@@ -412,7 +412,7 @@ public class EuclidShapeTestTools
             differenceNormalOnB.sub(expected.getNormalOnB(), actual.getNormalOnB());
 
             String difference = "[";
-            difference += "depth: " + Math.abs(expected.getDepth() - actual.getDepth());
+            difference += "distance: " + Math.abs(expected.getDistance() - actual.getDistance());
             difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.length();
             difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.length();
             difference += "]";

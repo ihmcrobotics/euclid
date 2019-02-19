@@ -12,7 +12,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<Shape3DCollisionTestResult>, GeometricallyComparable<Shape3DCollisionTestResult>
 {
    private boolean shapesAreColliding;
-   private double depth;
    private double distance;
 
    private Shape3DReadOnly shapeA;
@@ -32,7 +31,6 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    public void setToZero()
    {
       setShapesAreColliding(false);
-      setDepth(0.0);
       setDistance(0.0);
       setShapeA(null);
       setShapeB(null);
@@ -46,7 +44,6 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    public void setToNaN()
    {
       setShapesAreColliding(false);
-      setDepth(Double.NaN);
       setDistance(Double.NaN);
       setShapeA(null);
       setShapeB(null);
@@ -59,8 +56,8 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    @Override
    public boolean containsNaN()
    {
-      return Double.isNaN(getDepth()) || Double.isNaN(getDistance()) || getPointOnA().containsNaN() || getNormalOnA().containsNaN()
-            || getPointOnB().containsNaN() || getNormalOnB().containsNaN();
+      return Double.isNaN(getDistance()) || getPointOnA().containsNaN() || getNormalOnA().containsNaN() || getPointOnB().containsNaN()
+            || getNormalOnB().containsNaN();
    }
 
    public void swapShapes()
@@ -88,11 +85,6 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
       this.shapesAreColliding = shapesAreColliding;
    }
 
-   public void setDepth(double depth)
-   {
-      this.depth = depth;
-   }
-
    public void setDistance(double distance)
    {
       this.distance = distance;
@@ -111,11 +103,6 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    public boolean areShapesColliding()
    {
       return shapesAreColliding;
-   }
-
-   public double getDepth()
-   {
-      return depth;
    }
 
    public double getDistance()
@@ -158,18 +145,8 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    {
       if (areShapesColliding() != other.areShapesColliding())
          return false;
-
-      if (areShapesColliding())
-      {
-         if (!EuclidCoreTools.epsilonEquals(getDepth(), other.getDepth(), epsilon))
-            return false;
-      }
-      else
-      {
-         if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
-            return false;
-      }
-
+      if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
+         return false;
       if (getShapeA() != other.getShapeA())
          return false;
       if (getShapeB() != other.getShapeB())
@@ -192,16 +169,8 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
       if (areShapesColliding() != other.areShapesColliding())
          return false;
 
-      if (areShapesColliding())
-      {
-         if (!EuclidCoreTools.epsilonEquals(getDepth(), other.getDepth(), epsilon))
-            return false;
-      }
-      else
-      {
-         if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
-            return false;
-      }
+      if (!EuclidCoreTools.epsilonEquals(getDistance(), other.getDistance(), epsilon))
+         return false;
 
       if (getShapeA() == other.getShapeA())
       {

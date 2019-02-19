@@ -31,17 +31,9 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      if (resultToPack.areShapesColliding())
-         return;
-
       double distance = resultToPack.getDistance() - sphere3D.getRadius();
-
-      if (distance > 0.0)
-         return;
-
-      resultToPack.setShapesAreColliding(true);
-      resultToPack.setDepth(distance);
-      resultToPack.setDistance(Double.NaN);
+      resultToPack.setDistance(distance);
+      resultToPack.setShapesAreColliding(distance < 0.0);
    }
 
    private static void doPoint3DBox3DCollisionTest(Point3DReadOnly point3D, Box3DReadOnly box3D, Shape3DCollisionTestResult resultToPack)
@@ -54,17 +46,8 @@ public class EuclidShapeCollisionTools
       box3D.transformToWorld(resultToPack.getNormalOnB());
       resultToPack.getPointOnA().set(point3D);
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
-
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    public static void doPointShape3DCapsule3DCollisionTest(PointShape3DReadOnly pointShape3D, Capsule3DReadOnly capsule3D,
@@ -93,17 +76,8 @@ public class EuclidShapeCollisionTools
       pointOnB.scaleAdd(capsule3DB.getRadius(), normalOnB, pointOnB);
 
       double distance = distanceBetweenAxes - capsule3DA.getRadius() - capsule3DB.getRadius();
-
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
 
       resultToPack.setShapeA(capsule3DA);
       resultToPack.setShapeB(capsule3DB);
@@ -117,17 +91,9 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      if (resultToPack.areShapesColliding())
-         return;
-
       double distance = resultToPack.getDistance() - sphere3D.getRadius();
-
-      if (distance > 0.0)
-         return;
-
-      resultToPack.setShapesAreColliding(true);
-      resultToPack.setDepth(distance);
-      resultToPack.setDistance(Double.NaN);
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    private static void doPoint3DCapsule3DCollisionTest(Point3DReadOnly point3D, Capsule3DReadOnly capsule3D, Shape3DCollisionTestResult resultToPack)
@@ -139,16 +105,8 @@ public class EuclidShapeCollisionTools
       resultToPack.getPointOnA().set(point3D);
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
 
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    public static void doPointShape3DCylinder3DCollisionTest(PointShape3DReadOnly pointShape3D, Cylinder3DReadOnly cylinder3D,
@@ -167,17 +125,9 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      if (resultToPack.areShapesColliding())
-         return;
-
       double distance = resultToPack.getDistance() - sphere3D.getRadius();
-
-      if (distance > 0.0)
-         return;
-
-      resultToPack.setShapesAreColliding(true);
-      resultToPack.setDepth(distance);
-      resultToPack.setDistance(Double.NaN);
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    private static void doPoint3DCylinder3DCollisionTest(Point3DReadOnly point3D, Cylinder3DReadOnly cylinder3D, Shape3DCollisionTestResult resultToPack)
@@ -189,16 +139,8 @@ public class EuclidShapeCollisionTools
       resultToPack.getPointOnA().set(point3D);
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
 
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    public static void doPointShape3DEllipsoid3DCollisionTest(PointShape3DReadOnly pointShape3D, Ellipsoid3DReadOnly ellipsoid3D,
@@ -217,17 +159,9 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      if (resultToPack.areShapesColliding())
-         return;
-
       double distance = resultToPack.getDistance() - sphere3D.getRadius();
-
-      if (distance > 0.0)
-         return;
-
-      resultToPack.setShapesAreColliding(true);
-      resultToPack.setDepth(distance);
-      resultToPack.setDistance(Double.NaN);
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    private static void doPoint3DEllipsoid3DCollisionTest(Point3DReadOnly point3D, Ellipsoid3DReadOnly ellipsoid3D, Shape3DCollisionTestResult resultToPack)
@@ -242,16 +176,8 @@ public class EuclidShapeCollisionTools
       resultToPack.getPointOnA().set(point3D);
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
 
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    public static void doPointShape3DRamp3DCollisionTest(PointShape3DReadOnly pointShape3D, Ramp3DReadOnly ramp3D, Shape3DCollisionTestResult resultToPack)
@@ -269,17 +195,9 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      if (resultToPack.areShapesColliding())
-         return;
-
       double distance = resultToPack.getDistance() - sphere3D.getRadius();
-
-      if (distance > 0.0)
-         return;
-
-      resultToPack.setShapesAreColliding(true);
-      resultToPack.setDepth(distance);
-      resultToPack.setDistance(Double.NaN);
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    private static void doPoint3DRamp3DCollisionTest(Point3DReadOnly point3D, Ramp3DReadOnly ramp3D, Shape3DCollisionTestResult resultToPack)
@@ -293,16 +211,8 @@ public class EuclidShapeCollisionTools
       resultToPack.getPointOnA().set(point3D);
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
 
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    public static void doPointShape3DSphere3DCollisionTest(PointShape3DReadOnly pointShape3D, Sphere3DReadOnly sphere3D, Shape3DCollisionTestResult resultToPack)
@@ -320,21 +230,10 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3DA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      double distance = resultToPack.areShapesColliding() ? resultToPack.getDepth() : resultToPack.getDistance();
+      double distance = resultToPack.getDistance();
       distance -= sphere3DA.getRadius();
-
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(distance);
-         resultToPack.setDistance(Double.NaN);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-         resultToPack.setDepth(Double.NaN);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    private static void doPoint3DSphere3DCollisionTest(Point3DReadOnly point3D, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
@@ -347,16 +246,8 @@ public class EuclidShapeCollisionTools
       resultToPack.getPointOnA().set(point3D);
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
 
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    public static void doPointShape3DTorus3DCollisionTest(PointShape3DReadOnly pointShape3D, Torus3DReadOnly torus3D, Shape3DCollisionTestResult resultToPack)
@@ -374,17 +265,9 @@ public class EuclidShapeCollisionTools
 
       resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      if (resultToPack.areShapesColliding())
-         return;
-
       double distance = resultToPack.getDistance() - sphere3D.getRadius();
-
-      if (distance > 0.0)
-         return;
-
-      resultToPack.setShapesAreColliding(true);
-      resultToPack.setDepth(distance);
-      resultToPack.setDistance(Double.NaN);
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 
    private static void doPoint3DTorus3DCollisionTest(Point3DReadOnly point3D, Torus3DReadOnly torus3D, Shape3DCollisionTestResult resultToPack)
@@ -396,15 +279,7 @@ public class EuclidShapeCollisionTools
       resultToPack.getPointOnA().set(point3D);
       resultToPack.getNormalOnA().setAndNegate(resultToPack.getNormalOnB());
 
-      if (distance < 0.0)
-      {
-         resultToPack.setShapesAreColliding(true);
-         resultToPack.setDepth(-distance);
-      }
-      else
-      {
-         resultToPack.setShapesAreColliding(false);
-         resultToPack.setDistance(distance);
-      }
+      resultToPack.setShapesAreColliding(distance < 0.0);
+      resultToPack.setDistance(distance);
    }
 }

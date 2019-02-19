@@ -97,11 +97,7 @@ public class ExpandingPolytopeAlgorithm
       result.setShapesAreColliding(latestCollisionTestResult);
       result.setShapeA(shapeA);
       result.setShapeB(shapeB);
-
-      if (latestCollisionTestResult)
-         result.setDepth(getDistance());
-      else
-         result.setDistance(getDistance());
+      result.setDistance(simplex.getPolytope().signedDistance(origin));
 
       updatePoints();
       result.getPointOnA().set(pointOnA);

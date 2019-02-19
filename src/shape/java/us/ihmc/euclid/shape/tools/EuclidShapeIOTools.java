@@ -266,7 +266,7 @@ public class EuclidShapeIOTools
       String string = "Collision test result: ";
       if (collisionTestResult.areShapesColliding())
       {
-         string += "colliding, depth: " + collisionTestResult.getDepth() + "\n";
+         string += "colliding, depth: " + collisionTestResult.getDistance() + "\n";
       }
       else
       {
