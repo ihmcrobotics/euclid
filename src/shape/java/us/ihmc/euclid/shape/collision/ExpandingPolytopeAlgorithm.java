@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -80,7 +81,13 @@ public class ExpandingPolytopeAlgorithm
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
-         simplex.getSupportVectorDirectionTo(origin, supportDirection);
+         Simplex3D smallestSimplex = simplex.getSmallestSimplexMemberReference(origin);
+
+         if (smallestSimplex.distance(origin) > 1.0e-12)
+            smallestSimplex.getSupportVectorDirectionTo(origin, supportDirection);
+         else
+            smallestSimplex.getSupportVectorDirectionTo(simplex.getPolytope().getCentroid(), supportDirection);
+
          // We need to negate the support direction to point toward the outside of the simplex and thus force the expansion.
          supportDirection.negate();
 
