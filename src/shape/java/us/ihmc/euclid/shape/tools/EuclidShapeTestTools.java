@@ -780,11 +780,14 @@ public class EuclidShapeTestTools
             if (!connectedFaces.add(associatedEdge.getFace()))
                EuclidCoreTestTools.throwAssertionError(messagePrefix, "The connected faces to " + vertexIndex + "th vertex are not unique.");
 
-            if (associatedEdge.getDestination().getEdgeTo(vertex) == null)
-               EuclidCoreTestTools.throwAssertionError(messagePrefix,
-                                                       vertexIndex + "th vertex has an edge which destination does not have an edge going back to it.");
-            if (convexPolytope3D.getNumberOfFaces() > 1 && associatedEdge.getDestination().getEdgeTo(vertex) != associatedEdge.getTwin())
-               EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which destination's return edge is not the twin.");
+            if (convexPolytope3D.getNumberOfFaces() > 1)
+            {
+               if (associatedEdge.getDestination().getEdgeTo(vertex) == null)
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                          vertexIndex + "th vertex has an edge which destination does not have an edge going back to it.");
+               if (associatedEdge.getDestination().getEdgeTo(vertex) != associatedEdge.getTwin())
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which destination's return edge is not the twin.");
+            }
             if (!associatedEdge.getFace().getVertices().contains(vertex))
                EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which face does not delare it.");
 
