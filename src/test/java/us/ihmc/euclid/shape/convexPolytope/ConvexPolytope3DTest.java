@@ -1595,6 +1595,21 @@ public class ConvexPolytope3DTest
    }
 
    @Test
+   void testGeneralIntegrityOfRandomConvexPolytope3D() throws Exception
+   {
+      Random random = new Random(206422882);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
+         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
+
+         convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
+      }
+   }
+
+   @Test
    void testGJKNullPointerExceptionBug1() throws Exception
    {
       List<Point3D> vertices = new ArrayList<>();
@@ -1660,7 +1675,9 @@ public class ConvexPolytope3DTest
       double constructionEpsilon = 1.0e-3;
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
 
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
       convexPolytope3D.addVertex(troublingVertex);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
    }
 
    @Test
@@ -1684,7 +1701,9 @@ public class ConvexPolytope3DTest
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
       assertEquals(vertices.size(), convexPolytope3D.getNumberOfVertices());
 
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
       convexPolytope3D.addVertex(troublingVertex);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
    }
 
    @Test
@@ -1704,7 +1723,9 @@ public class ConvexPolytope3DTest
       double constructionEpsilon = 0.001;
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
 
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
       convexPolytope3D.addVertex(troublingVertex);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
    }
 
    @Test
@@ -1729,7 +1750,9 @@ public class ConvexPolytope3DTest
       //      Point3D troublingVertex = new Point3D( 0.02818508137321876200,  0.10400186862552696000,  0.10568732858207800000 );
       double constructionEpsilon = 0.001;
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices.subList(0, 8)), constructionEpsilon);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
       convexPolytope3D.addVertex(vertices.get(8));
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
    }
 
    @Test
@@ -1755,9 +1778,10 @@ public class ConvexPolytope3DTest
       //      Point3D troublingVertex = new Point3D(-0.17167505184802145000, -0.14532344838490086000, 0.06290309248341330000);
       double constructionEpsilon = 0.001;
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices.subList(0, 7)), constructionEpsilon);
-      assertTrue(convexPolytope3D.getHalfEdges().stream().noneMatch(edge -> edge.getTwin() == null));
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
       convexPolytope3D.addVertex(vertices.get(7));
-      assertTrue(convexPolytope3D.getHalfEdges().stream().noneMatch(edge -> edge.getTwin() == null));
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
       convexPolytope3D.addVertex(vertices.get(8));
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
    }
 }
