@@ -73,21 +73,21 @@ public class EuclidPolytopeConstructionTools
              */
             List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex, epsilon);
 
-            if (lineOfSight.size() != 1)
-            {
-               for (HalfEdge3D lineOfSightEdge : lineOfSight)
-               {
-                  if (silhouetteEdges.contains(lineOfSightEdge))
-                     continue; // This is the expected scenario.
+            if (lineOfSight.size() == 1)
+               continue; // The single visible edge is the silhouetteEdge, this is a safe context.
 
-                  /*
-                   * It would be fine if the new vertex would result in extending an edge of the face. However, if the
-                   * vertex is not an extrapolation of the line, we should not be able to see it => inconsistency we
-                   * need to abort.
-                   */
-                  if (lineOfSightEdge.distanceFromSupportLine(vertex) > epsilon)
-                     return null;
-               }
+            for (HalfEdge3D lineOfSightEdge : lineOfSight)
+            {
+               if (silhouetteEdges.contains(lineOfSightEdge))
+                  continue; // This is the expected scenario.
+
+               /*
+                * It would be fine if the new vertex would result in extending an edge of the face. However, if the
+                * vertex is not an extrapolation of the line, we should not be able to see it => inconsistency we
+                * need to abort.
+                */
+               if (lineOfSightEdge.distanceFromSupportLine(vertex) > epsilon)
+                  return null;
             }
          }
          // TODO Consider adding a filter for the faces to be created.
