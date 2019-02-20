@@ -63,15 +63,38 @@ public class EuclidPolytopeConstructionTools
          if (inPlaneFaces.contains(face))
          { // The face has to be extended to include the new vertex
             if (!face.canObserverSeeEdge(vertex, silhouetteEdge, epsilon))
+            { // Something is not quite right, the silhouetteEdge should be visible. Aborting.
                return null;
-            if (face.lineOfSight(vertex, epsilon).size() != 1)
-               return null;
+            }
+
+            /*
+             * The following check is redundant with the internal logic of Face3D.addVertex(...) and is also
+             * probably expensive, but it has to be done before we actually start modifying the polytope.
+             */
+            List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex, epsilon);
+
+            if (lineOfSight.size() != 1)
+            {
+               for (HalfEdge3D lineOfSightEdge : lineOfSight)
+               {
+                  if (silhouetteEdges.contains(lineOfSightEdge))
+                     continue; // This is the expected scenario.
+
+                  /*
+                   * It would be fine if the new vertex would result in extending an edge of the face. However, if the
+                   * vertex is not an extrapolation of the line, we should not be able to see it => inconsistency we
+                   * need to abort.
+                   */
+                  if (lineOfSightEdge.distanceFromSupportLine(vertex) > epsilon)
+                     return null;
+               }
+            }
          }
          // TODO Consider adding a filter for the faces to be created.
       }
 
       List<Face3D> newFaces = new ArrayList<>();
-      
+
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
          if (inPlaneFaces.contains(silhouetteEdge.getFace()))

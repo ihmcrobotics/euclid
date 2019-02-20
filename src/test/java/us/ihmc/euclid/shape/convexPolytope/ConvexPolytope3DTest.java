@@ -626,7 +626,6 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // First generating a truncated cone. Then add the top vertex at the very end and check that all the intermediate vertices have been removed to form a full cone.
-
          Point3D top = new Point3D(0.0, 0.0, 1.0);
 
          List<Point3D> bottom = new ArrayList<>();
@@ -1633,7 +1632,7 @@ public class ConvexPolytope3DTest
       assertTrue(silhouette.get(1).getDestination() == silhouette.get(2).getOrigin());
       assertTrue(silhouette.get(2).getDestination() == silhouette.get(0).getOrigin());
 
-      assertEquals(0, inPlaneFaces.size());
+      assertEquals(2, inPlaneFaces.size());
 
       for (Face3D inPlaneFace : inPlaneFaces)
          assertFalse(visibleFaces.contains(inPlaneFace));
@@ -1660,7 +1659,6 @@ public class ConvexPolytope3DTest
 
       double constructionEpsilon = 1.0e-3;
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
-      assertEquals(vertices.size(), convexPolytope3D.getNumberOfVertices());
 
       convexPolytope3D.addVertex(troublingVertex);
    }
