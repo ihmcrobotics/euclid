@@ -60,8 +60,8 @@ class Capsule3DTest
             EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, -0.5 * length), capsule3D.getBottomCenter(), EPSILON);
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(-0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(-0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(1.0, -0.1));
       }
 
       { // Capsule3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
@@ -86,8 +86,8 @@ class Capsule3DTest
             EuclidCoreTestTools.assertTuple3DEquals(expectedBottomCenter, capsule3D.getBottomCenter(), EPSILON);
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis.Z, -0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis.Z, 1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(new Point3D(), Axis.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(new Point3D(), Axis.Z, 1.0, -0.1));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
