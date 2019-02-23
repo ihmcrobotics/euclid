@@ -10,6 +10,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.EigenDecomposition;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -56,6 +57,8 @@ public class EuclidPolytopeConstructionTools
       if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertex, silhouetteEdges) <= epsilon)
          return null;
 
+      Vector3D towardOutside = new Vector3D();
+
       // Last filter before actually modifying the polytope
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
@@ -90,7 +93,24 @@ public class EuclidPolytopeConstructionTools
                   return null;
             }
          }
-         // TODO Consider adding a filter for the faces to be created.
+
+         towardOutside.cross(face.getNormal(), silhouetteEdge.getDirection(false));
+
+         /*
+          * Testing following edge-case: The new vertex is in between the face plane and the silhouetteEdge.
+          * In such context, this would result in a new face wrong ordering of the vertices which would be
+          * corrected by flipping the face normal which then points to the inside of the polytope.
+          */
+         if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
+         {
+            if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside))
+               return null;
+         }
+         else
+         {
+            if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside))
+               return null;
+         }
       }
 
       List<Face3D> newFaces = new ArrayList<>();
