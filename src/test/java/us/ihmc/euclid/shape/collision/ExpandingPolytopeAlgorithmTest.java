@@ -17,6 +17,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.shape.primitives.Sphere3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -575,22 +576,15 @@ class ExpandingPolytopeAlgorithmTest
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
-         epaDetector.setSimplexConstructionEpsilon(5.0e-4);
+         epaDetector.setSimplexConstructionEpsilon(0.5e-3);
          epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
+         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(epaDetector.getSimplex().getPolytope());
 
          System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", EPA: " + epaResult.getDistance() + ", diff: "
                + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
 
          meanError += Math.abs(expectedResult.getDistance() - epaResult.getDistance()) / ITERATIONS;
 
-         // Asserts the internal sanity of the collision result
-         System.out.println(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()));
-         for (Face3D face : epaDetector.getSimplex().getPolytope().getFaces())
-         {
-            Vector3D expectedNormalDirection = new Vector3D();
-            expectedNormalDirection.sub(face.getCentroid(), epaDetector.getSimplex().getPolytope().getCentroid());
-            assertTrue(expectedNormalDirection.dot(face.getNormal()) > 0.0, "Expected direction: " + expectedNormalDirection + ", actual face normal: " + face.getNormal());
-         }
 //         assertEquals(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, epaResult.areShapesColliding());
 
          if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.

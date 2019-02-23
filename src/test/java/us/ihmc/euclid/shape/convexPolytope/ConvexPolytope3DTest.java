@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.EuclidTestConstants;
+import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -1789,18 +1790,68 @@ public class ConvexPolytope3DTest
    void testGJKFaceNormalIntegrityBug7() throws Exception
    {
       List<Point3D> vertices = new ArrayList<>();
-//      vertices.add(new Point3D( 0.40484035046382340000,  0.66817675595325240000,  0.37565781894372985000 ));
-      vertices.add(new Point3D( 0.19770492108631288000, -0.11722888133146891000,  0.18345354993551521000 ));
-      vertices.add(new Point3D( 0.13177056177929392000, -0.01608972405889597000,  0.12227200619277923000 ));
-      vertices.add(new Point3D( 0.10804284059622116000,  0.04356860347168567400,  0.10025467521792486000 ));
-      vertices.add(new Point3D( 0.10535595585195023000,  0.05183458577843358400,  0.09786307209807943000 ));
-//      vertices.add(new Point3D( 0.10419258778046014000,  0.05592435430920772400,  0.09660853251948309000 ));
-//      vertices.add(new Point3D( 0.09875689526332210000,  0.07507951247051448000,  0.09163809842020465000 ));
-//      vertices.add(new Point3D( 0.09126555383425328000,  0.10746732352304089000,  0.08468676321119539000 ));
-//      vertices.add(new Point3D( 0.09891220007971846000,  0.37479443587413260000,  0.09178220823665961000 ));
-      Point3D troublingVertex = new Point3D( 0.10219794708629126000,  0.06220152556068970000,  0.09504439824552569000 );
+      //      vertices.add(new Point3D( 0.40484035046382340000,  0.66817675595325240000,  0.37565781894372985000 ));
+      vertices.add(new Point3D(0.19770492108631288000, -0.11722888133146891000, 0.18345354993551521000));
+      vertices.add(new Point3D(0.13177056177929392000, -0.01608972405889597000, 0.12227200619277923000));
+      vertices.add(new Point3D(0.10804284059622116000, 0.04356860347168567400, 0.10025467521792486000));
+      vertices.add(new Point3D(0.10535595585195023000, 0.05183458577843358400, 0.09786307209807943000));
+      //      vertices.add(new Point3D( 0.10419258778046014000,  0.05592435430920772400,  0.09660853251948309000 ));
+      //      vertices.add(new Point3D( 0.09875689526332210000,  0.07507951247051448000,  0.09163809842020465000 ));
+      //      vertices.add(new Point3D( 0.09126555383425328000,  0.10746732352304089000,  0.08468676321119539000 ));
+      //      vertices.add(new Point3D( 0.09891220007971846000,  0.37479443587413260000,  0.09178220823665961000 ));
+      Point3D troublingVertex = new Point3D(0.10219794708629126000, 0.06220152556068970000, 0.09504439824552569000);
       double constructionEpsilon = 1.0E-4;
       ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
+      convexPolytope3D.addVertex(troublingVertex);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
+   }
+   
+   @Test
+   void testEPAFaceNormalIntegrityBug8() throws Exception
+   {
+      List<Point3D> vertices = new ArrayList<>();
+//      vertices.add(new Point3D( 0.25923025651672880000, -1.32459442213312100000,  0.33731064563758340000 ));
+      vertices.add(new Point3D(-0.58211725366830260000, -0.18145508297583146000, -0.75745150010666570000 ));
+//      vertices.add(new Point3D(-0.29186699291394436000, -0.26463480549211205000, -0.37977759673184330000 ));
+      vertices.add(new Point3D(-0.15759191168890652000, -0.36628560982904357000, -0.20505873887300530000 ));
+      vertices.add(new Point3D(-0.14713791925305353000, -0.37644945730058765000, -0.19100593449992065000 ));
+      vertices.add(new Point3D(-0.14153660446287397000, -0.38162347173657220000, -0.18434170307648423000 ));
+//      vertices.add(new Point3D(-0.12585187210813410000, -0.39752753793187856000, -0.16375857049215160000 ));
+//      vertices.add(new Point3D(-0.09496404628807320000, -0.43099089641061805000, -0.12356730343211364000 ));
+//      vertices.add(new Point3D(-0.03597410587601624000, -0.50432786022543690000, -0.04680953929654707600 ));
+      Point3D troublingVertex = new Point3D(-0.13693975331059360000, -0.38652881789871840000, -0.17763839169767880000 );
+      double constructionEpsilon = 5.0E-4;
+      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
+      convexPolytope3D.addVertex(troublingVertex);
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
+   }
+
+   @Test
+   void testEPAFaceNormalIntegrityBug9() throws Exception
+   {
+      List<Point3D> vertices = new ArrayList<>();
+//      vertices.add(new Point3D( 0.25923025651672880000, -1.32459442213312100000,  0.33731064563758340000 ));
+      vertices.add(new Point3D(-0.58211725366830260000, -0.18145508297583146000, -0.75745150010666570000 ));
+      vertices.add(new Point3D(-0.29186699291394436000, -0.26463480549211205000, -0.37977759673184330000 ));
+      vertices.add(new Point3D(-0.15759191168890652000, -0.36628560982904357000, -0.20505873887300530000 ));
+      vertices.add(new Point3D(-0.14713791925305353000, -0.37644945730058765000, -0.19100593449992065000 ));
+      vertices.add(new Point3D(-0.14153660446287397000, -0.38162347173657220000, -0.18434170307648423000 ));
+//      vertices.add(new Point3D(-0.12585187210813410000, -0.39752753793187856000, -0.16375857049215160000 ));
+//      vertices.add(new Point3D(-0.09496404628807320000, -0.43099089641061805000, -0.12356730343211364000 ));
+//      vertices.add(new Point3D(-0.03597410587601624000, -0.50432786022543690000, -0.04680953929654707600 ));
+      Point3D troublingVertex = new Point3D(-0.13693975331059360000, -0.38652881789871840000, -0.17763839169767880000 );
+      double constructionEpsilon = 5.0E-4;
+      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
+      Vector3D translation = new Vector3D();//convexPolytope3D.getFace(0).getCentroid());
+//      translation.negate();
+      AxisAngle orientation = EuclidGeometryTools.axisAngleFromZUpToVector3D(convexPolytope3D.getFace(0).getNormal());
+      orientation.invert();
+      RigidBodyTransform transform = new RigidBodyTransform(orientation, translation);
+      convexPolytope3D.applyTransform(transform);
+      transform.transform(troublingVertex);
+      
       EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
       convexPolytope3D.addVertex(troublingVertex);
       EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
