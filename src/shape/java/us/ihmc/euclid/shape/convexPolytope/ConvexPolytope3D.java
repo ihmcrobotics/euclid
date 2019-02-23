@@ -262,19 +262,22 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
          if (firstFace.canObserverSeeFace(vertexToAdd))
             firstFace.flip();
 
-         faces.addAll(EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, firstFace.getEdges(), Collections.emptyList(),
-                                                                                 constructionEpsilon));
-         return true;
+         List<Face3D> newFaces = EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, firstFace.getEdges(), Collections.emptyList(),
+                                                                                            constructionEpsilon);
+         if (newFaces != null)
+         {
+            faces.addAll(newFaces);
+            return true;
+         }
       }
       else if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
       { // In face plane => need to extend the existing face.
          firstFace.addVertex(vertexToAdd);
          return true;
       }
-      else
-      { // The vertex already belongs to the face, nothing to do.
-         return false;
-      }
+
+      // The vertex already belongs to the face, nothing to do.
+      return false;
    }
 
    private boolean handleMultipleFaceCase(Vertex3D vertexToAdd)
