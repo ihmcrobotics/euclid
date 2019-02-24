@@ -4,7 +4,9 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
@@ -58,11 +60,17 @@ public class EuclidPolytopeConstructionTools
          return null;
 
       Vector3D towardOutside = new Vector3D();
+      Set<HalfEdge3D> edgesToSkip = new HashSet<>();
 
       // Last filter before actually modifying the polytope
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
+
+         if (edgesToSkip.contains(silhouetteEdge))
+            continue; // We already tested it.
+
          Face3D face = silhouetteEdge.getFace();
+
          if (inPlaneFaces.contains(face))
          { // The face has to be extended to include the new vertex
             if (!face.canObserverSeeEdge(vertex, silhouetteEdge, epsilon))
@@ -82,7 +90,11 @@ public class EuclidPolytopeConstructionTools
             for (HalfEdge3D lineOfSightEdge : lineOfSight)
             {
                if (silhouetteEdges.contains(lineOfSightEdge))
+               {
+                  if (silhouetteEdge != lineOfSightEdge)
+                     edgesToSkip.add(lineOfSightEdge);
                   continue; // This is the expected scenario.
+               }
 
                /*
                 * It would be fine if the new vertex would result in extending an edge of the face. However, if the
@@ -93,27 +105,39 @@ public class EuclidPolytopeConstructionTools
                   return null;
             }
          }
-
-         towardOutside.cross(face.getNormal(), silhouetteEdge.getDirection(false));
-
-         /*
-          * Testing following edge-case: The new vertex is in between the face plane and the silhouetteEdge.
-          * In such context, this would result in a new face wrong ordering of the vertices which would be
-          * corrected by flipping the face normal which then points to the inside of the polytope.
-          */
-         if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
-         {
-            if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, epsilon))
-               return null;
-         }
          else
-         {
-            if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, epsilon))
-               return null;
+         { // A new face will be created.
+            towardOutside.cross(face.getNormal(), silhouetteEdge.getDirection(false));
+
+            /*
+             * Testing following edge-case: The new vertex is in between the face plane and the silhouetteEdge.
+             * In such context, this would result in a new face wrong ordering of the vertices which would be
+             * corrected by flipping the face normal which then points to the inside of the polytope.
+             */
+            if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
+            {
+               if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
+                  return null;
+            }
+            else
+            {
+               if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
+                  return null;
+            }
          }
       }
 
       List<Face3D> newFaces = new ArrayList<>();
+
+      if (!edgesToSkip.isEmpty())
+      {
+         /*
+          * This means that more than one of the silhouette edges belongs to a single face. In such case,
+          * only one has to be processed.
+          */
+         silhouetteEdges = new ArrayList<>(silhouetteEdges);
+         silhouetteEdges.removeAll(edgesToSkip);
+      }
 
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
