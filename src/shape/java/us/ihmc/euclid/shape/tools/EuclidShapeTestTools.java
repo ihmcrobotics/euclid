@@ -637,73 +637,107 @@ public class EuclidShapeTestTools
 
    public static void assertConvexPolytope3DFacesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
+      Vector3D toOrigin = new Vector3D();
+      Vector3D toDestination = new Vector3D();
+      Vector3D toCentroid = new Vector3D();
+      Vector3D cross = new Vector3D();
+
       if (convexPolytope3D.getNumberOfFaces() == 1)
       {
-         for (int faceIndex = 0; faceIndex < convexPolytope3D.getNumberOfFaces(); faceIndex++)
-         {
-            Face3DReadOnly face = convexPolytope3D.getFace(faceIndex);
-            List<? extends HalfEdge3DReadOnly> edges = face.getEdges();
-            
-            for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
-            {
-               HalfEdge3DReadOnly edge = edges.get(edgeIndex);
-               
-               if (edge.getFace() != face)
-                  EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge does not this face as its face.");
-               if (!edges.contains(edge.getNext()))
-                  EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge's next does not belong to this face.");
-               if (!edges.contains(edge.getPrevious()))
-                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
-                                                          faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
-               if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
-                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
-                                                          faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
-            }
-         }
-      }
-      else
-      {
-         Vector3D toOrigin = new Vector3D();
-         Vector3D toDestination = new Vector3D();
-         Vector3D toCentroid = new Vector3D();
-         Vector3D cross = new Vector3D();
-         
          for (int faceIndex = 0; faceIndex < convexPolytope3D.getNumberOfFaces(); faceIndex++)
          {
             Face3DReadOnly face = convexPolytope3D.getFace(faceIndex);
             Point3DReadOnly centroid = face.getCentroid();
             Vector3DReadOnly normal = face.getNormal();
             List<? extends HalfEdge3DReadOnly> edges = face.getEdges();
-            
+
             for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
             {
                HalfEdge3DReadOnly edge = edges.get(edgeIndex);
-               
+
                if (edge.getFace() != face)
                   EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge does not this face as its face.");
                if (!edges.contains(edge.getNext()))
-                  EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge's next does not belong to this face.");
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                          faceIndex + "th face: the " + edgeIndex + "th edge's next does not belong to this face.");
                if (!edges.contains(edge.getPrevious()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
                if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
-               
+            }
+
+            if (edges.size() >= 3)
+            {
+               for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
+               {
+                  HalfEdge3DReadOnly edge = edges.get(edgeIndex);
+
+                  if (edge.getFace() != face)
+                     EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                             faceIndex + "th face: the " + edgeIndex + "th edge does not this face as its face.");
+                  if (!edges.contains(edge.getNext()))
+                     EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                             faceIndex + "th face: the " + edgeIndex + "th edge's next does not belong to this face.");
+                  if (!edges.contains(edge.getPrevious()))
+                     EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                             faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
+                  if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+                     EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                             faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
+
+                  // Verifying the edges are all clockwise ordered.
+                  toOrigin.sub(edge.getOrigin(), centroid);
+                  toDestination.sub(edge.getDestination(), centroid);
+                  cross.cross(toDestination, toOrigin);
+
+                  if (cross.dot(normal) < 0.0)
+                     EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                             faceIndex + "th face: the " + edgeIndex + "th edge is orientated counter-clockwise.");
+               }
+            }
+         }
+      }
+      else
+      {
+         for (int faceIndex = 0; faceIndex < convexPolytope3D.getNumberOfFaces(); faceIndex++)
+         {
+            Face3DReadOnly face = convexPolytope3D.getFace(faceIndex);
+            Point3DReadOnly centroid = face.getCentroid();
+            Vector3DReadOnly normal = face.getNormal();
+            List<? extends HalfEdge3DReadOnly> edges = face.getEdges();
+
+            // Verifying the normal is pointing towards the outside of the polytope.
+            toCentroid.sub(centroid, convexPolytope3D.getCentroid());
+
+            if (toCentroid.dot(normal) < 0.0)
+               EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face's normal is pointing towards the inside of the polytope.");
+
+            for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
+            {
+               HalfEdge3DReadOnly edge = edges.get(edgeIndex);
+
+               if (edge.getFace() != face)
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge does not this face as its face.");
+               if (!edges.contains(edge.getNext()))
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                          faceIndex + "th face: the " + edgeIndex + "th edge's next does not belong to this face.");
+               if (!edges.contains(edge.getPrevious()))
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                          faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
+               if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                          faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
+
                // Verifying the edges are all clockwise ordered.
                toOrigin.sub(edge.getOrigin(), centroid);
                toDestination.sub(edge.getDestination(), centroid);
                cross.cross(toDestination, toOrigin);
-               
+
                if (cross.dot(normal) < 0.0)
                   EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge is orientated counter-clockwise.");
             }
-            
-            // Verifying the normal is pointing towards the outside of the polytope.
-            toCentroid.sub(centroid, convexPolytope3D.getCentroid());
-            
-            if (toCentroid.dot(normal) < 0.0)
-               EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face's normal is pointing towards the inside of the polytope.");
          }
       }
    }
@@ -786,7 +820,8 @@ public class EuclidShapeTestTools
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           vertexIndex + "th vertex has an edge which destination does not have an edge going back to it.");
                if (associatedEdge.getDestination().getEdgeTo(vertex) != associatedEdge.getTwin())
-                  EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which destination's return edge is not the twin.");
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                          vertexIndex + "th vertex has an edge which destination's return edge is not the twin.");
             }
             if (!associatedEdge.getFace().getVertices().contains(vertex))
                EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex has an edge which face does not delare it.");
