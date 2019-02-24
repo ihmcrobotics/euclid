@@ -1,18 +1,6 @@
 package us.ihmc.euclid.shape.tools;
 
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getBox3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCollisionTestResultString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getConvexPolytope3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCylinder3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getEllipsoid3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getFace3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getHalfEdge3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getRamp3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getSphere3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getTorus3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getVertex3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -637,6 +625,15 @@ public class EuclidShapeTestTools
 
    public static void assertConvexPolytope3DFacesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
+      Set<Face3DReadOnly> faceSet = new HashSet<>();
+
+      for (int faceIndex = 0; faceIndex < convexPolytope3D.getNumberOfFaces(); faceIndex++)
+      { // We assert the uniqueness of the faces.
+         Face3DReadOnly face = convexPolytope3D.getFace(faceIndex);
+         if (!faceSet.add(face))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face is a duplicate.");
+      }
+
       Vector3D toOrigin = new Vector3D();
       Vector3D toDestination = new Vector3D();
       Vector3D toCentroid = new Vector3D();
@@ -744,6 +741,15 @@ public class EuclidShapeTestTools
 
    public static void assertConvexPolytope3DHalfEdgesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
+      Set<HalfEdge3DReadOnly> halfEdgeSet = new HashSet<>();
+
+      for (int halfEdgeIndex = 0; halfEdgeIndex < convexPolytope3D.getNumberOfHalfEdges(); halfEdgeIndex++)
+      { // We assert the uniqueness of the half-edges.
+         HalfEdge3DReadOnly halfEdge = convexPolytope3D.getHalfEdge(halfEdgeIndex);
+         if (!halfEdgeSet.add(halfEdge))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, halfEdgeIndex + "th half-edge is a duplicate.");
+      }
+
       for (int halfEdgeIndex = 0; halfEdgeIndex < convexPolytope3D.getNumberOfHalfEdges(); halfEdgeIndex++)
       {
          HalfEdge3DReadOnly halfEdge = convexPolytope3D.getHalfEdge(halfEdgeIndex);
@@ -798,6 +804,15 @@ public class EuclidShapeTestTools
 
    public static void assertConvexPolytope3DVerticesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
+      Set<Vertex3DReadOnly> vertexSet = new HashSet<>();
+
+      for (int vertexIndex = 0; vertexIndex < convexPolytope3D.getNumberOfVertices(); vertexIndex++)
+      { // We assert the uniqueness of the vertices.
+         Vertex3DReadOnly vertex = convexPolytope3D.getVertex(vertexIndex);
+         if (!vertexSet.add(vertex))
+            EuclidCoreTestTools.throwAssertionError(messagePrefix, vertexIndex + "th vertex is a duplicate.");
+      }
+
       for (int vertexIndex = 0; vertexIndex < convexPolytope3D.getNumberOfVertices(); vertexIndex++)
       {
          Vertex3DReadOnly vertex = convexPolytope3D.getVertex(vertexIndex);
