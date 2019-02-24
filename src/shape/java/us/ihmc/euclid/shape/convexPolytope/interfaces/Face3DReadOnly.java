@@ -259,12 +259,12 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
 
    default boolean canObserverSeeEdge(Point3DReadOnly query, HalfEdge3DReadOnly edge)
    {
-      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal());
+      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal(), 0.0);
    }
 
    default boolean canObserverSeeEdge(Point3DReadOnly query, HalfEdge3DReadOnly edge, double epsilon)
    {
-      if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal()))
+      if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal(), 0.0))
          return true;
       return edge.distanceFromSupportLine(query) <= epsilon;
    }

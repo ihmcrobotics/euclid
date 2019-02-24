@@ -51,32 +51,32 @@ public class EuclidPolytopeTools
    }
 
    public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                     Vector3DReadOnly planeNormal)
+                                                     Vector3DReadOnly planeNormal, double epsilon)
    {
-      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, true);
+      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, true, epsilon);
    }
 
    public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                     Vector3DReadOnly planeNormal)
+                                                     Vector3DReadOnly planeNormal, double epsilon)
    {
-      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, true);
+      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, true, epsilon);
    }
 
    public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                      Vector3DReadOnly planeNormal)
+                                                      Vector3DReadOnly planeNormal, double epsilon)
    {
-      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, false);
+      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, false, epsilon);
    }
 
    public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                      Vector3DReadOnly planeNormal)
+                                                      Vector3DReadOnly planeNormal, double epsilon)
    {
-      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, false);
+      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, false, epsilon);
    }
 
    public static boolean isPoint3DOnSideOfLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
                                                  double lineDirectionX, double lineDirectionY, double lineDirectionZ, double planeNormalX, double planeNormalY,
-                                                 double planeNormalZ, boolean testLeftSide)
+                                                 double planeNormalZ, boolean testLeftSide, double epsilon)
    {
       double dx = pointX - pointOnLineX;
       double dy = pointY - pointOnLineY;
@@ -86,16 +86,16 @@ public class EuclidPolytopeTools
       double crossY = lineDirectionZ * dx - lineDirectionX * dz;
       double crossZ = lineDirectionX * dy - lineDirectionY * dx;
 
-      double crossProduct = crossX * planeNormalX + crossY * planeNormalY + crossZ * planeNormalZ;
+      double dotProduct = crossX * planeNormalX + crossY * planeNormalY + crossZ * planeNormalZ;
 
       if (testLeftSide)
-         return crossProduct > 0.0;
+         return dotProduct > epsilon;
       else
-         return crossProduct < 0.0;
+         return dotProduct < -epsilon;
    }
 
    public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                 Vector3DReadOnly planeNormal, boolean testLeftSide)
+                                                 Vector3DReadOnly planeNormal, boolean testLeftSide, double epsilon)
    {
       double pointOnLineX = firstPointOnLine.getX();
       double pointOnLineY = firstPointOnLine.getY();
@@ -104,14 +104,14 @@ public class EuclidPolytopeTools
       double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
       double lineDirectionZ = secondPointOnLine.getZ() - firstPointOnLine.getZ();
       return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLineX, pointOnLineY, pointOnLineZ, lineDirectionX, lineDirectionY,
-                                     lineDirectionZ, planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide);
+                                     lineDirectionZ, planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide, epsilon);
    }
 
    public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                 Vector3DReadOnly planeNormal, boolean testLeftSide)
+                                                 Vector3DReadOnly planeNormal, boolean testLeftSide, double epsilon)
    {
       return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
-                                     lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide);
+                                     lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide, epsilon);
    }
 
    /**

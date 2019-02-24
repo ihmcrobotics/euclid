@@ -103,12 +103,12 @@ public class EuclidPolytopeConstructionTools
           */
          if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
          {
-            if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside))
+            if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, epsilon))
                return null;
          }
          else
          {
-            if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside))
+            if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, epsilon))
                return null;
          }
       }
