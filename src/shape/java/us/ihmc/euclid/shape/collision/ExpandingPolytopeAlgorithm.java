@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -73,6 +74,8 @@ public class ExpandingPolytopeAlgorithm
       latestCollisionTestResult = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
       simplex = gjkCollisionDetector.getSimplex();
       supportDirection.set(gjkCollisionDetector.getSupportDirection());
+      // FIXME cleanup the following once testing is done.
+      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope()); 
 
       if (!latestCollisionTestResult)
          return;
@@ -97,6 +100,8 @@ public class ExpandingPolytopeAlgorithm
          Point3DReadOnly supportingVertexA = shapeA.getSupportingVertex(supportDirection);
          Point3DReadOnly supportingVertexB = shapeB.getSupportingVertex(supportDirectionNegative);
          simplex.addVertex(supportingVertexA, supportingVertexB);
+         // FIXME cleanup the following once testing is done.
+         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
 
          previousSupportDirection.set(supportDirection);
       }

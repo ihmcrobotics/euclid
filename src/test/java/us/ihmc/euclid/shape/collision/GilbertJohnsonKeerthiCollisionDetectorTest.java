@@ -34,7 +34,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
-   private static final double LARGE_EPSILON = 5.0e-3;
+   private static final double LARGE_EPSILON = 15.0e-3;
 
    @Test
    void testSimpleCollisionWithNonCollidingCubeAndTetrahedron()
@@ -590,11 +590,11 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
        * as GJK will reduce the size of its internal polytope's faces and edges until new vertices are not
        * supposed to be added.
        */
-      Random random = new Random(108604);
+      Random random = new Random(105864);
       boolean verbose = false;
       double meanError = 0.0;
 
-      for (int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < 100 * ITERATIONS; i++)
       {
          Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
@@ -607,7 +607,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         gjkDetector.setSimplexConstructionEpsilon(1.0e-4);
+         gjkDetector.setSimplexConstructionEpsilon(1.0e-3);
          gjkDetector.doShapeCollisionTest(sphereA, sphereB, gjkResult);
 
          if (verbose && (i % 5000) == 0)
@@ -634,8 +634,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          else
          {
             assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), LARGE_EPSILON, "difference: " + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), LARGE_EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), LARGE_EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), 10.0 * LARGE_EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), 10.0 * LARGE_EPSILON);
          }
 
          // GJK does not estimate either the depth (collision case not covered) nor the normal on each shape.

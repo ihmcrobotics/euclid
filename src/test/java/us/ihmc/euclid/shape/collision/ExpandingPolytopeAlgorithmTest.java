@@ -576,7 +576,7 @@ class ExpandingPolytopeAlgorithmTest
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
-         epaDetector.setSimplexConstructionEpsilon(0.5e-3);
+         epaDetector.setSimplexConstructionEpsilon(1.0e-7);
          epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
          EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(epaDetector.getSimplex().getPolytope());
 

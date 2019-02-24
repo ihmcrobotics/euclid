@@ -1,8 +1,11 @@
 package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -87,7 +90,18 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
+         // FIXME cleanup the following once testing is done.
+         ConvexPolytope3D backup = new ConvexPolytope3D(simplex.getPolytope());
          simplex.addVertex(supportingVertexA, supportingVertexB);
+         try
+         {
+            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
+         }
+         catch (Error e)
+         {
+            System.out.println(EuclidShapeIOTools.getConvexPolytope3DStringForUnitTesting(backup, new SimplexVertex3D(supportingVertexA, supportingVertexB)));
+            throw e;
+         }
 
          // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
          if (simplex.isPointInside(origin, terminalConditionEpsilon))
