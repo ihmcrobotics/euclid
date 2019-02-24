@@ -257,8 +257,6 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       }
       else if (!firstFace.isPointInFacePlane(vertexToAdd, constructionEpsilon))
       { // Off the face plane => need to create new faces.
-         if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertexToAdd, firstFace.getEdges()) <= constructionEpsilon)
-            return false;
          if (firstFace.canObserverSeeFace(vertexToAdd))
             firstFace.flip();
 
@@ -272,8 +270,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       }
       else if (!firstFace.isPointDirectlyAboveOrBelow(vertexToAdd))
       { // In face plane => need to extend the existing face.
-         firstFace.addVertex(vertexToAdd);
-         return true;
+         return firstFace.addVertex(vertexToAdd);
       }
 
       // The vertex already belongs to the face, nothing to do.
