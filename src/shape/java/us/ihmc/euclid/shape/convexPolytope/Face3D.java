@@ -140,10 +140,15 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       }
       else
       {
-         List<HalfEdge3D> lineOfSight = lineOfSight(vertexToAdd, constructionEpsilon);
+         List<HalfEdge3D> lineOfSight = lineOfSight(vertexToAdd);
 
          if (lineOfSight.isEmpty())
             return false;
+
+         if (lineOfSight.get(0).getPrevious().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
+            lineOfSight.add(0, lineOfSight.get(0).getPrevious());
+         if (lineOfSight.get(lineOfSight.size() - 1).getNext().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
+            lineOfSight.add(lineOfSight.get(lineOfSight.size() - 1).getNext());
 
          HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
          HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
