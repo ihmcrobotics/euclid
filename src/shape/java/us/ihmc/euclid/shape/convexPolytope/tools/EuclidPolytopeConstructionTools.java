@@ -82,7 +82,9 @@ public class EuclidPolytopeConstructionTools
              * The following check is redundant with the internal logic of Face3D.addVertex(...) and is also
              * probably expensive, but it has to be done before we actually start modifying the polytope.
              */
-            List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex, epsilon);
+            List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex);
+
+            assert !lineOfSight.isEmpty();
 
             if (lineOfSight.size() == 1)
                continue; // The single visible edge is the silhouetteEdge, this is a safe context.
