@@ -35,13 +35,46 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class provides random generators to generate random shapes.
+ * <p>
+ * The main application is for writing JUnit Tests.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidShapeRandomTools
 {
+   /**
+    * Generates a random a box 3D.
+    * <ul>
+    * <li>{@code size}<sub>i</sub> &in; [0.0; 1.0].
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * 
+    * @param random the random generator to use.
+    * @return the random box 3D.
+    */
    public static Box3D nextBox3D(Random random)
    {
       return nextBox3D(random, 0.0, 1.0);
    }
 
+   /**
+    * Generates a random a box 3D.
+    * <ul>
+    * <li>{@code size}<sub>i</sub> &in; [minSize; maxSize].
+    * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
+    * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * 
+    * @param random the random generator to use.
+    * @param minSize the minimum value for each component of the box size.
+    * @param maxSize the maximum value for each component of the box size.
+    * @return the random box 3D.
+    * @throws RuntimeException if {@code minSize > maxSize}.
+    */
    public static Box3D nextBox3D(Random random, double minSize, double maxSize)
    {
       return new Box3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minSize, maxSize),
