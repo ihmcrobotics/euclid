@@ -61,6 +61,12 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
       boundingBoxToPack.set(this, this);
    }
 
+   @Override
+   default boolean isConvex()
+   {
+      return true;
+   }
+
    default boolean epsilonEquals(PointShape3DReadOnly other, double epsilon)
    {
       return Point3DReadOnly.super.epsilonEquals(other, epsilon);

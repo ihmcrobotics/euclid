@@ -197,6 +197,12 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return numberOfIntersections;
    }
 
+   @Override
+   default boolean isConvex()
+   {
+      return true;
+   }
+
    /**
     * Gets this box size along the x-axis, i.e. its length.
     *

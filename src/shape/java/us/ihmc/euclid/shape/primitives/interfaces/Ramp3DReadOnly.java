@@ -245,6 +245,12 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       getIntermediateVariableSupplier().releasePoint3D(vertex);
    }
 
+   @Override
+   default boolean isConvex()
+   {
+      return true;
+   }
+
    /**
     * Tests separately and on a per component basis if the pose and the size of this ramp and
     * {@code other}'s pose and size are equal to an {@code epsilon}.

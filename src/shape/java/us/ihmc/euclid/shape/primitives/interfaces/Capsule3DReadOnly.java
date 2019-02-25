@@ -87,6 +87,12 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       return EuclidShapeTools.orthogonalProjectionOntoCapsule3D(pointToProject, getPosition(), getAxis(), getLength(), getRadius(), projectionToPack);
    }
 
+   @Override
+   default boolean isConvex()
+   {
+      return true;
+   }
+
    default boolean epsilonEquals(Capsule3DReadOnly other, double epsilon)
    {
       return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)

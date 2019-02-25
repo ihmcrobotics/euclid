@@ -189,6 +189,12 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       EuclidShapeTools.boundingBoxEllipsoid3D(getPosition(), getOrientation(), getRadii(), boundingBoxToPack);
    }
 
+   @Override
+   default boolean isConvex()
+   {
+      return true;
+   }
+
    /**
     * Packs the 3 radii of this ellipsoid in the given tuple.
     *

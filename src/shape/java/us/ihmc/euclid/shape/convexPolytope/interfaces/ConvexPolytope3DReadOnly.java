@@ -323,6 +323,12 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
       return getNumberOfVertices() == 0;
    }
 
+   @Override
+   default boolean isConvex()
+   {
+      return true;
+   }
+
    default boolean equals(ConvexPolytope3DReadOnly other)
    {
       if (other == null)

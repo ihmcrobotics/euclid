@@ -140,4 +140,6 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
    }
 
    void getBoundingBox(BoundingBox3DBasics boundingBoxToPack);
+
+   boolean isConvex();
 }
