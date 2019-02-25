@@ -44,7 +44,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param line2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -102,7 +101,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line 3D: point = ( 0.174,  0.732, -0.222 ), direction = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param line3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -160,7 +158,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
     * </pre>
-    * </p>
     *
     * @param lineSegment1D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -221,7 +218,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 )
     * </pre>
-    * </p>
     *
     * @param lineSegment2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -281,7 +277,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line segment 3D: 1st endpoint = ( 0.174,  0.732, -0.222 ), 2nd endpoint = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param lineSegment3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -341,7 +336,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Bounding Box 2D: min = ( 0.174,  0.732 ), max = (-0.558, -0.380 )
     * </pre>
-    * </p>
     *
     * @param boundingBox2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -401,7 +395,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param boundingBox3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -461,7 +454,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * (0.174)
     * </pre>
-    * </p>
     *
     * @param orientation2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -520,7 +512,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param plane3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -578,7 +569,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
     * </pre>
-    * </p>
     *
     * @param pose2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -636,7 +626,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
     * </pre>
-    * </p>
     *
     * @param pose3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -696,7 +685,6 @@ public class EuclidGeometryIOTools
     * ( 0.174, -0.452 ),
     * (-0.052, -0.173 ) ]
     * </pre>
-    * </p>
     *
     * @param convexPolygon2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -785,7 +773,6 @@ public class EuclidGeometryIOTools
     * ( 0.174, -0.452 ),
     * (-0.052, -0.173 ) ]
     * </pre>
-    * </p>
     *
     * @param vertex2DSupplier the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -834,7 +821,6 @@ public class EuclidGeometryIOTools
     * ( 0.174, -0.452, -0.222 ),
     * (-0.052, -0.173, -0.371 ) ]
     * </pre>
-    * </p>
     *
     * @param vertex3DSupplier the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
