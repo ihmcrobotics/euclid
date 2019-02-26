@@ -1732,28 +1732,19 @@ public class ConvexPolytope3DTest
 
    @Test
    void testGJKNullPointerExceptionBug5() throws Exception
-   {
+   { // Could not reproduce the original exception, but manage to highlight a new one by shuffling the vertices in a given way
       List<Point3D> vertices = new ArrayList<>();
-      vertices.add(new Point3D(0.19811056289014100000, 1.53064568455729290000, 0.68554775478046680000));
-      vertices.add(new Point3D(0.09942174868943067000, -0.07312979643742923000, 0.34404201167296220000));
+      vertices.add(new Point3D(0.00987877860785552000, 0.19131147056882847000, 0.03418482283725754500));
+      vertices.add(new Point3D(0.02555035291707655200, 0.11906397969616522000, 0.09162654986018806000));
       vertices.add(new Point3D(0.03548092653292492000, 0.08553875648964482000, 0.12277926611952411000));
       vertices.add(new Point3D(0.02835400199038940000, 0.11051604727461928000, 0.09913549801006882000));
-      vertices.add(new Point3D(0.02555035291707655200, 0.11906397969616522000, 0.09162654986018806000));
-      vertices.add(new Point3D(0.02206651442783452700, 0.13649893774802690000, 0.07635963070894680000));
-      vertices.add(new Point3D(0.00987877860785552000, 0.19131147056882847000, 0.03418482283725754500));
-      vertices.add(new Point3D(-0.01048610647118039500, 0.31094167239958503000, -0.03628643845554569000));
-      vertices.add(new Point3D(-0.03072567104185691700, 0.85768242870865940000, -0.10632403688918313000));
-      vertices.add(new Point3D(0.03326520528372667000, 0.09790747514458276000, 0.11042444275049243000));
+      vertices.add(new Point3D(0.19811056289014100000, 1.53064568455729290000, 0.68554775478046680000));
 
-      // Could not reproduce the original exception, but manage to highlight a new one by shuffling the vertices in a given way
-      Random random = new Random(-103505459636305186L);
-      Collections.shuffle(vertices, random);
-
-      //      Point3D troublingVertex = new Point3D( 0.02818508137321876200,  0.10400186862552696000,  0.10568732858207800000 );
+      Point3D troublingVertex = new Point3D(0.03326520528372667000, 0.09790747514458276000, 0.11042444275049243000);
       double constructionEpsilon = 0.001;
-      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices.subList(0, 8)), constructionEpsilon);
+      ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);
       EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
-      convexPolytope3D.addVertex(vertices.get(8));
+      convexPolytope3D.addVertex(troublingVertex);
       EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(convexPolytope3D);
    }
 

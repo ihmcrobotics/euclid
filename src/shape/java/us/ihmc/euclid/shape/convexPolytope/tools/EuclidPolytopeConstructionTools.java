@@ -73,7 +73,7 @@ public class EuclidPolytopeConstructionTools
 
          if (inPlaneFaces.contains(face))
          { // The face has to be extended to include the new vertex
-            if (!face.canObserverSeeEdge(vertex, silhouetteEdge, epsilon))
+            if (!face.canObserverSeeEdge(vertex, silhouetteEdge))
             { // Something is not quite right, the silhouetteEdge should be visible. Aborting.
                return null;
             }
@@ -85,6 +85,9 @@ public class EuclidPolytopeConstructionTools
             List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex);
 
             assert !lineOfSight.isEmpty();
+
+            if (lineOfSight.isEmpty())
+               return null;
 
             if (lineOfSight.size() == 1)
                continue; // The single visible edge is the silhouetteEdge, this is a safe context.
