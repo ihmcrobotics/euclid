@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -14,9 +14,10 @@ import java.util.Set;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidMutationTesting;
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
-import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -573,8 +574,8 @@ public class ReferenceFrameTest
 
    public static void main(String[] args)
    {
-      String targetTests = EuclidTestSuite.class.getName();
+      String targetTests = EuclidTestConstants.class.getName();
       String targetClasses = ReferenceFrame.class.getName() + " " + ReferenceFrameTools.class.getName();
-      EuclidTestSuite.doPITMutationTestAndOpenResult(targetTests, targetClasses);
+      EuclidMutationTesting.doPITMutationTestAndOpenResult(targetTests, targetClasses);
    }
 }

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

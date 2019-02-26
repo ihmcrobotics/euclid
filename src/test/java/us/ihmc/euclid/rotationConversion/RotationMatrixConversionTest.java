@@ -2,7 +2,7 @@ package us.ihmc.euclid.rotationConversion;
 
 import static java.lang.Math.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 

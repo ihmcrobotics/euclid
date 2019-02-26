@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 

@@ -1,7 +1,7 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
