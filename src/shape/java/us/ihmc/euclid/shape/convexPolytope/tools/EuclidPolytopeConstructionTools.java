@@ -89,11 +89,11 @@ public class EuclidPolytopeConstructionTools
             if (lineOfSight.isEmpty())
                return null;
 
-            if (lineOfSight.size() == 1)
-               continue; // The single visible edge is the silhouetteEdge, this is a safe context.
-
             for (HalfEdge3D lineOfSightEdge : lineOfSight)
             {
+               if (lineOfSightEdge == silhouetteEdge)
+                  continue; // The single visible edge is the silhouetteEdge, this is a safe context.
+
                if (silhouetteEdges.contains(lineOfSightEdge))
                {
                   if (silhouetteEdge != lineOfSightEdge)
@@ -107,6 +107,28 @@ public class EuclidPolytopeConstructionTools
                 * need to abort.
                 */
                if (lineOfSightEdge.distanceFromSupportLine(vertex) > epsilon)
+                  return null;
+            }
+
+            /*
+             * Edge-case: the vertex on the support line of either the previous or next edge to the
+             * line-of-sight. Only case where it is fine is when the edge should be extended. The edge is not
+             * part of the silhouette. In such scenario, the face if the twin of the previous/next should also
+             * be part of the inPlaneFaces, if not we're dealing with a numerical issue we need to abort.
+             */
+            HalfEdge3D previousLineOfSight = lineOfSight.get(0).getPrevious();
+
+            if (previousLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
+            {
+               if (!inPlaneFaces.contains(previousLineOfSight.getTwin().getFace()))
+                  return null;
+            }
+
+            HalfEdge3D nextLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
+
+            if (nextLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
+            {
+               if (!inPlaneFaces.contains(nextLineOfSight.getTwin().getFace()))
                   return null;
             }
          }
