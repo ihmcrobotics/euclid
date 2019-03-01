@@ -170,7 +170,8 @@ public class EuclidPolytopeConstructionTools
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
          if (inPlaneFaces.contains(silhouetteEdge.getFace()))
          { // The face has to be extended to include the new vertex
-            assert silhouetteEdge.getFace().addVertex(vertex);
+            boolean wasModified = silhouetteEdge.getFace().addVertex(vertex);
+            assert wasModified;
          }
          else
          { // Creating a new face.
@@ -215,9 +216,12 @@ public class EuclidPolytopeConstructionTools
 
       Face3D face = new Face3D(initialNormal, epsilon);
 
-      assert face.addVertex(v1);
-      assert face.addVertex(v2);
-      assert face.addVertex(v3);
+      boolean wasModified = face.addVertex(v1);
+      assert wasModified;
+      wasModified = face.addVertex(v2);
+      assert wasModified;
+      wasModified = face.addVertex(v3);
+      assert wasModified;
 
       HalfEdge3D faceFirstEdge = face.getEdge(0);
 
