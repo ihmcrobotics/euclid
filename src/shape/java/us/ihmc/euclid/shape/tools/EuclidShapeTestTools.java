@@ -714,8 +714,9 @@ public class EuclidShapeTestTools
             for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
             {
                HalfEdge3DReadOnly edge = edges.get(edgeIndex);
+               Face3DReadOnly neighbor = edge.getFace();
 
-               if (edge.getFace() != face)
+               if (neighbor != face)
                   EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge does not this face as its face.");
                if (!edges.contains(edge.getNext()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
@@ -734,6 +735,9 @@ public class EuclidShapeTestTools
 
                if (cross.dot(normal) < 0.0)
                   EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge is orientated counter-clockwise.");
+
+               if (face.canObserverSeeFace(neighbor.getCentroid()))
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face is concave with respect to the " + edgeIndex + "th neighbor.");
             }
          }
       }
