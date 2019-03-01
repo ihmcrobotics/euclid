@@ -174,7 +174,7 @@ public class EuclidPolytopeConstructionTools
             assert wasModified;
          }
          else
-         { // Creating a new face.
+         { // Creating a new face. FIXME Need to check if the face can have more than only 3 vertices!
             newFaces.add(newFace3DFromVertexAndTwinEdge(vertex, silhouetteEdge, epsilon));
          }
       }
