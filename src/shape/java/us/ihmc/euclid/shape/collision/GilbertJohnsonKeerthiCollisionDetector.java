@@ -1,10 +1,12 @@
 package us.ihmc.euclid.shape.collision;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import us.ihmc.euclid.Axis;
-import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -23,6 +25,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private double terminalConditionEpsilon;
    private double simplexConstructionEpsilon = EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON;
    private boolean latestCollisionTestResult;
+
+   private final List<Point3D> vertices = new ArrayList<>();
 
    private SimplexPolytope3D simplex;
    private final Vector3D supportDirection = new Vector3D();
@@ -91,15 +95,16 @@ public class GilbertJohnsonKeerthiCollisionDetector
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
          // FIXME cleanup the following once testing is done.
-         ConvexPolytope3D backup = new ConvexPolytope3D(simplex.getPolytope());
-         simplex.addVertex(supportingVertexA, supportingVertexB);
+         
          try
          {
+            vertices.add(new Point3D(new SimplexVertex3D(supportingVertexA, supportingVertexB)));
+            simplex.addVertex(supportingVertexA, supportingVertexB);
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
          }
-         catch (Error e)
+         catch (Exception | Error e)
          {
-            System.out.println(EuclidShapeIOTools.getConvexPolytope3DStringForUnitTesting(backup, new SimplexVertex3D(supportingVertexA, supportingVertexB)));
+            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(vertices, new SimplexVertex3D(supportingVertexA, supportingVertexB), simplexConstructionEpsilon));
             throw e;
          }
 
