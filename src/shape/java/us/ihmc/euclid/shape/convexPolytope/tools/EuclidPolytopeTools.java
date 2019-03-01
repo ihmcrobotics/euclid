@@ -7,10 +7,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.ops.CommonOps;
+
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -111,7 +115,8 @@ public class EuclidPolytopeTools
                                                  Vector3DReadOnly planeNormal, boolean testLeftSide, double epsilon)
    {
       return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
-                                     lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide, epsilon);
+                                     lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide,
+                                     epsilon);
    }
 
    /**
@@ -357,7 +362,7 @@ public class EuclidPolytopeTools
    @SuppressWarnings("unchecked")
    public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> Collection<E> computeSilhouette(List<F> faces, Point3DReadOnly observer,
                                                                                                           double epsilon, Collection<F> visibleFacesToPack,
-                                                                                                          Collection<F> inPlaneFacesToPack)
+                                                                                                          List<F> inPlaneFacesToPack)
    {
       Face3DReadOnly leastVisibleFace = null;
       double minimumDistance = Double.POSITIVE_INFINITY;
@@ -368,6 +373,9 @@ public class EuclidPolytopeTools
       visibleFacesToPack.clear();
       if (inPlaneFacesToPack != null)
          inPlaneFacesToPack.clear();
+
+      double distanceToClosestFacePlane = Double.POSITIVE_INFINITY;
+      F faceWithPlaneClosestToVertex = null;
 
       for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
       { // First we go through the faces and sort them into 2 categories: visible faces, faces which support plane contains the observer.
@@ -380,7 +388,16 @@ public class EuclidPolytopeTools
             if (signedDistance > -epsilon)
             {
                if (inPlaneFacesToPack != null)
+               {
                   inPlaneFacesToPack.add(face);
+                  double distance = Math.abs(signedDistance);
+
+                  if (distance < distanceToClosestFacePlane)
+                  {
+                     distanceToClosestFacePlane = distance;
+                     faceWithPlaneClosestToVertex = face;
+                  }
+               }
 
                if (face.isPointDirectlyAboveOrBelow(observer))
                   return null; // The observer belongs to that face => no silhouette.
@@ -417,6 +434,69 @@ public class EuclidPolytopeTools
 
             if (!hasAtLeastOneVisibleNeighbor)
                return null;
+         }
+      }
+
+      if (inPlaneFacesToPack != null)
+      {
+         if (inPlaneFacesToPack.size() == 2)
+         {
+            /*
+             * In a perfect world, the only way to have a point lying on two distinct planes is that the point
+             * belongs to the planes line intersection. Because numerical inaccuracies & tolerance used, this
+             * does not have to be the case, so we verify that the point is lying on the common edge's support
+             * line, if not, the two faces are only considered being visible.
+             */
+            HalfEdge3DReadOnly commonEdge = inPlaneFacesToPack.get(0).getCommonEdgeWith(inPlaneFacesToPack.get(1));
+
+            if (commonEdge != null)
+            {
+               if (commonEdge.distanceFromSupportLine(observer) > epsilon)
+               {
+                  inPlaneFacesToPack.clear();
+                  inPlaneFacesToPack.add(faceWithPlaneClosestToVertex);
+               }
+            }
+            else
+            {
+               Point3D pointOnIntersection = new Point3D();
+               Vector3D intersectionDirection = new Vector3D();
+               EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(inPlaneFacesToPack.get(0).getCentroid(), inPlaneFacesToPack.get(1).getNormal(),
+                                                                  inPlaneFacesToPack.get(1).getCentroid(), inPlaneFacesToPack.get(1).getNormal(),
+                                                                  pointOnIntersection, intersectionDirection);
+
+               if (EuclidGeometryTools.distanceFromPoint3DToLine3D(observer, pointOnIntersection, intersectionDirection) > epsilon)
+               {
+                  inPlaneFacesToPack.clear();
+                  inPlaneFacesToPack.add(faceWithPlaneClosestToVertex);
+               }
+            }
+         }
+         else if (inPlaneFacesToPack.size() >= 3)
+         {
+            /*
+             * In a perfect world, the only way to have a point lying on three distinct planes is that the point
+             * belongs to the planes point intersection. Because numerical inaccuracies & tolerance used, this
+             * does not have to be the case. Instead of computing the intersection coordinates of the different
+             * planes, we evaluate the likelihood of a point intersection to exist.
+             */
+            // Inspired from http://www.ambrsoft.com/TrigoCalc/Plan3D/3PlanesIntersection_.htm
+            DenseMatrix64F planesNormalMatrix = new DenseMatrix64F(3, inPlaneFacesToPack.size());
+
+            for (int i = 0; i < inPlaneFacesToPack.size(); i++)
+            {
+               Vector3DReadOnly normal = inPlaneFacesToPack.get(i).getNormal();
+               normal.get(0, i, planesNormalMatrix);
+            }
+
+            DenseMatrix64F outerNormalMatrix = new DenseMatrix64F(3, 3);
+            CommonOps.multOuter(planesNormalMatrix, outerNormalMatrix);
+
+            if (Math.abs(CommonOps.det(outerNormalMatrix)) <= 15.0 * epsilon)
+            {
+               inPlaneFacesToPack.clear();
+               inPlaneFacesToPack.add(faceWithPlaneClosestToVertex);
+            }
          }
       }
 
