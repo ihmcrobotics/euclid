@@ -229,19 +229,19 @@ public class EuclidPolytopeConstructionTools
 
    public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
    {
-      return EuclidPolytopeConstructionTools.updateFace3DNormal(vertices, averageToPack, normalToUpdate, null);
+      return updateFace3DNormal(vertices, averageToPack, normalToUpdate, null);
    }
 
    public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate,
                                             Tuple3DBasics eigenValuesToPack)
    {
       Matrix3D covariance = new Matrix3D();
-      EuclidPolytopeConstructionTools.computeCovariance3D(vertices, averageToPack, covariance);
+      computeCovariance3D(vertices, averageToPack, covariance);
       if (eigenValuesToPack == null)
          eigenValuesToPack = new Vector3D();
 
       Vector3D newNormal = new Vector3D();
-      boolean success = EuclidPolytopeConstructionTools.computeEigenVectors(covariance, eigenValuesToPack, null, null, newNormal);
+      boolean success = computeEigenVectors(covariance, eigenValuesToPack, null, null, newNormal);
       if (!success)
          return false;
 
@@ -384,7 +384,7 @@ public class EuclidPolytopeConstructionTools
    public static double computeConvexPolygon3DArea(List<? extends Point3DReadOnly> convexPolygon3D, Vector3DReadOnly normal, int numberOfVertices,
                                                    boolean clockwiseOrdered, Point3DBasics centroidToPack)
    {
-      EuclidPolytopeConstructionTools.checkNumberOfVertices(convexPolygon3D, numberOfVertices);
+      checkNumberOfVertices(convexPolygon3D, numberOfVertices);
 
       if (numberOfVertices == 0)
       {
