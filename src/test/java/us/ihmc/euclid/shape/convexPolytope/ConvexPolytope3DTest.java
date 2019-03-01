@@ -30,6 +30,7 @@ import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLib
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug11Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug13Original;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrityBug13Simplified;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKFaceNormalIntegrity_20190228_220911;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug12Original;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug12Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug1Original;
@@ -1658,6 +1659,7 @@ public class ConvexPolytope3DTest
       datasets.add(new DatasetGJKNullPointerExceptionBug12Simplified());
       datasets.add(new DatasetGJKFaceNormalIntegrityBug13Original());
       datasets.add(new DatasetGJKFaceNormalIntegrityBug13Simplified());
+      datasets.add(new DatasetGJKFaceNormalIntegrity_20190228_220911());
 
       for (int i = 0; i < datasets.size(); i++)
       {
