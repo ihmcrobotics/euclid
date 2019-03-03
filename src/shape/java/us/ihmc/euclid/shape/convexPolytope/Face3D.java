@@ -145,6 +145,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          if (lineOfSight.isEmpty())
             return false;
 
+         if (lineOfSight.size() == 1 && lineOfSight.get(0).distance(vertexToAdd) < constructionEpsilon)
+            return false;
+
          if (lineOfSight.get(0).getPrevious().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
             lineOfSight.add(0, lineOfSight.get(0).getPrevious());
          if (lineOfSight.get(lineOfSight.size() - 1).getNext().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
@@ -155,11 +158,6 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
          if (lineOfSight.size() == 1)
          {
-            if (firstVisibleEdge.getOrigin().geometricallyEquals(vertexToAdd, constructionEpsilon))
-               return false;
-            if (firstVisibleEdge.getDestination().geometricallyEquals(vertexToAdd, constructionEpsilon))
-               return false;
-
             HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
             additionalEdge.setFace(this);
             firstVisibleEdge.setDestination(vertexToAdd);
