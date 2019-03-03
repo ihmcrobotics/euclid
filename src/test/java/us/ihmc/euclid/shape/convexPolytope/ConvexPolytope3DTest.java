@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.EuclidTestConstants;
@@ -20,6 +21,8 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190302_160115;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_111711;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Original;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug9Original;
@@ -1660,15 +1663,25 @@ public class ConvexPolytope3DTest
       datasets.add(new DatasetGJKFaceNormalIntegrityBug13Original());
       datasets.add(new DatasetGJKFaceNormalIntegrityBug13Simplified());
       datasets.add(new DatasetGJKFaceNormalIntegrity_20190228_220911());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190302_160115());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_111711());
 
       for (int i = 0; i < datasets.size(); i++)
       {
          ConvexPolytope3DTroublesomeDataset dataset = datasets.get(i);
          String messagePrefix = "Dataset: " + dataset.getClass().getSimpleName();
-         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(dataset.getPointsBeforeIssueAsSupplier(), dataset.getConstructionEpsilon());
-         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(messagePrefix, convexPolytope3D);
-         convexPolytope3D.addVertex(dataset.getTroublesomePoint());
-         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(messagePrefix, convexPolytope3D);
+         ConvexPolytope3D convexPolytope3D;
+         try
+         {
+            convexPolytope3D = new ConvexPolytope3D(dataset.getPointsBeforeIssueAsSupplier(), dataset.getConstructionEpsilon());
+            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(messagePrefix, convexPolytope3D);
+            convexPolytope3D.addVertex(dataset.getTroublesomePoint());
+            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(messagePrefix, convexPolytope3D);
+         }
+         catch (Exception e)
+         {
+            throw new AssertionFailedError(messagePrefix, e);
+         }
       }
    }
 }
