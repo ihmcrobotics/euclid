@@ -23,6 +23,13 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190302_160115;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_111711;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_120656;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_122006;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_142536;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_154201;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_165341;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_172836;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190303_180109;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Original;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug9Original;
@@ -1665,6 +1672,13 @@ public class ConvexPolytope3DTest
       datasets.add(new DatasetGJKFaceNormalIntegrity_20190228_220911());
       datasets.add(new ConvexPolytope3DTroublesomeDataset_20190302_160115());
       datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_111711());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_120656());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_122006());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_142536());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_154201());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_165341());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_172836());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190303_180109());
 
       for (int i = 0; i < datasets.size(); i++)
       {
@@ -1678,7 +1692,7 @@ public class ConvexPolytope3DTest
             convexPolytope3D.addVertex(dataset.getTroublesomePoint());
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(messagePrefix, convexPolytope3D);
          }
-         catch (Exception e)
+         catch (Exception | AssertionError e)
          {
             throw new AssertionFailedError(messagePrefix, e);
          }
