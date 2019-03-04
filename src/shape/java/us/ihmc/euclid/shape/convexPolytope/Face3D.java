@@ -14,6 +14,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -91,6 +92,11 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     */
    public boolean addVertex(Vertex3D vertexToAdd)
    {
+      return addVertex(vertexToAdd, null, false);
+   }
+
+   public boolean addVertex(Vertex3D vertexToAdd, Vertex3D faceVertexToLock, boolean lockEdgesWithTwin)
+   {
       if (edges.isEmpty())
       {
          HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, vertexToAdd);
@@ -145,6 +151,15 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          if (lineOfSight.isEmpty())
             return false;
 
+         if (lockEdgesWithTwin)
+         {
+            for (int i = 0; i < lineOfSight.size(); i++)
+            {
+               if (lineOfSight.get(i).getTwin() != null)
+                  return false;
+            }
+         }
+
          if (lineOfSight.size() == 1 && lineOfSight.get(0).distance(vertexToAdd) < constructionEpsilon)
             return false;
 
@@ -165,17 +180,35 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
             firstVisibleEdge.getNext().setPrevious(additionalEdge);
             firstVisibleEdge.setNext(additionalEdge);
             additionalEdge.setPrevious(firstVisibleEdge);
+            // Clear the twin information to force the update.
+            firstVisibleEdge.setTwin(null);
             edges.add(additionalEdge);
          }
          else
          {
+            if (faceVertexToLock != null)
+            {
+               for (int i = 1; i < lineOfSight.size(); i++)
+               {
+                  if (lineOfSight.get(i).getOrigin() == faceVertexToLock)
+                     return false;
+               }
+            }
+
             firstVisibleEdge.setDestination(vertexToAdd);
             lastVisibleEdge.setOrigin(vertexToAdd);
             firstVisibleEdge.setNext(lastVisibleEdge);
             lastVisibleEdge.setPrevious(firstVisibleEdge);
+            // Clear the twin information to force the update.
+            firstVisibleEdge.setTwin(null);
+            lastVisibleEdge.setTwin(null);
 
             for (int i = 1; i < lineOfSight.size() - 1; i++)
-               edges.remove(lineOfSight.get(i));
+            {
+               HalfEdge3D edgeToRemove = lineOfSight.get(i);
+               edgeToRemove.destroy();
+               edges.remove(edgeToRemove);
+            }
          }
       }
 
@@ -253,7 +286,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       for (int i = 0; i < edges.size(); i++)
       {
-         edges.get(i).detroy();
+         edges.get(i).destroy();
       }
       edges.clear();
       normal.setToNaN();
@@ -450,6 +483,16 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          return Face3DReadOnly.super.equals((Face3DReadOnly) object);
       else
          return false;
+   }
+
+   @Override
+   public int hashCode()
+   {
+      // Using ArrayList.hashCode() to combine the hash-codes of the vertices defining this face.
+      long hashCode = vertices.hashCode();
+      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, centroid.hashCode());
+      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, normal.hashCode());
+      return EuclidHashCodeTools.toIntHashCode(hashCode);
    }
 
    @Override
