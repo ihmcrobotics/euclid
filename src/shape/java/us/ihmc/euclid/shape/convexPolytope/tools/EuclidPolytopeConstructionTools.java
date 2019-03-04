@@ -53,8 +53,7 @@ public class EuclidPolytopeConstructionTools
     *           a line, etc.
     * @return the list of new faces that were created in the the process.
     */
-   public static List<Face3D> computeVertexNeighborFaces(Vertex3D vertex, Collection<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces,
-                                                         double epsilon)
+   public static List<Face3D> computeVertexNeighborFaces(Vertex3D vertex, List<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
    {
       if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertex, silhouetteEdges) <= epsilon)
          return null;
@@ -73,21 +72,16 @@ public class EuclidPolytopeConstructionTools
 
          if (inPlaneFaces.contains(face))
          { // The face has to be extended to include the new vertex
-            if (!face.canObserverSeeEdge(vertex, silhouetteEdge))
-            { // Something is not quite right, the silhouetteEdge should be visible. Aborting.
-               return null;
-            }
-
             /*
              * The following check is redundant with the internal logic of Face3D.addVertex(...) and is also
              * probably expensive, but it has to be done before we actually start modifying the polytope.
              */
             List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex);
 
-            assert !lineOfSight.isEmpty();
-
             if (lineOfSight.isEmpty())
                return null;
+
+            boolean faceRemovedFromInPlaneList = false;
 
             for (HalfEdge3D lineOfSightEdge : lineOfSight)
             {
@@ -108,28 +102,45 @@ public class EuclidPolytopeConstructionTools
                 */
                if (lineOfSightEdge.distanceFromSupportLine(vertex) > epsilon)
                   return null;
+
+               // The face will extend the edge to the new vertex, need to make sure the other face will do the same.
+               if (!inPlaneFaces.contains(lineOfSightEdge.getTwin().getFace()))
+               {
+                  faceRemovedFromInPlaneList = true;
+                  inPlaneFaces.remove(face);
+                  break;
+               }
             }
 
-            /*
-             * Edge-case: the vertex on the support line of either the previous or next edge to the
-             * line-of-sight. Only case where it is fine is when the edge should be extended. The edge is not
-             * part of the silhouette. In such scenario, the face if the twin of the previous/next should also
-             * be part of the inPlaneFaces, if not we're dealing with a numerical issue we need to abort.
-             */
-            HalfEdge3D previousLineOfSight = lineOfSight.get(0).getPrevious();
-
-            if (previousLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
+            if (!faceRemovedFromInPlaneList)
             {
-               if (!inPlaneFaces.contains(previousLineOfSight.getTwin().getFace()))
-                  return null;
-            }
+               /*
+                * Edge-case: the vertex on the support line of either the previous or next edge to the
+                * line-of-sight. Only case where it is fine is when the edge should be extended. The edge is not
+                * part of the silhouette. In such scenario, the face if the twin of the previous/next should also
+                * be part of the inPlaneFaces, if not we remove the face from the list which will force the
+                * creation of a new face.
+                */
+               HalfEdge3D previousLineOfSight = lineOfSight.get(0).getPrevious();
+               HalfEdge3D nextLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
 
-            HalfEdge3D nextLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
+               if (previousLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
+               {
+                  if (!inPlaneFaces.contains(previousLineOfSight.getTwin().getFace()))
+                  {
+                     inPlaneFaces.remove(face);
+                     continue;
+                  }
+               }
 
-            if (nextLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
-            {
-               if (!inPlaneFaces.contains(nextLineOfSight.getTwin().getFace()))
-                  return null;
+               if (nextLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
+               {
+                  if (!inPlaneFaces.contains(nextLineOfSight.getTwin().getFace()))
+                  {
+                     inPlaneFaces.remove(face);
+                     continue;
+                  }
+               }
             }
          }
          else
@@ -154,29 +165,147 @@ public class EuclidPolytopeConstructionTools
          }
       }
 
-      List<Face3D> newFaces = new ArrayList<>();
-
-      if (!edgesToSkip.isEmpty())
-      {
-         /*
-          * This means that more than one of the silhouette edges belongs to a single face. In such case,
-          * only one has to be processed.
-          */
-         silhouetteEdges = new ArrayList<>(silhouetteEdges);
-         silhouetteEdges.removeAll(edgesToSkip);
+      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+      { // We first destroy the faces that are to be removed so they remove their edges from the vertices associated edges.
+         destroyTwinFace(silhouetteEdge);
       }
 
-      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
-      { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
-         if (inPlaneFaces.contains(silhouetteEdge.getFace()))
-         { // The face has to be extended to include the new vertex
-            boolean wasModified = silhouetteEdge.getFace().addVertex(vertex);
+      if (!inPlaneFaces.isEmpty())
+      {
+         // Making copies of these lists so we don't modify the arguments.
+         silhouetteEdges = new ArrayList<>(silhouetteEdges);
+         inPlaneFaces = new ArrayList<>(inPlaneFaces);
+
+         for (int i = 0; i < silhouetteEdges.size() && !inPlaneFaces.isEmpty(); i++)
+         {
+            HalfEdge3D silhouetteEdge = silhouetteEdges.get(i);
+            Face3D faceToExtend = silhouetteEdge.getFace();
+
+            if (!inPlaneFaces.remove(faceToExtend))
+               continue;
+
+            // The faceToExtend may hold onto more than 1 silhouette edges.
+            silhouetteEdges.removeAll(faceToExtend.getEdges());
+            i--; // The list's subsequent elements are being shifted, so we need to rewind the current index.
+            boolean wasModified = faceToExtend.addVertex(vertex);
             assert wasModified;
          }
-         else
-         { // Creating a new face. FIXME Need to check if the face can have more than only 3 vertices!
-            newFaces.add(newFace3DFromVertexAndTwinEdge(vertex, silhouetteEdge, epsilon));
+      }
+
+      List<Face3D> newFaces = new ArrayList<>();
+      // Markers used to skip edges that were already processed.
+      int forloopStart = 0;
+      int forloopEnd = silhouetteEdges.size() - 1;
+
+      if (!silhouetteEdges.isEmpty())
+      {
+         /*
+          * We first need to handle the first silhouetteEdge in a special way. Simple case: the associated
+          * face is to be extended => we do nothing here and start the for-loop. Non-simple case: a new face
+          * is to be created with that silhouetteEdge, we then need to search backward and forward along the
+          * silhouette and see if the new face can be extended to include any of them, if so we need to make
+          * sure the processed edges are skipped in the for-loop.
+          */
+         HalfEdge3D firstSilhouetteEdge = silhouetteEdges.get(0);
+
+         Face3D newFace = newFace3DFromVertexAndTwinEdge(vertex, firstSilhouetteEdge, epsilon);
+         forloopStart = 1;
+
+         HalfEdge3D nextSilhouetteEdge;
+         HalfEdge3D previousSilhouetteEdge = firstSilhouetteEdge;
+
+         for (int i = 1; i < silhouetteEdges.size(); i++)
+         { // Perform forward search along the silhouette
+            nextSilhouetteEdge = silhouetteEdges.get(i);
+
+            if (previousSilhouetteEdge.getDestination() != nextSilhouetteEdge.getOrigin())
+            { // The silhouette is discontinuous, meaning some edges were processed in between, end of search.
+               break;
+            }
+
+            if (newFace.distanceToPlane(nextSilhouetteEdge.getDestination()) > epsilon)
+            { // We can't extend the newFace any further.
+               break;
+            }
+
+            // The new face can be extended to include the next silhouetteEdge.
+            if (!newFace.addVertex(nextSilhouetteEdge.getDestination(), vertex, true))
+            { // Extending the face to include would result in removing the vertex we're currently trying to add.
+               break;
+            }
+
+            HalfEdge3D newEdge = nextSilhouetteEdge.getDestination().getEdgeTo(nextSilhouetteEdge.getOrigin());
+            nextSilhouetteEdge.setTwin(newEdge);
+            newEdge.setTwin(nextSilhouetteEdge);
+            forloopStart = i + 1;
          }
+
+         nextSilhouetteEdge = firstSilhouetteEdge;
+
+         for (int i = silhouetteEdges.size() - 1; i >= forloopStart; i--)
+         { // Perform backward search along the silhouette
+            previousSilhouetteEdge = silhouetteEdges.get(i);
+
+            if (previousSilhouetteEdge.getDestination() != nextSilhouetteEdge.getOrigin())
+            { // The silhouette is discontinuous, meaning some edges were processed in between, end of search.
+               break;
+            }
+
+            if (newFace.distanceToPlane(previousSilhouetteEdge.getOrigin()) > epsilon)
+            { // We can't extend the newFace any further.
+               break;
+            }
+
+            // The new face can be extended to include the next silhouetteEdge.
+            if (!newFace.addVertex(nextSilhouetteEdge.getOrigin(), vertex, true))
+            { // Extending the face to include would result in removing the vertex we're currently trying to add.
+               break;
+            }
+
+            HalfEdge3D newEdge = previousSilhouetteEdge.getDestination().getEdgeTo(previousSilhouetteEdge.getOrigin());
+            previousSilhouetteEdge.setTwin(newEdge);
+            newEdge.setTwin(previousSilhouetteEdge);
+            forloopEnd = i - 1;
+         }
+
+         newFaces.add(newFace);
+      }
+
+      for (int i = forloopStart; i <= forloopEnd; i++)
+      {
+         HalfEdge3D silhouetteEdge = silhouetteEdges.get(i);
+
+         // Creating a new face.
+         Face3D newFace = newFace3DFromVertexAndTwinEdge(vertex, silhouetteEdge, epsilon);
+
+         HalfEdge3D nextSilhouetteEdge;
+         HalfEdge3D previousSilhouetteEdge = silhouetteEdge;
+
+         for (int j = i + 1; j < forloopEnd; j++)
+         {
+            nextSilhouetteEdge = silhouetteEdges.get(j);
+
+            if (previousSilhouetteEdge.getDestination() != nextSilhouetteEdge.getOrigin())
+            { // The silhouette is discontinuous, meaning some edges were processed in between, end of search.
+               break;
+            }
+
+            if (newFace.distanceToPlane(nextSilhouetteEdge.getDestination()) > epsilon)
+            { // We can't extend the newFace any further, resume the main loop while skipping processed edges.
+               break;
+            }
+
+            // The new face can be extended to include the next silhouetteEdge.
+            if (!newFace.addVertex(nextSilhouetteEdge.getDestination(), vertex, true))
+            { // Extending the face to include would result in removing the vertex we're currently trying to add.
+               break;
+            }
+            HalfEdge3D newEdge = nextSilhouetteEdge.getDestination().getEdgeTo(nextSilhouetteEdge.getOrigin());
+            nextSilhouetteEdge.setTwin(newEdge);
+            newEdge.setTwin(nextSilhouetteEdge);
+            i = j;
+         }
+         newFaces.add(newFace);
       }
 
       for (HalfEdge3D startingFrom : vertex.getAssociatedEdges())
@@ -188,6 +317,17 @@ public class EuclidPolytopeConstructionTools
       }
 
       return newFaces;
+   }
+
+   private static void destroyTwinFace(HalfEdge3D edge)
+   {
+      HalfEdge3D twin = edge.getTwin();
+      if (twin == null)
+         return;
+      Face3D face = twin.getFace();
+      if (face == null)
+         return;
+      face.destroy();
    }
 
    /**
@@ -227,6 +367,22 @@ public class EuclidPolytopeConstructionTools
 
       twinEdge.setTwin(faceFirstEdge);
       faceFirstEdge.setTwin(twinEdge);
+
+      HalfEdge3D vertexToOrigin = vertex.getEdgeTo(twinEdge.getOrigin());
+      HalfEdge3D originToVertex = twinEdge.getOrigin().getEdgeTo(vertex);
+
+      if (vertexToOrigin != null)
+         vertexToOrigin.setTwin(originToVertex);
+      if (originToVertex != null)
+         originToVertex.setTwin(vertexToOrigin);
+
+      HalfEdge3D vertexToDestination = vertex.getEdgeTo(twinEdge.getDestination());
+      HalfEdge3D destinationToVertex = twinEdge.getDestination().getEdgeTo(vertex);
+
+      if (vertexToDestination != null)
+         vertexToDestination.setTwin(destinationToVertex);
+      if (destinationToVertex != null)
+         destinationToVertex.setTwin(vertexToDestination);
 
       return face;
    }
@@ -457,9 +613,12 @@ public class EuclidPolytopeConstructionTools
 
          if (centroidToPack != null)
          {
-            if (area < 1.0e-5)
+            if (area < 1.0e-12)
             {
-               centroidToPack.set(convexPolygon3D.get(0));
+               centroidToPack.setToZero();
+               for (int i = 0; i < numberOfVertices; i++)
+                  centroidToPack.add(convexPolygon3D.get(i));
+               centroidToPack.scale(1.0 / numberOfVertices);
             }
             else
             {

@@ -225,6 +225,29 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
             isPolytopeModified |= handleMultipleFaceCase(vertexToAdd);
       }
 
+      if (faces.size() > 2)
+      {
+         for (int i = faces.size() - 1; i >= 0; i--)
+         {
+            Face3D face = faces.get(i);
+            if (face.getNumberOfEdges() <= 2)
+               removeFace(face);
+         }
+      }
+
+      if (faces.size() == 2)
+      {
+         removeFace(faces.get(1));
+         Face3D singleFace = faces.get(0);
+
+         for (int i = 0; i < singleFace.getNumberOfEdges(); i++)
+         {
+            HalfEdge3D edge = singleFace.getEdge(i);
+            edge.getOrigin().clearAssociatedEdgeList();
+            edge.getOrigin().addAssociatedEdge(edge);
+         }
+      }
+
       if (isPolytopeModified)
       {
          updateEdges();
@@ -281,7 +304,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
    {
       Set<Face3D> visibleFaces = new HashSet<>();
       List<Face3D> inPlaneFaces = new ArrayList<>();
-      Collection<HalfEdge3D> silhouette = EuclidPolytopeTools.computeSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
+      List<HalfEdge3D> silhouette = EuclidPolytopeTools.computeSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
 
       if (silhouette != null)
       {
