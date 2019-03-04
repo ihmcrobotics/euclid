@@ -5839,6 +5839,8 @@ public class EuclidGeometryTools
    }
 
    /**
+    * TODO Update Javadoc and test.
+    * 
     * Computes the normal of a plane that is defined by three points.
     * <p>
     * Edge cases:
@@ -5869,11 +5871,7 @@ public class EuclidGeometryTools
       normalToPack.setY(v2_x * v1_z - v2_z * v1_x);
       normalToPack.setZ(v1_x * v2_y - v1_y * v2_x);
 
-      double normalLength = normalToPack.length();
-      if (normalLength < ONE_TEN_MILLIONTH)
-         return false;
-
-      normalToPack.scale(1.0 / normalLength);
+      normalToPack.normalize();
       return true;
    }
 
