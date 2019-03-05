@@ -69,6 +69,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class ConvexPolytope3DTest
@@ -912,6 +913,111 @@ public class ConvexPolytope3DTest
          }
       }
       // TODO need to add tests with more complicated polytope
+   }
+
+   @Test
+   void testSignedDistance() throws Exception
+   {
+      Random random = new Random(5434543);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
+
+         { // We start with a query that is inside. The returned distance should be the signed distance to the closest face's plane.
+
+            Point3D point = new Point3D();
+            { // We generate the query by picking a face at random, then an edge on this face at random, and we get a random point from the polytope and face centroids and the edge end-points.
+               Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+               HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+               point.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
+                                                                         edge.getDestination()));
+            }
+
+            double expectedDistance = Double.NEGATIVE_INFINITY;
+
+            for (Face3D face : convexPolytope3D.getFaces())
+            {
+               expectedDistance = Math.max(expectedDistance,
+                                           EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, face.getCentroid(), face.getNormal()));
+            }
+
+            double actualDistance = convexPolytope3D.signedDistance(point);
+
+            assertEquals(expectedDistance, actualDistance, EPSILON);
+         }
+
+         { // Query is inside. The returned distance should be the signed distance to the closest face's plane.
+            Point3D point = new Point3D();
+            { // This time, the query is generated to be within the tetrahedron formed by 4 vertices picked at random.
+               Point3DReadOnly a = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+               Point3DReadOnly b = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+               Point3DReadOnly c = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+               Point3DReadOnly d = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+               point.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, a, b, c, d));
+            }
+
+            double expectedDistance = Double.NEGATIVE_INFINITY;
+
+            for (Face3D face : convexPolytope3D.getFaces())
+            {
+               expectedDistance = Math.max(expectedDistance,
+                                           EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, face.getCentroid(), face.getNormal()));
+            }
+
+            double actualDistance = convexPolytope3D.signedDistance(point);
+
+            assertEquals(expectedDistance, actualDistance, EPSILON);
+         }
+
+         { // Query is outside, hovering over a face.
+            double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+            Point3D point = new Point3D();
+            { // We generate the query to be first on a face picked at random, and then we offset it towards the outside.
+               Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+               HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+               point.set(EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(), edge.getDestination()));
+               point.scaleAdd(expectedDistance, face.getNormal(), point);
+            }
+
+            double actualDistance = convexPolytope3D.signedDistance(point);
+            assertEquals(expectedDistance, actualDistance, EPSILON);
+         }
+
+         { // Query is outside, closest to an edge.
+            double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+            Point3D point = new Point3D();
+            {// We pick an edge at random, construct a vector that points outside, translate by the expectedDistance
+               HalfEdge3D edge = convexPolytope3D.getHalfEdge(random.nextInt(convexPolytope3D.getNumberOfHalfEdges()));
+               Vector3D towardOutside = new Vector3D();
+               Vector3D normalA = edge.getFace().getNormal();
+               Vector3D normalB = edge.getTwin().getFace().getNormal();
+               towardOutside.interpolate(normalA, normalB, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               towardOutside.normalize();
+               point.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               point.scaleAdd(expectedDistance, towardOutside, point);
+            }
+
+            double actualDistance = convexPolytope3D.signedDistance(point);
+            assertEquals(expectedDistance, actualDistance, EPSILON, "Iteration " + i);
+         }
+
+         { // Query outside, closest to a vertex.
+            double expectedDistance = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+            Point3D point = new Point3D();
+            {// We pick a vertex at random, construct a vector that points outside, translate by the expectedDistance
+               Vertex3D vertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
+               Vector3D towardOutside = new Vector3D();
+               for (int edgeIndex = 0; edgeIndex < vertex.getNumberOfAssociatedEdges(); edgeIndex++)
+                  towardOutside.scaleAdd(random.nextDouble(), vertex.getAssociatedEdge(edgeIndex).getFace().getNormal(), towardOutside);
+               towardOutside.normalize();
+               point.scaleAdd(expectedDistance, towardOutside, vertex);
+            }
+
+            double actualDistance = convexPolytope3D.signedDistance(point);
+            assertEquals(expectedDistance, actualDistance, EPSILON, "Iteration " + i);
+         }
+      }
    }
 
    @Test
