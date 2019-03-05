@@ -79,6 +79,74 @@ public class EuclidPolytopeToolsTest
          boolean actual = EuclidPolytopeTools.isPoint3DOnSideOfLine3D(query3D, line3D.getPoint(), line3D.getDirection(), planeNormal, testForLeftSide, 0.0);
          assertEquals(expected, actual);
       }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Plane3D plane = EuclidGeometryRandomTools.nextPlane3D(random);
+         Vector3D firstTangent = EuclidCoreRandomTools.nextOrthogonalVector3D(random, plane.getNormal(), true);
+         Vector3D secondTangent = new Vector3D();
+         secondTangent.cross(firstTangent, plane.getNormal());
+
+         // We start off with the line and query lying on the plane
+         Point3D firstPointOnLine = new Point3D();
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), firstTangent, plane.getPoint());
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), secondTangent, firstPointOnLine);
+         Point3D secondPointOnLine = new Point3D();
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), firstTangent, plane.getPoint());
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random), secondTangent, secondPointOnLine);
+
+         Line3D line = new Line3D(firstPointOnLine, secondPointOnLine);
+
+         Vector3D orthogonalToLinePointingLeft = new Vector3D();
+         orthogonalToLinePointingLeft.cross(plane.getNormal(), line.getDirection());
+
+         Point3D pointOnLeftSide = new Point3D();
+         pointOnLeftSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 5.0), line.getDirection(), line.getPoint());
+         pointOnLeftSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), orthogonalToLinePointingLeft, pointOnLeftSide);
+
+         Point3D pointOnRightSide = new Point3D();
+         pointOnRightSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 5.0), line.getDirection(), line.getPoint());
+         pointOnRightSide.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), orthogonalToLinePointingLeft, pointOnRightSide);
+
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+
+         // Now we move the query along the plane's normal, the result should be the same
+         pointOnLeftSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), pointOnLeftSide);
+         pointOnRightSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), pointOnRightSide);
+
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+
+         // Finally we move the 2 points defining along the plane's normal, the result should be the same
+         firstPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), firstPointOnLine);
+         secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), secondPointOnLine);
+         line = new Line3D(firstPointOnLine, secondPointOnLine);
+
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+      }
    }
 
    @Test
