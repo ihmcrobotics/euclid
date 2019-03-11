@@ -31,7 +31,7 @@ class ExpandingPolytopeAlgorithmTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
-   private static final double LARGE_EPSILON = 1.0e-2;
+   private static final double LARGE_EPSILON = 1.0e-3;
 
    @Test
    void testNonCollidingCubeAndTetrahedron()
@@ -559,7 +559,7 @@ class ExpandingPolytopeAlgorithmTest
    @Test
    void testSphere3DToSphere3D() throws Exception
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
-      Random random = new Random(18604);
+      Random random = new Random(1382635);
       boolean verbose = false;
       double meanError = 0.0;
 
@@ -576,18 +576,24 @@ class ExpandingPolytopeAlgorithmTest
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
-         epaDetector.setSimplexConstructionEpsilon(1.0e-7);
+         epaDetector.setSimplexConstructionEpsilon(1.0e-6);
          epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
          EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(epaDetector.getSimplex().getPolytope());
 
-         System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", EPA: " + epaResult.getDistance() + ", diff: "
-               + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
+//         System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", EPA: " + epaResult.getDistance() + ", diff: "
+//               + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
 
          meanError += Math.abs(expectedResult.getDistance() - epaResult.getDistance()) / ITERATIONS;
 
-//         assertEquals(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, epaResult.areShapesColliding());
+         if (epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0 != epaResult.areShapesColliding())
+         {
+            ConvexPolytope3D polytope = epaDetector.getSimplex().getPolytope();
+            Face3D face = polytope.getClosestFace(new Point3D());
+            face.canObserverSeeEdge(new Point3D(), face.getEdge(0));
+         }
+         assertEquals(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, epaResult.areShapesColliding());
 
-         if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.
+//         if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.
             assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding());
 
          assertEquals(expectedResult.getDistance(), epaResult.getDistance(), LARGE_EPSILON,

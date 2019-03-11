@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
@@ -99,9 +100,19 @@ public class ExpandingPolytopeAlgorithm
 
          Point3DReadOnly supportingVertexA = shapeA.getSupportingVertex(supportDirection);
          Point3DReadOnly supportingVertexB = shapeB.getSupportingVertex(supportDirectionNegative);
-         simplex.addVertex(supportingVertexA, supportingVertexB);
          // FIXME cleanup the following once testing is done.
-         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
+         
+         try
+         {
+            simplex.addVertex(supportingVertexA, supportingVertexB);
+            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
+            gjkCollisionDetector.vertices.add(new Point3D(new SimplexVertex3D(supportingVertexA, supportingVertexB)));
+         }
+         catch (Exception | Error e)
+         {
+            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(gjkCollisionDetector.vertices, new SimplexVertex3D(supportingVertexA, supportingVertexB), gjkCollisionDetector.getSimplexConstructionEpsilon()));
+            throw e;
+         }
 
          previousSupportDirection.set(supportDirection);
       }

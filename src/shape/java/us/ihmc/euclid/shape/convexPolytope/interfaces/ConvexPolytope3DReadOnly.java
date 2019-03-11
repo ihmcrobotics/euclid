@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -180,7 +181,105 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
-      return getClosestFace(point).signedDistance(point);
+      boolean isOutside = false;
+      double maxNegativeDistance = Double.NEGATIVE_INFINITY;
+      Face3DReadOnly lastFaceExplored = null;
+
+      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
+      {
+         Face3DReadOnly face = getFace(faceIndex);
+         double signedDistanceToPlane = face.signedDistanceToPlane(point);
+
+         if (signedDistanceToPlane < 0.0)
+         {
+            maxNegativeDistance = Math.max(maxNegativeDistance, signedDistanceToPlane);
+         }
+         else
+         {
+            isOutside = true;
+            lastFaceExplored = face;
+            break;
+         }
+      }
+
+      if (!isOutside)
+         return maxNegativeDistance;
+
+      boolean goToNeighbor = false;
+      boolean isQueryDirectlyAboveFace = true;
+      Face3DReadOnly closestFace = lastFaceExplored;
+      HalfEdge3DReadOnly closestEdge = null;
+      double distanceSquaredToClosestEdge = Double.POSITIVE_INFINITY;
+
+      while (true)
+      {
+         goToNeighbor = false;
+         isQueryDirectlyAboveFace = true;
+         distanceSquaredToClosestEdge = Double.POSITIVE_INFINITY;
+         closestEdge = null;
+
+         for (int edgeIndex = 0; edgeIndex < closestFace.getNumberOfEdges(); edgeIndex++)
+         {
+            HalfEdge3DReadOnly edge = closestFace.getEdge(edgeIndex);
+            boolean isEdgeVisible = closestFace.canObserverSeeEdge(point, edge);
+
+            if (isEdgeVisible)
+            { // Visit neighbor.
+               isQueryDirectlyAboveFace = false;
+               HalfEdge3DReadOnly neighborEdge = edge.getTwin();
+               Face3DReadOnly candidateFace = neighborEdge.getFace();
+               boolean isNeighborEdgeVisible = candidateFace.canObserverSeeEdge(point, neighborEdge);
+
+               if (!isNeighborEdgeVisible)
+               {
+                  closestFace = candidateFace;
+                  goToNeighbor = true;
+                  break;
+               }
+               else
+               {
+                  double distanceSquared = edge.distanceSquared(point);
+
+                  if (distanceSquared < distanceSquaredToClosestEdge)
+                  {
+                     distanceSquaredToClosestEdge = distanceSquared;
+                     closestEdge = edge;
+                  }
+               }
+            }
+         }
+
+         if (!goToNeighbor)
+         {
+            Face3DReadOnly naiveClosestFace = getFaces().stream().sorted((f1, f2) -> Double.compare(f1.distance(point), f2.distance(point))).findFirst().get();
+            if (isQueryDirectlyAboveFace)
+            {
+               assert closestFace == naiveClosestFace;
+               return closestFace.distanceToPlane(point);
+            }
+            else
+            {
+               double percentage = closestEdge.percentageAlongLineSegment(point);
+
+               Vertex3DReadOnly vertexToExplore = null;
+
+               if (percentage < 0.0)
+                  vertexToExplore = closestEdge.getOrigin();
+               else if (percentage > 1.0)
+                  vertexToExplore = closestEdge.getDestination();
+               else
+                  return Math.sqrt(distanceSquaredToClosestEdge);
+
+               for (int edgeIndex = 0; edgeIndex < vertexToExplore.getNumberOfAssociatedEdges(); edgeIndex++)
+               {
+                  HalfEdge3DReadOnly candidateEdge = vertexToExplore.getAssociatedEdge(edgeIndex);
+                  distanceSquaredToClosestEdge = Math.min(distanceSquaredToClosestEdge, candidateEdge.distanceSquared(point));
+               }
+
+               return Math.sqrt(distanceSquaredToClosestEdge);
+            }
+         }
+      }
    }
 
    @Override
@@ -222,22 +321,233 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
       if (getNumberOfFaces() == 1)
          return getFace(0);
 
+      boolean isOutside = false;
+      double maxNegativeDistance = Double.NEGATIVE_INFINITY;
+      Face3DReadOnly lastFaceExplored = null;
       Face3DReadOnly closestFace = null;
-      double minDistance = Double.POSITIVE_INFINITY;
 
       for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
       {
          Face3DReadOnly face = getFace(faceIndex);
-         double distance = face.distance(point);
+         double signedDistanceToPlane = face.signedDistanceToPlane(point);
 
-         if (distance < minDistance)
+         if (signedDistanceToPlane < 0.0)
          {
-            closestFace = face;
-            minDistance = distance;
+            if (signedDistanceToPlane > maxNegativeDistance)
+            {
+               closestFace = face;
+               maxNegativeDistance = signedDistanceToPlane;
+            }
+         }
+         else
+         {
+            isOutside = true;
+            lastFaceExplored = face;
+            break;
          }
       }
 
-      return closestFace;
+      if (!isOutside)
+         return closestFace;
+
+      boolean goToNeighbor = false;
+
+      double supportDirectionX = point.getX() - getCentroid().getX();
+      double supportDirectionY = point.getY() - getCentroid().getY();
+      double supportDirectionZ = point.getZ() - getCentroid().getZ();
+      Vertex3DReadOnly supportingVertex = lastFaceExplored.getVertex(0);
+      double bestDot = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, supportingVertex);
+
+      boolean hasClosestVertexBeenUpdated = true;
+
+      while (hasClosestVertexBeenUpdated)
+      {
+         hasClosestVertexBeenUpdated = false;
+
+         for (int connectedVertexIndex = 0; connectedVertexIndex < supportingVertex.getNumberOfAssociatedEdges(); connectedVertexIndex++)
+         {
+            Vertex3DReadOnly candidate = supportingVertex.getAssociatedEdge(connectedVertexIndex).getDestination();
+            double dotCandidate = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, candidate);
+
+            if (dotCandidate > bestDot)
+            {
+               hasClosestVertexBeenUpdated = true;
+               supportingVertex = candidate;
+               bestDot = dotCandidate;
+               break;
+            }
+         }
+      }
+
+      double distanceSquaredToClosestEdge = Double.POSITIVE_INFINITY;
+
+      for (int i = 0; i < supportingVertex.getNumberOfAssociatedEdges(); i++)
+      {
+         HalfEdge3DReadOnly edge = supportingVertex.getAssociatedEdge(i);
+         Face3DReadOnly face = edge.getFace();
+
+         if (face.canObserverSeeFace(point)) // && !face.canObserverSeeEdge(point, edge))
+         {
+            double distanceSquared = edge.distanceSquared(point);
+            if (distanceSquared < distanceSquaredToClosestEdge)
+            {
+               distanceSquaredToClosestEdge = distanceSquared;
+               closestFace = face;
+            }
+         }
+      }
+
+      if (closestFace == null)
+      {
+         closestFace = supportingVertex.getAssociatedEdge(0).getFace();
+      }
+
+      int count = 0;
+
+      while (true)
+      {
+         if (count++ >= 10000)
+            throw new RuntimeException("Did not converge");
+         goToNeighbor = false;
+
+         List<? extends HalfEdge3DReadOnly> lineOfSight = closestFace.lineOfSight(point);
+
+         if (lineOfSight.isEmpty())
+            return closestFace;
+
+         HalfEdge3DReadOnly closestFaceEdge = null;
+
+         if (lineOfSight.size() == 1)
+         {
+            closestFaceEdge = lineOfSight.get(0);
+         }
+         else
+         {
+            distanceSquaredToClosestEdge = Double.POSITIVE_INFINITY;
+            
+            for (int edgeIndex = 0; edgeIndex < lineOfSight.size(); edgeIndex++)
+            {
+               HalfEdge3DReadOnly edge = lineOfSight.get(edgeIndex);
+               double distanceSquared = edge.distanceSquared(point);
+               
+               if (distanceSquared < distanceSquaredToClosestEdge)
+               {
+                  closestFaceEdge = edge;
+                  distanceSquaredToClosestEdge = distanceSquared;
+               }
+            }
+         }
+
+         { // Visit neighbors.
+           // 1- Explore neighbor through common edge:
+            HalfEdge3DReadOnly neighborEdge = closestFaceEdge.getTwin();
+            Face3DReadOnly candidateFace = neighborEdge.getFace();
+            boolean isNeighborEdgeVisible = candidateFace.canObserverSeeEdge(point, neighborEdge);
+
+            if (!isNeighborEdgeVisible)
+            {
+               closestFace = candidateFace;
+               goToNeighbor = true;
+               continue;
+            }
+
+            // 2- Test if the query is above the current edge:
+            double percentageAlongEdge = closestFaceEdge.percentageAlongLineSegment(point);
+
+            if (percentageAlongEdge >= 0.0 && percentageAlongEdge <= 1.0)
+            {
+               goToNeighbor = false;
+               return closestFace;
+            }
+
+            // 3- Explore neighbors through common vertex:
+            Vertex3DReadOnly vertex;
+
+            if (percentageAlongEdge <= 0.5)
+               vertex = closestFaceEdge.getOrigin();
+            else
+               vertex = closestFaceEdge.getDestination();
+
+            // First test for scenario where the query is closest to the vertex.
+            boolean isClosestToVertex = true;
+            boolean isClosestToEdge = false;
+            HalfEdge3DReadOnly closestEdge = null;
+
+            for (int i = 0; i < vertex.getNumberOfAssociatedEdges(); i++)
+            {
+               HalfEdge3DReadOnly associatedEdge = vertex.getAssociatedEdge(i);
+               percentageAlongEdge = associatedEdge.percentageAlongLineSegment(point);
+
+               if (associatedEdge != closestFaceEdge)
+               {
+                  if (isClosestToVertex && percentageAlongEdge > 0.0)
+                  {
+                     isClosestToVertex = false;
+                  }
+
+                  if (!isClosestToEdge)
+                  {
+                     if (percentageAlongEdge >= 0.0 && percentageAlongEdge <= 1.0)
+                     {
+                        Face3DReadOnly associatedFace = associatedEdge.getFace();
+                        HalfEdge3DReadOnly associatedTwinEdge = associatedEdge.getTwin();
+                        Face3DReadOnly associatedTwinFace = associatedTwinEdge.getFace();
+
+                        if (associatedFace.canObserverSeeEdge(point, associatedEdge) && associatedTwinFace.canObserverSeeEdge(point, associatedTwinEdge))
+                        {
+                           isClosestToEdge = true;
+                           closestEdge = associatedEdge;
+                           break;
+                        }
+                     }
+                  }
+               }
+            }
+
+            if (isClosestToVertex)
+            {
+               return closestFace;
+            }
+            else if (isClosestToEdge)
+            {
+               closestFace = closestEdge.getFace();
+               return closestFace;
+            }
+            else
+            {
+               for (int i = 0; i < vertex.getNumberOfAssociatedEdges(); i++)
+               {
+                  HalfEdge3DReadOnly associatedEdge = vertex.getAssociatedEdge(i);
+                  Face3DReadOnly associatedFace = associatedEdge.getFace();
+
+                  if (associatedFace == closestFace)
+                     continue;
+
+                  if (!associatedFace.canObserverSeeEdge(point, associatedEdge))
+                  { // Go to the associated face.
+                     closestFace = associatedFace;
+                     goToNeighbor = true;
+                     break;
+                  }
+                  else if (associatedEdge.getTwin().getFace().canObserverSeeEdge(point, associatedEdge.getTwin()))
+                  { // Test for scenario where the query is closest to an edge.
+                     percentageAlongEdge = associatedEdge.percentageAlongLineSegment(point);
+                     if (percentageAlongEdge >= 0.0 && percentageAlongEdge <= 1.0)
+                     {
+                        closestFace = associatedFace;
+                        return closestFace;
+                     }
+                  }
+               }
+            }
+         }
+
+         if (!goToNeighbor)
+         {
+            return closestFace;
+         }
+      }
+
    }
 
    /**
@@ -251,17 +561,22 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
+      return getSupportingVertex(supportDirection.getX(), supportDirection.getY(), supportDirection.getZ());
+   }
+
+   default Vertex3DReadOnly getSupportingVertex(double supportDirectionX, double supportDirectionY, double supportDirectionZ)
+   {
       if (isEmpty())
          return null;
       if (getNumberOfFaces() == 1)
-         return getFace(0).getSupportingVertex(supportDirection);
+         return getFace(0).getSupportingVertex(supportDirectionX, supportDirectionY, supportDirectionZ);
 
       Vertex3DReadOnly bestVertex = getFace(0).getEdge(0).getOrigin();
 
       if (getNumberOfVertices() == 1)
          return bestVertex;
 
-      double maxDotProduct = bestVertex.dot(supportDirection);
+      double maxDotProduct = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, bestVertex);
       Vertex3DReadOnly vertexCandidate = bestVertex;
 
       while (true)
@@ -270,7 +585,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
          {
             Vertex3DReadOnly candidate = currentEdge.getDestination();
 
-            double dotProduct = candidate.dot(supportDirection);
+            double dotProduct = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, candidate);
 
             if (dotProduct > maxDotProduct)
             {

@@ -34,7 +34,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
-   private static final double LARGE_EPSILON = 15.0e-3;
+   private static final double LARGE_EPSILON = 1.0e-3;
 
    @Test
    void testSimpleCollisionWithNonCollidingCubeAndTetrahedron()
@@ -590,11 +590,11 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
        * as GJK will reduce the size of its internal polytope's faces and edges until new vertices are not
        * supposed to be added.
        */
-      Random random = new Random(105864);
-      boolean verbose = false;
+      Random random = new Random(13741);
+      boolean verbose = true;
       double meanError = 0.0;
 
-      for (int i = 0; i < 100 * ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
@@ -607,7 +607,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         gjkDetector.setSimplexConstructionEpsilon(1.0e-2);
+         gjkDetector.setSimplexConstructionEpsilon(1.0e-6);
          gjkDetector.doShapeCollisionTest(sphereA, sphereB, gjkResult);
 
          if (verbose && (i % 5000) == 0)
@@ -618,26 +618,26 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          meanError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance()) / ITERATIONS;
 
-         // FIXME Uncomment the assertions once done debugging,
          // Asserts the internal sanity of the collision result
-//         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding());
-//
-//         if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.
-//            assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
-//
-//         if (gjkResult.areShapesColliding())
-//         {
-//            assertTrue(gjkResult.containsNaN());
-//            assertTrue(gjkResult.getPointOnA().containsNaN());
-//            assertTrue(gjkResult.getPointOnB().containsNaN());
-//            assertTrue(Double.isNaN(gjkResult.getDistance()));
-//         }
-//         else
-//         {
-//            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), LARGE_EPSILON, "difference: " + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
-//            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), 10.0 * LARGE_EPSILON);
-//            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), 10.0 * LARGE_EPSILON);
-//         }
+         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding());
+
+         if (expectedResult.getDistance() >= 1.0e-10) // Below that distance, GJK might fail at detecting collision.
+            assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
+
+         if (gjkResult.areShapesColliding())
+         {
+            assertTrue(gjkResult.containsNaN());
+            assertTrue(gjkResult.getPointOnA().containsNaN());
+            assertTrue(gjkResult.getPointOnB().containsNaN());
+            assertTrue(Double.isNaN(gjkResult.getDistance()));
+         }
+         else
+         {
+            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), LARGE_EPSILON,
+                         "difference: " + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
+            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), LARGE_EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), LARGE_EPSILON);
+         }
 
          // GJK does not estimate either the depth (collision case not covered) nor the normal on each shape.
          assertTrue(gjkResult.getNormalOnA().containsNaN());

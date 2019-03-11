@@ -26,7 +26,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private double simplexConstructionEpsilon = EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON;
    private boolean latestCollisionTestResult;
 
-   private final List<Point3D> vertices = new ArrayList<>();
+   final List<Point3D> vertices = new ArrayList<>();
 
    private SimplexPolytope3D simplex;
    private final Vector3D supportDirection = new Vector3D();
@@ -98,9 +98,9 @@ public class GilbertJohnsonKeerthiCollisionDetector
          
          try
          {
-            vertices.add(new Point3D(new SimplexVertex3D(supportingVertexA, supportingVertexB)));
             simplex.addVertex(supportingVertexA, supportingVertexB);
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
+            vertices.add(new Point3D(new SimplexVertex3D(supportingVertexA, supportingVertexB)));
          }
          catch (Exception | Error e)
          {

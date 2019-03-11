@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.collision.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -278,7 +279,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     */
    default boolean canObserverSeeFace(Point3DReadOnly observer)
    {
-      return signedDistanceToPlane(observer) > 0.0;
+      // This covers the edge-case the observer is on the face.
+      return !EuclidGeometryTools.isPoint3DBelowPlane3D(observer, getCentroid(), getNormal());
    }
 
    /**
@@ -462,18 +464,23 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
+      return getSupportingVertex(supportDirection.getX(), supportDirection.getY(), supportDirection.getZ());
+   }
+
+   default Vertex3DReadOnly getSupportingVertex(double supportDirectionX, double supportDirectionY, double supportDirectionZ)
+   {
       if (isEmpty())
          return null;
 
       HalfEdge3DReadOnly startEdge = getEdge(0);
       Vertex3DReadOnly supportingVertex = startEdge.getOrigin();
-      double maxDot = supportingVertex.dot(supportDirection);
+      double maxDot = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, supportingVertex);
       HalfEdge3DReadOnly currentEdge = startEdge.getNext();
 
       while (currentEdge != startEdge)
       {
          Vertex3DReadOnly candidate = currentEdge.getOrigin();
-         double currentDot = candidate.dot(supportDirection);
+         double currentDot = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, candidate);
 
          if (currentDot > maxDot)
          {
