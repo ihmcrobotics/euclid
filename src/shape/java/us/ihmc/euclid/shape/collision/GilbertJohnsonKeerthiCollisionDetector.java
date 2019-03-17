@@ -28,7 +28,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    final List<Point3D> vertices = new ArrayList<>();
 
-   private SimplexPolytope3D simplex;
+   private MinkowskiDifferencePolytope3D simplex;
    private final Vector3D supportDirection = new Vector3D();
    private final Vector3D previousSupportDirection = new Vector3D();
    private final Vector3DReadOnly supportDirectionNegative = EuclidCoreFactories.newNegativeLinkedVector3D(supportDirection);
@@ -49,7 +49,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       setTerminalConditionEpsilon(terminalConditionEpsilon);
    }
 
-   public SimplexPolytope3D getSimplex()
+   public MinkowskiDifferencePolytope3D getSimplex()
    {
       return simplex;
    }
@@ -90,21 +90,25 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return false;
       }
 
-      simplex = new SimplexPolytope3D(simplexConstructionEpsilon);
+      simplex = new MinkowskiDifferencePolytope3D(simplexConstructionEpsilon);
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
          // FIXME cleanup the following once testing is done.
-         
+
          try
          {
             simplex.addVertex(supportingVertexA, supportingVertexB);
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
-            vertices.add(new Point3D(new SimplexVertex3D(supportingVertexA, supportingVertexB)));
+            Point3D difference = new Point3D();
+            difference.sub(supportingVertexA, supportingVertexB);
+            vertices.add(difference);
          }
          catch (Exception | Error e)
          {
-            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(vertices, new SimplexVertex3D(supportingVertexA, supportingVertexB), simplexConstructionEpsilon));
+            Point3D difference = new Point3D();
+            difference.sub(supportingVertexA, supportingVertexB);
+            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(vertices, difference, simplexConstructionEpsilon));
             throw e;
          }
 

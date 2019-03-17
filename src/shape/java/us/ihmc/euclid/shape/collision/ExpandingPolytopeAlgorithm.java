@@ -20,7 +20,7 @@ public class ExpandingPolytopeAlgorithm
    private final int maxIterations = 1000;
    private boolean latestCollisionTestResult;
 
-   private SimplexPolytope3D simplex;
+   private MinkowskiDifferencePolytope3D simplex;
    private final Vector3D supportDirection = new Vector3D();
    private final Vector3D previousSupportDirection = new Vector3D();
    private final Vector3DReadOnly supportDirectionNegative = EuclidCoreFactories.newNegativeLinkedVector3D(supportDirection);
@@ -42,7 +42,7 @@ public class ExpandingPolytopeAlgorithm
       gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector(terminalConditionEpsilon);
    }
 
-   public SimplexPolytope3D getSimplex()
+   public MinkowskiDifferencePolytope3D getSimplex()
    {
       return simplex;
    }
@@ -106,11 +106,15 @@ public class ExpandingPolytopeAlgorithm
          {
             simplex.addVertex(supportingVertexA, supportingVertexB);
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
-            gjkCollisionDetector.vertices.add(new Point3D(new SimplexVertex3D(supportingVertexA, supportingVertexB)));
+            Point3D difference = new Point3D();
+            difference.sub(supportingVertexA, supportingVertexB);
+            gjkCollisionDetector.vertices.add(difference);
          }
          catch (Exception | Error e)
          {
-            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(gjkCollisionDetector.vertices, new SimplexVertex3D(supportingVertexA, supportingVertexB), gjkCollisionDetector.getSimplexConstructionEpsilon()));
+            Point3D difference = new Point3D();
+            difference.sub(supportingVertexA, supportingVertexB);
+            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(gjkCollisionDetector.vertices, difference, gjkCollisionDetector.getSimplexConstructionEpsilon()));
             throw e;
          }
 

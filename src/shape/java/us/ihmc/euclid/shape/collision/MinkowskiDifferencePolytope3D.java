@@ -7,6 +7,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
+import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -14,22 +15,20 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public class SimplexPolytope3D implements Simplex3D
+public class MinkowskiDifferencePolytope3D implements Simplex3D
 {
    private ConvexPolytope3D polytope;
-   private List<SimplexVertex3D> vertices = new ArrayList<>();
+   private List<DifferenceVertex3D> vertices = new ArrayList<>();
    private final Point3D projection = new Point3D();
 
-   public SimplexPolytope3D(double constructionEpsilon)
+   public MinkowskiDifferencePolytope3D(double constructionEpsilon)
    {
       polytope = new ConvexPolytope3D(constructionEpsilon);
    }
 
-   public SimplexVertex3D addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
+   public boolean addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
-      SimplexVertex3D newVertex = new SimplexVertex3D(vertexOnShapeA, vertexOnShapeB);
-      polytope.addVertex(newVertex);
-      return newVertex;
+      return polytope.addVertex(new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB));
    }
 
    public void clear()
@@ -98,7 +97,7 @@ public class SimplexPolytope3D implements Simplex3D
 
          for (int i = 0; i < face.getNumberOfEdges(); i++)
          {
-            SimplexVertex3D vertex = (SimplexVertex3D) face.getEdge(i).getOrigin();
+            DifferenceVertex3D vertex = (DifferenceVertex3D) face.getEdge(i).getOrigin();
 
             pointOnA.scaleAdd(coords[i], vertex.getVertexOnShapeA(), pointOnA);
             pointOnB.scaleAdd(coords[i], vertex.getVertexOnShapeB(), pointOnB);
@@ -107,22 +106,55 @@ public class SimplexPolytope3D implements Simplex3D
       else if (member instanceof HalfEdge3D)
       {
          HalfEdge3D edge = (HalfEdge3D) member;
-         SimplexVertex3D simplexVertex1 = (SimplexVertex3D) edge.getOrigin();
-         SimplexVertex3D simplexVertex2 = (SimplexVertex3D) edge.getDestination();
+         DifferenceVertex3D simplexVertex1 = (DifferenceVertex3D) edge.getOrigin();
+         DifferenceVertex3D simplexVertex2 = (DifferenceVertex3D) edge.getDestination();
          double percentage = EuclidGeometryTools.percentageAlongLineSegment3D(point, simplexVertex1, simplexVertex2);
 
          pointOnA.interpolate(simplexVertex1.getVertexOnShapeA(), simplexVertex2.getVertexOnShapeA(), percentage);
          pointOnB.interpolate(simplexVertex1.getVertexOnShapeB(), simplexVertex2.getVertexOnShapeB(), percentage);
       }
-      else if (member instanceof SimplexVertex3D)
+      else if (member instanceof DifferenceVertex3D)
       {
-         SimplexVertex3D vertex = (SimplexVertex3D) member;
+         DifferenceVertex3D vertex = (DifferenceVertex3D) member;
          pointOnA.set(vertex.getVertexOnShapeA());
          pointOnB.set(vertex.getVertexOnShapeB());
       }
       else
       {
          throw new RuntimeException("Unhandled simplex member " + member.getClass());
+      }
+   }
+
+   public static class DifferenceVertex3D extends Vertex3D
+   {
+      private Point3DReadOnly shapeAVertexReference;
+      private Point3DReadOnly shapeBVertexReference;
+
+      public DifferenceVertex3D()
+      {
+         super();
+      }
+
+      public DifferenceVertex3D(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
+      {
+         set(vertexOnShapeA, vertexOnShapeB);
+      }
+
+      public void set(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
+      {
+         this.shapeAVertexReference = vertexOnShapeA;
+         this.shapeBVertexReference = vertexOnShapeB;
+         sub(vertexOnShapeA, vertexOnShapeB);
+      }
+
+      public Point3DReadOnly getVertexOnShapeA()
+      {
+         return shapeAVertexReference;
+      }
+
+      public Point3DReadOnly getVertexOnShapeB()
+      {
+         return shapeBVertexReference;
       }
    }
 }
