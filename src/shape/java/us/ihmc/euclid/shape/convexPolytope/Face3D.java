@@ -315,45 +315,15 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
-   public List<HalfEdge3D> lineOfSight(Point3DReadOnly observer, double epsilon)
-   {
-      List<HalfEdge3D> lineOfSight = new ArrayList<>();
-
-      HalfEdge3D edgeUnderConsideration = lineOfSightStart(observer, epsilon);
-
-      for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
-      {
-         lineOfSight.add(edgeUnderConsideration);
-         edgeUnderConsideration = edgeUnderConsideration.getNext();
-         if (!canObserverSeeEdge(observer, edgeUnderConsideration, epsilon))
-            break;
-      }
-
-      return lineOfSight;
-   }
-
-   @Override
    public HalfEdge3D lineOfSightStart(Point3DReadOnly observer)
    {
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightStart(observer);
    }
 
    @Override
-   public HalfEdge3D lineOfSightStart(Point3DReadOnly observer, double epsilon)
-   {
-      return (HalfEdge3D) Face3DReadOnly.super.lineOfSightStart(observer, epsilon);
-   }
-
-   @Override
    public HalfEdge3D lineOfSightEnd(Point3DReadOnly observer)
    {
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer);
-   }
-
-   @Override
-   public HalfEdge3D lineOfSightEnd(Point3DReadOnly observer, double epsilon)
-   {
-      return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer, epsilon);
    }
 
    @Override

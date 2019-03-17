@@ -913,8 +913,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         System.out.println("Iteration " + i);
-         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextPointCloudBasedConvexPolytope3D(random); //nextConvexPolytope3D(random);
+         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3D(random);
 
          { // Query inside: The closest face should be the one with its plane being the closest to the query.
             Point3D point = new Point3D();
@@ -929,15 +928,7 @@ public class ConvexPolytope3DTest
                                                          .sorted((f1, f2) -> -Double.compare(f1.signedDistanceToPlane(point), f2.signedDistanceToPlane(point)))
                                                          .findFirst().get();
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
-            try
-            {
-               assertTrue(expectedClosestFace == actualClosestFace, "Iteration " + i);
-            }
-            catch (Error e)
-            {
-               System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(convexPolytope3D, point));
-               throw e;
-            }
+            assertTrue(expectedClosestFace == actualClosestFace, "Iteration " + i);
          }
 
          {
@@ -978,17 +969,7 @@ public class ConvexPolytope3DTest
                point.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), expectedClosestFace.getNormal(), point);
             }
 
-            Face3D actualClosestFace;
-            try
-            {
-               actualClosestFace = convexPolytope3D.getClosestFace(point);
-            }
-            catch (Exception e)
-            {
-               System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(convexPolytope3D, point));
-               throw e;
-            }
-
+            Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
             assertTrue(expectedClosestFace == actualClosestFace, "Iteration " + i);
          }
 
@@ -1021,15 +1002,7 @@ public class ConvexPolytope3DTest
             }
 
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
-            try
-            {
-               assertTrue(actualClosestFace.getVertices().contains(closestVertex), "Iteration " + i);
-            }
-            catch (Error e)
-            {
-               System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(convexPolytope3D, point));
-               throw e;
-            }
+            assertTrue(actualClosestFace.getVertices().contains(closestVertex), "Iteration " + i);
          }
       }
    }

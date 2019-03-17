@@ -194,14 +194,23 @@ public class EuclidPolytopeTools
       return face.distanceToPlane(observer) <= epsilon;
    }
 
-   public static double distanceToClosestHalfEdge3D(Point3DReadOnly query, Collection<? extends HalfEdge3DReadOnly> halfEdges)
+   public static double distanceSquaredToClosestHalfEdge3D(Point3DReadOnly query, List<? extends HalfEdge3DReadOnly> halfEdges)
    {
-      double minDistance = Double.POSITIVE_INFINITY;
-      for (HalfEdge3DReadOnly halfEdge : halfEdges)
+      if (halfEdges.isEmpty())
+         return Double.NaN;
+
+      double minDistanceSquared = halfEdges.get(0).distanceSquared(query);
+
+      for (int edgeIndex = 1; edgeIndex < halfEdges.size(); edgeIndex++)
       {
-         minDistance = Math.min(minDistance, halfEdge.distance(query));
+         minDistanceSquared = Math.min(minDistanceSquared, halfEdges.get(edgeIndex).distanceSquared(query));
       }
-      return minDistance;
+      return minDistanceSquared;
+   }
+
+   public static double distanceToClosestHalfEdge3D(Point3DReadOnly query, List<? extends HalfEdge3DReadOnly> halfEdges)
+   {
+      return Math.sqrt(distanceSquaredToClosestHalfEdge3D(query, halfEdges));
    }
 
    /**
