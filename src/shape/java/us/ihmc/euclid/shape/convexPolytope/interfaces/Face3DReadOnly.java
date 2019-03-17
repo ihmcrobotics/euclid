@@ -237,8 +237,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
     */
    default boolean canObserverSeeFace(Point3DReadOnly observer)
    {
-      // This covers the edge-case the observer is on the face.
-      return !EuclidGeometryTools.isPoint3DBelowPlane3D(observer, getCentroid(), getNormal());
+      return EuclidGeometryTools.isPoint3DAbovePlane3D(observer, getCentroid(), getNormal());
    }
 
    /**

@@ -109,7 +109,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          }
 
          // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
-         if (simplex.isPointInside(origin, terminalConditionEpsilon))
+         if (simplex.isPointInside(origin))
          {
             latestCollisionTestResult = true;
             return true;
