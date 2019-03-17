@@ -16,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
+public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFeature3D
 {
    /**
     * Gets the centroid of the face
@@ -529,14 +529,14 @@ public interface Face3DReadOnly extends SupportingVertexHolder, Simplex3D
    }
 
    @Override
-   default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
+   default ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
    {
       HalfEdge3DReadOnly closestVisibleEdge = getClosestVisibleEdge(point);
 
       if (closestVisibleEdge == null)
          return this;
       else
-         return closestVisibleEdge.getSmallestSimplexMemberReference(point);
+         return closestVisibleEdge.getSmallestFeature(point);
    }
 
    @Override

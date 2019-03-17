@@ -5,7 +5,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
+public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, ConvexPolytopeFeature3D
 {
    /**
     * Returns a reference to the origin vertex for this half edge
@@ -73,7 +73,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, Simplex3D
    }
 
    @Override
-   default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
+   default ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
    {
       double percentage = percentageAlongLineSegment(point);
       if (percentage <= 0.0)

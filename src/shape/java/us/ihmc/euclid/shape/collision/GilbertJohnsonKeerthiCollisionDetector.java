@@ -186,7 +186,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public double getDistance()
    {
-      return simplex.getSmallestSimplexMemberReference(origin).distance(origin);
+      return simplex.getSmallestFeature(origin).distance(origin);
    }
 
    public Point3DReadOnly getClosestPointOnA()

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeFeature3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
@@ -85,7 +85,7 @@ public class ExpandingPolytopeAlgorithm
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
-         Simplex3D smallestSimplex = simplex.getSmallestSimplexMemberReference(origin);
+         ConvexPolytopeFeature3D smallestSimplex = simplex.getSmallestFeature(origin);
 
          if (smallestSimplex.distance(origin) > 1.0e-12)
             smallestSimplex.getSupportVectorDirectionTo(origin, supportDirection);
@@ -152,16 +152,16 @@ public class ExpandingPolytopeAlgorithm
       {
          collisionVector.set(supportDirection);
          collisionVector.normalize();
-         collisionVector.scale(getDistance());
+         collisionVector.scale(getSignedDistance());
          isCollisionVectorUpToDate = true;
       }
 
       return collisionVector;
    }
 
-   public double getDistance()
+   public double getSignedDistance()
    {
-      return simplex.getSmallestSimplexMemberReference(origin).distance(origin);
+      return simplex.getSmallestFeature(origin).distance(origin);
    }
 
    public Point3DReadOnly getCollisionPointOnA()

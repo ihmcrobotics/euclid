@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
+public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, ConvexPolytopeFeature3D
 {
    /**
     * Returns the number of vertices that are in the polytope
@@ -394,12 +394,12 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, Simplex3D
    }
 
    @Override
-   default Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
+   default ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
    {
       if (isEmpty())
          return null;
       else
-         return getClosestFace(point).getSmallestSimplexMemberReference(point);
+         return getClosestFace(point).getSmallestFeature(point);
    }
 
    /**

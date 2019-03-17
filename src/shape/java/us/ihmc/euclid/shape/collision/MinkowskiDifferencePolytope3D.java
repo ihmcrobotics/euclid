@@ -8,14 +8,14 @@ import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.Simplex3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeFeature3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public class MinkowskiDifferencePolytope3D implements Simplex3D
+public class MinkowskiDifferencePolytope3D implements ConvexPolytopeFeature3D
 {
    private ConvexPolytope3D polytope;
    private List<DifferenceVertex3D> vertices = new ArrayList<>();
@@ -65,9 +65,9 @@ public class MinkowskiDifferencePolytope3D implements Simplex3D
    }
 
    @Override
-   public Simplex3D getSmallestSimplexMemberReference(Point3DReadOnly point)
+   public ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
    {
-      return polytope.getSmallestSimplexMemberReference(point);
+      return polytope.getSmallestFeature(point);
    }
 
    @Override
@@ -83,7 +83,7 @@ public class MinkowskiDifferencePolytope3D implements Simplex3D
 
    public void getCollidingPointsOnSimplex(Point3DReadOnly point, Point3DBasics pointOnA, Point3DBasics pointOnB)
    {
-      Simplex3D member = getSmallestSimplexMemberReference(point);
+      ConvexPolytopeFeature3D member = getSmallestFeature(point);
       // Assuming linearity between the simplex and polytope points
       if (member instanceof Face3D)
       {
