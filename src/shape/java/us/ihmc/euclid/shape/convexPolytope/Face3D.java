@@ -345,6 +345,12 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    @Override
+   public HalfEdge3D getClosestVisibleEdge(Point3DReadOnly point)
+   {
+      return (HalfEdge3D) Face3DReadOnly.super.getClosestVisibleEdge(point);
+   }
+
+   @Override
    public List<Vertex3D> getVertices()
    {
       return vertices;
