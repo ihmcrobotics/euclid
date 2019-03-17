@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,53 +10,27 @@ import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeFeature3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public class MinkowskiDifferencePolytope3D implements ConvexPolytopeFeature3D
+public class Simplex3D implements ConvexPolytopeFeature3D
 {
+   private final double constructionEpsilon;
    private ConvexPolytope3D polytope;
-   private final Point3D projection = new Point3D();
 
-   public MinkowskiDifferencePolytope3D(double constructionEpsilon)
+   public Simplex3D(double constructionEpsilon)
    {
+      this.constructionEpsilon = constructionEpsilon;
       polytope = new ConvexPolytope3D(constructionEpsilon);
-   }
-
-   public MinkowskiDifferencePolytope3D(Collection<DifferenceVertex3D> vertices, double constructionEpsilon)
-   {
-      this(constructionEpsilon);
-      vertices = vertices.stream().map(DifferenceVertex3D::new).collect(Collectors.toList());
-      polytope.addVertices(vertices);
    }
 
    public boolean addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
       return polytope.addVertex(new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB));
-   }
-
-   public void clear()
-   {
-      polytope.clear();
-   }
-
-   public boolean isPointInside(Point3DReadOnly pointToCheck)
-   {
-      return polytope.isPointInside(pointToCheck);
-   }
-
-   public boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
-   {
-      return polytope.isPointInside(pointToCheck, epsilon);
-   }
-
-   @Override
-   public double distance(Point3DReadOnly point)
-   {
-      return polytope.distance(point);
    }
 
    @Override
@@ -65,26 +39,21 @@ public class MinkowskiDifferencePolytope3D implements ConvexPolytopeFeature3D
       return polytope.getSupportVectorDirectionTo(point, supportVectorToPack);
    }
 
-   public boolean isEmpty()
+   public void getSupportVectorDirectionToAndReduceToSimplex(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
    {
-      return polytope.isEmpty();
-   }
+      ConvexPolytopeFeature3D smallestFeature = getSmallestFeature(point);
+      smallestFeature.getSupportVectorDirectionTo(point, supportVectorToPack);
 
-   @Override
-   public ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
-   {
-      return polytope.getSmallestFeature(point);
-   }
+      List<DifferenceVertex3D> vertices = new ArrayList<>();
+      for (Vertex3DReadOnly vertex : smallestFeature.getVertices())
+      {
+         DifferenceVertex3D differenceVertex = (DifferenceVertex3D) vertex;
+         differenceVertex.clearAssociatedEdgeList();
+         vertices.add(differenceVertex);
+      }
 
-   @Override
-   public String toString()
-   {
-      return polytope.toString();
-   }
-
-   public ConvexPolytope3D getPolytope()
-   {
-      return polytope;
+      polytope = new ConvexPolytope3D(constructionEpsilon);
+      polytope.addVertices(vertices);
    }
 
    public void getCollidingPointsOnSimplex(Point3DReadOnly point, Point3DBasics pointOnA, Point3DBasics pointOnB)
@@ -94,7 +63,7 @@ public class MinkowskiDifferencePolytope3D implements ConvexPolytopeFeature3D
       if (member instanceof Face3D)
       {
          Face3D face = (Face3D) member;
-
+         Point3D projection = new Point3D();
          EuclidGeometryTools.orthogonalProjectionOnPlane3D(point, face.getCentroid(), face.getNormal(), projection);
          double[] coords = EuclidPolytopeTools.barycentricCoordinates(face, projection);
 
@@ -131,9 +100,36 @@ public class MinkowskiDifferencePolytope3D implements ConvexPolytopeFeature3D
       }
    }
 
+   public boolean isPointInside(Point3DReadOnly pointToCheck)
+   {
+      return polytope.isPointInside(pointToCheck);
+   }
+
+   public ConvexPolytope3D getPolytope()
+   {
+      return polytope;
+   }
+
+   @Override
+   public double distance(Point3DReadOnly point)
+   {
+      return polytope.distance(point);
+   }
+
+   @Override
+   public ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
+   {
+      return polytope.getSmallestFeature(point);
+   }
+
    @Override
    public List<Vertex3D> getVertices()
    {
       return polytope.getVertices();
+   }
+
+   public List<DifferenceVertex3D> getDifferenceVertices()
+   {
+      return polytope.getVertices().stream().map(v -> (DifferenceVertex3D) v).collect(Collectors.toList());
    }
 }

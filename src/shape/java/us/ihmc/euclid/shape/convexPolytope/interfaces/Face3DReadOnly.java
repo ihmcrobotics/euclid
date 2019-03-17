@@ -57,6 +57,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
       return getEdges().get(index);
    }
 
+   @Override
    default List<? extends Vertex3DReadOnly> getVertices()
    {
       return getEdges().stream().map(HalfEdge3DReadOnly::getOrigin).collect(Collectors.toList());

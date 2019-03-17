@@ -211,7 +211,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       return addVertices(vertices);
    }
 
-   public boolean addVertices(Collection<Vertex3D> verticesToAdd)
+   public boolean addVertices(Collection<? extends Vertex3D> verticesToAdd)
    {
       boolean isPolytopeModified = false;
 

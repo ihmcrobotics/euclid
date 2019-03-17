@@ -1,5 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
+import java.util.List;
+
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -46,4 +48,6 @@ public interface ConvexPolytopeFeature3D
     * @return the smallest simplex for said point
     */
    ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point);
+
+   List<? extends Vertex3DReadOnly> getVertices();
 }

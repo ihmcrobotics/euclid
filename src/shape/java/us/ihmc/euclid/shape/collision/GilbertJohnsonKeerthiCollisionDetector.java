@@ -28,7 +28,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    final List<Point3D> vertices = new ArrayList<>();
 
-   private MinkowskiDifferencePolytope3D simplex;
+   private Simplex3D simplex;
    private final Vector3D supportDirection = new Vector3D();
    private final Vector3D previousSupportDirection = new Vector3D();
    private final Vector3DReadOnly supportDirectionNegative = EuclidCoreFactories.newNegativeLinkedVector3D(supportDirection);
@@ -49,7 +49,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       setTerminalConditionEpsilon(terminalConditionEpsilon);
    }
 
-   public MinkowskiDifferencePolytope3D getSimplex()
+   public Simplex3D getSimplex()
    {
       return simplex;
    }
@@ -90,7 +90,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return false;
       }
 
-      simplex = new MinkowskiDifferencePolytope3D(simplexConstructionEpsilon);
+      simplex = new Simplex3D(simplexConstructionEpsilon);
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
@@ -119,7 +119,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
             return true;
          }
 
-         simplex.getSupportVectorDirectionTo(origin, supportDirection);
+         simplex.getSupportVectorDirectionToAndReduceToSimplex(origin, supportDirection);
 
          if (previousSupportDirection.epsilonEquals(supportDirection, terminalConditionEpsilon))
             return false;

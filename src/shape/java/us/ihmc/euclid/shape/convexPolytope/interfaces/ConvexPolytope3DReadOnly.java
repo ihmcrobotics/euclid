@@ -97,6 +97,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, ConvexPolytop
     *
     * @return a list of read only reference to the vertices of the polytope
     */
+   @Override
    List<? extends Vertex3DReadOnly> getVertices();
 
    @Override

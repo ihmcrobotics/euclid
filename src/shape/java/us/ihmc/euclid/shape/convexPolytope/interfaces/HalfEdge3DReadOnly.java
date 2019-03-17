@@ -1,5 +1,8 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
+import java.util.Arrays;
+import java.util.List;
+
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -60,6 +63,12 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, ConvexPolytop
     * @return a read only reference to the face
     */
    Face3DReadOnly getFace();
+
+   @Override
+   default List<? extends Vertex3DReadOnly> getVertices()
+   {
+      return Arrays.asList(getOrigin(), getDestination());
+   }
 
    @Override
    default double distance(Point3DReadOnly point)
