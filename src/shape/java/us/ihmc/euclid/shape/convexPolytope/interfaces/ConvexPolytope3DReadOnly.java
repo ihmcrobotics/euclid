@@ -176,7 +176,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, ConvexPolytop
    @Override
    default double distance(Point3DReadOnly point)
    {
-      return Math.min(0.0, signedDistance(point));
+      return Math.max(0.0, signedDistance(point));
    }
 
    @Override
