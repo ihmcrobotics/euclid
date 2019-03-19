@@ -258,7 +258,7 @@ public class EuclidPolytopeConstructionTools
             }
 
             // The new face can be extended to include the next silhouetteEdge.
-            if (!newFace.addVertex(nextSilhouetteEdge.getOrigin(), vertex, true))
+            if (!newFace.addVertex(previousSilhouetteEdge.getOrigin(), vertex, true))
             { // Extending the face to include would result in removing the vertex we're currently trying to add.
                break;
             }
