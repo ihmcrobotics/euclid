@@ -238,6 +238,7 @@ public class EuclidPolytopeConstructionTools
             nextSilhouetteEdge.setTwin(newEdge);
             newEdge.setTwin(nextSilhouetteEdge);
             forloopStart = i + 1;
+            previousSilhouetteEdge = nextSilhouetteEdge;
          }
 
          nextSilhouetteEdge = firstSilhouetteEdge;
@@ -266,6 +267,7 @@ public class EuclidPolytopeConstructionTools
             previousSilhouetteEdge.setTwin(newEdge);
             newEdge.setTwin(previousSilhouetteEdge);
             forloopEnd = i - 1;
+            nextSilhouetteEdge = previousSilhouetteEdge;
          }
 
          newFaces.add(newFace);
@@ -304,6 +306,7 @@ public class EuclidPolytopeConstructionTools
             nextSilhouetteEdge.setTwin(newEdge);
             newEdge.setTwin(nextSilhouetteEdge);
             i = j;
+            previousSilhouetteEdge = nextSilhouetteEdge;
          }
          newFaces.add(newFace);
       }
