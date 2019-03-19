@@ -73,14 +73,18 @@ public class ExpandingPolytopeAlgorithm
       areCollisionPointsUpToDate = false;
 
       latestCollisionTestResult = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
+
+      if (!latestCollisionTestResult || gjkCollisionDetector.getSimplex() == null)
+      {
+         simplex = null;
+         return;
+      }
+
       simplex = new MinkowskiDifferencePolytope3D(gjkCollisionDetector.getSimplex().getDifferenceVertices(),
                                                   gjkCollisionDetector.getSimplexConstructionEpsilon());
       supportDirection.set(gjkCollisionDetector.getSupportDirection());
       // FIXME cleanup the following once testing is done.
       EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
-
-      if (!latestCollisionTestResult)
-         return;
 
       previousSupportDirection.setToNaN();
 
@@ -126,8 +130,13 @@ public class ExpandingPolytopeAlgorithm
 
    public Shape3DCollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
+      doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
+
+      if (gjkCollisionDetector.getSimplex() == null)
+         return null;
+
       Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
-      doShapeCollisionTest(shapeA, shapeB, result);
+      packResult(shapeA, shapeB, result);
       return result;
    }
 
@@ -135,26 +144,44 @@ public class ExpandingPolytopeAlgorithm
    {
       doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
       result.setToNaN();
-      result.setShapesAreColliding(latestCollisionTestResult);
-      result.setShapeA(shapeA);
-      result.setShapeB(shapeB);
-      result.setDistance(simplex.getPolytope().signedDistance(origin));
 
-      updatePoints();
-      result.getPointOnA().set(pointOnA);
-      result.getPointOnB().set(pointOnB);
+      if (gjkCollisionDetector.getSimplex() == null)
+         return;
+
+      packResult(shapeA, shapeB, result);
+   }
+
+   private void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, Shape3DCollisionTestResult result)
+   {
+      if (latestCollisionTestResult)
+      {
+         result.setToNaN();
+         result.setShapesAreColliding(latestCollisionTestResult);
+         result.setShapeA(shapeA);
+         result.setShapeB(shapeB);
+         result.setDistance(getSignedDistance());
+
+         updatePoints();
+         result.getPointOnA().set(pointOnA);
+         result.getPointOnB().set(pointOnB);
+      }
+      else
+      {
+         gjkCollisionDetector.packResult(shapeA, shapeB, result, false);
+      }
    }
 
    public Vector3DReadOnly getCollisionVector()
    {
-      if (simplex == null)
-         return null;
+      if (!latestCollisionTestResult)
+         return gjkCollisionDetector.getSeparationVector();
 
       if (!isCollisionVectorUpToDate)
       {
          collisionVector.set(supportDirection);
          collisionVector.normalize();
-         collisionVector.scale(getSignedDistance());
+         // Instead of Math.abs(double) we already know that getSignedDistance() is negative.
+         collisionVector.scale(-getSignedDistance());
          isCollisionVectorUpToDate = true;
       }
 
@@ -163,32 +190,33 @@ public class ExpandingPolytopeAlgorithm
 
    public double getSignedDistance()
    {
-      return simplex.getSmallestFeature(origin).distance(origin);
+      if (!latestCollisionTestResult)
+         return gjkCollisionDetector.getDistance();
+      else
+         return simplex.getPolytope().signedDistance(origin);
    }
 
    public Point3DReadOnly getCollisionPointOnA()
    {
-      if (simplex == null)
-         return null;
+      if (!latestCollisionTestResult)
+         return gjkCollisionDetector.getClosestPointOnA();
 
       updatePoints();
-
       return pointOnA;
    }
 
    public Point3DReadOnly getCollisionPointOnB()
    {
-      if (simplex == null)
-         return null;
+      if (!latestCollisionTestResult)
+         return gjkCollisionDetector.getClosestPointOnB();
 
       updatePoints();
-
       return pointOnB;
    }
 
    private void updatePoints()
    {
-      if (areCollisionPointsUpToDate)
+      if (!latestCollisionTestResult || areCollisionPointsUpToDate)
          return;
 
       simplex.getCollidingPointsOnSimplex(origin, pointOnA, pointOnB);

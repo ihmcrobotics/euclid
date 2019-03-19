@@ -108,7 +108,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          {
             Point3D difference = new Point3D();
             difference.sub(supportingVertexA, supportingVertexB);
-            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(vertices, difference, simplexConstructionEpsilon));
+            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(simplex.getVertices(), difference, simplexConstructionEpsilon));
             throw e;
          }
 
@@ -134,8 +134,11 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public Shape3DCollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
+      boolean areShapesColliding = doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
       Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
-      doShapeCollisionTest(shapeA, shapeB, result);
+      if (simplex == null)
+         return null;
+      packResult(shapeA, shapeB, result, areShapesColliding);
       return result;
    }
 
@@ -143,6 +146,15 @@ public class GilbertJohnsonKeerthiCollisionDetector
    {
       boolean areShapesColliding = doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
       result.setToNaN();
+
+      if (simplex == null)
+         return;
+
+      packResult(shapeA, shapeB, result, areShapesColliding);
+   }
+
+   void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, Shape3DCollisionTestResult result, boolean areShapesColliding)
+   {
       result.setShapesAreColliding(areShapesColliding);
       result.setShapeA(shapeA);
       result.setShapeB(shapeB);
@@ -186,7 +198,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public double getDistance()
    {
-      return simplex.getSmallestFeature(origin).distance(origin);
+      return simplex.distance(origin);
    }
 
    public Point3DReadOnly getClosestPointOnA()

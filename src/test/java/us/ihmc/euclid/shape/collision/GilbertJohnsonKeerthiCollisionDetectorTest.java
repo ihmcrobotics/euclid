@@ -33,8 +33,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 class GilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final int ITERATIONS = 1000;
-   private static final double EPSILON = 1.0e-12;
-   private static final double LARGE_EPSILON = 1.0e-3;
+   private static final double EPSILON = 1.0e-10;
 
    @Test
    void testSimpleCollisionWithNonCollidingCubeAndTetrahedron()
@@ -592,7 +591,14 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
        */
       Random random = new Random(13741);
       boolean verbose = true;
-      double meanError = 0.0;
+
+      double meanDistanceError = 0.0;
+      double meanPositionError = 0.0;
+
+      double maxDistanceError = 2.0e-6;
+      double maxPositionError = 1.0e-3;
+
+      int numberOfSamples = 0;
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -616,13 +622,10 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                   + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
          }
 
-         meanError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance()) / ITERATIONS;
-
          // Asserts the internal sanity of the collision result
          assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding());
 
-         if (expectedResult.getDistance() >= 1.0e-10) // Below that distance, GJK might fail at detecting collision.
-            assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
+         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
 
          if (gjkResult.areShapesColliding())
          {
@@ -633,10 +636,16 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          }
          else
          {
-            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), LARGE_EPSILON,
+            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), maxDistanceError,
                          "difference: " + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
-            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), LARGE_EPSILON);
-            EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), LARGE_EPSILON);
+            EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), maxPositionError);
+            EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), maxPositionError);
+
+            numberOfSamples++;
+            meanDistanceError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance());
+            meanPositionError += expectedResult.getPointOnA().distance(gjkResult.getPointOnA());
+            meanPositionError += expectedResult.getPointOnB().distance(gjkResult.getPointOnB());
+
          }
 
          // GJK does not estimate either the depth (collision case not covered) nor the normal on each shape.
@@ -644,7 +653,13 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          assertTrue(gjkResult.getNormalOnB().containsNaN());
       }
 
+      meanDistanceError /= numberOfSamples;
+      meanPositionError /= 2.0 * numberOfSamples;
+
       if (verbose)
-         System.out.println("Average error for the distance: " + meanError);
+         System.out.println("Average error for the distance: " + meanDistanceError + ", position: " + meanPositionError);
+
+      assertTrue(meanDistanceError < 5.0e-7);
+      assertTrue(meanPositionError < 5.0e-5);
    }
 }

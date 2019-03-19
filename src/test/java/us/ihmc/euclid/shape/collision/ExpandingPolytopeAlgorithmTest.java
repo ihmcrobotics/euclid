@@ -31,7 +31,6 @@ class ExpandingPolytopeAlgorithmTest
 {
    private static final int ITERATIONS = 1000;
    private static final double EPSILON = 1.0e-12;
-   private static final double LARGE_EPSILON = 1.0e-3;
 
    @Test
    void testNonCollidingCubeAndTetrahedron()
@@ -117,10 +116,11 @@ class ExpandingPolytopeAlgorithmTest
 
          assertEquals(0.0, cube.distance(pointOnCube), EPSILON);
          assertEquals(0.0, singleton.distance(pointOnSingleton), EPSILON);
-         double separatingDistance = collisionVector.length();
-         assertEquals(0.25, separatingDistance, EPSILON);
-         assertEquals(pointOnCube.distance(pointOnSingleton), separatingDistance, EPSILON);
-         assertEquals(cube.distance(point), separatingDistance, EPSILON);
+         double penetrationDistance = collisionVector.length();
+         assertEquals(0.25, penetrationDistance, EPSILON);
+         assertEquals(pointOnCube.distance(pointOnSingleton), penetrationDistance, EPSILON);
+         assertEquals(cube.signedDistance(point), -penetrationDistance, EPSILON);
+         assertEquals(cube.signedDistance(point), epa.getSignedDistance(), EPSILON);
 
          EuclidCoreTestTools.assertTuple3DEquals(point, pointOnSingleton, EPSILON);
          assertEquals(point.getY(), pointOnCube.getY(), EPSILON);
@@ -139,9 +139,10 @@ class ExpandingPolytopeAlgorithmTest
          Point3D pointOnCube = new Point3D(epa.getCollisionPointOnA());
          Point3D pointOnSingleton = new Point3D(epa.getCollisionPointOnB());
 
-         double separatingDistance = collisionVector.length();
-         assertEquals(pointOnCube.distance(pointOnSingleton), separatingDistance, EPSILON);
-         assertEquals(cube.distance(point), separatingDistance, EPSILON);
+         double penetrationDistance = collisionVector.length();
+         assertEquals(pointOnCube.distance(pointOnSingleton), penetrationDistance, EPSILON);
+         assertEquals(cube.signedDistance(point), -penetrationDistance, EPSILON);
+         assertEquals(cube.signedDistance(point), epa.getSignedDistance(), EPSILON);
          assertEquals(0.0, cube.distance(pointOnCube), EPSILON);
          assertEquals(0.0, tetrahedron.distance(pointOnSingleton), EPSILON);
 
@@ -157,7 +158,7 @@ class ExpandingPolytopeAlgorithmTest
       ConvexPolytope3D cube = EuclidPolytopeFactories.newCube(1.0);
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Superficiel collision, the result is straightforward
+      { // Superficial collision, the result is straightforward
          Point3D tetrahedronClosest = new Point3D(0.5, 0.0, 0.0);
          Point3D tetrahedronFarthest0 = new Point3D(100.0, 0.02, 0.0);
          Point3D tetrahedronFarthest1 = new Point3D(100.0, 0.0, 0.02);
@@ -185,7 +186,8 @@ class ExpandingPolytopeAlgorithmTest
          assertEquals(0.0, tetrahedron.distance(pointOnTetrahedron), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(tetrahedronClosest, pointOnTetrahedron, EPSILON);
 
-         assertEquals(cube.distance(tetrahedronClosest), penetrationDistance, EPSILON);
+         assertEquals(cube.signedDistance(tetrahedronClosest), -penetrationDistance, EPSILON);
+         assertEquals(cube.signedDistance(tetrahedronClosest), epa.getSignedDistance(), EPSILON);
          assertEquals(tetrahedronClosest.getY(), pointOnCube.getY(), EPSILON);
          assertEquals(tetrahedronClosest.getZ(), pointOnCube.getZ(), EPSILON);
       }
@@ -560,8 +562,12 @@ class ExpandingPolytopeAlgorithmTest
    void testSphere3DToSphere3D() throws Exception
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(1382635);
-      boolean verbose = false;
-      double meanError = 0.0;
+      boolean verbose = true;
+      double meanDistanceError = 0.0;
+      double meanPositionError = 0.0;
+
+      double maxDistanceError = 2.0e-6;
+      double maxPositionError = 1.0e-3;
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -578,35 +584,43 @@ class ExpandingPolytopeAlgorithmTest
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
          epaDetector.setSimplexConstructionEpsilon(1.0e-6);
          epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
-         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(epaDetector.getSimplex().getPolytope());
 
-//         System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", EPA: " + epaResult.getDistance() + ", diff: "
-//               + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
+         if (epaDetector.getSimplex() != null)
+            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(epaDetector.getSimplex().getPolytope());
 
-         meanError += Math.abs(expectedResult.getDistance() - epaResult.getDistance()) / ITERATIONS;
-
-         if (epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0 != epaResult.areShapesColliding())
+         if (verbose && (i % 5000) == 0)
          {
-            ConvexPolytope3D polytope = epaDetector.getSimplex().getPolytope();
-            Face3D face = polytope.getClosestFace(new Point3D());
-            face.canObserverSeeEdge(new Point3D(), face.getEdge(0));
+            System.out.println("Iteration #" + i + " Analytical: " + expectedResult.getDistance() + ", GJK: " + epaResult.getDistance() + ", diff: "
+                  + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
          }
-         assertEquals(epaDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, epaResult.areShapesColliding());
 
-//         if (expectedResult.getDistance() >= 1.0e-4) // Below that distance, GJK might fail at detecting collision.
-            assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding());
+         meanDistanceError += Math.abs(expectedResult.getDistance() - epaResult.getDistance());
 
-         assertEquals(expectedResult.getDistance(), epaResult.getDistance(), LARGE_EPSILON,
+         assertEquals(epaDetector.getSignedDistance() <= 0.0, epaResult.areShapesColliding());
+
+         assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding());
+
+         assertEquals(expectedResult.getDistance(), epaResult.getDistance(), maxDistanceError,
                       "difference: " + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
 
-         EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnA(), epaResult.getPointOnA(), LARGE_EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedResult.getPointOnB(), epaResult.getPointOnB(), LARGE_EPSILON);
-         // GJK-EPA does not estimate either the depth (collision case not covered) nor the normal on each shape.
+         EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnA(), epaResult.getPointOnA(), maxPositionError);
+         EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnB(), epaResult.getPointOnB(), maxPositionError);
+
+         meanPositionError += expectedResult.getPointOnA().distance(epaResult.getPointOnA());
+         meanPositionError += expectedResult.getPointOnB().distance(epaResult.getPointOnB());
+
+         // GJK-EPA does not estimate the normal on each shape.
          assertTrue(epaResult.getNormalOnA().containsNaN());
          assertTrue(epaResult.getNormalOnB().containsNaN());
       }
 
+      meanDistanceError /= ITERATIONS;
+      meanPositionError /= 2.0 * ITERATIONS;
+
       if (verbose)
-         System.out.println("Average error for the distance: " + meanError);
+         System.out.println("Average error for the distance: " + meanDistanceError + ", position: " + meanPositionError);
+
+      assertTrue(meanDistanceError < 5.0e-7);
+      assertTrue(meanPositionError < 5.0e-5);
    }
 }
