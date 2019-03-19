@@ -484,28 +484,30 @@ public class EuclidPolytopeTools
          }
       }
 
-      for (int faceIndex = inPlaneFacesToPack.size() - 1; faceIndex >= 0; faceIndex--)
+      if (inPlaneFacesToPack != null)
       {
-         /*
-          * Any in-plane face that is not adjacent to the silhouette is removed. A face considered adjacent
-          * to the silhouette if at least of its edges is part of the silhouette.
-          */
-         F inPlaneFace = inPlaneFacesToPack.get(faceIndex);
-         boolean isFaceAdjacentToSilhouette = false;
-
-         for (int edgeIndex = 0; edgeIndex < inPlaneFace.getNumberOfEdges(); edgeIndex++)
+         for (int faceIndex = inPlaneFacesToPack.size() - 1; faceIndex >= 0; faceIndex--)
          {
-            if (silhouette.contains(inPlaneFace.getEdge(edgeIndex)))
+            /*
+             * Any in-plane face that is not adjacent to the silhouette is removed. A face considered adjacent
+             * to the silhouette if at least of its edges is part of the silhouette.
+             */
+            F inPlaneFace = inPlaneFacesToPack.get(faceIndex);
+            boolean isFaceAdjacentToSilhouette = false;
+
+            for (int edgeIndex = 0; edgeIndex < inPlaneFace.getNumberOfEdges(); edgeIndex++)
             {
-               isFaceAdjacentToSilhouette = true;
-               break;
+               if (silhouette.contains(inPlaneFace.getEdge(edgeIndex)))
+               {
+                  isFaceAdjacentToSilhouette = true;
+                  break;
+               }
             }
+
+            if (!isFaceAdjacentToSilhouette)
+               inPlaneFacesToPack.remove(faceIndex);
          }
-
-         if (!isFaceAdjacentToSilhouette)
-            inPlaneFacesToPack.remove(faceIndex);
       }
-
       return silhouette;
    }
 
