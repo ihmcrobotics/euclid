@@ -228,6 +228,11 @@ public class EuclidPolytopeConstructionTools
                break;
             }
 
+            if (!newFace.canObserverSeeEdge(nextSilhouetteEdge.getDestination(), previousSilhouetteEdge.getTwin().getPrevious()))
+            { // Extending the face would result in an unexpected face setup where the newEdge below would not exist.
+               break;
+            }
+
             // The new face can be extended to include the next silhouetteEdge.
             if (!newFace.addVertex(nextSilhouetteEdge.getDestination(), vertex, true))
             { // Extending the face to include would result in removing the vertex we're currently trying to add.
@@ -254,6 +259,11 @@ public class EuclidPolytopeConstructionTools
 
             if (newFace.distanceToPlane(previousSilhouetteEdge.getOrigin()) > epsilon)
             { // We can't extend the newFace any further.
+               break;
+            }
+
+            if (!newFace.canObserverSeeEdge(previousSilhouetteEdge.getOrigin(), nextSilhouetteEdge.getTwin().getNext()))
+            { // Extending the face would result in an unexpected face setup where the newEdge below would not exist.
                break;
             }
 
@@ -294,6 +304,11 @@ public class EuclidPolytopeConstructionTools
 
             if (newFace.distanceToPlane(nextSilhouetteEdge.getDestination()) > epsilon)
             { // We can't extend the newFace any further, resume the main loop while skipping processed edges.
+               break;
+            }
+
+            if (!newFace.canObserverSeeEdge(nextSilhouetteEdge.getDestination(), previousSilhouetteEdge.getTwin().getPrevious()))
+            { // Extending the face would result in an unexpected face setup where the newEdge below would not exist.
                break;
             }
 
