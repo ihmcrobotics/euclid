@@ -247,6 +247,39 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
             edge.getOrigin().addAssociatedEdge(edge);
          }
       }
+      else if (faces.size() == 3)
+      { // One of the faces holds onto all this polytope vertices. So we'll keep the face that has the most vertices.
+         Face3D faceToKeep = faces.get(0);
+         Face3D secondFace = faces.get(1);
+         Face3D thirdFace = faces.get(2);
+
+         if (secondFace.getNumberOfEdges() > faceToKeep.getNumberOfEdges())
+         {
+            removeFace(faceToKeep);
+            faceToKeep = secondFace;
+         }
+         else
+         {
+            removeFace(secondFace);
+         }
+
+         if (thirdFace.getNumberOfEdges() > faceToKeep.getNumberOfEdges())
+         {
+            removeFace(faceToKeep);
+            faceToKeep = thirdFace;
+         }
+         else
+         {
+            removeFace(thirdFace);
+         }
+
+         for (int i = 0; i < faceToKeep.getNumberOfEdges(); i++)
+         {
+            HalfEdge3D edge = faceToKeep.getEdge(i);
+            edge.getOrigin().clearAssociatedEdgeList();
+            edge.getOrigin().addAssociatedEdge(edge);
+         }
+      }
 
       if (isPolytopeModified)
       {
