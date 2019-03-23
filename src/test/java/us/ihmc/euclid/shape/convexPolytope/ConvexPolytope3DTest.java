@@ -33,6 +33,7 @@ import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLib
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190317_143836;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190317_161948;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190321_222438;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.ConvexPolytope3DTroublesomeDataset_20190323_124929;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Original;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug8Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetEPAFaceNormalIntegrityBug9Original;
@@ -51,11 +52,14 @@ import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLib
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug2Original;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug2Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug3Original;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug3OriginalV2;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug3Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug4Original;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug4Simplified;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug5;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug6;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug6V2;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug6V3;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3DTroublesomeDatasetLibrary.DatasetGJKNullPointerExceptionBug7Original;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
@@ -1852,11 +1856,14 @@ public class ConvexPolytope3DTest
       datasets.add(new DatasetGJKNullPointerExceptionBug2Original());
       datasets.add(new DatasetGJKNullPointerExceptionBug2Simplified());
       datasets.add(new DatasetGJKNullPointerExceptionBug3Original());
+      datasets.add(new DatasetGJKNullPointerExceptionBug3OriginalV2());
       datasets.add(new DatasetGJKNullPointerExceptionBug3Simplified());
       datasets.add(new DatasetGJKNullPointerExceptionBug4Original());
       datasets.add(new DatasetGJKNullPointerExceptionBug4Simplified());
       datasets.add(new DatasetGJKNullPointerExceptionBug5());
       datasets.add(new DatasetGJKNullPointerExceptionBug6());
+      datasets.add(new DatasetGJKNullPointerExceptionBug6V2());
+      datasets.add(new DatasetGJKNullPointerExceptionBug6V3());
       datasets.add(new DatasetGJKNullPointerExceptionBug7Original());
       datasets.add(new DatasetEPAFaceNormalIntegrityBug8Original());
       datasets.add(new DatasetEPAFaceNormalIntegrityBug8Simplified());
@@ -1883,15 +1890,17 @@ public class ConvexPolytope3DTest
       datasets.add(new ConvexPolytope3DTroublesomeDataset_20190317_143836());
       datasets.add(new ConvexPolytope3DTroublesomeDataset_20190317_161948());
       datasets.add(new ConvexPolytope3DTroublesomeDataset_20190321_222438());
+//      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190323_122756());
+      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190323_124929());
+//      datasets.add(new ConvexPolytope3DTroublesomeDataset_20190323_150735());
 
       for (int i = 0; i < datasets.size(); i++)
       {
          ConvexPolytope3DTroublesomeDataset dataset = datasets.get(i);
          String messagePrefix = "Dataset: " + dataset.getClass().getSimpleName();
-         ConvexPolytope3D convexPolytope3D;
          try
          {
-            convexPolytope3D = new ConvexPolytope3D(dataset.getPointsBeforeIssueAsSupplier(), dataset.getConstructionEpsilon());
+            ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(dataset.getPointsBeforeIssueAsSupplier(), dataset.getConstructionEpsilon());
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(messagePrefix, convexPolytope3D);
             convexPolytope3D.addVertex(dataset.getTroublesomePoint());
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(messagePrefix, convexPolytope3D);
