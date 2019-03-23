@@ -336,11 +336,11 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
    private boolean handleMultipleFaceCase(Vertex3D vertexToAdd)
    {
       Set<Face3D> visibleFaces = new HashSet<>();
-      List<Face3D> inPlaneFaces = new ArrayList<>();
-      List<HalfEdge3D> silhouette = EuclidPolytopeTools.computeSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces, inPlaneFaces);
+      List<HalfEdge3D> silhouette = EuclidPolytopeTools.computeSilhouette(faces, vertexToAdd, constructionEpsilon, visibleFaces);
 
       if (silhouette != null)
       {
+         List<Face3D> inPlaneFaces = EuclidPolytopeTools.computeInPlaneFacesAroundSilhouette(vertexToAdd, silhouette, constructionEpsilon);
          List<Face3D> newFaces = EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, silhouette, inPlaneFaces, constructionEpsilon);
          if (newFaces != null)
          {

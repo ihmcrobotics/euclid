@@ -341,7 +341,7 @@ public class EuclidPolytopeTools
     */
    public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<E> computeSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon)
    {
-      return computeSilhouette(faces, observer, epsilon, null, null);
+      return computeSilhouette(faces, observer, epsilon, null);
    }
 
    /**
@@ -356,8 +356,6 @@ public class EuclidPolytopeTools
     * @param visibleFacesToPack the collection used to store the visible faces. It is cleared before
     *           starting the search. It preferable to provide an implementation that supports fast
     *           queries for {@link Collection#contains(Object)}. Can be {@code null}.
-    * @param inPlaneFacesToPack the list used to store the faces for which the observer lies in their
-    *           support plane. It is cleared before starting the search. Can be {@code null}.
     * @param <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
     * @param <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly} and has to
     *           be common to all the faces' edges.
@@ -366,8 +364,7 @@ public class EuclidPolytopeTools
     */
    @SuppressWarnings("unchecked")
    public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<E> computeSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon,
-                                                                                                    Collection<F> visibleFacesToPack,
-                                                                                                    List<F> inPlaneFacesToPack)
+                                                                                                    Collection<F> visibleFacesToPack)
    {
       Face3DReadOnly leastVisibleFace = null;
       double minimumDistance = Double.POSITIVE_INFINITY;
@@ -471,21 +468,27 @@ public class EuclidPolytopeTools
          }
       }
 
-      if (inPlaneFacesToPack != null)
-      {
-         inPlaneFacesToPack.clear();
-
-         for (int silhouetteIndex = 0; silhouetteIndex < silhouette.size(); silhouetteIndex++)
-         {
-            F face = (F) silhouette.get(silhouetteIndex).getFace();
-            if (inPlaneFacesToPack.contains(face))
-               continue;
-
-            if (arePoint3DAndFace3DInPlane(observer, face, epsilon))
-               inPlaneFacesToPack.add(face);
-         }
-      }
       return silhouette;
+   }
+
+   @SuppressWarnings("unchecked")
+   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<F> computeInPlaneFacesAroundSilhouette(Point3DReadOnly observer,
+                                                                                                                      Collection<E> silhouette, double epsilon)
+   {
+      List<F> inPlaneFacesToPack = new ArrayList<>();
+
+      for (E edge : silhouette)
+      {
+         F face = (F) edge.getFace();
+
+         if (inPlaneFacesToPack.contains(face))
+            continue;
+
+         if (arePoint3DAndFace3DInPlane(observer, face, epsilon))
+            inPlaneFacesToPack.add(face);
+      }
+
+      return inPlaneFacesToPack;
    }
 
    public static boolean arePoint3DAndFace3DInPlane(Point3DReadOnly point, Face3DReadOnly face, double epsilon)
