@@ -11,6 +11,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -375,8 +376,6 @@ public class EuclidPolytopeTools
          visibleFacesToPack = new HashSet<>();
 
       visibleFacesToPack.clear();
-      if (inPlaneFacesToPack != null)
-         inPlaneFacesToPack.clear();
 
       for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
       { // First we go through the faces and sort them into 2 categories: visible faces, faces which support plane contains the observer.
@@ -385,19 +384,7 @@ public class EuclidPolytopeTools
          double signedDistance = face.signedDistanceToPlane(observer);
 
          if (signedDistance <= epsilon)
-         {
-            if (signedDistance > -epsilon)
-            {
-               if (inPlaneFacesToPack != null)
-               {
-                  inPlaneFacesToPack.add(face);
-               }
-
-               if (face.isPointDirectlyAboveOrBelow(observer))
-                  return null; // The observer belongs to that face => no silhouette.
-            }
             continue;
-         }
 
          if (signedDistance < minimumDistance)
          {
@@ -486,29 +473,45 @@ public class EuclidPolytopeTools
 
       if (inPlaneFacesToPack != null)
       {
-         for (int faceIndex = inPlaneFacesToPack.size() - 1; faceIndex >= 0; faceIndex--)
+         inPlaneFacesToPack.clear();
+
+         for (int silhouetteIndex = 0; silhouetteIndex < silhouette.size(); silhouetteIndex++)
          {
-            /*
-             * Any in-plane face that is not adjacent to the silhouette is removed. A face considered adjacent
-             * to the silhouette if at least of its edges is part of the silhouette.
-             */
-            F inPlaneFace = inPlaneFacesToPack.get(faceIndex);
-            boolean isFaceAdjacentToSilhouette = false;
+            F face = (F) silhouette.get(silhouetteIndex).getFace();
+            if (inPlaneFacesToPack.contains(face))
+               continue;
 
-            for (int edgeIndex = 0; edgeIndex < inPlaneFace.getNumberOfEdges(); edgeIndex++)
-            {
-               if (silhouette.contains(inPlaneFace.getEdge(edgeIndex)))
-               {
-                  isFaceAdjacentToSilhouette = true;
-                  break;
-               }
-            }
-
-            if (!isFaceAdjacentToSilhouette)
-               inPlaneFacesToPack.remove(faceIndex);
+            if (arePoint3DAndFace3DInPlane(observer, face, epsilon))
+               inPlaneFacesToPack.add(face);
          }
       }
       return silhouette;
+   }
+
+   public static boolean arePoint3DAndFace3DInPlane(Point3DReadOnly point, Face3DReadOnly face, double epsilon)
+   {
+      if (face.distanceToPlane(point) <= epsilon)
+      {
+         return true;
+      }
+      else
+      {
+         Point3D average = new Point3D();
+         Vector3D normal = new Vector3D(face.getNormal());
+         List<Point3DReadOnly> extendedFaceVertices = new ArrayList<>(face.getVertices());
+         extendedFaceVertices.add(point);
+         EuclidPolytopeConstructionTools.updateFace3DNormal(extendedFaceVertices, average, normal);
+
+         for (Point3DReadOnly extendedFaceVertex : extendedFaceVertices)
+         {
+            if (EuclidGeometryTools.distanceFromPoint3DToPlane3D(extendedFaceVertex, average, normal) > 0.5 * epsilon)
+            {
+               return false;
+            }
+         }
+
+         return true;
+      }
    }
 
    public static boolean isPointDirectlyAboveOrBelowAnyFace(List<? extends Face3DReadOnly> faces, Point3DReadOnly query)

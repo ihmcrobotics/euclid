@@ -223,7 +223,7 @@ public class EuclidPolytopeConstructionTools
                break;
             }
 
-            if (newFace.distanceToPlane(nextSilhouetteEdge.getDestination()) > epsilon)
+            if (!EuclidPolytopeTools.arePoint3DAndFace3DInPlane(nextSilhouetteEdge.getDestination(), newFace, epsilon))
             { // We can't extend the newFace any further.
                break;
             }
@@ -257,7 +257,7 @@ public class EuclidPolytopeConstructionTools
                break;
             }
 
-            if (newFace.distanceToPlane(previousSilhouetteEdge.getOrigin()) > epsilon)
+            if (!EuclidPolytopeTools.arePoint3DAndFace3DInPlane(previousSilhouetteEdge.getOrigin(), newFace, epsilon))
             { // We can't extend the newFace any further.
                break;
             }
@@ -302,7 +302,7 @@ public class EuclidPolytopeConstructionTools
                break;
             }
 
-            if (newFace.distanceToPlane(nextSilhouetteEdge.getDestination()) > epsilon)
+            if (!EuclidPolytopeTools.arePoint3DAndFace3DInPlane(nextSilhouetteEdge.getDestination(), newFace, epsilon))
             { // We can't extend the newFace any further, resume the main loop while skipping processed edges.
                break;
             }
