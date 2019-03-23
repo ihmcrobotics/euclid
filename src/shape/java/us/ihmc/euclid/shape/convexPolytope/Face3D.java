@@ -97,159 +97,191 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
    public boolean addVertex(Vertex3D vertexToAdd, Vertex3D faceVertexToLock, boolean lockEdgesWithTwin)
    {
+      boolean isFaceModified = false;
+
       if (edges.isEmpty())
       {
-         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, vertexToAdd);
-         newEdge.setFace(this);
-         newEdge.setNext(newEdge);
-         newEdge.setPrevious(newEdge);
-         edges.add(newEdge);
+         isFaceModified |= handleNoEdgeCase(vertexToAdd);
       }
       else if (edges.size() == 1)
       {
-         HalfEdge3D firstEdge = edges.get(0);
-         if (firstEdge.getOrigin().geometricallyEquals(vertexToAdd, constructionEpsilon))
-            return false;
-
-         // Set the edge for the two points and then create its twin
-         firstEdge.setDestination(vertexToAdd);
-         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
-         newEdge.setFace(this);
-         newEdge.setNext(firstEdge);
-         newEdge.setPrevious(firstEdge);
-         firstEdge.setNext(newEdge);
-         firstEdge.setPrevious(newEdge);
-         edges.add(newEdge);
+         isFaceModified |= handleSingleEdgeCase(vertexToAdd);
       }
       else if (edges.size() == 2)
       {
-         HalfEdge3D firstEdge = edges.get(0);
-         if (firstEdge.distance(vertexToAdd) < constructionEpsilon)
-            return false;
-
-         HalfEdge3D secondEdge = edges.get(1);
-
-         // Ensuring clockwise ordering using the initial guess for the normal.
-         Vector3D resultingNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(firstEdge.getOrigin(), firstEdge.getDestination(),
-                                                                                     firstEdge.getDestination(), vertexToAdd);
-         if (resultingNormal.dot(normal) > 0.0)
-         { // Counter-clockwise, need to reverse the ordering.
-            firstEdge.flip();
-            secondEdge.setOrigin(firstEdge.getDestination());
-         }
-
-         secondEdge.setDestination(vertexToAdd);
-         HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin(), secondEdge, firstEdge, this);
-         firstEdge.setPrevious(newEdge);
-         secondEdge.setNext(newEdge);
-         edges.add(newEdge);
+         isFaceModified |= handleTwoEdgeCase(vertexToAdd);
       }
       else
       {
-         List<HalfEdge3D> lineOfSight = lineOfSight(vertexToAdd);
+         isFaceModified |= handleMultipleEdgeCase(vertexToAdd, faceVertexToLock, lockEdgesWithTwin);
+      }
 
-         if (lineOfSight.isEmpty())
-            return false;
+      if (isFaceModified)
+      {
+         HalfEdge3D startEdge = edges.get(0);
+         edges.clear();
+         edges.add(startEdge);
 
-         if (lockEdgesWithTwin)
+         HalfEdge3D currentEdge = startEdge.getNext();
+         while (currentEdge != startEdge)
          {
-            for (int i = 0; i < lineOfSight.size(); i++)
+            edges.add(currentEdge);
+            currentEdge = currentEdge.getNext();
+         }
+
+         updateVertices();
+         updateNormal();
+         updateCentroidAndArea();
+
+         boundingBox.updateToIncludePoint(vertexToAdd);
+      }
+
+      return isFaceModified;
+   }
+
+   private boolean handleNoEdgeCase(Vertex3D vertexToAdd)
+   {
+      HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, vertexToAdd);
+      newEdge.setFace(this);
+      newEdge.setNext(newEdge);
+      newEdge.setPrevious(newEdge);
+      edges.add(newEdge);
+      return true;
+   }
+
+   private boolean handleSingleEdgeCase(Vertex3D vertexToAdd)
+   {
+      HalfEdge3D firstEdge = edges.get(0);
+      if (firstEdge.getOrigin().geometricallyEquals(vertexToAdd, constructionEpsilon))
+         return false;
+
+      // Set the edge for the two points and then create its twin
+      firstEdge.setDestination(vertexToAdd);
+      HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
+      newEdge.setFace(this);
+      newEdge.setNext(firstEdge);
+      newEdge.setPrevious(firstEdge);
+      firstEdge.setNext(newEdge);
+      firstEdge.setPrevious(newEdge);
+      edges.add(newEdge);
+      return true;
+   }
+
+   private boolean handleTwoEdgeCase(Vertex3D vertexToAdd)
+   {
+      HalfEdge3D firstEdge = edges.get(0);
+      if (firstEdge.distance(vertexToAdd) < constructionEpsilon)
+         return false;
+
+      HalfEdge3D secondEdge = edges.get(1);
+
+      // Ensuring clockwise ordering using the initial guess for the normal.
+      Vector3D resultingNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(firstEdge.getOrigin(), firstEdge.getDestination(), firstEdge.getDestination(),
+                                                                                  vertexToAdd);
+      if (resultingNormal.dot(normal) > 0.0)
+      { // Counter-clockwise, need to reverse the ordering.
+         firstEdge.flip();
+         secondEdge.setOrigin(firstEdge.getDestination());
+      }
+
+      secondEdge.setDestination(vertexToAdd);
+      HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin(), secondEdge, firstEdge, this);
+      firstEdge.setPrevious(newEdge);
+      secondEdge.setNext(newEdge);
+      edges.add(newEdge);
+      return true;
+   }
+
+   private boolean handleMultipleEdgeCase(Vertex3D vertexToAdd, Vertex3D faceVertexToLock, boolean lockEdgesWithTwin)
+   {
+      List<HalfEdge3D> lineOfSight = lineOfSight(vertexToAdd);
+
+      if (lineOfSight.isEmpty())
+         return false;
+
+      if (lockEdgesWithTwin)
+      {
+         for (int i = 0; i < lineOfSight.size(); i++)
+         {
+            if (lineOfSight.get(i).getTwin() != null)
+               return false;
+         }
+      }
+
+      HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
+
+      if (lineOfSight.size() == 1 && firstVisibleEdge.distance(vertexToAdd) < constructionEpsilon)
+         return false;
+
+      HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
+
+      HalfEdge3D edgeBeforeLineOfSight = firstVisibleEdge.getPrevious();
+      HalfEdge3D edgeAfterLineOfSight = lastVisibleEdge.getNext();
+
+      if (edgeBeforeLineOfSight.distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
+      {
+         firstVisibleEdge = edgeBeforeLineOfSight;
+         lineOfSight.add(0, firstVisibleEdge);
+      }
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getOrigin(), vertexToAdd,
+                                                               edgeBeforeLineOfSight.getDestination()) < constructionEpsilon)
+      { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
+         firstVisibleEdge = edgeBeforeLineOfSight;
+         lineOfSight.add(0, firstVisibleEdge);
+      }
+
+      if (edgeAfterLineOfSight.distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
+      {
+         lastVisibleEdge = edgeAfterLineOfSight;
+         lineOfSight.add(lastVisibleEdge);
+      }
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getDestination(), vertexToAdd,
+                                                               edgeAfterLineOfSight.getOrigin()) < constructionEpsilon)
+      { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
+         lastVisibleEdge = edgeAfterLineOfSight;
+         lineOfSight.add(lastVisibleEdge);
+      }
+
+      if (lineOfSight.size() == 1)
+      {
+         HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
+         additionalEdge.setFace(this);
+         firstVisibleEdge.setDestination(vertexToAdd);
+         additionalEdge.setNext(firstVisibleEdge.getNext());
+         firstVisibleEdge.getNext().setPrevious(additionalEdge);
+         firstVisibleEdge.setNext(additionalEdge);
+         additionalEdge.setPrevious(firstVisibleEdge);
+         // Clear the twin information to force the update.
+         firstVisibleEdge.setTwin(null);
+         edges.add(additionalEdge);
+      }
+      else
+      {
+         if (faceVertexToLock != null)
+         {
+            for (int i = 1; i < lineOfSight.size(); i++)
             {
-               if (lineOfSight.get(i).getTwin() != null)
+               if (lineOfSight.get(i).getOrigin() == faceVertexToLock)
                   return false;
             }
          }
 
-         if (lineOfSight.size() == 1 && lineOfSight.get(0).distance(vertexToAdd) < constructionEpsilon)
-            return false;
+         firstVisibleEdge.setDestination(vertexToAdd);
+         lastVisibleEdge.setOrigin(vertexToAdd);
+         firstVisibleEdge.setNext(lastVisibleEdge);
+         lastVisibleEdge.setPrevious(firstVisibleEdge);
+         // Clear the twin information to force the update.
+         firstVisibleEdge.setTwin(null);
+         lastVisibleEdge.setTwin(null);
 
-         HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
-         HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
-
-         HalfEdge3D edgeBeforeLineOfSight = firstVisibleEdge.getPrevious();
-         HalfEdge3D edgeAfterLineOfSight = lastVisibleEdge.getNext();
-
-         if (edgeBeforeLineOfSight.distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
+         for (int i = 1; i < lineOfSight.size() - 1; i++)
          {
-            firstVisibleEdge = edgeBeforeLineOfSight;
-            lineOfSight.add(0, firstVisibleEdge);
-         }
-         else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getOrigin(), vertexToAdd,
-                                                                  edgeBeforeLineOfSight.getDestination()) < constructionEpsilon)
-         { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
-            firstVisibleEdge = edgeBeforeLineOfSight;
-            lineOfSight.add(0, firstVisibleEdge);
-         }
-
-         if (edgeAfterLineOfSight.distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
-         {
-            lastVisibleEdge = edgeAfterLineOfSight;
-            lineOfSight.add(lastVisibleEdge);
-         }
-         else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getDestination(), vertexToAdd,
-                                                                  edgeAfterLineOfSight.getOrigin()) < constructionEpsilon)
-         { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
-            lastVisibleEdge = edgeAfterLineOfSight;
-            lineOfSight.add(lastVisibleEdge);
-         }
-
-         if (lineOfSight.size() == 1)
-         {
-            HalfEdge3D additionalEdge = new HalfEdge3D(vertexToAdd, firstVisibleEdge.getDestination());
-            additionalEdge.setFace(this);
-            firstVisibleEdge.setDestination(vertexToAdd);
-            additionalEdge.setNext(firstVisibleEdge.getNext());
-            firstVisibleEdge.getNext().setPrevious(additionalEdge);
-            firstVisibleEdge.setNext(additionalEdge);
-            additionalEdge.setPrevious(firstVisibleEdge);
-            // Clear the twin information to force the update.
-            firstVisibleEdge.setTwin(null);
-            edges.add(additionalEdge);
-         }
-         else
-         {
-            if (faceVertexToLock != null)
-            {
-               for (int i = 1; i < lineOfSight.size(); i++)
-               {
-                  if (lineOfSight.get(i).getOrigin() == faceVertexToLock)
-                     return false;
-               }
-            }
-
-            firstVisibleEdge.setDestination(vertexToAdd);
-            lastVisibleEdge.setOrigin(vertexToAdd);
-            firstVisibleEdge.setNext(lastVisibleEdge);
-            lastVisibleEdge.setPrevious(firstVisibleEdge);
-            // Clear the twin information to force the update.
-            firstVisibleEdge.setTwin(null);
-            lastVisibleEdge.setTwin(null);
-
-            for (int i = 1; i < lineOfSight.size() - 1; i++)
-            {
-               HalfEdge3D edgeToRemove = lineOfSight.get(i);
-               edgeToRemove.destroy();
-               edges.remove(edgeToRemove);
-            }
+            HalfEdge3D edgeToRemove = lineOfSight.get(i);
+            edgeToRemove.destroy();
+            edges.remove(edgeToRemove);
          }
       }
 
-      HalfEdge3D startEdge = edges.get(0);
-      edges.clear();
-      edges.add(startEdge);
-
-      HalfEdge3D currentEdge = startEdge.getNext();
-      while (currentEdge != startEdge)
-      {
-         edges.add(currentEdge);
-         currentEdge = currentEdge.getNext();
-      }
-
-      updateVertices();
-      updateNormal();
-      updateCentroidAndArea();
-
-      boundingBox.updateToIncludePoint(vertexToAdd);
       return true;
    }
 
