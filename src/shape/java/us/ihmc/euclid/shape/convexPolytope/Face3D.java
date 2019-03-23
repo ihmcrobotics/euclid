@@ -163,13 +163,35 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          if (lineOfSight.size() == 1 && lineOfSight.get(0).distance(vertexToAdd) < constructionEpsilon)
             return false;
 
-         if (lineOfSight.get(0).getPrevious().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
-            lineOfSight.add(0, lineOfSight.get(0).getPrevious());
-         if (lineOfSight.get(lineOfSight.size() - 1).getNext().distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
-            lineOfSight.add(lineOfSight.get(lineOfSight.size() - 1).getNext());
-
          HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
          HalfEdge3D lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
+
+         HalfEdge3D edgeBeforeLineOfSight = firstVisibleEdge.getPrevious();
+         HalfEdge3D edgeAfterLineOfSight = lastVisibleEdge.getNext();
+
+         if (edgeBeforeLineOfSight.distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
+         {
+            firstVisibleEdge = edgeBeforeLineOfSight;
+            lineOfSight.add(0, firstVisibleEdge);
+         }
+         else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getOrigin(), vertexToAdd,
+                                                                  edgeBeforeLineOfSight.getDestination()) < constructionEpsilon)
+         { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
+            firstVisibleEdge = edgeBeforeLineOfSight;
+            lineOfSight.add(0, firstVisibleEdge);
+         }
+
+         if (edgeAfterLineOfSight.distanceFromSupportLine(vertexToAdd) < constructionEpsilon)
+         {
+            lastVisibleEdge = edgeAfterLineOfSight;
+            lineOfSight.add(lastVisibleEdge);
+         }
+         else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getDestination(), vertexToAdd,
+                                                                  edgeAfterLineOfSight.getOrigin()) < constructionEpsilon)
+         { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
+            lastVisibleEdge = edgeAfterLineOfSight;
+            lineOfSight.add(lastVisibleEdge);
+         }
 
          if (lineOfSight.size() == 1)
          {

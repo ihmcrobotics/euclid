@@ -885,4 +885,20 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
          constructionEpsilon = 1.0E-6;
       }
    }
+
+   public static class ConvexPolytope3DTroublesomeDataset_20190321_222438 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public ConvexPolytope3DTroublesomeDataset_20190321_222438()
+      {
+         pointsBeforeIssue.add(new Point3D(-0.22221431798593744000, 0.20154601678536010000, -0.50000000000000000000));
+         pointsBeforeIssue.add(new Point3D(-0.19164624264091773000, 0.23080666732488140000, 0.50000000000000000000));
+         pointsBeforeIssue.add(new Point3D(-0.22233983991481920000, 0.20140753607214537000, -0.50000000000000000000));
+         pointsBeforeIssue.add(new Point3D(0.01577966270187325400, -0.29958471630744965000, 0.50000000000000000000));
+         pointsBeforeIssue.add(new Point3D(-0.24694684726893160000, 0.17034451744607154000, 0.50000000000000000000));
+         pointsBeforeIssue.add(new Point3D(-0.26566620349137715000, -0.13936092824919830000, -0.50000000000000000000));
+
+         troublesomePoint.set(-0.22089658280712426000, 0.20298940786192580000, -0.50000000000000000000);
+         constructionEpsilon = 1.0E-6;
+      }
+   }
 }
