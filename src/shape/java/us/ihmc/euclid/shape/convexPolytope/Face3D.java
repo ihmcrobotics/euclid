@@ -336,6 +336,13 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       return lineOfSight;
    }
 
+   @SuppressWarnings("unchecked")
+   @Override
+   public List<HalfEdge3D> lineOfSight(Point3DReadOnly observer, double epsilon)
+   {
+      return (List<HalfEdge3D>) Face3DReadOnly.super.lineOfSight(observer, epsilon);
+   }
+
    @Override
    public HalfEdge3D lineOfSightStart(Point3DReadOnly observer)
    {

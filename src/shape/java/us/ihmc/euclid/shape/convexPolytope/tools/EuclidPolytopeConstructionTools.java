@@ -185,7 +185,7 @@ public class EuclidPolytopeConstructionTools
                continue;
 
             // The faceToExtend may hold onto more than 1 silhouette edges.
-            silhouetteEdges.removeAll(faceToExtend.getEdges());
+            silhouetteEdges.removeAll(faceToExtend.lineOfSight(vertex, epsilon));
             i--; // The list's subsequent elements are being shifted, so we need to rewind the current index.
             boolean wasModified = faceToExtend.addVertex(vertex);
             assert wasModified;

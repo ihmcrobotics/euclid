@@ -118,6 +118,57 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
       return lineOfSight;
    }
 
+   default List<? extends HalfEdge3DReadOnly> lineOfSight(Point3DReadOnly observer, double epsilon)
+   {
+      HalfEdge3DReadOnly currentEdge = lineOfSightStart(observer);
+
+      if (currentEdge == null)
+         return Collections.emptyList();
+
+      List<HalfEdge3DReadOnly> lineOfSight = new ArrayList<>();
+
+      for (int i = 0; i < getNumberOfEdges(); i++)
+      {
+         lineOfSight.add(currentEdge);
+         currentEdge = currentEdge.getNext();
+
+         if (!canObserverSeeEdge(observer, currentEdge))
+            break;
+      }
+
+      HalfEdge3DReadOnly firstVisibleEdge = lineOfSight.get(0);
+      HalfEdge3DReadOnly lastVisibleEdge = lineOfSight.get(lineOfSight.size() - 1);
+
+      HalfEdge3DReadOnly edgeBeforeLineOfSight = firstVisibleEdge.getPrevious();
+      HalfEdge3DReadOnly edgeAfterLineOfSight = lastVisibleEdge.getNext();
+
+      if (edgeBeforeLineOfSight.distanceFromSupportLine(observer) < epsilon)
+      {
+         firstVisibleEdge = edgeBeforeLineOfSight;
+         lineOfSight.add(0, firstVisibleEdge);
+      }
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getOrigin(), observer,
+                                                               edgeBeforeLineOfSight.getDestination()) < epsilon)
+      { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass.
+         firstVisibleEdge = edgeBeforeLineOfSight;
+         lineOfSight.add(0, firstVisibleEdge);
+      }
+
+      if (edgeAfterLineOfSight.distanceFromSupportLine(observer) < epsilon)
+      {
+         lastVisibleEdge = edgeAfterLineOfSight;
+         lineOfSight.add(lastVisibleEdge);
+      }
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getDestination(), observer,
+                                                               edgeAfterLineOfSight.getOrigin()) < epsilon)
+      { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass.
+         lastVisibleEdge = edgeAfterLineOfSight;
+         lineOfSight.add(lastVisibleEdge);
+      }
+
+      return lineOfSight;
+   }
+
    /**
     * Returns the first edge that is visible from the specified point.
     * <p>
