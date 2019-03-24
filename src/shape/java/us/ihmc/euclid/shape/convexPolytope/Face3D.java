@@ -109,7 +109,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       }
       else if (edges.size() == 2)
       {
-         isFaceModified |= handleTwoEdgeCase(vertexToAdd);
+         isFaceModified |= handleTwoEdgeCase(vertexToAdd, lockEdgesWithTwin);
       }
       else
       {
@@ -167,13 +167,36 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       return true;
    }
 
-   private boolean handleTwoEdgeCase(Vertex3D vertexToAdd)
+   private boolean handleTwoEdgeCase(Vertex3D vertexToAdd, boolean lockEdgesWithTwin)
    {
       HalfEdge3D firstEdge = edges.get(0);
-      if (firstEdge.distance(vertexToAdd) < constructionEpsilon)
-         return false;
-
       HalfEdge3D secondEdge = edges.get(1);
+
+      if (firstEdge.distance(vertexToAdd) < constructionEpsilon)
+      {
+         return false;
+      }
+      else if (!lockEdgesWithTwin || firstEdge.getTwin() == null)
+      { // We need to check if either the origin or destination of the firstEdge would become unnecessary by adding the new vertex.
+         if (firstEdge.getOrigin().distanceSquared(vertexToAdd) > firstEdge.getDestination().distanceSquared(vertexToAdd))
+         {
+            if (EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(firstEdge.getDestination(), vertexToAdd, firstEdge.getOrigin()) < constructionEpsilon)
+            {
+               firstEdge.setDestination(vertexToAdd);
+               secondEdge.setOrigin(vertexToAdd);
+               return true;
+            }
+         }
+         else
+         {
+            if (EuclidGeometryTools.distanceFromPoint3DToLineSegment3D(firstEdge.getOrigin(), vertexToAdd, firstEdge.getDestination()) < constructionEpsilon)
+            {
+               firstEdge.setOrigin(vertexToAdd);
+               secondEdge.setDestination(vertexToAdd);
+               return true;
+            }
+         }
+      }
 
       // Ensuring clockwise ordering using the initial guess for the normal.
       Vector3D resultingNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(firstEdge.getOrigin(), firstEdge.getDestination(), firstEdge.getDestination(),
@@ -199,15 +222,6 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       if (lineOfSight.isEmpty())
          return false;
 
-      if (lockEdgesWithTwin)
-      {
-         for (int i = 0; i < lineOfSight.size(); i++)
-         {
-            if (lineOfSight.get(i).getTwin() != null)
-               return false;
-         }
-      }
-
       HalfEdge3D firstVisibleEdge = lineOfSight.get(0);
 
       if (lineOfSight.size() == 1 && firstVisibleEdge.distance(vertexToAdd) < constructionEpsilon)
@@ -223,8 +237,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          firstVisibleEdge = edgeBeforeLineOfSight;
          lineOfSight.add(0, firstVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getOrigin(), vertexToAdd,
-                                                               edgeBeforeLineOfSight.getDestination()) < constructionEpsilon)
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), vertexToAdd,
+                                                               edgeBeforeLineOfSight.getOrigin()) < constructionEpsilon)
       { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
          firstVisibleEdge = edgeBeforeLineOfSight;
          lineOfSight.add(0, firstVisibleEdge);
@@ -235,11 +249,20 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          lastVisibleEdge = edgeAfterLineOfSight;
          lineOfSight.add(lastVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getDestination(), vertexToAdd,
-                                                               edgeAfterLineOfSight.getOrigin()) < constructionEpsilon)
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), vertexToAdd,
+                                                               edgeAfterLineOfSight.getDestination()) < constructionEpsilon)
       { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
          lastVisibleEdge = edgeAfterLineOfSight;
          lineOfSight.add(lastVisibleEdge);
+      }
+
+      if (lockEdgesWithTwin)
+      {
+         for (int i = 0; i < lineOfSight.size(); i++)
+         {
+            if (lineOfSight.get(i).getTwin() != null)
+               return false;
+         }
       }
 
       if (lineOfSight.size() == 1)
@@ -529,6 +552,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       long hashCode = vertices.hashCode();
       hashCode = EuclidHashCodeTools.combineHashCode(hashCode, centroid.hashCode());
       hashCode = EuclidHashCodeTools.combineHashCode(hashCode, normal.hashCode());
+      hashCode = EuclidHashCodeTools.addToHashCode(hashCode, area);
       return EuclidHashCodeTools.toIntHashCode(hashCode);
    }
 

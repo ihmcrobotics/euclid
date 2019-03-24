@@ -147,8 +147,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
          firstVisibleEdge = edgeBeforeLineOfSight;
          lineOfSight.add(0, firstVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getOrigin(), observer,
-                                                               edgeBeforeLineOfSight.getDestination()) < epsilon)
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), observer,
+                                                               edgeBeforeLineOfSight.getOrigin()) < epsilon)
       { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass.
          firstVisibleEdge = edgeBeforeLineOfSight;
          lineOfSight.add(0, firstVisibleEdge);
@@ -159,8 +159,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
          lastVisibleEdge = edgeAfterLineOfSight;
          lineOfSight.add(lastVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getDestination(), observer,
-                                                               edgeAfterLineOfSight.getOrigin()) < epsilon)
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), observer,
+                                                               edgeAfterLineOfSight.getDestination()) < epsilon)
       { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass.
          lastVisibleEdge = edgeAfterLineOfSight;
          lineOfSight.add(lastVisibleEdge);

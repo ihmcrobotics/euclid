@@ -517,6 +517,29 @@ public class EuclidPolytopeTools
       }
    }
 
+   public static boolean arePoint3DAndHalfEdge3DInLine(Point3DReadOnly point, HalfEdge3DReadOnly halfEdge, double epsilon)
+   {
+      if (halfEdge.distanceFromSupportLine(point) <= epsilon)
+      {
+         return true;
+      }
+      else
+      {
+         if (halfEdge.getOrigin().distanceSquared(point) > halfEdge.getDestination().distanceSquared(point))
+         {
+            if (EuclidGeometryTools.distanceFromPoint3DToLine3D(halfEdge.getDestination(), point, halfEdge.getOrigin()) <= epsilon)
+               return true;
+         }
+         else
+         {
+            if (EuclidGeometryTools.distanceFromPoint3DToLine3D(halfEdge.getOrigin(), point, halfEdge.getDestination()) <= epsilon)
+               return true;
+         }
+
+         return false;
+      }
+   }
+
    public static boolean isPointDirectlyAboveOrBelowAnyFace(List<? extends Face3DReadOnly> faces, Point3DReadOnly query)
    {
       for (int i = 0; i < faces.size(); i++)

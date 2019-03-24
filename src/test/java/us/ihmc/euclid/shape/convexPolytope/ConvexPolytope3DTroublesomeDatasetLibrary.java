@@ -61,6 +61,34 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
       }
    }
 
+   public static class DatasetGJKNullPointerExceptionBug2OriginalV2 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public DatasetGJKNullPointerExceptionBug2OriginalV2()
+      {
+         pointsBeforeIssue.add(new Point3D(0.0139072921615079, -0.0447432688724709, 0.0011758183858351));
+         pointsBeforeIssue.add(new Point3D(0.0186428968993924, -0.0235249738131959, 0.0012995156961376));
+         pointsBeforeIssue.add(new Point3D(0.0212072625303128, -0.0130016538284213, 0.0026586776633881));
+         pointsBeforeIssue.add(new Point3D(0.0643309020398054, 0.0996995467973626, 0.0054389780927482));
+         troublesomePoint.set(00.0269036070083187, 0.0083216605291816, 0.0078200543380451);
+         constructionEpsilon = 1.0e-3;
+      }
+   }
+
+   public static class DatasetGJKNullPointerExceptionBug2OriginalV3 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public DatasetGJKNullPointerExceptionBug2OriginalV3()
+      {
+         pointsBeforeIssue.add(new Point3D(0.1075136584776464, -0.4824945590361311, 0.0090899461159321));
+         pointsBeforeIssue.add(new Point3D(0.5607657881997890, 0.4040329322380422, 0.0474110068485305));
+         pointsBeforeIssue.add(new Point3D(0.0289073412127943, 0.0078295230557014, -0.0147523787325835));
+         pointsBeforeIssue.add(new Point3D(0.0043375074277710, -0.1974921037188990, 0.0003667227899621));
+         pointsBeforeIssue.add(new Point3D(0.0139072921615079, -0.0447432688724709, 0.0011758183858351));
+         pointsBeforeIssue.add(new Point3D(0.0186428968993924, -0.0235249738131959, 0.0012995156961376));
+         troublesomePoint.set(0.0212072625303128, -0.0130016538284213, 0.0026586776633881);
+         constructionEpsilon = 1.0e-3;
+      }
+   }
+
    public static class DatasetGJKNullPointerExceptionBug2Simplified extends ConvexPolytope3DTroublesomeDataset
    {
       public DatasetGJKNullPointerExceptionBug2Simplified()
@@ -232,6 +260,20 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
       }
    }
 
+   public static class DatasetGJKNullPointerExceptionBug6V4 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public DatasetGJKNullPointerExceptionBug6V4()
+      {
+         pointsBeforeIssue.add(new Point3D(-0.18402867588922667000, -0.12629220803748709000, 0.07363271127979126000));
+         pointsBeforeIssue.add(new Point3D(-0.17583758138846740000, -0.13878848467476557000, 0.06663279438238556000));
+         pointsBeforeIssue.add(new Point3D(-0.45317219159206390000, 0.14566075149172053000, 0.17519427511219820000));
+         pointsBeforeIssue.add(new Point3D(-0.13409442245051250000, -0.19646058810895028000, 0.05184028405466168000));
+         pointsBeforeIssue.add(new Point3D(-0.20441775948060736000, -0.10131005633356671000, 0.07902696117881491000));
+         troublesomePoint.set(-0.16885169989877480000, -0.14496535839630130000, 0.07101749538537033000);
+         constructionEpsilon = 0.001;
+      }
+   }
+
    public static class DatasetGJKNullPointerExceptionBug7Original extends ConvexPolytope3DTroublesomeDataset
    {
       public DatasetGJKNullPointerExceptionBug7Original()
@@ -293,16 +335,23 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
    {
       public DatasetEPAFaceNormalIntegrityBug8Simplified()
       {
-         //      pointsBeforeIssue.add(new Point3D( 0.25923025651672880000, -1.32459442213312100000,  0.33731064563758340000 ));
          pointsBeforeIssue.add(new Point3D(-0.58211725366830260000, -0.18145508297583146000, -0.75745150010666570000));
-         //      pointsBeforeIssue.add(new Point3D(-0.29186699291394436000, -0.26463480549211205000, -0.37977759673184330000 ));
          pointsBeforeIssue.add(new Point3D(-0.15759191168890652000, -0.36628560982904357000, -0.20505873887300530000));
          pointsBeforeIssue.add(new Point3D(-0.14713791925305353000, -0.37644945730058765000, -0.19100593449992065000));
          pointsBeforeIssue.add(new Point3D(-0.14153660446287397000, -0.38162347173657220000, -0.18434170307648423000));
-         //      pointsBeforeIssue.add(new Point3D(-0.12585187210813410000, -0.39752753793187856000, -0.16375857049215160000 ));
-         //      pointsBeforeIssue.add(new Point3D(-0.09496404628807320000, -0.43099089641061805000, -0.12356730343211364000 ));
-         //      pointsBeforeIssue.add(new Point3D(-0.03597410587601624000, -0.50432786022543690000, -0.04680953929654707600 ));
+         troublesomePoint.set(-0.13693975331059360000, -0.38652881789871840000, -0.17763839169767880000);
+         constructionEpsilon = 5.0E-4;
+      }
+   }
 
+   public static class DatasetEPAFaceNormalIntegrityBug8SimplifiedV2 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public DatasetEPAFaceNormalIntegrityBug8SimplifiedV2()
+      {
+         pointsBeforeIssue.add(new Point3D(-0.58211725366830260000, -0.18145508297583146000, -0.75745150010666570000));
+         pointsBeforeIssue.add(new Point3D(-0.15759191168890652000, -0.36628560982904357000, -0.20505873887300530000));
+         pointsBeforeIssue.add(new Point3D(-0.14713791925305353000, -0.37644945730058765000, -0.19100593449992065000));
+         pointsBeforeIssue.add(new Point3D(-0.14153660446287397000, -0.38162347173657220000, -0.18434170307648423000));
          troublesomePoint.set(-0.13693975331059360000, -0.38652881789871840000, -0.17763839169767880000);
          constructionEpsilon = 5.0E-4;
       }
@@ -979,6 +1028,62 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
          pointsBeforeIssue.add(new Point3D(-0.02949883371674418000, -0.04037101447018488000, 0.15000000000000000000));
          pointsBeforeIssue.add(new Point3D(-0.02973125211791738700, -0.04020015730691651000, -0.15000000000000000000));
          troublesomePoint.set(-0.02889868575683430700, -0.04080276904240376000, -0.15000000000000000000);
+         constructionEpsilon = 1.0E-6;
+      }
+   }
+
+   public static class ConvexPolytope3DTroublesomeDataset_20190323_190624 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public ConvexPolytope3DTroublesomeDataset_20190323_190624()
+      {
+         pointsBeforeIssue.add(new Point3D(-0.02299062921644618000, -0.04440079918460806000, -0.001));
+         pointsBeforeIssue.add(new Point3D(-0.01961949482806400000, -0.04598994914860822500, 0.001));
+         pointsBeforeIssue.add(new Point3D(-0.01954504118681128400, -0.04602164018161294000, 0.001));
+         pointsBeforeIssue.add(new Point3D(-0.01853556656231905000, -0.04643740703585678000, 0.001));
+         troublesomePoint.set(-0.01764619662299450600, -0.04678260087620843000, -0.001);
+         constructionEpsilon = 1.0E-6;
+      }
+   }
+
+   public static class ConvexPolytope3DTroublesomeDataset_20190323_193234 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public ConvexPolytope3DTroublesomeDataset_20190323_193234()
+      {
+         pointsBeforeIssue.add(new Point3D(-0.01540314387381502300, -0.04756829993601363600, -0.001));
+         pointsBeforeIssue.add(new Point3D(-0.02299062921644618000, -0.04440079918460806000, -0.001));
+         pointsBeforeIssue.add(new Point3D(-0.01961949482806400000, -0.04598994914860822500, 0.001));
+         pointsBeforeIssue.add(new Point3D(-0.01954504118681128400, -0.04602164018161294000, 0.001));
+         pointsBeforeIssue.add(new Point3D(-0.01853556656231905000, -0.04643740703585678000, 0.001));
+         troublesomePoint.set(-0.01764619662299450600, -0.04678260087620843000, -0.001);
+         constructionEpsilon = 1.0E-6;
+      }
+   }
+
+   public static class ConvexPolytope3DTroublesomeDataset_20190323_195449 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public ConvexPolytope3DTroublesomeDataset_20190323_195449()
+      {
+         pointsBeforeIssue.add(new Point3D(-0.03541014613115714400, -0.03530044689476462000, 0.001));
+         pointsBeforeIssue.add(new Point3D(-0.03734847754427659000, -0.03324291240437076600, 0.001));
+         pointsBeforeIssue.add(new Point3D(-0.03534070522258475000, -0.03536996684152207000, -0.001));
+         pointsBeforeIssue.add(new Point3D(-0.03543195159362232000, -0.03527856015014224600, -0.001));
+         pointsBeforeIssue.add(new Point3D(0.01847795496318006800, 0.04646036138880852000, -0.001));
+         troublesomePoint.set(-0.03581713708947079000, -0.03488742883495509600, -0.001);
+         constructionEpsilon = 1.0E-6;
+      }
+   }
+
+   public static class ConvexPolytope3DTroublesomeDataset_20190323_213507 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public ConvexPolytope3DTroublesomeDataset_20190323_213507()
+      {
+         pointsBeforeIssue.add(new Point3D(0.01569971687419740800, 0.04747124276938661400, -0.001));
+         pointsBeforeIssue.add(new Point3D(0.00638643724321071700, 0.04959045693819055000,  0.001));
+         pointsBeforeIssue.add(new Point3D(-0.04099078792044472000, 0.02863136925927790000, 0.001));
+         pointsBeforeIssue.add(new Point3D(0.00562149156111026600, 0.04968298333059687000,  0.001));
+         pointsBeforeIssue.add(new Point3D(0.00653865510674285100, 0.04957061618938245000,  0.001));
+         pointsBeforeIssue.add(new Point3D(0.00542547626947362700, 0.04970477046772652600,  0.001));
+                      troublesomePoint.set(0.00609110437244231200, 0.04962759764006328000,  0.001);
          constructionEpsilon = 1.0E-6;
       }
    }

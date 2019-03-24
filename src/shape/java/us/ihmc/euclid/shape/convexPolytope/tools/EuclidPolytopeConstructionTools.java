@@ -79,7 +79,9 @@ public class EuclidPolytopeConstructionTools
             List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex);
 
             if (lineOfSight.isEmpty())
-               return null;
+            {
+               inPlaneFaces.remove(face);
+            }
 
             boolean faceRemovedFromInPlaneList = false;
 
@@ -97,13 +99,18 @@ public class EuclidPolytopeConstructionTools
 
                /*
                 * It would be fine if the new vertex would result in extending an edge of the face. However, if the
-                * vertex is not an extrapolation of the line, we should not be able to see it => inconsistency we
-                * need to abort.
+                * vertex is not an extrapolation of the line, we should not be able to see it.
                 */
-               if (lineOfSightEdge.distanceFromSupportLine(vertex) > epsilon)
-                  return null;
-
-               // The face will extend the edge to the new vertex, need to make sure the other face will do the same.
+               if (!EuclidPolytopeTools.arePoint3DAndHalfEdge3DInLine(vertex, lineOfSightEdge, epsilon))
+               {
+                  faceRemovedFromInPlaneList = true;
+                  inPlaneFaces.remove(face);
+                  break;
+               }
+               /*
+                * The edge will be extended, let's make sure that the neighbor would do the same. Just need to make
+                * sure it is part of the in-plane faces.
+                */
                if (!inPlaneFaces.contains(lineOfSightEdge.getTwin().getFace()))
                {
                   faceRemovedFromInPlaneList = true;
@@ -121,24 +128,26 @@ public class EuclidPolytopeConstructionTools
                 * be part of the inPlaneFaces, if not we remove the face from the list which will force the
                 * creation of a new face.
                 */
-               HalfEdge3D previousLineOfSight = lineOfSight.get(0).getPrevious();
-               HalfEdge3D nextLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
+               HalfEdge3D edgeBeforeLineOfSight = lineOfSight.get(0).getPrevious();
+               HalfEdge3D edgeAfterLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
 
-               if (previousLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
+               if (!silhouetteEdges.contains(edgeBeforeLineOfSight) && (edgeBeforeLineOfSight.distanceFromSupportLine(vertex) < epsilon
+                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), vertex,
+                                                                        edgeBeforeLineOfSight.getOrigin()) < epsilon))
                {
-                  if (!inPlaneFaces.contains(previousLineOfSight.getTwin().getFace()))
+                  if (!inPlaneFaces.contains(edgeBeforeLineOfSight.getTwin().getFace()))
                   {
                      inPlaneFaces.remove(face);
-                     continue;
                   }
                }
 
-               if (nextLineOfSight.distanceFromSupportLine(vertex) <= epsilon)
+               if (!silhouetteEdges.contains(edgeAfterLineOfSight) && (edgeAfterLineOfSight.distanceFromSupportLine(vertex) < epsilon
+                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), vertex,
+                                                                        edgeAfterLineOfSight.getDestination()) < epsilon))
                {
-                  if (!inPlaneFaces.contains(nextLineOfSight.getTwin().getFace()))
+                  if (!inPlaneFaces.contains(edgeAfterLineOfSight.getTwin().getFace()))
                   {
                      inPlaneFaces.remove(face);
-                     continue;
                   }
                }
             }
@@ -378,13 +387,14 @@ public class EuclidPolytopeConstructionTools
       assert wasModified;
       wasModified = face.addVertex(v2);
       assert wasModified;
-      wasModified = face.addVertex(v3);
-      assert wasModified;
 
+      // Associate the first edge so the next operation on the face won't modify it.
       HalfEdge3D faceFirstEdge = face.getEdge(0);
-
       twinEdge.setTwin(faceFirstEdge);
       faceFirstEdge.setTwin(twinEdge);
+
+      wasModified = face.addVertex(v3, null, true);
+      assert wasModified;
 
       HalfEdge3D vertexToOrigin = vertex.getEdgeTo(twinEdge.getOrigin());
       HalfEdge3D originToVertex = twinEdge.getOrigin().getEdgeTo(vertex);

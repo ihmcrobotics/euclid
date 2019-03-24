@@ -297,9 +297,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       // Polytope is empty. Creating face and adding the vertex
       Face3D newFace = new Face3D(Axis.Z, constructionEpsilon);
       newFace.addVertex(vertexToAdd);
-      faces.add(newFace);
-
-      return true;
+      return faces.add(newFace);
    }
 
    private boolean handleSingleFaceCase(Vertex3D vertexToAdd)
@@ -308,10 +306,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
 
       if (firstFace.getNumberOfEdges() <= 2)
       { // The face is not an actual face yet, extend it.
-         firstFace.addVertex(vertexToAdd);
-         return true;
+         return firstFace.addVertex(vertexToAdd);
       }
-      else if (!firstFace.isPointInFacePlane(vertexToAdd, constructionEpsilon))
+      else if (!EuclidPolytopeTools.arePoint3DAndFace3DInPlane(vertexToAdd, firstFace, constructionEpsilon))
       { // Off the face plane => need to create new faces.
          if (firstFace.canObserverSeeFace(vertexToAdd))
             firstFace.flip();
