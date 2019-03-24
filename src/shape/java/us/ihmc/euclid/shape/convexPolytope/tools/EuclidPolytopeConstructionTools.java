@@ -58,41 +58,36 @@ public class EuclidPolytopeConstructionTools
       if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertex, silhouetteEdges) <= epsilon)
          return null;
 
-      // TODO it seems that the filter for the new faces is obsolete now. Need to be confirmed.
-//      Vector3D towardOutside = new Vector3D();
-//      Set<HalfEdge3D> edgesToSkip = new HashSet<>();
+      Vector3D towardOutside = new Vector3D();
 
       // Last filter before actually modifying the polytope
       filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon);
-//      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
-//      { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
-//
-//         if (edgesToSkip.contains(silhouetteEdge))
-//            continue; // We already tested it.
-//
-//         Face3D face = silhouetteEdge.getFace();
-//
-//         if (!inPlaneFaces.contains(face))
-//         { // A new face will be created.
-//            towardOutside.cross(face.getNormal(), silhouetteEdge.getDirection(false));
-//
-//            /*
-//             * Testing following edge-case: The new vertex is in between the face plane and the silhouetteEdge.
-//             * In such context, this would result in a new face wrong ordering of the vertices which would be
-//             * corrected by flipping the face normal which then points to the inside of the polytope.
-//             */
-//            if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
-//            {
-//               if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
-//                  return null;
-//            }
-//            else
-//            {
-//               if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
-//                  return null;
-//            }
-//         }
-//      }
+
+      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+      {
+         Face3D face = silhouetteEdge.getFace();
+
+         if (!inPlaneFaces.contains(face))
+         { // A new face will be created.
+            towardOutside.cross(face.getNormal(), silhouetteEdge.getDirection(false));
+
+            /*
+             * Testing following edge-case: The new vertex is in between the face plane and the silhouetteEdge.
+             * In such context, this would result in a new face wrong ordering of the vertices which would be
+             * corrected by flipping the face normal which then points to the inside of the polytope.
+             */
+            if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
+            {
+               if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
+                  return null;
+            }
+            else
+            {
+               if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
+                  return null;
+            }
+         }
+      }
 
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // We first destroy the faces that are to be removed so they remove their edges from the vertices associated edges.
