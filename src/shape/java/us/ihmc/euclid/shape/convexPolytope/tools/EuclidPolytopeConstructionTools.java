@@ -58,121 +58,41 @@ public class EuclidPolytopeConstructionTools
       if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertex, silhouetteEdges) <= epsilon)
          return null;
 
-      Vector3D towardOutside = new Vector3D();
-      Set<HalfEdge3D> edgesToSkip = new HashSet<>();
+      // TODO it seems that the filter for the new faces is obsolete now. Need to be confirmed.
+//      Vector3D towardOutside = new Vector3D();
+//      Set<HalfEdge3D> edgesToSkip = new HashSet<>();
 
       // Last filter before actually modifying the polytope
-      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
-      { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
-
-         if (edgesToSkip.contains(silhouetteEdge))
-            continue; // We already tested it.
-
-         Face3D face = silhouetteEdge.getFace();
-
-         if (inPlaneFaces.contains(face))
-         { // The face has to be extended to include the new vertex
-            /*
-             * The following check is redundant with the internal logic of Face3D.addVertex(...) and is also
-             * probably expensive, but it has to be done before we actually start modifying the polytope.
-             */
-            List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex);
-
-            if (lineOfSight.isEmpty())
-            {
-               inPlaneFaces.remove(face);
-            }
-
-            boolean faceRemovedFromInPlaneList = false;
-
-            for (HalfEdge3D lineOfSightEdge : lineOfSight)
-            {
-               if (lineOfSightEdge == silhouetteEdge)
-                  continue; // The single visible edge is the silhouetteEdge, this is a safe context.
-
-               if (silhouetteEdges.contains(lineOfSightEdge))
-               {
-                  if (silhouetteEdge != lineOfSightEdge)
-                     edgesToSkip.add(lineOfSightEdge);
-                  continue; // This is the expected scenario.
-               }
-
-               /*
-                * It would be fine if the new vertex would result in extending an edge of the face. However, if the
-                * vertex is not an extrapolation of the line, we should not be able to see it.
-                */
-               if (!EuclidPolytopeTools.arePoint3DAndHalfEdge3DInLine(vertex, lineOfSightEdge, epsilon))
-               {
-                  faceRemovedFromInPlaneList = true;
-                  inPlaneFaces.remove(face);
-                  break;
-               }
-               /*
-                * The edge will be extended, let's make sure that the neighbor would do the same. Just need to make
-                * sure it is part of the in-plane faces.
-                */
-               if (!inPlaneFaces.contains(lineOfSightEdge.getTwin().getFace()))
-               {
-                  faceRemovedFromInPlaneList = true;
-                  inPlaneFaces.remove(face);
-                  break;
-               }
-            }
-
-            if (!faceRemovedFromInPlaneList)
-            {
-               /*
-                * Edge-case: the vertex on the support line of either the previous or next edge to the
-                * line-of-sight. Only case where it is fine is when the edge should be extended. The edge is not
-                * part of the silhouette. In such scenario, the face if the twin of the previous/next should also
-                * be part of the inPlaneFaces, if not we remove the face from the list which will force the
-                * creation of a new face.
-                */
-               HalfEdge3D edgeBeforeLineOfSight = lineOfSight.get(0).getPrevious();
-               HalfEdge3D edgeAfterLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
-
-               if (!silhouetteEdges.contains(edgeBeforeLineOfSight) && (edgeBeforeLineOfSight.distanceFromSupportLine(vertex) < epsilon
-                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), vertex,
-                                                                        edgeBeforeLineOfSight.getOrigin()) < epsilon))
-               {
-                  if (!inPlaneFaces.contains(edgeBeforeLineOfSight.getTwin().getFace()))
-                  {
-                     inPlaneFaces.remove(face);
-                  }
-               }
-
-               if (!silhouetteEdges.contains(edgeAfterLineOfSight) && (edgeAfterLineOfSight.distanceFromSupportLine(vertex) < epsilon
-                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), vertex,
-                                                                        edgeAfterLineOfSight.getDestination()) < epsilon))
-               {
-                  if (!inPlaneFaces.contains(edgeAfterLineOfSight.getTwin().getFace()))
-                  {
-                     inPlaneFaces.remove(face);
-                  }
-               }
-            }
-         }
-         else
-         { // A new face will be created.
-            towardOutside.cross(face.getNormal(), silhouetteEdge.getDirection(false));
-
-            /*
-             * Testing following edge-case: The new vertex is in between the face plane and the silhouetteEdge.
-             * In such context, this would result in a new face wrong ordering of the vertices which would be
-             * corrected by flipping the face normal which then points to the inside of the polytope.
-             */
-            if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
-            {
-               if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
-                  return null;
-            }
-            else
-            {
-               if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
-                  return null;
-            }
-         }
-      }
+      filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon);
+//      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+//      { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
+//
+//         if (edgesToSkip.contains(silhouetteEdge))
+//            continue; // We already tested it.
+//
+//         Face3D face = silhouetteEdge.getFace();
+//
+//         if (!inPlaneFaces.contains(face))
+//         { // A new face will be created.
+//            towardOutside.cross(face.getNormal(), silhouetteEdge.getDirection(false));
+//
+//            /*
+//             * Testing following edge-case: The new vertex is in between the face plane and the silhouetteEdge.
+//             * In such context, this would result in a new face wrong ordering of the vertices which would be
+//             * corrected by flipping the face normal which then points to the inside of the polytope.
+//             */
+//            if (EuclidGeometryTools.isPoint3DAbovePlane3D(vertex, face.getCentroid(), face.getNormal()))
+//            {
+//               if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
+//                  return null;
+//            }
+//            else
+//            {
+//               if (EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(vertex, silhouetteEdge.getOrigin(), silhouetteEdge.getDestination(), towardOutside, 0.0))
+//                  return null;
+//            }
+//         }
+//      }
 
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       { // We first destroy the faces that are to be removed so they remove their edges from the vertices associated edges.
@@ -344,6 +264,118 @@ public class EuclidPolytopeConstructionTools
       }
 
       return newFaces;
+   }
+
+   private static void filterInPlaneFaces(Vertex3D vertex, List<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
+   {
+      if (inPlaneFaces.isEmpty())
+         return;
+
+      boolean hasInPlaneFacesBeenModified = false;
+
+      Set<HalfEdge3D> edgesToSkip = new HashSet<>();
+
+      // Last filter before actually modifying the polytope
+      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+      { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
+
+         if (edgesToSkip.contains(silhouetteEdge))
+            continue; // We already tested it.
+
+         Face3D face = silhouetteEdge.getFace();
+
+         if (inPlaneFaces.contains(face))
+         { // The face has to be extended to include the new vertex
+            /*
+             * The following check is redundant with the internal logic of Face3D.addVertex(...) and is also
+             * probably expensive, but it has to be done before we actually start modifying the polytope.
+             */
+            List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex);
+
+            if (lineOfSight.isEmpty())
+            {
+               inPlaneFaces.remove(face);
+               hasInPlaneFacesBeenModified = true;
+               continue;
+            }
+
+            boolean faceRemovedFromInPlaneList = false;
+
+            for (HalfEdge3D lineOfSightEdge : lineOfSight)
+            {
+               if (lineOfSightEdge == silhouetteEdge)
+                  continue; // The single visible edge is the silhouetteEdge, this is a safe context.
+
+               if (silhouetteEdges.contains(lineOfSightEdge))
+               {
+                  if (silhouetteEdge != lineOfSightEdge)
+                     edgesToSkip.add(lineOfSightEdge);
+                  continue; // This is the expected scenario.
+               }
+
+               /*
+                * It would be fine if the new vertex would result in extending an edge of the face. However, if the
+                * vertex is not an extrapolation of the line, we should not be able to see it.
+                */
+               if (!EuclidPolytopeTools.arePoint3DAndHalfEdge3DInLine(vertex, lineOfSightEdge, epsilon))
+               {
+                  faceRemovedFromInPlaneList = true;
+                  inPlaneFaces.remove(face);
+                  hasInPlaneFacesBeenModified = true;
+                  break;
+               }
+               /*
+                * The edge will be extended, let's make sure that the neighbor would do the same. Just need to make
+                * sure it is part of the in-plane faces.
+                */
+               if (!inPlaneFaces.contains(lineOfSightEdge.getTwin().getFace()))
+               {
+                  faceRemovedFromInPlaneList = true;
+                  inPlaneFaces.remove(face);
+                  hasInPlaneFacesBeenModified = true;
+                  break;
+               }
+            }
+
+            if (!faceRemovedFromInPlaneList)
+            {
+               /*
+                * Edge-case: the vertex on the support line of either the previous or next edge to the
+                * line-of-sight. Only case where it is fine is when the edge should be extended. The edge is not
+                * part of the silhouette. In such scenario, the face if the twin of the previous/next should also
+                * be part of the inPlaneFaces, if not we remove the face from the list which will force the
+                * creation of a new face.
+                */
+               HalfEdge3D edgeBeforeLineOfSight = lineOfSight.get(0).getPrevious();
+               HalfEdge3D edgeAfterLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
+
+               if (!silhouetteEdges.contains(edgeBeforeLineOfSight) && (edgeBeforeLineOfSight.distanceFromSupportLine(vertex) < epsilon
+                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), vertex,
+                                                                        edgeBeforeLineOfSight.getOrigin()) < epsilon))
+               {
+                  if (!inPlaneFaces.contains(edgeBeforeLineOfSight.getTwin().getFace()))
+                  {
+                     inPlaneFaces.remove(face);
+                     hasInPlaneFacesBeenModified = true;
+                  }
+               }
+
+               if (!silhouetteEdges.contains(edgeAfterLineOfSight) && (edgeAfterLineOfSight.distanceFromSupportLine(vertex) < epsilon
+                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), vertex,
+                                                                        edgeAfterLineOfSight.getDestination()) < epsilon))
+               {
+                  if (!inPlaneFaces.contains(edgeAfterLineOfSight.getTwin().getFace()))
+                  {
+                     inPlaneFaces.remove(face);
+                     hasInPlaneFacesBeenModified = true;
+                  }
+               }
+            }
+         }
+      }
+
+      if (hasInPlaneFacesBeenModified)
+         filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon);
    }
 
    private static void destroyTwinFace(HalfEdge3D edge)
