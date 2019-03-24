@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class EuclidEllipsoid3DTools
 {
    public static final int DEFAULT_ROOT_FINDING_ITERATIONS = 150;
-   public static final double DEFAULT_EPSILON = 1.0e-8;
+   public static final double DEFAULT_EPSILON = 1.0e-10;
 
    private static double findRoot(double r0, double r1, double z0, double z1, double z2, double g, int maxIterations, double epsilon)
    {
@@ -162,6 +162,11 @@ public class EuclidEllipsoid3DTools
       return value * value;
    }
 
+   public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query)
+   {
+      return distancePoint3DEllipsoid3D(radii, query, null);
+   }
+
    public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query, Point3DBasics closestPointToPack)
    {
       return distancePoint3DEllipsoid3D(radii, query, DEFAULT_ROOT_FINDING_ITERATIONS, DEFAULT_EPSILON, closestPointToPack);
@@ -175,9 +180,19 @@ public class EuclidEllipsoid3DTools
       double e0 = order.getCoordinate0(radii);
       double e1 = order.getCoordinate1(radii);
       double e2 = order.getCoordinate2(radii);
-      double y0 = Math.abs(order.getCoordinate0(query));
-      double y1 = Math.abs(order.getCoordinate1(query));
-      double y2 = Math.abs(order.getCoordinate2(query));
+      double y0 = order.getCoordinate0(query);
+      double y1 = order.getCoordinate1(query);
+      double y2 = order.getCoordinate2(query);
+      boolean negate0 = y0 < 0.0;
+      boolean negate1 = y1 < 0.0;
+      boolean negate2 = y2 < 0.0;
+
+      if (negate0)
+         y0 = -y0;
+      if (negate1)
+         y1 = -y1;
+      if (negate2)
+         y2 = -y2;
 
       double x0 = Double.NaN;
       double x1 = Double.NaN;
@@ -204,6 +219,8 @@ public class EuclidEllipsoid3DTools
                   x1 = r1 * y1 / (sbar + r1);
                   x2 = y2 / (sbar + 1.0);
                   distance = EuclidGeometryTools.distanceBetweenPoint3Ds(x0, x1, x2, y0, y1, y2);
+                  if (g < 0.0)
+                     distance = -distance;
                }
                else
                {
@@ -216,9 +233,12 @@ public class EuclidEllipsoid3DTools
             else // y0 == 0.0
             {
                distance = distancePoint2DEllipse2D(e1, e2, y1, y2, maxIterations, epsilon, closestPointToPack);
-               x0 = 0.0;
-               x1 = closestPointToPack.getX();
-               x2 = closestPointToPack.getY();
+               if (closestPointToPack != null)
+               {
+                  x0 = 0.0;
+                  x1 = closestPointToPack.getX();
+                  x2 = closestPointToPack.getY();
+               }
             }
          }
          else // y1 == 0.0
@@ -226,16 +246,19 @@ public class EuclidEllipsoid3DTools
             if (y0 > epsilon)
             {
                distance = distancePoint2DEllipse2D(e0, e2, y0, y2, maxIterations, epsilon, closestPointToPack);
-               x0 = closestPointToPack.getX();
-               x1 = 0.0;
-               x2 = closestPointToPack.getY();
+               if (closestPointToPack != null)
+               {
+                  x0 = closestPointToPack.getX();
+                  x1 = 0.0;
+                  x2 = closestPointToPack.getY();
+               }
             }
             else // y0 == 0.0
             {
                x0 = 0.0;
                x1 = 0.0;
                x2 = e2;
-               distance = Math.abs(y2 - e2);
+               distance = y2 - e2;
             }
          }
       }
@@ -257,7 +280,7 @@ public class EuclidEllipsoid3DTools
                x0 = e0 * xde0;
                x1 = e1 * xde1;
                x2 = e2 * Math.sqrt(discr);
-               distance = EuclidGeometryTools.distanceBetweenPoint3Ds(x0, x1, x2, y0, y1, 0.0);
+               distance = -EuclidGeometryTools.distanceBetweenPoint3Ds(x0, x1, x2, y0, y1, 0.0);
                computed = true;
             }
          }
@@ -265,19 +288,25 @@ public class EuclidEllipsoid3DTools
          if (!computed)
          {
             distance = distancePoint2DEllipse2D(e0, e1, y0, y1, maxIterations, epsilon, closestPointToPack);
-            x0 = closestPointToPack.getX();
-            x1 = closestPointToPack.getY();
-            x2 = 0.0;
+            if (closestPointToPack != null)
+            {
+               x0 = closestPointToPack.getX();
+               x1 = closestPointToPack.getY();
+               x2 = 0.0;
+            }
          }
       }
 
-      order.updateTuple3D(x0, x1, x2, closestPointToPack);
-      if (query.getX() < 0.0)
-         closestPointToPack.setX(-closestPointToPack.getX());
-      if (query.getY() < 0.0)
-         closestPointToPack.setY(-closestPointToPack.getY());
-      if (query.getZ() < 0.0)
-         closestPointToPack.setZ(-closestPointToPack.getZ());
+      if (negate0)
+         x0 = -x0;
+      if (negate1)
+         x1 = -x1;
+      if (negate2)
+         x2 = -x2;
+
+      if (closestPointToPack != null)
+         order.updateTuple3D(x0, x1, x2, closestPointToPack);
+
       return distance;
    }
 
@@ -302,6 +331,8 @@ public class EuclidEllipsoid3DTools
                x0 = r0 * y0 / (sbar + r0);
                x1 = y1 / (sbar + 1.0);
                distance = EuclidGeometryTools.distanceBetweenPoint2Ds(x0, x1, y0, y1);
+               if (g < 0.0)
+                  distance = -distance;
             }
             else
             {
@@ -314,7 +345,7 @@ public class EuclidEllipsoid3DTools
          {
             x0 = 0.0;
             x1 = e1;
-            distance = Math.abs(y1 - e1);
+            distance = y1 - e1;
          }
       }
       else // y1 == 0.0
@@ -332,10 +363,11 @@ public class EuclidEllipsoid3DTools
          {
             x0 = e0;
             x1 = 0.0;
-            distance = Math.abs(y0 - e0);
+            distance = y0 - e0;
          }
       }
-      closestPointToPack.set(x0, x1, Double.NaN);
+      if (closestPointToPack != null)
+         closestPointToPack.set(x0, x1, Double.NaN);
       return distance;
    }
 }

@@ -16,8 +16,10 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidEllipsoid3DTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -30,7 +32,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Ellipsoid3DTest
 {
-   private static final double EPSILON = 1.0e-10; // This epsilon is meant small changes in coordinates. Use Ellipsoid3d's DEFAULT_EPSILON for error handling.
+   private static final double EPSILON = 1.0e-10;
 
    @Test
    void testConstructors() throws Exception
@@ -302,54 +304,129 @@ public class Ellipsoid3DTest
    {
       Random random = new Random(345345);
 
-      Point3D actualClosestPoint = new Point3D();
+      Point3D actualClosestPointWorld = new Point3D();
+      Point3D actualClosestPointLocal = new Point3D();
       Vector3D actualNormal = new Vector3D();
-      Point3D expectedClosestPoint = new Point3D();
       Vector3D expectedNormal = new Vector3D();
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point inside, generated to be inside unit-sphere and then scaled up by the radii
-         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random, 0.001, 2.0);
 
          double radiusInUnitSphere = random.nextDouble();
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
          Point3D pointInside = new Point3D(translation);
          pointInside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
 
-         expectedClosestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
-         expectedClosestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
-         expectedNormal.setAndScale(1.0 / radiusInUnitSphere, translation);
-         expectedNormal.scale(1.0 / ellipsoid3D.getRadiusX(), 1.0 / ellipsoid3D.getRadiusY(), 1.0 / ellipsoid3D.getRadiusZ());
-         expectedNormal.normalize();
-
          ellipsoid3D.transformToWorld(pointInside);
-         ellipsoid3D.transformToWorld(expectedClosestPoint);
+
+         assertTrue(ellipsoid3D.doPoint3DCollisionTest(pointInside, actualClosestPointWorld, actualNormal));
+         actualClosestPointLocal.set(actualClosestPointWorld);
+         ellipsoid3D.transformToLocal(actualClosestPointLocal);
+         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+                      "Iteration: " + i);
+
+         // The normal should be pointing from the query to the closest point (toward the outside).
+         expectedNormal.sub(actualClosestPointWorld, pointInside);
+         expectedNormal.normalize();
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+
+         // The normal should be orthogonal to the ellipsoid surface at the closest point.
+         expectedNormal.set(actualClosestPointLocal);
+         double rxSquare = ellipsoid3D.getRadiusX() * ellipsoid3D.getRadiusX();
+         double rySquare = ellipsoid3D.getRadiusY() * ellipsoid3D.getRadiusY();
+         double rzSquare = ellipsoid3D.getRadiusZ() * ellipsoid3D.getRadiusZ();
+         expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
+         expectedNormal.normalize();
          ellipsoid3D.transformToWorld(expectedNormal);
-         assertTrue(ellipsoid3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Point outside, generated to be outside unit-sphere and then scaled up by the radii
-         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random, 0.001, 2.0);
 
          double radiusInUnitSphere = 1.0 + random.nextDouble();
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
          Point3D pointOutside = new Point3D(translation);
          pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
 
-         expectedClosestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
-         expectedClosestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
-         expectedNormal.setAndScale(1.0 / radiusInUnitSphere, translation);
-         expectedNormal.scale(1.0 / ellipsoid3D.getRadiusX(), 1.0 / ellipsoid3D.getRadiusY(), 1.0 / ellipsoid3D.getRadiusZ());
-         expectedNormal.normalize();
-
          ellipsoid3D.transformToWorld(pointOutside);
-         ellipsoid3D.transformToWorld(expectedClosestPoint);
+
+         assertFalse(ellipsoid3D.doPoint3DCollisionTest(pointOutside, actualClosestPointWorld, actualNormal));
+         actualClosestPointLocal.set(actualClosestPointWorld);
+         ellipsoid3D.transformToLocal(actualClosestPointLocal);
+         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+                      "Iteration: " + i);
+
+         // The normal should be pointing from the closest point to the query (toward the outside).
+         expectedNormal.sub(pointOutside, actualClosestPointWorld);
+         expectedNormal.normalize();
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+
+         // The normal should be orthogonal to the ellipsoid surface at the closest point.
+         expectedNormal.set(actualClosestPointLocal);
+         double rxSquare = ellipsoid3D.getRadiusX() * ellipsoid3D.getRadiusX();
+         double rySquare = ellipsoid3D.getRadiusY() * ellipsoid3D.getRadiusY();
+         double rzSquare = ellipsoid3D.getRadiusZ() * ellipsoid3D.getRadiusZ();
+         expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
+         expectedNormal.normalize();
          ellipsoid3D.transformToWorld(expectedNormal);
-         assertFalse(ellipsoid3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
-         EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point on surface
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random, 0.001, 2.0);
+
+         Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         Point3D pointOnSurface = new Point3D(translation);
+         pointOnSurface.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+
+         ellipsoid3D.transformToWorld(pointOnSurface);
+
+         assertTrue(ellipsoid3D.doPoint3DCollisionTest(pointOnSurface, actualClosestPointWorld, actualNormal));
+         actualClosestPointLocal.set(actualClosestPointWorld);
+         ellipsoid3D.transformToLocal(actualClosestPointLocal);
+         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+                      "Iteration: " + i);
+         EuclidCoreTestTools.assertTuple3DEquals(pointOnSurface, actualClosestPointWorld, EPSILON);
+         // The normal should be orthogonal to the ellipsoid surface at the closest point.
+         expectedNormal.set(actualClosestPointLocal);
+         double rxSquare = ellipsoid3D.getRadiusX() * ellipsoid3D.getRadiusX();
+         double rySquare = ellipsoid3D.getRadiusY() * ellipsoid3D.getRadiusY();
+         double rzSquare = ellipsoid3D.getRadiusZ() * ellipsoid3D.getRadiusZ();
+         expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
+         expectedNormal.normalize();
+         ellipsoid3D.transformToWorld(expectedNormal);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Point lying on 1, 2, or 3 of the ellipsoid axes
+         Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random, 0.001, 2.0);
+         Point3D point = new Point3D(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.5));
+         if (random.nextBoolean())
+            point.setX(0.0);
+         if (random.nextBoolean())
+            point.setY(0.0);
+         if (random.nextBoolean())
+            point.setZ(0.0);
+         ellipsoid3D.transformToWorld(point);
+
+         ellipsoid3D.doPoint3DCollisionTest(point, actualClosestPointWorld, actualNormal);
+         actualClosestPointLocal.set(actualClosestPointWorld);
+         ellipsoid3D.transformToLocal(actualClosestPointLocal);
+         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+                      "Iteration: " + i);
+         // The normal should be orthogonal to the ellipsoid surface at the closest point.
+         expectedNormal.set(actualClosestPointLocal);
+         double rxSquare = ellipsoid3D.getRadiusX() * ellipsoid3D.getRadiusX();
+         double rySquare = ellipsoid3D.getRadiusY() * ellipsoid3D.getRadiusY();
+         double rzSquare = ellipsoid3D.getRadiusZ() * ellipsoid3D.getRadiusZ();
+         expectedNormal.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
+         expectedNormal.normalize();
+         ellipsoid3D.transformToWorld(expectedNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
    }
@@ -448,16 +525,13 @@ public class Ellipsoid3DTest
 
          double radiusInUnitSphere = 1.0 + random.nextDouble();
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
-         Point3D pointOutside = new Point3D(translation);
-         pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         Point3D pointOutsideLocal = new Point3D(translation);
+         pointOutsideLocal.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
 
-         Point3D closestPoint = new Point3D();
-         closestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
-         closestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
-         double expectedDistance = closestPoint.distance(pointOutside);
-
-         ellipsoid3D.transformToWorld(pointOutside);
-         assertEquals(expectedDistance, ellipsoid3D.distance(pointOutside), EPSILON);
+         Point3D pointOutsideWorld = new Point3D(pointOutsideLocal);
+         ellipsoid3D.transformToWorld(pointOutsideWorld);
+         double expectedDistance = Math.max(0.0, EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointOutsideLocal));
+         assertEquals(expectedDistance, ellipsoid3D.distance(pointOutsideWorld), EPSILON, "Iteration: " + i);
       }
    }
 
@@ -472,16 +546,13 @@ public class Ellipsoid3DTest
 
          double radiusInUnitSphere = random.nextDouble();
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
-         Point3D pointInside = new Point3D(translation);
-         pointInside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         Point3D pointInsideLocal = new Point3D(translation);
+         pointInsideLocal.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
 
-         Point3D closestPoint = new Point3D();
-         closestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
-         closestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
-         double expectedDistance = -closestPoint.distance(pointInside);
-
-         ellipsoid3D.transformToWorld(pointInside);
-         assertEquals(expectedDistance, ellipsoid3D.signedDistance(pointInside), EPSILON);
+         Point3D pointInsideWorld = new Point3D(pointInsideLocal);
+         ellipsoid3D.transformToWorld(pointInsideWorld);
+         double expectedDistance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointInsideLocal);
+         assertEquals(expectedDistance, ellipsoid3D.signedDistance(pointInsideWorld), EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -490,16 +561,13 @@ public class Ellipsoid3DTest
 
          double radiusInUnitSphere = 1.0 + random.nextDouble();
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, radiusInUnitSphere);
-         Point3D pointOutside = new Point3D(translation);
-         pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
+         Point3D pointOutsideLocal = new Point3D(translation);
+         pointOutsideLocal.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
 
-         Point3D closestPoint = new Point3D();
-         closestPoint.setAndScale(1.0 / radiusInUnitSphere, translation);
-         closestPoint.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
-         double expectedDistance = closestPoint.distance(pointOutside);
-
-         ellipsoid3D.transformToWorld(pointOutside);
-         assertEquals(expectedDistance, ellipsoid3D.signedDistance(pointOutside), EPSILON);
+         Point3D pointOutsideWorld = new Point3D(pointOutsideLocal);
+         ellipsoid3D.transformToWorld(pointOutsideWorld);
+         double expectedDistance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointOutsideLocal);
+         assertEquals(expectedDistance, ellipsoid3D.signedDistance(pointOutsideWorld), EPSILON);
       }
    }
 
@@ -522,7 +590,7 @@ public class Ellipsoid3DTest
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Point outside, generated to be outside unit-sphere and then scaled up by the radii
+      { // Point outside, we rely on doPoint3DCollisionTest to test orthogonalProjection
          Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random);
 
          double radiusInUnitSphere = 1.0 + random.nextDouble();
@@ -530,12 +598,10 @@ public class Ellipsoid3DTest
          Point3D pointOutside = new Point3D(translation);
          pointOutside.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
 
-         Point3D expectedProjection = new Point3D();
-         expectedProjection.setAndScale(1.0 / radiusInUnitSphere, translation);
-         expectedProjection.scale(ellipsoid3D.getRadiusX(), ellipsoid3D.getRadiusY(), ellipsoid3D.getRadiusZ());
-
          ellipsoid3D.transformToWorld(pointOutside);
-         ellipsoid3D.transformToWorld(expectedProjection);
+
+         Point3D expectedProjection = new Point3D();
+         ellipsoid3D.doPoint3DCollisionTest(pointOutside, expectedProjection, new Vector3D());
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, ellipsoid3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
    }

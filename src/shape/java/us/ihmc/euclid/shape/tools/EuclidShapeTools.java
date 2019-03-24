@@ -792,21 +792,8 @@ public class EuclidShapeTools
 
    public static boolean orthogonalProjectionOntoEllipsoid3D(Point3DReadOnly pointToProject, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics projectionToPack)
    {
-      double xRadius = ellipsoid3DRadii.getX();
-      double yRadius = ellipsoid3DRadii.getY();
-      double zRadius = ellipsoid3DRadii.getZ();
-
-      double sumOfSquares = EuclidCoreTools.normSquared(pointToProject.getX() / xRadius, pointToProject.getY() / yRadius, pointToProject.getZ() / zRadius);
-
-      if (sumOfSquares > 1.0)
-      {
-         projectionToPack.setAndScale(1.0 / Math.sqrt(sumOfSquares), pointToProject);
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      double distance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3DRadii, pointToProject, projectionToPack);
+      return distance > 0.0;
    }
 
    public static void supportingVertexEllipsoid3D(Vector3DReadOnly supportDirection, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics supportingVertexToPack)
@@ -857,35 +844,23 @@ public class EuclidShapeTools
    public static double doPoint3DEllipsoid3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics closestPointToPack,
                                                           Vector3DBasics normalToPack)
    {
-      double xRadius = ellipsoid3DRadii.getX();
-      double yRadius = ellipsoid3DRadii.getY();
-      double zRadius = ellipsoid3DRadii.getZ();
-
-      double sumOfSquares = EuclidCoreTools.normSquared(query.getX() / xRadius, query.getY() / yRadius, query.getZ() / zRadius);
-
-      if (sumOfSquares > 1.0e-10)
+      double distance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3DRadii, query, closestPointToPack);
+      if (distance != 0.0)
       {
-         double scaleFactor = 1.0 / Math.sqrt(sumOfSquares);
-
-         closestPointToPack.setAndScale(scaleFactor, query);
-
-         double xScale = 1.0 / (xRadius * xRadius);
-         double yScale = 1.0 / (yRadius * yRadius);
-         double zScale = 1.0 / (zRadius * zRadius);
-
-         normalToPack.set(query);
-         normalToPack.scale(xScale, yScale, zScale);
-         normalToPack.normalize();
-
-         return query.distanceFromOrigin() * (1.0 - scaleFactor);
+         normalToPack.sub(query, closestPointToPack);
+         normalToPack.scale(1.0 / distance);
       }
       else
       {
-         closestPointToPack.set(0.0, 0.0, ellipsoid3DRadii.getZ());
-         normalToPack.set(Axis.Z);
-
-         return query.getZ() - zRadius;
+         normalToPack.set(closestPointToPack);
+         double rxSquare = ellipsoid3DRadii.getX() * ellipsoid3DRadii.getX();
+         double rySquare = ellipsoid3DRadii.getY() * ellipsoid3DRadii.getY();
+         double rzSquare = ellipsoid3DRadii.getZ() * ellipsoid3DRadii.getZ();
+         normalToPack.scale(1.0 / rxSquare, 1.0 / rySquare, 1.0 / rzSquare);
+         normalToPack.normalize();
       }
+
+      return distance;
    }
 
    public static double computeRamp3DLength(Vector3DReadOnly ramp3DSize)

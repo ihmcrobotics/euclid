@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidEllipsoid3DTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -54,12 +55,13 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
 
-      double distance = EuclidShapeTools.doPoint3DEllipsoid3DCollisionTest(pointToCheckInLocal, getRadii(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
+      double distance = EuclidShapeTools.doPoint3DEllipsoid3DCollisionTest(pointToCheckInLocal, getRadii(), closestPointOnSurfaceToPack,
+                                                                           normalAtClosestPointToPack);
 
       transformToWorld(closestPointOnSurfaceToPack);
       transformToWorld(normalAtClosestPointToPack);
       getIntermediateVariableSupplier().releasePoint3D(pointToCheckInLocal);
-      
+
       return distance <= 0.0;
    }
 
@@ -70,6 +72,8 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       getPose().inverseTransform(supportDirection, supportDirectionInLocal);
 
       EuclidShapeTools.supportingVertexEllipsoid3D(supportDirectionInLocal, getRadii(), supportingVertexToPack);
+
+      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
 
       transformToWorld(supportingVertexToPack);
 
@@ -82,7 +86,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(point, queryInLocal);
 
-      double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(queryInLocal, getRadii());
+      double signedDistance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(getRadii(), queryInLocal);
 
       getIntermediateVariableSupplier().releasePoint3D(queryInLocal);
 
