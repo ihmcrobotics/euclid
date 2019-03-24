@@ -789,11 +789,11 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
    { // This test confirms that GJK can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(13741);
 
-      double distanceMaxEpsilon = 1.0e-12;
-      double positionMaxEpsilon = 1.0e-12;
+      double distanceMaxEpsilon = 1.0e-6;
+      double positionMaxEpsilon = 8.0e-4;
 
-      double distanceMeanEpsilon = 5.0e-15;
-      double positionMeanEpsilon = 5.0e-15;
+      double distanceMeanEpsilon = 1.0e-7;
+      double positionMeanEpsilon = 3.0e-5;
 
       AnalyticalShapeCollisionDetection<PointShape3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
@@ -948,7 +948,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          }
          catch (Throwable e)
          {
-            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(gjkDetector.getSimplex().getVertices(), new Point3D(), gjkDetector.getSimplexConstructionEpsilon()));
+            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(gjkDetector.getSimplex().getVertices(), new Point3D(),
+                                                                                          gjkDetector.getSimplexConstructionEpsilon()));
             throw e;
          }
       }
