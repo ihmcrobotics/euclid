@@ -898,15 +898,15 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Pair<A, B> shapes = function.shapeSupplier.get();
-         A sphereA = shapes.a;
-         B sphereB = shapes.b;
+         A shapeA = shapes.a;
+         B shapeB = shapes.b;
 
-         Shape3DCollisionTestResult expectedResult = function.collisionFunction.apply(sphereA, sphereB);
+         Shape3DCollisionTestResult expectedResult = function.collisionFunction.apply(shapeA, shapeB);
          Shape3DCollisionTestResult gjkResult = new Shape3DCollisionTestResult();
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
          gjkDetector.setSimplexConstructionEpsilon(1.0e-6);
-         gjkDetector.doShapeCollisionTest(sphereA, sphereB, gjkResult);
+         gjkDetector.doShapeCollisionTest(shapeA, shapeB, gjkResult);
 
          if (verbose && (i % 5000) == 0)
          {
