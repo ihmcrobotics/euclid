@@ -592,8 +592,16 @@ public class EuclidShapeTools
       double dot = supportDirection.dot(cylinder3DAxis);
       supportingVertexToPack.setAndScale(dot, cylinder3DAxis);
       supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
-      supportingVertexToPack.scale(cylinder3DRadius / supportingVertexToPack.distanceFromOrigin());
-      supportingVertexToPack.add(cylinder3DPosition);
+      double distanceSquaredFromAxis = supportingVertexToPack.distanceFromOriginSquared();
+      if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      {
+         supportingVertexToPack.set(cylinder3DPosition);
+      }
+      else
+      {
+         supportingVertexToPack.scale(cylinder3DRadius / Math.sqrt(distanceSquaredFromAxis));
+         supportingVertexToPack.add(cylinder3DPosition);
+      }
 
       if (supportDirection.dot(cylinder3DAxis) > 0.0)
          supportingVertexToPack.scaleAdd(0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
