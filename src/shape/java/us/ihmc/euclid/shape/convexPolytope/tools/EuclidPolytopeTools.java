@@ -507,7 +507,7 @@ public class EuclidPolytopeTools
 
          for (Point3DReadOnly extendedFaceVertex : extendedFaceVertices)
          {
-            if (EuclidGeometryTools.distanceFromPoint3DToPlane3D(extendedFaceVertex, average, normal) > 0.5 * epsilon)
+            if (EuclidGeometryTools.distanceFromPoint3DToPlane3D(extendedFaceVertex, average, normal) > epsilon)
             {
                return false;
             }

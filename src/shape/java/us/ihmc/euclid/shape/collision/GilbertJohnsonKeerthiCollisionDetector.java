@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.Axis;
-import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -26,7 +24,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private double simplexConstructionEpsilon = EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON;
    private boolean latestCollisionTestResult;
 
-   final List<Point3D> vertices = new ArrayList<>();
+   final List<DifferenceVertex3D> vertices = new ArrayList<>();
 
    private Simplex3D simplex;
    private final Vector3D supportDirection = new Vector3D();
@@ -96,23 +94,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
       {
          // FIXME cleanup the following once testing is done.
 
-         try
-         {
-            simplex.addVertex(supportingVertexA, supportingVertexB);
-            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
-            Point3D difference = new Point3D();
-            difference.sub(supportingVertexA, supportingVertexB);
-            vertices.add(difference);
-         }
-         catch (Exception | Error e)
-         {
-            Point3D difference = new Point3D();
-            difference.sub(supportingVertexA, supportingVertexB);
-            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(simplex.getVertices(), difference, simplexConstructionEpsilon));
-            throw e;
-         }
+         DifferenceVertex3D newVertex = simplex.addVertex(supportingVertexA, supportingVertexB);
+         if (newVertex != null)
+            vertices.add(newVertex);
 
-         // TODO Inefficient approach here, the simplex is growing with the number of iterations whereas the most complex shape should remain a tetrahedron.
          if (simplex.isPointInside(origin))
          {
             latestCollisionTestResult = true;
@@ -138,6 +123,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
       if (simplex == null)
          return null;
+      result.setToNaN();
       packResult(shapeA, shapeB, result, areShapesColliding);
       return result;
    }

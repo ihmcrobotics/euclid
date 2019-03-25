@@ -1102,4 +1102,34 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
          constructionEpsilon = 1.0E-6;
       }
    }
+
+   public static class ConvexPolytope3DTroublesomeDataset_20190324_182459 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public ConvexPolytope3DTroublesomeDataset_20190324_182459()
+      {
+         pointsBeforeIssue.add(new Point3D(0.14002669077756869000, 1.71724580178321700000, -0.51140456321487700000));
+         pointsBeforeIssue.add(new Point3D(0.14464138985533160000, 1.71884373875992600000, -0.50821583595323080000));
+         pointsBeforeIssue.add(new Point3D(0.44125051252842373000, 1.80742794525663130000, -0.31821074227963140000));
+         pointsBeforeIssue.add(new Point3D(1.66194586390551140000, 0.88972308060624930000, -0.88487843614218600000));
+         pointsBeforeIssue.add(new Point3D(0.26804772520095743000, 0.71749313283470420000, -1.52109919425220790000));
+         troublesomePoint.set(0.11682083115045750000, 1.70320404009874780000, -0.53374773515644060000);
+         constructionEpsilon = 1.0E-6;
+      }
+   }
+
+   public static class ConvexPolytope3DTroublesomeDataset_20190324_185429 extends ConvexPolytope3DTroublesomeDataset
+   {
+      public ConvexPolytope3DTroublesomeDataset_20190324_185429()
+      {
+         pointsBeforeIssue.add(new Point3D(1.02789006910026280000, -1.96520915722745930000, -0.57037689610167770000));
+         pointsBeforeIssue.add(new Point3D(1.53130112740555410000, -1.54277251686120880000, -0.21290799720003972000));
+         pointsBeforeIssue.add(new Point3D(1.00266118280722630000, -1.88594311008552570000, 0.88496609188020230000));
+         pointsBeforeIssue.add(new Point3D(0.45799000579097760000, -2.35848721332737950000, 0.27109853934318723000));
+         pointsBeforeIssue.add(new Point3D(0.97953540922620610000, -2.00310093530315260000, -0.56532794195239730000));
+         pointsBeforeIssue.add(new Point3D(1.01941156390882640000, -1.97187873769681400000, -0.56986767382176460000));
+         pointsBeforeIssue.add(new Point3D(1.19731650748988640000, -1.73495118479849130000, 0.84202190182865110000));
+         troublesomePoint.set(1.03130688008012330000, -1.96251826135452710000, -0.57053698796407590000);
+         constructionEpsilon = 1.0E-6;
+      }
+   }
 }

@@ -28,9 +28,13 @@ public class Simplex3D implements ConvexPolytopeFeature3D
       polytope = new ConvexPolytope3D(constructionEpsilon);
    }
 
-   public boolean addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
+   public DifferenceVertex3D addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
-      return polytope.addVertex(new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB));
+      DifferenceVertex3D newVertex = new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB);
+      if (polytope.addVertex(newVertex))
+         return newVertex;
+      else
+         return null;
    }
 
    @Override

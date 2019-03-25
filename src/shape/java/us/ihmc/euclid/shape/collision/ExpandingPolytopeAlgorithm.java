@@ -109,11 +109,10 @@ public class ExpandingPolytopeAlgorithm
 
          try
          {
-            simplex.addVertex(supportingVertexA, supportingVertexB);
+            DifferenceVertex3D newVertex = simplex.addVertex(supportingVertexA, supportingVertexB);
             EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
-            Point3D difference = new Point3D();
-            difference.sub(supportingVertexA, supportingVertexB);
-            gjkCollisionDetector.vertices.add(difference);
+            if (newVertex != null)
+               gjkCollisionDetector.vertices.add(newVertex);
          }
          catch (Exception | Error e)
          {
