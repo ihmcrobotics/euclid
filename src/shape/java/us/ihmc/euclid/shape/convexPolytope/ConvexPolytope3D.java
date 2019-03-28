@@ -75,6 +75,31 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       set(polytope);
    }
 
+   public ConvexPolytope3D(List<Face3D> faces, double constructionEpsilon)
+   {
+      this(constructionEpsilon);
+      
+      this.faces.addAll(faces);
+
+      updateEdges();
+      updateVertices();
+      updateBoundingBox();
+      updateCentroidAndVolume();
+
+      if (faces.size() > 1)
+      {
+         for (HalfEdge3D halfEdge : edges)
+         {
+            if (halfEdge.getTwin() == null)
+            {
+               HalfEdge3D twin = halfEdge.getDestination().getEdgeTo(halfEdge.getOrigin());
+               halfEdge.setTwin(twin);
+               twin.setTwin(halfEdge);
+            }
+         }
+      }
+   }
+
    public void clear()
    {
       vertices.clear();
