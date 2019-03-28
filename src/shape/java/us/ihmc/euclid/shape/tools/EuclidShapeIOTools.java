@@ -611,12 +611,12 @@ public class EuclidShapeIOTools
    {
       if (face3D == null)
          return "null";
-      return getFace3DString(format, face3D.getCentroid(), face3D.getNormal(), face3D.getEdges());
+      return getFace3DString(format, face3D.getCentroid(), face3D.getNormal(), face3D.getArea(), face3D.getEdges());
    }
 
-   public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, Collection<? extends HalfEdge3DReadOnly> faceEdges)
+   public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, double area, Collection<? extends HalfEdge3DReadOnly> faceEdges)
    {
-      String string = "Face 3D: " + getFace3DShortString(format, centroid, normal) + ", number of edges: " + faceEdges.size()
+      String string = "Face 3D: " + getFace3DShortString(format, centroid, normal) + ", area: " + String.format(format, area)  + ", number of edges: " + faceEdges.size()
             + getHalfEdge3DCollectionString(format, "\n\t", faceEdges);
       return string;
    }
