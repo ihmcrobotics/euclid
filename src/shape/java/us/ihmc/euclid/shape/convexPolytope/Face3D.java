@@ -82,6 +82,14 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       updateNormal();
       updateCentroidAndArea();
       refreshBoundingBox();
+
+      for (HalfEdge3D edge : faceEdges)
+      {
+         if (edge.getPrevious() == null)
+            edge.setPrevious(faceEdges.stream().filter(e -> e.getDestination() == edge.getOrigin()).findFirst().get());
+         if (edge.getNext() == null)
+            edge.setNext(faceEdges.stream().filter(e -> e.getOrigin() == edge.getDestination()).findFirst().get());
+      }
    }
 
    /**
