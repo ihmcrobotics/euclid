@@ -366,6 +366,11 @@ public class EuclidPolytopeTools
    public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<E> computeSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon,
                                                                                                     Collection<F> visibleFacesToPack)
    {
+      if (faces.isEmpty())
+         return null;
+      if (faces.size() == 1)
+         return (List<E>) faces.get(0).getEdges();
+
       Face3DReadOnly leastVisibleFace = null;
       double minimumDistance = Double.POSITIVE_INFINITY;
 
@@ -381,7 +386,12 @@ public class EuclidPolytopeTools
          double signedDistance = face.signedDistanceToPlane(observer);
 
          if (signedDistance <= epsilon)
-            continue;
+         {
+            if (signedDistance >= -epsilon && face.isPointDirectlyAboveOrBelow(observer))
+               return null; // The observer belongs to the face.
+            else
+               continue;
+         }
 
          if (signedDistance < minimumDistance)
          {
