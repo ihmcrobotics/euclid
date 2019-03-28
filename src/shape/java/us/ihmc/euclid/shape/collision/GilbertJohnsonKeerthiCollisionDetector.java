@@ -1,11 +1,12 @@
 package us.ihmc.euclid.shape.collision;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeFeature3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -14,7 +15,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class GilbertJohnsonKeerthiCollisionDetector
 {
-   private static final double defaultCollisionEpsilon = 1.0e-10;
+   public static boolean PERFORM_EXTRA_ASSERTIONS = false;
+   public static final double DEFAULT_COLLISION_EPSILON = 1.0e-10;
 
    private static final Point3DReadOnly origin = new Point3D();
 
@@ -23,8 +25,6 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private double terminalConditionEpsilon;
    private double simplexConstructionEpsilon = EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON;
    private boolean latestCollisionTestResult;
-
-   final List<DifferenceVertex3D> vertices = new ArrayList<>();
 
    private Simplex3D simplex;
    private final Vector3D supportDirection = new Vector3D();
@@ -39,7 +39,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public GilbertJohnsonKeerthiCollisionDetector()
    {
-      this(defaultCollisionEpsilon);
+      this(DEFAULT_COLLISION_EPSILON);
    }
 
    public GilbertJohnsonKeerthiCollisionDetector(double terminalConditionEpsilon)
@@ -92,11 +92,26 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
-         // FIXME cleanup the following once testing is done.
+         if (PERFORM_EXTRA_ASSERTIONS)
+         {
+            DifferenceVertex3D newVertex = new DifferenceVertex3D(supportingVertexA, supportingVertexB);
+            ConvexPolytope3D simplexCopy = new ConvexPolytope3D(simplex.getPolytope());
 
-         DifferenceVertex3D newVertex = simplex.addVertex(supportingVertexA, supportingVertexB);
-         if (newVertex != null)
-            vertices.add(newVertex);
+            try
+            {
+               simplex.addVertex(newVertex);
+               EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
+            }
+            catch (Throwable e)
+            {
+               System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(simplexCopy, newVertex));
+               throw e;
+            }
+         }
+         else
+         {
+            simplex.addVertex(supportingVertexA, supportingVertexB);
+         }
 
          if (simplex.isPointInside(origin))
          {
@@ -104,10 +119,13 @@ public class GilbertJohnsonKeerthiCollisionDetector
             return true;
          }
 
-         simplex.getSupportVectorDirectionToAndReduceToSimplex(origin, supportDirection);
+         ConvexPolytopeFeature3D smallestFeature = simplex.getSmallestFeature(origin);
+         smallestFeature.getSupportVectorDirectionTo(origin, supportDirection);
 
          if (previousSupportDirection.epsilonEquals(supportDirection, terminalConditionEpsilon))
             return false;
+
+         simplex.reduceToFeature(smallestFeature);
 
          previousSupportDirection.set(supportDirection);
 

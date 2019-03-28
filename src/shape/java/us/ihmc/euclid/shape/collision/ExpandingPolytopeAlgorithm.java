@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeFeature3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
@@ -12,7 +13,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class ExpandingPolytopeAlgorithm
 {
-   private static final double defaultCollisionEpsilon = 1.0e-10;
+   public static boolean PERFORM_EXTRA_ASSERTIONS = false;
+   private static final double SMALLEST_DISTANCE_FOR_SUPPORT_DIRECTION = 1.0e-12;
 
    private static final Point3DReadOnly origin = new Point3D();
 
@@ -20,7 +22,7 @@ public class ExpandingPolytopeAlgorithm
    private final int maxIterations = 1000;
    private boolean latestCollisionTestResult;
 
-   private MinkowskiDifferencePolytope3D simplex;
+   private MinkowskiDifferencePolytope3D minkowskiDifference;
    private final Vector3D supportDirection = new Vector3D();
    private final Vector3D previousSupportDirection = new Vector3D();
    private final Vector3DReadOnly supportDirectionNegative = EuclidCoreFactories.newNegativeLinkedVector3D(supportDirection);
@@ -34,7 +36,7 @@ public class ExpandingPolytopeAlgorithm
 
    public ExpandingPolytopeAlgorithm()
    {
-      this(defaultCollisionEpsilon);
+      this(GilbertJohnsonKeerthiCollisionDetector.DEFAULT_COLLISION_EPSILON);
    }
 
    public ExpandingPolytopeAlgorithm(double terminalConditionEpsilon)
@@ -42,9 +44,9 @@ public class ExpandingPolytopeAlgorithm
       gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector(terminalConditionEpsilon);
    }
 
-   public MinkowskiDifferencePolytope3D getSimplex()
+   public MinkowskiDifferencePolytope3D getMinkowskiDifference()
    {
-      return simplex;
+      return minkowskiDifference;
    }
 
    public void setTerminalConditionEpsilon(double epsilon)
@@ -76,26 +78,27 @@ public class ExpandingPolytopeAlgorithm
 
       if (!latestCollisionTestResult || gjkCollisionDetector.getSimplex() == null)
       {
-         simplex = null;
+         minkowskiDifference = null;
          return;
       }
 
-      simplex = new MinkowskiDifferencePolytope3D(gjkCollisionDetector.getSimplex().getDifferenceVertices(),
-                                                  gjkCollisionDetector.getSimplexConstructionEpsilon());
+      minkowskiDifference = new MinkowskiDifferencePolytope3D(gjkCollisionDetector.getSimplex().getDifferenceVertices(),
+                                                              gjkCollisionDetector.getSimplexConstructionEpsilon());
       supportDirection.set(gjkCollisionDetector.getSupportDirection());
-      // FIXME cleanup the following once testing is done.
-      EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
+
+      if (PERFORM_EXTRA_ASSERTIONS)
+         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(minkowskiDifference.getPolytope());
 
       previousSupportDirection.setToNaN();
 
       for (iterations = 0; iterations < maxIterations; iterations++)
       {
-         ConvexPolytopeFeature3D smallestSimplex = simplex.getSmallestFeature(origin);
+         ConvexPolytopeFeature3D smallestSimplex = minkowskiDifference.getSmallestFeature(origin);
 
-         if (smallestSimplex.distance(origin) > 1.0e-12)
+         if (smallestSimplex.distance(origin) > SMALLEST_DISTANCE_FOR_SUPPORT_DIRECTION)
             smallestSimplex.getSupportVectorDirectionTo(origin, supportDirection);
          else
-            smallestSimplex.getSupportVectorDirectionTo(simplex.getPolytope().getCentroid(), supportDirection);
+            smallestSimplex.getSupportVectorDirectionTo(minkowskiDifference.getPolytope().getCentroid(), supportDirection);
 
          // We need to negate the support direction to point toward the outside of the simplex and thus force the expansion.
          supportDirection.negate();
@@ -105,22 +108,26 @@ public class ExpandingPolytopeAlgorithm
 
          Point3DReadOnly supportingVertexA = shapeA.getSupportingVertex(supportDirection);
          Point3DReadOnly supportingVertexB = shapeB.getSupportingVertex(supportDirectionNegative);
-         // FIXME cleanup the following once testing is done.
 
-         try
+         if (PERFORM_EXTRA_ASSERTIONS)
          {
-            DifferenceVertex3D newVertex = simplex.addVertex(supportingVertexA, supportingVertexB);
-            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(simplex.getPolytope());
-            if (newVertex != null)
-               gjkCollisionDetector.vertices.add(newVertex);
+            DifferenceVertex3D newVertex = new DifferenceVertex3D(supportingVertexA, supportingVertexB);
+            ConvexPolytope3D minkowksiDifferenceCopy = new ConvexPolytope3D(minkowskiDifference.getPolytope());
+
+            try
+            {
+               minkowskiDifference.addVertex(newVertex);
+               EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(minkowskiDifference.getPolytope());
+            }
+            catch (Throwable e)
+            {
+               System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(minkowksiDifferenceCopy, newVertex));
+               throw e;
+            }
          }
-         catch (Exception | Error e)
+         else
          {
-            Point3D difference = new Point3D();
-            difference.sub(supportingVertexA, supportingVertexB);
-            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(gjkCollisionDetector.vertices, difference,
-                                                                                          gjkCollisionDetector.getSimplexConstructionEpsilon()));
-            throw e;
+            minkowskiDifference.addVertex(supportingVertexA, supportingVertexB);
          }
 
          previousSupportDirection.set(supportDirection);
@@ -192,7 +199,7 @@ public class ExpandingPolytopeAlgorithm
       if (!latestCollisionTestResult)
          return gjkCollisionDetector.getDistance();
       else
-         return simplex.getPolytope().signedDistance(origin);
+         return minkowskiDifference.getPolytope().signedDistance(origin);
    }
 
    public Point3DReadOnly getCollisionPointOnA()
@@ -218,7 +225,7 @@ public class ExpandingPolytopeAlgorithm
       if (!latestCollisionTestResult || areCollisionPointsUpToDate)
          return;
 
-      simplex.getCollidingPointsOnSimplex(origin, pointOnA, pointOnB);
+      minkowskiDifference.getCollidingPointsOnSimplex(origin, pointOnA, pointOnB);
       areCollisionPointsUpToDate = true;
    }
 

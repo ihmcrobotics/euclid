@@ -735,7 +735,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
-   @Test // FIXME The accuracy for point to cylinder looks really bad.
+   @Test
    void testPointShape3DCylinder3DCollisionTest() throws Exception
    { // This test confirms that GJK can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(13741);
@@ -892,7 +892,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double meanDistanceError = 0.0;
       double meanPositionError = 0.0;
 
-      int numberOfSamples = 0;
+      int numberOfNonCollidingSamples = 0;
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -914,59 +914,53 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          }
 
          // Asserts the internal sanity of the collision result
-//         try
-//         {
-            assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding());
+         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding());
 
-            assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
+         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding());
 
-            if (gjkResult.areShapesColliding())
-            {
-               assertTrue(gjkResult.containsNaN());
-               assertTrue(gjkResult.getPointOnA().containsNaN());
-               assertTrue(gjkResult.getPointOnB().containsNaN());
-               assertTrue(Double.isNaN(gjkResult.getDistance()));
-            }
-            else
-            {
-               assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), distanceMaxEpsilon,
-                            "difference: " + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
-               EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), positionMaxEpsilon);
-               EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), positionMaxEpsilon);
+         if (gjkResult.areShapesColliding())
+         {
+            assertTrue(gjkResult.containsNaN());
+            assertTrue(gjkResult.getPointOnA().containsNaN());
+            assertTrue(gjkResult.getPointOnB().containsNaN());
+            assertTrue(Double.isNaN(gjkResult.getDistance()));
+         }
+         else
+         {
+            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), distanceMaxEpsilon,
+                         "difference: " + Math.abs(expectedResult.getDistance() - gjkResult.getDistance()));
+            EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnA(), gjkResult.getPointOnA(), positionMaxEpsilon);
+            EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnB(), gjkResult.getPointOnB(), positionMaxEpsilon);
 
-               numberOfSamples++;
-               meanDistanceError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance());
-               meanPositionError += expectedResult.getPointOnA().distance(gjkResult.getPointOnA());
-               meanPositionError += expectedResult.getPointOnB().distance(gjkResult.getPointOnB());
+            numberOfNonCollidingSamples++;
+            meanDistanceError += Math.abs(expectedResult.getDistance() - gjkResult.getDistance());
+            meanPositionError += expectedResult.getPointOnA().distance(gjkResult.getPointOnA());
+            meanPositionError += expectedResult.getPointOnB().distance(gjkResult.getPointOnB());
 
-            }
+         }
 
-            // GJK does not estimate either the depth (collision case not covered) nor the normal on each shape.
-            assertTrue(gjkResult.getNormalOnA().containsNaN());
-            assertTrue(gjkResult.getNormalOnB().containsNaN());
-//         }
-//         catch (Throwable e)
-//         {
-//            System.out.println(ConvexPolytope3DTroublesomeDataset.generateDatasetAsString(gjkDetector.getSimplex().getVertices(), new Point3D(),
-//                                                                                          gjkDetector.getSimplexConstructionEpsilon()));
-//            throw e;
-//         }
+         // GJK does not estimate either the depth (collision case not covered) nor the normal on each shape.
+         assertTrue(gjkResult.getNormalOnA().containsNaN());
+         assertTrue(gjkResult.getNormalOnB().containsNaN());
       }
 
-      meanDistanceError /= numberOfSamples;
-      meanPositionError /= 2.0 * numberOfSamples;
+      meanDistanceError /= numberOfNonCollidingSamples;
+      meanPositionError /= 2.0 * numberOfNonCollidingSamples;
 
       if (verbose)
+      {
          System.out.println("Average error for the distance: " + meanDistanceError + ", position: " + meanPositionError);
+         System.out.println("Number of iterations: " + ITERATIONS + ", number of non-colliding samples: " + numberOfNonCollidingSamples);
+      }
 
-      assertTrue(meanDistanceError < distanceMeanEpsilon, "mean distance error: " + meanDistanceError);
-      assertTrue(meanPositionError < positionMeanEpsilon, "mean position error: " + meanPositionError);
+      assertTrue(meanDistanceError < distanceMeanEpsilon, "mean distance error: " + meanDistanceError + " expected less than: " + distanceMeanEpsilon);
+      assertTrue(meanPositionError < positionMeanEpsilon, "mean position error: " + meanPositionError + " expected less than: " + positionMeanEpsilon);
    }
 
-   private static class AnalyticalShapeCollisionDetection<A extends Shape3DReadOnly, B extends Shape3DReadOnly>
+   static class AnalyticalShapeCollisionDetection<A extends Shape3DReadOnly, B extends Shape3DReadOnly>
    {
-      private final Supplier<Pair<A, B>> shapeSupplier;
-      private final BiFunction<A, B, Shape3DCollisionTestResult> collisionFunction;
+      final Supplier<Pair<A, B>> shapeSupplier;
+      final BiFunction<A, B, Shape3DCollisionTestResult> collisionFunction;
 
       public AnalyticalShapeCollisionDetection(Supplier<Pair<A, B>> shapeSupplier, TriConsumer<A, B, Shape3DCollisionTestResult> collisionFunction)
       {
@@ -990,10 +984,10 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
    }
 
-   private static class Pair<A, B>
+   static class Pair<A, B>
    {
-      private final A a;
-      private final B b;
+      final A a;
+      final B b;
 
       public Pair(A a, B b)
       {
@@ -1002,7 +996,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       }
    }
 
-   private static interface TriConsumer<T, U, V>
+   static interface TriConsumer<T, U, V>
    {
       void accept(T t, U u, V v);
    }

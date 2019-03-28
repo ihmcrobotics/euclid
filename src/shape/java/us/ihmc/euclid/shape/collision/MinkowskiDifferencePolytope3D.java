@@ -33,14 +33,14 @@ public class MinkowskiDifferencePolytope3D implements ConvexPolytopeFeature3D
       polytope.addVertices(vertices);
    }
 
-   public DifferenceVertex3D addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
+   public boolean addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
-      DifferenceVertex3D newVertex = new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB);
-      
-      if (polytope.addVertex(newVertex))
-         return newVertex;
-      else
-         return null;
+      return addVertex(new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB));
+   }
+
+   public boolean addVertex(DifferenceVertex3D newVertex)
+   {
+      return polytope.addVertex(newVertex);
    }
 
    public void clear()

@@ -28,13 +28,14 @@ public class Simplex3D implements ConvexPolytopeFeature3D
       polytope = new ConvexPolytope3D(constructionEpsilon);
    }
 
-   public DifferenceVertex3D addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
+   public boolean addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
    {
-      DifferenceVertex3D newVertex = new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB);
-      if (polytope.addVertex(newVertex))
-         return newVertex;
-      else
-         return null;
+      return addVertex(new DifferenceVertex3D(vertexOnShapeA, vertexOnShapeB));
+   }
+
+   public boolean addVertex(DifferenceVertex3D newVertex)
+   {
+      return polytope.addVertex(newVertex);
    }
 
    @Override
@@ -43,11 +44,8 @@ public class Simplex3D implements ConvexPolytopeFeature3D
       return polytope.getSupportVectorDirectionTo(point, supportVectorToPack);
    }
 
-   public void getSupportVectorDirectionToAndReduceToSimplex(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
+   public void reduceToFeature(ConvexPolytopeFeature3D smallestFeature)
    {
-      ConvexPolytopeFeature3D smallestFeature = getSmallestFeature(point);
-      smallestFeature.getSupportVectorDirectionTo(point, supportVectorToPack);
-
       List<DifferenceVertex3D> vertices = new ArrayList<>();
       for (Vertex3DReadOnly vertex : smallestFeature.getVertices())
       {

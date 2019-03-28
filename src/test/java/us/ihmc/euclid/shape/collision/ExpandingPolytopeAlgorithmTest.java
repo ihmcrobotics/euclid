@@ -9,15 +9,23 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest.AnalyticalShapeCollisionDetection;
+import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest.Pair;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
+import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.Capsule3D;
+import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
+import us.ihmc.euclid.shape.primitives.PointShape3D;
+import us.ihmc.euclid.shape.primitives.Ramp3D;
 import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
-import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -562,31 +570,287 @@ class ExpandingPolytopeAlgorithmTest
    void testSphere3DToSphere3D() throws Exception
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(1382635);
+
+      double distanceMaxEpsilon = 2.0e-6;
+      double positionMaxEpsilon = 1.2e-3;
+
+      double distanceMeanEpsilon = 7.0e-7;
+      double positionMeanEpsilon = 7.0e-5;
+
+      AnalyticalShapeCollisionDetection<Sphere3D, Sphere3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
+         Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
+         return new Pair<>(sphereA, sphereB);
+      }, EuclidShapeCollisionTools::doSphere3DSphere3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testPointShape3DBox3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-12;
+      double positionMaxEpsilon = 1.0e-12;
+
+      double distanceMeanEpsilon = 1.0e-15;
+      double positionMeanEpsilon = 1.0e-15;
+
+      AnalyticalShapeCollisionDetection<PointShape3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
+         Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doPointShape3DBox3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testSphere3DBox3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-6;
+      double positionMaxEpsilon = 2.0e-3;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<Sphere3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
+         Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doSphere3DBox3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testPointShape3DCapsule3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<PointShape3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
+         Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doPointShape3DCapsule3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testCapsule3DCapsule3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<Capsule3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         Capsule3D shapeA = EuclidShapeRandomTools.nextCapsule3D(random);
+         Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doCapsule3DCapsule3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testSphere3DCapsule3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<Sphere3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
+         Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
+         Point3D closestPointOnSurface = new Point3D();
+         Vector3D normal = new Vector3D();
+         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doSphere3DCapsule3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testPointShape3DCylinder3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<PointShape3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
+         Cylinder3D shapeB = EuclidShapeRandomTools.nextCylinder3D(random);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doPointShape3DCylinder3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testSphere3DCylinder3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<Sphere3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
+         Cylinder3D shapeB = EuclidShapeRandomTools.nextCylinder3D(random);
+         Point3D closestPointOnSurface = new Point3D();
+         Vector3D normal = new Vector3D();
+         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doSphere3DCylinder3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testPointShape3DEllipsoid3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<PointShape3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
+         Ellipsoid3D shapeB = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doPointShape3DEllipsoid3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testSphere3DEllipsoid3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<Sphere3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
+         Ellipsoid3D shapeB = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         Point3D closestPointOnSurface = new Point3D();
+         Vector3D normal = new Vector3D();
+         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doSphere3DEllipsoid3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testPointShape3DRamp3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<PointShape3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
+         Ramp3D shapeB = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D closestPointOnSurface = new Point3D();
+         Vector3D normal = new Vector3D();
+         boolean colliding = shapeB.doPoint3DCollisionTest(shapeA, closestPointOnSurface, normal);
+         if (colliding)
+            shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doPointShape3DRamp3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   @Test
+   void testSphere3DRamp3DCollisionTest() throws Exception
+   { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
+      Random random = new Random(13741);
+
+      double distanceMaxEpsilon = 1.0e-17;
+      double positionMaxEpsilon = 1.0e-17;
+
+      double distanceMeanEpsilon = 1.0e-17;
+      double positionMeanEpsilon = 1.0e-17;
+
+      AnalyticalShapeCollisionDetection<Sphere3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+         Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
+         Ramp3D shapeB = EuclidShapeRandomTools.nextRamp3D(random);
+         Point3D closestPointOnSurface = new Point3D();
+         Vector3D normal = new Vector3D();
+         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
+         return new Pair<>(shapeA, shapeB);
+      }, EuclidShapeCollisionTools::doSphere3DRamp3DCollisionTest);
+
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+   }
+
+   private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> void assertAgainstAnalyticalFunction(AnalyticalShapeCollisionDetection<A, B> function,
+                                                                                                              double distanceMaxEpsilon,
+                                                                                                              double positionMaxEpsilon,
+                                                                                                              double distanceMeanEpsilon,
+                                                                                                              double positionMeanEpsilon)
+   {
       boolean verbose = true;
       double meanDistanceError = 0.0;
       double meanPositionError = 0.0;
 
-      double maxDistanceError = 2.0e-6;
-      double maxPositionError = 1.0e-3;
+      int numberOfCollidingSamples = 0;
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
-         Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
-         sphereB.getPosition().set(sphereA.getPosition());
-         sphereB.getPosition().add(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 0.8, 2.0)
-               * (sphereA.getRadius() + sphereB.getRadius())));
+         Pair<A, B> shapes = function.shapeSupplier.get();
+         A shapeA = shapes.a;
+         B shapeB = shapes.b;
 
-         Shape3DCollisionTestResult expectedResult = new Shape3DCollisionTestResult();
+         Shape3DCollisionTestResult expectedResult = function.collisionFunction.apply(shapeA, shapeB);
          Shape3DCollisionTestResult epaResult = new Shape3DCollisionTestResult();
-         EuclidShapeCollisionTools.doSphere3DSphere3DCollisionTest(sphereA, sphereB, expectedResult);
 
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
-         epaDetector.setSimplexConstructionEpsilon(1.0e-6);
-         epaDetector.doShapeCollisionTest(sphereA, sphereB, epaResult);
-
-         if (epaDetector.getSimplex() != null)
-            EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(epaDetector.getSimplex().getPolytope());
+         epaDetector.setSimplexConstructionEpsilon(1.0e-7);
+         epaDetector.doShapeCollisionTest(shapeA, shapeB, epaResult);
 
          if (verbose && (i % 5000) == 0)
          {
@@ -596,15 +860,18 @@ class ExpandingPolytopeAlgorithmTest
 
          meanDistanceError += Math.abs(expectedResult.getDistance() - epaResult.getDistance());
 
-         assertEquals(epaDetector.getSignedDistance() <= 0.0, epaResult.areShapesColliding());
+         assertEquals(epaDetector.getSignedDistance() <= 0.0, epaResult.areShapesColliding(), "Iteration: " + i);
+
+         if (epaResult.areShapesColliding())
+            numberOfCollidingSamples++;
 
          assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding());
 
-         assertEquals(expectedResult.getDistance(), epaResult.getDistance(), maxDistanceError,
+         assertEquals(expectedResult.getDistance(), epaResult.getDistance(), distanceMaxEpsilon,
                       "difference: " + Math.abs(expectedResult.getDistance() - epaResult.getDistance()));
 
-         EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnA(), epaResult.getPointOnA(), maxPositionError);
-         EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnB(), epaResult.getPointOnB(), maxPositionError);
+         EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnA(), epaResult.getPointOnA(), positionMaxEpsilon);
+         EuclidCoreTestTools.assertPoint3DGeometricallyEquals(expectedResult.getPointOnB(), epaResult.getPointOnB(), positionMaxEpsilon);
 
          meanPositionError += expectedResult.getPointOnA().distance(epaResult.getPointOnA());
          meanPositionError += expectedResult.getPointOnB().distance(epaResult.getPointOnB());
@@ -618,9 +885,12 @@ class ExpandingPolytopeAlgorithmTest
       meanPositionError /= 2.0 * ITERATIONS;
 
       if (verbose)
+      {
          System.out.println("Average error for the distance: " + meanDistanceError + ", position: " + meanPositionError);
+         System.out.println("Number of iterations: " + ITERATIONS + ", number of colliding samples: " + numberOfCollidingSamples);
+      }
 
-      assertTrue(meanDistanceError < 5.0e-7);
-      assertTrue(meanPositionError < 5.0e-5);
+      assertTrue(meanDistanceError < distanceMeanEpsilon, "mean distance error: " + meanDistanceError + " expected less than: " + distanceMeanEpsilon);
+      assertTrue(meanPositionError < positionMeanEpsilon, "mean position error: " + meanPositionError + " expected less than: " + positionMeanEpsilon);
    }
 }
