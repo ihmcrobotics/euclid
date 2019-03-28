@@ -709,7 +709,14 @@ public class EuclidShapeTestTools
             toCentroid.sub(centroid, convexPolytope3D.getCentroid());
 
             if (toCentroid.dot(normal) < 0.0)
-               EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face's normal is pointing towards the inside of the polytope.");
+            {
+               if (convexPolytope3D.getVolume() < convexPolytope3D.getConstructionEpsilon())
+                  System.out.println("WARNING: "
+                        + EuclidCoreTestTools.addPrefixToMessage(messagePrefix,
+                                                                 faceIndex + "th face's normal might be pointing towards the inside of the polytope."));
+               else
+                  EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face's normal is pointing towards the inside of the polytope.");
+            }
 
             for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
             {
