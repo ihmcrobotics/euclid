@@ -58,10 +58,11 @@ public class EuclidPolytopeConstructionTools
       if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertex, silhouetteEdges) <= epsilon)
          return null;
 
-      Vector3D towardOutside = new Vector3D();
-
       // Last filter before actually modifying the polytope
-      filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon);
+      if (!filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon))
+         return null;
+      
+      Vector3D towardOutside = new Vector3D();
 
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
       {
@@ -261,10 +262,10 @@ public class EuclidPolytopeConstructionTools
       return newFaces;
    }
 
-   private static void filterInPlaneFaces(Vertex3D vertex, List<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
+   private static boolean filterInPlaneFaces(Vertex3D vertex, List<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
    {
       if (inPlaneFaces.isEmpty())
-         return;
+         return true;
 
       boolean hasInPlaneFacesBeenModified = false;
 
@@ -295,6 +296,11 @@ public class EuclidPolytopeConstructionTools
             }
 
             boolean faceRemovedFromInPlaneList = false;
+
+            if (!lineOfSight.contains(silhouetteEdge))
+            { // The silhouette is very likely corrupted (super-concave) and there is no easy way to handle it. Let's abort.
+               return false;
+            }
 
             for (HalfEdge3D lineOfSightEdge : lineOfSight)
             {
@@ -370,7 +376,9 @@ public class EuclidPolytopeConstructionTools
       }
 
       if (hasInPlaneFacesBeenModified)
-         filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon);
+         return filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon);
+      else
+         return true;
    }
 
    private static void destroyTwinFace(HalfEdge3D edge)
