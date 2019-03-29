@@ -1126,10 +1126,9 @@ public class EuclidGeometryTools
       double areaPt1 = lengthSquaredA * lengthSquaredB;
       areaPt1 += lengthSquaredA * lengthSquaredC;
       areaPt1 += lengthSquaredB * lengthSquaredC;
-
       double areaPt2 = lengthSquaredA + lengthSquaredB + lengthSquaredC;
-
-      return 0.25 * Math.sqrt(4.0 * areaPt1 - areaPt2 * areaPt2);
+      double areaPt3 = 4.0 * areaPt1 - areaPt2 * areaPt2;
+      return areaPt3 <= 0.0 ? 0.0 : 0.25 * Math.sqrt(areaPt3);
    }
 
    /**
