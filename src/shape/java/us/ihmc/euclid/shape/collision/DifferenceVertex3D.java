@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public class DifferenceVertex3D extends Vertex3D
 {
@@ -40,5 +41,22 @@ public class DifferenceVertex3D extends Vertex3D
    public Point3DReadOnly getVertexOnShapeB()
    {
       return shapeBVertexReference;
+   }
+
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object == this)
+      {
+         return true;
+      }
+      else if (object instanceof Tuple3DReadOnly)
+      {
+         return equals((Tuple3DReadOnly) object);
+      }
+      else
+      {
+         return false;
+      }
    }
 }

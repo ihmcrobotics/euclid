@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.collision;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
@@ -31,6 +32,12 @@ public class MinkowskiDifferencePolytope3D implements ConvexPolytopeFeature3D
       this(constructionEpsilon);
       vertices = vertices.stream().map(DifferenceVertex3D::new).collect(Collectors.toList());
       polytope.addVertices(vertices);
+   }
+
+   public MinkowskiDifferencePolytope3D(DifferenceVertex3D[] vertices, double constructionEpsilon)
+   {
+      this(constructionEpsilon);
+      polytope.addVertices(Stream.of(vertices).map(DifferenceVertex3D::new).collect(Collectors.toList()));
    }
 
    public boolean addVertex(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)

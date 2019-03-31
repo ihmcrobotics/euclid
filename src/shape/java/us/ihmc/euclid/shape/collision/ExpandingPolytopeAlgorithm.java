@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.collision;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytopeFeature3D;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
@@ -14,12 +15,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class ExpandingPolytopeAlgorithm
 {
    public static boolean PERFORM_EXTRA_ASSERTIONS = false;
-   private static final double SMALLEST_DISTANCE_FOR_SUPPORT_DIRECTION = 1.0e-12;
+   public static final double DEFAULT_COLLISION_EPSILON = 1.0e-10;
+   private static final double SMALLEST_DISTANCE_FOR_SUPPORT_DIRECTION = 1.0e-10;
 
    private static final Point3DReadOnly origin = new Point3D();
 
    private int iterations;
    private final int maxIterations = 1000;
+   private double simplexConstructionEpsilon = EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON;
    private boolean latestCollisionTestResult;
 
    private MinkowskiDifferencePolytope3D minkowskiDifference;
@@ -36,12 +39,12 @@ public class ExpandingPolytopeAlgorithm
 
    public ExpandingPolytopeAlgorithm()
    {
-      this(GilbertJohnsonKeerthiCollisionDetector.DEFAULT_COLLISION_EPSILON);
+      this(DEFAULT_COLLISION_EPSILON);
    }
 
    public ExpandingPolytopeAlgorithm(double terminalConditionEpsilon)
    {
-      gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector(terminalConditionEpsilon);
+      gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
    }
 
    public MinkowskiDifferencePolytope3D getMinkowskiDifference()
@@ -56,7 +59,7 @@ public class ExpandingPolytopeAlgorithm
 
    public void setSimplexConstructionEpsilon(double simplexConstructionEpsilon)
    {
-      gjkCollisionDetector.setSimplexConstructionEpsilon(simplexConstructionEpsilon);
+      this.simplexConstructionEpsilon = simplexConstructionEpsilon;
    }
 
    public double getTerminalConditionEpsilon()
@@ -66,7 +69,7 @@ public class ExpandingPolytopeAlgorithm
 
    public double getSimplexConstructionEpsilon()
    {
-      return gjkCollisionDetector.getSimplexConstructionEpsilon();
+      return simplexConstructionEpsilon;
    }
 
    public void doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
@@ -76,15 +79,13 @@ public class ExpandingPolytopeAlgorithm
 
       latestCollisionTestResult = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
 
-      if (!latestCollisionTestResult || gjkCollisionDetector.getSimplex() == null)
+      if (!latestCollisionTestResult || gjkCollisionDetector.getSimplexVertices() == null)
       {
          minkowskiDifference = null;
          return;
       }
 
-      minkowskiDifference = new MinkowskiDifferencePolytope3D(gjkCollisionDetector.getSimplex().getDifferenceVertices(),
-                                                              gjkCollisionDetector.getSimplexConstructionEpsilon());
-      supportDirection.set(gjkCollisionDetector.getSupportDirection());
+      minkowskiDifference = new MinkowskiDifferencePolytope3D(gjkCollisionDetector.getSimplexVertices(), simplexConstructionEpsilon);
 
       if (PERFORM_EXTRA_ASSERTIONS)
          EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(minkowskiDifference.getPolytope());
@@ -103,11 +104,13 @@ public class ExpandingPolytopeAlgorithm
          // We need to negate the support direction to point toward the outside of the simplex and thus force the expansion.
          supportDirection.negate();
 
-         if (supportDirection.epsilonEquals(previousSupportDirection, gjkCollisionDetector.getTerminalConditionEpsilon()))
-            break;
+         //         if (supportDirection.epsilonEquals(previousSupportDirection, gjkCollisionDetector.getTerminalConditionEpsilon()))
+         //            break;
 
          Point3DReadOnly supportingVertexA = shapeA.getSupportingVertex(supportDirection);
          Point3DReadOnly supportingVertexB = shapeB.getSupportingVertex(supportDirectionNegative);
+
+         boolean hasPolytopeExpanded;
 
          if (PERFORM_EXTRA_ASSERTIONS)
          {
@@ -116,7 +119,7 @@ public class ExpandingPolytopeAlgorithm
 
             try
             {
-               minkowskiDifference.addVertex(newVertex);
+               hasPolytopeExpanded = minkowskiDifference.addVertex(newVertex);
                EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity(minkowskiDifference.getPolytope());
             }
             catch (Throwable e)
@@ -127,9 +130,11 @@ public class ExpandingPolytopeAlgorithm
          }
          else
          {
-            minkowskiDifference.addVertex(supportingVertexA, supportingVertexB);
+            hasPolytopeExpanded = minkowskiDifference.addVertex(supportingVertexA, supportingVertexB);
          }
 
+         if (!hasPolytopeExpanded)
+            break;
          previousSupportDirection.set(supportDirection);
       }
    }
@@ -138,7 +143,7 @@ public class ExpandingPolytopeAlgorithm
    {
       doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
 
-      if (gjkCollisionDetector.getSimplex() == null)
+      if (gjkCollisionDetector.getSimplexVertices() == null)
          return null;
 
       Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
@@ -151,7 +156,7 @@ public class ExpandingPolytopeAlgorithm
       doCollisionTest((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
       result.setToNaN();
 
-      if (gjkCollisionDetector.getSimplex() == null)
+      if (gjkCollisionDetector.getSimplexVertices() == null)
          return;
 
       packResult(shapeA, shapeB, result);
