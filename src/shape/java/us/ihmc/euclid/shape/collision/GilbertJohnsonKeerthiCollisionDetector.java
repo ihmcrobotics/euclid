@@ -12,6 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 // From "Improving the GJK algorithm for faster and more reliable distance queries between convex
 // objects."
+// TODO Make the initial supportDirection be settable to reduce number of iterations when possible.
 public class GilbertJohnsonKeerthiCollisionDetector
 {
    private double epsilon = 1.0e-16;
