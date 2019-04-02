@@ -966,13 +966,16 @@ public class EuclidGeometryTools
       double d = ux * w0X + uy * w0Y + uz * w0Z;
       double e = vx * w0X + vy * w0Y + vz * w0Z;
 
-      double delta = a * c - b * b;
+      double ac = a * c;
+      double bb = b * b;
+
+      double delta = ac - bb;
 
       double sc, sNumerator, sDenominator = delta;
       double tc, tNumerator, tDenominator = delta;
 
       // check to see if the lines are parallel
-      if (delta <= ONE_MILLIONTH)
+      if (delta <= ONE_TRILLIONTH * Math.max(ac, bb))
       {
          /*
           * The lines are parallel, there's an infinite number of pairs, but for one chosen point on one of
@@ -1024,8 +1027,8 @@ public class EuclidGeometryTools
          sDenominator = a;
       }
 
-      sc = Math.abs(sNumerator) < ONE_MILLIONTH ? 0.0 : sNumerator / sDenominator;
-      tc = Math.abs(tNumerator) < ONE_MILLIONTH ? 0.0 : tNumerator / tDenominator;
+      sc = Math.abs(sNumerator) < ONE_TRILLIONTH ? 0.0 : sNumerator / sDenominator;
+      tc = Math.abs(tNumerator) < ONE_TRILLIONTH ? 0.0 : tNumerator / tDenominator;
 
       double PscX = sc * ux + P0X;
       double PscY = sc * uy + P0Y;
