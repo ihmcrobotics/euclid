@@ -594,4 +594,22 @@ public class EuclidPolytopeTools
 
       return coordinates;
    }
+
+   public static boolean tetrahedronContainsOrigin(Point3DReadOnly p0, Point3DReadOnly p1, Point3DReadOnly p2, Point3DReadOnly p3)
+   {
+      Vector3D n;
+      n = EuclidPolytopeTools.crossProductOfLineSegment3Ds(p0, p1, p0, p2); // (p1 - p0) x (p2 - p0)
+      if (TupleTools.dot(n, p0) > 0.0 == TupleTools.dot(n, p3) > 0.0)
+         return false;
+      n = EuclidPolytopeTools.crossProductOfLineSegment3Ds(p1, p2, p1, p3); // (p2 - p1) x (p3 - p1)
+      if (TupleTools.dot(n, p1) > 0.0 == TupleTools.dot(n, p0) > 0.0)
+         return false;
+      n = EuclidPolytopeTools.crossProductOfLineSegment3Ds(p1, p2, p1, p3); // (p3 - p2) x (p0 - p2)
+      if (TupleTools.dot(n, p2) > 0.0 == TupleTools.dot(n, p1) > 0.0)
+         return false;
+      n = EuclidPolytopeTools.crossProductOfLineSegment3Ds(p3, p0, p3, p1); // (p0 - p3) x (p1 - p3)
+      if (TupleTools.dot(n, p3) > 0.0 == TupleTools.dot(n, p2) > 0.0)
+         return false;
+      return true;
+   }
 }

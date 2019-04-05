@@ -12,6 +12,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
@@ -617,6 +618,13 @@ public class EuclidShapeTestTools
    {
       if (convexPolytope3D.getCentroid().containsNaN())
          EuclidCoreTestTools.throwAssertionError(messagePrefix, "The polytope's centroid contains NaN.");
+      int verticesSize = convexPolytope3D.getVertices().size();
+      int halfEdgesSize = convexPolytope3D.getHalfEdges().size();
+      int facesSize = convexPolytope3D.getFaces().size();
+
+      if (verticesSize != EuclidPolytopeTools.computeConvexPolytopeNumberOfVertices(facesSize, halfEdgesSize / 2))
+         EuclidCoreTestTools.throwAssertionError(messagePrefix, "Inconsistent data size, expected "
+               + EuclidPolytopeTools.computeConvexPolytopeNumberOfVertices(facesSize, halfEdgesSize / 2) + " vertices but was " + verticesSize);
 
       assertConvexPolytope3DFacesIntegrity(messagePrefix, convexPolytope3D);
       assertConvexPolytope3DHalfEdgesIntegrity(messagePrefix, convexPolytope3D);
