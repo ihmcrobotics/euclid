@@ -913,7 +913,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          // Asserts the internal sanity of the collision result
          //         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding(), iterationPrefix);
 
-         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding(), iterationPrefix + ", GJK distance: " + gjkResult.getDistance());
+         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding(),
+                      iterationPrefix + " Analytical: " + expectedResult.getDistance() + ", GJK: " + gjkResult.getDistance() + ", diff: " + distanceError);
 
          if (gjkResult.areShapesColliding())
          {

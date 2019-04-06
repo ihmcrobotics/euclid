@@ -38,7 +38,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 
 class ExpandingPolytopeAlgorithmTest
 {
-   private static final int ITERATIONS = 500000;
+   private static final int ITERATIONS = 20000;
    private static final double EPSILON = 1.0e-12;
 
    @Test
@@ -211,7 +211,7 @@ class ExpandingPolytopeAlgorithmTest
          ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(tetrahedronClosest, tetrahedronFarthest0, tetrahedronFarthest1,
                                                                                                  tetrahedronFarthest2));
 
-         assertResolvingCollision(cube, tetrahedron);
+         assertResolvingCollision("Iteration " + i, cube, tetrahedron);
       }
    }
 
@@ -221,95 +221,91 @@ class ExpandingPolytopeAlgorithmTest
       Random random = new Random(45345);
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Create the tetrahedron to have its top vertex closest to a face. 
+      {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-
-         if (convexPolytope3D.isEmpty())
-         {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
-            performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
-         }
-         else
-         {
-            Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
-            HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-            Point3D closestOnConvexPolytope3D = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(),
-                                                                                             edge.getDestination());
-            Point3D closestOnTetrahedron = new Point3D(closestOnConvexPolytope3D);
-            closestOnTetrahedron.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), face.getNormal(), closestOnTetrahedron);
-
-            ConvexPolytope3D tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, closestOnTetrahedron, face.getNormal(), 1.0);
-
-            performAssertionsOnEPA(random, convexPolytope3D, tetrahedron, closestOnConvexPolytope3D, closestOnTetrahedron);
-         }
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Create the tetrahedron to have its top vertex closest to an edge. 
-         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-
-         if (convexPolytope3D.isEmpty())
-         {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
-            performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
-         }
-         else
-         {
-            Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
-            HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
-
-            Vector3D towardOutside = new Vector3D();
-            if (closestEdge.getTwin() != null)
+         { // Create the tetrahedron to have its top vertex closest to a face. 
+            if (convexPolytope3D.isEmpty())
             {
-               Face3D secondFace = closestEdge.getTwin().getFace();
-               towardOutside.interpolate(firstFace.getNormal(), secondFace.getNormal(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
+               performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
             }
             else
             {
-               Vector3D faceNormal = new Vector3D(firstFace.getNormal());
-               towardOutside.cross(faceNormal, closestEdge.getDirection(false));
-               if (random.nextBoolean())
-                  faceNormal.negate();
-               towardOutside.interpolate(faceNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+               HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
+               Point3D closestOnConvexPolytope3D = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(),
+                                                                                                edge.getDestination());
+               Point3D closestOnTetrahedron = new Point3D(closestOnConvexPolytope3D);
+               closestOnTetrahedron.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), face.getNormal(), closestOnTetrahedron);
+
+               ConvexPolytope3D tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, closestOnTetrahedron, face.getNormal(), 1.0);
+
+               performAssertionsOnEPA(random, convexPolytope3D, tetrahedron, closestOnConvexPolytope3D, closestOnTetrahedron);
             }
-
-            towardOutside.normalize();
-
-            Point3D pointOnEdge = new Point3D();
-            pointOnEdge.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-            Point3D pointOutside = new Point3D();
-            pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOnEdge);
-
-            ConvexPolytope3D tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointOutside, towardOutside, 1.0);
-
-            performAssertionsOnEPA(random, convexPolytope3D, tetrahedron, pointOnEdge, pointOutside);
-
          }
-      }
 
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Point outside closest to a vertex
-         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
+         { // Create the tetrahedron to have its top vertex closest to an edge. 
+            if (convexPolytope3D.isEmpty())
+            {
+               performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
+               performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
+            }
+            else
+            {
+               Face3D firstFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
+               HalfEdge3D closestEdge = firstFace.getEdge(random.nextInt(firstFace.getNumberOfEdges()));
 
-         if (convexPolytope3D.isEmpty())
-         {
-            performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
-            performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
+               Vector3D towardOutside = new Vector3D();
+               if (closestEdge.getTwin() != null)
+               {
+                  Face3D secondFace = closestEdge.getTwin().getFace();
+                  towardOutside.interpolate(firstFace.getNormal(), secondFace.getNormal(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               }
+               else
+               {
+                  Vector3D faceNormal = new Vector3D(firstFace.getNormal());
+                  towardOutside.cross(faceNormal, closestEdge.getDirection(false));
+                  if (random.nextBoolean())
+                     faceNormal.negate();
+                  towardOutside.interpolate(faceNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               }
+
+               towardOutside.normalize();
+
+               Point3D pointOnEdge = new Point3D();
+               pointOnEdge.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+               Point3D pointOutside = new Point3D();
+               pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), towardOutside, pointOnEdge);
+
+               ConvexPolytope3D tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointOutside, towardOutside, 1.0);
+
+               performAssertionsOnEPA(random, convexPolytope3D, tetrahedron, pointOnEdge, pointOutside);
+
+            }
          }
-         else
-         {
-            Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
 
-            Vector3D towardOutside = new Vector3D();
-            closestVertex.getAssociatedEdges().stream().forEach(edge -> towardOutside.scaleAdd(random.nextDouble(), edge.getFace().getNormal(), towardOutside));
-            towardOutside.normalize();
+         { // Point outside closest to a vertex
+            if (convexPolytope3D.isEmpty())
+            {
+               performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
+               performAssertionsOnEPA(random, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), convexPolytope3D, null, null);
+            }
+            else
+            {
+               Vertex3D closestVertex = convexPolytope3D.getVertex(random.nextInt(convexPolytope3D.getNumberOfVertices()));
 
-            Point3D pointOutside = new Point3D();
-            pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, closestVertex);
+               Vector3D towardOutside = new Vector3D();
+               closestVertex.getAssociatedEdges().stream()
+                            .forEach(edge -> towardOutside.scaleAdd(random.nextDouble(), edge.getFace().getNormal(), towardOutside));
+               towardOutside.normalize();
 
-            ConvexPolytope3D tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointOutside, towardOutside, 1.0);
+               Point3D pointOutside = new Point3D();
+               pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), towardOutside, closestVertex);
 
-            performAssertionsOnEPA(random, convexPolytope3D, tetrahedron, closestVertex, pointOutside);
+               ConvexPolytope3D tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointOutside, towardOutside, 1.0);
+
+               performAssertionsOnEPA(random, convexPolytope3D, tetrahedron, closestVertex, pointOutside);
+            }
          }
       }
    }
@@ -373,7 +369,7 @@ class ExpandingPolytopeAlgorithmTest
                tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointInside, face.getNormal(), 1.0);
             }
 
-            assertResolvingCollision(convexPolytope3D, tetrahedron);
+            assertResolvingCollision("Iteration " + i, convexPolytope3D, tetrahedron);
          }
       }
 
@@ -440,7 +436,7 @@ class ExpandingPolytopeAlgorithmTest
                tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointInside, towardInside, 1.0);
             }
 
-            assertResolvingCollision(convexPolytope3D, tetrahedron);
+            assertResolvingCollision("Iteration " + i, convexPolytope3D, tetrahedron);
          }
       }
 
@@ -503,7 +499,7 @@ class ExpandingPolytopeAlgorithmTest
                tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointInside, towardInside, 1.0);
             }
 
-            assertResolvingCollision(convexPolytope3D, tetrahedron);
+            assertResolvingCollision("Iteration " + i, convexPolytope3D, tetrahedron);
          }
       }
    }
@@ -529,14 +525,14 @@ class ExpandingPolytopeAlgorithmTest
 
          assertEquals(0.0, polytopeA.distance(actualPointOnA), EPSILON);
          assertEquals(0.0, polytopeB.distance(actualPointOnB), EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnA, actualPointOnA, 20.0 * EPSILON);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnB, actualPointOnB, 20.0 * EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnA, actualPointOnA, 10.0 * EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedPointOnB, actualPointOnB, 10.0 * EPSILON);
          expectedCollisionVector.sub(actualPointOnB, actualPointOnA);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedCollisionVector, actualCollisionVector, 20.0 * EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedCollisionVector, actualCollisionVector, EPSILON);
       }
    }
 
-   public static void assertResolvingCollision(ConvexPolytope3DReadOnly polytopeA, ConvexPolytope3DReadOnly polytopeB)
+   public static void assertResolvingCollision(String messagePrefix, ConvexPolytope3DReadOnly polytopeA, ConvexPolytope3DReadOnly polytopeB)
    {
       assertTrue(new GilbertJohnsonKeerthiCollisionDetector().doCollisionTest(polytopeA, polytopeB));
 
@@ -548,23 +544,23 @@ class ExpandingPolytopeAlgorithmTest
       Vector3D expectedCollisionVector = new Vector3D();
 
       expectedCollisionVector.sub(pointOnA, pointOnB);
-      EuclidCoreTestTools.assertTuple3DEquals(expectedCollisionVector, actualCollisionVector, 2000.0 * EPSILON);
+      EuclidCoreTestTools.assertTuple3DEquals(expectedCollisionVector, actualCollisionVector, EPSILON);
 
       assertEquals(0.0, polytopeA.distance(pointOnA), EPSILON);
       assertEquals(0.0, polytopeB.distance(pointOnB), EPSILON);
 
       Vector3D augmentedCollisionVector = new Vector3D();
-      augmentedCollisionVector.setAndScale(0.5, actualCollisionVector);
+      augmentedCollisionVector.setAndScale(0.99, actualCollisionVector);
       ConvexPolytope3D polytopeBTranslated = new ConvexPolytope3D(polytopeB);
       polytopeBTranslated.applyTransform(new RigidBodyTransform(new Quaternion(), augmentedCollisionVector));
       // We translate the polytopeB but not enough to resolve the collision
-      assertTrue(new GilbertJohnsonKeerthiCollisionDetector().doCollisionTest(polytopeA, polytopeBTranslated));
+      assertTrue(new GilbertJohnsonKeerthiCollisionDetector().doCollisionTest(polytopeA, polytopeBTranslated), messagePrefix);
 
       augmentedCollisionVector.setAndScale(1.01, actualCollisionVector);
       polytopeBTranslated = new ConvexPolytope3D(polytopeB);
       polytopeBTranslated.applyTransform(new RigidBodyTransform(new Quaternion(), augmentedCollisionVector));
       // We translate the polytopeB just enough to resolve the collision
-      assertFalse(new GilbertJohnsonKeerthiCollisionDetector().doCollisionTest(polytopeA, polytopeBTranslated));
+      assertFalse(new GilbertJohnsonKeerthiCollisionDetector().doCollisionTest(polytopeA, polytopeBTranslated), messagePrefix);
    }
 
    @Test
@@ -578,13 +574,16 @@ class ExpandingPolytopeAlgorithmTest
       double distanceMeanEpsilon = 1.0e-12;
       double positionMeanEpsilon = 1.0e-6;
 
+      double depthThresholdCollisionDetection = 0.0;
+
       AnalyticalShapeCollisionDetection<Sphere3D, Sphere3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
          return new Pair<>(sphereA, sphereB);
       }, EuclidShapeCollisionTools::doSphere3DSphere3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -598,13 +597,16 @@ class ExpandingPolytopeAlgorithmTest
       double distanceMeanEpsilon = 1.0e-18;
       double positionMeanEpsilon = 1.0e-17;
 
+      double depthThresholdCollisionDetection = 0.0;
+
       AnalyticalShapeCollisionDetection<PointShape3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doPointShape3DBox3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -618,13 +620,16 @@ class ExpandingPolytopeAlgorithmTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-6;
 
+      double depthThresholdCollisionDetection = 0.0;
+
       AnalyticalShapeCollisionDetection<Sphere3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
          Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DBox3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -638,13 +643,16 @@ class ExpandingPolytopeAlgorithmTest
       double distanceMeanEpsilon = 1.0e-11;
       double positionMeanEpsilon = 1.0e-6;
 
+      double depthThresholdCollisionDetection = 0.0;
+
       AnalyticalShapeCollisionDetection<PointShape3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doPointShape3DCapsule3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -658,13 +666,16 @@ class ExpandingPolytopeAlgorithmTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-6;
 
+      double depthThresholdCollisionDetection = 0.0;
+
       AnalyticalShapeCollisionDetection<Capsule3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          Capsule3D shapeA = EuclidShapeRandomTools.nextCapsule3D(random);
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doCapsule3DCapsule3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -678,13 +689,16 @@ class ExpandingPolytopeAlgorithmTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-6;
 
+      double depthThresholdCollisionDetection = 0.0;
+
       AnalyticalShapeCollisionDetection<Sphere3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DCapsule3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -698,25 +712,30 @@ class ExpandingPolytopeAlgorithmTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-7;
 
+      double depthThresholdCollisionDetection = 0.0;
+
       AnalyticalShapeCollisionDetection<PointShape3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Cylinder3D shapeB = EuclidShapeRandomTools.nextCylinder3D(random);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doPointShape3DCylinder3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
-   @Test
+   @Test // TODO Sphere <-> Cylinder seems to be inaccurate compared to the other shape combinations.
    void testSphere3DCylinder3DCollisionTest() throws Exception
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(13741);
 
-      double distanceMaxEpsilon = 1.0e-0;
-      double positionMaxEpsilon = 3.0e-0;
+      double distanceMaxEpsilon = 1.0e-2;
+      double positionMaxEpsilon = 3.0e-2;
 
-      double distanceMeanEpsilon = 5.0e-8;
-      double positionMeanEpsilon = 1.0e-17;
+      double distanceMeanEpsilon = 2.0e-7;
+      double positionMeanEpsilon = 5.0e-5;
+
+      double depthThresholdCollisionDetection = 0.0;
 
       AnalyticalShapeCollisionDetection<Sphere3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
@@ -724,7 +743,8 @@ class ExpandingPolytopeAlgorithmTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DCylinder3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -732,11 +752,13 @@ class ExpandingPolytopeAlgorithmTest
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(13741);
 
-      double distanceMaxEpsilon = 1.0e-6;
-      double positionMaxEpsilon = 5.0e-4;
+      double distanceMaxEpsilon = 1.0e-10;
+      double positionMaxEpsilon = 1.0e-4;
 
-      double distanceMeanEpsilon = 5.0e-8;
-      double positionMeanEpsilon = 1.0e-5;
+      double distanceMeanEpsilon = 1.0e-12;
+      double positionMeanEpsilon = 1.0e-7;
+
+      double depthThresholdCollisionDetection = 0.0;
 
       AnalyticalShapeCollisionDetection<PointShape3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
@@ -744,7 +766,8 @@ class ExpandingPolytopeAlgorithmTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doPointShape3DEllipsoid3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -752,11 +775,13 @@ class ExpandingPolytopeAlgorithmTest
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(13741);
 
-      double distanceMaxEpsilon = 1.0e-6;
-      double positionMaxEpsilon = 5.0e-4;
+      double distanceMaxEpsilon = 1.0e-7;
+      double positionMaxEpsilon = 1.0e-3;
 
-      double distanceMeanEpsilon = 5.0e-8;
-      double positionMeanEpsilon = 5.0e-5;
+      double distanceMeanEpsilon = 1.0e-11;
+      double positionMeanEpsilon = 1.0e-6;
+
+      double depthThresholdCollisionDetection = 0.0;
 
       AnalyticalShapeCollisionDetection<Sphere3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
@@ -764,7 +789,8 @@ class ExpandingPolytopeAlgorithmTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DEllipsoid3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -772,11 +798,13 @@ class ExpandingPolytopeAlgorithmTest
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(13741);
 
-      double distanceMaxEpsilon = 1.0e-12;
-      double positionMaxEpsilon = 1.0e-12;
+      double distanceMaxEpsilon = 1.0e-14;
+      double positionMaxEpsilon = 1.0e-14;
 
-      double distanceMeanEpsilon = 1.0e-12;
-      double positionMeanEpsilon = 1.0e-12;
+      double distanceMeanEpsilon = 1.0e-18;
+      double positionMeanEpsilon = 1.0e-18;
+
+      double depthThresholdCollisionDetection = 0.0;
 
       AnalyticalShapeCollisionDetection<PointShape3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
@@ -784,7 +812,8 @@ class ExpandingPolytopeAlgorithmTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doPointShape3DRamp3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    @Test
@@ -792,11 +821,13 @@ class ExpandingPolytopeAlgorithmTest
    { // This test confirms that GJK-EPA can be used with primitives too, and also serves as benchmark for accuracy.
       Random random = new Random(13741);
 
-      double distanceMaxEpsilon = 1.0e-6;
-      double positionMaxEpsilon = 5.0e-4;
+      double distanceMaxEpsilon = 1.0e-8;
+      double positionMaxEpsilon = 3.0e-4;
 
-      double distanceMeanEpsilon = 1.0e-8;
-      double positionMeanEpsilon = 1.0e-5;
+      double distanceMeanEpsilon = 1.0e-11;
+      double positionMeanEpsilon = 1.0e-7;
+
+      double depthThresholdCollisionDetection = 0.0;
 
       AnalyticalShapeCollisionDetection<Sphere3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
@@ -804,14 +835,16 @@ class ExpandingPolytopeAlgorithmTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DRamp3DCollisionTest);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon,
+                                      depthThresholdCollisionDetection);
    }
 
    private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> void assertAgainstAnalyticalFunction(AnalyticalShapeCollisionDetection<A, B> function,
                                                                                                               double distanceMaxEpsilon,
                                                                                                               double positionMaxEpsilon,
                                                                                                               double distanceMeanEpsilon,
-                                                                                                              double positionMeanEpsilon)
+                                                                                                              double positionMeanEpsilon,
+                                                                                                              double depthThresholdCollisionDetection)
    {
       boolean verbose = true;
       double meanDistanceError = 0.0;
@@ -831,25 +864,21 @@ class ExpandingPolytopeAlgorithmTest
          Shape3DCollisionTestResult expectedResult = function.collisionFunction.apply(shapeA, shapeB);
          Shape3DCollisionTestResult epaResult = new Shape3DCollisionTestResult();
 
-         ExpandingPolytopeAlgorithm2 epaDetector = new ExpandingPolytopeAlgorithm2();
-         //         epaDetector.setSimplexConstructionEpsilon(1.0e-7);
-         try
-         {
-            epaDetector.doShapeCollisionTest(shapeA, shapeB, epaResult);
-         }
-         catch (Throwable e)
-         {
-            fail(iterationPrefix, e);
-         }
+         ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
+         epaDetector.doShapeCollisionTest(shapeA, shapeB, epaResult);
 
          double distanceError = Math.abs(expectedResult.getDistance() - epaResult.getDistance());
          if (verbose && (i % 5000) == 0)
          {
-            System.out.println(iterationPrefix + " Analytical: " + expectedResult.getDistance() + ", GJK: " + epaResult.getDistance() + ", diff: "
+            System.out.println(iterationPrefix + " Analytical: " + expectedResult.getDistance() + ", EPA: " + epaResult.getDistance() + ", diff: "
                   + distanceError);
          }
 
-         assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding(), iterationPrefix);
+         if (expectedResult.getDistance() > 0.0 || expectedResult.getDistance() < -depthThresholdCollisionDetection)
+         {
+            assertEquals(expectedResult.areShapesColliding(), epaResult.areShapesColliding(),
+                         iterationPrefix + " Analytical: " + expectedResult.getDistance() + ", EPA: " + epaResult.getDistance() + ", diff: " + distanceError);
+         }
 
          if (epaResult.areShapesColliding())
          { // We're only interested on measuring the error for EPA as GJK is tested in its own test class.
@@ -880,9 +909,9 @@ class ExpandingPolytopeAlgorithmTest
 
       if (verbose)
       {
-         System.out.println("Average error for the distance: " + meanDistanceError + ", position: " + meanPositionError);
-         System.out.println("Max error for the distance: " + maxDistanceError + ", position: " + maxPositionError);
          System.out.println("Number of iterations: " + ITERATIONS + ", number of colliding samples: " + numberOfCollidingSamples);
+         System.out.println("Max error for the distance: " + maxDistanceError + ", position: " + maxPositionError);
+         System.out.println("Average error for the distance: " + meanDistanceError + ", position: " + meanPositionError);
       }
 
       assertTrue(meanDistanceError < distanceMeanEpsilon, "mean distance error: " + meanDistanceError + " expected less than: " + distanceMeanEpsilon);

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.collision.Shape3DCollisionTestResult;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
@@ -729,9 +730,9 @@ public class EuclidShapeTestTools
             for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++)
             {
                HalfEdge3DReadOnly edge = edges.get(edgeIndex);
-               Face3DReadOnly neighbor = edge.getFace();
+               Face3DReadOnly neighbor = edge.getTwin().getFace();
 
-               if (neighbor != face)
+               if (edge.getFace() != face)
                   EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge does not this face as its face.");
                if (!edges.contains(edge.getNext()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
@@ -751,8 +752,11 @@ public class EuclidShapeTestTools
                if (cross.dot(normal) < 0.0)
                   EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face: the " + edgeIndex + "th edge is orientated counter-clockwise.");
 
-               if (face.canObserverSeeFace(neighbor.getCentroid()))
+               if (EuclidGeometryTools.isPoint3DAbovePlane3D(neighbor.getCentroid(), face.getCentroid(), face.getNormal()))
+               {
+                  EuclidGeometryTools.isPoint3DAbovePlane3D(neighbor.getCentroid(), face.getCentroid(), face.getNormal());
                   EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face is concave with respect to the " + edgeIndex + "th neighbor.");
+               }
             }
          }
       }

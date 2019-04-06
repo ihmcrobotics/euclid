@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
@@ -15,7 +16,9 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 // TODO Make the initial supportDirection be settable to reduce number of iterations when possible.
 public class GilbertJohnsonKeerthiCollisionDetector
 {
+   private static final boolean VERBOSE = false;
    private double epsilon = 1.0e-16;
+   private double epsilonTriangleNormalSwitch = 1.0e-6;
    private int maxIterations = 500;
    private boolean latestCollisionTestResult;
    private ClosestSimplexFeature simplex = null;
@@ -75,6 +78,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
          {
             simplex = previousOutput;
             latestCollisionTestResult = false;
+            if (VERBOSE)
+               System.out.println("New vertex belongs to simplex, terminating.");
             break;
          }
 
@@ -82,6 +87,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
          {
             simplex = previousOutput;
             latestCollisionTestResult = false;
+            if (VERBOSE)
+               System.out.println("Progression under tolerance, terminating.");
             break;
          }
 
@@ -91,6 +98,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
          { // End of process
             simplex = previousOutput;
             latestCollisionTestResult = false;
+            if (VERBOSE)
+               System.out.println("Closest simplex is null, terminating.");
             break;
          }
 
@@ -98,6 +107,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
          {
             simplex = previousOutput;
             latestCollisionTestResult = false;
+            if (VERBOSE)
+               System.out.println("No progression, terminating.");
             break;
          }
 
@@ -107,10 +118,15 @@ public class GilbertJohnsonKeerthiCollisionDetector
          { // End of process
             simplex = output;
             latestCollisionTestResult = true;
+            if (VERBOSE)
+               System.out.println("Collision detected, terminating.");
             break;
          }
 
-         supportDirection.setAndNegate(output.closestPoint());
+         if (closestPointNormSquared < epsilonTriangleNormalSwitch && output.supportVertices.length == 3)
+            supportDirection.set(output.getTriangleNormal());
+         else
+            supportDirection.setAndNegate(output.closestPoint());
          vertexA = shapeA.getSupportingVertex(supportDirection);
          supportDirection.negate();
          vertexB = shapeB.getSupportingVertex(supportDirection);
@@ -118,6 +134,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
          previousOutput = output;
       }
 
+      if (VERBOSE)
+         System.out.println("Number of iterations: " + numberOfIterations);
       return latestCollisionTestResult;
    }
 
@@ -163,6 +181,11 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return simplex.closestPointNorm();
    }
 
+   public ClosestSimplexFeature getSimplex()
+   {
+      return simplex;
+   }
+
    public Vector3DReadOnly getSeparationVector()
    {
       if (simplex == null || latestCollisionTestResult)
@@ -170,6 +193,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
       Vector3D separationVector = new Vector3D();
       separationVector.set(simplex.closestPoint());
+      separationVector.negate();
       return separationVector;
    }
 
@@ -291,85 +315,71 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public static ClosestSimplexFeature signedVolumeFor2Simplex(DifferenceVertex3D s1, DifferenceVertex3D s2, DifferenceVertex3D s3)
    {
-      double s1x3D = s1.getX(), s1y3D = s1.getY(), s1z3D = s1.getZ();
-      double s2x3D = s2.getX(), s2y3D = s2.getY(), s2z3D = s2.getZ();
-      double s3x3D = s3.getX(), s3y3D = s3.getY(), s3z3D = s3.getZ();
+      double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
+      double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
+      double s3x = s3.getX(), s3y = s3.getY(), s3z = s3.getZ();
 
-      double s2s1x3D = s1x3D - s2x3D;
-      double s2s1y3D = s1y3D - s2y3D;
-      double s2s1z3D = s1z3D - s2z3D;
+      double p0x, p0y, p0z;
+      { // Computing the projection p0 of the origin (0, 0, 0) onto the face as p0 = (s1.n) / (n.n) n
+         double s2s1x3D = s1x - s2x;
+         double s2s1y3D = s1y - s2y;
+         double s2s1z3D = s1z - s2z;
 
-      double s3s1x3D = s1x3D - s3x3D;
-      double s3s1y3D = s1y3D - s3y3D;
-      double s3s1z3D = s1z3D - s3z3D;
+         double s3s1x3D = s1x - s3x;
+         double s3s1y3D = s1y - s3y;
+         double s3s1z3D = s1z - s3z;
 
-      // Computing the face's normal as n = (s2 - s1) x (s3 - s1)
-      double nx = s2s1y3D * s3s1z3D - s2s1z3D * s3s1y3D;
-      double ny = s2s1z3D * s3s1x3D - s2s1x3D * s3s1z3D;
-      double nz = s2s1x3D * s3s1y3D - s2s1y3D * s3s1x3D;
+         // Computing the face's normal as n = (s2 - s1) x (s3 - s1)
+         double nx = s2s1y3D * s3s1z3D - s2s1z3D * s3s1y3D;
+         double ny = s2s1z3D * s3s1x3D - s2s1x3D * s3s1z3D;
+         double nz = s2s1x3D * s3s1y3D - s2s1y3D * s3s1x3D;
 
-      // Computing the projection p0 of the origin (0, 0, 0) onto the face as p0 = (s1.n) / (n.n) n
-      double distanceFromPlane = TupleTools.dot(nx, ny, nz, s1) / EuclidCoreTools.normSquared(nx, ny, nz);
-      double p0x3D = distanceFromPlane * nx;
-      double p0y3D = distanceFromPlane * ny;
-      double p0z3D = distanceFromPlane * nz;
+         double distanceFromPlane = TupleTools.dot(nx, ny, nz, s1) / EuclidCoreTools.normSquared(nx, ny, nz);
+         p0x = distanceFromPlane * nx;
+         p0y = distanceFromPlane * ny;
+         p0z = distanceFromPlane * nz;
+      }
 
-      double muMax = 0.0; // mu = area of the triangle (s1, s2, s3)
-      double s1x, s2x, s3x, p0x;
-      double s1y, s2y, s3y, p0y;
+      double muMax = 0.0, muMaxAbs = 0.0; // mu = signed area of the triangle (s1, s2, s3)
 
       // Finding muMax and the coordinates that generate it.
-      // As described in the paper, the 3D triangle is projected on each Cartesian plane. The projected 2D triangle with the largest area is selected to pursue further computation.
-      double mu;
+      // As described in the paper, the 3D triangle is projected on each Cartesian plane.
+      // The projected 2D triangle with the largest area is selected to pursue further computation.
+      double mu, muAbs;
+      ProjectedTriangleSignedAreaCalculator calculator = yzTriangleAreaCalculator;
 
       // Area of the triangle (s1, s2, s3) projected onto the YZ-plane.
-      mu = s1y3D * (s2z3D - s3z3D) + s2y3D * (s3z3D - s1z3D) + s3y3D * (s1z3D - s2z3D);
+      mu = calculator.compute(s1x, s1y, s1z, s2x, s2y, s2z, s3x, s3y, s3z);
+      muAbs = Math.abs(mu);
 
       muMax = mu;
-      s1x = s1y3D;
-      s2x = s2y3D;
-      s3x = s3y3D;
-      p0x = p0y3D;
-      s1y = s1z3D;
-      s2y = s2z3D;
-      s3y = s3z3D;
-      p0y = p0z3D;
+      muMaxAbs = muAbs;
 
       // Area of the triangle (s1, s2, s3) projected onto the XZ-plane.
-      mu = s1z3D * (s2x3D - s3x3D) + s2z3D * (s3x3D - s1x3D) + s3z3D * (s1x3D - s2x3D);
+      mu = zxTriangleAreaCalculator.compute(s1x, s1y, s1z, s2x, s2y, s2z, s3x, s3y, s3z);
+      muAbs = Math.abs(mu);
 
-      if (Math.abs(mu) > Math.abs(muMax))
+      if (muAbs > muMaxAbs)
       {
          muMax = mu;
-         s1x = s1z3D;
-         s2x = s2z3D;
-         s3x = s3z3D;
-         p0x = p0z3D;
-         s1y = s1x3D;
-         s2y = s2x3D;
-         s3y = s3x3D;
-         p0y = p0x3D;
+         muMaxAbs = muAbs;
+         calculator = zxTriangleAreaCalculator;
       }
 
       // Area of the triangle (s1, s2, s3) projected onto the XY-plane.
-      mu = s1x3D * (s2y3D - s3y3D) + s2x3D * (s3y3D - s1y3D) + s3x3D * (s1y3D - s2y3D);
+      mu = xyTriangleAreaCalculator.compute(s1x, s1y, s1z, s2x, s2y, s2z, s3x, s3y, s3z);
+      muAbs = Math.abs(mu);
 
-      if (Math.abs(mu) > Math.abs(muMax))
+      if (muAbs > muMaxAbs)
       {
          muMax = mu;
-         s1x = s1x3D;
-         s2x = s2x3D;
-         s3x = s3x3D;
-         p0x = p0x3D;
-         s1y = s1y3D;
-         s2y = s2y3D;
-         s3y = s3y3D;
-         p0y = p0y3D;
+         muMaxAbs = muAbs;
+         calculator = xyTriangleAreaCalculator;
       }
 
-      double C1 = p0x * (s2y - s3y) + s2x * (s3y - p0y) + s3x * (p0y - s2y); // = area of the triangle (p0, s2, s3) projected onto the selected Cartesian plane.
-      double C2 = s1x * (p0y - s3y) + p0x * (s3y - s1y) + s3x * (s1y - p0y); // = area of the triangle (s1, p0, s3) projected onto the selected Cartesian plane.
-      double C3 = s1x * (s2y - p0y) + s2x * (p0y - s1y) + p0x * (s1y - s2y); // = area of the triangle (s1, s2, p0) projected onto the selected Cartesian plane.
+      double C1 = calculator.compute(p0x, p0y, p0z, s2x, s2y, s2z, s3x, s3y, s3z); // = area of the triangle (p0, s2, s3) projected onto the selected Cartesian plane.
+      double C2 = calculator.compute(s1x, s1y, s1z, p0x, p0y, p0z, s3x, s3y, s3z); // = area of the triangle (s1, p0, s3) projected onto the selected Cartesian plane.
+      double C3 = calculator.compute(s1x, s1y, s1z, s2x, s2y, s2z, p0x, p0y, p0z); // = area of the triangle (s1, s2, p0) projected onto the selected Cartesian plane.
 
       if (compareSigns(muMax, C1) && compareSigns(muMax, C2) && compareSigns(muMax, C3))
       { // The projection p0 is inside the face. Computing the barycentric coordinates.
@@ -405,50 +415,70 @@ public class GilbertJohnsonKeerthiCollisionDetector
       }
    }
 
+   public static final ProjectedTriangleSignedAreaCalculator yzTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ay, az, by,
+                                                                                                                                                   bz, cy, cz);
+   public static final ProjectedTriangleSignedAreaCalculator zxTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(az, ax, bz,
+                                                                                                                                                   bx, cz, cx);
+   public static final ProjectedTriangleSignedAreaCalculator xyTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ax, ay, bx,
+                                                                                                                                                   by, cx, cy);
+
+   public static interface ProjectedTriangleSignedAreaCalculator
+   {
+      double compute(double ax, double ay, double az, double bx, double by, double bz, double cx, double cy, double cz);
+   }
+
+   public static double triangleSignedArea(double ax, double ay, double bx, double by, double cx, double cy)
+   {
+      return ax * (by - cy) + bx * (cy - ay) + cx * (ay - by);
+   }
+
    public static ClosestSimplexFeature signedVolumeFor1Simplex(DifferenceVertex3D s1, DifferenceVertex3D s2)
    {
-      double s1x3D = s1.getX(), s1y3D = s1.getY(), s1z3D = s1.getZ();
-      double s2x3D = s2.getX(), s2y3D = s2.getY(), s2z3D = s2.getZ();
+      double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
+      double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
 
-      // Computing the edge's direction as t = (s2 - s1)
-      double tx = s2x3D - s1x3D;
-      double ty = s2y3D - s1y3D;
-      double tz = s2z3D - s1z3D;
-      // Computing the projection p0 of the origin (0, 0, 0) onto the edge as p0 = s2 - (s2.t) / (t.t) t
-      double param = -TupleTools.dot(tx, ty, tz, s2) / EuclidCoreTools.normSquared(tx, ty, tz);
-      double p0x3D = param * tx + s2x3D;
-      double p0y3D = param * ty + s2y3D;
-      double p0z3D = param * tz + s2z3D;
+      double p0x, p0y, p0z;
+      { // Computing the projection p0 of the origin (0, 0, 0) onto the edge as p0 = s2 - (s2.t) / (t.t) t
+        // Computing the edge's direction as t = (s2 - s1)
+         double tx = s2x - s1x;
+         double ty = s2y - s1y;
+         double tz = s2z - s1z;
+
+         double param = -TupleTools.dot(tx, ty, tz, s2) / EuclidCoreTools.normSquared(tx, ty, tz);
+         p0x = param * tx + s2x;
+         p0y = param * ty + s2y;
+         p0z = param * tz + s2z;
+      }
 
       double muMax = 0.0; // mu = length of the edge (s1, s2)
       double s1Max, s2Max, p0Max;
 
       { // Finding muMax and the coordinates that generate it.
         // Length of the edge (s1, s2) projected onto the X-axis.
-         s1Max = s1x3D;
-         s2Max = s2x3D;
-         p0Max = p0x3D;
-         muMax = s1x3D - s2x3D;
+         s1Max = s1x;
+         s2Max = s2x;
+         p0Max = p0x;
+         muMax = s1x - s2x;
 
          // Length of the edge (s1, s2) projected onto the Y-axis.
-         double mu = s1y3D - s2y3D;
+         double mu = s1y - s2y;
 
          if (Math.abs(mu) > Math.abs(muMax))
          {
-            s1Max = s1y3D;
-            s2Max = s2y3D;
-            p0Max = p0y3D;
+            s1Max = s1y;
+            s2Max = s2y;
+            p0Max = p0y;
             muMax = mu;
          }
 
          // Length of the edge (s1, s2) projected onto the Z-axis.
-         mu = s1z3D - s2z3D;
+         mu = s1z - s2z;
 
          if (Math.abs(mu) > Math.abs(muMax))
          {
-            s1Max = s1z3D;
-            s2Max = s2z3D;
-            p0Max = p0z3D;
+            s1Max = s1z;
+            s2Max = s2z;
+            p0Max = p0z;
             muMax = mu;
          }
       }
@@ -540,6 +570,16 @@ public class GilbertJohnsonKeerthiCollisionDetector
       public double closestPointNormSquared()
       {
          return distanceFromOriginSquared;
+      }
+
+      public Vector3D getTriangleNormal()
+      {
+         if (supportVertices.length != 3)
+            return null;
+         Vector3D n = EuclidPolytopeTools.crossProductOfLineSegment3Ds(supportVertices[0], supportVertices[1], supportVertices[0], supportVertices[2]);
+         if (TupleTools.dot(n, closestPointToOrigin) > 0.0)
+            n.negate();
+         return n;
       }
 
       public Point3D computePointOnA()
