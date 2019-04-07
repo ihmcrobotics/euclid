@@ -1,7 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
@@ -26,8 +25,6 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     */
    private final List<HalfEdge3D> associatedEdges = new ArrayList<>();
 
-   private final List<Vertex3D> vertices = Collections.singletonList(this);
-
    public Vertex3D()
    {
       setToZero();
@@ -41,12 +38,6 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
    public Vertex3D(Point3DReadOnly position)
    {
       set(position);
-   }
-
-   @Override
-   public List<Vertex3D> getVertices()
-   {
-      return vertices;
    }
 
    /**

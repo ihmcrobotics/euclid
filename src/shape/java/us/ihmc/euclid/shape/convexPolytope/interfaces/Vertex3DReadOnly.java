@@ -1,21 +1,12 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface Vertex3DReadOnly extends Point3DReadOnly, ConvexPolytopeFeature3D
+public interface Vertex3DReadOnly extends Point3DReadOnly
 {
-   @Override
-   default List<? extends Vertex3DReadOnly> getVertices()
-   {
-      return Collections.singletonList(this);
-   }
-
    /**
     * Get list of edges that originate at this vertex
     * 
@@ -87,19 +78,6 @@ public interface Vertex3DReadOnly extends Point3DReadOnly, ConvexPolytopeFeature
    default double distance(Point3DReadOnly other)
    {
       return Point3DReadOnly.super.distance(other);
-   }
-
-   @Override
-   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
-   {
-      supportVectorToPack.sub(point, this);
-      return true;
-   }
-
-   @Override
-   default ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
-   {
-      return this;
    }
 
    default boolean equals(Vertex3DReadOnly other)

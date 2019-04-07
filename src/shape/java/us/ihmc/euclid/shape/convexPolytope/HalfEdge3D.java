@@ -1,8 +1,5 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -55,12 +52,8 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     */
    private Face3D face;
 
-   private final List<Vertex3D> vertices = new ArrayList<>();
-
    public HalfEdge3D()
    {
-      vertices.add(null);
-      vertices.add(null);
    }
 
    /**
@@ -121,7 +114,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
       this.origin = origin;
       if (this.origin != null)
          this.origin.addAssociatedEdge(this);
-      vertices.set(0, origin);
    }
 
    /**
@@ -143,7 +135,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    public void setDestination(Vertex3D destination)
    {
       this.destination = destination;
-      vertices.set(1, destination);
    }
 
    /**
@@ -245,12 +236,6 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    public Face3D getFace()
    {
       return face;
-   }
-
-   @Override
-   public List<Vertex3D> getVertices()
-   {
-      return vertices;
    }
 
    @Override

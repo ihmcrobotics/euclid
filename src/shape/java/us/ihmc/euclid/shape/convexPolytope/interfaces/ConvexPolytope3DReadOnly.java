@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, ConvexPolytopeFeature3D
+public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
 {
    /**
     * Returns the number of vertices that are in the polytope
@@ -97,7 +97,6 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, ConvexPolytop
     *
     * @return a list of read only reference to the vertices of the polytope
     */
-   @Override
    List<? extends Vertex3DReadOnly> getVertices();
 
    @Override
@@ -257,12 +256,57 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, ConvexPolytop
       if (isEmpty())
          return false;
 
-      Face3DReadOnly closestFace = getClosestFace(pointToCheck);
-      closestFace.orthogonalProjection(pointToCheck, closestPointOnSurfaceToPack);
-      closestFace.getSupportVectorDirectionTo(pointToCheck, normalAtClosestPointToPack);
-      normalAtClosestPointToPack.normalize();
+      if (getNumberOfFaces() == 1)
+      {
+         Face3DReadOnly face = getFace(0);
 
-      return !EuclidGeometryTools.isPoint3DAbovePlane3D(pointToCheck, closestFace.getCentroid(), closestFace.getNormal());
+         if (face.getNumberOfEdges() == 1)
+         {
+            closestPointOnSurfaceToPack.set(face.getVertex(0));
+            normalAtClosestPointToPack.sub(pointToCheck, closestPointOnSurfaceToPack);
+            normalAtClosestPointToPack.normalize();
+            return false;
+         }
+         else if (face.getNumberOfEdges() == 2)
+         {
+            face.getEdge(0).orthogonalProjection(pointToCheck, closestPointOnSurfaceToPack);
+            normalAtClosestPointToPack.sub(pointToCheck, closestPointOnSurfaceToPack);
+            normalAtClosestPointToPack.normalize();
+            return false;
+         }
+         else
+         {
+            face.orthogonalProjection(pointToCheck, closestPointOnSurfaceToPack);
+
+            if (face.isPointDirectlyAboveOrBelow(pointToCheck))
+            {
+               normalAtClosestPointToPack.set(face.getNormal());
+            }
+            else
+            {
+               normalAtClosestPointToPack.sub(pointToCheck, closestPointOnSurfaceToPack);
+               normalAtClosestPointToPack.normalize();
+            }
+            return false;
+         }
+      }
+      else
+      {
+         Face3DReadOnly closestFace = getClosestFace(pointToCheck);
+         closestFace.orthogonalProjection(pointToCheck, closestPointOnSurfaceToPack);
+
+         if (closestFace.isPointDirectlyAboveOrBelow(pointToCheck))
+         {
+            normalAtClosestPointToPack.set(closestFace.getNormal());
+         }
+         else
+         {
+            normalAtClosestPointToPack.sub(pointToCheck, closestPointOnSurfaceToPack);
+            normalAtClosestPointToPack.normalize();
+         }
+
+         return !EuclidGeometryTools.isPoint3DAbovePlane3D(pointToCheck, closestFace.getCentroid(), closestFace.getNormal());
+      }
    }
 
    default Face3DReadOnly getClosestFace(Point3DReadOnly point)
@@ -383,24 +427,6 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly, ConvexPolytop
          return false;
       supportingVertexToPack.set(getSupportingVertex(supportDirection));
       return true;
-   }
-
-   @Override
-   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
-   {
-      if (isEmpty())
-         return false;
-      else
-         return getClosestFace(point).getSupportVectorDirectionTo(point, supportVectorToPack);
-   }
-
-   @Override
-   default ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
-   {
-      if (isEmpty())
-         return null;
-      else
-         return getClosestFace(point).getSmallestFeature(point);
    }
 
    /**

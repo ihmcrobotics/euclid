@@ -3,12 +3,15 @@ package us.ihmc.euclid.shape.collision;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 // From "Improving the GJK algorithm for faster and more reliable distance queries between convex
@@ -21,7 +24,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private double epsilonTriangleNormalSwitch = 1.0e-6;
    private int maxIterations = 500;
    private boolean latestCollisionTestResult;
-   private ClosestSimplexFeature simplex = null;
+   private GJKSimplex simplex = null;
    private int numberOfIterations = 0;
    private final Vector3D supportDirection = new Vector3D();
 
@@ -53,7 +56,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public boolean doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
    {
-      ClosestSimplexFeature previousOutput = new ClosestSimplexFeature();
+      GJKSimplex previousOutput = new GJKSimplex();
 
       supportDirection.set(Axis.Y);
       Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
@@ -72,7 +75,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       for (int i = 0; i < maxIterations; i++)
       {
          numberOfIterations = i;
-         DifferenceVertex3D newVertex = new DifferenceVertex3D(vertexA, vertexB);
+         GJKVertex3D newVertex = new GJKVertex3D(vertexA, vertexB);
 
          if (simplexContainsVertex(previousOutput.supportVertices, newVertex, epsilon))
          {
@@ -92,7 +95,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
             break;
          }
 
-         ClosestSimplexFeature output = computeClosestFeatureBasedOnSignedVolume(previousOutput.supportVertices, newVertex);
+         GJKSimplex output = computeClosestFeatureBasedOnSignedVolume(previousOutput.supportVertices, newVertex);
 
          if (output == null)
          { // End of process
@@ -181,7 +184,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return simplex.closestPointNorm();
    }
 
-   public ClosestSimplexFeature getSimplex()
+   public GJKSimplex getSimplex()
    {
       return simplex;
    }
@@ -213,7 +216,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return simplex.computePointOnB();
    }
 
-   public DifferenceVertex3D[] getSimplexVertices()
+   public GJKVertex3D[] getSimplexVertices()
    {
       if (simplex == null)
          return null;
@@ -221,9 +224,9 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return simplex.supportVertices;
    }
 
-   private static boolean simplexContainsVertex(DifferenceVertex3D[] simplex, DifferenceVertex3D query, double epsilon)
+   private static boolean simplexContainsVertex(GJKVertex3D[] simplex, GJKVertex3D query, double epsilon)
    {
-      for (DifferenceVertex3D vertex : simplex)
+      for (GJKVertex3D vertex : simplex)
       {
          if (query.epsilonEquals(vertex, epsilon))
             return true;
@@ -231,7 +234,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return false;
    }
 
-   public static ClosestSimplexFeature computeClosestFeatureBasedOnSignedVolume(DifferenceVertex3D[] oldVertices, DifferenceVertex3D newVertex)
+   public static GJKSimplex computeClosestFeatureBasedOnSignedVolume(GJKVertex3D[] oldVertices, GJKVertex3D newVertex)
    {
       if (oldVertices.length == 3)
          return signedVolumeFor3Simplex(newVertex, oldVertices[2], oldVertices[1], oldVertices[0]);
@@ -240,10 +243,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
       else if (oldVertices.length == 1)
          return signedVolumeFor1Simplex(newVertex, oldVertices[0]);
       else
-         return new ClosestSimplexFeature(newVertex);
+         return new GJKSimplex(newVertex);
    }
 
-   public static ClosestSimplexFeature signedVolumeFor3Simplex(DifferenceVertex3D s1, DifferenceVertex3D s2, DifferenceVertex3D s3, DifferenceVertex3D s4)
+   public static GJKSimplex signedVolumeFor3Simplex(GJKVertex3D s1, GJKVertex3D s2, GJKVertex3D s3, GJKVertex3D s4)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -259,17 +262,17 @@ public class GilbertJohnsonKeerthiCollisionDetector
       if (compareSigns(detM, C41) && compareSigns(detM, C42) && compareSigns(detM, C43) && compareSigns(detM, C44))
       {
          double[] lambdas = {C41 / detM, C42 / detM, C43 / detM, C44 / detM};
-         DifferenceVertex3D[] supportVertices = {s1, s2, s3, s4};
-         return new ClosestSimplexFeature(supportVertices, lambdas);
+         GJKVertex3D[] supportVertices = {s1, s2, s3, s4};
+         return new GJKSimplex(supportVertices, lambdas);
       }
       else
       {
          double d = Double.POSITIVE_INFINITY;
-         ClosestSimplexFeature output = null;
+         GJKSimplex output = null;
 
          if (compareSigns(detM, -C42))
          {
-            ClosestSimplexFeature candidateOutput = signedVolumeFor2Simplex(s1, s3, s4);
+            GJKSimplex candidateOutput = signedVolumeFor2Simplex(s1, s3, s4);
             if (candidateOutput != null)
             {
                double candidateNorm = candidateOutput.closestPointNormSquared();
@@ -283,7 +286,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
          if (compareSigns(detM, -C43))
          {
-            ClosestSimplexFeature candidateOutput = signedVolumeFor2Simplex(s1, s2, s4);
+            GJKSimplex candidateOutput = signedVolumeFor2Simplex(s1, s2, s4);
             if (candidateOutput != null)
             {
                double candidateNorm = candidateOutput.closestPointNormSquared();
@@ -297,7 +300,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
          if (compareSigns(detM, -C44))
          {
-            ClosestSimplexFeature candidateOutput = signedVolumeFor2Simplex(s1, s2, s3);
+            GJKSimplex candidateOutput = signedVolumeFor2Simplex(s1, s2, s3);
             if (candidateOutput != null)
             {
                double candidateNorm = candidateOutput.closestPointNormSquared();
@@ -313,7 +316,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       }
    }
 
-   public static ClosestSimplexFeature signedVolumeFor2Simplex(DifferenceVertex3D s1, DifferenceVertex3D s2, DifferenceVertex3D s3)
+   public static GJKSimplex signedVolumeFor2Simplex(GJKVertex3D s1, GJKVertex3D s2, GJKVertex3D s3)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -384,17 +387,17 @@ public class GilbertJohnsonKeerthiCollisionDetector
       if (compareSigns(muMax, C1) && compareSigns(muMax, C2) && compareSigns(muMax, C3))
       { // The projection p0 is inside the face. Computing the barycentric coordinates.
          double[] lambdas = {C1 / muMax, C2 / muMax, C3 / muMax};
-         DifferenceVertex3D[] supportingVerices = {s1, s2, s3};
-         return new ClosestSimplexFeature(supportingVerices, lambdas);
+         GJKVertex3D[] supportingVerices = {s1, s2, s3};
+         return new GJKSimplex(supportingVerices, lambdas);
       }
       else
       { // The projection p0 is outside the face, identifying the closest edge knowing that s1 was just added, so it cannot be rejected.
          double d = Double.POSITIVE_INFINITY;
-         ClosestSimplexFeature output = null;
+         GJKSimplex output = null;
 
          if (compareSigns(muMax, -C2))
          {
-            ClosestSimplexFeature candidateOutput = signedVolumeFor1Simplex(s1, s3);
+            GJKSimplex candidateOutput = signedVolumeFor1Simplex(s1, s3);
             double candidateNorm = candidateOutput.closestPointNormSquared();
             output = candidateOutput;
             d = candidateNorm;
@@ -402,7 +405,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
          if (compareSigns(muMax, -C3))
          {
-            ClosestSimplexFeature candidateOutput = signedVolumeFor1Simplex(s1, s2);
+            GJKSimplex candidateOutput = signedVolumeFor1Simplex(s1, s2);
             double candidateNorm = candidateOutput.closestPointNormSquared();
             if (candidateNorm < d)
             {
@@ -432,7 +435,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return ax * (by - cy) + bx * (cy - ay) + cx * (ay - by);
    }
 
-   public static ClosestSimplexFeature signedVolumeFor1Simplex(DifferenceVertex3D s1, DifferenceVertex3D s2)
+   public static GJKSimplex signedVolumeFor1Simplex(GJKVertex3D s1, GJKVertex3D s2)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -492,17 +495,17 @@ public class GilbertJohnsonKeerthiCollisionDetector
          if (compareSigns(muMax, C2))
          { // The projection in between the edge endpoints. Computing the barycentric coordinates.
             double[] lambdas = {C1 / muMax, C2 / muMax};
-            DifferenceVertex3D[] supportVertices = {s1, s2};
-            return new ClosestSimplexFeature(supportVertices, lambdas);
+            GJKVertex3D[] supportVertices = {s1, s2};
+            return new GJKSimplex(supportVertices, lambdas);
          }
          else
          { // The projection is outside, since s1 is the new vertex we automatically reject s2.
-            return new ClosestSimplexFeature(s1);
+            return new GJKSimplex(s1);
          }
       }
       else
       { // The projection is outside, since s1 is the new vertex we automatically reject s2.
-         return new ClosestSimplexFeature(s1);
+         return new GJKSimplex(s1);
       }
    }
 
@@ -516,25 +519,25 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return false;
    }
 
-   public static class ClosestSimplexFeature
+   public static class GJKSimplex
    {
-      private final DifferenceVertex3D[] supportVertices;
+      private final GJKVertex3D[] supportVertices;
       private final double[] barycentricCoordinates;
 
       private final Point3D closestPointToOrigin;
       private final double distanceFromOriginSquared;
 
-      public ClosestSimplexFeature()
+      public GJKSimplex()
       {
-         supportVertices = new DifferenceVertex3D[0];
+         supportVertices = new GJKVertex3D[0];
          barycentricCoordinates = new double[0];
          closestPointToOrigin = null;
          distanceFromOriginSquared = Double.NaN;
       }
 
-      public ClosestSimplexFeature(DifferenceVertex3D supportVertex)
+      public GJKSimplex(GJKVertex3D supportVertex)
       {
-         supportVertices = new DifferenceVertex3D[1];
+         supportVertices = new GJKVertex3D[1];
          barycentricCoordinates = new double[1];
          supportVertices[0] = supportVertex;
          barycentricCoordinates[0] = 1.0;
@@ -542,7 +545,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          distanceFromOriginSquared = supportVertex.distanceFromOriginSquared();
       }
 
-      public ClosestSimplexFeature(DifferenceVertex3D[] supportVertices, double[] barycentricCoordinates)
+      public GJKSimplex(GJKVertex3D[] supportVertices, double[] barycentricCoordinates)
       {
          this.supportVertices = supportVertices;
          this.barycentricCoordinates = barycentricCoordinates;
@@ -638,6 +641,88 @@ public class GilbertJohnsonKeerthiCollisionDetector
       public int size()
       {
          return supportVertices.length;
+      }
+   }
+
+   public static class GJKVertex3D implements Point3DReadOnly
+   {
+      private final double x, y, z;
+      private final Point3DReadOnly vertexOnShapeA;
+      private final Point3DReadOnly vertexOnShapeB;
+
+      public GJKVertex3D(Point3DReadOnly vertexOnShapeA, Point3DReadOnly vertexOnShapeB)
+      {
+         this.vertexOnShapeA = vertexOnShapeA;
+         this.vertexOnShapeB = vertexOnShapeB;
+         x = vertexOnShapeA.getX() - vertexOnShapeB.getX();
+         y = vertexOnShapeA.getY() - vertexOnShapeB.getY();
+         z = vertexOnShapeA.getZ() - vertexOnShapeB.getZ();
+      }
+
+      public Point3DReadOnly getVertexOnShapeA()
+      {
+         return vertexOnShapeA;
+      }
+
+      public Point3DReadOnly getVertexOnShapeB()
+      {
+         return vertexOnShapeB;
+      }
+
+      public double dot(Tuple3DReadOnly tuple3D)
+      {
+         return TupleTools.dot(this, tuple3D);
+      }
+
+      @Override
+      public double getX()
+      {
+         return x;
+      }
+
+      @Override
+      public double getY()
+      {
+         return y;
+      }
+
+      @Override
+      public double getZ()
+      {
+         return z;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long bits = 1L;
+         bits = EuclidHashCodeTools.addToHashCode(bits, x);
+         bits = EuclidHashCodeTools.addToHashCode(bits, y);
+         bits = EuclidHashCodeTools.addToHashCode(bits, z);
+         return EuclidHashCodeTools.toIntHashCode(bits);
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object == this)
+         {
+            return true;
+         }
+         else if (object instanceof Tuple3DReadOnly)
+         {
+            return equals((Tuple3DReadOnly) object);
+         }
+         else
+         {
+            return false;
+         }
+      }
+
+      @Override
+      public String toString()
+      {
+         return "GJK Vertex 3D: " + EuclidCoreIOTools.getTuple3DString(this);
       }
    }
 }

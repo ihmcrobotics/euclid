@@ -11,6 +11,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -558,41 +559,6 @@ public class EuclidPolytopeTools
             return true;
       }
       return false;
-   }
-
-   public static double[] barycentricCoordinates(Face3DReadOnly face, Point3DReadOnly pointInside)
-   {
-      // From: A general construction of barycentric coordinates over convex polygons:
-      // https://pdfs.semanticscholar.org/d747/c8ad5a16c25d6fe4e4bbaddba7216b633023.pdf
-      double[] coordinates = new double[face.getNumberOfEdges()];
-      double[] subTriangleAreas = new double[face.getNumberOfEdges()];
-
-      for (int i = 0; i < face.getNumberOfEdges(); i++)
-      {
-         HalfEdge3DReadOnly edge = face.getEdge(i);
-         subTriangleAreas[i] = EuclidGeometryTools.triangleArea(pointInside, edge.getOrigin(), edge.getDestination());
-      }
-
-      double sum = 0.0;
-
-      for (int i = 0; i < face.getNumberOfEdges(); i++)
-      {
-         HalfEdge3DReadOnly edge = face.getEdge(i);
-         double w = EuclidGeometryTools.triangleArea(edge.getPrevious().getOrigin(), edge.getOrigin(), edge.getDestination());
-         if (i == 0)
-            w = w / (subTriangleAreas[face.getNumberOfEdges() - 1] * subTriangleAreas[i]);
-         else
-            w = w / (subTriangleAreas[i - 1] * subTriangleAreas[i]);
-         coordinates[i] = w;
-         sum += w;
-      }
-
-      for (int i = 0; i < face.getNumberOfEdges(); i++)
-      {
-         coordinates[i] /= sum;
-      }
-
-      return coordinates;
    }
 
    public static boolean tetrahedronContainsOrigin(Point3DReadOnly p0, Point3DReadOnly p1, Point3DReadOnly p2, Point3DReadOnly p3)

@@ -13,10 +13,9 @@ import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFeature3D
+public interface Face3DReadOnly extends SupportingVertexHolder
 {
    /**
     * Gets the centroid of the face
@@ -57,7 +56,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
       return getEdges().get(index);
    }
 
-   @Override
    default List<? extends Vertex3DReadOnly> getVertices()
    {
       return getEdges().stream().map(HalfEdge3DReadOnly::getOrigin).collect(Collectors.toList());
@@ -147,8 +145,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
          firstVisibleEdge = edgeBeforeLineOfSight;
          lineOfSight.add(0, firstVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), observer,
-                                                               edgeBeforeLineOfSight.getOrigin()) < epsilon)
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), observer, edgeBeforeLineOfSight.getOrigin()) < epsilon)
       { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass.
          firstVisibleEdge = edgeBeforeLineOfSight;
          lineOfSight.add(0, firstVisibleEdge);
@@ -159,8 +156,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
          lastVisibleEdge = edgeAfterLineOfSight;
          lineOfSight.add(lastVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), observer,
-                                                               edgeAfterLineOfSight.getDestination()) < epsilon)
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), observer, edgeAfterLineOfSight.getDestination()) < epsilon)
       { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass.
          lastVisibleEdge = edgeAfterLineOfSight;
          lineOfSight.add(lastVisibleEdge);
@@ -353,15 +349,17 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
       if (getNumberOfEdges() < 3)
          return false;
 
-      HalfEdge3DReadOnly edge = getEdge(0);
+      HalfEdge3DReadOnly startEdge = getEdge(0);
+      HalfEdge3DReadOnly edge = startEdge;
 
-      for (int i = 0; i < getNumberOfEdges(); i++)
+      do
       {
          if (canObserverSeeEdge(query, edge))
             return false;
 
          edge = edge.getNext();
       }
+      while (edge != startEdge);
 
       return true;
    }
@@ -503,7 +501,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
     * @param point the point to which the distance is required
     * @return the shortest length from the specified point to the face
     */
-   @Override
    default double distance(Point3DReadOnly point)
    {
       HalfEdge3DReadOnly closestVisibleEdge = getClosestVisibleEdge(point);
@@ -578,38 +575,6 @@ public interface Face3DReadOnly extends SupportingVertexHolder, ConvexPolytopeFe
          return false;
       supportingVertexToPack.set(getSupportingVertex(supportDirection));
       return true;
-   }
-
-   @Override
-   default ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
-   {
-      HalfEdge3DReadOnly closestVisibleEdge = getClosestVisibleEdge(point);
-
-      if (closestVisibleEdge == null)
-         return this;
-      else
-         return closestVisibleEdge.getSmallestFeature(point);
-   }
-
-   @Override
-   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
-   {
-      if (isEmpty())
-         return false;
-
-      HalfEdge3DReadOnly closestVisibleEdge = getClosestVisibleEdge(point);
-
-      if (closestVisibleEdge == null)
-      {
-         supportVectorToPack.set(getNormal());
-         if (!EuclidGeometryTools.isPoint3DAbovePlane3D(point, getCentroid(), getNormal()))
-            supportVectorToPack.negate();
-         return true;
-      }
-      else
-      {
-         return closestVisibleEdge.getSupportVectorDirectionTo(point, supportVectorToPack);
-      }
    }
 
    default boolean equals(Face3DReadOnly other)

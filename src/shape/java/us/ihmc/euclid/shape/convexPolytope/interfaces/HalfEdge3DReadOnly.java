@@ -1,14 +1,10 @@
 package us.ihmc.euclid.shape.convexPolytope.interfaces;
 
-import java.util.Arrays;
-import java.util.List;
-
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
-public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, ConvexPolytopeFeature3D
+public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
 {
    /**
     * Returns a reference to the origin vertex for this half edge
@@ -65,12 +61,6 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, ConvexPolytop
    Face3DReadOnly getFace();
 
    @Override
-   default List<? extends Vertex3DReadOnly> getVertices()
-   {
-      return Arrays.asList(getOrigin(), getDestination());
-   }
-
-   @Override
    default double distance(Point3DReadOnly point)
    {
       return LineSegment3DReadOnly.super.distance(point);
@@ -79,40 +69,6 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly, ConvexPolytop
    default double distanceFromSupportLine(Point3DReadOnly point)
    {
       return EuclidGeometryTools.distanceFromPoint3DToLine3D(point, getOrigin(), getDestination());
-   }
-
-   @Override
-   default ConvexPolytopeFeature3D getSmallestFeature(Point3DReadOnly point)
-   {
-      double percentage = percentageAlongLineSegment(point);
-      if (percentage <= 0.0)
-         return getOrigin();
-      else if (percentage >= 1.0)
-         return getDestination();
-      else
-         return this;
-   }
-
-   @Override
-   default boolean getSupportVectorDirectionTo(Point3DReadOnly point, Vector3DBasics supportVectorToPack)
-   {
-      double alpha = percentageAlongLineSegment(point);
-
-      if (alpha >= 1.0)
-      {
-         supportVectorToPack.sub(point, getDestination());
-      }
-      else if (alpha <= 0.0)
-      {
-         supportVectorToPack.sub(point, getOrigin());
-      }
-      else
-      {
-         supportVectorToPack.interpolate(getOrigin(), getDestination(), alpha);
-         supportVectorToPack.sub(point, supportVectorToPack);
-      }
-
-      return true;
    }
 
    /**

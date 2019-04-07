@@ -15,6 +15,7 @@ import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetector.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetector.ProjectedTriangleSignedAreaCalculator;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
@@ -77,7 +78,7 @@ public class ExpandingPolytopeAlgorithm
       return latestCollisionTestResult;
    }
 
-   public void doCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, DifferenceVertex3D[] simplex)
+   public void doCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] simplex)
    {
       PriorityQueue<EPAFace3D> queue = new PriorityQueue<>();
       double mu = Double.POSITIVE_INFINITY;
@@ -969,7 +970,7 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
-   private static List<EPAFace3D> fromDifferenceVertices(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, DifferenceVertex3D[] differenceVertices,
+   private static List<EPAFace3D> fromDifferenceVertices(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] differenceVertices,
                                                          double epsilon)
    {
       List<EPAFace3D> epaPolytope = new ArrayList<>();
