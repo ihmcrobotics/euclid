@@ -559,6 +559,27 @@ public class EuclidFrameTools
    }
 
    /**
+    * Computes the area of a triangle defined by its three vertices: a, b, and c. No specific ordering
+    * of the vertices is required.
+    * <p>
+    * This method uses {@link EuclidGeometryTools#triangleAreaHeron2(double, double, double)}.
+    * </p>
+    *
+    * @param a first vertex of the triangle. Not modified.
+    * @param b second vertex of the triangle. Not modified.
+    * @param c third vertex of the triangle. Not modified.
+    * @return the area of the triangle.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double triangleArea(FramePoint3DReadOnly a, FramePoint3DReadOnly b, FramePoint3DReadOnly c)
+   {
+      a.checkReferenceFrameMatch(b);
+      a.checkReferenceFrameMatch(c);
+      return EuclidGeometryTools.triangleArea(a, b, c);
+   }
+
+   /**
     * This methods computes the minimum distance between the two infinitely long 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *

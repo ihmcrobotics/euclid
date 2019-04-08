@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -808,50 +807,6 @@ public class EuclidGeometryToolsTest
          EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
          actualAxisAngle = EuclidGeometryTools.axisAngleFromZUpToVector3D(vector);
          EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
-      }
-   }
-
-   @Test
-   void testBarycentricCoordinatesInTriangle3D() throws Exception
-   {
-      Random random = new Random(34543);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         Point3D triangleA = EuclidCoreRandomTools.nextPoint3D(random);
-         Point3D triangleB = EuclidCoreRandomTools.nextPoint3D(random);
-         Point3D triangleC = EuclidCoreRandomTools.nextPoint3D(random);
-
-         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random, 0.0, 1.0);
-         double sum = expected.getX() + expected.getY() + expected.getZ();
-         expected.scale(1.0 / sum);
-
-         Point3D p = new Point3D();
-         p.scaleAdd(expected.getX(), triangleA, p);
-         p.scaleAdd(expected.getY(), triangleB, p);
-         p.scaleAdd(expected.getZ(), triangleC, p);
-
-         Vector3D actual = EuclidGeometryTools.barycentricCoordinatesInTriangle3D(p, triangleA, triangleB, triangleC);
-
-         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         Point3D triangleA = EuclidCoreRandomTools.nextPoint3D(random);
-         Point3D triangleB = EuclidCoreRandomTools.nextPoint3D(random);
-         Point3D triangleC = EuclidCoreRandomTools.nextPoint3D(random);
-         Point3D original = EuclidCoreRandomTools.nextPoint3D(random);
-
-         Plane3D supportPlane = new Plane3D(triangleA, triangleB, triangleC);
-         supportPlane.orthogonalProjection(original);
-
-         Vector3D coordinates = EuclidGeometryTools.barycentricCoordinatesInTriangle3D(original, triangleA, triangleB, triangleC);
-         Point3D actual = new Point3D();
-         actual.scaleAdd(coordinates.getX(), triangleA, actual);
-         actual.scaleAdd(coordinates.getY(), triangleB, actual);
-         actual.scaleAdd(coordinates.getZ(), triangleC, actual);
-         EuclidCoreTestTools.assertTuple3DEquals(original, actual, EPSILON);
       }
    }
 

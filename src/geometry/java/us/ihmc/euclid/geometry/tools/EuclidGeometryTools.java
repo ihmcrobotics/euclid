@@ -756,51 +756,6 @@ public class EuclidGeometryTools
       axisAngleFromFirstToSecondVector3D(0.0, 0.0, 1.0, vector.getX(), vector.getY(), vector.getZ(), rotationToPack);
    }
 
-   public static Vector3D barycentricCoordinatesInTriangle3D(Point3DReadOnly p, Point3DReadOnly triangleA, Point3DReadOnly triangleB, Point3DReadOnly triangleC)
-   {
-      Vector3D barycentricCoordinate = new Vector3D();
-      barycentricCoordinatesInTriangle3D(p, triangleA, triangleB, triangleC, barycentricCoordinate);
-      return barycentricCoordinate;
-   }
-
-   public static void barycentricCoordinatesInTriangle3D(Point3DReadOnly p, Point3DReadOnly triangleA, Point3DReadOnly triangleB, Point3DReadOnly triangleC,
-                                                         Vector3DBasics barycentricCoordinatesToPack)
-   { // https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates
-      double xAB = triangleB.getX() - triangleA.getX();
-      double yAB = triangleB.getY() - triangleA.getY();
-      double zAB = triangleB.getZ() - triangleA.getZ();
-      double xAC = triangleC.getX() - triangleA.getX();
-      double yAC = triangleC.getY() - triangleA.getY();
-      double zAC = triangleC.getZ() - triangleA.getZ();
-      double xBC = triangleC.getX() - triangleB.getX();
-      double yBC = triangleC.getY() - triangleB.getY();
-      double zBC = triangleC.getZ() - triangleB.getZ();
-      double xAP = p.getX() - triangleA.getX();
-      double yAP = p.getY() - triangleA.getY();
-      double zAP = p.getZ() - triangleA.getZ();
-      double xBP = p.getX() - triangleB.getX();
-      double yBP = p.getY() - triangleB.getY();
-      double zBP = p.getZ() - triangleB.getZ();
-
-      double xN = yAB * zAC - zAB * yAC;
-      double yN = zAB * xAC - xAB * zAC;
-      double zN = xAB * yAC - yAB * xAC;
-      double denom = 1.0 / EuclidCoreTools.normSquared(xN, yN, zN);
-
-      double xC = yAB * zAP - zAB * yAP;
-      double yC = zAB * xAP - xAB * zAP;
-      double zC = xAB * yAP - yAB * xAP;
-      double w = (xN * xC + yN * yC + zN * zC) * denom;
-      xC = yBC * zBP - zBC * yBP;
-      yC = zBC * xBP - xBC * zBP;
-      zC = xBC * yBP - yBC * xBP;
-      double u = (xN * xC + yN * yC + zN * zC) * denom;
-
-      double v = 1.0 - u - w;
-
-      barycentricCoordinatesToPack.set(u, v, w);
-   }
-
    /**
     * Given two 3D infinitely long lines, this methods computes two points P &in; line1 and Q &in; lin2
     * such that the distance || P - Q || is the minimum distance between the two 3D lines.
@@ -5873,7 +5828,11 @@ public class EuclidGeometryTools
       normalToPack.setY(v2_x * v1_z - v2_z * v1_x);
       normalToPack.setZ(v1_x * v2_y - v1_y * v2_x);
 
-      normalToPack.normalize();
+      double normalLength = normalToPack.length();
+      if (normalLength < ONE_TRILLIONTH)
+         return false;
+
+      normalToPack.scale(1.0 / normalLength);
       return true;
    }
 
