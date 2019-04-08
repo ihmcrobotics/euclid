@@ -510,7 +510,7 @@ public class EuclidPolytopeTools
       {
          return true;
       }
-      else if (distanceToPlane >= 2.0 * epsilon)
+      else if (distanceToPlane >= 4.0 * epsilon)
       {
          return false;
       }

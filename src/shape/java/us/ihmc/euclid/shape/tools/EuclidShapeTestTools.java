@@ -619,13 +619,18 @@ public class EuclidShapeTestTools
    {
       if (convexPolytope3D.getCentroid().containsNaN())
          EuclidCoreTestTools.throwAssertionError(messagePrefix, "The polytope's centroid contains NaN.");
-      int verticesSize = convexPolytope3D.getVertices().size();
-      int halfEdgesSize = convexPolytope3D.getHalfEdges().size();
-      int facesSize = convexPolytope3D.getFaces().size();
 
-      if (verticesSize != EuclidPolytopeTools.computeConvexPolytopeNumberOfVertices(facesSize, halfEdgesSize / 2))
-         EuclidCoreTestTools.throwAssertionError(messagePrefix, "Inconsistent data size, expected "
-               + EuclidPolytopeTools.computeConvexPolytopeNumberOfVertices(facesSize, halfEdgesSize / 2) + " vertices but was " + verticesSize);
+      if (convexPolytope3D.getNumberOfFaces() > 1)
+      {
+         int verticesSize = convexPolytope3D.getVertices().size();
+         int halfEdgesSize = convexPolytope3D.getHalfEdges().size();
+         int facesSize = convexPolytope3D.getFaces().size();
+         
+         int expectedNumberOfVertices = EuclidPolytopeTools.computeConvexPolytopeNumberOfVertices(facesSize, halfEdgesSize / 2);
+         if (verticesSize != expectedNumberOfVertices)
+            EuclidCoreTestTools.throwAssertionError(messagePrefix,
+                                                    "Inconsistent data size, expected " + expectedNumberOfVertices + " vertices but was " + verticesSize);
+      }
 
       assertConvexPolytope3DFacesIntegrity(messagePrefix, convexPolytope3D);
       assertConvexPolytope3DHalfEdgesIntegrity(messagePrefix, convexPolytope3D);
@@ -754,8 +759,10 @@ public class EuclidShapeTestTools
 
                if (EuclidGeometryTools.isPoint3DAbovePlane3D(neighbor.getCentroid(), face.getCentroid(), face.getNormal()))
                {
-                  EuclidGeometryTools.isPoint3DAbovePlane3D(neighbor.getCentroid(), face.getCentroid(), face.getNormal());
-                  EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face is concave with respect to the " + edgeIndex + "th neighbor.");
+                  if (face.signedDistanceToPlane(neighbor.getCentroid()) < convexPolytope3D.getConstructionEpsilon())
+                     System.out.println("WARNING: " + EuclidCoreTestTools.addPrefixToMessage(messagePrefix, faceIndex + "th face might be concave with respect to a neighor, the " + convexPolytope3D.getFaces().indexOf(neighbor) + "th face."));
+                  else
+                     EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face is concave with respect to a neighor, the " + convexPolytope3D.getFaces().indexOf(neighbor) + "th face.");
                }
             }
          }
