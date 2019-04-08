@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.ejml.data.DenseMatrix64F;
+import org.ejml.factory.DecompositionFactory;
 import org.ejml.ops.CommonOps;
 import org.junit.jupiter.api.Test;
 
@@ -49,25 +50,24 @@ public class EuclidPolytopeConstructionToolsTest
                                          .collect(Collectors.toList());
          points.stream().filter(p -> random.nextBoolean()).forEach(Point3D::negate);
 
-         Matrix3D actualCovariance = new Matrix3D();
-         Vector3D[] actual = {new Vector3D(), new Vector3D(), new Vector3D()};
+         DenseMatrix64F actualCovariance = new DenseMatrix64F(3, 3);
          EuclidPolytopeConstructionTools.computeCovariance3D(points, null, actualCovariance);
-         Point3D eigenValues = new Point3D();
-         EuclidPolytopeConstructionTools.computeEigenVectors(actualCovariance, eigenValues, actual[0], actual[1], actual[2]);
 
-         Vector3D[] expected = {new Vector3D(Axis.X), new Vector3D(Axis.Y), new Vector3D(Axis.Z)};
+         Vector3D actualNormal = new Vector3D(1.0, 1.0, 1.0);
+         EuclidPolytopeConstructionTools.updateNormal(actualCovariance, actualNormal);
 
-         assertTrue(eigenValues.getX() > eigenValues.getY());
-         assertTrue(eigenValues.getY() > eigenValues.getZ());
+         Vector3D expectedNormal = new Vector3D(Axis.Z);
 
-         for (int j = 0; j < 3; j++)
-         {
-            assertEquals(0.0, Math.abs(actual[j].dot(actual[(j + 1) % 3])), EPSILON);
-            assertEquals(1.0, actual[j].length(), EPSILON);
+         String errorMessage = "Iteration" + i + ", nPoints: " + numberOfPoints + ", angle: " + expectedNormal.angle(actualNormal);
+         assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 0.30), errorMessage);
 
-            String errorMessage = "Iteration" + i + ", nPoints: " + numberOfPoints + ", angle: " + expected[j].angle(actual[j]);
-            assertTrue(EuclidGeometryTools.areVector3DsParallel(expected[j], actual[j], 0.30), errorMessage);
-         }
+         actualNormal = new Vector3D(-1.0, -1.0, -1.0);
+         EuclidPolytopeConstructionTools.updateNormal(DecompositionFactory.eig(3, true, true), actualCovariance, actualNormal);
+
+         expectedNormal.negate();
+
+         errorMessage = "Iteration" + i + ", nPoints: " + numberOfPoints + ", angle: " + expectedNormal.angle(actualNormal);
+         assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 0.30), errorMessage);
       }
    }
 
@@ -83,14 +83,10 @@ public class EuclidPolytopeConstructionToolsTest
 
          for (int j = 3; j <= vertices.size(); j++)
          {
-            Matrix3D actualCovariance = new Matrix3D();
+            DenseMatrix64F actualCovariance = new DenseMatrix64F(3, 3);
             Vector3D actualNormal = new Vector3D();
             EuclidPolytopeConstructionTools.computeCovariance3D(vertices.subList(0, j), null, actualCovariance);
-            Point3D eigenValues = new Point3D();
-            EuclidPolytopeConstructionTools.computeEigenVectors(actualCovariance, eigenValues, null, null, actualNormal);
-
-            assertTrue(eigenValues.getX() > eigenValues.getY());
-            assertTrue(eigenValues.getY() > eigenValues.getZ());
+            EuclidPolytopeConstructionTools.updateNormal(actualCovariance, actualNormal);
 
             String errorMessage = "Iteration" + i + ", nPoints: " + j + ", angle: " + expectedNormal.angle(actualNormal);
             assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5), errorMessage);
@@ -113,7 +109,7 @@ public class EuclidPolytopeConstructionToolsTest
                                          .mapToObj(h -> EuclidCoreRandomTools.nextPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ))
                                          .collect(Collectors.toList());
 
-         Matrix3D actualCovariance = new Matrix3D();
+         DenseMatrix64F actualCovariance = new DenseMatrix64F(3, 3);
          EuclidPolytopeConstructionTools.computeCovariance3D(points, null, actualCovariance);
          Matrix3D expectedCovariance = computeCovarianceMatrix(points);
 
@@ -127,7 +123,7 @@ public class EuclidPolytopeConstructionToolsTest
             }
          }
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedCovariance, actualCovariance, EPSILON * maxValue);
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedCovariance, new Matrix3D(actualCovariance), EPSILON * maxValue);
       }
    }
 
@@ -147,8 +143,8 @@ public class EuclidPolytopeConstructionToolsTest
          Point3D expectedCentroid3D = new Point3D(centroid2D);
 
          Point3D actualCentroid3D = new Point3D();
-         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, Axis.Z, circleBasedConvexPolygon3D.size(), true,
-                                                                            actualCentroid3D);
+         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, Axis.Z, circleBasedConvexPolygon3D.size(),
+                                                                                        true, actualCentroid3D);
 
          assertEquals(expectedArea, actualArea, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
@@ -172,8 +168,8 @@ public class EuclidPolytopeConstructionToolsTest
          expectedCentroid3D.applyTransform(transform);
 
          Point3D actualCentroid3D = new Point3D();
-         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, normal, circleBasedConvexPolygon3D.size(), true,
-                                                                            actualCentroid3D);
+         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, normal, circleBasedConvexPolygon3D.size(),
+                                                                                        true, actualCentroid3D);
 
          assertEquals(expectedArea, actualArea, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);

@@ -504,9 +504,15 @@ public class EuclidPolytopeTools
 
    public static boolean arePoint3DAndFace3DInPlane(Point3DReadOnly point, Face3DReadOnly face, double epsilon)
    {
-      if (face.distanceToPlane(point) <= epsilon)
+      double distanceToPlane = face.distanceToPlane(point);
+
+      if (distanceToPlane <= epsilon)
       {
          return true;
+      }
+      else if (distanceToPlane >= 2.0 * epsilon)
+      {
+         return false;
       }
       else
       {

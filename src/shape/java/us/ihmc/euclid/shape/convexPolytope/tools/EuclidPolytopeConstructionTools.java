@@ -13,9 +13,6 @@ import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.matrix.Matrix3D;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
@@ -61,7 +58,7 @@ public class EuclidPolytopeConstructionTools
       // Last filter before actually modifying the polytope
       if (!filterInPlaneFaces(vertex, silhouetteEdges, inPlaneFaces, epsilon))
          return null;
-      
+
       Vector3D towardOutside = new Vector3D();
 
       for (HalfEdge3D silhouetteEdge : silhouetteEdges)
@@ -452,106 +449,70 @@ public class EuclidPolytopeConstructionTools
 
    public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
    {
-      return updateFace3DNormal(vertices, averageToPack, normalToUpdate, null);
+      DenseMatrix64F covarianceMatrix = new DenseMatrix64F(3, 3);
+      computeCovariance3D(vertices, averageToPack, covarianceMatrix);
+      return updateNormal(covarianceMatrix, normalToUpdate);
    }
 
-   public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate,
-                                            Tuple3DBasics eigenValuesToPack)
+   public static boolean updateNormal(DenseMatrix64F covarianceMatrix, Vector3DBasics normalToUpdate)
    {
-      Matrix3D covariance = new Matrix3D();
-      computeCovariance3D(vertices, averageToPack, covariance);
-      if (eigenValuesToPack == null)
-         eigenValuesToPack = new Vector3D();
-
-      Vector3D newNormal = new Vector3D();
-      boolean success = computeEigenVectors(covariance, eigenValuesToPack, null, null, newNormal);
-      if (!success)
-         return false;
-
-      if (newNormal.dot(normalToUpdate) < 0.0)
-         newNormal.negate();
-
-      normalToUpdate.set(newNormal);
-
-      return true;
+      return updateNormal(DecompositionFactory.eig(3, true, true), covarianceMatrix, normalToUpdate);
    }
 
-   public static boolean computeEigenVectors(Matrix3DReadOnly matrix, Tuple3DBasics eigenValues, Vector3DBasics firstEigenVector,
-                                             Vector3DBasics secondEigenVector, Vector3DBasics thirdEigenVector)
+   public static boolean updateNormal(EigenDecomposition<DenseMatrix64F> eigenDecomposition, DenseMatrix64F covarianceMatrix, Vector3DBasics normalToUpdate)
    {
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
-      matrix.get(denseMatrix);
-
-      EigenDecomposition<DenseMatrix64F> eig = DecompositionFactory.eig(3, true, true);
-      if (!eig.decompose(denseMatrix))
+      if (!eigenDecomposition.decompose(covarianceMatrix))
          return false;
-      double eigenValue0 = eig.getEigenvalue(0).getReal();
-      double eigenValue1 = eig.getEigenvalue(1).getReal();
-      double eigenValue2 = eig.getEigenvalue(2).getReal();
 
-      int largeEigenValueIndex, midEigenValueIndex, smallEigenValueIndex;
+      double eigenValue0 = eigenDecomposition.getEigenvalue(0).getReal();
+      double eigenValue1 = eigenDecomposition.getEigenvalue(1).getReal();
+      double eigenValue2 = eigenDecomposition.getEigenvalue(2).getReal();
+
+      int smallEigenValueIndex;
 
       if (eigenValue0 > eigenValue1)
       {
          if (eigenValue1 > eigenValue2)
-         { // eigenValue0 > eigenValue1 > eigenValue2
-            largeEigenValueIndex = 0;
-            midEigenValueIndex = 1;
+         { // (eigenValue0 > eigenValue1 > eigenValue2)
             smallEigenValueIndex = 2;
          }
-         else if (eigenValue0 > eigenValue2)
-         { // eigenValue0 > eigenValue2 > eigenValue1
-            largeEigenValueIndex = 0;
-            midEigenValueIndex = 2;
-            smallEigenValueIndex = 1;
-         }
          else
-         { // eigenValue2 > eigenValue0 > eigenValue1
-            largeEigenValueIndex = 2;
-            midEigenValueIndex = 0;
+         { // (// eigenValue0 > eigenValue2 > eigenValue1) or (eigenValue2 > eigenValue0 > eigenValue1)
             smallEigenValueIndex = 1;
          }
       }
       else
       {
          if (eigenValue0 > eigenValue2)
-         { // eigenValue1 > eigenValue0 > eigenValue2
-            largeEigenValueIndex = 1;
-            midEigenValueIndex = 0;
+         { // (eigenValue1 > eigenValue0 > eigenValue2)
             smallEigenValueIndex = 2;
          }
-         else if (eigenValue1 > eigenValue2)
-         { // eigenValue1 > eigenValue2 > eigenValue0
-            largeEigenValueIndex = 1;
-            midEigenValueIndex = 2;
-            smallEigenValueIndex = 0;
-         }
          else
-         { // eigenValue2 > eigenValue1 > eigenValue0
-            largeEigenValueIndex = 2;
-            midEigenValueIndex = 1;
+         { // (eigenValue1 > eigenValue2 > eigenValue0) or (eigenValue2 > eigenValue1 > eigenValue0)
             smallEigenValueIndex = 0;
          }
       }
 
-      if (eigenValues != null)
-      {
-         eigenValues.setX(eig.getEigenvalue(largeEigenValueIndex).getReal());
-         eigenValues.setY(eig.getEigenvalue(midEigenValueIndex).getReal());
-         eigenValues.setZ(eig.getEigenvalue(smallEigenValueIndex).getReal());
-      }
+      DenseMatrix64F eigenVector = eigenDecomposition.getEigenVector(smallEigenValueIndex);
+      double newX = eigenVector.get(0, 0);
+      double newY = eigenVector.get(1, 0);
+      double newZ = eigenVector.get(2, 0);
 
-      if (firstEigenVector != null)
-         firstEigenVector.set(eig.getEigenVector(largeEigenValueIndex));
-      if (secondEigenVector != null)
-         secondEigenVector.set(eig.getEigenVector(midEigenValueIndex));
-      if (thirdEigenVector != null)
-         thirdEigenVector.set(eig.getEigenVector(smallEigenValueIndex));
+      boolean negate = TupleTools.dot(newX, newY, newZ, normalToUpdate) < 0.0;
+
+      normalToUpdate.set(eigenVector);
+      if (negate)
+         normalToUpdate.negate();
 
       return true;
    }
 
-   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, Matrix3DBasics covarianceToPack)
+   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, DenseMatrix64F covarianceToPack)
+   {
+      computeCovariance3D(input, null, covarianceToPack);
+   }
+
+   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, DenseMatrix64F covarianceToPack)
    {
       double meanX = 0.0;
       double meanY = 0.0;
@@ -576,7 +537,8 @@ public class EuclidPolytopeConstructionTools
          averageToPack.set(meanX, meanY, meanZ);
       }
 
-      covarianceToPack.setToZero();
+      double covXX = 0.0, covYY = 0.0, covZZ = 0.0;
+      double covXY = 0.0, covXZ = 0.0, covYZ = 0.0;
 
       for (int i = 0; i < input.size(); i++)
       {
@@ -585,23 +547,25 @@ public class EuclidPolytopeConstructionTools
          double devY = element.getY() - meanY;
          double devZ = element.getZ() - meanZ;
 
-         double covXX = devX * devX * inverseOfInputSize;
-         double covYY = devY * devY * inverseOfInputSize;
-         double covZZ = devZ * devZ * inverseOfInputSize;
-         double covXY = devX * devY * inverseOfInputSize;
-         double covXZ = devX * devZ * inverseOfInputSize;
-         double covYZ = devY * devZ * inverseOfInputSize;
+         covXX += devX * devX * inverseOfInputSize;
+         covYY += devY * devY * inverseOfInputSize;
+         covZZ += devZ * devZ * inverseOfInputSize;
+         covXY += devX * devY * inverseOfInputSize;
+         covXZ += devX * devZ * inverseOfInputSize;
+         covYZ += devY * devZ * inverseOfInputSize;
 
-         covarianceToPack.addM00(covXX);
-         covarianceToPack.addM11(covYY);
-         covarianceToPack.addM22(covZZ);
-         covarianceToPack.addM01(covXY);
-         covarianceToPack.addM10(covXY);
-         covarianceToPack.addM02(covXZ);
-         covarianceToPack.addM20(covXZ);
-         covarianceToPack.addM12(covYZ);
-         covarianceToPack.addM21(covYZ);
       }
+
+      covarianceToPack.reshape(3, 3);
+      covarianceToPack.set(0, covXX);
+      covarianceToPack.set(1, covXY);
+      covarianceToPack.set(2, covXZ);
+      covarianceToPack.set(3, covXY);
+      covarianceToPack.set(4, covYY);
+      covarianceToPack.set(5, covYZ);
+      covarianceToPack.set(6, covXZ);
+      covarianceToPack.set(7, covYZ);
+      covarianceToPack.set(8, covZZ);
    }
 
    public static double computeConvexPolygon3DArea(List<? extends Point3DReadOnly> convexPolygon3D, Vector3DReadOnly normal, int numberOfVertices,

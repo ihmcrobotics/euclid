@@ -5,6 +5,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.factory.DecompositionFactory;
+import org.ejml.interfaces.decomposition.EigenDecomposition;
+
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -51,6 +55,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    private final BoundingBox3D boundingBox = new BoundingBox3D();
 
    private final double constructionEpsilon;
+
+   private final DenseMatrix64F verticesCovariance = new DenseMatrix64F(3, 3);
+   private final EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(3, true, true);
 
    public Face3D(Vector3DReadOnly initialGuessNormal)
    {
@@ -326,7 +333,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    {
       if (vertices.size() > 3)
       {
-         EuclidPolytopeConstructionTools.updateFace3DNormal(vertices, null, normal);
+         EuclidPolytopeConstructionTools.computeCovariance3D(vertices, verticesCovariance);
+         EuclidPolytopeConstructionTools.updateNormal(eigenDecomposition, verticesCovariance, normal);
       }
       else if (vertices.size() == 3)
       {
