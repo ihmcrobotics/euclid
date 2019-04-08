@@ -34,7 +34,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class ExpandingPolytopeAlgorithm
 {
-   private static final boolean VERBOSE = true;
+   private static final boolean VERBOSE = false;
 
    private double epsilon = 1.0e-12;
    private int numberOfIterations = 0;
@@ -1119,7 +1119,7 @@ public class ExpandingPolytopeAlgorithm
             epaPolytope.add(f2);
             epaPolytope.add(f3);
          }
-         else
+         else if (EuclidPolytopeTools.tetrahedronContainsOrigin(y0, y1, y2, y4))
          {
             EPAFace3D f0 = new EPAFace3D(y4, y1, y0, epsilon);
             if (f0.isTriangleAffinelyDependent)
@@ -1146,6 +1146,46 @@ public class ExpandingPolytopeAlgorithm
             epaPolytope.add(f1);
             epaPolytope.add(f2);
             epaPolytope.add(f3);
+         }
+         else
+         {
+            EPAFace3D f0 = new EPAFace3D(y4, y1, y0, epsilon);
+            if (f0.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f1 = new EPAFace3D(y4, y2, y1, epsilon);
+            if (f1.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f2 = new EPAFace3D(y4, y0, y2, epsilon);
+            if (f2.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f3 = new EPAFace3D(y3, y0, y1, epsilon);
+            if (f3.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f4 = new EPAFace3D(y3, y1, y2, epsilon);
+            if (f4.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f5 = new EPAFace3D(y3, y2, y0, epsilon);
+            if (f5.isTriangleAffinelyDependent)
+               return null;
+
+            f3.e0.setTwin(f5.e2); // e30 <-> e03
+            f4.e0.setTwin(f3.e2); // e31 <-> e13
+            f5.e0.setTwin(f4.e2); // e32 <-> e23
+
+            f2.e0.setTwin(f0.e2); // e40 <-> e04
+            f0.e0.setTwin(f1.e2); // e41 <-> e14
+            f1.e0.setTwin(f2.e2); // e42 <-> e24
+
+            f3.e1.setTwin(f0.e1); // e01 <-> e10
+            f2.e1.setTwin(f5.e1); // e02 <-> e20
+            f4.e1.setTwin(f1.e1); // e12 <-> e21
+            
+            epaPolytope.add(f0);
+            epaPolytope.add(f1);
+            epaPolytope.add(f2);
+            epaPolytope.add(f3);
+            epaPolytope.add(f4);
+            epaPolytope.add(f5);
          }
       }
       else if (gjkVertices.length == 2)
@@ -1223,7 +1263,7 @@ public class ExpandingPolytopeAlgorithm
             epaPolytope.add(f2);
             epaPolytope.add(f3);
          }
-         else
+         else if (EuclidPolytopeTools.tetrahedronContainsOrigin(y1, y2, y3, y4))
          {
             // Building the faces such that clockwise winding
             EPAFace3D f0 = new EPAFace3D(y1, y3, y2, epsilon);
@@ -1251,6 +1291,50 @@ public class ExpandingPolytopeAlgorithm
             epaPolytope.add(f1);
             epaPolytope.add(f2);
             epaPolytope.add(f3);
+         }
+         else
+         {
+            EPAFace3D f0 = new EPAFace3D(y0, y2, y3, epsilon);
+            if (f0.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f1 = new EPAFace3D(y0, y3, y4, epsilon);
+            if (f1.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f2 = new EPAFace3D(y0, y4, y2, epsilon);
+            if (f2.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f3 = new EPAFace3D(y1, y3, y2, epsilon);
+            if (f3.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f4 = new EPAFace3D(y1, y4, y3, epsilon);
+            if (f4.isTriangleAffinelyDependent)
+               return null;
+            EPAFace3D f5 = new EPAFace3D(y1, y2, y4, epsilon);
+            if (f5.isTriangleAffinelyDependent)
+               return null;
+
+            f0.e0.setTwin(f2.e2); // e02 <-> e20
+            f1.e0.setTwin(f0.e2); // e03 <-> e30
+            f2.e0.setTwin(f1.e2); // e04 <-> e40
+
+            f5.e0.setTwin(f3.e2); // e12 <-> e21
+            f3.e0.setTwin(f4.e2); // e13 <-> e31
+            f4.e0.setTwin(f5.e2); // e14 <-> e41
+            
+            f0.e1.setTwin(f3.e1); // e23 <-> e32
+            f5.e1.setTwin(f2.e1); // e24 <-> e42
+            f1.e1.setTwin(f4.e1); // e34 <-> e43
+
+            f0.e1.setTwin(f3.e1); // e23 <-> e32
+            f5.e1.setTwin(f2.e1); // e24 <-> e42
+            f1.e1.setTwin(f4.e1); // e34 <-> e43
+
+            epaPolytope.add(f0);
+            epaPolytope.add(f1);
+            epaPolytope.add(f2);
+            epaPolytope.add(f3);
+            epaPolytope.add(f4);
+            epaPolytope.add(f5);
          }
       }
       else if (gjkVertices.length == 1)
