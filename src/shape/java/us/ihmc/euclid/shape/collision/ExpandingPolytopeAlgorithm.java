@@ -38,7 +38,7 @@ public class ExpandingPolytopeAlgorithm
 
    private double epsilon = 1.0e-12;
    private int numberOfIterations = 0;
-   private int maxIterations = 10000000;
+   private int maxIterations = 10000;
    private final GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
    private boolean latestCollisionTestResult;
    private EPAFace3D lastResult = null;
@@ -95,13 +95,10 @@ public class ExpandingPolytopeAlgorithm
 
       initialPolytope.stream().forEach(queue::add);
       Vector3D supportDirection = new Vector3D();
-      List<EPAFace3D> visibleFaces = null;
       numberOfIterations = 0;
 
       while (numberOfIterations < maxIterations)
       {
-         visibleFaces = null;
-
          if (queue.isEmpty())
          {
             if (VERBOSE)
@@ -112,10 +109,14 @@ public class ExpandingPolytopeAlgorithm
          EPAFace3D entry = queue.poll();
          if (entry.isObsolete())
             continue;
-         double currentNormSquared = entry.normSquared;
+         double currentNormSquared = entry.getNormSquared();
 
          numberOfIterations++;
 
+         /*
+          * In the original algorithm, the comparison does not add epsilon to mu, but this appears to be
+          * needed to handle some edge-cases.
+          */
          if (currentNormSquared > mu + epsilon)
          {
             if (VERBOSE)
@@ -129,9 +130,11 @@ public class ExpandingPolytopeAlgorithm
             supportDirection.set(entry.closestPoint);
          else
             supportDirection.set(entry.getNormal());
+
          Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
          supportDirection.negate();
          Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
+
          EPAVertex3D newVertex = new EPAVertex3D(vertexA, vertexB);
 
          if (entry.contains(newVertex))
@@ -159,10 +162,9 @@ public class ExpandingPolytopeAlgorithm
 
          entry.markObsolete();
          List<EPAEdge3D> silhouette = new ArrayList<>();
-         visibleFaces = new ArrayList<>();
-         silhouette(entry.e0.twin, newVertex, silhouette, visibleFaces);
-         silhouette(entry.e1.twin, newVertex, silhouette, visibleFaces);
-         silhouette(entry.e2.twin, newVertex, silhouette, visibleFaces);
+         silhouette(entry.e0.twin, newVertex, silhouette);
+         silhouette(entry.e1.twin, newVertex, silhouette);
+         silhouette(entry.e2.twin, newVertex, silhouette);
 
          boolean areNewTrianglesFine = true;
 
@@ -177,7 +179,12 @@ public class ExpandingPolytopeAlgorithm
                areNewTrianglesFine = false;
                break;
             }
-            if (newEntry.isClosestPointInternal && currentNormSquared <= newEntry.normSquared && newEntry.normSquared <= mu + epsilon)
+
+            /*
+             * Same as above, the original check with mu does not include epsilon, but it seems to be needed to
+             * handle some edge-cases.
+             */
+            if (newEntry.isClosestPointInternal() && currentNormSquared <= newEntry.getNormSquared() && newEntry.getNormSquared() <= mu + epsilon)
             {
                queue.add(newEntry);
             }
@@ -191,7 +198,8 @@ public class ExpandingPolytopeAlgorithm
          for (int edgeIndex = 0; edgeIndex < newVertex.getNumberOfAssociatedEdges(); edgeIndex++)
          {
             EPAEdge3D edge = newVertex.getAssociatedEdge(edgeIndex);
-            EPAEdge3D twin = edge.v1.getEdgeTo(newVertex);
+            EPAEdge3D twin = edge.getDestination().getEdgeTo(newVertex);
+
             if (twin == null)
             {
                if (VERBOSE)
@@ -199,6 +207,7 @@ public class ExpandingPolytopeAlgorithm
                terminate = true;
                break;
             }
+
             edge.setTwin(twin);
          }
 
@@ -206,13 +215,7 @@ public class ExpandingPolytopeAlgorithm
             break;
 
          entry.destroy();
-         visibleFaces.forEach(EPAFace3D::destroy);
       }
-
-      if (lastResult != null)
-         lastResult.obsolete = false;
-      if (visibleFaces != null)
-         visibleFaces.forEach(face -> face.obsolete = false);
 
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
@@ -226,7 +229,7 @@ public class ExpandingPolytopeAlgorithm
          result.setShapesAreColliding(latestCollisionTestResult);
          result.setShapeA(shapeA);
          result.setShapeB(shapeB);
-         result.setDistance(latestCollisionTestResult ? -lastResult.getDistanceFromOrigin() : gjkCollisionDetector.getDistance());
+         result.setDistance(latestCollisionTestResult ? -lastResult.getNorm() : gjkCollisionDetector.getDistance());
 
          result.getPointOnA().set(lastResult.computePointOnA());
          result.getPointOnB().set(lastResult.computePointOnB());
@@ -244,7 +247,7 @@ public class ExpandingPolytopeAlgorithm
 
    public double getSignedDistance()
    {
-      return latestCollisionTestResult ? -lastResult.getDistanceFromOrigin() : gjkCollisionDetector.getDistance();
+      return latestCollisionTestResult ? -lastResult.getNorm() : gjkCollisionDetector.getDistance();
    }
 
    public Vector3DReadOnly getCollisionVector()
@@ -289,7 +292,7 @@ public class ExpandingPolytopeAlgorithm
       return value * value;
    }
 
-   private static void silhouette(EPAEdge3D edge, Point3DReadOnly observer, List<EPAEdge3D> silhouetteToPack, List<EPAFace3D> visibleFacesToPack)
+   private static void silhouette(EPAEdge3D edge, Point3DReadOnly observer, List<EPAEdge3D> silhouetteToPack)
    {
       if (edge == null || edge.face.isObsolete())
          return;
@@ -301,9 +304,8 @@ public class ExpandingPolytopeAlgorithm
       else
       {
          edge.face.markObsolete();
-         visibleFacesToPack.add(edge.face);
-         silhouette(edge.next.twin, observer, silhouetteToPack, visibleFacesToPack);
-         silhouette(edge.prev.twin, observer, silhouetteToPack, visibleFacesToPack);
+         silhouette(edge.next.twin, observer, silhouetteToPack);
+         silhouette(edge.prev.twin, observer, silhouetteToPack);
       }
    }
 
@@ -492,15 +494,23 @@ public class ExpandingPolytopeAlgorithm
       @Override
       public boolean canObserverSeeFace(Point3DReadOnly observer)
       {
-         //         if (TupleTools.dot(closestPoint, observer) >= normSquared)
-         //            return true;
+         // The following test was suggested in the original algorithm.
+         // However, it appears to not be robust to edge-cases where the new vertex would not be above 
+         // the current entry.
+         // if (TupleTools.dot(closestPoint, observer) >= normSquared)
+         //    return true;
          return EuclidGeometryTools.isPoint3DAbovePlane3D(observer, v0, normal);
       }
 
-      public double getDistanceFromOrigin()
+      public double getNormSquared()
+      {
+         return normSquared;
+      }
+
+      public double getNorm()
       {
          if (Double.isNaN(norm))
-            norm = Math.sqrt(normSquared);
+            norm = Math.sqrt(getNormSquared());
          return norm;
       }
 
@@ -547,9 +557,9 @@ public class ExpandingPolytopeAlgorithm
       @Override
       public int compareTo(EPAFace3D other)
       {
-         if (normSquared == other.normSquared)
+         if (getNormSquared() == other.getNormSquared())
             return 0;
-         if (normSquared > other.normSquared)
+         if (getNormSquared() > other.getNormSquared())
             return 1;
          return -1;
       }
@@ -867,9 +877,13 @@ public class ExpandingPolytopeAlgorithm
       else
       {
          double normSquared = Double.POSITIVE_INFINITY;
+         boolean isAlmostInside = true;
 
          if (compareSigns(muMax, -C1))
          {
+            if (Math.abs(C1) > epsilon)
+               isAlmostInside = false;
+
             double[] candidateOutput = signedVolumeFor1Simplex(s2, s3);
             double lambda2 = candidateOutput[0];
             double lambda3 = candidateOutput[1];
@@ -885,6 +899,9 @@ public class ExpandingPolytopeAlgorithm
 
          if (compareSigns(muMax, -C2))
          {
+            if (Math.abs(C2) > epsilon)
+               isAlmostInside = false;
+
             double[] candidateOutput = signedVolumeFor1Simplex(s1, s3);
             double lambda1 = candidateOutput[0];
             double lambda3 = candidateOutput[1];
@@ -903,6 +920,9 @@ public class ExpandingPolytopeAlgorithm
 
          if (compareSigns(muMax, -C3))
          {
+            if (Math.abs(C3) > epsilon)
+               isAlmostInside = false;
+
             double[] candidateOutput = signedVolumeFor1Simplex(s1, s2);
             double lambda1 = candidateOutput[0];
             double lambda2 = candidateOutput[1];
@@ -919,7 +939,7 @@ public class ExpandingPolytopeAlgorithm
             }
          }
 
-         return SignedVolumeOutput.OUTSIDE;
+         return isAlmostInside ? SignedVolumeOutput.INSIDE : SignedVolumeOutput.OUTSIDE;
       }
    }
 
@@ -1179,7 +1199,7 @@ public class ExpandingPolytopeAlgorithm
             f3.e1.setTwin(f0.e1); // e01 <-> e10
             f2.e1.setTwin(f5.e1); // e02 <-> e20
             f4.e1.setTwin(f1.e1); // e12 <-> e21
-            
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -1320,7 +1340,7 @@ public class ExpandingPolytopeAlgorithm
             f5.e0.setTwin(f3.e2); // e12 <-> e21
             f3.e0.setTwin(f4.e2); // e13 <-> e31
             f4.e0.setTwin(f5.e2); // e14 <-> e41
-            
+
             f0.e1.setTwin(f3.e1); // e23 <-> e32
             f5.e1.setTwin(f2.e1); // e24 <-> e42
             f1.e1.setTwin(f4.e1); // e34 <-> e43

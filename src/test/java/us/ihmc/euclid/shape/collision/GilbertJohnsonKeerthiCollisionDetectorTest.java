@@ -881,7 +881,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                                                                                                               double distanceMeanEpsilon,
                                                                                                               double positionMeanEpsilon)
    {
-      boolean verbose = true;
+      boolean verbose = false;
 
       double meanDistanceError = 0.0;
       double meanPositionError = 0.0;
@@ -951,9 +951,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
       if (verbose)
       {
+         System.out.println("Number of iterations: " + ITERATIONS + ", number of non-colliding samples: " + numberOfNonCollidingSamples);
          System.out.println("Max error for the distance: " + maxDistanceError + ", position: " + maxPositionError);
          System.out.println("Average error for the distance: " + meanDistanceError + ", position: " + meanPositionError);
-         System.out.println("Number of iterations: " + ITERATIONS + ", number of non-colliding samples: " + numberOfNonCollidingSamples);
       }
 
       assertTrue(meanDistanceError < distanceMeanEpsilon, "mean distance error: " + meanDistanceError + " expected less than: " + distanceMeanEpsilon);
