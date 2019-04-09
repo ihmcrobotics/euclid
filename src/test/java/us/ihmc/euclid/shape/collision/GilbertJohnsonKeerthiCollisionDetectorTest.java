@@ -897,8 +897,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          A shapeA = shapes.a;
          B shapeB = shapes.b;
 
-         Shape3DCollisionTestResult expectedResult = function.collisionFunction.apply(shapeA, shapeB);
-         Shape3DCollisionTestResult gjkResult = new Shape3DCollisionTestResult();
+         EuclidShape3DCollisionResult expectedResult = function.collisionFunction.apply(shapeA, shapeB);
+         EuclidShape3DCollisionResult gjkResult = new EuclidShape3DCollisionResult();
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
          gjkDetector.doShapeCollisionTest(shapeA, shapeB, gjkResult);
@@ -963,23 +963,23 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
    static class AnalyticalShapeCollisionDetection<A extends Shape3DReadOnly, B extends Shape3DReadOnly>
    {
       final Supplier<Pair<A, B>> shapeSupplier;
-      final BiFunction<A, B, Shape3DCollisionTestResult> collisionFunction;
+      final BiFunction<A, B, EuclidShape3DCollisionResult> collisionFunction;
 
-      public AnalyticalShapeCollisionDetection(Supplier<Pair<A, B>> shapeSupplier, TriConsumer<A, B, Shape3DCollisionTestResult> collisionFunction)
+      public AnalyticalShapeCollisionDetection(Supplier<Pair<A, B>> shapeSupplier, TriConsumer<A, B, EuclidShape3DCollisionResult> collisionFunction)
       {
          this(shapeSupplier, toBiFunction(collisionFunction));
       }
 
-      public AnalyticalShapeCollisionDetection(Supplier<Pair<A, B>> shapeSupplier, BiFunction<A, B, Shape3DCollisionTestResult> collisionFunction)
+      public AnalyticalShapeCollisionDetection(Supplier<Pair<A, B>> shapeSupplier, BiFunction<A, B, EuclidShape3DCollisionResult> collisionFunction)
       {
          this.shapeSupplier = shapeSupplier;
          this.collisionFunction = collisionFunction;
       }
 
-      private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> BiFunction<A, B, Shape3DCollisionTestResult> toBiFunction(TriConsumer<A, B, Shape3DCollisionTestResult> triConsumer)
+      private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> BiFunction<A, B, EuclidShape3DCollisionResult> toBiFunction(TriConsumer<A, B, EuclidShape3DCollisionResult> triConsumer)
       {
          return (t, u) -> {
-            Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
+            EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
             triConsumer.accept(t, u, result);
             return result;
          };

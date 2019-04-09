@@ -47,10 +47,10 @@ public class ExpandingPolytopeAlgorithm
    {
    }
 
-   public Shape3DCollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   public EuclidShape3DCollisionResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
       doCollisionTest(shapeA, shapeB);
-      Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
+      EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
       if (gjkCollisionDetector.getSimplexVertices() == null)
          return null;
       result.setToNaN();
@@ -58,15 +58,15 @@ public class ExpandingPolytopeAlgorithm
       return result;
    }
 
-   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, Shape3DCollisionTestResult result)
+   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
       doCollisionTest(shapeA, shapeB);
-      result.setToNaN();
+      resultToPack.setToNaN();
 
       if (gjkCollisionDetector.getSimplexVertices() == null)
          return;
 
-      packResult(shapeA, shapeB, result);
+      packResult(shapeA, shapeB, resultToPack);
    }
 
    public boolean doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
@@ -221,22 +221,22 @@ public class ExpandingPolytopeAlgorithm
          System.out.println("Number of iterations: " + numberOfIterations);
    }
 
-   private void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, Shape3DCollisionTestResult result)
+   private void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
       if (latestCollisionTestResult)
       {
-         result.setToNaN();
-         result.setShapesAreColliding(latestCollisionTestResult);
-         result.setShapeA(shapeA);
-         result.setShapeB(shapeB);
-         result.setDistance(latestCollisionTestResult ? -lastResult.getNorm() : gjkCollisionDetector.getDistance());
+         resultToPack.setToNaN();
+         resultToPack.setShapesAreColliding(latestCollisionTestResult);
+         resultToPack.setShapeA(shapeA);
+         resultToPack.setShapeB(shapeB);
+         resultToPack.setDistance(latestCollisionTestResult ? -lastResult.getNorm() : gjkCollisionDetector.getDistance());
 
-         result.getPointOnA().set(lastResult.computePointOnA());
-         result.getPointOnB().set(lastResult.computePointOnB());
+         resultToPack.getPointOnA().set(lastResult.computePointOnA());
+         resultToPack.getPointOnB().set(lastResult.computePointOnB());
       }
       else
       {
-         gjkCollisionDetector.packResult(shapeA, shapeB, result, false);
+         gjkCollisionDetector.packResult(shapeA, shapeB, resultToPack, false);
       }
    }
 

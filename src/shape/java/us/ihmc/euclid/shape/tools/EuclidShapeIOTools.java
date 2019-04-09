@@ -9,7 +9,7 @@ import java.util.function.Function;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.shape.collision.Shape3DCollisionTestResult;
+import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
@@ -534,31 +534,31 @@ public class EuclidShapeIOTools
       return "Shape 3D pose: [position: " + getTuple3DString(format, position) + ", " + getStringAsYawPitchRoll(format, orientation) + "]";
    }
 
-   public static String getCollisionTestResultString(Shape3DCollisionTestResult collisionTestResult)
+   public static String getEuclidShape3DCollisionResultString(EuclidShape3DCollisionResult euclidShape3DCollisionResult)
    {
-      return getCollisionTestResultString(DEFAULT_FORMAT, collisionTestResult);
+      return getEuclidShape3DCollisionResultString(DEFAULT_FORMAT, euclidShape3DCollisionResult);
    }
 
-   public static String getCollisionTestResultString(String format, Shape3DCollisionTestResult collisionTestResult)
+   public static String getEuclidShape3DCollisionResultString(String format, EuclidShape3DCollisionResult euclidShape3DCollisionResult)
    {
-      if (collisionTestResult == null)
+      if (euclidShape3DCollisionResult == null)
          return "null";
 
       String string = "Collision test result: ";
-      if (collisionTestResult.areShapesColliding())
+      if (euclidShape3DCollisionResult.areShapesColliding())
       {
-         string += "colliding, depth: " + collisionTestResult.getDistance() + "\n";
+         string += "colliding, depth: " + euclidShape3DCollisionResult.getDistance() + "\n";
       }
       else
       {
-         string += "non-colliding, separating distance: " + collisionTestResult.getDistance() + "\n";
+         string += "non-colliding, separating distance: " + euclidShape3DCollisionResult.getDistance() + "\n";
       }
-      string += "Shape A: " + (collisionTestResult.getShapeA() == null ? "null" : collisionTestResult.getShapeA().getClass().getSimpleName());
-      string += ", location: " + getTuple3DString(format, collisionTestResult.getPointOnA());
-      string += ", normal: " + getTuple3DString(format, collisionTestResult.getNormalOnA()) + "\n";
-      string += "Shape B: " + (collisionTestResult.getShapeB() == null ? "null" : collisionTestResult.getShapeB().getClass().getSimpleName());
-      string += ", location: " + getTuple3DString(format, collisionTestResult.getPointOnB());
-      string += ", normal: " + getTuple3DString(format, collisionTestResult.getNormalOnB());
+      string += "Shape A: " + (euclidShape3DCollisionResult.getShapeA() == null ? "null" : euclidShape3DCollisionResult.getShapeA().getClass().getSimpleName());
+      string += ", location: " + getTuple3DString(format, euclidShape3DCollisionResult.getPointOnA());
+      string += ", normal: " + getTuple3DString(format, euclidShape3DCollisionResult.getNormalOnA()) + "\n";
+      string += "Shape B: " + (euclidShape3DCollisionResult.getShapeB() == null ? "null" : euclidShape3DCollisionResult.getShapeB().getClass().getSimpleName());
+      string += ", location: " + getTuple3DString(format, euclidShape3DCollisionResult.getPointOnB());
+      string += ", normal: " + getTuple3DString(format, euclidShape3DCollisionResult.getNormalOnB());
       return string;
    }
 
@@ -614,10 +614,11 @@ public class EuclidShapeIOTools
       return getFace3DString(format, face3D.getCentroid(), face3D.getNormal(), face3D.getArea(), face3D.getEdges());
    }
 
-   public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, double area, Collection<? extends HalfEdge3DReadOnly> faceEdges)
+   public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, double area,
+                                        Collection<? extends HalfEdge3DReadOnly> faceEdges)
    {
-      String string = "Face 3D: " + getFace3DShortString(format, centroid, normal) + ", area: " + String.format(format, area)  + ", number of edges: " + faceEdges.size()
-            + getHalfEdge3DCollectionString(format, "\n\t", faceEdges);
+      String string = "Face 3D: " + getFace3DShortString(format, centroid, normal) + ", area: " + String.format(format, area) + ", number of edges: "
+            + faceEdges.size() + getHalfEdge3DCollectionString(format, "\n\t", faceEdges);
       return string;
    }
 

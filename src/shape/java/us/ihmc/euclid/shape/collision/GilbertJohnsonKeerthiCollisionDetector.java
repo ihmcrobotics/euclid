@@ -32,10 +32,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
    {
    }
 
-   public Shape3DCollisionTestResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   public EuclidShape3DCollisionResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
       boolean areShapesColliding = doCollisionTest(shapeA, shapeB);
-      Shape3DCollisionTestResult result = new Shape3DCollisionTestResult();
+      EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
       if (simplex == null)
          return null;
       result.setToNaN();
@@ -43,15 +43,15 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return result;
    }
 
-   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, Shape3DCollisionTestResult result)
+   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
       boolean areShapesColliding = doCollisionTest(shapeA, shapeB);
-      result.setToNaN();
+      resultToPack.setToNaN();
 
       if (simplex == null)
          return;
 
-      packResult(shapeA, shapeB, result, areShapesColliding);
+      packResult(shapeA, shapeB, resultToPack, areShapesColliding);
    }
 
    public boolean doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
@@ -162,18 +162,18 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return numberOfIterations;
    }
 
-   void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, Shape3DCollisionTestResult result, boolean areShapesColliding)
+   void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack, boolean areShapesColliding)
    {
-      result.setShapesAreColliding(areShapesColliding);
-      result.setShapeA(shapeA);
-      result.setShapeB(shapeB);
+      resultToPack.setShapesAreColliding(areShapesColliding);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
       if (areShapesColliding)
          return;
 
-      result.setDistance(simplex.closestPointNorm());
-      result.getPointOnA().set(getClosestPointOnA());
-      result.getPointOnB().set(getClosestPointOnB());
+      resultToPack.setDistance(simplex.closestPointNorm());
+      resultToPack.getPointOnA().set(getClosestPointOnA());
+      resultToPack.getPointOnB().set(getClosestPointOnB());
    }
 
    public double getDistance()

@@ -3,13 +3,16 @@ package us.ihmc.euclid.shape.collision;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 
-public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<Shape3DCollisionTestResult>, GeometricallyComparable<Shape3DCollisionTestResult>
+public class EuclidShape3DCollisionResult
+      implements Clearable, EpsilonComparable<EuclidShape3DCollisionResult>, GeometricallyComparable<EuclidShape3DCollisionResult>, Transformable
 {
    private boolean shapesAreColliding;
    private double distance;
@@ -23,7 +26,7 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    private final Point3D pointOnB = new Point3D();
    private final Vector3D normalOnB = new Vector3D();
 
-   public Shape3DCollisionTestResult()
+   public EuclidShape3DCollisionResult()
    {
    }
 
@@ -141,7 +144,33 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    }
 
    @Override
-   public boolean epsilonEquals(Shape3DCollisionTestResult other, double epsilon)
+   public void applyTransform(Transform transform)
+   {
+      if (!pointOnA.containsNaN())
+         pointOnA.applyTransform(transform);
+      if (!pointOnB.containsNaN())
+         pointOnB.applyTransform(transform);
+      if (!normalOnA.containsNaN())
+         normalOnA.applyTransform(transform);
+      if (!normalOnB.containsNaN())
+         normalOnB.applyTransform(transform);
+   }
+
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      if (!pointOnA.containsNaN())
+         pointOnA.applyInverseTransform(transform);
+      if (!pointOnB.containsNaN())
+         pointOnB.applyInverseTransform(transform);
+      if (!normalOnA.containsNaN())
+         normalOnA.applyInverseTransform(transform);
+      if (!normalOnB.containsNaN())
+         normalOnB.applyInverseTransform(transform);
+   }
+
+   @Override
+   public boolean epsilonEquals(EuclidShape3DCollisionResult other, double epsilon)
    {
       if (areShapesColliding() != other.areShapesColliding())
          return false;
@@ -164,7 +193,7 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    }
 
    @Override
-   public boolean geometricallyEquals(Shape3DCollisionTestResult other, double epsilon)
+   public boolean geometricallyEquals(EuclidShape3DCollisionResult other, double epsilon)
    {
       if (areShapesColliding() != other.areShapesColliding())
          return false;
@@ -207,6 +236,6 @@ public class Shape3DCollisionTestResult implements Clearable, EpsilonComparable<
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getCollisionTestResultString(this);
+      return EuclidShapeIOTools.getEuclidShape3DCollisionResultString(this);
    }
 }

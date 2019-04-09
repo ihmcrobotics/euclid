@@ -865,8 +865,8 @@ class ExpandingPolytopeAlgorithmTest
          A shapeA = shapes.a;
          B shapeB = shapes.b;
 
-         Shape3DCollisionTestResult expectedResult = function.collisionFunction.apply(shapeA, shapeB);
-         Shape3DCollisionTestResult epaResult = new Shape3DCollisionTestResult();
+         EuclidShape3DCollisionResult expectedResult = function.collisionFunction.apply(shapeA, shapeB);
+         EuclidShape3DCollisionResult epaResult = new EuclidShape3DCollisionResult();
 
          ExpandingPolytopeAlgorithm epaDetector = new ExpandingPolytopeAlgorithm();
          epaDetector.doShapeCollisionTest(shapeA, shapeB, epaResult);

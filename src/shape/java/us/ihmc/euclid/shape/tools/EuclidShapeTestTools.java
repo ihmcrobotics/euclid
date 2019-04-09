@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.collision.Shape3DCollisionTestResult;
+import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
@@ -387,19 +387,19 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
-   public static void assertCollisionTestResultEquals(Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, double epsilon)
+   public static void assertEuclidShape3DCollisionResultEquals(EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual, double epsilon)
    {
-      assertCollisionTestResultEquals(null, expected, actual, epsilon);
+      assertEuclidShape3DCollisionResultEquals(null, expected, actual, epsilon);
    }
 
-   public static void assertCollisionTestResultEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual,
-                                                      double epsilon)
+   public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix, EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual,
+                                                               double epsilon)
    {
-      assertCollisionTestResultEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertEuclidShape3DCollisionResultEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
-   public static void assertCollisionTestResultEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual,
-                                                      double epsilon, String format)
+   public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix, EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual,
+                                                               double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -625,7 +625,7 @@ public class EuclidShapeTestTools
          int verticesSize = convexPolytope3D.getVertices().size();
          int halfEdgesSize = convexPolytope3D.getHalfEdges().size();
          int facesSize = convexPolytope3D.getFaces().size();
-         
+
          int expectedNumberOfVertices = EuclidPolytopeTools.computeConvexPolytopeNumberOfVertices(facesSize, halfEdgesSize / 2);
          if (verticesSize != expectedNumberOfVertices)
             EuclidCoreTestTools.throwAssertionError(messagePrefix,
@@ -760,9 +760,11 @@ public class EuclidShapeTestTools
                if (EuclidGeometryTools.isPoint3DAbovePlane3D(neighbor.getCentroid(), face.getCentroid(), face.getNormal()))
                {
                   if (face.signedDistanceToPlane(neighbor.getCentroid()) < convexPolytope3D.getConstructionEpsilon())
-                     System.out.println("WARNING: " + EuclidCoreTestTools.addPrefixToMessage(messagePrefix, faceIndex + "th face might be concave with respect to a neighor, the " + convexPolytope3D.getFaces().indexOf(neighbor) + "th face."));
+                     System.out.println("WARNING: " + EuclidCoreTestTools.addPrefixToMessage(messagePrefix, faceIndex
+                           + "th face might be concave with respect to a neighor, the " + convexPolytope3D.getFaces().indexOf(neighbor) + "th face."));
                   else
-                     EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face is concave with respect to a neighor, the " + convexPolytope3D.getFaces().indexOf(neighbor) + "th face.");
+                     EuclidCoreTestTools.throwAssertionError(messagePrefix, faceIndex + "th face is concave with respect to a neighor, the "
+                           + convexPolytope3D.getFaces().indexOf(neighbor) + "th face.");
                }
             }
          }
@@ -882,19 +884,19 @@ public class EuclidShapeTestTools
       }
    }
 
-   public static void assertCollisionTestResultGeometricallyEquals(Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, double epsilon)
+   public static void assertCollisionTestResultGeometricallyEquals(EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual, double epsilon)
    {
       assertCollisionTestResultGeometricallyEquals(null, expected, actual, epsilon);
    }
 
-   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual,
-                                                                   double epsilon)
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResult expected,
+                                                                   EuclidShape3DCollisionResult actual, double epsilon)
    {
       assertCollisionTestResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
-   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual,
-                                                                   double epsilon, String format)
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResult expected,
+                                                                   EuclidShape3DCollisionResult actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -962,16 +964,17 @@ public class EuclidShapeTestTools
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual,
+                                                   String format)
    {
       throwNotEqualAssertionError(messagePrefix, expected, actual, format, null);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Shape3DCollisionTestResult expected, Shape3DCollisionTestResult actual, String format,
-                                                   String differenceAsString)
+   private static void throwNotEqualAssertionError(String messagePrefix, EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual,
+                                                   String format, String differenceAsString)
    {
-      String expectedAsString = getCollisionTestResultString(format, expected);
-      String actualAsString = getCollisionTestResultString(format, actual);
+      String expectedAsString = getEuclidShape3DCollisionResultString(format, expected);
+      String actualAsString = getEuclidShape3DCollisionResultString(format, actual);
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, differenceAsString);
    }
 
