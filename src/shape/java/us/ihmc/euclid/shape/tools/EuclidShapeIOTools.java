@@ -9,7 +9,7 @@ import java.util.function.Function;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;
+import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
@@ -534,12 +534,12 @@ public class EuclidShapeIOTools
       return "Shape 3D pose: [position: " + getTuple3DString(format, position) + ", " + getStringAsYawPitchRoll(format, orientation) + "]";
    }
 
-   public static String getEuclidShape3DCollisionResultString(EuclidShape3DCollisionResult euclidShape3DCollisionResult)
+   public static String getEuclidShape3DCollisionResultString(EuclidShape3DCollisionResultReadOnly euclidShape3DCollisionResult)
    {
       return getEuclidShape3DCollisionResultString(DEFAULT_FORMAT, euclidShape3DCollisionResult);
    }
 
-   public static String getEuclidShape3DCollisionResultString(String format, EuclidShape3DCollisionResult euclidShape3DCollisionResult)
+   public static String getEuclidShape3DCollisionResultString(String format, EuclidShape3DCollisionResultReadOnly euclidShape3DCollisionResult)
    {
       if (euclidShape3DCollisionResult == null)
          return "null";

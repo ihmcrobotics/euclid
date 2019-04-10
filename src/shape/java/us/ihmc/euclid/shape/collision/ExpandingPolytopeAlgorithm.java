@@ -17,6 +17,8 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetector.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetector.ProjectedTriangleSignedAreaCalculator;
+import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
+import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
@@ -29,6 +31,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -40,44 +43,42 @@ public class ExpandingPolytopeAlgorithm
    private int numberOfIterations = 0;
    private int maxIterations = 10000;
    private final GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
-   private boolean latestCollisionTestResult;
    private EPAFace3D lastResult = null;
 
    public ExpandingPolytopeAlgorithm()
    {
    }
 
-   public EuclidShape3DCollisionResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   public EuclidShape3DCollisionResult evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
-      doCollisionTest(shapeA, shapeB);
       EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
-      if (gjkCollisionDetector.getSimplexVertices() == null)
-         return null;
-      result.setToNaN();
-      packResult(shapeA, shapeB, result);
+      evaluateCollision(shapeA, shapeB, result);
       return result;
    }
 
-   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
+   public void evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
-      doCollisionTest(shapeA, shapeB);
-      resultToPack.setToNaN();
-
-      if (gjkCollisionDetector.getSimplexVertices() == null)
-         return;
-
-      packResult(shapeA, shapeB, resultToPack);
+      evaluateCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
-   public boolean doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
+   public EuclidShape3DCollisionResult doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
    {
-      latestCollisionTestResult = gjkCollisionDetector.doCollisionTest(shapeA, shapeB);
-      if (latestCollisionTestResult)
-         doCollision(shapeA, shapeB, gjkCollisionDetector.getSimplexVertices());
-      return latestCollisionTestResult;
+      EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
+      evaluateCollision(shapeA, shapeB, result);
+      return result;
    }
 
-   public void doCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] simplex)
+   public boolean evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, EuclidShape3DCollisionResultBasics resultToPack)
+   {
+      boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
+      if (areShapesColliding)
+         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplexVertices(), resultToPack);
+      return areShapesColliding;
+   }
+
+   public void evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] simplex, EuclidShape3DCollisionResultBasics resultToPack)
    {
       PriorityQueue<EPAFace3D> queue = new PriorityQueue<>();
       double mu = Double.POSITIVE_INFINITY;
@@ -86,158 +87,153 @@ public class ExpandingPolytopeAlgorithm
 
       if (initialPolytope == null)
       {
-         latestCollisionTestResult = false;
          lastResult = null;
          if (VERBOSE)
             System.out.println("Initial polytope has triangle face that is affinely dependent.");
-         return;
       }
-
-      initialPolytope.stream().forEach(queue::add);
-      Vector3D supportDirection = new Vector3D();
-      numberOfIterations = 0;
-
-      while (numberOfIterations < maxIterations)
+      else
       {
-         if (queue.isEmpty())
+         initialPolytope.stream().forEach(queue::add);
+         Vector3D supportDirection = new Vector3D();
+         numberOfIterations = 0;
+
+         while (numberOfIterations < maxIterations)
          {
-            if (VERBOSE)
-               System.out.println("Queue is empty, terminating.");
-            break;
-         }
-
-         EPAFace3D entry = queue.poll();
-         if (entry.isObsolete())
-            continue;
-         double currentNormSquared = entry.getNormSquared();
-
-         numberOfIterations++;
-
-         /*
-          * In the original algorithm, the comparison does not add epsilon to mu, but this appears to be
-          * needed to handle some edge-cases.
-          */
-         if (currentNormSquared > mu + epsilon)
-         {
-            if (VERBOSE)
-               System.out.println("Best norm exceeds upper bound, terminating.");
-            break;
-         }
-
-         lastResult = entry;
-
-         if (currentNormSquared > epsilon)
-            supportDirection.set(entry.closestPoint);
-         else
-            supportDirection.set(entry.getNormal());
-
-         Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
-         supportDirection.negate();
-         Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
-
-         EPAVertex3D newVertex = new EPAVertex3D(vertexA, vertexB);
-
-         if (entry.contains(newVertex))
-         {
-            if (VERBOSE)
-               System.out.println("New vertex equals to a vertex of entry, terminating.");
-            break;
-         }
-
-         mu = Math.min(mu, square(TupleTools.dot(newVertex, supportDirection)) / currentNormSquared);
-
-         if (mu <= square(1.0 + epsilon) * currentNormSquared)
-         {
-            if (VERBOSE)
-               System.out.println("Reached max accuracy, terminating.");
-            break;
-         }
-
-         if (!entry.canObserverSeeFace(newVertex))
-         {
-            if (VERBOSE)
-               System.out.println("Malformed silhouette, terminating.");
-            break;
-         }
-
-         entry.markObsolete();
-         List<EPAEdge3D> silhouette = new ArrayList<>();
-         silhouette(entry.e0.twin, newVertex, silhouette);
-         silhouette(entry.e1.twin, newVertex, silhouette);
-         silhouette(entry.e2.twin, newVertex, silhouette);
-
-         boolean areNewTrianglesFine = true;
-
-         for (EPAEdge3D sentryEdge : silhouette)
-         {
-            EPAFace3D newEntry = EPAFace3D.fromVertexAndTwinEdge(newVertex, sentryEdge, epsilon);
-
-            if (newEntry.isTriangleAffinelyDependent)
+            if (queue.isEmpty())
             {
                if (VERBOSE)
-                  System.out.println("New triangle affinely dependent, terminating.");
-               areNewTrianglesFine = false;
+                  System.out.println("Queue is empty, terminating.");
                break;
             }
+
+            EPAFace3D entry = queue.poll();
+            if (entry.isObsolete())
+               continue;
+            double currentNormSquared = entry.getNormSquared();
+
+            numberOfIterations++;
 
             /*
-             * Same as above, the original check with mu does not include epsilon, but it seems to be needed to
-             * handle some edge-cases.
+             * In the original algorithm, the comparison does not add epsilon to mu, but this appears to be
+             * needed to handle some edge-cases.
              */
-            if (newEntry.isClosestPointInternal() && currentNormSquared <= newEntry.getNormSquared() && newEntry.getNormSquared() <= mu + epsilon)
-            {
-               queue.add(newEntry);
-            }
-         }
-
-         if (!areNewTrianglesFine)
-            break;
-
-         boolean terminate = false;
-
-         for (int edgeIndex = 0; edgeIndex < newVertex.getNumberOfAssociatedEdges(); edgeIndex++)
-         {
-            EPAEdge3D edge = newVertex.getAssociatedEdge(edgeIndex);
-            EPAEdge3D twin = edge.getDestination().getEdgeTo(newVertex);
-
-            if (twin == null)
+            if (currentNormSquared > mu + epsilon)
             {
                if (VERBOSE)
-                  System.out.println("Could not find twin of an edge, silhouette probably malformed, terminating.");
-               terminate = true;
+                  System.out.println("Best norm exceeds upper bound, terminating.");
                break;
             }
 
-            edge.setTwin(twin);
+            lastResult = entry;
+
+            if (currentNormSquared > epsilon)
+               supportDirection.set(entry.closestPoint);
+            else
+               supportDirection.set(entry.getNormal());
+
+            Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
+            supportDirection.negate();
+            Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
+
+            EPAVertex3D newVertex = new EPAVertex3D(vertexA, vertexB);
+
+            if (entry.contains(newVertex))
+            {
+               if (VERBOSE)
+                  System.out.println("New vertex equals to a vertex of entry, terminating.");
+               break;
+            }
+
+            mu = Math.min(mu, square(TupleTools.dot(newVertex, supportDirection)) / currentNormSquared);
+
+            if (mu <= square(1.0 + epsilon) * currentNormSquared)
+            {
+               if (VERBOSE)
+                  System.out.println("Reached max accuracy, terminating.");
+               break;
+            }
+
+            if (!entry.canObserverSeeFace(newVertex))
+            {
+               if (VERBOSE)
+                  System.out.println("Malformed silhouette, terminating.");
+               break;
+            }
+
+            entry.markObsolete();
+            List<EPAEdge3D> silhouette = new ArrayList<>();
+            silhouette(entry.e0.twin, newVertex, silhouette);
+            silhouette(entry.e1.twin, newVertex, silhouette);
+            silhouette(entry.e2.twin, newVertex, silhouette);
+
+            boolean areNewTrianglesFine = true;
+
+            for (EPAEdge3D sentryEdge : silhouette)
+            {
+               EPAFace3D newEntry = EPAFace3D.fromVertexAndTwinEdge(newVertex, sentryEdge, epsilon);
+
+               if (newEntry.isTriangleAffinelyDependent)
+               {
+                  if (VERBOSE)
+                     System.out.println("New triangle affinely dependent, terminating.");
+                  areNewTrianglesFine = false;
+                  break;
+               }
+
+               /*
+                * Same as above, the original check with mu does not include epsilon, but it seems to be needed to
+                * handle some edge-cases.
+                */
+               if (newEntry.isClosestPointInternal() && currentNormSquared <= newEntry.getNormSquared() && newEntry.getNormSquared() <= mu + epsilon)
+               {
+                  queue.add(newEntry);
+               }
+            }
+
+            if (!areNewTrianglesFine)
+               break;
+
+            boolean terminate = false;
+
+            for (int edgeIndex = 0; edgeIndex < newVertex.getNumberOfAssociatedEdges(); edgeIndex++)
+            {
+               EPAEdge3D edge = newVertex.getAssociatedEdge(edgeIndex);
+               EPAEdge3D twin = edge.getDestination().getEdgeTo(newVertex);
+
+               if (twin == null)
+               {
+                  if (VERBOSE)
+                     System.out.println("Could not find twin of an edge, silhouette probably malformed, terminating.");
+                  terminate = true;
+                  break;
+               }
+
+               edge.setTwin(twin);
+            }
+
+            if (terminate)
+               break;
+
+            entry.destroy();
          }
+      }
 
-         if (terminate)
-            break;
-
-         entry.destroy();
+      if (initialPolytope == null)
+      {
+         resultToPack.setToNaN();
+      }
+      else
+      {
+         resultToPack.setShapesAreColliding(true);
+         resultToPack.setDistance(-lastResult.getNorm());
+         lastResult.computePointOnA(resultToPack.getPointOnA());
+         lastResult.computePointOnB(resultToPack.getPointOnB());
+         resultToPack.getNormalOnA().setToNaN();
+         resultToPack.getNormalOnB().setToNaN();
       }
 
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
-   }
-
-   private void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
-   {
-      if (latestCollisionTestResult)
-      {
-         resultToPack.setToNaN();
-         resultToPack.setShapesAreColliding(latestCollisionTestResult);
-         resultToPack.setShapeA(shapeA);
-         resultToPack.setShapeB(shapeB);
-         resultToPack.setDistance(latestCollisionTestResult ? -lastResult.getNorm() : gjkCollisionDetector.getDistance());
-
-         resultToPack.getPointOnA().set(lastResult.computePointOnA());
-         resultToPack.getPointOnB().set(lastResult.computePointOnB());
-      }
-      else
-      {
-         gjkCollisionDetector.packResult(shapeA, shapeB, resultToPack, false);
-      }
    }
 
    public int getNumberOfIterations()
@@ -245,46 +241,9 @@ public class ExpandingPolytopeAlgorithm
       return numberOfIterations;
    }
 
-   public double getSignedDistance()
+   public EPAFace3D getClosestFace()
    {
-      return latestCollisionTestResult ? -lastResult.getNorm() : gjkCollisionDetector.getDistance();
-   }
-
-   public Vector3DReadOnly getCollisionVector()
-   {
-      if (latestCollisionTestResult)
-      {
-         return new Vector3D(lastResult.closestPoint);
-      }
-      else
-      {
-         return gjkCollisionDetector.getSeparationVector();
-      }
-   }
-
-   public Point3DReadOnly getCollisionPointOnA()
-   {
-      if (latestCollisionTestResult)
-      {
-         return lastResult.computePointOnA();
-      }
-      else
-      {
-         return gjkCollisionDetector.getClosestPointOnA();
-      }
-   }
-
-   public Point3DReadOnly getCollisionPointOnB()
-   {
-      if (latestCollisionTestResult)
-         return lastResult.computePointOnB();
-      else
-         return gjkCollisionDetector.getClosestPointOnB();
-   }
-
-   public ConvexPolytope3DReadOnly getPolytope()
-   {
-      return new EPAConvexPolytope3D(lastResult);
+      return lastResult;
    }
 
    private static double square(double value)
@@ -309,7 +268,7 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
-   private static class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
+   public static class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
    {
       private final List<EPAFace3D> faces = new ArrayList<>();
       private final List<EPAEdge3D> halfEdges = new ArrayList<>();
@@ -414,7 +373,7 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
-   private static class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
+   public static class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
    {
       private final EPAVertex3D v0, v1, v2;
       private final EPAEdge3D e0, e1, e2;
@@ -536,22 +495,18 @@ public class ExpandingPolytopeAlgorithm
          return isClosestPointInternal;
       }
 
-      public Point3D computePointOnA()
+      public void computePointOnA(Point3DBasics pointOnAToPack)
       {
-         Point3D pointOnA = new Point3D();
-         pointOnA.scaleAdd(lambda0, v0.getVertexOnShapeA(), pointOnA);
-         pointOnA.scaleAdd(lambda1, v1.getVertexOnShapeA(), pointOnA);
-         pointOnA.scaleAdd(lambda2, v2.getVertexOnShapeA(), pointOnA);
-         return pointOnA;
+         pointOnAToPack.setAndScale(lambda0, v0.getVertexOnShapeA());
+         pointOnAToPack.scaleAdd(lambda1, v1.getVertexOnShapeA(), pointOnAToPack);
+         pointOnAToPack.scaleAdd(lambda2, v2.getVertexOnShapeA(), pointOnAToPack);
       }
 
-      public Point3D computePointOnB()
+      public void computePointOnB(Point3DBasics pointOnBToPack)
       {
-         Point3D pointOnB = new Point3D();
-         pointOnB.scaleAdd(lambda0, v0.getVertexOnShapeB(), pointOnB);
-         pointOnB.scaleAdd(lambda1, v1.getVertexOnShapeB(), pointOnB);
-         pointOnB.scaleAdd(lambda2, v2.getVertexOnShapeB(), pointOnB);
-         return pointOnB;
+         pointOnBToPack.setAndScale(lambda0, v0.getVertexOnShapeB());
+         pointOnBToPack.scaleAdd(lambda1, v1.getVertexOnShapeB(), pointOnBToPack);
+         pointOnBToPack.scaleAdd(lambda2, v2.getVertexOnShapeB(), pointOnBToPack);
       }
 
       @Override
@@ -606,7 +561,7 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
-   private static class EPAEdge3D implements HalfEdge3DReadOnly
+   public static class EPAEdge3D implements HalfEdge3DReadOnly
    {
       private final EPAFace3D face;
       private final EPAVertex3D v0, v1;
@@ -681,7 +636,7 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
-   private static class EPAVertex3D implements Vertex3DReadOnly
+   public static class EPAVertex3D implements Vertex3DReadOnly
    {
       private final double x, y, z;
       private final Point3DReadOnly vertexOnShapeA;
@@ -796,7 +751,7 @@ public class ExpandingPolytopeAlgorithm
       INSIDE, OUTSIDE, AFFINELY_DEPENDENT
    };
 
-   public static SignedVolumeOutput signedVolumeFor2Simplex(Point3DReadOnly s1, Point3DReadOnly s2, Point3DReadOnly s3, double epsilon, double[] lambdasToPack)
+   private static SignedVolumeOutput signedVolumeFor2Simplex(Point3DReadOnly s1, Point3DReadOnly s2, Point3DReadOnly s3, double epsilon, double[] lambdasToPack)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -943,7 +898,7 @@ public class ExpandingPolytopeAlgorithm
       }
    }
 
-   public static double[] signedVolumeFor1Simplex(Point3DReadOnly s1, Point3DReadOnly s2)
+   private static double[] signedVolumeFor1Simplex(Point3DReadOnly s1, Point3DReadOnly s2)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -1020,7 +975,11 @@ public class ExpandingPolytopeAlgorithm
    {
       List<EPAFace3D> epaPolytope = new ArrayList<>();
 
-      if (gjkVertices.length == 4)
+      if (gjkVertices == null)
+      {
+         return null;
+      }
+      else if (gjkVertices.length == 4)
       {
          EPAVertex3D y0 = new EPAVertex3D(gjkVertices[0]);
          EPAVertex3D y1 = new EPAVertex3D(gjkVertices[1]);

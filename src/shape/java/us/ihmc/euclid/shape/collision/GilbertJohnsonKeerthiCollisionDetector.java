@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
+import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -10,6 +12,7 @@ import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -23,123 +26,151 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private double epsilon = 1.0e-16;
    private double epsilonTriangleNormalSwitch = 1.0e-6;
    private int maxIterations = 500;
-   private boolean latestCollisionTestResult;
    private GJKSimplex3D simplex = null;
    private int numberOfIterations = 0;
    private final Vector3D supportDirection = new Vector3D();
+   private final Vector3D initialSupportDirection = new Vector3D(Axis.Y);
 
    public GilbertJohnsonKeerthiCollisionDetector()
    {
    }
 
-   public EuclidShape3DCollisionResult doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   public EuclidShape3DCollisionResult evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
-      boolean areShapesColliding = doCollisionTest(shapeA, shapeB);
       EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
-      if (simplex == null)
-         return null;
-      result.setToNaN();
-      packResult(shapeA, shapeB, result, areShapesColliding);
+      evaluateCollision(shapeA, shapeB, result);
       return result;
    }
 
-   public void doShapeCollisionTest(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
+   public void evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
-      boolean areShapesColliding = doCollisionTest(shapeA, shapeB);
-      resultToPack.setToNaN();
-
-      if (simplex == null)
-         return;
-
-      packResult(shapeA, shapeB, resultToPack, areShapesColliding);
+      evaluateCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
-   public boolean doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
+   public EuclidShape3DCollisionResult evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
+   {
+      EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
+      evaluateCollision(shapeA, shapeB, result);
+      return result;
+   }
+
+   public boolean evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
       GJKSimplex3D previousOutput = new GJKSimplex3D();
 
-      supportDirection.set(Axis.Y);
+      supportDirection.set(initialSupportDirection);
       Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
       supportDirection.negate();
       Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
 
+      boolean areColliding = false;
+
       if (vertexA == null || vertexB == null)
       {
          simplex = null;
-         latestCollisionTestResult = false;
-         return false;
+         areColliding = false;
+      }
+      else
+      {
+         double closestPointNormSquared = 1.0;
+
+         for (int i = 0; i < maxIterations; i++)
+         {
+            numberOfIterations = i;
+            GJKVertex3D newVertex = new GJKVertex3D(vertexA, vertexB);
+
+            if (previousOutput.contains(newVertex))
+            {
+               simplex = previousOutput;
+               areColliding = false;
+               if (VERBOSE)
+                  System.out.println("New vertex belongs to simplex, terminating.");
+               break;
+            }
+
+            if (Math.abs(closestPointNormSquared - newVertex.dot(supportDirection)) <= epsilon * closestPointNormSquared)
+            {
+               simplex = previousOutput;
+               areColliding = false;
+               if (VERBOSE)
+                  System.out.println("Progression under tolerance, terminating.");
+               break;
+            }
+
+            GJKSimplex3D output = nextBestSimplex(previousOutput.vertices, newVertex);
+
+            if (output == null)
+            { // End of process
+               simplex = previousOutput;
+               areColliding = false;
+               if (VERBOSE)
+                  System.out.println("Closest simplex is null, terminating.");
+               break;
+            }
+
+            if (output.closestPointNormSquared() >= previousOutput.closestPointNormSquared())
+            {
+               simplex = previousOutput;
+               areColliding = false;
+               if (VERBOSE)
+                  System.out.println("No progression, terminating.");
+               break;
+            }
+
+            closestPointNormSquared = output.closestPointNormSquared();
+
+            if (output.size() == 4 || closestPointNormSquared <= epsilon * output.maxNormSquared())
+            { // End of process
+               simplex = output;
+               areColliding = true;
+               if (VERBOSE)
+                  System.out.println("Collision detected, terminating.");
+               break;
+            }
+
+            if (closestPointNormSquared < epsilonTriangleNormalSwitch && output.vertices.length == 3)
+               supportDirection.set(output.getTriangleNormal());
+            else
+               supportDirection.setAndNegate(output.closestPoint());
+            vertexA = shapeA.getSupportingVertex(supportDirection);
+            supportDirection.negate();
+            vertexB = shapeB.getSupportingVertex(supportDirection);
+
+            previousOutput = output;
+         }
       }
 
-      double closestPointNormSquared = 1.0;
-
-      for (int i = 0; i < maxIterations; i++)
+      if (areColliding)
       {
-         numberOfIterations = i;
-         GJKVertex3D newVertex = new GJKVertex3D(vertexA, vertexB);
-
-         if (previousOutput.contains(newVertex))
-         {
-            simplex = previousOutput;
-            latestCollisionTestResult = false;
-            if (VERBOSE)
-               System.out.println("New vertex belongs to simplex, terminating.");
-            break;
-         }
-
-         if (Math.abs(closestPointNormSquared - newVertex.dot(supportDirection)) <= epsilon * closestPointNormSquared)
-         {
-            simplex = previousOutput;
-            latestCollisionTestResult = false;
-            if (VERBOSE)
-               System.out.println("Progression under tolerance, terminating.");
-            break;
-         }
-
-         GJKSimplex3D output = nextBestSimplex(previousOutput.vertices, newVertex);
-
-         if (output == null)
-         { // End of process
-            simplex = previousOutput;
-            latestCollisionTestResult = false;
-            if (VERBOSE)
-               System.out.println("Closest simplex is null, terminating.");
-            break;
-         }
-
-         if (output.closestPointNormSquared() >= previousOutput.closestPointNormSquared())
-         {
-            simplex = previousOutput;
-            latestCollisionTestResult = false;
-            if (VERBOSE)
-               System.out.println("No progression, terminating.");
-            break;
-         }
-
-         closestPointNormSquared = output.closestPointNormSquared();
-
-         if (output.size() == 4 || closestPointNormSquared <= epsilon * output.maxNormSquared())
-         { // End of process
-            simplex = output;
-            latestCollisionTestResult = true;
-            if (VERBOSE)
-               System.out.println("Collision detected, terminating.");
-            break;
-         }
-
-         if (closestPointNormSquared < epsilonTriangleNormalSwitch && output.vertices.length == 3)
-            supportDirection.set(output.getTriangleNormal());
-         else
-            supportDirection.setAndNegate(output.closestPoint());
-         vertexA = shapeA.getSupportingVertex(supportDirection);
-         supportDirection.negate();
-         vertexB = shapeB.getSupportingVertex(supportDirection);
-
-         previousOutput = output;
+         resultToPack.setToNaN();
+         resultToPack.setShapesAreColliding(areColliding);
+      }
+      else if (simplex == null)
+      {
+         resultToPack.setToNaN();
+      }
+      else
+      {
+         resultToPack.setDistance(simplex.closestPointNorm());
+         resultToPack.setShapeA(null);
+         resultToPack.setShapeB(null);
+         simplex.computePointOnA(resultToPack.getPointOnA());
+         simplex.computePointOnB(resultToPack.getPointOnB());
+         resultToPack.getNormalOnA().setToNaN();
+         resultToPack.getNormalOnB().setToNaN();
       }
 
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
-      return latestCollisionTestResult;
+
+      return areColliding;
+   }
+
+   public void setInitialSupportDirection(Vector3DReadOnly initialSupportDirection)
+   {
+      this.initialSupportDirection.set(initialSupportDirection);
    }
 
    public void setMaxIterations(int maxIterations)
@@ -162,55 +193,6 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return numberOfIterations;
    }
 
-   void packResult(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack, boolean areShapesColliding)
-   {
-      resultToPack.setShapesAreColliding(areShapesColliding);
-      resultToPack.setShapeA(shapeA);
-      resultToPack.setShapeB(shapeB);
-
-      if (areShapesColliding)
-         return;
-
-      resultToPack.setDistance(simplex.closestPointNorm());
-      resultToPack.getPointOnA().set(getClosestPointOnA());
-      resultToPack.getPointOnB().set(getClosestPointOnB());
-   }
-
-   public double getDistance()
-   {
-      if (simplex == null)
-         return Double.NaN;
-      else
-         return simplex.closestPointNorm();
-   }
-
-   public Vector3DReadOnly getSeparationVector()
-   {
-      if (simplex == null || latestCollisionTestResult)
-         return null;
-
-      Vector3D separationVector = new Vector3D();
-      separationVector.set(simplex.closestPoint());
-      separationVector.negate();
-      return separationVector;
-   }
-
-   public Point3DReadOnly getClosestPointOnA()
-   {
-      if (simplex == null || latestCollisionTestResult)
-         return null;
-
-      return simplex.computePointOnA();
-   }
-
-   public Point3DReadOnly getClosestPointOnB()
-   {
-      if (simplex == null || latestCollisionTestResult)
-         return null;
-
-      return simplex.computePointOnB();
-   }
-
    public GJKSimplex3D getSimplex()
    {
       return simplex;
@@ -224,7 +206,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return simplex.vertices;
    }
 
-   public static GJKSimplex3D nextBestSimplex(GJKVertex3D[] oldVertices, GJKVertex3D newVertex)
+   private static GJKSimplex3D nextBestSimplex(GJKVertex3D[] oldVertices, GJKVertex3D newVertex)
    {
       if (oldVertices.length == 3)
          return nextBestSimplexFrom3Simplex(newVertex, oldVertices[2], oldVertices[1], oldVertices[0]);
@@ -236,7 +218,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          return new GJKSimplex3D(newVertex);
    }
 
-   public static GJKSimplex3D nextBestSimplexFrom3Simplex(GJKVertex3D s1, GJKVertex3D s2, GJKVertex3D s3, GJKVertex3D s4)
+   private static GJKSimplex3D nextBestSimplexFrom3Simplex(GJKVertex3D s1, GJKVertex3D s2, GJKVertex3D s3, GJKVertex3D s4)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -306,7 +288,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       }
    }
 
-   public static GJKSimplex3D nextBestSimplexFrom2Simplex(GJKVertex3D s1, GJKVertex3D s2, GJKVertex3D s3)
+   private static GJKSimplex3D nextBestSimplexFrom2Simplex(GJKVertex3D s1, GJKVertex3D s2, GJKVertex3D s3)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -408,24 +390,24 @@ public class GilbertJohnsonKeerthiCollisionDetector
       }
    }
 
-   public static final ProjectedTriangleSignedAreaCalculator yzTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ay, az, by,
-                                                                                                                                                   bz, cy, cz);
-   public static final ProjectedTriangleSignedAreaCalculator zxTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(az, ax, bz,
-                                                                                                                                                   bx, cz, cx);
-   public static final ProjectedTriangleSignedAreaCalculator xyTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ax, ay, bx,
-                                                                                                                                                   by, cx, cy);
+   static final ProjectedTriangleSignedAreaCalculator yzTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ay, az, by, bz, cy,
+                                                                                                                                            cz);
+   static final ProjectedTriangleSignedAreaCalculator zxTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(az, ax, bz, bx, cz,
+                                                                                                                                            cx);
+   static final ProjectedTriangleSignedAreaCalculator xyTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ax, ay, bx, by, cx,
+                                                                                                                                            cy);
 
-   public static interface ProjectedTriangleSignedAreaCalculator
+   static interface ProjectedTriangleSignedAreaCalculator
    {
       double compute(double ax, double ay, double az, double bx, double by, double bz, double cx, double cy, double cz);
    }
 
-   public static double triangleSignedArea(double ax, double ay, double bx, double by, double cx, double cy)
+   private static double triangleSignedArea(double ax, double ay, double bx, double by, double cx, double cy)
    {
       return ax * (by - cy) + bx * (cy - ay) + cx * (ay - by);
    }
 
-   public static GJKSimplex3D nextBestSimplexFrom1Simplex(GJKVertex3D s1, GJKVertex3D s2)
+   private static GJKSimplex3D nextBestSimplexFrom1Simplex(GJKVertex3D s1, GJKVertex3D s2)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -499,7 +481,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       }
    }
 
-   public static boolean compareSigns(double a, double b)
+   static boolean compareSigns(double a, double b)
    {
       if (a > 0.0 && b >= 0.0)
          return true;
@@ -587,39 +569,59 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
       public Point3D computePointOnA()
       {
+         Point3D pointOnA = new Point3D();
+         if (computePointOnA(pointOnA))
+            return pointOnA;
+         else
+            return null;
+      }
+
+      public boolean computePointOnA(Point3DBasics pointOnAToPack)
+      {
          if (size() == 0)
          {
-            return null;
+            return false;
          }
          else if (size() == 1)
          {
-            return new Point3D(vertices[0].getVertexOnShapeA());
+            pointOnAToPack.set(vertices[0].getVertexOnShapeA());
+            return true;
          }
          else
          {
-            Point3D pointOnA = new Point3D();
-            for (int i = 0; i < size(); i++)
-               pointOnA.scaleAdd(barycentricCoordinates[i], vertices[i].getVertexOnShapeA(), pointOnA);
-            return pointOnA;
+            pointOnAToPack.setAndScale(barycentricCoordinates[0], vertices[0].getVertexOnShapeA());
+            for (int i = 1; i < size(); i++)
+               pointOnAToPack.scaleAdd(barycentricCoordinates[i], vertices[i].getVertexOnShapeA(), pointOnAToPack);
+            return true;
          }
       }
 
       public Point3D computePointOnB()
       {
+         Point3D pointOnB = new Point3D();
+         if (computePointOnB(pointOnB))
+            return pointOnB;
+         else
+            return null;
+      }
+
+      public boolean computePointOnB(Point3DBasics pointOnBToPack)
+      {
          if (size() == 0)
          {
-            return null;
+            return false;
          }
          else if (size() == 1)
          {
-            return new Point3D(vertices[0].getVertexOnShapeB());
+            pointOnBToPack.set(vertices[0].getVertexOnShapeB());
+            return true;
          }
          else
          {
-            Point3D pointOnB = new Point3D();
-            for (int i = 0; i < size(); i++)
-               pointOnB.scaleAdd(barycentricCoordinates[i], vertices[i].getVertexOnShapeB(), pointOnB);
-            return pointOnB;
+            pointOnBToPack.setAndScale(barycentricCoordinates[0], vertices[0].getVertexOnShapeB());
+            for (int i = 1; i < size(); i++)
+               pointOnBToPack.scaleAdd(barycentricCoordinates[i], vertices[i].getVertexOnShapeB(), pointOnBToPack);
+            return true;
          }
       }
 

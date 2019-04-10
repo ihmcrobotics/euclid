@@ -123,8 +123,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                                                                                                  tetrahedronFarthest2));
 
          GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         assertTrue(collisionDetector.doCollisionTest(cube, tetrahedron));
-         assertTrue(collisionDetector.doCollisionTest(tetrahedron, cube));
+         assertTrue(collisionDetector.evaluateCollision(cube, tetrahedron).areShapesColliding());
+         assertTrue(collisionDetector.evaluateCollision(tetrahedron, cube).areShapesColliding());
 
          performAssertionsTwoCombinations("Iteration: " + i, cube, tetrahedron, true, null, null);
       }
@@ -560,8 +560,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                                         boolean expectedCollisionTestResult, Point3DReadOnly expectedPointOnA, Point3DReadOnly expectedPointOnB)
    {
       GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
-      boolean actualCollisionTestResult = collisionDetector.doCollisionTest(polytopeA, polytopeB);
-      assertEquals(expectedCollisionTestResult, actualCollisionTestResult, messagePrefix + ", GJK distance: " + collisionDetector.getDistance());
+      EuclidShape3DCollisionResult result = collisionDetector.evaluateCollision(polytopeA, polytopeB);
+      boolean actualCollisionTestResult = result.areShapesColliding();
+      assertEquals(expectedCollisionTestResult, actualCollisionTestResult, messagePrefix + ", GJK distance: " + result.getDistance());
 
       boolean isOnePolytopeEmpty = polytopeA.isEmpty() || polytopeB.isEmpty();
 
@@ -570,22 +571,34 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       else
          assertNotNull(collisionDetector.getSimplexVertices(), messagePrefix);
 
-      if (isOnePolytopeEmpty || actualCollisionTestResult)
+      if (isOnePolytopeEmpty)
       {
-         assertNull(collisionDetector.getClosestPointOnA(), messagePrefix);
-         assertNull(collisionDetector.getClosestPointOnB(), messagePrefix);
-         assertNull(collisionDetector.getSeparationVector(), messagePrefix);
+         assertFalse(result.areShapesColliding());
+         assertTrue(Double.isNaN(result.getDistance()));
+         assertNull(result.getShapeA());
+         assertNull(result.getShapeB());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnA());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnB());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnA());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnB());
+      }
+      else if (actualCollisionTestResult)
+      {
+         assertTrue(Double.isNaN(result.getDistance()));
+         assertNull(result.getShapeA());
+         assertNull(result.getShapeB());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnA());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnB());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnA());
+         EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnB());
       }
       else
       {
-         Point3D actualPointOnA = new Point3D(collisionDetector.getClosestPointOnA());
-         Point3D actualPointOnB = new Point3D(collisionDetector.getClosestPointOnB());
+         Point3D actualPointOnA = result.getPointOnA();
+         Point3D actualPointOnB = result.getPointOnB();
 
          EuclidCoreTestTools.assertTuple3DEquals(messagePrefix, expectedPointOnA, actualPointOnA, 20.0 * EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(messagePrefix, expectedPointOnB, actualPointOnB, 20.0 * EPSILON);
-
-         Vector3D separationVector = new Vector3D(collisionDetector.getSeparationVector());
-         assertEquals(actualPointOnA.distance(actualPointOnB), separationVector.length(), EPSILON, messagePrefix);
       }
    }
 
@@ -901,7 +914,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          EuclidShape3DCollisionResult gjkResult = new EuclidShape3DCollisionResult();
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         gjkDetector.doShapeCollisionTest(shapeA, shapeB, gjkResult);
+         gjkDetector.evaluateCollision(shapeA, shapeB, gjkResult);
 
          double distanceError = Math.abs(expectedResult.getDistance() - gjkResult.getDistance());
          if (verbose && (i % 5000) == 0)
