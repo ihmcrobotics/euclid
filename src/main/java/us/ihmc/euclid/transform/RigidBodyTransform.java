@@ -1110,7 +1110,9 @@ public class RigidBodyTransform
     */
    public boolean equals(RigidBodyTransform other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return rotationMatrix.equals(other.rotationMatrix) && translationVector.equals(other.translationVector);

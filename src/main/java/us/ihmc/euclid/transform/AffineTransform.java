@@ -2143,7 +2143,9 @@ public class AffineTransform
     */
    public boolean equals(AffineTransform other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return rotationScaleMatrix.equals(other.rotationScaleMatrix) && translationVector.equals(other.translationVector);

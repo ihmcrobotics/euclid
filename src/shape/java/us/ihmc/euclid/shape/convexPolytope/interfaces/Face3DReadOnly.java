@@ -579,6 +579,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    default boolean equals(Face3DReadOnly other)
    {
+      if (other == this)
+         return true;
       if (other == null)
          return false;
       if (getNumberOfEdges() != other.getNumberOfEdges())

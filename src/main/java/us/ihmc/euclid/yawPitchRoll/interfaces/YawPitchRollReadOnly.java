@@ -384,7 +384,9 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     */
    default boolean equals(YawPitchRollReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getYaw() == other.getYaw() && getPitch() == other.getPitch() && getRoll() == other.getRoll();

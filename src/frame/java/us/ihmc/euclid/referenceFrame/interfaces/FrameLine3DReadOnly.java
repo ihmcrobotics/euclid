@@ -830,7 +830,9 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     */
    default boolean equals(FrameLine3DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
          return Line3DReadOnly.super.equals(other);

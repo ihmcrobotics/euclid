@@ -956,7 +956,9 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default boolean equals(FrameMatrix3DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Matrix3DReadOnly.super.equals(other);

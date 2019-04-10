@@ -372,7 +372,9 @@ public interface Line3DReadOnly
     */
    default boolean equals(Line3DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());

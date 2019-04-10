@@ -500,7 +500,11 @@ public abstract class Matrix3DFeatures
     */
    public static boolean equals(Matrix3DReadOnly m1, Matrix3DReadOnly m2)
    {
-      if (m1 == null || m2 == null)
+      if (m1 == m2)
+      {
+         return true;
+      }
+      else if (m1 == null || m2 == null)
       {
          return false;
       }

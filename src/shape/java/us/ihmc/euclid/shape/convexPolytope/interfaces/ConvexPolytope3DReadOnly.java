@@ -447,6 +447,9 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
 
    default boolean equals(ConvexPolytope3DReadOnly other)
    {
+      if (other == this)
+         return true;
+
       if (other == null)
          return false;
 

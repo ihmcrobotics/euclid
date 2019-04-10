@@ -1907,7 +1907,9 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean equals(FrameConvexPolygon2DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
          return ConvexPolygon2DReadOnly.super.equals(other);

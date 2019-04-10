@@ -87,6 +87,8 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
 
    default boolean equals(HalfEdge3DReadOnly other)
    {
+      if (other == this)
+         return true;
       if (getOrigin() == null || getDestination() == null)
          return false;
       else

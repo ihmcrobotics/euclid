@@ -549,7 +549,9 @@ public interface LineSegment3DReadOnly
     */
    default boolean equals(LineSegment3DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());

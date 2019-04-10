@@ -551,7 +551,9 @@ public interface BoundingBox2DReadOnly
     */
    default boolean equals(BoundingBox2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());

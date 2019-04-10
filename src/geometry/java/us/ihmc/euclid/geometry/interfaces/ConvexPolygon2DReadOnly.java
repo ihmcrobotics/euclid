@@ -1554,6 +1554,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     */
    default boolean equals(ConvexPolygon2DReadOnly other)
    {
+      if (other == this)
+         return true;
       if (other == null)
          return false;
 

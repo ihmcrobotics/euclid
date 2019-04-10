@@ -247,7 +247,9 @@ public interface FramePose3DReadOnly extends Pose3DReadOnly, ReferenceFrameHolde
     */
    default boolean equals(FramePose3DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Pose3DReadOnly.super.equals(other);

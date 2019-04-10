@@ -31,7 +31,9 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
 
    default boolean equals(Shape3DPoseReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());

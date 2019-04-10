@@ -589,7 +589,9 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     */
    default boolean equals(FrameOrientation2DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
       return Orientation2DReadOnly.super.equals(other);
    }

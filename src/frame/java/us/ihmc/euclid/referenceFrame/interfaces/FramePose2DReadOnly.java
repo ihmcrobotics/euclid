@@ -131,7 +131,9 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default boolean equals(FramePose2DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Pose2DReadOnly.super.equals(other);

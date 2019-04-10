@@ -324,6 +324,7 @@ public interface LineSegment2DReadOnly
     * <p>
     * WARNING: This method generates garbage.
     * </p>
+    * 
     * @return copy of this line segment flipped.
     */
    default LineSegment2D flipDirectionCopy()
@@ -358,8 +359,8 @@ public interface LineSegment2DReadOnly
     *
     * @param convexPolygon the polygon this line segment may intersect. Not modified.
     * @return the intersections between the line segment and the polygon.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2D#update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2D#update()} has not been called since
+    *            last time this polygon's vertices were edited.
     */
    default Point2DBasics[] intersectionWith(ConvexPolygon2DReadOnly convexPolygon)
    {
@@ -801,7 +802,9 @@ public interface LineSegment2DReadOnly
     */
    default boolean equals(LineSegment2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
