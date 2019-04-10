@@ -528,7 +528,7 @@ public interface LineSegment3DReadOnly
    }
 
    /**
-    * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
+    * Tests on a per component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
     * @param other the query. Not modified.
