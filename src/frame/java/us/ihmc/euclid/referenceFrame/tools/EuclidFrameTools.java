@@ -1971,28 +1971,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
     * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -2002,7 +1995,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
@@ -2033,28 +2026,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
     * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -2064,7 +2050,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -2096,28 +2082,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -2127,7 +2106,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
@@ -2157,28 +2136,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param pointOnLine a point located on the infinitely long line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -2188,7 +2160,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -2752,28 +2724,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line segment and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -2783,7 +2748,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the line segment and the cylinder. It is either equal
     *         to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
@@ -2813,28 +2778,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line segment and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
     * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -2844,7 +2802,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the line segment and the cylinder. It is either equal
     *         to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
@@ -3364,28 +3322,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the ray and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param rayOrigin the coordinate of the ray origin. Not modified.
     * @param rayDirection the direction of the ray. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -3395,7 +3346,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
@@ -3425,28 +3376,21 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the ray and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
+    * @param cylinderLength length of the cylinder.
     * @param cylinderRadius radius of the cylinder.
+    * @param cylinderPosition the center of the cylinder.
+    * @param cylinderAxis the cylinder's axis.
     * @param rayOrigin the coordinate of the ray origin. Not modified.
     * @param rayDirection the direction of the ray. Not modified.
     * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
@@ -3456,7 +3400,7 @@ public class EuclidFrameTools
     *
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
+    * @throws IllegalArgumentException if either {@code cylinderLength < 0} or
     *            {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *            same reference frame.
