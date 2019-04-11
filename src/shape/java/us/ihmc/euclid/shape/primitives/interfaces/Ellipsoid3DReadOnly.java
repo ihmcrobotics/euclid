@@ -55,7 +55,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
 
-      double distance = EuclidShapeTools.doPoint3DEllipsoid3DCollisionTest(pointToCheckInLocal, getRadii(), closestPointOnSurfaceToPack,
+      double distance = EuclidShapeTools.evaluatePoint3DEllipsoid3DCollision(pointToCheckInLocal, getRadii(), closestPointOnSurfaceToPack,
                                                                            normalAtClosestPointToPack);
 
       transformToWorld(closestPointOnSurfaceToPack);

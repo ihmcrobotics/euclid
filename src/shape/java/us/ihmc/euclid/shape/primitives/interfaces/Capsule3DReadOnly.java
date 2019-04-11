@@ -55,7 +55,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DCapsule3DCollisionTest(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
+      return EuclidShapeTools.evaluatePoint3DCapsule3DCollision(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
                                                               normalAtClosestPointToPack) <= 0.0;
    }
 

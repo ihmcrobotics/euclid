@@ -54,7 +54,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
 
-      double distance = EuclidShapeTools.doPoint3DBox3DCollisionTest(queryInLocal, getSize(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
+      double distance = EuclidShapeTools.evaluatePoint3DBox3DCollision(queryInLocal, getSize(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
 
       transformToWorld(closestPointOnSurfaceToPack);
       transformToWorld(normalAtClosestPointToPack);

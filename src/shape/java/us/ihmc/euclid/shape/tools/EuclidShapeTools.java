@@ -13,21 +13,50 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class provides a variety of tools for performing operations with shapes.
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidShapeTools
 {
-   private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
-   private static final double TORUS_SMALLEST_DISTANCE_TO_AXIS = 1.0e-12;
+   /**
+    * Represents minimum tolerance for triggering edge-case resolution.
+    */
+   public static final double MIN_DISTANCE_EPSILON = 1.0e-12;
 
    private EuclidShapeTools()
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   /**
+    * Tests whether the {@code query} is located inside an axis-aligned 3D box centered at the origin
+    * given its size.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param box3DSize the size of the box. Not modified.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the box, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the box's surface, {@code false} otherwise.
+    */
    public static boolean isPoint3DInsideBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize, double epsilon)
    {
       return isPoint3DInsideBox3D(query.getX(), query.getY(), query.getZ(), box3DSize, epsilon);
    }
 
+   /**
+    * Tests whether the {@code query} is located inside an axis-aligned 3D box centered at the origin
+    * given its size.
+    *
+    * @param x the x-coordinates of the query. Not modified.
+    * @param y the y-coordinates of the query. Not modified.
+    * @param z the z-coordinates of the query. Not modified.
+    * @param box3DSize the size of the box. Not modified.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the box, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the box's surface, {@code false} otherwise.
+    */
    public static boolean isPoint3DInsideBox3D(double x, double y, double z, Vector3DReadOnly box3DSize, double epsilon)
    {
       if (Math.abs(x) <= 0.5 * box3DSize.getX() + epsilon)
@@ -40,6 +69,22 @@ public class EuclidShapeTools
       return false;
    }
 
+   /**
+    * Computes the distance between the {@code query} and an axis-aligned 3D box centered at the origin
+    * given its size.
+    * <p>
+    * The returned distance is signed as follows:
+    * <ul>
+    * <li>Positive: the query is located outside the box.
+    * <li>Zero: the query is located on the box's surface.
+    * <li>Negative: the query is located inside the box.
+    * </ul>
+    * </p>
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param box3DSize the size of the box. Not modified.
+    * @return the signed distance between the query and the box.
+    */
    public static double signedDistanceBetweenPoint3DAndBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
@@ -66,6 +111,19 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the orthogonal projection of a 3D point on an axis-aligned 3D box centered at the origin
+    * given its size.
+    * <p>
+    * When the query is located inside the box, this method returns {@code false} and
+    * {@code projectionToPack} is not modified.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param box3DSize the size of the box. Not modified.
+    * @param projectionToPack point in which the projection is stored. Modified.
+    * @return whether the projection has succeeded or not.
+    */
    public static boolean orthogonalProjectionOntoBox3D(Point3DReadOnly pointToProject, Vector3DReadOnly box3DSize, Point3DBasics projectionToPack)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
@@ -92,6 +150,18 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the supporting vertex for an axis-aligned 3D box centered at the origin and given its
+    * size.
+    * <p>
+    * The supporting vertex represents the location on a shape that is the farthest in a given
+    * direction.
+    * </p>
+    *
+    * @param supportDirection the search direction. Not modified.
+    * @param box3DSize the size of the box. Not modified.
+    * @param supportingVertexToPack point in which the supporting vertex is stored. Modified.
+    */
    public static void supportingVertexBox3D(Vector3DReadOnly supportDirection, Vector3DReadOnly box3DSize, Point3DBasics supportingVertexToPack)
    {
       supportingVertexToPack.setX(supportDirection.getX() > 0.0 ? box3DSize.getX() : -box3DSize.getX());
@@ -100,6 +170,14 @@ public class EuclidShapeTools
       supportingVertexToPack.scale(0.5);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given box 3D.
+    *
+    * @param box3DPosition the location of the box's center. Not modified.
+    * @param box3DOrientation the orientation of the box. Not modified.
+    * @param box3DSize the size of the box. Not modified.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxBox3D(Point3DReadOnly box3DPosition, RotationMatrixReadOnly box3DOrientation, Vector3DReadOnly box3DSize,
                                        BoundingBox3DBasics boundingBoxToPack)
    {
@@ -134,8 +212,19 @@ public class EuclidShapeTools
       boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
-   public static double doPoint3DBox3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly box3DSize, Point3DBasics closestPointToPack,
-                                                    Vector3DBasics normalToPack)
+   /**
+    * Evaluates the collision between a 3D point and a 3D box centered at the origin and given its
+    * size.
+    *
+    * @param query the location of the query. Not modified.
+    * @param box3DSize the size of the box. Not modified.
+    * @param closestPointOnSurfaceToPack the closest point located on the surface of the box. Modified.
+    * @param normalToPack the surface normal at the closest point. Not modified.
+    * @return the signed distance between the query and the box. It is negative when the query is
+    *         inside, positive otherwise.
+    */
+   public static double evaluatePoint3DBox3DCollision(Point3DReadOnly query, Vector3DReadOnly box3DSize, Point3DBasics closestPointOnSurfaceToPack,
+                                                      Vector3DBasics normalToPack)
    {
       double halfSizeX = 0.5 * box3DSize.getX();
       double halfSizeY = 0.5 * box3DSize.getY();
@@ -154,21 +243,21 @@ public class EuclidShapeTools
          dy = Math.abs(Math.abs(yLocal) - halfSizeY);
          dz = Math.abs(Math.abs(zLocal) - halfSizeZ);
 
-         closestPointToPack.set(xLocal, yLocal, zLocal);
+         closestPointOnSurfaceToPack.set(xLocal, yLocal, zLocal);
 
          if (dx < dy)
          {
             if (dx < dz)
-               closestPointToPack.setX(Math.copySign(halfSizeX, xLocal));
+               closestPointOnSurfaceToPack.setX(Math.copySign(halfSizeX, xLocal));
             else
-               closestPointToPack.setZ(Math.copySign(halfSizeZ, zLocal));
+               closestPointOnSurfaceToPack.setZ(Math.copySign(halfSizeZ, zLocal));
          }
          else
          {
             if (dy < dz)
-               closestPointToPack.setY(Math.copySign(halfSizeY, yLocal));
+               closestPointOnSurfaceToPack.setY(Math.copySign(halfSizeY, yLocal));
             else
-               closestPointToPack.setZ(Math.copySign(halfSizeZ, zLocal));
+               closestPointOnSurfaceToPack.setZ(Math.copySign(halfSizeZ, zLocal));
          }
          normalToPack.setToZero();
 
@@ -201,7 +290,7 @@ public class EuclidShapeTools
 
          double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
 
-         closestPointToPack.set(xLocalClamped, yLocalClamped, zLocalClamped);
+         closestPointOnSurfaceToPack.set(xLocalClamped, yLocalClamped, zLocalClamped);
          normalToPack.set(dx, dy, dz);
          normalToPack.scale(1.0 / distance);
 
@@ -209,6 +298,19 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Tests whether the {@code query} is located inside a 3D capsule.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param capsule3DPosition the coordinates of the capsule's center. Not modified.
+    * @param capsule3DAxis the axis of revolution of the capsule. Not modified.
+    * @param capsule3DLength the length of the capsule, i.e. the distance between the center of the
+    *           half-spheres.
+    * @param capsule3DRadius the radius of the capsule.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the capsule, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the capsule's surface, {@code false} otherwise.
+    */
    public static boolean isPoint3DInsideCapsule3D(Point3DReadOnly query, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
                                                   double capsule3DLength, double capsule3DRadius, double epsilon)
    {
@@ -227,6 +329,25 @@ public class EuclidShapeTools
       return distanceSquared <= upsizedRadius * upsizedRadius;
    }
 
+   /**
+    * Computes the distance between the {@code query} and a 3D capsule.
+    * <p>
+    * The returned distance is signed as follows:
+    * <ul>
+    * <li>Positive: the query is located outside the capsule.
+    * <li>Zero: the query is located on the capsule's surface.
+    * <li>Negative: the query is located inside the capsule.
+    * </ul>
+    * </p>
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param capsule3DPosition the coordinates of the capsule's center. Not modified.
+    * @param capsule3DAxis the axis of revolution of the capsule. Not modified.
+    * @param capsule3DLength the length of the capsule, i.e. the distance between the center of the
+    *           half-spheres.
+    * @param capsule3DRadius the radius of the capsule.
+    * @return the signed distance between the query and the capsule.
+    */
    public static double signedDistanceBetweenPoint3DAndCapsule3D(Point3DReadOnly query, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
                                                                  double capsule3DLength, double capsule3DRadius)
    {
@@ -244,6 +365,22 @@ public class EuclidShapeTools
       return distanceFromAxis - capsule3DRadius;
    }
 
+   /**
+    * Computes the orthogonal projection of a 3D point on a 3D capsule.
+    * <p>
+    * When the query is located inside the capsule, this method returns {@code false} and
+    * {@code projectionToPack} is not modified.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param capsule3DPosition the coordinates of the capsule's center. Not modified.
+    * @param capsule3DAxis the axis of revolution of the capsule. Not modified.
+    * @param capsule3DLength the length of the capsule, i.e. the distance between the center of the
+    *           half-spheres.
+    * @param capsule3DRadius the radius of the capsule.
+    * @param projectionToPack point in which the projection is stored. Modified.
+    * @return whether the projection has succeeded or not.
+    */
    public static boolean orthogonalProjectionOntoCapsule3D(Point3DReadOnly pointToProject, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
                                                            double capsule3DLength, double capsule3DRadius, Point3DBasics projectionToPack)
    {
@@ -325,6 +462,21 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the supporting vertex for a 3D capsule.
+    * <p>
+    * The supporting vertex represents the location on a shape that is the farthest in a given
+    * direction.
+    * </p>
+    *
+    * @param supportDirection the search direction. Not modified.
+    * @param capsule3DPosition the coordinates of the capsule's center. Not modified.
+    * @param capsule3DAxis the axis of revolution of the capsule. Not modified.
+    * @param capsule3DLength the length of the capsule, i.e. the distance between the center of the
+    *           half-spheres.
+    * @param capsule3DRadius the radius of the capsule.
+    * @param supportingVertexToPack point in which the supporting vertex is stored. Modified.
+    */
    public static void supportingVertexCapsule3D(Vector3DReadOnly supportDirection, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
                                                 double capsule3DLength, double capsule3DRadius, Point3DBasics supportingVertexToPack)
    {
@@ -337,6 +489,16 @@ public class EuclidShapeTools
          supportingVertexToPack.scaleAdd(-0.5 * capsule3DLength, capsule3DAxis, supportingVertexToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given capsule 3D.
+    *
+    * @param capsule3DPosition the coordinates of the capsule's center. Not modified.
+    * @param capsule3DAxis the axis of revolution of the capsule. Not modified.
+    * @param capsule3DLength the length of the capsule, i.e. the distance between the center of the
+    *           half-spheres.
+    * @param capsule3DRadius the radius of the capsule.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxCapsule3D(Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis, double capsule3DLength, double capsule3DRadius,
                                            BoundingBox3DBasics boundingBoxToPack)
    {
@@ -356,9 +518,24 @@ public class EuclidShapeTools
       boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
-   public static double doPoint3DCapsule3DCollisionTest(Point3DReadOnly query, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
-                                                        double capsule3DLength, double capsule3DRadius, Point3DBasics closestPointOnSurfaceToPack,
-                                                        Vector3DBasics normalToPack)
+   /**
+    * Evaluates the collision between a 3D point and a 3D capsule.
+    *
+    * @param query the location of the query. Not modified.
+    * @param capsule3DPosition the coordinates of the capsule's center. Not modified.
+    * @param capsule3DAxis the axis of revolution of the capsule. Not modified.
+    * @param capsule3DLength the length of the capsule, i.e. the distance between the center of the
+    *           half-spheres.
+    * @param capsule3DRadius the radius of the capsule.
+    * @param closestPointOnSurfaceToPack the closest point located on the surface of the capsule.
+    *           Modified.
+    * @param normalToPack the surface normal at the closest point. Not modified.
+    * @return the signed distance between the query and the capsule. It is negative when the query is
+    *         inside, positive otherwise.
+    */
+   public static double evaluatePoint3DCapsule3DCollision(Point3DReadOnly query, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
+                                                          double capsule3DLength, double capsule3DRadius, Point3DBasics closestPointOnSurfaceToPack,
+                                                          Vector3DBasics normalToPack)
    {
       if (capsule3DRadius <= 0.0)
       {
@@ -374,7 +551,7 @@ public class EuclidShapeTools
       }
       else if (capsule3DLength == 0.0)
       {
-         return doPoint3DSphere3DCollisionTest(query, capsule3DPosition, capsule3DRadius, closestPointOnSurfaceToPack, normalToPack);
+         return evaluatePoint3DSphere3DCollision(query, capsule3DPosition, capsule3DRadius, closestPointOnSurfaceToPack, normalToPack);
       }
 
       double capsule3DHalfLength = 0.5 * capsule3DLength;
@@ -391,7 +568,7 @@ public class EuclidShapeTools
       double distanceSquaredFromAxisClosest = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ,
                                                                                                  query);
 
-      if (distanceSquaredFromAxisClosest < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      if (distanceSquaredFromAxisClosest < MIN_DISTANCE_EPSILON)
       { // We need to setup a vector that is orthogonal to the capsule's axis, then we'll perform the projection along that vector.
         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
          if (Math.abs(capsule3DAxis.getY()) > 0.1 || Math.abs(capsule3DAxis.getZ()) > 0.1)
@@ -420,6 +597,19 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Tests whether the {@code query} is located inside a 3D capsule.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param cylinder3DPosition the coordinates of the cylinder's center. Not modified.
+    * @param cylinder3DAxis the axis of revolution of the cylinder. Not modified.
+    * @param cylinder3DLength the length of the cylinder.
+    * @param cylinder3DRadius the radius of the cylinder.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the cylinder, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the cylinder's surface, {@code false}
+    *         otherwise.
+    */
    public static boolean isPoint3DInsideCylinder3D(Point3DReadOnly query, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
                                                    double cylinder3DLength, double cylinder3DRadius, double epsilon)
    {
@@ -438,6 +628,24 @@ public class EuclidShapeTools
       return distanceSquaredFromAxis <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
+   /**
+    * Computes the distance between the {@code query} and a 3D cylinder.
+    * <p>
+    * The returned distance is signed as follows:
+    * <ul>
+    * <li>Positive: the query is located outside the cylinder.
+    * <li>Zero: the query is located on the cylinder's surface.
+    * <li>Negative: the query is located inside the cylinder.
+    * </ul>
+    * </p>
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param cylinder3DPosition the coordinates of the cylinder's center. Not modified.
+    * @param cylinder3DAxis the axis of revolution of the cylinder. Not modified.
+    * @param cylinder3DLength the length of the cylinder.
+    * @param cylinder3DRadius the radius of the cylinder.
+    * @return the signed distance between the query and the cylinder.
+    */
    public static double signedDistanceBetweenPoint3DAndCylinder3D(Point3DReadOnly query, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
                                                                   double cylinder3DLength, double cylinder3DRadius)
    {
@@ -518,6 +726,21 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the orthogonal projection of a 3D point on a 3D cylinder.
+    * <p>
+    * When the query is located inside the cylinder, this method returns {@code false} and
+    * {@code projectionToPack} is not modified.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param cylinder3DPosition the coordinates of the cylinder's center. Not modified.
+    * @param cylinder3DAxis the axis of revolution of the cylinder. Not modified.
+    * @param cylinder3DLength the length of the cylinder.
+    * @param cylinder3DRadius the radius of the cylinder.
+    * @param projectionToPack point in which the projection is stored. Modified.
+    * @return whether the projection has succeeded or not.
+    */
    public static boolean orthogonalProjectionOntoCylinder3D(Point3DReadOnly pointToProject, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
                                                             double cylinder3DLength, double cylinder3DRadius, Point3DBasics projectionToPack)
    {
@@ -590,6 +813,20 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the supporting vertex for a 3D cylinder.
+    * <p>
+    * The supporting vertex represents the location on a shape that is the farthest in a given
+    * direction.
+    * </p>
+    *
+    * @param supportDirection the search direction. Not modified.
+    * @param cylinder3DPosition the coordinates of the cylinder's center. Not modified.
+    * @param cylinder3DAxis the axis of revolution of the cylinder. Not modified.
+    * @param cylinder3DLength the length of the cylinder.
+    * @param cylinder3DRadius the radius of the cylinder.
+    * @param supportingVertexToPack point in which the supporting vertex is stored. Modified.
+    */
    public static void supportingVertexCylinder3D(Vector3DReadOnly supportDirection, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
                                                  double cylinder3DLength, double cylinder3DRadius, Point3DBasics supportingVertexToPack)
    {
@@ -598,7 +835,7 @@ public class EuclidShapeTools
       supportingVertexToPack.setAndScale(dot, cylinder3DAxis);
       supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
       double distanceSquaredFromAxis = supportingVertexToPack.distanceFromOriginSquared();
-      if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      if (distanceSquaredFromAxis < MIN_DISTANCE_EPSILON)
       {
          supportingVertexToPack.set(cylinder3DPosition);
       }
@@ -614,6 +851,15 @@ public class EuclidShapeTools
          supportingVertexToPack.scaleAdd(-0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given cylinder 3D.
+    *
+    * @param cylinder3DPosition the coordinates of the cylinder's center. Not modified.
+    * @param cylinder3DAxis the axis of revolution of the cylinder. Not modified.
+    * @param cylinder3DLength the length of the cylinder.
+    * @param cylinder3DRadius the radius of the cylinder.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxCylinder3D(Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis, double cylinder3DLength,
                                             double cylinder3DRadius, BoundingBox3DBasics boundingBoxToPack)
    {
@@ -641,9 +887,23 @@ public class EuclidShapeTools
       boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
-   public static double doPoint3DCylinder3DCollisionTest(Point3DReadOnly query, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
-                                                         double cylinder3DLength, double cylinder3DRadius, Point3DBasics closestPointOnSurfaceToPack,
-                                                         Vector3DBasics normalToPack)
+   /**
+    * Evaluates the collision between a 3D point and a 3D cylinder.
+    *
+    * @param query the location of the query. Not modified.
+    * @param cylinder3DPosition the coordinates of the cylinder's center. Not modified.
+    * @param cylinder3DAxis the axis of revolution of the cylinder. Not modified.
+    * @param cylinder3DLength the length of the cylinder.
+    * @param cylinder3DRadius the radius of the cylinder.
+    * @param closestPointOnSurfaceToPack the closest point located on the surface of the cylinder.
+    *           Modified.
+    * @param normalToPack the surface normal at the closest point. Not modified.
+    * @return the signed distance between the query and the cylinder. It is negative when the query is
+    *         inside, positive otherwise.
+    */
+   public static double evaluatePoint3DCylinder3DCollision(Point3DReadOnly query, Point3DReadOnly cylinder3DPosition, Vector3DReadOnly cylinder3DAxis,
+                                                           double cylinder3DLength, double cylinder3DRadius, Point3DBasics closestPointOnSurfaceToPack,
+                                                           Vector3DBasics normalToPack)
    {
       if (cylinder3DRadius <= 0.0 || cylinder3DLength <= 0.0)
       {
@@ -701,7 +961,7 @@ public class EuclidShapeTools
                return positionOnAxis - halfLength;
             }
          }
-         else if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+         else if (distanceSquaredFromAxis < MIN_DISTANCE_EPSILON)
          { // Edge-case: the query is too close to the axis to compute sane results
            // We need to setup a vector that is orthogonal to the cylinder's axis, then we'll perform the projection along that vector.
            // Purposefully picking a large tolerance to ensure sanity of the cross-product.
@@ -783,6 +1043,17 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Tests whether the {@code query} is located inside an axis-aligned 3D ellipsoid centered at the
+    * origin given its radii.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param ellipsoid3DRadii the radii of the ellipsoid. Not modified.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the ellipsoid, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the ellipsoid's surface, {@code false}
+    *         otherwise.
+    */
    public static boolean isPoint3DInsideEllipsoid3D(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, double epsilon)
    {
       double scaledX = query.getX() / (ellipsoid3DRadii.getX() + epsilon);
@@ -792,6 +1063,22 @@ public class EuclidShapeTools
       return EuclidCoreTools.normSquared(scaledX, scaledY, scaledZ) <= 1.0;
    }
 
+   /**
+    * Computes the distance between the {@code query} and an axis-aligned 3D ellipsoid centered at the
+    * origin given its radii.
+    * <p>
+    * The returned distance is signed as follows:
+    * <ul>
+    * <li>Positive: the query is located outside the ellipsoid.
+    * <li>Zero: the query is located on the ellipsoid's surface.
+    * <li>Negative: the query is located inside the ellipsoid.
+    * </ul>
+    * </p>
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param ellipsoid3DRadii the radii of the ellipsoid. Not modified.
+    * @return the signed distance between the query and the ellipsoid.
+    */
    public static double signedDistanceBetweenPoint3DAndEllipsoid3D(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii)
    {
       double xRadius = ellipsoid3DRadii.getX();
@@ -803,12 +1090,37 @@ public class EuclidShapeTools
       return query.distanceFromOrigin() * (1.0 - scaleFactor);
    }
 
+   /**
+    * Computes the orthogonal projection of a 3D point on an axis-aligned 3D ellipsoid centered at the
+    * origin given its radii.
+    * <p>
+    * When the query is located inside the ellipsoid, this method returns {@code false} and
+    * {@code projectionToPack} is not modified.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param ellipsoid3DRadii the radii of the ellipsoid. Not modified.
+    * @param projectionToPack point in which the projection is stored. Modified.
+    * @return whether the projection has succeeded or not.
+    */
    public static boolean orthogonalProjectionOntoEllipsoid3D(Point3DReadOnly pointToProject, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics projectionToPack)
    {
       double distance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3DRadii, pointToProject, projectionToPack);
       return distance > 0.0;
    }
 
+   /**
+    * Computes the supporting vertex for an axis-aligned 3D ellipsoid centered at the origin and given
+    * its radii.
+    * <p>
+    * The supporting vertex represents the location on a shape that is the farthest in a given
+    * direction.
+    * </p>
+    *
+    * @param supportDirection the search direction. Not modified.
+    * @param ellipsoid3DRadii the radii of the ellipsoid. Not modified.
+    * @param supportingVertexToPack point in which the supporting vertex is stored. Modified.
+    */
    public static void supportingVertexEllipsoid3D(Vector3DReadOnly supportDirection, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics supportingVertexToPack)
    {
       double nx = supportDirection.getX();
@@ -824,26 +1136,45 @@ public class EuclidShapeTools
       supportingVertexToPack.scale(1.0 / Math.sqrt(EuclidCoreTools.normSquared(nx, ny, nz)));
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given ellipsoid 3D.
+    *
+    * @param ellipsoid3DPosition the coordinates of the ellipsoid's center. Not modified.
+    * @param ellipsoid3DOrientation the orientation of the ellipsoid. Not modified.
+    * @param ellipsoid3DRadii the radii of the ellipsoid. Not modified.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxEllipsoid3D(Point3DReadOnly ellipsoid3DPosition, RotationMatrixReadOnly ellipsoid3DOrientation,
                                              Vector3DReadOnly ellipsoid3DRadii, BoundingBox3DBasics boundingBoxToPack)
    {
-      double m00 = ellipsoid3DOrientation.getM00() * ellipsoid3DOrientation.getM00();
-      double m01 = ellipsoid3DOrientation.getM01() * ellipsoid3DOrientation.getM01();
-      double m02 = ellipsoid3DOrientation.getM02() * ellipsoid3DOrientation.getM02();
-      double m10 = ellipsoid3DOrientation.getM10() * ellipsoid3DOrientation.getM10();
-      double m11 = ellipsoid3DOrientation.getM11() * ellipsoid3DOrientation.getM11();
-      double m12 = ellipsoid3DOrientation.getM12() * ellipsoid3DOrientation.getM12();
-      double m20 = ellipsoid3DOrientation.getM20() * ellipsoid3DOrientation.getM20();
-      double m21 = ellipsoid3DOrientation.getM21() * ellipsoid3DOrientation.getM21();
-      double m22 = ellipsoid3DOrientation.getM22() * ellipsoid3DOrientation.getM22();
+      double xRange, yRange, zRange;
 
-      double rx = ellipsoid3DRadii.getX() * ellipsoid3DRadii.getX();
-      double ry = ellipsoid3DRadii.getY() * ellipsoid3DRadii.getY();
-      double rz = ellipsoid3DRadii.getZ() * ellipsoid3DRadii.getZ();
+      if (ellipsoid3DOrientation.isIdentity())
+      {
+         double m00 = ellipsoid3DOrientation.getM00() * ellipsoid3DOrientation.getM00();
+         double m01 = ellipsoid3DOrientation.getM01() * ellipsoid3DOrientation.getM01();
+         double m02 = ellipsoid3DOrientation.getM02() * ellipsoid3DOrientation.getM02();
+         double m10 = ellipsoid3DOrientation.getM10() * ellipsoid3DOrientation.getM10();
+         double m11 = ellipsoid3DOrientation.getM11() * ellipsoid3DOrientation.getM11();
+         double m12 = ellipsoid3DOrientation.getM12() * ellipsoid3DOrientation.getM12();
+         double m20 = ellipsoid3DOrientation.getM20() * ellipsoid3DOrientation.getM20();
+         double m21 = ellipsoid3DOrientation.getM21() * ellipsoid3DOrientation.getM21();
+         double m22 = ellipsoid3DOrientation.getM22() * ellipsoid3DOrientation.getM22();
 
-      double xRange = Math.sqrt(m00 * rx + m01 * ry + m02 * rz);
-      double yRange = Math.sqrt(m10 * rx + m11 * ry + m12 * rz);
-      double zRange = Math.sqrt(m20 * rx + m21 * ry + m22 * rz);
+         double rx = ellipsoid3DRadii.getX() * ellipsoid3DRadii.getX();
+         double ry = ellipsoid3DRadii.getY() * ellipsoid3DRadii.getY();
+         double rz = ellipsoid3DRadii.getZ() * ellipsoid3DRadii.getZ();
+
+         xRange = Math.sqrt(m00 * rx + m01 * ry + m02 * rz);
+         yRange = Math.sqrt(m10 * rx + m11 * ry + m12 * rz);
+         zRange = Math.sqrt(m20 * rx + m21 * ry + m22 * rz);
+      }
+      else
+      {
+         xRange = ellipsoid3DRadii.getX();
+         yRange = ellipsoid3DRadii.getY();
+         zRange = ellipsoid3DRadii.getZ();
+      }
 
       double maxX = ellipsoid3DPosition.getX() + xRange;
       double maxY = ellipsoid3DPosition.getY() + yRange;
@@ -854,18 +1185,30 @@ public class EuclidShapeTools
       boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
-   public static double doPoint3DEllipsoid3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics closestPointToPack,
-                                                          Vector3DBasics normalToPack)
+   /**
+    * Evaluates the collision between a 3D point and a 3D ellipsoid centered at the origin and given
+    * its radii.
+    *
+    * @param query the location of the query. Not modified.
+    * @param ellipsoid3DRadii the radii of the ellipsoid. Not modified.
+    * @param closestPointOnSurfaceToPack the closest point located on the surface of the ellipsoid.
+    *           Modified.
+    * @param normalToPack the surface normal at the closest point. Not modified.
+    * @return the signed distance between the query and the ellipsoid. It is negative when the query is
+    *         inside, positive otherwise.
+    */
+   public static double evaluatePoint3DEllipsoid3DCollision(Point3DReadOnly query, Vector3DReadOnly ellipsoid3DRadii, Point3DBasics closestPointOnSurfaceToPack,
+                                                            Vector3DBasics normalToPack)
    {
-      double distance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3DRadii, query, closestPointToPack);
+      double distance = EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3DRadii, query, closestPointOnSurfaceToPack);
       if (distance != 0.0)
       {
-         normalToPack.sub(query, closestPointToPack);
+         normalToPack.sub(query, closestPointOnSurfaceToPack);
          normalToPack.scale(1.0 / distance);
       }
       else
       {
-         normalToPack.set(closestPointToPack);
+         normalToPack.set(closestPointOnSurfaceToPack);
          double rxSquare = ellipsoid3DRadii.getX() * ellipsoid3DRadii.getX();
          double rySquare = ellipsoid3DRadii.getY() * ellipsoid3DRadii.getY();
          double rzSquare = ellipsoid3DRadii.getZ() * ellipsoid3DRadii.getZ();
@@ -876,26 +1219,62 @@ public class EuclidShapeTools
       return distance;
    }
 
+   /**
+    * Computes the length of the slope part of a ramp 3D given its size.
+    *
+    * @param ramp3DSize the size of the ramp. Not modified.
+    * @return the length of the ramp.
+    */
    public static double computeRamp3DLength(Vector3DReadOnly ramp3DSize)
    {
       return computeRamp3DLength(ramp3DSize.getX(), ramp3DSize.getZ());
    }
 
+   /**
+    * Computes the length of the slope part of a ramp 3D given its size.
+    *
+    * @param ramp3DSizeX the x-component of the ramp.
+    * @param ramp3DSizeZ the z-component of the ramp.
+    * @return the length of the ramp.
+    */
    public static double computeRamp3DLength(double ramp3DSizeX, double ramp3DSizeZ)
    {
       return Math.sqrt(EuclidCoreTools.normSquared(ramp3DSizeX, ramp3DSizeZ));
    }
 
+   /**
+    * Computes the incline in radians of a ramp 3D.
+    *
+    * @param ramp3DSize the size of the ramp. Not modified.
+    * @return the slope angle.
+    */
    public static double computeRamp3DIncline(Vector3DReadOnly ramp3DSize)
    {
       return computeRanp3DIncline(ramp3DSize.getX(), ramp3DSize.getZ());
    }
 
+   /**
+    * Computes the incline in radians of a ramp 3D.
+    *
+    * @param ramp3DSizeX the x-component of the ramp.
+    * @param ramp3DSizeZ the z-component of the ramp.
+    * @return the slope angle.
+    */
    public static double computeRanp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
    {
       return Math.atan(ramp3DSizeZ / ramp3DSizeX);
    }
 
+   /**
+    * Tests whether the {@code query} is located inside an axis-aligned 3D ramp starting from the
+    * origin.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param ramp3DSize the size of the ramp. Not modified.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the ramp, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the ramp's surface, {@code false} otherwise.
+    */
    public static boolean isPoint3DInsideRamp3D(Point3DReadOnly query, Vector3DReadOnly ramp3DSize, double epsilon)
    {
       if (query.getZ() < -epsilon)
@@ -917,6 +1296,22 @@ public class EuclidShapeTools
       return rampDirectionX * query.getZ() - query.getX() * rampDirectionZ <= epsilon;
    }
 
+   /**
+    * Computes the distance between the {@code query} and an axis-aligned 3D ramp starting from the
+    * origin.
+    * <p>
+    * The returned distance is signed as follows:
+    * <ul>
+    * <li>Positive: the query is located outside the ramp.
+    * <li>Zero: the query is located on the ramp's surface.
+    * <li>Negative: the query is located inside the ramp.
+    * </ul>
+    * </p>
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param ramp3DSize the size of the ramp. Not modified.
+    * @return the signed distance between the query and the ramp.
+    */
    public static double signedDistanceBetweenPoint3DAndRamp3D(Point3DReadOnly query, Vector3DReadOnly ramp3DSize)
    {
       double rampLength = computeRamp3DLength(ramp3DSize);
@@ -1000,6 +1395,19 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the orthogonal projection of a 3D point on an axis-aligned 3D ramp starting from the
+    * origin.
+    * <p>
+    * When the query is located inside the ramp, this method returns {@code false} and
+    * {@code projectionToPack} is not modified.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param ramp3DSize the size of the ramp. Not modified.
+    * @param projectionToPack point in which the projection is stored. Modified.
+    * @return whether the projection has succeeded or not.
+    */
    public static boolean orthogonalProjectionOntoRamp3D(Point3DReadOnly pointToProject, Vector3DReadOnly ramp3DSize, Point3DBasics projectionToPack)
    {
       double rampLength = computeRamp3DLength(ramp3DSize);
@@ -1080,6 +1488,17 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the supporting vertex for an axis-aligned 3D ramp starting from the origin.
+    * <p>
+    * The supporting vertex represents the location on a shape that is the farthest in a given
+    * direction.
+    * </p>
+    *
+    * @param supportDirection the search direction. Not modified.
+    * @param ramp3DSize the size of the ramp. Not modified.
+    * @param supportingVertexToPack point in which the supporting vertex is stored. Modified.
+    */
    public static void supportingVectexRamp3D(Vector3DReadOnly supportDirection, Vector3DReadOnly ramp3DSize, Point3DBasics supportingVertexToPack)
    {
       if (supportDirection.getZ() < 0.0)
@@ -1112,8 +1531,18 @@ public class EuclidShapeTools
       supportingVertexToPack.setY(supportDirection.getY() > 0.0 ? 0.5 * ramp3DSize.getY() : -0.5 * ramp3DSize.getY());
    }
 
-   public static double doPoint3DRamp3DCollisionTest(Point3DReadOnly query, Vector3DReadOnly ramp3DSize, Point3DBasics closestPointOnSurfaceToPack,
-                                                     Vector3DBasics normalToPack)
+   /**
+    * Evaluates the collision between a 3D point and a 3D ramp starting from the origin.
+    *
+    * @param query the location of the query. Not modified.
+    * @param ramp3DSize the size of the ramp. Not modified.
+    * @param closestPointOnSurfaceToPack the closest point located on the surface of the box. Modified.
+    * @param normalToPack the surface normal at the closest point. Not modified.
+    * @return the signed distance between the query and the box. It is negative when the query is
+    *         inside, positive otherwise.
+    */
+   public static double evaluatePoint3DRamp3DCollision(Point3DReadOnly query, Vector3DReadOnly ramp3DSize, Point3DBasics closestPointOnSurfaceToPack,
+                                                       Vector3DBasics normalToPack)
    {
       double rampLength = computeRamp3DLength(ramp3DSize);
       double rampDirectionX = ramp3DSize.getX() / rampLength;
@@ -1274,32 +1703,98 @@ public class EuclidShapeTools
       return distance;
    }
 
+   /**
+    * Tests whether the first argument has the smallest value of all the arguments.
+    *
+    * @param possibleMin the query.
+    * @param value1 the first value to compare the candidate against.
+    * @param value2 the second value to compare the candidate against.
+    * @param value3 the third value to compare the candidate against.
+    * @param value4 the fourth value to compare the candidate against.
+    * @return {@code true} if the query has the smallest value, {@code false} otherwise
+    */
    public static boolean isFirstValueMinimum(double possibleMin, double value1, double value2, double value3, double value4)
    {
       return possibleMin <= value1 && possibleMin <= value2 && possibleMin <= value3 && possibleMin <= value4;
    }
 
+   /**
+    * Tests whether the first argument has the smallest value of all the arguments.
+    *
+    * @param possibleMin the query.
+    * @param value1 the first value to compare the candidate against.
+    * @param value2 the second value to compare the candidate against.
+    * @param value3 the third value to compare the candidate against.
+    * @return {@code true} if the query has the smallest value, {@code false} otherwise
+    */
    public static boolean isFirstValueMinimum(double possibleMin, double value1, double value2, double value3)
    {
       return possibleMin <= value1 && possibleMin <= value2 && possibleMin <= value3;
    }
 
+   /**
+    * Tests whether the first argument has the smallest value of all the arguments.
+    *
+    * @param possibleMin the query.
+    * @param value1 the first value to compare the candidate against.
+    * @param value2 the second value to compare the candidate against.
+    * @return {@code true} if the query has the smallest value, {@code false} otherwise
+    */
    public static boolean isFirstValueMinimum(double possibleMin, double value1, double value2)
    {
       return possibleMin <= value1 && possibleMin <= value2;
    }
 
+   /**
+    * Tests whether the {@code query} is located inside a 3D sphere.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param sphere3DPosition the coordinates of the sphere's center. Not modified.
+    * @param sphere3DRadius the radius of the sphere.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the sphere, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the sphere's surface, {@code false} otherwise.
+    */
    public static boolean isPoint3DInsideSphere3D(Point3DReadOnly query, Point3DReadOnly sphere3DPosition, double sphere3DRadius, double epsilon)
    {
       double radiusWithEpsilon = sphere3DRadius + epsilon;
       return sphere3DPosition.distanceSquared(query) <= radiusWithEpsilon * radiusWithEpsilon;
    }
 
+   /**
+    * Computes the distance between the {@code query} and a 3D sphere.
+    * <p>
+    * The returned distance is signed as follows:
+    * <ul>
+    * <li>Positive: the query is located outside the sphere.
+    * <li>Zero: the query is located on the sphere's surface.
+    * <li>Negative: the query is located inside the sphere.
+    * </ul>
+    * </p>
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param sphere3DPosition the coordinates of the sphere's center. Not modified.
+    * @param sphere3DRadius the radius of the sphere.
+    * @return the signed distance between the query and the sphere.
+    */
    public static double signedDistanceBetweenPoint3DAndSphere3D(Point3DReadOnly query, Point3DReadOnly sphere3DPosition, double sphere3DRadius)
    {
       return sphere3DPosition.distance(query) - sphere3DRadius;
    }
 
+   /**
+    * Computes the orthogonal projection of a 3D point on a 3D sphere.
+    * <p>
+    * When the query is located inside the sphere, this method returns {@code false} and
+    * {@code projectionToPack} is not modified.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param sphere3DPosition the coordinates of the sphere's center. Not modified.
+    * @param sphere3DRadius the radius of the sphere.
+    * @param projectionToPack point in which the projection is stored. Modified.
+    * @return whether the projection has succeeded or not.
+    */
    public static boolean orthogonalProjectionOntoSphere3D(Point3DReadOnly pointToProject, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
                                                           Point3DBasics projectionToPack)
    {
@@ -1313,6 +1808,18 @@ public class EuclidShapeTools
       return true;
    }
 
+   /**
+    * Computes the supporting vertex for a 3D sphere.
+    * <p>
+    * The supporting vertex represents the location on a shape that is the farthest in a given
+    * direction.
+    * </p>
+    *
+    * @param supportDirection the search direction. Not modified.
+    * @param sphere3DPosition the coordinates of the sphere's center. Not modified.
+    * @param sphere3DRadius the radius of the sphere.
+    * @param supportingVertexToPack point in which the supporting vertex is stored. Modified.
+    */
    public static void supportingVertexSphere3D(Vector3DReadOnly supportDirection, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
                                                Point3DBasics supportingVertexToPack)
    {
@@ -1321,28 +1828,52 @@ public class EuclidShapeTools
       supportingVertexToPack.add(sphere3DPosition);
    }
 
-   public static double doPoint3DSphere3DCollisionTest(Point3DReadOnly query, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
-                                                       Point3DBasics closestPointToPack, Vector3DBasics normalToPack)
+   /**
+    * Evaluates the collision between a 3D point and a 3D sphere.
+    *
+    * @param query the location of the query. Not modified.
+    * @param sphere3DPosition the coordinates of the sphere's center. Not modified.
+    * @param sphere3DRadius the radius of the sphere.
+    * @param closestPointOnSurfaceToPack the closest point located on the surface of the sphere.
+    *           Modified.
+    * @param normalToPack the surface normal at the closest point. Not modified.
+    * @return the signed distance between the query and the sphere. It is negative when the query is
+    *         inside, positive otherwise.
+    */
+   public static double evaluatePoint3DSphere3DCollision(Point3DReadOnly query, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
+                                                         Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalToPack)
    {
       double distance = sphere3DPosition.distance(query);
 
-      if (distance > SPHERE_SMALLEST_DISTANCE_TO_ORIGIN)
+      if (distance > MIN_DISTANCE_EPSILON)
       {
-         closestPointToPack.sub(query, sphere3DPosition);
-         closestPointToPack.scale(sphere3DRadius / distance);
+         closestPointOnSurfaceToPack.sub(query, sphere3DPosition);
+         closestPointOnSurfaceToPack.scale(sphere3DRadius / distance);
          normalToPack.sub(query, sphere3DPosition);
          normalToPack.scale(1.0 / distance);
       }
       else
       {
-         closestPointToPack.set(0.0, 0.0, sphere3DRadius);
+         closestPointOnSurfaceToPack.set(0.0, 0.0, sphere3DRadius);
          normalToPack.set(0.0, 0.0, 1.0);
       }
-      closestPointToPack.add(sphere3DPosition);
+      closestPointOnSurfaceToPack.add(sphere3DPosition);
 
       return distance - sphere3DRadius;
    }
 
+   /**
+    * Tests whether the {@code query} is located inside a 3D torus.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param torus3DPosition the coordinates of the torus' center. Not modified.
+    * @param torus3DAxis the axis of revolution of the torus. Not modified.
+    * @param torus3DRadius the radius from the axis to the tube center.
+    * @param torus3DTubeRadius the radius of the tube.
+    * @param epsilon the tolerance to use for this test. A positive value is equivalent to growing the
+    *           size of the torus, while a negative value is equivalent to shrinking it.
+    * @return {@code true} if the query is inside or on the capsule's surface, {@code false} otherwise.
+    */
    public static boolean isPoint3DInsideTorus3D(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis, double torus3DRadius,
                                                 double torus3DTubeRadius, double epsilon)
    {
@@ -1363,6 +1894,24 @@ public class EuclidShapeTools
       return EuclidCoreTools.normSquared(distanceFromAxis - torus3DRadius, positionOnAxis) <= tubeRadiusWithEpsilon * tubeRadiusWithEpsilon;
    }
 
+   /**
+    * Computes the distance between the {@code query} and a 3D torus.
+    * <p>
+    * The returned distance is signed as follows:
+    * <ul>
+    * <li>Positive: the query is located outside the torus.
+    * <li>Zero: the query is located on the torus's surface.
+    * <li>Negative: the query is located inside the torus.
+    * </ul>
+    * </p>
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @param torus3DPosition the coordinates of the torus' center. Not modified.
+    * @param torus3DAxis the axis of revolution of the torus. Not modified.
+    * @param torus3DRadius the radius from the axis to the tube center.
+    * @param torus3DTubeRadius the radius of the tube.
+    * @return the signed distance between the query and the torus.
+    */
    public static double signedDistanceBetweenPoint3DAndTorus3D(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
                                                                double torus3DRadius, double torus3DTubeRadius)
    {
@@ -1383,6 +1932,21 @@ public class EuclidShapeTools
       }
    }
 
+   /**
+    * Computes the orthogonal projection of a 3D point on a 3D torus.
+    * <p>
+    * When the query is located inside the torus, this method returns {@code false} and
+    * {@code projectionToPack} is not modified.
+    * </p>
+    *
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param torus3DPosition the coordinates of the torus' center. Not modified.
+    * @param torus3DAxis the axis of revolution of the torus. Not modified.
+    * @param torus3DRadius the radius from the axis to the tube center.
+    * @param torus3DTubeRadius the radius of the tube.
+    * @param projectionToPack point in which the projection is stored. Modified.
+    * @return whether the projection has succeeded or not.
+    */
    public static boolean orthogonalProjectionOntoTorus3D(Point3DReadOnly pointToProject, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
                                                          double torus3DRadius, double torus3DTubeRadius, Point3DBasics projectionToPack)
    {
@@ -1397,7 +1961,7 @@ public class EuclidShapeTools
 
       double distanceSquaredFromAxis = EuclidCoreTools.normSquared(xInPlane, yInPlane, zInPlane);
 
-      if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      if (distanceSquaredFromAxis < MIN_DISTANCE_EPSILON)
       { // We need to setup a vector that is orthogonal to the torus' axis, then we'll perform the projection along that vector.
          double xNonCollinearToAxis, yNonCollinearToAxis, zNonCollinearToAxis;
 
@@ -1423,7 +1987,7 @@ public class EuclidShapeTools
          double distanceFromTubeCenter = Math.sqrt(normSquared(percentageOnAxis, torus3DRadius));
 
          double scale = torus3DTubeRadius / distanceFromTubeCenter;
-         double resultDistanceFromAxis = torus3DRadius - (torus3DRadius * scale);
+         double resultDistanceFromAxis = torus3DRadius - torus3DRadius * scale;
          double resultPositionOnAxis = percentageOnAxis * scale;
 
          projectionToPack.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
@@ -1457,9 +2021,23 @@ public class EuclidShapeTools
       }
    }
 
-   public static double doPoint3DTorus3DCollisionTest(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
-                                                      double torus3DRadius, double torus3DTubeRadius, Point3DBasics closestPointToPack,
-                                                      Vector3DBasics normalToPack)
+   /**
+    * Evaluates the collision between a 3D point and a 3D torus.
+    *
+    * @param query the location of the query. Not modified.
+    * @param torus3DPosition the coordinates of the torus' center. Not modified.
+    * @param torus3DAxis the axis of revolution of the torus. Not modified.
+    * @param torus3DRadius the radius from the axis to the tube center.
+    * @param torus3DTubeRadius the radius of the tube.
+    * @param closestPointOnSurfaceToPack the closest point located on the surface of the torus.
+    *           Modified.
+    * @param normalToPack the surface normal at the closest point. Not modified.
+    * @return the signed distance between the query and the torus. It is negative when the query is
+    *         inside, positive otherwise.
+    */
+   public static double evaluatePoint3DTorus3DCollision(Point3DReadOnly query, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
+                                                        double torus3DRadius, double torus3DTubeRadius, Point3DBasics closestPointOnSurfaceToPack,
+                                                        Vector3DBasics normalToPack)
    {
       double x = query.getX() - torus3DPosition.getX();
       double y = query.getY() - torus3DPosition.getY();
@@ -1472,7 +2050,7 @@ public class EuclidShapeTools
 
       double distanceSquaredFromAxis = EuclidCoreTools.normSquared(xInPlane, yInPlane, zInPlane);
 
-      if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+      if (distanceSquaredFromAxis < MIN_DISTANCE_EPSILON)
       { // We need to setup a vector that is orthogonal to the torus' axis, then we'll perform the projection along that vector.
         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
          if (Math.abs(torus3DAxis.getY()) > 0.1 || Math.abs(torus3DAxis.getZ()) > 0.1)
@@ -1486,13 +2064,13 @@ public class EuclidShapeTools
          double distanceFromTubeCenter = Math.sqrt(normSquared(percentageOnAxis, torus3DRadius));
 
          double scale = torus3DTubeRadius / distanceFromTubeCenter;
-         double resultDistanceFromAxis = torus3DRadius - (torus3DRadius * scale);
+         double resultDistanceFromAxis = torus3DRadius - torus3DRadius * scale;
          double resultPositionOnAxis = percentageOnAxis * scale;
 
-         closestPointToPack.set(normalToPack);
-         closestPointToPack.scale(resultDistanceFromAxis);
-         closestPointToPack.scaleAdd(resultPositionOnAxis, torus3DAxis, closestPointToPack);
-         closestPointToPack.add(torus3DPosition);
+         closestPointOnSurfaceToPack.set(normalToPack);
+         closestPointOnSurfaceToPack.scale(resultDistanceFromAxis);
+         closestPointOnSurfaceToPack.scaleAdd(resultPositionOnAxis, torus3DAxis, closestPointOnSurfaceToPack);
+         closestPointOnSurfaceToPack.add(torus3DPosition);
 
          normalToPack.scale(-torus3DRadius);
          normalToPack.scaleAdd(percentageOnAxis, torus3DAxis, normalToPack);
@@ -1512,12 +2090,12 @@ public class EuclidShapeTools
 
          double distanceSquaredFromTubeCenter = EuclidGeometryTools.distanceSquaredBetweenPoint3Ds(xTubeCenter, yTubeCenter, zTubeCenter, query);
 
-         if (distanceSquaredFromTubeCenter < TORUS_SMALLEST_DISTANCE_TO_AXIS)
+         if (distanceSquaredFromTubeCenter < MIN_DISTANCE_EPSILON)
          { // Second edge-case: the query is on the tube center.
            // However, here we know that torus3DAxis is orthogonal to the local tube axis, let just pick that one.
             normalToPack.set(torus3DAxis);
-            closestPointToPack.set(xTubeCenter, yTubeCenter, zTubeCenter);
-            closestPointToPack.scaleAdd(torus3DTubeRadius, normalToPack, closestPointToPack);
+            closestPointOnSurfaceToPack.set(xTubeCenter, yTubeCenter, zTubeCenter);
+            closestPointOnSurfaceToPack.scaleAdd(torus3DTubeRadius, normalToPack, closestPointOnSurfaceToPack);
             return -torus3DTubeRadius;
          }
          else
@@ -1527,34 +2105,71 @@ public class EuclidShapeTools
             normalToPack.sub(xTubeCenter, yTubeCenter, zTubeCenter);
             normalToPack.scale(1.0 / distanceFromTubeCenter);
 
-            closestPointToPack.setAndScale(torus3DTubeRadius, normalToPack);
-            closestPointToPack.add(xTubeCenter, yTubeCenter, zTubeCenter);
+            closestPointOnSurfaceToPack.setAndScale(torus3DTubeRadius, normalToPack);
+            closestPointOnSurfaceToPack.add(xTubeCenter, yTubeCenter, zTubeCenter);
 
             return distanceFromTubeCenter - torus3DTubeRadius;
          }
       }
    }
 
+   /**
+    * Computes the volume of a cone defined by its height and base radius.
+    *
+    * @param height the height of the cone.
+    * @param radius the radius of the cone's base.
+    * @return the volume of the cone.
+    */
    public static double coneVolume(double height, double radius)
    {
       return Math.PI * radius * radius * height / 3.0;
    }
 
+   /**
+    * Computes the volume of a cylinder defined by its length and radius.
+    *
+    * @param length the length of the cylinder.
+    * @param radius the radius of the cylinder.
+    * @return the volume of the cylinder.
+    */
    public static double cylinderVolume(double length, double radius)
    {
       return Math.PI * radius * radius * length;
    }
 
+   /**
+    * Computes the volume of a regular icosahedron defined by its edge length.
+    *
+    * @param edgeLength the length of each edge of the icosahedron.
+    * @return the volume of the icosahedron.
+    */
    public static double icosahedronVolume(double edgeLength)
    {
       return edgeLength * edgeLength * edgeLength * (5.0 * (3.0 + Math.sqrt(5.0))) / 12.0;
    }
 
+   /**
+    * Computes the volume of a pyramid defined by its height and the size of its base.
+    *
+    * @param height the height of the pyramid.
+    * @param baseLength the length of the pyramid's base.
+    * @param baseWidth the width of the pyramid's base.
+    * @return the volume of the pyramid.
+    */
    public static double pyramidVolume(double height, double baseLength, double baseWidth)
    {
       return baseLength * baseWidth * height / 3.0;
    }
 
+   /**
+    * Computes the volume of a tetrahedron defined by its vertices.
+    *
+    * @param a the coordinates of the first vertex of the tetrahedron. Not modified.
+    * @param b the coordinates of the second vertex of the tetrahedron. Not modified.
+    * @param c the coordinates of the third vertex of the tetrahedron. Not modified.
+    * @param d the coordinates of the fourth vertex of the tetrahedron. Not modified.
+    * @return the volume of the tetrahedron.
+    */
    public static double tetrahedronVolume(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c, Point3DReadOnly d)
    {
       // From: http://mathworld.wolfram.com/Tetrahedron.html
@@ -1569,11 +2184,23 @@ public class EuclidShapeTools
       return Math.abs(x * (b.getX() - a.getX()) + y * (b.getY() - a.getY()) + z * (b.getZ() - a.getZ())) / 6.0;
    }
 
+   /**
+    * Computes the edge length of a regular icosahedron given the radius of its circumscribed sphere.
+    *
+    * @param radius the radius of the circumscribed sphere.
+    * @return the edge length of the regular icosahedron.
+    */
    public static double icosahedronEdgeLength(double radius)
    {
       return radius / Math.sin(0.4 * Math.PI);
    }
 
+   /**
+    * Computes the radius of the circumscribed sphere of a regular icosahedron given its edge length.
+    *
+    * @param edgeLength the edge length.
+    * @return the radius of the circumscribed sphere.
+    */
    public static double icosahedronRadius(double edgeLength)
    {
       return edgeLength * Math.sin(0.4 * Math.PI);

@@ -66,7 +66,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DCylinder3DCollisionTest(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
+      return EuclidShapeTools.evaluatePoint3DCylinder3DCollision(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
                                                                normalAtClosestPointToPack) <= 0.0;
    }
 

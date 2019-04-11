@@ -45,7 +45,7 @@ public class EuclidShapeCollisionTools
    {
       resultToPack.setToNaN();
       box3D.getPose().inverseTransform(point3D, resultToPack.getPointOnA());
-      double distance = EuclidShapeTools.doPoint3DBox3DCollisionTest(resultToPack.getPointOnA(), box3D.getSize(), resultToPack.getPointOnB(),
+      double distance = EuclidShapeTools.evaluatePoint3DBox3DCollision(resultToPack.getPointOnA(), box3D.getSize(), resultToPack.getPointOnB(),
                                                                      resultToPack.getNormalOnB());
       box3D.transformToWorld(resultToPack.getPointOnB());
       box3D.transformToWorld(resultToPack.getNormalOnB());
@@ -104,7 +104,7 @@ public class EuclidShapeCollisionTools
    private static void doPoint3DCapsule3DCollisionTest(Point3DReadOnly point3D, Capsule3DReadOnly capsule3D, EuclidShape3DCollisionResult resultToPack)
    {
       resultToPack.setToNaN();
-      double distance = EuclidShapeTools.doPoint3DCapsule3DCollisionTest(point3D, capsule3D.getPosition(), capsule3D.getAxis(), capsule3D.getLength(),
+      double distance = EuclidShapeTools.evaluatePoint3DCapsule3DCollision(point3D, capsule3D.getPosition(), capsule3D.getAxis(), capsule3D.getLength(),
                                                                          capsule3D.getRadius(), resultToPack.getPointOnB(), resultToPack.getNormalOnB());
 
       resultToPack.getPointOnA().set(point3D);
@@ -138,7 +138,7 @@ public class EuclidShapeCollisionTools
    private static void doPoint3DCylinder3DCollisionTest(Point3DReadOnly point3D, Cylinder3DReadOnly cylinder3D, EuclidShape3DCollisionResult resultToPack)
    {
       resultToPack.setToNaN();
-      double distance = EuclidShapeTools.doPoint3DCylinder3DCollisionTest(point3D, cylinder3D.getPosition(), cylinder3D.getAxis(), cylinder3D.getLength(),
+      double distance = EuclidShapeTools.evaluatePoint3DCylinder3DCollision(point3D, cylinder3D.getPosition(), cylinder3D.getAxis(), cylinder3D.getLength(),
                                                                           cylinder3D.getRadius(), resultToPack.getPointOnB(), resultToPack.getNormalOnB());
 
       resultToPack.getPointOnA().set(point3D);
@@ -173,7 +173,7 @@ public class EuclidShapeCollisionTools
    {
       resultToPack.setToNaN();
       ellipsoid3D.getPose().inverseTransform(point3D, resultToPack.getPointOnA());
-      double distance = EuclidShapeTools.doPoint3DEllipsoid3DCollisionTest(resultToPack.getPointOnA(), ellipsoid3D.getRadii(), resultToPack.getPointOnB(),
+      double distance = EuclidShapeTools.evaluatePoint3DEllipsoid3DCollision(resultToPack.getPointOnA(), ellipsoid3D.getRadii(), resultToPack.getPointOnB(),
                                                                            resultToPack.getNormalOnB());
       ellipsoid3D.transformToWorld(resultToPack.getPointOnB());
       ellipsoid3D.transformToWorld(resultToPack.getNormalOnB());
@@ -209,7 +209,7 @@ public class EuclidShapeCollisionTools
    {
       resultToPack.setToNaN();
       ramp3D.getPose().inverseTransform(point3D, resultToPack.getPointOnA());
-      double distance = EuclidShapeTools.doPoint3DRamp3DCollisionTest(resultToPack.getPointOnA(), ramp3D.getSize(), resultToPack.getPointOnB(),
+      double distance = EuclidShapeTools.evaluatePoint3DRamp3DCollision(resultToPack.getPointOnA(), ramp3D.getSize(), resultToPack.getPointOnB(),
                                                                       resultToPack.getNormalOnB());
       ramp3D.transformToWorld(resultToPack.getPointOnB());
       ramp3D.transformToWorld(resultToPack.getNormalOnB());
@@ -246,7 +246,7 @@ public class EuclidShapeCollisionTools
                                                       EuclidShape3DCollisionResult resultToPack)
    {
       resultToPack.setToNaN();
-      double distance = EuclidShapeTools.doPoint3DSphere3DCollisionTest(point3D, sphere3DPosition, sphere3DRadius, resultToPack.getPointOnB(),
+      double distance = EuclidShapeTools.evaluatePoint3DSphere3DCollision(point3D, sphere3DPosition, sphere3DRadius, resultToPack.getPointOnB(),
                                                                         resultToPack.getNormalOnB());
 
       resultToPack.getPointOnA().set(point3D);
@@ -279,7 +279,7 @@ public class EuclidShapeCollisionTools
    private static void doPoint3DTorus3DCollisionTest(Point3DReadOnly point3D, Torus3DReadOnly torus3D, EuclidShape3DCollisionResult resultToPack)
    {
       resultToPack.setToNaN();
-      double distance = EuclidShapeTools.doPoint3DTorus3DCollisionTest(point3D, torus3D.getPosition(), torus3D.getAxis(), torus3D.getRadius(),
+      double distance = EuclidShapeTools.evaluatePoint3DTorus3DCollision(point3D, torus3D.getPosition(), torus3D.getAxis(), torus3D.getRadius(),
                                                                        torus3D.getTubeRadius(), resultToPack.getPointOnB(), resultToPack.getNormalOnB());
 
       resultToPack.getPointOnA().set(point3D);

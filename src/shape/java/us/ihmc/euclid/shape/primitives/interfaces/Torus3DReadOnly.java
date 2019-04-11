@@ -44,7 +44,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.doPoint3DTorus3DCollisionTest(pointToCheck, getPosition(), getAxis(), getRadius(), getTubeRadius(), closestPointOnSurfaceToPack,
+      return EuclidShapeTools.evaluatePoint3DTorus3DCollision(pointToCheck, getPosition(), getAxis(), getRadius(), getTubeRadius(), closestPointOnSurfaceToPack,
                                                             normalAtClosestPointToPack) <= 0.0;
    }
 

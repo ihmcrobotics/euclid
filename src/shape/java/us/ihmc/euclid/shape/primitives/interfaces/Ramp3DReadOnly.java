@@ -79,7 +79,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
 
-      double distance = EuclidShapeTools.doPoint3DRamp3DCollisionTest(pointToCheckInLocal, getSize(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
+      double distance = EuclidShapeTools.evaluatePoint3DRamp3DCollision(pointToCheckInLocal, getSize(), closestPointOnSurfaceToPack, normalAtClosestPointToPack);
 
       transformToWorld(closestPointOnSurfaceToPack);
       transformToWorld(normalAtClosestPointToPack);
