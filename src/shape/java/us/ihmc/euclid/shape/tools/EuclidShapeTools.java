@@ -1151,6 +1151,12 @@ public class EuclidShapeTools
 
       if (ellipsoid3DOrientation.isIdentity())
       {
+         xRange = ellipsoid3DRadii.getX();
+         yRange = ellipsoid3DRadii.getY();
+         zRange = ellipsoid3DRadii.getZ();
+      }
+      else
+      {
          double m00 = ellipsoid3DOrientation.getM00() * ellipsoid3DOrientation.getM00();
          double m01 = ellipsoid3DOrientation.getM01() * ellipsoid3DOrientation.getM01();
          double m02 = ellipsoid3DOrientation.getM02() * ellipsoid3DOrientation.getM02();
@@ -1168,12 +1174,6 @@ public class EuclidShapeTools
          xRange = Math.sqrt(m00 * rx + m01 * ry + m02 * rz);
          yRange = Math.sqrt(m10 * rx + m11 * ry + m12 * rz);
          zRange = Math.sqrt(m20 * rx + m21 * ry + m22 * rz);
-      }
-      else
-      {
-         xRange = ellipsoid3DRadii.getX();
-         yRange = ellipsoid3DRadii.getY();
-         zRange = ellipsoid3DRadii.getZ();
       }
 
       double maxX = ellipsoid3DPosition.getX() + xRange;
