@@ -48,9 +48,11 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
    }
 
    /**
-    * Sets both endpoints of this line segment to {@link Double#NaN}. After calling this method, this
-    * line segment becomes invalid. A new pair of valid endpoints will have to be set so this line
-    * segment is again usable.
+    * Sets both endpoints of this line segment to {@link Double#NaN}.
+    * <p>
+    * After calling this method, this line segment becomes invalid. A new pair of valid endpoints will
+    * have to be set so this line segment is again usable.
+    * </p>
     */
    @Override
    default void setToNaN()

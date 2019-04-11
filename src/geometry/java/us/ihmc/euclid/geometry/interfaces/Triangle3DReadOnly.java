@@ -14,21 +14,21 @@ public interface Triangle3DReadOnly
    /**
     * Gets the read-only reference to the first vertex of this triangle.
     * 
-    * @return the reference to the first vertex of this line segment.
+    * @return the reference to the first vertex of this triangle.
     */
    Point3DReadOnly getA();
 
    /**
     * Gets the read-only reference to the second vertex of this triangle.
     * 
-    * @return the reference to the second vertex of this line segment.
+    * @return the reference to the second vertex of this triangle.
     */
    Point3DReadOnly getB();
 
    /**
     * Gets the read-only reference to the third vertex of this triangle.
     * 
-    * @return the reference to the second third of this line segment.
+    * @return the reference to the second third of this triangle.
     */
    Point3DReadOnly getC();
 
