@@ -63,7 +63,7 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    }
 
    /**
-    * Sets this line segment to be same as the given line segment.
+    * Sets this line segment to be the same as the given line segment.
     *
     * @param other the other line segment to copy. Not modified.
     */
