@@ -44,7 +44,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    public void evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
-      evaluateCollision(shapeA, shapeB, resultToPack);
+      evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
    }

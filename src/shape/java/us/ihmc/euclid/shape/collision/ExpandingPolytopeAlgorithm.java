@@ -58,12 +58,12 @@ public class ExpandingPolytopeAlgorithm
 
    public void evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
-      evaluateCollision(shapeA, shapeB, resultToPack);
+      evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
    }
 
-   public EuclidShape3DCollisionResult doCollisionTest(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
+   public EuclidShape3DCollisionResult evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
    {
       EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
       evaluateCollision(shapeA, shapeB, result);

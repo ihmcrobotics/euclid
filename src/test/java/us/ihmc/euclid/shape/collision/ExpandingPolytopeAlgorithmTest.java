@@ -90,7 +90,7 @@ class ExpandingPolytopeAlgorithmTest
          assertEquals(translation.getX(), distance, EPSILON);
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
-         EuclidShape3DCollisionResult result = epa.doCollisionTest(cube, tetrahedron);
+         EuclidShape3DCollisionResult result = epa.evaluateCollision(cube, tetrahedron);
          Point3D pointOnCube = result.getPointOnA();
          Point3D pointOnTetrahedron = result.getPointOnB();
 
@@ -117,7 +117,7 @@ class ExpandingPolytopeAlgorithmTest
          ConvexPolytope3D singleton = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(point));
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
-         EuclidShape3DCollisionResult result = epa.doCollisionTest(cube, singleton);
+         EuclidShape3DCollisionResult result = epa.evaluateCollision(cube, singleton);
          Point3D pointOnCube = result.getPointOnA();
          Point3D pointOnSingleton = result.getPointOnB();
 
@@ -139,7 +139,7 @@ class ExpandingPolytopeAlgorithmTest
          ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(point));
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
-         EuclidShape3DCollisionResult result = epa.doCollisionTest(cube, tetrahedron);
+         EuclidShape3DCollisionResult result = epa.evaluateCollision(cube, tetrahedron);
          Point3D pointOnCube = result.getPointOnA();
          Point3D pointOnSingleton = result.getPointOnB();
 
@@ -177,7 +177,7 @@ class ExpandingPolytopeAlgorithmTest
                                                                                                  tetrahedronFarthest2));
 
          ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
-         EuclidShape3DCollisionResult result = epa.doCollisionTest(cube, tetrahedron);
+         EuclidShape3DCollisionResult result = epa.evaluateCollision(cube, tetrahedron);
          Point3D pointOnCube = result.getPointOnA();
          Point3D pointOnTetrahedron = result.getPointOnB();
 
@@ -498,14 +498,14 @@ class ExpandingPolytopeAlgorithmTest
                                              Point3DReadOnly expectedPointOnA, Point3DReadOnly expectedPointOnB)
    {
       ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
-      EuclidShape3DCollisionResult result = epa.doCollisionTest(polytopeA, polytopeB);
+      EuclidShape3DCollisionResult result = epa.evaluateCollision(polytopeA, polytopeB);
+      assertTrue(polytopeA == result.getShapeA());
+      assertTrue(polytopeB == result.getShapeB());
 
       if (polytopeA.isEmpty() || polytopeB.isEmpty())
       {
          assertFalse(result.areShapesColliding());
          assertTrue(Double.isNaN(result.getDistance()));
-         assertNull(result.getShapeA());
-         assertNull(result.getShapeB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(result.getPointOnA());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(result.getPointOnB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(result.getNormalOnA());
@@ -530,7 +530,7 @@ class ExpandingPolytopeAlgorithmTest
       assertTrue(result.areShapesColliding());
 
       ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
-      result = epa.doCollisionTest(polytopeA, polytopeB);
+      result = epa.evaluateCollision(polytopeA, polytopeB);
       Point3D pointOnA = result.getPointOnA();
       Point3D pointOnB = result.getPointOnB();
 

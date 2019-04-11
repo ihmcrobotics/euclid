@@ -566,6 +566,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
       boolean isOnePolytopeEmpty = polytopeA.isEmpty() || polytopeB.isEmpty();
 
+      assertTrue(polytopeA == result.getShapeA());
+      assertTrue(polytopeB == result.getShapeB());
+
       if (isOnePolytopeEmpty)
          assertNull(collisionDetector.getSimplexVertices(), messagePrefix);
       else
@@ -575,8 +578,6 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       {
          assertFalse(result.areShapesColliding());
          assertTrue(Double.isNaN(result.getDistance()));
-         assertNull(result.getShapeA());
-         assertNull(result.getShapeB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnA());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnA());
@@ -585,8 +586,6 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       else if (actualCollisionTestResult)
       {
          assertTrue(Double.isNaN(result.getDistance()));
-         assertNull(result.getShapeA());
-         assertNull(result.getShapeB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnA());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnA());
