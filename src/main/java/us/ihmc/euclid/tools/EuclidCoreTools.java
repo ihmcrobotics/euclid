@@ -218,6 +218,11 @@ public class EuclidCoreTools
       }
    };
 
+   private EuclidCoreTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Calculates and returns the square root of the given value.
     * <p>

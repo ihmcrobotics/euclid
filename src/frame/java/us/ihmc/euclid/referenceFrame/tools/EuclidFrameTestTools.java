@@ -28,6 +28,11 @@ public class EuclidFrameTestTools
 {
    private static final String DEFAULT_FORMAT = getStringFormat(15, 12);
 
+   private EuclidFrameTestTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Asserts on a per component basis that the two rotation frame vectors represent the same geometry
     * to an {@code epsilon}.

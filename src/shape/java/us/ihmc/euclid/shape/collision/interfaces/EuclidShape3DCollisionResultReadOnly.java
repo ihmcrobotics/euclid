@@ -5,6 +5,11 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface EuclidShape3DCollisionResultReadOnly
 {
    boolean areShapesColliding();

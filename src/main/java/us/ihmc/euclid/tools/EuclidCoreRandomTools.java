@@ -40,8 +40,13 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  *
  * @author Sylvain Bertrand
  */
-public abstract class EuclidCoreRandomTools
+public class EuclidCoreRandomTools
 {
+   private EuclidCoreRandomTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Generates random yaw-pitch-roll angles and returns it in an array.
     * <p>

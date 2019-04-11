@@ -28,6 +28,11 @@ public class ReferenceFrameTools
     */
    private static final ReferenceFrame worldFrame = constructARootFrame("World");
 
+   private ReferenceFrameTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Construct a new z-up root reference frame.
     * <p>

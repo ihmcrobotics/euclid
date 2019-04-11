@@ -16,6 +16,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class EuclidShapeCollisionTools
 {
+   private EuclidShapeCollisionTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    public static void doPointShape3DBox3DCollisionTest(PointShape3DReadOnly pointShape3D, Box3DReadOnly box3D, EuclidShape3DCollisionResult resultToPack)
    {
       doPoint3DBox3DCollisionTest(pointShape3D, box3D, resultToPack);
@@ -215,7 +220,8 @@ public class EuclidShapeCollisionTools
       resultToPack.setDistance(distance);
    }
 
-   public static void doPointShape3DSphere3DCollisionTest(PointShape3DReadOnly pointShape3D, Sphere3DReadOnly sphere3D, EuclidShape3DCollisionResult resultToPack)
+   public static void doPointShape3DSphere3DCollisionTest(PointShape3DReadOnly pointShape3D, Sphere3DReadOnly sphere3D,
+                                                          EuclidShape3DCollisionResult resultToPack)
    {
       doPoint3DSphere3DCollisionTest(pointShape3D, sphere3D.getPosition(), sphere3D.getRadius(), resultToPack);
       resultToPack.setShapeA(pointShape3D);

@@ -25,6 +25,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidFrameFactories
 {
+   private EuclidFrameFactories()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Creates a new frame point that is linked to the {@code originalTuple} as follows:
     *

@@ -36,6 +36,11 @@ public class YawPitchRollTools
    /** Tolerance used to test if a yaw-pitch-roll is equal to zero. */
    public static final double ZERO_EPS = 1.0e-12;
 
+   private YawPitchRollTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Tests whether the three given angles yaw, pitch, and roll are equal to zero.
     * 

@@ -15,6 +15,11 @@ public class EuclidHashCodeTools
     */
    public final static long MULTIPLIER = 31L;
 
+   private EuclidHashCodeTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Returns a hash bit stream as an integer hash value.
     *

@@ -26,10 +26,15 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class EuclidCoreIOTools
+public class EuclidCoreIOTools
 {
    /** Default format used to print decimal numbers. */
    public static final String DEFAULT_FORMAT = getStringFormat(6, 3);
+
+   private EuclidCoreIOTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Gets a representative {@code String} of {@code rigidBodyTransform} as follows:

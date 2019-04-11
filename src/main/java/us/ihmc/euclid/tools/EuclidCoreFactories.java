@@ -22,6 +22,11 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  */
 public class EuclidCoreFactories
 {
+   private EuclidCoreFactories()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Creates a new point that is linked to the {@code originalTuple} as follows:
     *

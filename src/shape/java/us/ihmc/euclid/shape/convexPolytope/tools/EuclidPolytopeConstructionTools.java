@@ -33,6 +33,11 @@ public class EuclidPolytopeConstructionTools
 {
    public static final double DEFAULT_CONSTRUCTION_EPSILON = 1.0e-10;
 
+   private EuclidPolytopeConstructionTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Computes the faces containing the given {@code vertex} as follows:
     * <ul>

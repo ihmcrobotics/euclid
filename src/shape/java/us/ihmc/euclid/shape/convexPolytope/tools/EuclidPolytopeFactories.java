@@ -9,6 +9,11 @@ import us.ihmc.euclid.tuple3D.Point3D;
 
 public class EuclidPolytopeFactories
 {
+   private EuclidPolytopeFactories()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    public static List<Point3D> newConeVertices(double height, double radius, int numberOfDivisions)
    {
       List<Point3D> vertices = new ArrayList<>();

@@ -18,6 +18,11 @@ public class EuclidShapeTools
    private static final double SPHERE_SMALLEST_DISTANCE_TO_ORIGIN = 1.0e-12;
    private static final double TORUS_SMALLEST_DISTANCE_TO_AXIS = 1.0e-12;
 
+   private EuclidShapeTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    public static boolean isPoint3DInsideBox3D(Point3DReadOnly query, Vector3DReadOnly box3DSize, double epsilon)
    {
       return isPoint3DInsideBox3D(query.getX(), query.getY(), query.getZ(), box3DSize, epsilon);
@@ -1469,7 +1474,7 @@ public class EuclidShapeTools
 
       if (distanceSquaredFromAxis < TORUS_SMALLEST_DISTANCE_TO_AXIS)
       { // We need to setup a vector that is orthogonal to the torus' axis, then we'll perform the projection along that vector.
-         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
+        // Purposefully picking a large tolerance to ensure sanity of the cross-product.
          if (Math.abs(torus3DAxis.getY()) > 0.1 || Math.abs(torus3DAxis.getZ()) > 0.1)
             normalToPack.set(1.0, 0.0, 0.0);
          else

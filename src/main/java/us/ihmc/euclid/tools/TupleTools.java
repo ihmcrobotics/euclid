@@ -9,8 +9,13 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  * 
  * @author Sylvain Bertrand
  */
-public abstract class TupleTools
+public class TupleTools
 {
+   private TupleTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Convenience method to calculate the dot product of two tuples.
     * 

@@ -40,6 +40,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidShapeIOTools
 {
+   private EuclidShapeIOTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Gets the representative {@code String} of {@code box3D} as follows:
     * 

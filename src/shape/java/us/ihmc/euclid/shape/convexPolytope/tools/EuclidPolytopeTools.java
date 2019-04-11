@@ -21,6 +21,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 // TODO Remove unused/untested methods
 public class EuclidPolytopeTools
 {
+   private EuclidPolytopeTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    // From nVertices - nEdges + nFaces = 2
    public static int computeConvexPolytopeNumberOfVertices(int numberOfFaces, int numberOfEdges)
    {

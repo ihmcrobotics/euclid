@@ -94,6 +94,11 @@ public class IcoSphereFactory
       }
    }
 
+   private IcoSphereFactory()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    public static GeometryMesh3D newIcoSphere(int recursionLevel)
    {
       GeometryMesh3D geometry = new GeometryMesh3D();

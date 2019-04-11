@@ -11,7 +11,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
  * 
  * @author Sylvain Bertrand
  */
-public abstract class Matrix3DFeatures
+public class Matrix3DFeatures
 {
    /**
     * Default tolerance for determining whether a matrix 3D represents the identity matrix or not.
@@ -29,6 +29,11 @@ public abstract class Matrix3DFeatures
     * Default tolerance for determining whether a matrix 3D is skew symmetric or not.
     */
    public static final double EPS_CHECK_SKEW = 1.0e-8;
+
+   private Matrix3DFeatures()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Computes the determinant of the matrix described by the given 9 coefficients.

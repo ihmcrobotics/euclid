@@ -37,6 +37,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidFrameTools
 {
+   private EuclidFrameTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Tests if the two given lines are collinear given a tolerance on the angle between in the range
     * ]0; <i>pi</i>/2[. This method returns {@code true} if the two lines are collinear, whether they

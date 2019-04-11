@@ -38,13 +38,18 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  * 
  * @author Sylvain Bertrand
  */
-public abstract class EuclidCoreTestTools
+public class EuclidCoreTestTools
 {
    /**
     * Default format used with {@link EuclidCoreIOTools} to build comprehensible feedback when an
     * assertion is failing.
     */
    public static final String DEFAULT_FORMAT = getStringFormat(15, 12);
+
+   private EuclidCoreTestTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Asserts that the two given angles are equal to an {@code epsilon}.

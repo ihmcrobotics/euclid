@@ -474,6 +474,11 @@ public class EuclidFrameAPITestTools
       acceptableExceptions = Collections.unmodifiableSet(modifiableSet);
    }
 
+   private EuclidFrameAPITestTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Asserts, using reflection, that all methods with frameless arguments, such as
     * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.

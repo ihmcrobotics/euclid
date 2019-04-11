@@ -45,6 +45,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidShapeRandomTools
 {
+   private EuclidShapeRandomTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Generates a random a box 3D.
     * <ul>

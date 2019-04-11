@@ -31,6 +31,11 @@ public class EuclidShapeTestTools
 {
    private static final String DEFAULT_FORMAT = EuclidCoreTestTools.DEFAULT_FORMAT;
 
+   private EuclidShapeTestTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    public static void assertBox3DEquals(Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
       assertBox3DEquals(null, expected, actual, epsilon);

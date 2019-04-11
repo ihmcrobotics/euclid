@@ -14,6 +14,11 @@ public class EuclidEllipsoid3DTools
    public static final int DEFAULT_ROOT_FINDING_ITERATIONS = 150;
    public static final double DEFAULT_EPSILON = 1.0e-10;
 
+   private EuclidEllipsoid3DTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    private static double findRoot(double r0, double r1, double z0, double z1, double z2, double g, int maxIterations, double epsilon)
    {
       double n0 = r0 * z0;
