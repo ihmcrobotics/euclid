@@ -40,6 +40,10 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  */
 public abstract class EuclidCoreTestTools
 {
+   /**
+    * Default format used with {@link EuclidCoreIOTools} to build comprehensible feedback when an
+    * assertion is failing.
+    */
    public static final String DEFAULT_FORMAT = getStringFormat(15, 12);
 
    /**
@@ -2714,11 +2718,42 @@ public abstract class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
    }
 
+   /**
+    * Throws a new {@code AssertionError} as follows:
+    * 
+    * <pre>
+    * messagePrefix expected:
+    * expectedAsString
+    * but was:
+    * actualAsString
+    * </pre>
+    * 
+    * @param messagePrefix prefix to add to the error message.
+    * @param expectedAsString the result that was expected in a {@code String} form.
+    * @param actualAsString the result that was obtained in a {@code String} form.
+    */
    public static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString)
    {
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, null);
    }
 
+   /**
+    * Throws a new {@code AssertionError} as follows:
+    * 
+    * <pre>
+    * messagePrefix expected:
+    * expectedAsString
+    * but was:
+    * actualAsString
+    * Difference of: differenceAsString
+    * </pre>
+    * 
+    * @param messagePrefix prefix to add to the error message.
+    * @param expectedAsString the result that was expected in a {@code String} form.
+    * @param differenceAsString a short comprehensible summary of the difference between the expected
+    *           and obtained results.
+    * @param actualAsString the result that was obtained in a {@code String} form.
+    */
    public static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString, String differenceAsString)
    {
       String errorMessage = addPrefixToMessage(messagePrefix, "expected:\n" + expectedAsString + "\n but was:\n" + actualAsString);
@@ -2728,11 +2763,32 @@ public abstract class EuclidCoreTestTools
       throw new AssertionError(errorMessage);
    }
 
+   /**
+    * Throws a new {@code AssertionError} as follows:
+    * 
+    * <pre>
+    * messagePrefix errorMessage
+    * </pre>
+    * 
+    * @param messagePrefix prefix to add to the error message.
+    * @param errorMessage the detail message of why the assertion is failing.
+    */
    public static void throwAssertionError(String messagePrefix, String errorMessage)
    {
       throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
    }
 
+   /**
+    * Convenience method for prepending an optional prefix to a message.
+    * <p>
+    * In the case the given {@code prefix} is {@code null} or empty, the original {@code message} is
+    * returned.
+    * </p>
+    * 
+    * @param prefix the {@code String} to prepend to the message.
+    * @param message the original message.
+    * @return the message with the prefix.
+    */
    public static String addPrefixToMessage(String prefix, String message)
    {
       if (prefix != null && !prefix.isEmpty())
