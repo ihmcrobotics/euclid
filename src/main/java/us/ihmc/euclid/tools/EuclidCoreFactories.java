@@ -35,7 +35,7 @@ public class EuclidCoreFactories
     * @param originalTuple the reference tuple to scale. Not modified.
     * @return the new point linked to {@code originalTuple}.
     */
-   public static Point2DReadOnly newPoint2DReadOnly(DoubleSupplier scaleSupplier, Tuple2DReadOnly originalTuple)
+   public static Point2DReadOnly newLinkedPoint2DReadOnly(DoubleSupplier scaleSupplier, Tuple2DReadOnly originalTuple)
    {
       DoubleSupplier xSupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getX();
       DoubleSupplier ySupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getY();
@@ -55,7 +55,7 @@ public class EuclidCoreFactories
     * @param originalTuple the reference tuple to scale. Not modified.
     * @return the new vector linked to {@code originalTuple}.
     */
-   public static Vector2DReadOnly newVector2DReadOnly(DoubleSupplier scaleSupplier, Tuple2DReadOnly originalTuple)
+   public static Vector2DReadOnly newLinkedVector2DReadOnly(DoubleSupplier scaleSupplier, Tuple2DReadOnly originalTuple)
    {
       DoubleSupplier xSupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getX();
       DoubleSupplier ySupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getY();
@@ -75,7 +75,7 @@ public class EuclidCoreFactories
     * @param originalTuple the reference tuple to scale. Not modified.
     * @return the new point linked to {@code originalTuple}.
     */
-   public static Point3DReadOnly newPoint3DReadOnly(DoubleSupplier scaleSupplier, Tuple3DReadOnly originalTuple)
+   public static Point3DReadOnly newLinkedPoint3DReadOnly(DoubleSupplier scaleSupplier, Tuple3DReadOnly originalTuple)
    {
       DoubleSupplier xSupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getX();
       DoubleSupplier ySupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getY();
@@ -96,7 +96,7 @@ public class EuclidCoreFactories
     * @param originalTuple the reference tuple to scale. Not modified.
     * @return the new vector linked to {@code originalTuple}.
     */
-   public static Vector3DReadOnly newVector3DReadOnly(DoubleSupplier scaleSupplier, Tuple3DReadOnly originalTuple)
+   public static Vector3DReadOnly newLinkedVector3DReadOnly(DoubleSupplier scaleSupplier, Tuple3DReadOnly originalTuple)
    {
       DoubleSupplier xSupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getX();
       DoubleSupplier ySupplier = () -> scaleSupplier.getAsDouble() * originalTuple.getY();
