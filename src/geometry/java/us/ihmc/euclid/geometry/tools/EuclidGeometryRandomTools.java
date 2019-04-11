@@ -617,11 +617,32 @@ public abstract class EuclidGeometryRandomTools
       return convexPolygon2D;
    }
 
+   /**
+    * Generates a random 3D triangle.
+    * <p>
+    * Each coordinate of each vertex is generated randomly within the range [-1, 1].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random triangle.
+    */
    public static Triangle3D nextTriangle3D(Random random)
    {
       return nextTriangle3D(random, 1.0);
    }
 
+   /**
+    * Generates a random 3D triangle.
+    * <p>
+    * Each coordinate of each vertex is generated randomly within the range [-{@code minMax},
+    * {@code minMax}].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each coordinate.
+    * @return the random triangle.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
    public static Triangle3D nextTriangle3D(Random random, double minMax)
    {
       return new Triangle3D(nextPoint3D(random, minMax), nextPoint3D(random, minMax), nextPoint3D(random, minMax));
