@@ -27,6 +27,11 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class provides the tools to perform a variety of assertions on shape types.
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidShapeTestTools
 {
    private static final String DEFAULT_FORMAT = EuclidCoreTestTools.DEFAULT_FORMAT;
@@ -36,16 +41,57 @@ public class EuclidShapeTestTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   /**
+    * Asserts on a per component basis that the two boxes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected box. Not modified.
+    * @param actual the actual box. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two boxes are not equal or not expressed in the reference frame. If
+    *            only one of the arguments is equal to {@code null}.
+    */
    public static void assertBox3DEquals(Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
       assertBox3DEquals(null, expected, actual, epsilon);
    }
 
+   
+   /**
+    * Asserts on a per component basis that the two boxes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected box. Not modified.
+    * @param actual the actual box. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two boxes are not equal or not expressed in the reference frame. If
+    *            only one of the arguments is equal to {@code null}.
+    */
    public static void assertBox3DEquals(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
       assertBox3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two boxes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected box. Not modified.
+    * @param actual the actual box. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two boxes are not equal or not expressed in the reference frame. If
+    *            only one of the arguments is equal to {@code null}.
+    */
    public static void assertBox3DEquals(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)

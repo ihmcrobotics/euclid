@@ -18,6 +18,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**
  * This class provides the tools to perform a variety of assertions on frame geometry types.
@@ -26,7 +27,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
  */
 public class EuclidFrameTestTools
 {
-   private static final String DEFAULT_FORMAT = getStringFormat(15, 12);
+   private static final String DEFAULT_FORMAT = EuclidCoreTestTools.DEFAULT_FORMAT;
 
    private EuclidFrameTestTools()
    {
