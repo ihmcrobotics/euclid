@@ -312,7 +312,7 @@ public class Box3DTest
       { // Test with point inside using the weighted random generator 
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, box3D.getVertices());
          assertTrue(box3D.isPointInside(pointInside));
       }
 
@@ -610,9 +610,9 @@ public class Box3DTest
                   new Point3D(xSign * halfSizeX, -halfSizeY, -halfSizeZ), new Point3D(xSign * halfSizeX, halfSizeY, -halfSizeZ)};
 
             if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
             else
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
             expectedClosestPoint.set(xSign * halfSizeX, pointInside.getY(), pointInside.getZ());
             expectedNormal.set(xSign, 0.0, 0.0);
@@ -630,9 +630,9 @@ public class Box3DTest
                   new Point3D(-halfSizeX, ySign * halfSizeY, -halfSizeZ), new Point3D(halfSizeX, ySign * halfSizeY, -halfSizeZ)};
 
             if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
             else
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
             expectedClosestPoint.set(pointInside.getX(), ySign * halfSizeY, pointInside.getZ());
             expectedNormal.set(0.0, ySign, 0.0);
@@ -650,9 +650,9 @@ public class Box3DTest
                   new Point3D(-halfSizeX, -halfSizeY, zSign * halfSizeZ), new Point3D(halfSizeX, -halfSizeY, zSign * halfSizeZ)};
 
             if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
             else
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
             expectedClosestPoint.set(pointInside.getX(), pointInside.getY(), zSign * halfSizeZ);
             expectedNormal.set(0.0, 0.0, zSign);
@@ -1178,7 +1178,7 @@ public class Box3DTest
       { // Point inside, the returned distance should be zero
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, box3D.getVertices());
          assertEquals(0.0, box3D.distance(pointInside));
       }
    }
@@ -1216,9 +1216,9 @@ public class Box3DTest
                   new Point3D(xSign * halfSize, -halfSize, -halfSize), new Point3D(xSign * halfSize, halfSize, -halfSize)};
 
             if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
             else
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
             double expectedDistance = -Math.abs(pointInside.getX() - xSign * halfSize);
 
@@ -1232,9 +1232,9 @@ public class Box3DTest
                   new Point3D(-halfSize, ySign * halfSize, -halfSize), new Point3D(halfSize, ySign * halfSize, -halfSize)};
 
             if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
             else
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
             double expectedDistance = -Math.abs(pointInside.getY() - ySign * halfSize);
             box3D.transformToWorld(pointInside);
@@ -1247,9 +1247,9 @@ public class Box3DTest
                   new Point3D(-halfSize, -halfSize, zSign * halfSize), new Point3D(halfSize, -halfSize, zSign * halfSize)};
 
             if (random.nextBoolean()) // Can only generate a point from the box's center and 3 vertices. Randomly pick a triangle of 2 possible triangles for the face
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[1], faceVertices[2]));
             else
-               pointInside.set(EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
+               pointInside.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, new Point3D(), faceVertices[0], faceVertices[2], faceVertices[3]));
 
             double expectedDistance = -Math.abs(pointInside.getZ() - zSign * halfSize);
             box3D.transformToWorld(pointInside);
@@ -1373,7 +1373,7 @@ public class Box3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Point inside, orthogonalProjection should return null
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, box3D.getVertices());
          assertNull(box3D.orthogonalProjectionCopy(pointInside));
       }
    }
@@ -1512,7 +1512,7 @@ public class Box3DTest
          for (Point3DBasics vertex : box3D.getVertices())
             assertTrue(boundingBox.isInsideInclusive(vertex));
          for (int j = 0; j < 100; j++)
-            assertTrue(boundingBox.isInsideExclusive(EuclidShapeRandomTools.nextWeightedAverage(random, box3D.getVertices())));
+            assertTrue(boundingBox.isInsideExclusive(EuclidGeometryRandomTools.nextWeightedAverage(random, box3D.getVertices())));
       }
 
       for (int i = 0; i < ITERATIONS; i++)

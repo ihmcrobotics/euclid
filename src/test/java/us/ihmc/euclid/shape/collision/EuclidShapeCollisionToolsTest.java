@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.primitives.Capsule3D;
@@ -52,7 +53,7 @@ public class EuclidShapeCollisionToolsTest
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
          Axis axis = Axis.values[random.nextInt(3)];
          Bound bound = Bound.values()[random.nextInt(2)];
-         Point3D pointOnAFace = EuclidShapeRandomTools.nextWeightedAverage(random, getBox3DFaceVertices(axis, bound, box3D));
+         Point3D pointOnAFace = EuclidGeometryRandomTools.nextWeightedAverage(random, getBox3DFaceVertices(axis, bound, box3D));
 
          Vector3D shiftDirection = new Vector3D(getAxis(axis, box3D.getPose()));
          if (bound == Bound.MIN)
@@ -94,7 +95,7 @@ public class EuclidShapeCollisionToolsTest
          Point3D farthestInside = new Point3D();
          farthestInside.scaleAdd(-minHalfSize, closestFacePlane.getNormal(), closestFacePlane.getPoint());
          faceVerticesAndFarthestIn.add(farthestInside);
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, faceVerticesAndFarthestIn);
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, faceVerticesAndFarthestIn);
 
          Point3D pointOnFace = new Point3D();
          closestFacePlane.orthogonalProjection(pointInside, pointOnFace);
@@ -549,7 +550,7 @@ public class EuclidShapeCollisionToolsTest
             regionToExplore.add(farthestInside2);
          }
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, regionToExplore);
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, regionToExplore);
 
          Point3D pointOnSurface = new Point3D();
          endPlane.orthogonalProjection(pointInside, pointOnSurface);
@@ -609,7 +610,7 @@ public class EuclidShapeCollisionToolsTest
             regionToExplore.add(farthestInside);
          }
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, regionToExplore);
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, regionToExplore);
 
          Point3D pointOnSurface = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointInside, centerOnSurface, normal);
          double distance = pointOnSurface.distance(pointInside);
@@ -1193,7 +1194,7 @@ public class EuclidShapeCollisionToolsTest
                                                 new Point3D(ramp3D.getSizeX(), halfWidth, ramp3D.getSizeZ()));
          vertices.forEach(ramp3D.getPose()::transform);
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, vertices);
 
          Plane3D closestFace = faces.stream().sorted((a, b) -> Double.compare(a.distance(pointInside), b.distance(pointInside))).findFirst().get();
          Point3D pointOnSurface = closestFace.orthogonalProjectionCopy(pointInside);

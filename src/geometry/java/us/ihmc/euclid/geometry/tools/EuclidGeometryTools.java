@@ -41,6 +41,11 @@ public class EuclidGeometryTools
    /** Constant used to save some computation. */
    public static final double HALF_PI = 0.5 * Math.PI;
 
+   private EuclidGeometryTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Computes the angle in radians from the first 2D vector to the second 2D vector. The computed
     * angle is in the range [-<i>pi</i>; <i>pi</i>].

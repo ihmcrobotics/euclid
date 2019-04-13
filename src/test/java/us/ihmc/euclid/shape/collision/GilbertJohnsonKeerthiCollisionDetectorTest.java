@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
@@ -148,8 +149,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             {
                Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-               Point3D pointOnConvexPolytope3D = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(),
-                                                                                              edge.getDestination());
+               Point3D pointOnConvexPolytope3D = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(),
+                                                                                                 edge.getDestination());
                Point3D pointOnTetrahedron = new Point3D(pointOnConvexPolytope3D);
                pointOnTetrahedron.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), face.getNormal(), pointOnTetrahedron);
 
@@ -276,7 +277,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                {
                   Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                   HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-                  Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(),
+                  Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(),
                                                                                         edge.getOrigin(), edge.getDestination());
 
                   tetrahedron = newTetrahedron(random, pointInside, face.getNormal(), 1.0);
@@ -469,7 +470,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Point3D triangleC = EuclidCoreRandomTools.nextPoint3D(random);
          ConvexPolytope3D triangle = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(triangleA, triangleB, triangleC));
 
-         Point3D pointOnTriangle = EuclidShapeRandomTools.nextPoint3DInTriangle(random, triangleA, triangleB, triangleC);
+         Point3D pointOnTriangle = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, triangleA, triangleB, triangleC);
 
          Vector3D orthogonalToNormal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, triangle.getFace(0).getNormal(), true);
 
@@ -500,7 +501,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Point3D firstTriangleC = EuclidCoreRandomTools.nextPoint3D(random);
          ConvexPolytope3D firstTriangle = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTriangleA, firstTriangleB, firstTriangleC));
 
-         Point3D pointOnTriangle = EuclidShapeRandomTools.nextPoint3DInTriangle(random, firstTriangleA, firstTriangleB, firstTriangleC);
+         Point3D pointOnTriangle = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, firstTriangleA, firstTriangleB, firstTriangleC);
 
          Vector3D orthogonalToNormal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstTriangle.getFace(0).getNormal(), true);
 

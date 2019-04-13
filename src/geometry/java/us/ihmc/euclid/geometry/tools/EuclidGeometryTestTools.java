@@ -26,6 +26,11 @@ public class EuclidGeometryTestTools
 {
    private static final String DEFAULT_FORMAT = EuclidCoreTestTools.DEFAULT_FORMAT;
 
+   private EuclidGeometryTestTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Asserts on a per component basis that the two line 2Ds are equal to an {@code epsilon}.
     * <p>

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest.AnalyticalShapeCollisionDetection;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest.Pair;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
@@ -223,7 +224,7 @@ class ExpandingPolytopeAlgorithmTest
             {
                Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-               Point3D closestOnConvexPolytope3D = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(),
+               Point3D closestOnConvexPolytope3D = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(),
                                                                                                 edge.getDestination());
                Point3D closestOnTetrahedron = new Point3D(closestOnConvexPolytope3D);
                closestOnTetrahedron.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), face.getNormal(), closestOnTetrahedron);
@@ -355,7 +356,7 @@ class ExpandingPolytopeAlgorithmTest
                {
                   Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                   HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-                  Point3D pointInside = EuclidShapeRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(),
+                  Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(),
                                                                                         edge.getOrigin(), edge.getDestination());
 
                   tetrahedron = GilbertJohnsonKeerthiCollisionDetectorTest.newTetrahedron(random, pointInside, face.getNormal(), 1.0);

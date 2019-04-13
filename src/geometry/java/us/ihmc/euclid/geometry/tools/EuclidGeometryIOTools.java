@@ -38,6 +38,11 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public class EuclidGeometryIOTools
 {
+   private EuclidGeometryIOTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Gets a representative {@code String} of {@code line2D} as follows:
     *

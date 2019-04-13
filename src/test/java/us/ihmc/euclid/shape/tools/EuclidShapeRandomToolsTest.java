@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -30,7 +31,7 @@ class EuclidShapeRandomToolsTest
          Point2D b = EuclidCoreRandomTools.nextPoint2D(random, 5.0);
          Point2D c = EuclidCoreRandomTools.nextPoint2D(random, 5.0);
 
-         Point2D nextPoint = EuclidShapeRandomTools.nextPoint2DInTriangle(random, a, b, c);
+         Point2D nextPoint = EuclidGeometryRandomTools.nextPoint2DInTriangle(random, a, b, c);
          assertTrue(EuclidGeometryTools.isPoint2DInsideTriangleABC(nextPoint, a, b, c));
       }
 
@@ -55,7 +56,7 @@ class EuclidShapeRandomToolsTest
 
             assertEquals(l, b.distance(c), EPSILON);
 
-            Point2D nextPoint = EuclidShapeRandomTools.nextPoint2DInTriangle(random, a, b, c);
+            Point2D nextPoint = EuclidGeometryRandomTools.nextPoint2DInTriangle(random, a, b, c);
             assertTrue(EuclidGeometryTools.isPoint2DInsideTriangleABC(nextPoint, a, b, c));
 
             Point2D centroid = EuclidGeometryTools.averagePoint2Ds(Arrays.asList(a, b, c));

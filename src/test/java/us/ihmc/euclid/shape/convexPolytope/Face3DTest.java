@@ -465,7 +465,7 @@ public class Face3DTest
          Vector3D faceNormal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
          Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15, faceNormal);
          List<? extends Vertex3DReadOnly> vertices = face3D.getVertices();
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, vertices);
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, vertices);
 
          for (int edgeIndex = 0; edgeIndex < face3D.getNumberOfEdges(); edgeIndex++)
          {
@@ -518,7 +518,7 @@ public class Face3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with a point inside the face
          Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
-         Point3D pointOnFace = EuclidShapeRandomTools.nextWeightedAverage(random, face.getVertices());
+         Point3D pointOnFace = EuclidGeometryRandomTools.nextWeightedAverage(random, face.getVertices());
 
          assertEquals(0.0, face.distance(pointOnFace), EPSILON);
 
@@ -698,7 +698,7 @@ public class Face3DTest
       { // Test against naive method with point inside
          Face3D face = EuclidShapeRandomTools.nextCircleBasedFace3D(random, 5.0, 1.0, 15);
 
-         Point3D point = EuclidShapeRandomTools.nextWeightedAverage(random, face.getVertices());
+         Point3D point = EuclidGeometryRandomTools.nextWeightedAverage(random, face.getVertices());
 
          HalfEdge3D expectedEdge = null;
          int expectedEdgeIndex = -1;
@@ -787,7 +787,7 @@ public class Face3DTest
          Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
-         Point3D pointAbove = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
+         Point3D pointAbove = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
          pointAbove.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointAbove);
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointAbove, face3D.getCentroid(), face3D.getNormal());
@@ -800,7 +800,7 @@ public class Face3DTest
          Face3D face3D = EuclidShapeRandomTools.nextCircleBasedFace3D(random);
 
          HalfEdge3D edge = face3D.getEdge(random.nextInt(face3D.getNumberOfEdges()));
-         Point3D pointBelow = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
+         Point3D pointBelow = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, face3D.getCentroid(), edge.getOrigin(), edge.getDestination());
          pointBelow.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face3D.getNormal(), pointBelow);
 
          Point3D expectedProjection = EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointBelow, face3D.getCentroid(), face3D.getNormal());

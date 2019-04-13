@@ -440,7 +440,7 @@ public class Ramp3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Point inside, using the random weighted average generator
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
          assertTrue(ramp3D.isPointInside(pointInside));
       }
    }
@@ -805,7 +805,7 @@ public class Ramp3DTest
       { // Point inside, we use brute force to figure out the expected closest point and normal
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
 
          Plane3D backPlane = new Plane3D(new Point3D(ramp3D.getSizeX(), 0.0, 0.0), Axis.X);
          Plane3D bottomPlane = new Plane3D(new Point3D(0.0, 0.0, 0.0), new Vector3D(0.0, 0.0, -1.0));
@@ -1275,7 +1275,7 @@ public class Ramp3DTest
       { // Point inside, the distance should be 0.0
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
          assertEquals(0.0, ramp3D.distance(pointInside));
       }
    }
@@ -1562,7 +1562,7 @@ public class Ramp3DTest
       { // Point inside, the distance should be 0.0
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
 
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
          Plane3D backPlane = new Plane3D(new Point3D(ramp3D.getSizeX(), 0.0, 0.0), Axis.X);
          Plane3D bottomPlane = new Plane3D(new Point3D(0.0, 0.0, 0.0), new Vector3D(0.0, 0.0, -1.0));
          Plane3D leftPlane = new Plane3D(new Point3D(0.0, 0.5 * ramp3D.getSizeY(), 0.0), Axis.Y);
@@ -1589,7 +1589,7 @@ public class Ramp3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Point inside, projection should return null
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
-         Point3D pointInside = EuclidShapeRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
+         Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
          assertNull(ramp3D.orthogonalProjectionCopy(pointInside));
       }
 
@@ -1627,7 +1627,7 @@ public class Ramp3DTest
          for (Point3DBasics vertex : ramp3D.getVertices())
             assertTrue(boundingBox.isInsideInclusive(vertex));
          for (int j = 0; j < 100; j++)
-            assertTrue(boundingBox.isInsideExclusive(EuclidShapeRandomTools.nextWeightedAverage(random, ramp3D.getVertices())));
+            assertTrue(boundingBox.isInsideExclusive(EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices())));
       }
 
       for (int i = 0; i < ITERATIONS; i++)

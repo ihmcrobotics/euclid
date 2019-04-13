@@ -218,7 +218,7 @@ public class EuclidPolytopeToolsTest
             for (int faceIndex = 0; faceIndex < 4; faceIndex++)
             { // Expecting only 1 visible face
                Face3D face = convexPolytope3D.getFace(faceIndex);
-               Point3D pointOnFace = EuclidShapeRandomTools.nextPoint3DInTriangle(random, face.getVertex(0), face.getVertex(1), face.getVertex(2));
+               Point3D pointOnFace = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, face.getVertex(0), face.getVertex(1), face.getVertex(2));
                Point3D pointOutside = new Point3D();
                pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOnFace);
 
