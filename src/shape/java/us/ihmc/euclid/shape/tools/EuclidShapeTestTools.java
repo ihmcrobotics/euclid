@@ -50,15 +50,14 @@ public class EuclidShapeTestTools
     * @param expected the expected box. Not modified.
     * @param actual the actual box. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two boxes are not equal or not expressed in the reference frame. If
-    *            only one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two boxes are not equal. If only one of the arguments is equal to
+    *            {@code null}.
     */
    public static void assertBox3DEquals(Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
       assertBox3DEquals(null, expected, actual, epsilon);
    }
 
-   
    /**
     * Asserts on a per component basis that the two boxes are equal to an {@code epsilon}.
     * <p>
@@ -69,8 +68,8 @@ public class EuclidShapeTestTools
     * @param expected the expected box. Not modified.
     * @param actual the actual box. Not modified.
     * @param epsilon the tolerance to use.
-    * @throws AssertionError if the two boxes are not equal or not expressed in the reference frame. If
-    *            only one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two boxes are not equal. If only one of the arguments is equal to
+    *            {@code null}.
     */
    public static void assertBox3DEquals(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
@@ -89,8 +88,8 @@ public class EuclidShapeTestTools
     * @param epsilon the tolerance to use.
     * @param format the format to use for printing each component when an {@code AssertionError} is
     *           thrown.
-    * @throws AssertionError if the two boxes are not equal or not expressed in the reference frame. If
-    *            only one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two boxes are not equal. If only one of the arguments is equal to
+    *            {@code null}.
     */
    public static void assertBox3DEquals(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, double epsilon, String format)
    {
@@ -104,16 +103,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two boxes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected box. Not modified.
+    * @param actual the actual box. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two boxes do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertBox3DGeometricallyEquals(Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
       assertBox3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two boxes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected box. Not modified.
+    * @param actual the actual box. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two boxes do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertBox3DGeometricallyEquals(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, double epsilon)
    {
       assertBox3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two boxes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected box. Not modified.
+    * @param actual the actual box. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two boxes do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertBox3DGeometricallyEquals(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -126,16 +168,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two capsules are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected capsule. Not modified.
+    * @param actual the actual capsule. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two capsules are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertCapsule3DEquals(Capsule3DReadOnly expected, Capsule3DReadOnly actual, double epsilon)
    {
       assertCapsule3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two capsules are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected capsule. Not modified.
+    * @param actual the actual capsule. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two capsules are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertCapsule3DEquals(String messagePrefix, Capsule3DReadOnly expected, Capsule3DReadOnly actual, double epsilon)
    {
       assertCapsule3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two capsules are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected capsule. Not modified.
+    * @param actual the actual capsule. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two capsules are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertCapsule3DEquals(String messagePrefix, Capsule3DReadOnly expected, Capsule3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -148,16 +230,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two capsules represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected capsule. Not modified.
+    * @param actual the actual capsule. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two capsules do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertCapsule3DGeometricallyEquals(Capsule3DReadOnly expected, Capsule3DReadOnly actual, double epsilon)
    {
       assertCapsule3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two capsules represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected capsule. Not modified.
+    * @param actual the actual capsule. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two capsules do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertCapsule3DGeometricallyEquals(String messagePrefix, Capsule3DReadOnly expected, Capsule3DReadOnly actual, double epsilon)
    {
       assertCapsule3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two capsules represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected capsule. Not modified.
+    * @param actual the actual capsule. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two capsules do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertCapsule3DGeometricallyEquals(String messagePrefix, Capsule3DReadOnly expected, Capsule3DReadOnly actual, double epsilon,
                                                          String format)
    {
@@ -171,16 +296,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two cylinders are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected cylinder. Not modified.
+    * @param actual the actual cylinder. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two cylinders are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertCylinder3DEquals(Cylinder3DReadOnly expected, Cylinder3DReadOnly actual, double epsilon)
    {
       assertCylinder3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two cylinders are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected cylinder. Not modified.
+    * @param actual the actual cylinder. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two cylinders are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertCylinder3DEquals(String messagePrefix, Cylinder3DReadOnly expected, Cylinder3DReadOnly actual, double epsilon)
    {
       assertCylinder3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two cylinders are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected cylinder. Not modified.
+    * @param actual the actual cylinder. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two cylinders are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertCylinder3DEquals(String messagePrefix, Cylinder3DReadOnly expected, Cylinder3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -193,16 +358,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two cylinders represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected cylinder. Not modified.
+    * @param actual the actual cylinder. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two cylinders do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertCylinder3DGeometricallyEquals(Cylinder3DReadOnly expected, Cylinder3DReadOnly actual, double epsilon)
    {
       assertCylinder3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two cylinders represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected cylinder. Not modified.
+    * @param actual the actual cylinder. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two cylinders do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertCylinder3DGeometricallyEquals(String messagePrefix, Cylinder3DReadOnly expected, Cylinder3DReadOnly actual, double epsilon)
    {
       assertCylinder3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two cylinders represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected cylinder. Not modified.
+    * @param actual the actual cylinder. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two cylinders do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertCylinder3DGeometricallyEquals(String messagePrefix, Cylinder3DReadOnly expected, Cylinder3DReadOnly actual, double epsilon,
                                                           String format)
    {
@@ -216,16 +424,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two ellipsoids are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected ellipsoid. Not modified.
+    * @param actual the actual ellipsoid. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ellipsoids are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertEllipsoid3DEquals(Ellipsoid3DReadOnly expected, Ellipsoid3DReadOnly actual, double epsilon)
    {
       assertEllipsoid3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two ellipsoids are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ellipsoid. Not modified.
+    * @param actual the actual ellipsoid. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ellipsoids are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertEllipsoid3DEquals(String messagePrefix, Ellipsoid3DReadOnly expected, Ellipsoid3DReadOnly actual, double epsilon)
    {
       assertEllipsoid3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two ellipsoids are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ellipsoid. Not modified.
+    * @param actual the actual ellipsoid. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two ellipsoids are not equal. If only one of the arguments is equal
+    *            to {@code null}.
+    */
    public static void assertEllipsoid3DEquals(String messagePrefix, Ellipsoid3DReadOnly expected, Ellipsoid3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -238,16 +486,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two ellipsoids represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected ellipsoid. Not modified.
+    * @param actual the actual ellipsoid. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ellipsoids do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertEllipsoid3DGeometricallyEquals(Ellipsoid3DReadOnly expected, Ellipsoid3DReadOnly actual, double epsilon)
    {
       assertEllipsoid3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two ellipsoids represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ellipsoid. Not modified.
+    * @param actual the actual ellipsoid. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ellipsoids do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertEllipsoid3DGeometricallyEquals(String messagePrefix, Ellipsoid3DReadOnly expected, Ellipsoid3DReadOnly actual, double epsilon)
    {
       assertEllipsoid3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two ellipsoids represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ellipsoid. Not modified.
+    * @param actual the actual ellipsoid. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two ellipsoids do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertEllipsoid3DGeometricallyEquals(String messagePrefix, Ellipsoid3DReadOnly expected, Ellipsoid3DReadOnly actual, double epsilon,
                                                            String format)
    {
@@ -261,16 +552,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two point shapes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected point shape. Not modified.
+    * @param actual the actual point shape. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two point shapes are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
    public static void assertPointShape3DEquals(PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon)
    {
       assertPointShape3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two point shapes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected point shape. Not modified.
+    * @param actual the actual point shape. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two point shapes are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
    public static void assertPointShape3DEquals(String messagePrefix, PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon)
    {
       assertPointShape3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two point shapes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected point shape. Not modified.
+    * @param actual the actual point shape. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two point shapes are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
    public static void assertPointShape3DEquals(String messagePrefix, PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -283,16 +614,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two point shapes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected point shape. Not modified.
+    * @param actual the actual point shape. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two point shapes do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertPointShape3DGeometricallyEquals(PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon)
    {
       assertPointShape3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two point shapes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected point shape. Not modified.
+    * @param actual the actual point shape. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two point shapes do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertPointShape3DGeometricallyEquals(String messagePrefix, PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon)
    {
       assertPointShape3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two point shapes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected point shape. Not modified.
+    * @param actual the actual point shape. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two point shapes do not represent the same geometry. If only one of
+    *            the arguments is equal to {@code null}.
+    */
    public static void assertPointShape3DGeometricallyEquals(String messagePrefix, PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon,
                                                             String format)
    {
@@ -306,16 +680,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two ramps are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected ramp. Not modified.
+    * @param actual the actual ramp. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ramps are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertRamp3DEquals(Ramp3DReadOnly expected, Ramp3DReadOnly actual, double epsilon)
    {
       assertRamp3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two ramps are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ramp. Not modified.
+    * @param actual the actual ramp. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ramps are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertRamp3DEquals(String messagePrefix, Ramp3DReadOnly expected, Ramp3DReadOnly actual, double epsilon)
    {
       assertRamp3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two ramps are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ramp. Not modified.
+    * @param actual the actual ramp. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two ramps are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertRamp3DEquals(String messagePrefix, Ramp3DReadOnly expected, Ramp3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -328,16 +742,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two ramps represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected ramp. Not modified.
+    * @param actual the actual ramp. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ramps do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertRamp3DGeometricallyEquals(Ramp3DReadOnly expected, Ramp3DReadOnly actual, double epsilon)
    {
       assertRamp3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two ramps represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ramp. Not modified.
+    * @param actual the actual ramp. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two ramps do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertRamp3DGeometricallyEquals(String messagePrefix, Ramp3DReadOnly expected, Ramp3DReadOnly actual, double epsilon)
    {
       assertRamp3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two ramps represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected ramp. Not modified.
+    * @param actual the actual ramp. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two ramps do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertRamp3DGeometricallyEquals(String messagePrefix, Ramp3DReadOnly expected, Ramp3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -350,16 +807,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two spheres are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected sphere. Not modified.
+    * @param actual the actual sphere. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two spheres are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertSphere3DEquals(Sphere3DReadOnly expected, Sphere3DReadOnly actual, double epsilon)
    {
       assertSphere3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two spheres are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected sphere. Not modified.
+    * @param actual the actual sphere. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two spheres are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertSphere3DEquals(String messagePrefix, Sphere3DReadOnly expected, Sphere3DReadOnly actual, double epsilon)
    {
       assertSphere3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two spheres are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected sphere. Not modified.
+    * @param actual the actual sphere. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two spheres are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertSphere3DEquals(String messagePrefix, Sphere3DReadOnly expected, Sphere3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -372,16 +869,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two spheres represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected sphere. Not modified.
+    * @param actual the actual sphere. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two spheres do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertSphere3DGeometricallyEquals(Sphere3DReadOnly expected, Sphere3DReadOnly actual, double epsilon)
    {
       assertSphere3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two spheres represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected sphere. Not modified.
+    * @param actual the actual sphere. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two spheres do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertSphere3DGeometricallyEquals(String messagePrefix, Sphere3DReadOnly expected, Sphere3DReadOnly actual, double epsilon)
    {
       assertSphere3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two spheres represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected sphere. Not modified.
+    * @param actual the actual sphere. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two spheres do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertSphere3DGeometricallyEquals(String messagePrefix, Sphere3DReadOnly expected, Sphere3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -394,16 +934,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two tori are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected torus. Not modified.
+    * @param actual the actual torus. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two tori are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertTorus3DEquals(Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon)
    {
       assertTorus3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two tori are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected torus. Not modified.
+    * @param actual the actual torus. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two tori are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertTorus3DEquals(String messagePrefix, Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon)
    {
       assertTorus3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two tori are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected torus. Not modified.
+    * @param actual the actual torus. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two tori are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertTorus3DEquals(String messagePrefix, Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -416,16 +996,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two tori represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected torus. Not modified.
+    * @param actual the actual torus. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two tori do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertTorus3DGeometricallyEquals(Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon)
    {
       assertTorus3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two tori represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected torus. Not modified.
+    * @param actual the actual torus. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two tori do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertTorus3DGeometricallyEquals(String messagePrefix, Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon)
    {
       assertTorus3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two tori represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected torus. Not modified.
+    * @param actual the actual torus. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two tori do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertTorus3DGeometricallyEquals(String messagePrefix, Torus3DReadOnly expected, Torus3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -438,17 +1061,57 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two collision results are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected collision result. Not modified.
+    * @param actual the actual collision result. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two collision results are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
    public static void assertEuclidShape3DCollisionResultEquals(EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual, double epsilon)
    {
       assertEuclidShape3DCollisionResultEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two collision results are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected collision result. Not modified.
+    * @param actual the actual collision result. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two collision results are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
    public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix, EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual,
                                                                double epsilon)
    {
       assertEuclidShape3DCollisionResultEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two collision results are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected collision result. Not modified.
+    * @param actual the actual collision result. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two collision results are not equal. If only one of the arguments
+    *            is equal to {@code null}.
+    */
    public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix, EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual,
                                                                double epsilon, String format)
    {
@@ -481,84 +1144,62 @@ public class EuclidShapeTestTools
       }
    }
 
-   public static void assertVertex3DEquals(Vertex3DReadOnly expected, Vertex3DReadOnly actual, double epsilon)
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected collision result. Not modified.
+    * @param actual the actual collision result. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *            one of the arguments is equal to {@code null}.
+    */
+   public static void assertCollisionTestResultGeometricallyEquals(EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual, double epsilon)
    {
-      assertVertex3DEquals(null, expected, actual, epsilon);
+      assertCollisionTestResultGeometricallyEquals(null, expected, actual, epsilon);
    }
 
-   public static void assertVertex3DEquals(String messagePrefix, Vertex3DReadOnly expected, Vertex3DReadOnly actual, double epsilon)
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected collision result. Not modified.
+    * @param actual the actual collision result. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *            one of the arguments is equal to {@code null}.
+    */
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResult expected,
+                                                                   EuclidShape3DCollisionResult actual, double epsilon)
    {
-      assertVertex3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      assertCollisionTestResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
-   public static void assertVertex3DEquals(String messagePrefix, Vertex3DReadOnly expected, Vertex3DReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-   }
-
-   public static void assertVertex3DGeometricallyEquals(Vertex3DReadOnly expected, Vertex3DReadOnly actual, double epsilon)
-   {
-      assertVertex3DGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   public static void assertVertex3DGeometricallyEquals(String messagePrefix, Vertex3DReadOnly expected, Vertex3DReadOnly actual, double epsilon)
-   {
-      assertVertex3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   public static void assertVertex3DGeometricallyEquals(String messagePrefix, Vertex3DReadOnly expected, Vertex3DReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-   }
-
-   public static void assertHalfEdge3DEquals(HalfEdge3DReadOnly expected, HalfEdge3DReadOnly actual, double epsilon)
-   {
-      assertHalfEdge3DEquals(null, expected, actual, epsilon);
-   }
-
-   public static void assertHalfEdge3DEquals(String messagePrefix, HalfEdge3DReadOnly expected, HalfEdge3DReadOnly actual, double epsilon)
-   {
-      assertHalfEdge3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   public static void assertHalfEdge3DEquals(String messagePrefix, HalfEdge3DReadOnly expected, HalfEdge3DReadOnly actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-   }
-
-   public static void assertHalfEdge3DGeometricallyEquals(HalfEdge3DReadOnly expected, HalfEdge3DReadOnly actual, double epsilon)
-   {
-      assertHalfEdge3DGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   public static void assertHalfEdge3DGeometricallyEquals(String messagePrefix, HalfEdge3DReadOnly expected, HalfEdge3DReadOnly actual, double epsilon)
-   {
-      assertHalfEdge3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   public static void assertHalfEdge3DGeometricallyEquals(String messagePrefix, HalfEdge3DReadOnly expected, HalfEdge3DReadOnly actual, double epsilon,
-                                                          String format)
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected collision result. Not modified.
+    * @param actual the actual collision result. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *            one of the arguments is equal to {@code null}.
+    */
+   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResult expected,
+                                                                   EuclidShape3DCollisionResult actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -570,16 +1211,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two faces are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected face. Not modified.
+    * @param actual the actual face. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two faces are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertFace3DEquals(Face3DReadOnly expected, Face3DReadOnly actual, double epsilon)
    {
       assertFace3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two faces are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected face. Not modified.
+    * @param actual the actual face. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two faces are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertFace3DEquals(String messagePrefix, Face3DReadOnly expected, Face3DReadOnly actual, double epsilon)
    {
       assertFace3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two faces are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected face. Not modified.
+    * @param actual the actual face. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two faces are not equal. If only one of the arguments is equal to
+    *            {@code null}.
+    */
    public static void assertFace3DEquals(String messagePrefix, Face3DReadOnly expected, Face3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -592,16 +1273,59 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two faces represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected face. Not modified.
+    * @param actual the actual face. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two faces do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertFace3DGeometricallyEquals(Face3DReadOnly expected, Face3DReadOnly actual, double epsilon)
    {
       assertFace3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two faces represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected face. Not modified.
+    * @param actual the actual face. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two faces do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertFace3DGeometricallyEquals(String messagePrefix, Face3DReadOnly expected, Face3DReadOnly actual, double epsilon)
    {
       assertFace3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two faces represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected face. Not modified.
+    * @param actual the actual face. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two faces do not represent the same geometry. If only one of the
+    *            arguments is equal to {@code null}.
+    */
    public static void assertFace3DGeometricallyEquals(String messagePrefix, Face3DReadOnly expected, Face3DReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -614,16 +1338,56 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two convex polytopes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected convex polytope. Not modified.
+    * @param actual the actual convex polytope. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two convex polytopes are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
    public static void assertConvexPolytope3DEquals(ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual, double epsilon)
    {
       assertConvexPolytope3DEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two convex polytopes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected convex polytope. Not modified.
+    * @param actual the actual convex polytope. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two convex polytopes are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
    public static void assertConvexPolytope3DEquals(String messagePrefix, ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual, double epsilon)
    {
       assertConvexPolytope3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two convex polytopes are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected convex polytope. Not modified.
+    * @param actual the actual convex polytope. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two convex polytopes are not equal. If only one of the arguments is
+    *            equal to {@code null}.
+    */
    public static void assertConvexPolytope3DEquals(String messagePrefix, ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual, double epsilon,
                                                    String format)
    {
@@ -637,17 +1401,60 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts on a per component basis that the two convex polytopes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected convex polytope. Not modified.
+    * @param actual the actual convex polytope. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two convex polytopes do not represent the same geometry. If only
+    *            one of the arguments is equal to {@code null}.
+    */
    public static void assertConvexPolytope3DGeometricallyEquals(ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual, double epsilon)
    {
       assertConvexPolytope3DGeometricallyEquals(null, expected, actual, epsilon);
    }
 
+   /**
+    * Asserts on a per component basis that the two convex polytopes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected convex polytope. Not modified.
+    * @param actual the actual convex polytope. Not modified.
+    * @param epsilon the tolerance to use.
+    * @throws AssertionError if the two convex polytopes do not represent the same geometry. If only
+    *            one of the arguments is equal to {@code null}.
+    */
    public static void assertConvexPolytope3DGeometricallyEquals(String messagePrefix, ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual,
                                                                 double epsilon)
    {
       assertConvexPolytope3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
 
+   /**
+    * Asserts on a per component basis that the two convex polytopes represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the automated message.
+    * @param expected the expected convex polytope. Not modified.
+    * @param actual the actual convex polytope. Not modified.
+    * @param epsilon the tolerance to use.
+    * @param format the format to use for printing each component when an {@code AssertionError} is
+    *           thrown.
+    * @throws AssertionError if the two convex polytopes do not represent the same geometry. If only
+    *            one of the arguments is equal to {@code null}.
+    */
    public static void assertConvexPolytope3DGeometricallyEquals(String messagePrefix, ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual,
                                                                 double epsilon, String format)
    {
@@ -661,11 +1468,42 @@ public class EuclidShapeTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
+   /**
+    * Asserts the integrity of a convex polytope.
+    * <p>
+    * Properties asserted include notably:
+    * <ul>
+    * <li>vertices, edges, and faces are properly linked to each other.
+    * <li>convexity between neighbor faces.
+    * <li>convexity and clockwise winding for each face.
+    * <li>each face's normal points outside.
+    * </ul>
+    * </p>
+    * 
+    * @param convexPolytope3D the convex polytope to run assertions on. Not modified.
+    * @throws AssertionError if the convex polytope is corrupted.
+    */
    public static void assertConvexPolytope3DGeneralIntegrity(ConvexPolytope3DReadOnly convexPolytope3D)
    {
       assertConvexPolytope3DGeneralIntegrity(null, convexPolytope3D);
    }
 
+   /**
+    * Asserts the integrity of a convex polytope.
+    * <p>
+    * Properties asserted include notably:
+    * <ul>
+    * <li>vertices, edges, and faces are properly linked to each other.
+    * <li>convexity between neighbor faces.
+    * <li>convexity and clockwise winding for each face.
+    * <li>each face's normal points outside.
+    * </ul>
+    * </p>
+    * 
+    * @param messagePrefix prefix to add to the automated message.
+    * @param convexPolytope3D the convex polytope to run assertions on. Not modified.
+    * @throws AssertionError if the convex polytope is corrupted.
+    */
    public static void assertConvexPolytope3DGeneralIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
       if (convexPolytope3D.getCentroid().containsNaN())
@@ -688,7 +1526,7 @@ public class EuclidShapeTestTools
       assertConvexPolytope3DVerticesIntegrity(messagePrefix, convexPolytope3D);
    }
 
-   public static void assertConvexPolytope3DFacesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
+   private static void assertConvexPolytope3DFacesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
       Set<Face3DReadOnly> faceSet = new HashSet<>();
 
@@ -822,7 +1660,7 @@ public class EuclidShapeTestTools
       }
    }
 
-   public static void assertConvexPolytope3DHalfEdgesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
+   private static void assertConvexPolytope3DHalfEdgesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
       Set<HalfEdge3DReadOnly> halfEdgeSet = new HashSet<>();
 
@@ -885,7 +1723,7 @@ public class EuclidShapeTestTools
       }
    }
 
-   public static void assertConvexPolytope3DVerticesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
+   private static void assertConvexPolytope3DVerticesIntegrity(String messagePrefix, ConvexPolytope3DReadOnly convexPolytope3D)
    {
       Set<Vertex3DReadOnly> vertexSet = new HashSet<>();
 
@@ -933,30 +1771,6 @@ public class EuclidShapeTestTools
                                                        vertexIndex + "th vertex has an edge's destination which is not registered as a polytope vertex.");
          }
       }
-   }
-
-   public static void assertCollisionTestResultGeometricallyEquals(EuclidShape3DCollisionResult expected, EuclidShape3DCollisionResult actual, double epsilon)
-   {
-      assertCollisionTestResultGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResult expected,
-                                                                   EuclidShape3DCollisionResult actual, double epsilon)
-   {
-      assertCollisionTestResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   public static void assertCollisionTestResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResult expected,
-                                                                   EuclidShape3DCollisionResult actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Box3DReadOnly expected, Box3DReadOnly actual, String format)
@@ -1027,20 +1841,6 @@ public class EuclidShapeTestTools
       String expectedAsString = getEuclidShape3DCollisionResultString(format, expected);
       String actualAsString = getEuclidShape3DCollisionResultString(format, actual);
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, differenceAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Vertex3DReadOnly expected, Vertex3DReadOnly actual, String format)
-   {
-      String expectedAsString = getVertex3DString(format, expected);
-      String actualAsString = getVertex3DString(format, actual);
-      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, HalfEdge3DReadOnly expected, HalfEdge3DReadOnly actual, String format)
-   {
-      String expectedAsString = getHalfEdge3DString(format, expected);
-      String actualAsString = getHalfEdge3DString(format, actual);
-      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Face3DReadOnly expected, Face3DReadOnly actual, String format)
