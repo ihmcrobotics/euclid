@@ -3,10 +3,7 @@ package us.ihmc.euclid.shape.tools;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.function.Function;
 
-import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
@@ -534,16 +531,78 @@ public class EuclidShapeIOTools
       return getShape3DPoseString(format, shape3DPose.getShapeOrientation(), shape3DPose.getShapePosition());
    }
 
+   /**
+    * Gets the representative {@code String} of {@code shape3DPose} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * 
+    * <pre>
+    * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param orientation the orientation part of the {@code shapePose3D}. Not modified.
+    * @param position the position part of the {@code shapePose3D}. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getShape3DPoseString(String format, RotationMatrixReadOnly orientation, Point3DReadOnly position)
    {
       return "Shape 3D pose: [position: " + getTuple3DString(format, position) + ", " + getStringAsYawPitchRoll(format, orientation) + "]";
    }
 
+   /**
+    * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} as follows:<br>
+    * When shapes are colliding:
+    * 
+    * <pre>
+    * Collision test result: colliding, depth: 0.539
+    * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * </pre>
+    * 
+    * When shapes are not colliding:
+    * 
+    * <pre>
+    * Collision test result: non-colliding, separating distance: 0.539
+    * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * </pre>
+    * 
+    * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getEuclidShape3DCollisionResultString(EuclidShape3DCollisionResultReadOnly euclidShape3DCollisionResult)
    {
       return getEuclidShape3DCollisionResultString(DEFAULT_FORMAT, euclidShape3DCollisionResult);
    }
 
+   /**
+    * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} given a specific
+    * format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
+    * When shapes are colliding:
+    * 
+    * <pre>
+    * Collision test result: colliding, depth: 0.539
+    * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * </pre>
+    * 
+    * When shapes are not colliding:
+    * 
+    * <pre>
+    * Collision test result: non-colliding, separating distance: 0.539
+    * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getEuclidShape3DCollisionResultString(String format, EuclidShape3DCollisionResultReadOnly euclidShape3DCollisionResult)
    {
       if (euclidShape3DCollisionResult == null)
@@ -567,113 +626,233 @@ public class EuclidShapeIOTools
       return string;
    }
 
+   /**
+    * Gets the representative {@code String} of {@code vertex3D} as follows:
+    * 
+    * <pre>
+    * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
+    *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
+    *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
+    *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
+    * </pre>
+    * 
+    * @param vertex3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getVertex3DString(Vertex3DReadOnly vertex3D)
    {
       return getVertex3DString(DEFAULT_FORMAT, vertex3D);
    }
 
+   /**
+    * Gets the representative {@code String} of {@code vertex3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * 
+    * <pre>
+    * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
+    *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
+    *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
+    *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param vertex3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getVertex3DString(String format, Vertex3DReadOnly vertex3D)
    {
-      return getVertex3DString(format, vertex3D, vertex3D.getAssociatedEdges());
-   }
-
-   public static String getVertex3DString(String format, Tuple3DReadOnly vertex3DPosition, Collection<? extends HalfEdge3DReadOnly> vertexHalfEdges)
-   {
-      String string = "Vertex 3D: " + getTuple3DString(format, vertex3DPosition) + ", number of edges: " + vertexHalfEdges.size();
-      string += getHalfEdge3DCollectionString(format, "\n\t", vertexHalfEdges);
+      if (vertex3D == null)
+         return "null";
+      String string = "Vertex 3D: " + getTuple3DString(format, vertex3D) + ", number of edges: " + vertex3D.getNumberOfAssociatedEdges();
+      string += getHalfEdge3DCollectionString(format, "\n\t", vertex3D.getAssociatedEdges());
       return string;
    }
 
+   /**
+    * Gets the representative {@code String} of {@code halfEdge3D} as follows:
+    * 
+    * <pre>
+    * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
+    *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
+    *    Next    : [( 3.310,  6.118, -3.108 ); ( 3.411,  2.581, -3.144 )]
+    *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
+    *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
+    * </pre>
+    * 
+    * @param halfEdge3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getHalfEdge3DString(HalfEdge3DReadOnly halfEdge3D)
    {
       return getHalfEdge3DString(DEFAULT_FORMAT, halfEdge3D);
    }
 
+   /**
+    * Gets the representative {@code String} of {@code halfEdge3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * 
+    * <pre>
+    * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
+    *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
+    *    Next    : [( 3.310,  6.118, -3.108 ); ( 3.411,  2.581, -3.144 )]
+    *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
+    *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param halfEdge3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getHalfEdge3DString(String format, HalfEdge3DReadOnly halfEdge3D)
    {
       if (halfEdge3D == null)
          return "null";
-      return getHalfEdge3DString(format, halfEdge3D, halfEdge3D.getTwin(), halfEdge3D.getNext(), halfEdge3D.getPrevious(), halfEdge3D.getFace());
-   }
-
-   public static String getHalfEdge3DString(String format, LineSegment3DReadOnly edgeSupportingSegment, HalfEdge3DReadOnly twinEdge,
-                                            HalfEdge3DReadOnly nextEdge, HalfEdge3DReadOnly previousEdge, Face3DReadOnly face)
-   {
-      String string = "Half-edge 3D: " + getLineSegment3DShortString(format, edgeSupportingSegment);
-      string += "\n\tTwin    : " + getLineSegment3DShortString(format, twinEdge);
-      string += "\n\tNext    : " + getLineSegment3DShortString(format, nextEdge);
-      string += "\n\tPrevious: " + getLineSegment3DShortString(format, previousEdge);
-      string += "\n\tFace: " + getFace3DShortString(format, face);
+      String string = "Half-edge 3D: " + getHalfEdge3DShortString(format, halfEdge3D);
+      string += "\n\tTwin    : " + getHalfEdge3DShortString(format, halfEdge3D.getTwin());
+      string += "\n\tNext    : " + getHalfEdge3DShortString(format, halfEdge3D.getNext());
+      string += "\n\tPrevious: " + getHalfEdge3DShortString(format, halfEdge3D.getPrevious());
+      string += "\n\tFace: " + getFace3DShortString(format, halfEdge3D.getFace());
       return string;
    }
 
+   /**
+    * Gets the representative {@code String} of {@code face3D} as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    * </pre>
+    * 
+    * @param face3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getFace3DString(Face3DReadOnly face3D)
    {
       return getFace3DString(DEFAULT_FORMAT, face3D);
    }
 
+   /**
+    * Gets the representative {@code String} of {@code face3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param face3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getFace3DString(String format, Face3DReadOnly face3D)
    {
       if (face3D == null)
          return "null";
-      return getFace3DString(format, face3D.getCentroid(), face3D.getNormal(), face3D.getArea(), face3D.getEdges());
+
+      return "Face 3D: " + getFace3DShortString(format, face3D) + ", area: " + String.format(format, face3D.getArea()) + ", number of edges: "
+            + face3D.getNumberOfEdges() + getHalfEdge3DCollectionString(format, "\n\t", face3D.getEdges());
    }
 
-   public static String getFace3DString(String format, Point3DReadOnly centroid, Vector3DReadOnly normal, double area,
-                                        Collection<? extends HalfEdge3DReadOnly> faceEdges)
-   {
-      String string = "Face 3D: " + getFace3DShortString(format, centroid, normal) + ", area: " + String.format(format, area) + ", number of edges: "
-            + faceEdges.size() + getHalfEdge3DCollectionString(format, "\n\t", faceEdges);
-      return string;
-   }
-
+   /**
+    * Gets the representative {@code String} of {@code convexPolytope3D} as follows:
+    *
+    * <pre>
+    * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
+    * Face list: 
+    *    centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
+    *    centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
+    *    centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
+    *    centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
+    * Edge list: 
+    *    [( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.674,  0.482,  0.712 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
+    * Vertex list: 
+    *    ( 0.674,  0.482,  0.712 )
+    *    ( 0.870,  0.251,  0.229 )
+    *    ( 0.204, -0.803, -0.461 )
+    *    (-0.283, -0.207, -0.595 )
+    * </pre>
+    * 
+    * @param convexPolytope3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getConvexPolytope3DString(ConvexPolytope3DReadOnly convexPolytope3D)
    {
       return getConvexPolytope3DString(DEFAULT_FORMAT, convexPolytope3D);
    }
 
+   /**
+    * Gets the representative {@code String} of {@code convexPolytope3D} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
+    * Face list: 
+    * 	centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
+    * 	centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
+    * 	centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
+    * 	centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
+    * Edge list: 
+    * 	[( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
+    * 	[( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
+    * 	[( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
+    * 	[( 0.870,  0.251,  0.229 ); ( 0.674,  0.482,  0.712 )]
+    * 	[( 0.674,  0.482,  0.712 ); (-0.283, -0.207, -0.595 )]
+    * 	[(-0.283, -0.207, -0.595 ); ( 0.870,  0.251,  0.229 )]
+    * 	[( 0.204, -0.803, -0.461 ); ( 0.870,  0.251,  0.229 )]
+    * 	[( 0.870,  0.251,  0.229 ); (-0.283, -0.207, -0.595 )]
+    * 	[(-0.283, -0.207, -0.595 ); ( 0.204, -0.803, -0.461 )]
+    * 	[( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
+    * 	[( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
+    * 	[(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
+    * Vertex list: 
+    * 	( 0.674,  0.482,  0.712 )
+    * 	( 0.870,  0.251,  0.229 )
+    * 	( 0.204, -0.803, -0.461 )
+    * 	(-0.283, -0.207, -0.595 )
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param convexPolytope3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
    public static String getConvexPolytope3DString(String format, ConvexPolytope3DReadOnly convexPolytope3D)
    {
       if (convexPolytope3D == null)
          return "null";
-      return getConvexPolytope3DString(format, convexPolytope3D.getVertices(), convexPolytope3D.getHalfEdges(), convexPolytope3D.getFaces());
-   }
 
-   public static String getConvexPolytope3DString(String format, Collection<? extends Vertex3DReadOnly> polytopeVertices,
-                                                  Collection<? extends HalfEdge3DReadOnly> polytopeEdges, Collection<? extends Face3DReadOnly> polytopeFaces)
-   {
-      String string = "Convex polytope 3D: number of: [faces: " + polytopeFaces.size() + ", edges: " + polytopeEdges.size() + ", vertices: "
-            + polytopeVertices.size();
+      String string = "Convex polytope 3D: number of: [faces: " + convexPolytope3D.getNumberOfFaces() + ", edges: " + convexPolytope3D.getNumberOfEdges()
+            + ", vertices: " + convexPolytope3D.getNumberOfVertices();
       String linePrefix = "\n\t";
-      string += "\nFace list: " + getFace3DCollectionString(format, linePrefix, polytopeFaces);
-      string += "\nEdge list: " + getHalfEdge3DCollectionString(format, linePrefix, polytopeEdges);
-      string += "\nVertex list: " + getVertex3DCollectionString(format, linePrefix, polytopeVertices);
+      string += "\nFace list: " + getFace3DCollectionString(format, linePrefix, convexPolytope3D.getFaces());
+      string += "\nEdge list: " + getHalfEdge3DCollectionString(format, linePrefix, convexPolytope3D.getHalfEdges());
+      string += "\nVertex list: " + getVertex3DCollectionString(format, linePrefix, convexPolytope3D.getVertices());
       return string;
-   }
-
-   public static String getConvexPolytope3DStringForUnitTesting(ConvexPolytope3DReadOnly badPolytope, Point3DReadOnly troublingVertex)
-   {
-      return getConvexPolytope3DStringForUnitTesting(badPolytope.getVertices(), troublingVertex, badPolytope.getConstructionEpsilon());
-   }
-
-   public static String getConvexPolytope3DStringForUnitTesting(List<? extends Point3DReadOnly> verticesBeforeProblem, Point3DReadOnly troublingVertex,
-                                                                double constructionEpsilon)
-   {
-      String stringFormat = EuclidCoreIOTools.getStringFormat(23, 20);
-
-      String prefix = "vertices.add(new Point3D";
-      String suffix = ");";
-      String separator = suffix + "\n" + prefix;
-      Function<Point3DReadOnly, String> elementToStringFunction = v -> EuclidCoreIOTools.getTuple3DString(stringFormat, v);
-
-      String result = "";
-      result += "List<Point3D> vertices = new ArrayList<>();\n";
-      result += EuclidCoreIOTools.getCollectionString(prefix, suffix, separator, verticesBeforeProblem, elementToStringFunction) + "\n";
-      result += "Point3D troublingVertex = new Point3D" + elementToStringFunction.apply(troublingVertex) + ";\n";
-      result += "double constructionEpsilon = " + constructionEpsilon + ";\n";
-      result += "ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices), constructionEpsilon);\n";
-      result += "convexPolytope3D.addVertex(troublingVertex);";
-      return result;
    }
 
    private static String getVertex3DCollectionString(String format, String linePrefix, Collection<? extends Vertex3DReadOnly> vertices)
@@ -683,7 +862,7 @@ public class EuclidShapeIOTools
 
    private static String getHalfEdge3DCollectionString(String format, String linePrefix, Collection<? extends HalfEdge3DReadOnly> halfEdges)
    {
-      return EuclidCoreIOTools.getCollectionString(linePrefix, null, linePrefix, halfEdges, halfEdge -> getLineSegment3DShortString(format, halfEdge));
+      return EuclidCoreIOTools.getCollectionString(linePrefix, null, linePrefix, halfEdges, halfEdge -> getHalfEdge3DShortString(format, halfEdge));
    }
 
    private static String getFace3DCollectionString(String format, String linePrefix, Collection<? extends Face3DReadOnly> faces)
@@ -691,23 +870,17 @@ public class EuclidShapeIOTools
       return EuclidCoreIOTools.getCollectionString(linePrefix, null, linePrefix, faces, face -> getFace3DShortString(format, face));
    }
 
-   private static String getLineSegment3DShortString(String format, LineSegment3DReadOnly edgeSupportingSegment)
+   private static String getHalfEdge3DShortString(String format, HalfEdge3DReadOnly halfEdge)
    {
-      if (edgeSupportingSegment == null)
+      if (halfEdge == null)
          return null;
-      return "[" + getTuple3DString(format, edgeSupportingSegment.getFirstEndpoint()) + "; "
-            + getTuple3DString(format, edgeSupportingSegment.getSecondEndpoint()) + "]";
+      return "[" + getTuple3DString(format, halfEdge.getOrigin()) + "; " + getTuple3DString(format, halfEdge.getDestination()) + "]";
    }
 
    private static String getFace3DShortString(String format, Face3DReadOnly face3D)
    {
       if (face3D == null)
          return "null";
-      return getFace3DShortString(format, face3D.getCentroid(), face3D.getNormal());
-   }
-
-   private static String getFace3DShortString(String format, Point3DReadOnly faceCentroid, Vector3DReadOnly faceNormal)
-   {
-      return "centroid: " + getTuple3DString(format, faceCentroid) + ", normal: " + getTuple3DString(format, faceNormal);
+      return "centroid: " + getTuple3DString(format, face3D.getCentroid()) + ", normal: " + getTuple3DString(format, face3D.getNormal());
    }
 }
