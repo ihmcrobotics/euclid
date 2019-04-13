@@ -8,175 +8,73 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-// https://www.geometrictools.com/Documentation/DistancePointEllipseEllipsoid.pdf
+/**
+ * Implementation of an algorithm for finding the smallest distance between a point and an
+ * ellipsoid.
+ * <p>
+ * The algorithm is from <a href=
+ * "https://www.geometrictools.com/Documentation/DistancePointEllipseEllipsoid.pdf">DistancePointEllipseEllipsoid</a>
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidEllipsoid3DTools
 {
-   public static final int DEFAULT_ROOT_FINDING_ITERATIONS = 150;
-   public static final double DEFAULT_EPSILON = 1.0e-10;
+   private static final int DEFAULT_ROOT_FINDING_ITERATIONS = 150;
+   private static final double DEFAULT_EPSILON = 1.0e-10;
 
    private EuclidEllipsoid3DTools()
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
-   private static double findRoot(double r0, double r1, double z0, double z1, double z2, double g, int maxIterations, double epsilon)
-   {
-      double n0 = r0 * z0;
-      double n1 = r1 * z1;
-      double s0 = z2 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (Math.sqrt(EuclidCoreTools.normSquared(n0, n1, z2)) - 1.0);
-      double s = 0.0;
-
-      for (int i = 0; i < maxIterations; i++)
-      {
-         s = (s0 + s1) / 2.0;
-         if (s == s0 || s == s1)
-            break;
-         double ratio0 = n0 / (s + r0);
-         double ratio1 = n1 / (s + r1);
-         double ratio2 = z2 / (s + 1.0);
-         g = EuclidCoreTools.normSquared(ratio0, ratio1, ratio2) - 1.0;
-         if (g > epsilon)
-            s0 = s;
-         else if (g < -epsilon)
-            s1 = s;
-         else
-            break;
-      }
-
-      return s;
-   }
-
-   private static double findRoot(double r0, double z0, double z1, double g, int maxIterations, double epsilon)
-   {
-      double n0 = r0 * z0;
-      double s0 = z1 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (Math.sqrt(EuclidCoreTools.normSquared(n0, z1)) - 1.0);
-      double s = 0.0;
-
-      for (int i = 0; i < maxIterations; i++)
-      {
-         s = (s0 + s1) / 2.0;
-         if (s == s0 || s == s1)
-            break;
-         double ratio0 = n0 / (s + r0);
-         double ratio1 = z1 / (s + 1.0);
-         g = EuclidCoreTools.normSquared(ratio0, ratio1) - 1.0;
-         if (g > epsilon)
-            s0 = s;
-         else if (g < -epsilon)
-            s1 = s;
-         else
-            break;
-      }
-
-      return s;
-   }
-
-   private enum CoordinateOrder implements Tuple3DUpdater
-   {
-      XYZ((x0, x1, x2, tuple) -> tuple.set(x0, x1, x2), tuple -> tuple.getX(), tuple -> tuple.getY(), tuple -> tuple.getZ()),
-      XZY((x0, x1, x2, tuple) -> tuple.set(x0, x2, x1), tuple -> tuple.getX(), tuple -> tuple.getZ(), tuple -> tuple.getY()),
-      YXZ((x0, x1, x2, tuple) -> tuple.set(x1, x0, x2), tuple -> tuple.getY(), tuple -> tuple.getX(), tuple -> tuple.getZ()),
-      YZX((x0, x1, x2, tuple) -> tuple.set(x2, x0, x1), tuple -> tuple.getY(), tuple -> tuple.getZ(), tuple -> tuple.getX()),
-      ZXY((x0, x1, x2, tuple) -> tuple.set(x1, x2, x0), tuple -> tuple.getZ(), tuple -> tuple.getX(), tuple -> tuple.getY()),
-      ZYX((x0, x1, x2, tuple) -> tuple.set(x2, x1, x0), tuple -> tuple.getZ(), tuple -> tuple.getY(), tuple -> tuple.getX());
-
-      private final Tuple3DUpdater tuple3DUpdater;
-      private final CoordinateReader coordinateReader0;
-      private final CoordinateReader coordinateReader1;
-      private final CoordinateReader coordinateReader2;
-
-      private CoordinateOrder(Tuple3DUpdater tuple3DUpdater, CoordinateReader coordinateReader0, CoordinateReader coordinateReader1,
-                              CoordinateReader coordinateReader2)
-      {
-         this.tuple3DUpdater = tuple3DUpdater;
-         this.coordinateReader0 = coordinateReader0;
-         this.coordinateReader1 = coordinateReader1;
-         this.coordinateReader2 = coordinateReader2;
-      }
-
-      @Override
-      public void updateTuple3D(double x0, double x1, double x2, Tuple3DBasics tupleToUpdate)
-      {
-         tuple3DUpdater.updateTuple3D(x0, x1, x2, tupleToUpdate);
-      }
-
-      public double getCoordinate0(Tuple3DReadOnly tuple)
-      {
-         return coordinateReader0.read(tuple);
-      }
-
-      public double getCoordinate1(Tuple3DReadOnly tuple)
-      {
-         return coordinateReader1.read(tuple);
-      }
-
-      public double getCoordinate2(Tuple3DReadOnly tuple)
-      {
-         return coordinateReader2.read(tuple);
-      }
-
-      static CoordinateOrder descendingOrder(Tuple3DReadOnly tuple)
-      {
-         if (tuple.getX() >= tuple.getY())
-         {
-            if (tuple.getY() >= tuple.getZ())
-            {
-               return CoordinateOrder.XYZ;
-            }
-            else if (tuple.getX() >= tuple.getZ())
-            {
-               return CoordinateOrder.XZY;
-            }
-            else
-            {
-               return CoordinateOrder.ZXY;
-            }
-         }
-         else
-         {
-            if (tuple.getX() >= tuple.getZ())
-            {
-               return CoordinateOrder.YXZ;
-            }
-            else if (tuple.getY() >= tuple.getZ())
-            {
-               return CoordinateOrder.YZX;
-            }
-            else
-            {
-               return CoordinateOrder.ZYX;
-            }
-         }
-      }
-   };
-
-   private interface Tuple3DUpdater
-   {
-      void updateTuple3D(double x0, double x1, double x2, Tuple3DBasics tupleToUpdate);
-   }
-
-   private interface CoordinateReader
-   {
-      double read(Tuple3DReadOnly tuple);
-   }
-
-   private static double square(double value)
-   {
-      return value * value;
-   }
-
+   /**
+    * Finds the smallest distance between a point and an ellipsoid.
+    * <p>
+    * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
+    * </p>
+    * 
+    * @param radii the ellipsoid's radii. Not modified.
+    * @param query the coordinates of the point. Not modified.
+    * @return the smallest distance between the point and the ellipsoid's surface.
+    */
    public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query)
    {
       return distancePoint3DEllipsoid3D(radii, query, null);
    }
 
+   /**
+    * Finds the smallest distance between a point and an ellipsoid.
+    * <p>
+    * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
+    * </p>
+    * 
+    * @param radii the ellipsoid's radii. Not modified.
+    * @param query the coordinates of the point. Not modified.
+    * @param closestPointToPack point in which the coordinates of the closest point to the query are
+    *           stored. Modified.
+    * @return the smallest distance between the point and the ellipsoid's surface.
+    */
    public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query, Point3DBasics closestPointToPack)
    {
       return distancePoint3DEllipsoid3D(radii, query, DEFAULT_ROOT_FINDING_ITERATIONS, DEFAULT_EPSILON, closestPointToPack);
    }
 
+   /**
+    * Finds the smallest distance between a point and an ellipsoid.
+    * <p>
+    * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
+    * </p>
+    * 
+    * @param radii the ellipsoid's radii. Not modified.
+    * @param query the coordinates of the point. Not modified.
+    * @param maxIterations the maximum number of iterations for the internal iterative search
+    *           algorithm.
+    * @param epsilon the tolerance used for performing comparisons.
+    * @param closestPointToPack point in which the coordinates of the closest point to the query are
+    *           stored. Modified.
+    * @return the smallest distance between the point and the ellipsoid's surface.
+    */
    public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query, int maxIterations, double epsilon,
                                                    Point3DBasics closestPointToPack)
    {
@@ -374,5 +272,153 @@ public class EuclidEllipsoid3DTools
       if (closestPointToPack != null)
          closestPointToPack.set(x0, x1, Double.NaN);
       return distance;
+   }
+
+   private static double findRoot(double r0, double r1, double z0, double z1, double z2, double g, int maxIterations, double epsilon)
+   {
+      double n0 = r0 * z0;
+      double n1 = r1 * z1;
+      double s0 = z2 - 1.0;
+      double s1 = g < 0.0 ? 0.0 : (Math.sqrt(EuclidCoreTools.normSquared(n0, n1, z2)) - 1.0);
+      double s = 0.0;
+
+      for (int i = 0; i < maxIterations; i++)
+      {
+         s = (s0 + s1) / 2.0;
+         if (s == s0 || s == s1)
+            break;
+         double ratio0 = n0 / (s + r0);
+         double ratio1 = n1 / (s + r1);
+         double ratio2 = z2 / (s + 1.0);
+         g = EuclidCoreTools.normSquared(ratio0, ratio1, ratio2) - 1.0;
+         if (g > epsilon)
+            s0 = s;
+         else if (g < -epsilon)
+            s1 = s;
+         else
+            break;
+      }
+
+      return s;
+   }
+
+   private static double findRoot(double r0, double z0, double z1, double g, int maxIterations, double epsilon)
+   {
+      double n0 = r0 * z0;
+      double s0 = z1 - 1.0;
+      double s1 = g < 0.0 ? 0.0 : (Math.sqrt(EuclidCoreTools.normSquared(n0, z1)) - 1.0);
+      double s = 0.0;
+
+      for (int i = 0; i < maxIterations; i++)
+      {
+         s = (s0 + s1) / 2.0;
+         if (s == s0 || s == s1)
+            break;
+         double ratio0 = n0 / (s + r0);
+         double ratio1 = z1 / (s + 1.0);
+         g = EuclidCoreTools.normSquared(ratio0, ratio1) - 1.0;
+         if (g > epsilon)
+            s0 = s;
+         else if (g < -epsilon)
+            s1 = s;
+         else
+            break;
+      }
+
+      return s;
+   }
+
+   private enum CoordinateOrder implements Tuple3DUpdater
+   {
+      XYZ((x0, x1, x2, tuple) -> tuple.set(x0, x1, x2), tuple -> tuple.getX(), tuple -> tuple.getY(), tuple -> tuple.getZ()),
+      XZY((x0, x1, x2, tuple) -> tuple.set(x0, x2, x1), tuple -> tuple.getX(), tuple -> tuple.getZ(), tuple -> tuple.getY()),
+      YXZ((x0, x1, x2, tuple) -> tuple.set(x1, x0, x2), tuple -> tuple.getY(), tuple -> tuple.getX(), tuple -> tuple.getZ()),
+      YZX((x0, x1, x2, tuple) -> tuple.set(x2, x0, x1), tuple -> tuple.getY(), tuple -> tuple.getZ(), tuple -> tuple.getX()),
+      ZXY((x0, x1, x2, tuple) -> tuple.set(x1, x2, x0), tuple -> tuple.getZ(), tuple -> tuple.getX(), tuple -> tuple.getY()),
+      ZYX((x0, x1, x2, tuple) -> tuple.set(x2, x1, x0), tuple -> tuple.getZ(), tuple -> tuple.getY(), tuple -> tuple.getX());
+
+      private final Tuple3DUpdater tuple3DUpdater;
+      private final CoordinateReader coordinateReader0;
+      private final CoordinateReader coordinateReader1;
+      private final CoordinateReader coordinateReader2;
+
+      private CoordinateOrder(Tuple3DUpdater tuple3DUpdater, CoordinateReader coordinateReader0, CoordinateReader coordinateReader1,
+                              CoordinateReader coordinateReader2)
+      {
+         this.tuple3DUpdater = tuple3DUpdater;
+         this.coordinateReader0 = coordinateReader0;
+         this.coordinateReader1 = coordinateReader1;
+         this.coordinateReader2 = coordinateReader2;
+      }
+
+      @Override
+      public void updateTuple3D(double x0, double x1, double x2, Tuple3DBasics tupleToUpdate)
+      {
+         tuple3DUpdater.updateTuple3D(x0, x1, x2, tupleToUpdate);
+      }
+
+      public double getCoordinate0(Tuple3DReadOnly tuple)
+      {
+         return coordinateReader0.read(tuple);
+      }
+
+      public double getCoordinate1(Tuple3DReadOnly tuple)
+      {
+         return coordinateReader1.read(tuple);
+      }
+
+      public double getCoordinate2(Tuple3DReadOnly tuple)
+      {
+         return coordinateReader2.read(tuple);
+      }
+
+      static CoordinateOrder descendingOrder(Tuple3DReadOnly tuple)
+      {
+         if (tuple.getX() >= tuple.getY())
+         {
+            if (tuple.getY() >= tuple.getZ())
+            {
+               return CoordinateOrder.XYZ;
+            }
+            else if (tuple.getX() >= tuple.getZ())
+            {
+               return CoordinateOrder.XZY;
+            }
+            else
+            {
+               return CoordinateOrder.ZXY;
+            }
+         }
+         else
+         {
+            if (tuple.getX() >= tuple.getZ())
+            {
+               return CoordinateOrder.YXZ;
+            }
+            else if (tuple.getY() >= tuple.getZ())
+            {
+               return CoordinateOrder.YZX;
+            }
+            else
+            {
+               return CoordinateOrder.ZYX;
+            }
+         }
+      }
+   };
+
+   private interface Tuple3DUpdater
+   {
+      void updateTuple3D(double x0, double x1, double x2, Tuple3DBasics tupleToUpdate);
+   }
+
+   private interface CoordinateReader
+   {
+      double read(Tuple3DReadOnly tuple);
+   }
+
+   private static double square(double value)
+   {
+      return value * value;
    }
 }
