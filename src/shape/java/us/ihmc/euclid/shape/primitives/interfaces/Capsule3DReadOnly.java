@@ -10,26 +10,64 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for a capsule 3D.
+ * <p>
+ * A capsule 3D is represented by its length, i.e. the distance separating the center of the two
+ * half-spheres, its radius, the position of its center, and its axis of revolution.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Capsule3DReadOnly extends Shape3DReadOnly
 {
-   double getRadius();
 
+   /**
+    * Gets the length of this capsule.
+    * 
+    * @return the length.
+    */
    double getLength();
 
    /**
-    * Gets the read-only reference of the position of this shape.
-    *
-    * @return the position of this shape.
+    * Gets the half-length of this capsule.
+    * 
+    * @return the half-length.
     */
-   Point3DReadOnly getPosition();
-
-   Vector3DReadOnly getAxis();
-
    default double getHalfLength()
    {
       return 0.5 * getLength();
    }
 
+   /**
+    * Gets the radius of this capsule.
+    * 
+    * @return the radius.
+    */
+   double getRadius();
+
+   /**
+    * Gets the read-only reference of the position of this capsule center.
+    *
+    * @return the position of this capsule.
+    */
+   Point3DReadOnly getPosition();
+
+   /**
+    * Gets the read-only reference of this capsule axis of revolution.
+    * 
+    * @return the axis of this capsule.
+    */
+   Vector3DReadOnly getAxis();
+
+   /**
+    * Gets the read-only reference to the center of the top half-sphere.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * 
+    * @return the top center.
+    */
    default Point3DReadOnly getTopCenter()
    {
       Point3D topCenter = new Point3D();
@@ -37,6 +75,14 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       return topCenter;
    }
 
+   /**
+    * Gets the read-only reference to the center of the bottom half-sphere.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * 
+    * @return the bottom center.
+    */
    default Point3DReadOnly getBottomCenter()
    {
       Point3D bottomCenter = new Point3D();
@@ -53,12 +99,13 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       return EuclidShapeTools.evaluatePoint3DCapsule3DCollision(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
-                                                              normalAtClosestPointToPack) <= 0.0;
+                                                                normalAtClosestPointToPack) <= 0.0;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -87,18 +134,33 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       return EuclidShapeTools.orthogonalProjectionOntoCapsule3D(pointToProject, getPosition(), getAxis(), getLength(), getRadius(), projectionToPack);
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isConvex()
    {
       return true;
    }
 
+   /**
+    * Tests on a per component bases if this capsule and {@code other} are equal to an {@code epsilon}.
+    * 
+    * @param other the other capsule to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
+    */
    default boolean epsilonEquals(Capsule3DReadOnly other, double epsilon)
    {
       return EuclidCoreTools.epsilonEquals(getLength(), other.getLength(), epsilon) && EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon)
             && getPosition().epsilonEquals(other.getPosition(), epsilon) && other.getAxis().epsilonEquals(other.getAxis(), epsilon);
    }
 
+   /**
+    * Compares {@code this} to {@code other} to determine if the two capsules geometrically similar.
+    * 
+    * @param other the other capsule to compare against this. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.
+    */
    default boolean geometricallyEquals(Capsule3DReadOnly other, double epsilon)
    {
       if (!EuclidCoreTools.epsilonEquals(getRadius(), other.getRadius(), epsilon))
@@ -112,6 +174,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
    }
 
+   /** {@inheritDoc} */
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {

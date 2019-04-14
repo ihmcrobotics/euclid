@@ -641,7 +641,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         boolean colliding = shapeB.doPoint3DCollisionTest(shapeA, closestPointOnSurface, normal);
+         boolean colliding = shapeB.evaluatePoint3DCollision(shapeA, closestPointOnSurface, normal);
          if (colliding)
             shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
@@ -666,7 +666,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DBox3DCollisionTest);
@@ -690,7 +690,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         shapeB.doPoint3DCollisionTest(shapeA, closestPointOnSurface, normal);
+         shapeB.evaluatePoint3DCollision(shapeA, closestPointOnSurface, normal);
          shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doPointShape3DCapsule3DCollisionTest);
@@ -734,7 +734,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DCapsule3DCollisionTest);
@@ -758,7 +758,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Cylinder3D shapeB = EuclidShapeRandomTools.nextCylinder3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         shapeB.doPoint3DCollisionTest(shapeA, closestPointOnSurface, normal);
+         shapeB.evaluatePoint3DCollision(shapeA, closestPointOnSurface, normal);
          shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doPointShape3DCylinder3DCollisionTest);
@@ -782,7 +782,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Cylinder3D shapeB = EuclidShapeRandomTools.nextCylinder3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DCylinder3DCollisionTest);
@@ -806,7 +806,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Ellipsoid3D shapeB = EuclidShapeRandomTools.nextEllipsoid3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         boolean colliding = shapeB.doPoint3DCollisionTest(shapeA, closestPointOnSurface, normal);
+         boolean colliding = shapeB.evaluatePoint3DCollision(shapeA, closestPointOnSurface, normal);
          if (colliding)
             shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
@@ -831,7 +831,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Ellipsoid3D shapeB = EuclidShapeRandomTools.nextEllipsoid3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DEllipsoid3DCollisionTest);
@@ -855,7 +855,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Ramp3D shapeB = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         boolean colliding = shapeB.doPoint3DCollisionTest(shapeA, closestPointOnSurface, normal);
+         boolean colliding = shapeB.evaluatePoint3DCollision(shapeA, closestPointOnSurface, normal);
          if (colliding)
             shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
@@ -880,7 +880,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Ramp3D shapeB = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D closestPointOnSurface = new Point3D();
          Vector3D normal = new Vector3D();
-         shapeB.doPoint3DCollisionTest(shapeA.getPosition(), closestPointOnSurface, normal);
+         shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::doSphere3DRamp3DCollisionTest);

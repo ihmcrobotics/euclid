@@ -196,7 +196,7 @@ public class Sphere3DTest
    }
 
    @Test
-   void testDoPoint3DCollisionTest() throws Exception
+   void testEvaluatePoint3DCollision() throws Exception
    {
       Random random = new Random(2309819);
 
@@ -215,7 +215,7 @@ public class Sphere3DTest
          expectedClosestPoint.scaleAdd(sphere3D.getRadius(), direction, sphere3D.getPosition());
          expectedNormal.setAndNormalize(direction);
 
-         assertTrue(sphere3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+         assertTrue(sphere3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -230,7 +230,7 @@ public class Sphere3DTest
          expectedClosestPoint.scaleAdd(sphere3D.getRadius(), direction, sphere3D.getPosition());
          expectedNormal.setAndNormalize(direction);
 
-         assertFalse(sphere3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(sphere3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -530,7 +530,7 @@ public class Sphere3DTest
          expectedNormal.normalize();
 
          Vector3D actualNormal = new Vector3D();
-         sphere.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
+         sphere.evaluatePoint3DCollision(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
    }

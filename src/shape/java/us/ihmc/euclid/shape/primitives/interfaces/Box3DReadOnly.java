@@ -14,16 +14,37 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for box 3D.
+ * <p>
+ * A box 3D is represented by its size, the position of its center, and its orientation.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public interface Box3DReadOnly extends Shape3DReadOnly
 {
+   /**
+    * Get the read-only reference to the size along the three local axes of this box.
+    *
+    * @return the size of this box.
+    */
    Vector3DReadOnly getSize();
 
+   /**
+    * Gets the read-only reference to the pose of this box.
+    * <p>
+    * The position part describes the coordinates of the center.
+    * </p>
+    *
+    * @return the pose of this box.
+    */
    Shape3DPoseReadOnly getPose();
 
    /**
-    * Gets the read-only reference to the orientation of this shape.
+    * Gets the read-only reference to the orientation of this box.
     *
-    * @return the orientation of this shape.
+    * @return the orientation of this box.
     */
    default RotationMatrixReadOnly getOrientation()
    {
@@ -31,25 +52,33 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets the read-only reference of the position of this shape.
+    * Gets the read-only reference of the position of this box's center.
     *
-    * @return the position of this shape.
+    * @return the position of this box.
     */
    default Point3DReadOnly getPosition()
    {
       return getPose().getShapePosition();
    }
 
+   /**
+    * Gets the intermediate variable supplier that can be used for performing operations in either a
+    * garbage-free of thread-safe manner.
+    *
+    * @return the intermediate variable supplier.
+    */
    IntermediateVariableSupplier getIntermediateVariableSupplier();
 
    /** {@inheritDoc} */
+   @Override
    default boolean containsNaN()
    {
       return getPose().containsNaN() || getSize().containsNaN();
    }
 
+   /** {@inheritDoc} */
    @Override
-   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       Point3DBasics queryInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, queryInLocal);
@@ -63,6 +92,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return distance <= 0.0;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -76,6 +106,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
@@ -89,6 +120,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return signedDistance;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
@@ -197,6 +229,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return numberOfIntersections;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isConvex()
    {
@@ -204,7 +237,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets this box size along the x-axis, i.e. its length.
+    * Gets this box size along the x-axis.
     *
     * @return this box size along the x-axis.
     */
@@ -214,7 +247,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets this box size along the y-axis, i.e. its width.
+    * Gets this box size along the y-axis.
     *
     * @return this box size along the y-axis.
     */
@@ -224,7 +257,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets this box size along the z-axis, i.e. its height.
+    * Gets this box size along the z-axis.
     *
     * @return this box size along the z-axis.
     */
@@ -243,6 +276,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     *
     * @param boundingBoxToPack the bounding box to pack. Modified.
     */
+   @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
       EuclidShapeTools.boundingBoxBox3D(getPosition(), getOrientation(), getSize(), boundingBoxToPack);
@@ -251,7 +285,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    /**
     * Gets the 8 vertices, expressed in world, of this box as an array.
     * <p>
-    * WARNING: This method generates garbage.
+    * WARNING: The default implementation of this method generates garbage.
     * </p>
     *
     * @return an array of 8 {@code Point3D} with this box vertices.
@@ -280,6 +314,16 @@ public interface Box3DReadOnly extends Shape3DReadOnly
          getVertex(vertexIndex, verticesToPack[vertexIndex]);
    }
 
+   /**
+    * Packs the world coordinates of one of this box vertices.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    *
+    * @param vertexIndex the index in [0, 7] of the vertex to pack.
+    * @return the coordinates of the vertex.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 7].
+    */
    default Point3DBasics getVertex(int vertexIndex)
    {
       Point3D vertex = new Point3D();

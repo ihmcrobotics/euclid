@@ -9,8 +9,10 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransformBasics, Transformable
 {
+   @Override
    RotationMatrix getShapeOrientation();
 
+   @Override
    Point3DBasics getShapePosition();
 
    @Override

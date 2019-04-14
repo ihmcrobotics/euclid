@@ -1645,7 +1645,7 @@ public class ConvexPolytope3DTest
    }
 
    @Test
-   void testDoPoint3DCollisionTest() throws Exception
+   void testEvaluatePoint3DCollision() throws Exception
    {
       Random random = new Random(34535);
       Point3D expectedClosestPoint = new Point3D();
@@ -1659,16 +1659,16 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
          }
          else if (convexPolytope3D.getNumberOfVertices() == 1)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal);
+            convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal);
             expectedClosestPoint.set(convexPolytope3D.getVertex(0));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1679,7 +1679,7 @@ public class ConvexPolytope3DTest
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1693,7 +1693,7 @@ public class ConvexPolytope3DTest
 
             expectedClosestPoint.set(pointOnFace);
             expectedNormal.set(face.getNormal());
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1705,16 +1705,16 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
          }
          else if (convexPolytope3D.getNumberOfVertices() == 1)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal);
+            convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal);
             expectedClosestPoint.set(convexPolytope3D.getVertex(0));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1725,7 +1725,7 @@ public class ConvexPolytope3DTest
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1743,9 +1743,9 @@ public class ConvexPolytope3DTest
             expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointInside, closestFace.getCentroid(), closestFace.getNormal()));
             expectedNormal.set(closestFace.getNormal());
             if (convexPolytope3D.getNumberOfFaces() == 1)
-               assertFalse(convexPolytope3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal), "Iteration: " + i);
+               assertFalse(convexPolytope3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal), "Iteration: " + i);
             else
-               assertTrue(convexPolytope3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal), "Iteration: " + i);
+               assertTrue(convexPolytope3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal), "Iteration: " + i);
                
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
@@ -1758,16 +1758,16 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
          }
          else if (convexPolytope3D.getNumberOfVertices() == 1)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal);
+            convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal);
             expectedClosestPoint.set(convexPolytope3D.getVertex(0));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1778,7 +1778,7 @@ public class ConvexPolytope3DTest
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1810,7 +1810,7 @@ public class ConvexPolytope3DTest
 
             expectedClosestPoint.set(pointOnEdge);
             expectedNormal.set(towardOutside);
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1822,16 +1822,16 @@ public class ConvexPolytope3DTest
 
          if (convexPolytope3D.isEmpty())
          {
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(EuclidCoreRandomTools.nextPoint3D(random, 5.0), actualClosestPoint, actualNormal));
          }
          else if (convexPolytope3D.getNumberOfVertices() == 1)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal);
+            convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal);
             expectedClosestPoint.set(convexPolytope3D.getVertex(0));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1842,7 +1842,7 @@ public class ConvexPolytope3DTest
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(point, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(point, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1859,7 +1859,7 @@ public class ConvexPolytope3DTest
 
             expectedClosestPoint.set(closestVertex);
             expectedNormal.set(towardOutside);
-            assertFalse(convexPolytope3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal), "Iteration: " + i);
+            assertFalse(convexPolytope3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal), "Iteration: " + i);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }

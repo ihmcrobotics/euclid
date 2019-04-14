@@ -251,7 +251,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       if (isEmpty())
          return false;

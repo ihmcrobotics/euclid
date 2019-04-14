@@ -14,16 +14,37 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for ellipsoid 3D.
+ * <p>
+ * A ellipsoid 3D is represented by its radii, the position of its center, and its orientation.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
 {
+   /**
+    * Get the read-only reference to the radii about the three local axes of this ellipsoid.
+    *
+    * @return the size of this ellipsoid.
+    */
    Vector3DReadOnly getRadii();
 
+   /**
+    * Gets the read-only reference to the pose of this ellipsoid.
+    * <p>
+    * The position part describes the coordinates of the center.
+    * </p>
+    *
+    * @return the pose of this ellipsoid.
+    */
    Shape3DPoseReadOnly getPose();
 
    /**
-    * Gets the read-only reference to the orientation of this shape.
+    * Gets the read-only reference to the orientation of this ellipsoid.
     *
-    * @return the orientation of this shape.
+    * @return the orientation of this ellipsoid.
     */
    default RotationMatrixReadOnly getOrientation()
    {
@@ -31,15 +52,21 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets the read-only reference of the position of this shape.
+    * Gets the read-only reference of the position of this ellipsoid.
     *
-    * @return the position of this shape.
+    * @return the position of this ellipsoid.
     */
    default Point3DReadOnly getPosition()
    {
       return getPose().getShapePosition();
    }
 
+   /**
+    * Gets the intermediate variable supplier that can be used for performing operations in either a
+    * garbage-free of thread-safe manner.
+    *
+    * @return the intermediate variable supplier.
+    */
    IntermediateVariableSupplier getIntermediateVariableSupplier();
 
    /** {@inheritDoc} */
@@ -49,14 +76,15 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return getPose().containsNaN() || getRadii().containsNaN();
    }
 
+   /** {@inheritDoc} */
    @Override
-   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
 
       double distance = EuclidShapeTools.evaluatePoint3DEllipsoid3DCollision(pointToCheckInLocal, getRadii(), closestPointOnSurfaceToPack,
-                                                                           normalAtClosestPointToPack);
+                                                                             normalAtClosestPointToPack);
 
       transformToWorld(closestPointOnSurfaceToPack);
       transformToWorld(normalAtClosestPointToPack);
@@ -65,6 +93,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return distance <= 0.0;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -80,6 +109,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
@@ -93,6 +123,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return signedDistance;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
@@ -187,12 +218,14 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return numberOfIntersections;
    }
 
+   /** {@inheritDoc} */
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
       EuclidShapeTools.boundingBoxEllipsoid3D(getPosition(), getOrientation(), getRadii(), boundingBoxToPack);
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isConvex()
    {

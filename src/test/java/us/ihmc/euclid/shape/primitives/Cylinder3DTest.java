@@ -317,7 +317,7 @@ public class Cylinder3DTest
    }
 
    @Test
-   void testDoPoint3DCollisionTest() throws Exception
+   void testEvaluatePoint3DCollision() throws Exception
    {
       Random random = new Random(4444);
 
@@ -332,11 +332,11 @@ public class Cylinder3DTest
          Point3D pointOnAxis = new Point3D();
          pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
 
-         assertTrue(cylinder3D.doPoint3DCollisionTest(pointOnAxis, actualClosestPoint, actualNormal));
+         assertTrue(cylinder3D.evaluatePoint3DCollision(pointOnAxis, actualClosestPoint, actualNormal));
          assertFalse(actualClosestPoint.containsNaN());
          assertFalse(actualNormal.containsNaN());
 
-         cylinder3D.doPoint3DCollisionTest(actualClosestPoint, expectedClosestPoint, expectedNormal);
+         cylinder3D.evaluatePoint3DCollision(actualClosestPoint, expectedClosestPoint, expectedNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -362,7 +362,7 @@ public class Cylinder3DTest
          { // Closest to the infinite cylinder
             expectedClosestPoint.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, pointOnAxis);
             expectedNormal.setAndNormalize(orthogonalToAxis);
-            assertTrue(cylinder3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            assertTrue(cylinder3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, distanceOffAxis < 1.0e-3 ? 2.0 * EPSILON : EPSILON);
          }
@@ -378,7 +378,7 @@ public class Cylinder3DTest
                expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointInside, cylinder3D.getBottomCenter(), cylinder3D.getAxis()));
                expectedNormal.setAndNegate(cylinder3D.getAxis());
             }
-            assertTrue(cylinder3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            assertTrue(cylinder3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -397,7 +397,7 @@ public class Cylinder3DTest
          expectedClosestPoint.scaleAdd(cylinder3D.getRadius(), orthogonalToAxis, pointOnAxis);
          expectedNormal.setAndNormalize(orthogonalToAxis);
 
-         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(cylinder3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -416,7 +416,7 @@ public class Cylinder3DTest
          expectedClosestPoint.set(pointOnTopCap);
          expectedNormal.set(cylinder3D.getAxis());
 
-         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(cylinder3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -435,7 +435,7 @@ public class Cylinder3DTest
          expectedClosestPoint.set(pointOnBottomCap);
          expectedNormal.setAndNegate(cylinder3D.getAxis());
 
-         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(cylinder3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -455,7 +455,7 @@ public class Cylinder3DTest
          expectedNormal.sub(pointOutside, expectedClosestPoint);
          expectedNormal.normalize();
 
-         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(cylinder3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -475,7 +475,7 @@ public class Cylinder3DTest
          expectedNormal.sub(pointOutside, expectedClosestPoint);
          expectedNormal.normalize();
 
-         assertFalse(cylinder3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(cylinder3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -968,7 +968,7 @@ public class Cylinder3DTest
          assertFalse(cylinder.isPointInside(supportingVertexTranslated, EPSILON));
 
          Vector3D actualNormal = new Vector3D();
-         cylinder.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
+         cylinder.evaluatePoint3DCollision(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
       }
    }

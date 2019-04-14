@@ -436,7 +436,7 @@ public class Box3DTest
    }
 
    @Test
-   void testDoPoint3DCollisionTest() throws Exception
+   void testEvaluatePoint3DCollision() throws Exception
    {
       Random random = new Random(354534665);
 
@@ -462,7 +462,7 @@ public class Box3DTest
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -476,7 +476,7 @@ public class Box3DTest
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -490,7 +490,7 @@ public class Box3DTest
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -520,7 +520,7 @@ public class Box3DTest
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -536,7 +536,7 @@ public class Box3DTest
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -552,7 +552,7 @@ public class Box3DTest
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+            assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -583,7 +583,7 @@ public class Box3DTest
          box3D.transformToWorld(pointOutside);
          box3D.transformToWorld(expectedClosestPoint);
          box3D.transformToWorld(expectedNormal);
-         assertFalse(box3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(box3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -619,7 +619,7 @@ public class Box3DTest
             box3D.transformToWorld(pointInside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertTrue(box3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            assertTrue(box3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -639,7 +639,7 @@ public class Box3DTest
             box3D.transformToWorld(pointInside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertTrue(box3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            assertTrue(box3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -659,7 +659,7 @@ public class Box3DTest
             box3D.transformToWorld(pointInside);
             box3D.transformToWorld(expectedClosestPoint);
             box3D.transformToWorld(expectedNormal);
-            assertTrue(box3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+            assertTrue(box3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
             EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
          }
@@ -1057,7 +1057,7 @@ public class Box3DTest
          expectedNormal.normalize();
 
          Vector3D actualNormal = new Vector3D();
-         box.doPoint3DCollisionTest(supportingVertexTranslated, new Point3D(), actualNormal);
+         box.evaluatePoint3DCollision(supportingVertexTranslated, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
    }

@@ -34,10 +34,10 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       return EuclidShapeTools.evaluatePoint3DSphere3DCollision(pointToCheck, getPosition(), getRadius(), closestPointOnSurfaceToPack,
-                                                             normalAtClosestPointToPack) <= 0.0;
+                                                               normalAtClosestPointToPack) <= 0.0;
    }
 
    @Override

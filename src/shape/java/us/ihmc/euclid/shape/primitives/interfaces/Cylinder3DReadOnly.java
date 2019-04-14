@@ -11,6 +11,15 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for a cylinder 3D.
+ * <p>
+ * A cylinder 3D is represented by its length, its radius, the position of its center, and its axis
+ * of revolution.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Cylinder3DReadOnly extends Shape3DReadOnly
 {
    /**
@@ -20,6 +29,11 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     */
    double getLength();
 
+   /**
+    * Gets the half-length of this cylinder.
+    * 
+    * @return the half-length.
+    */
    default double getHalfLength()
    {
       return 0.5 * getLength();
@@ -33,14 +47,27 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    double getRadius();
 
    /**
-    * Gets the read-only reference of the position of this shape.
+    * Gets the read-only reference of the position of this cylinder center.
     *
-    * @return the position of this shape.
+    * @return the position of this cylinder.
     */
    Point3DReadOnly getPosition();
 
+   /**
+    * Gets the read-only reference of this cylinder axis of revolution.
+    * 
+    * @return the axis of this cylinder.
+    */
    Vector3DReadOnly getAxis();
 
+   /**
+    * Gets the read-only reference to the center of the top cap.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * 
+    * @return the top center.
+    */
    default Point3DReadOnly getTopCenter()
    {
       Point3D topCenter = new Point3D();
@@ -48,6 +75,14 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       return topCenter;
    }
 
+   /**
+    * Gets the read-only reference to the center of the bottom cap.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * 
+    * @return the bottom center.
+    */
    default Point3DReadOnly getBottomCenter()
    {
       Point3D bottomCenter = new Point3D();
@@ -64,12 +99,13 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
       return EuclidShapeTools.evaluatePoint3DCylinder3DCollision(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
-                                                               normalAtClosestPointToPack) <= 0.0;
+                                                                 normalAtClosestPointToPack) <= 0.0;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -142,12 +178,14 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
                                                                         firstIntersectionToPack, secondIntersectionToPack);
    }
 
+   /** {@inheritDoc} */
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
       EuclidShapeTools.boundingBoxCylinder3D(getPosition(), getAxis(), getLength(), getRadius(), boundingBoxToPack);
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isConvex()
    {

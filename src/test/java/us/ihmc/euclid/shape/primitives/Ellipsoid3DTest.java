@@ -300,7 +300,7 @@ public class Ellipsoid3DTest
    }
 
    @Test
-   void testDoPoint3DCollisionTest() throws Exception
+   void testEvaluatePoint3DCollision() throws Exception
    {
       Random random = new Random(345345);
 
@@ -320,7 +320,7 @@ public class Ellipsoid3DTest
 
          ellipsoid3D.transformToWorld(pointInside);
 
-         assertTrue(ellipsoid3D.doPoint3DCollisionTest(pointInside, actualClosestPointWorld, actualNormal));
+         assertTrue(ellipsoid3D.evaluatePoint3DCollision(pointInside, actualClosestPointWorld, actualNormal));
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
          assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
@@ -353,7 +353,7 @@ public class Ellipsoid3DTest
 
          ellipsoid3D.transformToWorld(pointOutside);
 
-         assertFalse(ellipsoid3D.doPoint3DCollisionTest(pointOutside, actualClosestPointWorld, actualNormal));
+         assertFalse(ellipsoid3D.evaluatePoint3DCollision(pointOutside, actualClosestPointWorld, actualNormal));
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
          assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
@@ -385,7 +385,7 @@ public class Ellipsoid3DTest
 
          ellipsoid3D.transformToWorld(pointOnSurface);
 
-         assertTrue(ellipsoid3D.doPoint3DCollisionTest(pointOnSurface, actualClosestPointWorld, actualNormal));
+         assertTrue(ellipsoid3D.evaluatePoint3DCollision(pointOnSurface, actualClosestPointWorld, actualNormal));
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
          assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
@@ -414,7 +414,7 @@ public class Ellipsoid3DTest
             point.setZ(0.0);
          ellipsoid3D.transformToWorld(point);
 
-         ellipsoid3D.doPoint3DCollisionTest(point, actualClosestPointWorld, actualNormal);
+         ellipsoid3D.evaluatePoint3DCollision(point, actualClosestPointWorld, actualNormal);
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
          assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
@@ -601,7 +601,7 @@ public class Ellipsoid3DTest
          ellipsoid3D.transformToWorld(pointOutside);
 
          Point3D expectedProjection = new Point3D();
-         ellipsoid3D.doPoint3DCollisionTest(pointOutside, expectedProjection, new Vector3D());
+         ellipsoid3D.evaluatePoint3DCollision(pointOutside, expectedProjection, new Vector3D());
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, ellipsoid3D.orthogonalProjectionCopy(pointOutside), EPSILON);
       }
    }
@@ -1238,7 +1238,7 @@ public class Ellipsoid3DTest
          assertFalse(ellipsoid.isPointInside(supportingVertexTranslated, EPSILON));
 
          Vector3D actualNormal = new Vector3D();
-         ellipsoid.doPoint3DCollisionTest(supportingVertex, new Point3D(), actualNormal);
+         ellipsoid.evaluatePoint3DCollision(supportingVertex, new Point3D(), actualNormal);
          EuclidCoreTestTools.assertTuple3DEquals(supportDirection, actualNormal, EPSILON);
       }
    }

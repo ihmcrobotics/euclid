@@ -238,7 +238,7 @@ public class Torus3DTest
    }
 
    @Test
-   void testDoPoint3DCollisionTest() throws Exception
+   void testEvaluatePoint3DCollision() throws Exception
    {
       Random random = new Random(16980501);
 
@@ -253,11 +253,11 @@ public class Torus3DTest
          Point3D pointOnAxis = new Point3D();
          pointOnAxis.scaleAdd(EuclidCoreRandomTools.nextDouble(random), torus3D.getAxis(), torus3D.getPosition());
 
-         assertFalse(torus3D.doPoint3DCollisionTest(pointOnAxis, actualClosestPoint, actualNormal));
+         assertFalse(torus3D.evaluatePoint3DCollision(pointOnAxis, actualClosestPoint, actualNormal));
          assertFalse(actualClosestPoint.containsNaN());
          assertFalse(actualNormal.containsNaN());
 
-         torus3D.doPoint3DCollisionTest(actualClosestPoint, expectedClosestPoint, expectedNormal);
+         torus3D.evaluatePoint3DCollision(actualClosestPoint, expectedClosestPoint, expectedNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -270,11 +270,11 @@ public class Torus3DTest
          Point3D pointOnTubeCenter = new Point3D();
          pointOnTubeCenter.scaleAdd(torus3D.getRadius(), orthogonalToAxis, torus3D.getPosition());
 
-         assertTrue(torus3D.doPoint3DCollisionTest(pointOnTubeCenter, actualClosestPoint, actualNormal));
+         assertTrue(torus3D.evaluatePoint3DCollision(pointOnTubeCenter, actualClosestPoint, actualNormal));
          assertFalse(actualClosestPoint.containsNaN());
          assertFalse(actualNormal.containsNaN());
 
-         torus3D.doPoint3DCollisionTest(actualClosestPoint, expectedClosestPoint, expectedNormal);
+         torus3D.evaluatePoint3DCollision(actualClosestPoint, expectedClosestPoint, expectedNormal);
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -298,7 +298,7 @@ public class Torus3DTest
          expectedClosestPoint.scaleAdd(torus3D.getTubeRadius(), orthogonalToTubeAxis, pointOnTubeCenter);
          expectedNormal.set(orthogonalToTubeAxis);
 
-         assertTrue(torus3D.doPoint3DCollisionTest(pointInside, actualClosestPoint, actualNormal));
+         assertTrue(torus3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -322,7 +322,7 @@ public class Torus3DTest
          expectedClosestPoint.scaleAdd(torus3D.getTubeRadius(), orthogonalToTubeAxis, pointOnTubeCenter);
          expectedNormal.set(orthogonalToTubeAxis);
 
-         assertFalse(torus3D.doPoint3DCollisionTest(pointOutside, actualClosestPoint, actualNormal));
+         assertFalse(torus3D.evaluatePoint3DCollision(pointOutside, actualClosestPoint, actualNormal));
          EuclidCoreTestTools.assertTuple3DEquals(expectedClosestPoint, actualClosestPoint, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
       }
@@ -508,7 +508,7 @@ public class Torus3DTest
          assertFalse(actualProjection.containsNaN());
 
          Point3D expectedProjection = new Point3D();
-         torus3D.doPoint3DCollisionTest(actualProjection, expectedProjection, new Vector3D());
+         torus3D.evaluatePoint3DCollision(actualProjection, expectedProjection, new Vector3D());
          EuclidCoreTestTools.assertTuple3DEquals(expectedProjection, actualProjection, EPSILON);
       }
 

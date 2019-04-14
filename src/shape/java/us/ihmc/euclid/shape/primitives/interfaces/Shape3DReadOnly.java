@@ -9,34 +9,35 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
+/**
+ * Read-only interface for representing a 3D shape.
+ *
+ * @author Sylvain Bertrand
+ */
 public interface Shape3DReadOnly extends SupportingVertexHolder
 {
-   static final double IS_INSIDE_EPS = 1.0e-12;
-
+   /**
+    * Tests whether this shape contains at least one {@link Double#NaN} or not.
+    *
+    * @return {@code true} if this shape contains {@link Double#NaN}, {@code false} otherwise.
+    */
    boolean containsNaN();
 
    /**
-    * Evaluates the query point {@code pointToCheck}:
-    * <ul>
-    * <li>tests if the query is located inside this shape,
-    * <li>calculates the coordinates of the closest point to the query and on laying on the shape
-    * surface,
-    * <li>calculates the normal of the shape surface at the coordinates of the closest point to the
-    * query.
-    * </ul>
+    * Evaluates the collision state between a point {@code pointToCheck} and this shape.
     *
     * @param pointToCheck the coordinates of the query to be evaluated. Not modified.
-    * @param closestPointOnSurfaceToPack the closest point to the query that lies on the shape surface.
-    *           Modified.
+    * @param closestPointOnSurfaceToPack the closest point to the query that lies on this shape
+    *           surface. Modified.
     * @param normalAtClosestPointToPack the surface normal at the closest point to the query. The
     *           normal points toward outside the shape. Modified.
     * @return {@code true} if the query is inside this shape or exactly on its surface, {@code false}
     *         otherwise.
     */
-   boolean doPoint3DCollisionTest(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
+   boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack);
 
    /**
-    * Calculates the minimum distance between the point and this shape.
+    * Calculates the minimum distance between a point and this shape.
     * <p>
     * Note that if the point is inside this shape, this method returns 0.0.
     * </p>
@@ -89,6 +90,21 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     */
    boolean isPointInside(Point3DReadOnly query, double epsilon);
 
+   /**
+    * Computes the orthogonal projection of a point on this shape.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>If the query is inside the shape, the method fails and returns {@code null}.
+    * </ul>
+    * </p>
+    *
+    * @param pointToProject the point to project on this shape. Not modified.
+    * @return the projection if this method succeeds, {@code null} otherwise.
+    */
    default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
       Point3D projection = new Point3D();
@@ -132,6 +148,14 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     */
    boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack);
 
+   /**
+    * Gets the tightest axis-aligned bounding box that contains this shape.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    *
+    * @return the bounding box.
+    */
    default BoundingBox3DReadOnly getBoundingBox()
    {
       BoundingBox3D boundingBox3D = new BoundingBox3D();
@@ -139,7 +163,17 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
       return boundingBox3D;
    }
 
+   /**
+    * Gets the tightest axis-aligned bounding box that contains this shape.
+    *
+    * @param boundingBoxToPack the bounding box to pack. Modified.
+    */
    void getBoundingBox(BoundingBox3DBasics boundingBoxToPack);
 
+   /**
+    * Gets the convex property for this shape.
+    *
+    * @return {@code true} if this shape's implementation is convex, {@code false} otherwise.
+    */
    boolean isConvex();
 }
