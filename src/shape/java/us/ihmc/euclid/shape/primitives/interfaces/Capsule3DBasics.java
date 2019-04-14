@@ -58,6 +58,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
     * 
     * @param length the new length.
     * @param radius the new radius.
+    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
     */
    default void setSize(double length, double radius)
    {
@@ -120,6 +121,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
     * @param axis the axis of revolution of this capsule. Not modified.
     * @param length the new length.
     * @param radius the new radius.
+    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
     */
    default void set(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {

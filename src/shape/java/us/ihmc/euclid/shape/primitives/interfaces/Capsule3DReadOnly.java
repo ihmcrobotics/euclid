@@ -174,6 +174,37 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
    }
 
+   /**
+    * Tests on a per component basis, if this capsule 3D is exactly equal to {@code other}.
+    *
+    * @param other the other capsule 3D to compare against this. Not modified.
+    * @return {@code true} if the two capsules are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(Capsule3DReadOnly other)
+   {
+      if (other == this)
+      {
+         return true;
+      }
+      else if (other == null)
+      {
+         return false;
+      }
+      else
+      {
+         if (getLength() != other.getLength())
+            return false;
+         if (getRadius() != other.getRadius())
+            return false;
+         if (!getPosition().equals(other.getPosition()))
+            return false;
+         if (!getAxis().equals(other.getAxis()))
+            return false;
+         return true;
+      }
+   }
+
    /** {@inheritDoc} */
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)

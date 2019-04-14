@@ -115,11 +115,9 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    }
 
    /**
-    * Tests separately and on a per component basis if the pose and the radius of this sphere and
-    * {@code other}'s pose and radius are equal to an {@code epsilon}.
+    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other sphere which pose and radius is to be compared against this radius pose
-    *           and radius. Not modified.
+    * @param other the other sphere to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
     */

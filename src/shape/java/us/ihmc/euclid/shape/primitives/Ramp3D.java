@@ -3,20 +3,22 @@ package us.ihmc.euclid.shape.primitives;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
- * {@code Ramp3D} represents a 3D shape with a triangular section in the XZ-plane.
+ * Implementation of a ramp 3D.
  * <p>
- * Shape description:
+ * A ramp represents a 3D shape with a triangular section in the XZ-plane. Shape description:
  * <ul>
  * <li>The slope face starts from {@code x=0.0}, {@code z=0.0} to end at {@code x=size.getX()},
  * {@code z=size.getZ()}.
@@ -26,10 +28,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * <li>The right face is vertical (XZ-plane) at {@code y=size.getY()/2.0}.
  * </ul>
  * </p>
+ * 
+ * @author Sylvain Bertrand
  */
 public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 {
+   /** Pose of this box. */
    private final Shape3DPose pose = new Shape3DPose();
+   /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** Size of this ramp's bounding box. */
@@ -83,10 +89,10 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Creates a new ramp 3D and initializes its size.
     *
-    * @param length the size of this ramp along the x-axis.
-    * @param width the size of this ramp along the y-axis.
-    * @param height the size of this ramp along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    * @param sizeX the size of this ramp along the x-axis.
+    * @param sizeY the size of this ramp along the y-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
     *            negative.
     */
    public Ramp3D(double sizeX, double sizeY, double sizeZ)
@@ -94,6 +100,17 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       setSize(sizeX, sizeY, sizeZ);
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param position the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param sizeX the size of this ramp along the x-axis.
+    * @param sizeY the size of this ramp along the y-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
+    *            negative.
+    */
    public Ramp3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       set(position, orientation, sizeX, sizeY, sizeZ);
@@ -103,10 +120,10 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * Creates a new ramp 3D and initializes its pose and size.
     *
     * @param pose the position and orientation for this ramp. Not modified.
-    * @param length the size of this ramp along the x-axis.
-    * @param width the size of this ramp along the y-axis.
-    * @param height the size of this ramp along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    * @param sizeX the size of this ramp along the x-axis.
+    * @param sizeY the size of this ramp along the y-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
     *            negative.
     */
    public Ramp3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
@@ -118,10 +135,10 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * Creates a new ramp 3D and initializes its pose and size.
     *
     * @param pose the position and orientation for this ramp. Not modified.
-    * @param length the size of this ramp along the x-axis.
-    * @param width the size of this ramp along the y-axis.
-    * @param height the size of this ramp along the z-axis.
-    * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
+    * @param sizeX the size of this ramp along the x-axis.
+    * @param sizeY the size of this ramp along the y-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
     *            negative.
     */
    public Ramp3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
@@ -156,24 +173,28 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       angleOfRampIncline = EuclidShapeTools.computeRanp3DIncline(x, z);
    }
 
+   /** {@inheritDoc} */
    @Override
    public Shape3DPose getPose()
    {
       return pose;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Vector3DBasics getSize()
    {
       return size;
    }
 
+   /** {@inheritDoc} */
    @Override
    public IntermediateVariableSupplier getIntermediateVariableSupplier()
    {
       return supplier;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
@@ -210,11 +231,9 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    }
 
    /**
-    * Tests separately and on a per component basis if the pose and the size of this ramp and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
+    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other ramp which pose and size is to be compared against this ramp pose and
-    *           size. Not modified.
+    * @param other the other ramp to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
     */
@@ -239,6 +258,41 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       return Ramp3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Ramp3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof Box3DReadOnly)
+         return Ramp3DBasics.super.equals((Ramp3DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this ramp 3D.
+    *
+    * @return the hash code value for this ramp 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long hash = EuclidHashCodeTools.combineHashCode(pose.hashCode(), size.hashCode());
+      return EuclidHashCodeTools.toIntHashCode(hash);
+   }
+
+   /**
+    * Provides a {@code String} representation of this box 3D as follows:<br>
+    * Ramp 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: (
+    * 0.191, 0.719, 0.479 )]
+    * 
+    * @return the {@code String} representing this box 3D.
+    */
    @Override
    public String toString()
    {

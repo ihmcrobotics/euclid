@@ -210,11 +210,6 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
-    * <p>
-    * This method accounts for the multiple combinations of radius/length and rotations that generate
-    * identical cylinder. For instance, two cylinders that are identical but one is rotated around its
-    * main axis are considered geometrically equal.
-    * </p>
     *
     * @param other the cylinder to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
@@ -229,5 +224,36 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
          return false;
 
       return EuclidGeometryTools.areVector3DsParallel(getAxis(), other.getAxis(), epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this cylinder 3D is exactly equal to {@code other}.
+    *
+    * @param other the other cylinder 3D to compare against this. Not modified.
+    * @return {@code true} if the two cylinders are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(Cylinder3DReadOnly other)
+   {
+      if (other == this)
+      {
+         return true;
+      }
+      else if (other == null)
+      {
+         return false;
+      }
+      else
+      {
+         if (getLength() != other.getLength())
+            return false;
+         if (getRadius() != other.getRadius())
+            return false;
+         if (!getPosition().equals(other.getPosition()))
+            return false;
+         if (!getAxis().equals(other.getAxis()))
+            return false;
+         return true;
+      }
    }
 }

@@ -171,9 +171,8 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar,
-    * i.e. the position of each sphere is geometrically similar given {@code epsilon} and the
-    * difference between the radius of each sphere is less than or equal to {@code epsilon}.
+    * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
+    * to an {@code epsilon}.
     *
     * @param other the sphere to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.

@@ -361,6 +361,22 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    }
 
    /**
+    * Tests on a per component basis, if this ramp 3D is exactly equal to {@code other}.
+    *
+    * @param other the other ramp 3D to compare against this. Not modified.
+    * @return {@code true} if the two ramps are exactly equal component-wise, {@code false} otherwise.
+    */
+   default boolean equals(Ramp3DReadOnly other)
+   {
+      if (other == this)
+         return true;
+      else if (other == null)
+         return false;
+      else
+         return getPose().equals(other.getPose()) && getSize().equals(other.getSize());
+   }
+
+   /**
     * Changes the given {@code transformable} from being expressed in world to being expressed in this
     * shape local coordinates.
     *

@@ -6,24 +6,26 @@ import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * {@code Cylinder3D} represents a cylinder defined by its radius and length.
+ * Implementation of a cylinder 3D.
  * <p>
- * Shape description:
- * <ul>
- * <li>The cylinder's axis is the z-axis.
- * <li>The cylinder's origin is its centroid.
- * </ul>
+ * A cylinder 3D is represented by its length, its radius, the position of its center, and its axis
+ * of revolution.
  * </p>
+ * 
+ * @author Sylvain Bertrand
  */
 public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
 {
+   /** Position of this cylinder's center. */
    private final Point3D position = new Point3D();
+   /** Axis of revolution of this cylinder. */
    private final Vector3D axis = new Vector3D(Axis.Z);
 
    /** Radius of the cylinder part. */
@@ -33,17 +35,21 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * at {@code - 0.5 * length}.
     */
    private double length;
+   /** This cylinder half-length. */
    private double halfLength;
 
+   /** Position of the top cap center linked to this capsule properties. */
    private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> halfLength * axis.getX() + position.getX(),
                                                                                           () -> halfLength * axis.getY() + position.getY(),
                                                                                           () -> halfLength * axis.getZ() + position.getZ());
+   /** Position of the bottom cap center linked to this capsule properties. */
    private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -halfLength * axis.getX() + position.getX(),
                                                                                              () -> -halfLength * axis.getY() + position.getY(),
                                                                                              () -> -halfLength * axis.getZ() + position.getZ());
 
    /**
-    * Creates a new cylinder with length of {@code 1} and radius of {@code 0.5}.
+    * Creates a new cylinder with length of {@code 1}, radius of {@code 0.5}, and axis along the
+    * z-axis.
     */
    public Cylinder3D()
    {
@@ -51,9 +57,9 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    }
 
    /**
-    * Creates a new cylinder 3D and initializes its length and radius.
+    * Creates a new cylinder 3D which axis is along the z-axis and initializes its length and radius.
     *
-    * @param length the cylinder length along the z-axis.
+    * @param length the length of the cylinder.
     * @param radius the radius of the cylinder.
     * @throws IllegalArgumentException if either {@code length} or {@code radius} is negative.
     */
@@ -62,6 +68,15 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       setSize(length, radius);
    }
 
+   /**
+    * Creates a new cylinder 3D and initializes its pose and size.
+    * 
+    * @param position the position of the center. Not modified.
+    * @param axis the axis of revolution. Not modified.
+    * @param length the length of this cylinder.
+    * @param radius the radius of this cylinder.
+    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
+    */
    public Cylinder3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
       set(position, axis, length, radius);
@@ -145,24 +160,28 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       return halfLength;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3D getPosition()
    {
       return position;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Vector3D getAxis()
    {
       return axis;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3DReadOnly getTopCenter()
    {
       return topCenter;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3DReadOnly getBottomCenter()
    {
@@ -170,11 +189,9 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    }
 
    /**
-    * Tests separately and on a per component basis if the pose and the size of this cylinder and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
+    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other cylinder which pose and size is to be compared against this cylinder pose
-    *           and size. Not modified.
+    * @param other the other cylinder to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
     */
@@ -187,11 +204,6 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    /**
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
-    * <p>
-    * This method accounts for the multiple combinations of radius/length and rotations that generate
-    * identical cylinder. For instance, two cylinders that are identical but one is rotated around its
-    * main axis are considered geometrically equal.
-    * </p>
     *
     * @param other the cylinder to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
@@ -203,6 +215,45 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       return Cylinder3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Cylinder3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof Cylinder3DReadOnly)
+         return Cylinder3DBasics.super.equals((Cylinder3DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this cylinder 3D.
+    *
+    * @return the hash code value for this cylinder 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long hash = 1L;
+      hash = EuclidHashCodeTools.addToHashCode(hash, length);
+      hash = EuclidHashCodeTools.addToHashCode(hash, radius);
+      hash = EuclidHashCodeTools.combineHashCode(hash, position.hashCode());
+      hash = EuclidHashCodeTools.combineHashCode(hash, axis.hashCode());
+      return EuclidHashCodeTools.toIntHashCode(hash);
+   }
+
+   /**
+    * Provides a {@code String} representation of this cylinder 3D as follows:<br>
+    * Cylinder 3D: [position: (-0.362, -0.617, 0.066 ), axis: ( 0.634, -0.551, -0.543 ), length: 0.170,
+    * radius: 0.906]
+    * 
+    * @return the {@code String} representing this cylinder 3D.
+    */
    @Override
    public String toString()
    {

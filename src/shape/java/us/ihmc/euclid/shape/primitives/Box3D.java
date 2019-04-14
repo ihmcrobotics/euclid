@@ -7,20 +7,25 @@ import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
- * {@code Box3D} represents a box with a sizeX, a sizeY, and a sizeZ.
+ * Implementation of a box 3D.
  * <p>
- * Its origin is located at its centroid.
+ * A box 3D is represented by its size, the position of its center, and its orientation.
  * </p>
+ *
+ * @author Sylvain Bertrand
  */
 public class Box3D implements Box3DBasics, GeometryObject<Box3D>
 {
+   /** Pose of this box. */
    private final Shape3DPose pose = new Shape3DPose();
+   /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /**
@@ -132,24 +137,28 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       set(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public Shape3DPose getPose()
    {
       return pose;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Vector3DBasics getSize()
    {
       return size;
    }
 
+   /** {@inheritDoc} */
    @Override
    public IntermediateVariableSupplier getIntermediateVariableSupplier()
    {
       return supplier;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
@@ -168,11 +177,9 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    }
 
    /**
-    * Tests separately and on a per component basis if the pose and the size of this box and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
+    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other box which pose and size is to be compared against this box pose and size.
-    *           Not modified.
+    * @param other the other box to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
     */
@@ -184,11 +191,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
 
    /**
     * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
-    * <p>
-    * This method accounts for the multiple combinations of sizes and rotations that generate identical
-    * boxes. For instance, two boxes that are identical but one is flipped by 180 degrees are
-    * considered geometrically equal.
-    * </p>
     *
     * @param other the box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
@@ -200,6 +202,41 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       return Box3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Box3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof Box3DReadOnly)
+         return Box3DBasics.super.equals((Box3DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this box 3D.
+    *
+    * @return the hash code value for this box 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long hash = EuclidHashCodeTools.combineHashCode(pose.hashCode(), size.hashCode());
+      return EuclidHashCodeTools.toIntHashCode(hash);
+   }
+
+   /**
+    * Provides a {@code String} representation of this box 3D as follows:<br>
+    * Box 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: (
+    * 0.191, 0.719, 0.479 )]
+    * 
+    * @return the {@code String} representing this box 3D.
+    */
    @Override
    public String toString()
    {

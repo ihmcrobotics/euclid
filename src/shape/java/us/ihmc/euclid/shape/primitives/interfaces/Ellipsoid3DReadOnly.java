@@ -290,11 +290,6 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
-    * <p>
-    * This method accounts for the multiple combinations of radii and rotations that generate identical
-    * ellipsoids. For instance, two ellipsoids that are identical but one is flipped by 180 degrees are
-    * considered geometrically equal.
-    * </p>
     *
     * @param other the ellipsoid to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
@@ -377,6 +372,23 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
          return true;
 
       return false;
+   }
+
+   /**
+    * Tests on a per component basis, if this ellipsoid 3D is exactly equal to {@code other}.
+    *
+    * @param other the other ellipsoid 3D to compare against this. Not modified.
+    * @return {@code true} if the two ellipsoids are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(Ellipsoid3DReadOnly other)
+   {
+      if (other == this)
+         return true;
+      else if (other == null)
+         return false;
+      else
+         return getPose().equals(other.getPose()) && getRadii().equals(other.getRadii());
    }
 
    /**

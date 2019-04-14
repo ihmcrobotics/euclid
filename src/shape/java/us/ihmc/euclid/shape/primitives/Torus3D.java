@@ -5,26 +5,26 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * {@code Torus3D} represents a torus in the XY-plane.
+ * Implementation of a torus 3D.
  * <p>
- * Shape description:
- * <ul>
- * <li>The origin is located at the centroid or center of the torus.
- * <li>The axis of revolution is the z-axis.
- * <li>The torus is defined by two radii: {@code tubeRadius} that represents the radius of the tube,
- * and {@code radius} that is the radius for the center of the torus to the center of the tube.
- * </ul>
+ * A torus is represented by its position, its axis of revolution, the radius of its tube, and the
+ * radius from the torus axis to the tube center.
  * </p>
+ *
+ * @author Sylvain Bertrand
  */
 public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
 {
+   /** Position of this torus' center. */
    private final Point3D position = new Point3D();
+   /** Axis of revolution of this torus. */
    private final Vector3D axis = new Vector3D(Axis.Z);
 
    /** It is the radius for the center of the torus to the center of the tube. */
@@ -33,7 +33,8 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    private double tubeRadius;
 
    /**
-    * Creates a new torus 3D with a radius of {@code 1}, and tube radius of {@code 0.1}.
+    * Creates a new torus 3D with a radius of {@code 1}, and tube radius of {@code 0.1} and which axis
+    * is along the z-axis.
     */
    public Torus3D()
    {
@@ -45,8 +46,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
     *
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
-    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code radius} or {@code tubeRadius} is negative.
     */
    public Torus3D(double radius, double tubeRadius)
    {
@@ -56,11 +56,11 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    /**
     * Creates a new torus 3D and initializes its pose and radii.
     *
-    * @param pose the position and orientation of this torus. Not modified.
+    * @param position the position of the center. Not modified.
+    * @param axis the axis of revolution. Not modified.
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
-    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code radius} or {@code tubeRadius} is negative.
     */
    public Torus3D(Point3DReadOnly position, Vector3DReadOnly axis, double radius, double tubeRadius)
    {
@@ -93,8 +93,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
     *
     * @param radius radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
-    * @throws IllegalArgumentException if {@code tubeRadius} is less than {@value #MIN_TUBE_RADIUS} or
-    *            if the resulting inner radius is less than {@value #MIN_INNER_RADIUS}.
+    * @throws IllegalArgumentException if {@code radius} or {@code tubeRadius} is negative.
     */
    public void setRadii(double radius, double tubeRadius)
    {
@@ -107,34 +106,28 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
       this.tubeRadius = tubeRadius;
    }
 
-   /**
-    * Gets the radius from the torus center to the tube center.
-    *
-    * @return this torus main radius.
-    */
+   /** {@inheritDoc} */
    @Override
    public double getRadius()
    {
       return radius;
    }
 
-   /**
-    * Gets the radius of the tube of this torus.
-    *
-    * @return the radius of the tube.
-    */
+   /** {@inheritDoc} */
    @Override
    public double getTubeRadius()
    {
       return tubeRadius;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3D getPosition()
    {
       return position;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Vector3D getAxis()
    {
@@ -142,11 +135,9 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    }
 
    /**
-    * Tests separately and on a per component basis if the pose and the radii of this torus and
-    * {@code other}'s pose and radii are equal to an {@code epsilon}.
+    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other torus which pose and radii is to be compared against this torus pose and
-    *           radii. Not modified.
+    * @param other the other torus to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two tori are equal component-wise, {@code false} otherwise.
     */
@@ -158,11 +149,6 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
 
    /**
     * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
-    * <p>
-    * This method accounts for the multiple combinations of radii and rotations that generate identical
-    * tori. For instance, two tori that are identical but one is rotated around its main axis are
-    * considered geometrically equal.
-    * </p>
     *
     * @param other the torus to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
@@ -174,6 +160,45 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
       return Torus3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Torus3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof Torus3DReadOnly)
+         return Torus3DBasics.super.equals((Torus3DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this torus 3D.
+    *
+    * @return the hash code value for this torus 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long hash = 1L;
+      hash = EuclidHashCodeTools.addToHashCode(hash, radius);
+      hash = EuclidHashCodeTools.addToHashCode(hash, tubeRadius);
+      hash = EuclidHashCodeTools.combineHashCode(hash, position.hashCode());
+      hash = EuclidHashCodeTools.combineHashCode(hash, axis.hashCode());
+      return EuclidHashCodeTools.toIntHashCode(hash);
+   }
+
+   /**
+    * Provides a {@code String} representation of this torus 3D as follows:<br>
+    * Torus 3D: [position: (-0.362, -0.617, 0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius: 0.170,
+    * tube radius: 0.906]
+    * 
+    * @return the {@code String} representing this torus 3D.
+    */
    @Override
    public String toString()
    {
