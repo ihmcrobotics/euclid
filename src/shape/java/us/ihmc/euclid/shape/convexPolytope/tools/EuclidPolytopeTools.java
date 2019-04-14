@@ -193,12 +193,12 @@ public class EuclidPolytopeTools
 
    public static boolean canObserverSeeFace(Point3DReadOnly observer, Face3DReadOnly face, double epsilon)
    {
-      return face.signedDistanceToPlane(observer) > epsilon;
+      return face.signedDistanceFromSupportPlane(observer) > epsilon;
    }
 
    public static boolean isOnFaceSupportPlane(Point3DReadOnly observer, Face3DReadOnly face, double epsilon)
    {
-      return face.distanceToPlane(observer) <= epsilon;
+      return face.distanceFromSupportPlane(observer) <= epsilon;
    }
 
    public static double distanceSquaredToClosestHalfEdge3D(Point3DReadOnly query, List<? extends HalfEdge3DReadOnly> halfEdges)
@@ -245,7 +245,7 @@ public class EuclidPolytopeTools
       {
          F face = faces.get(faceIndex);
 
-         double signedDistance = face.signedDistanceToPlane(observer);
+         double signedDistance = face.signedDistanceFromSupportPlane(observer);
 
          if (signedDistance <= visibilityThreshold)
             continue;
@@ -295,7 +295,7 @@ public class EuclidPolytopeTools
       {
          F face = faces.get(faceIndex);
 
-         double signedDistance = face.signedDistanceToPlane(observer);
+         double signedDistance = face.signedDistanceFromSupportPlane(observer);
 
          if (signedDistance <= epsilon)
          {
@@ -330,7 +330,7 @@ public class EuclidPolytopeTools
 
    public static <F extends Face3DReadOnly> List<F> extractInPlaneFaces(List<F> faces, Point3DReadOnly query, double distanceThreshold)
    {
-      return faces.stream().filter(face -> face.isPointInFacePlane(query, distanceThreshold)).collect(Collectors.toList());
+      return faces.stream().filter(face -> face.isPointInFaceSupportPlane(query, distanceThreshold)).collect(Collectors.toList());
    }
 
    /**
@@ -389,7 +389,7 @@ public class EuclidPolytopeTools
       { // First we go through the faces and sort them into 2 categories: visible faces, faces which support plane contains the observer.
          F face = faces.get(faceIndex);
 
-         double signedDistance = face.signedDistanceToPlane(observer);
+         double signedDistance = face.signedDistanceFromSupportPlane(observer);
 
          if (signedDistance <= epsilon)
          {
@@ -509,7 +509,7 @@ public class EuclidPolytopeTools
 
    public static boolean arePoint3DAndFace3DInPlane(Point3DReadOnly point, Face3DReadOnly face, double epsilon)
    {
-      double distanceToPlane = face.distanceToPlane(point);
+      double distanceToPlane = face.distanceFromSupportPlane(point);
 
       if (distanceToPlane <= epsilon)
       {

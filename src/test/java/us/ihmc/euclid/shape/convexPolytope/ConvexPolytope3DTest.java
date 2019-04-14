@@ -949,7 +949,7 @@ public class ConvexPolytope3DTest
             }
 
             Face3D expectedClosestFace = convexPolytope3D.getFaces().stream()
-                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceToPlane(point), f2.signedDistanceToPlane(point)))
+                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point), f2.signedDistanceFromSupportPlane(point)))
                                                          .findFirst().get();
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
             assertTrue(expectedClosestFace == actualClosestFace, "Iteration " + i);
@@ -973,7 +973,7 @@ public class ConvexPolytope3DTest
             }
 
             Face3D expectedClosestFace = convexPolytope3D.getFaces().stream()
-                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceToPlane(point), f2.signedDistanceToPlane(point)))
+                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point), f2.signedDistanceFromSupportPlane(point)))
                                                          .findFirst().get();
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
             assertTrue(expectedClosestFace == actualClosestFace, "Iteration " + i);

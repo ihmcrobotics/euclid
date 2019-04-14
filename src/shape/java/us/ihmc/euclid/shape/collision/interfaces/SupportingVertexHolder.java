@@ -35,7 +35,7 @@ public interface SupportingVertexHolder
     * the case for an empty {@code ConvexPolytope3DReadOnly}.
     * </p>
     * <p>
-    * WARNING: This method generates garbage.
+    * WARNING: The default implementation of this method generates garbage.
     * </p>
     * 
     * @param supportDirection the direction to search for the farthest point on this shape. Not

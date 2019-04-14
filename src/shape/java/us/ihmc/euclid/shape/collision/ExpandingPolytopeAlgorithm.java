@@ -663,7 +663,7 @@ public class ExpandingPolytopeAlgorithm
 
       public void addAssociatedEdge(EPAEdge3D edge)
       {
-         if (!isAssociatedWithEdge(edge))
+         if (!isEdgeAssociated(edge))
          {
             if (edge.v0 != this)
                throw new IllegalArgumentException("A vertex's associated edges should originate from this same vertex.");

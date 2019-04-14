@@ -142,7 +142,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Tests on a per component bases if this capsule and {@code other} are equal to an {@code epsilon}.
+    * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.
     * 
     * @param other the other capsule to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -155,7 +155,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two capsules geometrically similar.
+    * Compares {@code this} to {@code other} to determine if the two capsules are geometrically similar.
     * 
     * @param other the other capsule to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.

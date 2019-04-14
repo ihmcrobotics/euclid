@@ -9,78 +9,126 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
-import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for a face 3D that belongs to a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Face3DReadOnly extends SupportingVertexHolder
 {
    /**
-    * Gets the centroid of the face
+    * Gets the read-only reference to the centroid of the face.
     *
-    * @return read only point object indicating the spatial location of the face centroid
+    * @return this face centroid location.
     */
    Point3DReadOnly getCentroid();
 
    /**
-    * Gets a vector normal to the face. If the face is part of a polytope, the vector will point away
-    * from the centroid of the polytope. If the face is not part of a polytope, the direction of the
-    * vector is arbitrary
+    * Gets a vector normal to the face.
+    * <p>
+    * A face's normal points away from the centroid of the convex polytope it belongs.
+    * </p>
     *
-    * @return a read only vector normal to the face
+    * @return this face normal vector.
     */
    Vector3DReadOnly getNormal();
 
+   /**
+    * Gets this face area.
+    * 
+    * @return this face area.
+    */
    double getArea();
 
+   /**
+    * Gets the tightest axis-aligned bounding box that contains this face.
+    *
+    * @return the bounding box.
+    */
    BoundingBox3DReadOnly getBoundingBox();
 
    /**
-    * Gets a list of all half edges that constitute the face
+    * Gets this face's half-edges.
+    * <p>
+    * The half-edges are clockwise ordered.
+    * </p>
     *
-    * @return a list of read only references to the half edges
+    * @return this face's half-edges.
     */
    List<? extends HalfEdge3DReadOnly> getEdges();
 
    /**
-    * Gets a particular half edge that is part of the face
+    * Gets the read-only reference to the i<sup>th</sup> half-edge of this face.
     *
-    * @param index the index of the half edge that is required. Should be less than value returned by
-    *           {@code getNumberOfEdges()}
-    * @return
+    * @param index the edge index &in; [0; {@link #getNumberOfEdges()}[.
+    * @return the read-only reference to the edge.
     */
    default HalfEdge3DReadOnly getEdge(int index)
    {
       return getEdges().get(index);
    }
 
+   /**
+    * Gets this face's vertices.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * <p>
+    * The vertices are clockwise ordered.
+    * </p>
+    * 
+    * @return this face's vertices.
+    */
    default List<? extends Vertex3DReadOnly> getVertices()
    {
       return getEdges().stream().map(HalfEdge3DReadOnly::getOrigin).collect(Collectors.toList());
    }
 
+   /**
+    * Gets the read-only reference to the i<sup>th</sup> vertex of this face.
+    *
+    * @param index the vertex index &in; [0; {@link #getNumberOfEdges()}[.
+    * @return the read-only reference to the vertex.
+    */
    default Vertex3DReadOnly getVertex(int index)
    {
       return getEdge(index).getOrigin();
    }
 
    /**
-    * Gets the number of edges that the face is made up of
+    * Gets the number of edges for this face.
     *
-    * @return
+    * @return this face number of edges.
     */
    default int getNumberOfEdges()
    {
       return getEdges().size();
    }
 
+   /**
+    * Tests whether this face has at least one edge or not.
+    * 
+    * @return {@code true} if this face has no edge, {@code false} otherwise.
+    */
    default boolean isEmpty()
    {
       return getEdges().isEmpty();
    }
 
+   /**
+    * Tests whether this face contains at least one {@link Double#NaN} or not.
+    *
+    * @return {@code true} if this face contains {@link Double#NaN}, {@code false} otherwise.
+    */
    default boolean containsNaN()
    {
       if (isEmpty())
@@ -95,6 +143,21 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return false;
    }
 
+   /**
+    * From the point of view of an observer located outside the face, only a continuous subset of the
+    * face's edges can be seen defining a line-of-sight. This method finds the edges in order that are
+    * in the line-of-sight.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * <p>
+    * In case the observer located directly above, below, or on the face, this method returns
+    * {@code null}.
+    * </p>
+    * 
+    * @param observer the coordinates of the observer. Not modified.
+    * @return the edges in order that are in the line-of-sight.
+    */
    default List<? extends HalfEdge3DReadOnly> lineOfSight(Point3DReadOnly observer)
    {
       HalfEdge3DReadOnly currentEdge = lineOfSightStart(observer);
@@ -116,6 +179,25 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return lineOfSight;
    }
 
+   /**
+    * Collects and returns the edges that are in the line-of-sight of the given observer in a similar
+    * way as {@link #lineOfSight(Point3DReadOnly)}.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * <p>
+    * The line-of-sight is possibly extended to include the edge right before and right after if the
+    * observer is within {@code epsilon} of the their support lines.
+    * </p>
+    * <p>
+    * In case the observer located directly above, below, or on the face, this method returns
+    * {@code null}.
+    * </p>
+    * 
+    * @param observer the coordinates of the observer. Not modified.
+    * @param epsilon tolerance to determine whether to extend the line-of-sight.
+    * @return the edges in order that are in the line-of-sight.
+    */
    default List<? extends HalfEdge3DReadOnly> lineOfSight(Point3DReadOnly observer, double epsilon)
    {
       HalfEdge3DReadOnly currentEdge = lineOfSightStart(observer);
@@ -166,16 +248,14 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Returns the first edge that is visible from the specified point.
+    * Finds and returns the first edge that is visible from the observer.
     * <p>
-    * A face edge is considered visible if its origin and destination can be connected by a straight
-    * line to the specified point without crossing any other point First is defined in the counter
-    * clockwise sense w.r.t to the face normal.
+    * In case the observer located directly above, below, or on the face, this method returns
+    * {@code null}.
     * </p>
     *
-    * @param observer the point in the plane of the face w.r.t. which the visible edge is to be
-    *           computed
-    * @return a read only reference to the first visible half edge
+    * @param observer the coordinates of the observer. Not modified.
+    * @return the first visible half edge.
     */
    default HalfEdge3DReadOnly lineOfSightStart(Point3DReadOnly observer)
    {
@@ -214,6 +294,16 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return null;
    }
 
+   /**
+    * Finds and returns the last edge that is visible from the observer.
+    * <p>
+    * In case the observer located directly above, below, or on the face, this method returns
+    * {@code null}.
+    * </p>
+    *
+    * @param observer the coordinates of the observer. Not modified.
+    * @return the last visible half edge.
+    */
    default HalfEdge3DReadOnly lineOfSightEnd(Point3DReadOnly observer)
    {
       if (isEmpty())
@@ -252,36 +342,40 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Checks if a point is strictly on the same side of the specified edge as the face centroid, i.e.
-    * the left hand side w.r.t. to the edge
+    * Tests whether the i<sup>th</sup> edge of this face is visible from the observer.
     *
-    * @param point the point to be checked
-    * @param index index of the edge w.r.t. which the point is to be evaluated
-    * @return
+    * @param observer the coordinates of the observer. Not modified.
+    * @param index the index &in; [0; {@link #getNumberOfEdges()}[ of the edge to test.
+    * @return {@code true} if the observer can see the edge, {@code false} otherwise.
     */
    default boolean canObserverSeeEdge(Point3DReadOnly observer, int index)
    {
       return canObserverSeeEdge(observer, getEdge(index));
    }
 
-   default boolean canObserverSeeEdge(Point3DReadOnly query, HalfEdge3DReadOnly edge)
+   /**
+    * Tests whether the given edge is visible from the observer.
+    * <p>
+    * It is assumed that the given edge belongs to this face.
+    * </p>
+    *
+    * @param observer the coordinates of the observer. Not modified.
+    * @param edge the edge to test. Not modified.
+    * @return {@code true} if the observer can see the edge, {@code false} otherwise.
+    */
+   default boolean canObserverSeeEdge(Point3DReadOnly observer, HalfEdge3DReadOnly edge)
    {
-      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal(), 0.0);
-   }
-
-   default boolean canObserverSeeEdge(Point3DReadOnly query, HalfEdge3DReadOnly edge, double epsilon)
-   {
-      if (EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(query, edge.getOrigin(), edge.getDestination(), getNormal(), 0.0))
-         return true;
-      return edge.distanceFromSupportLine(query) <= epsilon;
+      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(observer, edge.getOrigin(), edge.getDestination(), getNormal(), 0.0);
    }
 
    /**
-    * Check if the face is visible from the specified point
+    * Tests whether this face is visible from the observer.
+    * <p>
+    * The face is visible from an observer if the face's normal is pointing towards it.
+    * </p>
     *
-    * @param point the point from which the visibility of the face is to be established
-    * @param epsilon the precision of this check
-    * @return {@code true} if the face is visible from the specified point, {@code false} otherwise
+    * @param observer the coordinates of the observer. Not modified.
+    * @return {@code true} if the observer can see this face, {@code false} otherwise.
     */
    default boolean canObserverSeeFace(Point3DReadOnly observer)
    {
@@ -289,36 +383,14 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Returns a dot product of the vector from a point on the face to the specified point and the face
-    * normal A positive value indicates that the face is visible from the point specified
+    * Tests whether the query is within {@code epsilon} of this face's support plane.
     *
-    * @param point the point from which visibility of the face is to be tested
-    * @return dot product result from the computation. Represents the distance of the face plane from
-    *         the point
+    * @param query the coordinates of the query. Not modified.
+    * @param epsilon the tolerance to use for this test.
+    * @return {@code true} if the query is considered to be on this face's support plane, {@code false}
+    *         otherwise.
     */
-   default double signedDistanceToPlane(Point3DReadOnly point)
-   {
-      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
-   }
-
-   default double signedDistanceToEdge(Point3DReadOnly point, int edgeIndex)
-   {
-      return signedDistanceToEdge(point, getEdge(edgeIndex));
-   }
-
-   default double signedDistanceToEdge(Point3DReadOnly point, HalfEdge3DReadOnly edge)
-   {
-      return EuclidPolytopeTools.signedDistanceFromPoint3DToLine3D(point, edge.getOrigin(), edge.getDirection(false), getNormal());
-   }
-
-   /**
-    * Checks if a particular point is in the same spatial plane as this face
-    *
-    * @param pointToCheck the point for which the check is to be performed
-    * @param epsilon the error value that is acceptable (units should be distance)
-    * @return {@code true} if the point is in the same plane as the face. {@code false} otherwise
-    */
-   default boolean isPointInFacePlane(Point3DReadOnly query, double epsilon)
+   default boolean isPointInFaceSupportPlane(Point3DReadOnly query, double epsilon)
    {
       if (getNumberOfEdges() < 3)
          return getEdge(0).distanceSquared(query) <= epsilon * epsilon;
@@ -327,12 +399,11 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Checks if a particular point is an interior point to the face. For a point to be an interior
-    * point it must lie in the plane of the face and be strictly within the face edges
+    * Tests whether the query is located inside this face.
     *
-    * @param vertexToCheck the point on which the check is to be performed
-    * @param epsilon the precision level for this check operation
-    * @return {@code true} if the point is an interior point. {@code false} otherwise
+    * @param query the coordinates of the query. Not modified.
+    * @param epsilon the tolerance to use for this test.
+    * @return {@code true} if the point is an interior point, {@code false} otherwise.
     */
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
@@ -341,9 +412,17 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       else if (!getBoundingBox().isInsideEpsilon(query, epsilon))
          return false;
       else
-         return isPointInFacePlane(query, epsilon) && isPointDirectlyAboveOrBelow(query);
+         return isPointInFaceSupportPlane(query, epsilon) && isPointDirectlyAboveOrBelow(query);
    }
 
+   /**
+    * Tests whether the query is located directly above or below this face, such its projection would
+    * be located inside this face.
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @return {@code true} if the query is located either directly above or below this face,
+    *         {@code false} otherwise.
+    */
    default boolean isPointDirectlyAboveOrBelow(Point3DReadOnly query)
    {
       if (getNumberOfEdges() < 3)
@@ -365,12 +444,10 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Return a reference to an adjacent face if this face is part of a polytope. If not can return a
-    * {@code null} or throw a {@code NullPointerException}
+    * Gets the i<sup>th</sup> neighbor to this face.
     *
-    * @param index the index of the adjacent face that is required. Should be less than
-    *           {@code getNumberOfEdges()}
-    * @return a read only reference to the adjacent face
+    * @param index the neighbor index &in; [0; {@link #getNumberOfEdges()}[.
+    * @return the neighbor face.
     */
    default Face3DReadOnly getNeighbor(int index)
    {
@@ -381,6 +458,12 @@ public interface Face3DReadOnly extends SupportingVertexHolder
          return twinEdge.getFace();
    }
 
+   /**
+    * Finds, if it exists, the common edge between {@code this} and the given {@code neighbor}.
+    * 
+    * @param neighbor the face to find to common edge to. Not modified.
+    * @return the edge common to both faces.
+    */
    default HalfEdge3DReadOnly getCommonEdgeWith(Face3DReadOnly neighbor)
    {
       for (int i = 0; i < getNumberOfEdges(); i++)
@@ -392,21 +475,21 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Returns the edge closed to the point specified
+    * Finds and returns the closest edge to the query.
     *
-    * @param point the point to which the closed edge is required
-    * @return read only reference to the half edge that is closed to the specified point
+    * @param query the coordinates of the query. Not modified.
+    * @return the closest edge to the query.
     */
-   default HalfEdge3DReadOnly getClosestEdge(Point3DReadOnly point)
+   default HalfEdge3DReadOnly getClosestEdge(Point3DReadOnly query)
    {
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly closestEdge = startEdge;
-      double minDistanceSquared = startEdge.distanceSquared(point);
+      double minDistanceSquared = startEdge.distanceSquared(query);
       HalfEdge3DReadOnly currentEdge = startEdge.getNext();
 
       while (currentEdge != startEdge)
       {
-         double distanceSquared = currentEdge.distanceSquared(point);
+         double distanceSquared = currentEdge.distanceSquared(query);
          if (distanceSquared < minDistanceSquared)
          {
             closestEdge = currentEdge;
@@ -418,7 +501,17 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return closestEdge;
    }
 
-   default HalfEdge3DReadOnly getClosestVisibleEdge(Point3DReadOnly point)
+   /**
+    * Finds and returns the closest visible edge to the query.
+    * <p>
+    * If the query is located directly above, below, or on the face, this method returns {@code null}.
+    * </p>
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @return the closest visible edge to the query, or {@code null} if there is no visible edge from
+    *         the query.
+    */
+   default HalfEdge3DReadOnly getClosestVisibleEdge(Point3DReadOnly query)
    {
       if (isEmpty())
          return null;
@@ -430,19 +523,19 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
       HalfEdge3DReadOnly startEdge = getEdge(0);
       HalfEdge3DReadOnly currentEdge = startEdge;
-      boolean edgeVisible = canObserverSeeEdge(point, currentEdge);
+      boolean edgeVisible = canObserverSeeEdge(query, currentEdge);
 
       if (edgeVisible)
       { // Search backward for the line-of-sight start while recording distance to closest edge.
-         distanceSquaredToClosestVisibleEdge = startEdge.distanceSquared(point);
+         distanceSquaredToClosestVisibleEdge = startEdge.distanceSquared(query);
          closestVisibleEdge = startEdge;
 
          do
          {
             currentEdge = currentEdge.getPrevious();
-            if (!canObserverSeeEdge(point, currentEdge))
+            if (!canObserverSeeEdge(query, currentEdge))
                break;
-            double distanceSquared = currentEdge.distanceSquared(point);
+            double distanceSquared = currentEdge.distanceSquared(query);
             if (distanceSquared < distanceSquaredToClosestVisibleEdge)
             {
                closestVisibleEdge = currentEdge;
@@ -457,9 +550,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder
          do
          {
             currentEdge = currentEdge.getNext();
-            if (!canObserverSeeEdge(point, currentEdge))
+            if (!canObserverSeeEdge(query, currentEdge))
                break;
-            double distanceSquared = currentEdge.distanceSquared(point);
+            double distanceSquared = currentEdge.distanceSquared(query);
             if (distanceSquared < distanceSquaredToClosestVisibleEdge)
             {
                closestVisibleEdge = currentEdge;
@@ -474,9 +567,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder
          {
             currentEdge = currentEdge.getNext();
 
-            if (canObserverSeeEdge(point, currentEdge))
+            if (canObserverSeeEdge(query, currentEdge))
             {
-               double distanceSquared = currentEdge.distanceSquared(point);
+               double distanceSquared = currentEdge.distanceSquared(query);
 
                if (distanceSquared < distanceSquaredToClosestVisibleEdge)
                {
@@ -496,26 +589,53 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Returns the shortest distance to the point specified
-    *
-    * @param point the point to which the distance is required
-    * @return the shortest length from the specified point to the face
+    * Computes the minimum distance between a given point and the infinitely large plane supporting
+    * this face.
+    * <p>
+    * The returned value is signed as follows: positive if the query is located above the face's
+    * support plane, negative if it is located below.
+    * </p>
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @return the signed minimum distance between the point and this face's support plane.
     */
-   default double distance(Point3DReadOnly point)
+   default double signedDistanceFromSupportPlane(Point3DReadOnly query)
    {
-      HalfEdge3DReadOnly closestVisibleEdge = getClosestVisibleEdge(point);
+      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(query, getCentroid(), getNormal());
+   }
+
+   /**
+    * Returns the minimum distance between this face and the given point.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @return the minimum distance between the point and this face.
+    */
+   default double distance(Point3DReadOnly query)
+   {
+      HalfEdge3DReadOnly closestVisibleEdge = getClosestVisibleEdge(query);
 
       if (closestVisibleEdge == null)
-         return distanceToPlane(point);
+         return distanceFromSupportPlane(query);
       else
-         return closestVisibleEdge.distance(point);
+         return closestVisibleEdge.distance(query);
    }
 
-   default double distanceToPlane(Point3DReadOnly point)
+   /**
+    * Computes the minimum distance between a given point and the infinitely large plane supporting
+    * this face.
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @return the minimum distance between the point and this face's support plane.
+    */
+   default double distanceFromSupportPlane(Point3DReadOnly query)
    {
-      return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, getCentroid(), getNormal());
+      return EuclidGeometryTools.distanceFromPoint3DToPlane3D(query, getCentroid(), getNormal());
    }
 
+   /**
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @return the projection of the point onto this face or {@code null} if the method failed.
+    */
    default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
    {
       Point3D projection = new Point3D();
@@ -525,6 +645,14 @@ public interface Face3DReadOnly extends SupportingVertexHolder
          return null;
    }
 
+   /**
+    * Computes the orthogonal projection of a point on this face.
+    * 
+    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param projectionToPack point in which the projection of the point onto this face is stored.
+    *           Modified.
+    * @return whether the method succeeded or not.
+    */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
       HalfEdge3DReadOnly closestVisibleEdge = getClosestVisibleEdge(pointToProject);
@@ -535,26 +663,22 @@ public interface Face3DReadOnly extends SupportingVertexHolder
          return closestVisibleEdge.orthogonalProjection(pointToProject, projectionToPack);
    }
 
+   /** {@inheritDoc} */
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
-   {
-      return getSupportingVertex(supportDirection.getX(), supportDirection.getY(), supportDirection.getZ());
-   }
-
-   default Vertex3DReadOnly getSupportingVertex(double supportDirectionX, double supportDirectionY, double supportDirectionZ)
    {
       if (isEmpty())
          return null;
 
       HalfEdge3DReadOnly startEdge = getEdge(0);
       Vertex3DReadOnly supportingVertex = startEdge.getOrigin();
-      double maxDot = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, supportingVertex);
+      double maxDot = supportingVertex.dot(supportDirection);
       HalfEdge3DReadOnly currentEdge = startEdge.getNext();
 
       while (currentEdge != startEdge)
       {
          Vertex3DReadOnly candidate = currentEdge.getOrigin();
-         double currentDot = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, candidate);
+         double currentDot = candidate.dot(supportDirection);
 
          if (currentDot > maxDot)
          {
@@ -568,6 +692,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return supportingVertex;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -577,23 +702,13 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       return true;
    }
 
-   default boolean equals(Face3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      if (other == null)
-         return false;
-      if (getNumberOfEdges() != other.getNumberOfEdges())
-         return false;
-
-      for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
-      {
-         if (!getEdge(edgeIndex).equals(other.getEdge(edgeIndex)))
-            return false;
-      }
-      return true;
-   }
-
+   /**
+    * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
+    * 
+    * @param other the other face to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
+    */
    default boolean epsilonEquals(Face3DReadOnly other, double epsilon)
    {
       if (getNumberOfEdges() != other.getNumberOfEdges())
@@ -608,12 +723,11 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
-    * Geometrically evaluates if the face is within an epsilon vicinity of the specified face. This
-    * check is actually performed on the vertices that the face is composed of. Both spatial and and
-    * relations between vertices are checked
-    *
-    * @return {@code true} is the face is geometrically similar to the specified face, {@code false}
-    *         otherwise
+    * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
+    * 
+    * @param other the other face to compare against this. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.
     */
    default boolean geometricallyEquals(Face3DReadOnly other, double epsilon)
    {
@@ -647,6 +761,29 @@ public interface Face3DReadOnly extends SupportingVertexHolder
       }
       while (thisCurrentEdge != startEdge);
 
+      return true;
+   }
+
+   /**
+    * Tests on a per component basis, if this face 3D is exactly equal to {@code other}.
+    *
+    * @param other the other face 3D to compare against this. Not modified.
+    * @return {@code true} if the two faces are exactly equal component-wise, {@code false} otherwise.
+    */
+   default boolean equals(Face3DReadOnly other)
+   {
+      if (other == this)
+         return true;
+      if (other == null)
+         return false;
+      if (getNumberOfEdges() != other.getNumberOfEdges())
+         return false;
+
+      for (int edgeIndex = 0; edgeIndex < getNumberOfEdges(); edgeIndex++)
+      {
+         if (!getEdge(edgeIndex).equals(other.getEdge(edgeIndex)))
+            return false;
+      }
       return true;
    }
 }

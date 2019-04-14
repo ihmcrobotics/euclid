@@ -1648,7 +1648,7 @@ public class EuclidShapeTestTools
 
                if (EuclidGeometryTools.isPoint3DAbovePlane3D(neighbor.getCentroid(), face.getCentroid(), face.getNormal()))
                {
-                  if (face.signedDistanceToPlane(neighbor.getCentroid()) < convexPolytope3D.getConstructionEpsilon())
+                  if (face.signedDistanceFromSupportPlane(neighbor.getCentroid()) < convexPolytope3D.getConstructionEpsilon())
                      System.out.println("WARNING: " + EuclidCoreTestTools.addPrefixToMessage(messagePrefix, faceIndex
                            + "th face might be concave with respect to a neighor, the " + convexPolytope3D.getFaces().indexOf(neighbor) + "th face."));
                   else

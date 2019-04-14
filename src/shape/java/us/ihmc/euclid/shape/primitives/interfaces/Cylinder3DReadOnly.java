@@ -193,11 +193,9 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Tests separately and on a per component basis if the pose and the size of this cylinder and
-    * {@code other}'s pose and size are equal to an {@code epsilon}.
-    *
-    * @param other the other cylinder which pose and size is to be compared against this cylinder pose
-    *           and size. Not modified.
+    * Tests on a per component basis if this cylinder and {@code other} are equal to an {@code epsilon}.
+    * 
+    * @param other the other cylinder to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
     */

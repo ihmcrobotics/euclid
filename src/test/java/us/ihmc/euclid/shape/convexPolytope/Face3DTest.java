@@ -166,7 +166,7 @@ public class Face3DTest
 
          Point3D observer3D = new Point3D(observer2D);
          assertFalse(face3D.isPointInside(observer3D, 0.0));
-         assertTrue(face3D.isPointInFacePlane(observer3D, EPSILON));
+         assertTrue(face3D.isPointInFaceSupportPlane(observer3D, EPSILON));
 
          Vertex3DReadOnly expectedLineOfSightStartVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[0]);
          Vertex3DReadOnly expectedLineOfSightEndVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[1]);
@@ -257,7 +257,7 @@ public class Face3DTest
          Point3D observer3D = new Point3D(observer2D);
          observer3D.applyTransform(transform);
          assertFalse(face3D.isPointInside(observer3D, 0.0));
-         assertTrue(face3D.isPointInFacePlane(observer3D, EPSILON));
+         assertTrue(face3D.isPointInFaceSupportPlane(observer3D, EPSILON));
 
          Vertex3DReadOnly expectedLineOfSightStartVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[0]);
          Vertex3DReadOnly expectedLineOfSightEndVertex3D = face3D.getVertices().get(expectedLineOfSightIndices[1]);

@@ -102,7 +102,7 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
     */
    public void addAssociatedEdge(HalfEdge3D edge)
    {
-      if (!isAssociatedWithEdge(edge))
+      if (!isEdgeAssociated(edge))
       {
          if (edge.getOrigin() != this)
             throw new IllegalArgumentException("A vertex's associated edges should originate from this same vertex.");

@@ -9,18 +9,26 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
-import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
 {
    /**
-    * Returns the number of vertices that are in the polytope
+    * Gets the number of vertices that compose this polytope.
     *
-    * @return integer number of vertices in the polytope
+    * @return the number of vertices in this polytope.
     */
    default int getNumberOfVertices()
    {
@@ -28,10 +36,12 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Returns the number of edge that are part of the polytope Note: number of edges is half the number
-    * of half edges
+    * Gets the number of edges that compose this polytope.
+    * <p>
+    * Note: the number of edges is half the number of half-edges.
+    * </p>
     *
-    * @return integer number of edges in the face
+    * @return the number of edges in this polytope.
     */
    default int getNumberOfEdges()
    {
@@ -41,15 +51,23 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
          return getNumberOfHalfEdges() / 2;
    }
 
+   /**
+    * Gets the number of half-edges that compose this polytope.
+    * <p>
+    * Note: the number of half-edges is twice the number of edges.
+    * </p>
+    * 
+    * @return the number of half-edges in this polytope.
+    */
    default int getNumberOfHalfEdges()
    {
       return getHalfEdges().size();
    }
 
    /**
-    * Returns the number of face that are constitute the polytope
+    * Gets the number of faces that compose this polytope.
     *
-    * @return integer number of faces
+    * @return the number of faces in this polytope.
     */
    default int getNumberOfFaces()
    {
@@ -57,10 +75,17 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets a specified face of polytope
+    * Gets this polytope's faces.
     *
-    * @param index the index of the polytope. Should be smaller than {@code getNumberOfFaces()}
-    * @return
+    * @return this polytope's faces.
+    */
+   List<? extends Face3DReadOnly> getFaces();
+
+   /**
+    * Gets the i<sup>th</sup> face of this polytope.
+    *
+    * @param index the face index &in; [0; {@link #getNumberOfFaces()}[.
+    * @return the read-only reference to the face.
     */
    default Face3DReadOnly getFace(int index)
    {
@@ -68,48 +93,67 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Get a list of faces that constitute the polytope
+    * Gets this polytope's half-edges.
+    * <p>
+    * Note that the number of half-edges is twice the number of edges in this polytope.
+    * </p>
     *
-    * @return a list of read only references to the faces of the polytope
+    * @return this polytope's half-edges.
     */
-   List<? extends Face3DReadOnly> getFaces();
+   List<? extends HalfEdge3DReadOnly> getHalfEdges();
 
+   /**
+    * Gets the i<sup>th</sup> half-edge of this polytope.
+    *
+    * @param index the half-edge index &in; [0; {@link #getNumberOfHalfEdges()}[.
+    * @return the read-only reference to the half-edge.
+    */
    default HalfEdge3DReadOnly getHalfEdge(int index)
    {
       return getHalfEdges().get(index);
    }
 
    /**
-    * Get a list of half edges that are part of this polytope. List will contain the half edge and its
-    * twin Size of the list will be twice the number of edges returned by {@code getNumberOfEdges()}
+    * Gets this polytope's vertices.
     *
-    * @return a list of read only references to the half edges that make up the faces of this polytope
+    * @return this polytope's vertices.
     */
-   List<? extends HalfEdge3DReadOnly> getHalfEdges();
+   List<? extends Vertex3DReadOnly> getVertices();
 
+   /**
+    * Gets the i<sup>th</sup> vertex of this polytope.
+    *
+    * @param index the vertex index &in; [0; {@link #getNumberOfVertices()}[.
+    * @return the read-only reference to the vertex.
+    */
    default Vertex3DReadOnly getVertex(int index)
    {
       return getVertices().get(index);
    }
 
-   /**
-    * Get a list of vertices that are part of this polytope. List does not contain any repetitions
-    *
-    * @return a list of read only reference to the vertices of the polytope
-    */
-   List<? extends Vertex3DReadOnly> getVertices();
-
+   /** {@inheritDoc} */
    @Override
    BoundingBox3DReadOnly getBoundingBox();
 
+   /** {@inheritDoc} */
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxToPack.set(getBoundingBox());
    }
 
+   /**
+    * Gets the read-only reference to the centroid of this polytope.
+    *
+    * @return this polytope centroid location.
+    */
    Point3DReadOnly getCentroid();
 
+   /**
+    * Gets this polytope volume.
+    * 
+    * @return this polytope volume.
+    */
    double getVolume();
 
    /**
@@ -119,6 +163,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     */
    double getConstructionEpsilon();
 
+   /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
    {
@@ -130,6 +175,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isPointInside(Point3DReadOnly pointToCheck)
    {
@@ -146,12 +192,13 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       {
          Face3DReadOnly face = getFace(faceIndex);
 
-         if (EuclidGeometryTools.isPoint3DAbovePlane3D(pointToCheck, face.getCentroid(), face.getNormal()))
+         if (face.canObserverSeeFace(pointToCheck))
             return false;
       }
       return true;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isPointInside(Point3DReadOnly pointToCheck, double epsilon)
    {
@@ -172,12 +219,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
-   @Override
-   default double distance(Point3DReadOnly point)
-   {
-      return Math.max(0.0, signedDistance(point));
-   }
-
+   /** {@inheritDoc} */
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
@@ -194,7 +236,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       for (faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
       {
          Face3DReadOnly face = getFace(faceIndex);
-         double signedDistanceToPlane = face.signedDistanceToPlane(point);
+         double signedDistanceToPlane = face.signedDistanceFromSupportPlane(point);
 
          if (signedDistanceToPlane < 0.0)
          {
@@ -232,15 +274,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       }
    }
 
-   @Override
-   default Point3DBasics orthogonalProjectionCopy(Point3DReadOnly pointToProject)
-   {
-      if (isEmpty() || isPointInside(pointToProject))
-         return null;
-      else
-         return getClosestFace(pointToProject).orthogonalProjectionCopy(pointToProject);
-   }
-
+   /** {@inheritDoc} */
    @Override
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
@@ -250,6 +284,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
          return getClosestFace(pointToProject).orthogonalProjection(pointToProject, projectionToPack);
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
@@ -309,7 +344,13 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       }
    }
 
-   default Face3DReadOnly getClosestFace(Point3DReadOnly point)
+   /**
+    * Finds and returns the closest face to the query.
+    *
+    * @param query the coordinates of the query. Not modified.
+    * @return the closest face to the query.
+    */
+   default Face3DReadOnly getClosestFace(Point3DReadOnly query)
    {
       if (getNumberOfFaces() == 0)
          return null;
@@ -325,7 +366,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       for (faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
       {
          Face3DReadOnly face = getFace(faceIndex);
-         double signedDistanceToPlane = face.signedDistanceToPlane(point);
+         double signedDistanceToPlane = face.signedDistanceFromSupportPlane(query);
 
          if (signedDistanceToPlane < 0.0)
          {
@@ -345,18 +386,18 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       if (isOutside)
       { // The query is outside.
          closestFace = getFace(faceIndex);
-         double closestFaceDistance = closestFace.distance(point);
+         double closestFaceDistance = closestFace.distance(query);
 
          faceIndex++;
 
          for (; faceIndex < getNumberOfFaces(); faceIndex++)
          {
             Face3DReadOnly face = getFace(faceIndex);
-            if (!face.canObserverSeeFace(point))
+            if (!face.canObserverSeeFace(query))
                continue; // The query is below, cannot be the closest face.
 
             // Now use the more expensive Face3DReadOnly.distance(Point3DReadOnly)
-            double candidateDistance = face.distance(point);
+            double candidateDistance = face.distance(query);
 
             if (candidateDistance < closestFaceDistance)
             {
@@ -369,33 +410,21 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return closestFace;
    }
 
-   /**
-    * Returns a reference to the polytope vertex that is further along the direction indicated by the
-    * specified vector
-    *
-    * @param supportingVertexDirection the direction in which the search for said vertex is to be
-    *           performed
-    * @return a read only reference to the required vertex
-    */
+   /** {@inheritDoc} */
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
-   {
-      return getSupportingVertex(supportDirection.getX(), supportDirection.getY(), supportDirection.getZ());
-   }
-
-   default Vertex3DReadOnly getSupportingVertex(double supportDirectionX, double supportDirectionY, double supportDirectionZ)
    {
       if (isEmpty())
          return null;
       if (getNumberOfFaces() == 1)
-         return getFace(0).getSupportingVertex(supportDirectionX, supportDirectionY, supportDirectionZ);
+         return getFace(0).getSupportingVertex(supportDirection);
 
       Vertex3DReadOnly bestVertex = getFace(0).getEdge(0).getOrigin();
 
       if (getNumberOfVertices() == 1)
          return bestVertex;
 
-      double maxDotProduct = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, bestVertex);
+      double maxDotProduct = bestVertex.dot(supportDirection);
       Vertex3DReadOnly vertexCandidate = bestVertex;
 
       while (true)
@@ -404,7 +433,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
          {
             Vertex3DReadOnly candidate = currentEdge.getDestination();
 
-            double dotProduct = TupleTools.dot(supportDirectionX, supportDirectionY, supportDirectionZ, candidate);
+            double dotProduct = candidate.dot(supportDirection);
 
             if (dotProduct > maxDotProduct)
             {
@@ -420,6 +449,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       }
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -430,41 +460,31 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Check is the polytope is empty (contains no vertices / edges)
+    * Tests if this polytope is empty, i.e. it has no vertices.
     *
-    * @return {@code true} if the polytope has faces that contain edges, otherwise {@code false}
+    * @return {@code true} if the polytope has has at least one vertex, {@code false} otherwise.
     */
    default boolean isEmpty()
    {
       return getNumberOfVertices() == 0;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isConvex()
    {
       return true;
    }
 
-   default boolean equals(ConvexPolytope3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-
-      if (other == null)
-         return false;
-
-      if (getNumberOfFaces() != other.getNumberOfFaces())
-         return false;
-
-      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
-      {
-         if (!getFace(faceIndex).equals(other.getFace(faceIndex)))
-            return false;
-      }
-
-      return true;
-   }
-
+   /**
+    * Tests on a per component basis if this convex polytope and {@code other} are equal to an
+    * {@code epsilon}.
+    * 
+    * @param other the other convex polytope to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
+    *         otherwise.
+    */
    default boolean epsilonEquals(ConvexPolytope3DReadOnly other, double epsilon)
    {
       if (other == null)
@@ -482,6 +502,15 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /**
+    * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
+    * similar.
+    * 
+    * @param other the other convex polytope to compare against this. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
+    *         otherwise.
+    */
    default boolean geometricallyEquals(ConvexPolytope3DReadOnly other, double epsilon)
    {
       if (other == null)
@@ -507,5 +536,32 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       }
 
       return thisFacesStack.isEmpty();
+   }
+
+   /**
+    * Tests on a per component basis, if this convex polytope 3D is exactly equal to {@code other}.
+    *
+    * @param other the other convex polytope 3D to compare against this. Not modified.
+    * @return {@code true} if the two convex polytopes are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(ConvexPolytope3DReadOnly other)
+   {
+      if (other == this)
+         return true;
+
+      if (other == null)
+         return false;
+
+      if (getNumberOfFaces() != other.getNumberOfFaces())
+         return false;
+
+      for (int faceIndex = 0; faceIndex < getNumberOfFaces(); faceIndex++)
+      {
+         if (!getFace(faceIndex).equals(other.getFace(faceIndex)))
+            return false;
+      }
+
+      return true;
    }
 }
