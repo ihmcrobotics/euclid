@@ -10,6 +10,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for a sphere 3D.
+ * <p>
+ * A sphere 3D is represented by its position and radius.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Sphere3DReadOnly extends Shape3DReadOnly
 {
    /**
@@ -20,9 +28,9 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    double getRadius();
 
    /**
-    * Gets the read-only reference of the position of this shape.
+    * Gets the read-only reference of the position of this sphere.
     *
-    * @return the position of this shape.
+    * @return the position of this sphere.
     */
    Point3DReadOnly getPosition();
 
@@ -33,6 +41,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       return getPosition().containsNaN() || Double.isNaN(getRadius());
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
@@ -40,6 +49,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
                                                                normalAtClosestPointToPack) <= 0.0;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -47,12 +57,14 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
       return EuclidShapeTools.signedDistanceBetweenPoint3DAndSphere3D(point, getPosition(), getRadius());
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
@@ -124,6 +136,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       return numberOfIntersections;
    }
 
+   /** {@inheritDoc} */
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
@@ -136,6 +149,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isConvex()
    {

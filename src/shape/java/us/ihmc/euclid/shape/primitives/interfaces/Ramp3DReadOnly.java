@@ -11,16 +11,42 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Read-only interface for a ramp 3D.
+ * <p>
+ * A ramp represents a 3D shape with a triangular section in the XZ-plane. Shape description:
+ * <ul>
+ * <li>The slope face starts from {@code x=0.0}, {@code z=0.0} to end at {@code x=size.getX()},
+ * {@code z=size.getZ()}.
+ * <li>The bottom face is horizontal (XY-plane) at {@code z=0.0}.
+ * <li>The rear face is vertical (YZ-plane) at {@code x=size.getX()}.
+ * <li>The left face is vertical (XZ-plane) at {@code y=-size.getY()/2.0}.
+ * <li>The right face is vertical (XZ-plane) at {@code y=size.getY()/2.0}.
+ * </ul>
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Ramp3DReadOnly extends Shape3DReadOnly
 {
+   /**
+    * Get the read-only reference to the size along the three local axes of this ramp.
+    *
+    * @return the size of this ramp.
+    */
    Vector3DReadOnly getSize();
 
+   /**
+    * Gets the read-only reference to the pose of this ramp.
+    *
+    * @return the pose of this ramp.
+    */
    Shape3DPoseReadOnly getPose();
 
    /**
-    * Gets the read-only reference to the orientation of this shape.
+    * Gets the read-only reference to the orientation of this ramp.
     *
-    * @return the orientation of this shape.
+    * @return the orientation of this ramp.
     */
    default RotationMatrixReadOnly getOrientation()
    {
@@ -28,43 +54,22 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets the read-only reference of the position of this shape.
+    * Gets the read-only reference of the position of this ramp.
     *
-    * @return the position of this shape.
+    * @return the position of this ramp.
     */
    default Point3DReadOnly getPosition()
    {
       return getPose().getShapePosition();
    }
 
+   /**
+    * Gets the intermediate variable supplier that can be used for performing operations in either a
+    * garbage-free of thread-safe manner.
+    *
+    * @return the intermediate variable supplier.
+    */
    IntermediateVariableSupplier getIntermediateVariableSupplier();
-
-   /**
-    * Gets the length of this ramp's slope part.
-    * <p>
-    * Note that this is different than {@link #getSizeX()}. The returned value is equal to:
-    * &radic;(this.length<sup>2</sup> + this.height<sup>2</sup>)
-    * </p>
-    *
-    * @return the length of the slope.
-    */
-   default double getRampLength()
-   {
-      return EuclidShapeTools.computeRamp3DLength(getSize());
-   }
-
-   /**
-    * Gets the angle formed by the slope and the bottom face.
-    * <p>
-    * The angle is positive and in [0, <i>pi</i>].
-    * </p>
-    *
-    * @return the slope angle.
-    */
-   default double getRampIncline()
-   {
-      return EuclidShapeTools.computeRamp3DIncline(getSize());
-   }
 
    /** {@inheritDoc} */
    @Override
@@ -73,6 +78,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return getPose().containsNaN() || getSize().containsNaN();
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
@@ -90,6 +96,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return distance <= 0.0;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
@@ -105,6 +112,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
    @Override
    default double signedDistance(Point3DReadOnly point)
    {
@@ -118,6 +126,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return signedDistance;
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isPointInside(Point3DReadOnly query, double epsilon)
    {
@@ -151,7 +160,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    /**
     * Gets the size of this ramp along the x-axis.
     *
-    * @return this ramp's length.
+    * @return this ramp size along the x-axis.
     */
    default double getSizeX()
    {
@@ -161,7 +170,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    /**
     * Gets the size of this ramp along the y-axis.
     *
-    * @return this ramp's width.
+    * @return this ramp size along the x-axis.
     */
    default double getSizeY()
    {
@@ -171,13 +180,48 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    /**
     * Gets the size of this ramp along the z-axis.
     *
-    * @return this ramp's height.
+    * @return this ramp size along the x-axis.
     */
    default double getSizeZ()
    {
       return getSize().getZ();
    }
 
+   /**
+    * Gets the length of this ramp's slope part.
+    * <p>
+    * Note that this is different than {@link #getSizeX()}. The returned value is equal to:
+    * &radic;(this.length<sup>2</sup> + this.height<sup>2</sup>)
+    * </p>
+    *
+    * @return the length of the slope.
+    */
+   default double getRampLength()
+   {
+      return EuclidShapeTools.computeRamp3DLength(getSize());
+   }
+
+   /**
+    * Gets the angle formed by the slope and the bottom face.
+    * <p>
+    * The angle is positive and in [0, <i>pi</i>].
+    * </p>
+    *
+    * @return the slope angle.
+    */
+   default double getRampIncline()
+   {
+      return EuclidShapeTools.computeRamp3DIncline(getSize());
+   }
+
+   /**
+    * Computes and returns the surface normal of the slope face of this ramp.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    * 
+    * @return the surface normal of the slope.
+    */
    default Vector3D getRampSurfaceNormal()
    {
       Vector3D surfaceNormal = new Vector3D();
@@ -196,6 +240,14 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       transformToWorld(surfaceNormalToPack);
    }
 
+   /**
+    * Gets the 6 vertices, expressed in world, of this ramp as an array.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    *
+    * @return an array of 6 {@code Point3D} with this ramp vertices.
+    */
    default Point3DBasics[] getVertices()
    {
       Point3D[] vertices = new Point3D[6];
@@ -204,6 +256,13 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return vertices;
    }
 
+   /**
+    * Pack the coordinates in world of the 6 vertices of this ramp in the given array.
+    *
+    * @param verticesToPack the array in which the coordinates are stored. Modified.
+    * @throws IllegalArgumentException if the length of the given array is different than 6.
+    * @throws NullPointerException if any of the 6 first elements of the given array is {@code null}.
+    */
    default void getVertices(Point3DBasics[] verticesToPack)
    {
       if (verticesToPack.length < 6)
@@ -213,6 +272,16 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
          getVertex(vertexIndex, verticesToPack[vertexIndex]);
    }
 
+   /**
+    * Packs the world coordinates of one of this ramp vertices.
+    * <p>
+    * WARNING: The default implementation of this method generates garbage.
+    * </p>
+    *
+    * @param vertexIndex the index in [0, 5] of the vertex to pack.
+    * @return the coordinates of the vertex.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 5].
+    */
    default Point3DBasics getVertex(int vertexIndex)
    {
       Point3D vertex = new Point3D();
@@ -220,6 +289,13 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return vertex;
    }
 
+   /**
+    * Packs the world coordinates of one of this ramp vertices.
+    *
+    * @param vertexIndex the index in [0, 5] of the vertex to pack.
+    * @param vertexToPack point in which the coordinates of the vertex are stored. Modified.
+    * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 5].
+    */
    default void getVertex(int vertexIndex, Point3DBasics vertexToPack)
    {
       if (vertexIndex < 0 || vertexIndex >= 6)
@@ -231,6 +307,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       transformToWorld(vertexToPack);
    }
 
+   /** {@inheritDoc} */
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
@@ -246,6 +323,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       getIntermediateVariableSupplier().releasePoint3D(vertex);
    }
 
+   /** {@inheritDoc} */
    @Override
    default boolean isConvex()
    {

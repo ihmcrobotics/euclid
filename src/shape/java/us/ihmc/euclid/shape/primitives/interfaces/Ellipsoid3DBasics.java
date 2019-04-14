@@ -10,18 +10,39 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
+/**
+ * Write and read interface for ellipsoid 3D.
+ * <p>
+ * A ellipsoid 3D is represented by its radii, the position of its center, and its orientation.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
 {
+   /**
+    * Get the reference to the radii along the three local axes of this ellipsoid.
+    *
+    * @return the size of this ellipsoid.
+    */
    @Override
    Vector3DBasics getRadii();
 
+   /**
+    * Gets the reference to the pose of this ellipsoid.
+    * <p>
+    * The position part describes the coordinates of the center.
+    * </p>
+    *
+    * @return the pose of this ellipsoid.
+    */
    @Override
    Shape3DPoseBasics getPose();
 
    /**
-    * Gets the reference to the orientation of this shape.
+    * Gets the reference to the orientation of this ellipsoid.
     *
-    * @return the orientation of this shape.
+    * @return the orientation of this ellipsoid.
     */
    @Override
    default RotationMatrix getOrientation()
@@ -30,9 +51,9 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    }
 
    /**
-    * Gets the reference of the position of this shape.
+    * Gets the reference of the position of this ellipsoid.
     *
-    * @return the position of this shape.
+    * @return the position of this ellipsoid.
     */
    @Override
    default Point3DBasics getPosition()
@@ -40,8 +61,14 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
       return getPose().getShapePosition();
    }
 
+   /**
+    * Changes the variable supplier to use with this shape.
+    * 
+    * @param newSupplier the new variable supplier.
+    */
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
 
+   /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
    {
@@ -75,6 +102,16 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
       getRadii().set(other.getRadii());
    }
 
+   /**
+    * Sets this ellipsoid properties.
+    *
+    * @param position the position of this ellipsoid center. Not modified.
+    * @param orientation the orientation of this ellipsoid. Not modified.
+    * @param radiusX radius of the ellipsoid along the x-axis.
+    * @param radiusY radius of the ellipsoid along the y-axis.
+    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @throws IllegalArgumentException if any of the three radii is negative.
+    */
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
    {
       getPose().set(orientation, position);
@@ -111,6 +148,13 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
       setRadii(radiusX, radiusY, radiusZ);
    }
 
+   /**
+    * Sets the pose and radii of this ellipsoid.
+    *
+    * @param pose the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of this ellipsoid along the x, y, and z axes in order. Not modified.
+    * @throws IllegalArgumentException if any of the three radii is negative.
+    */
    default void set(RigidBodyTransformReadOnly pose, double[] radii)
    {
       getPose().set(pose);

@@ -10,18 +10,44 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
+/**
+ * Write and read interface for a ramp 3D.
+ * <p>
+ * A ramp represents a 3D shape with a triangular section in the XZ-plane. Shape description:
+ * <ul>
+ * <li>The slope face starts from {@code x=0.0}, {@code z=0.0} to end at {@code x=size.getX()},
+ * {@code z=size.getZ()}.
+ * <li>The bottom face is horizontal (XY-plane) at {@code z=0.0}.
+ * <li>The rear face is vertical (YZ-plane) at {@code x=size.getX()}.
+ * <li>The left face is vertical (XZ-plane) at {@code y=-size.getY()/2.0}.
+ * <li>The right face is vertical (XZ-plane) at {@code y=size.getY()/2.0}.
+ * </ul>
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
 {
+   /**
+    * Get the reference to the size along the three local axes of this ramp.
+    *
+    * @return the size of this ramp.
+    */
    @Override
    Vector3DBasics getSize();
 
+   /**
+    * Gets the reference to the pose of this ramp.
+    *
+    * @return the pose of this ramp.
+    */
    @Override
    Shape3DPoseBasics getPose();
 
    /**
-    * Gets the reference to the orientation of this shape.
+    * Gets the reference to the orientation of this ramp.
     *
-    * @return the orientation of this shape.
+    * @return the orientation of this ramp.
     */
    @Override
    default RotationMatrix getOrientation()
@@ -30,9 +56,9 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    }
 
    /**
-    * Gets the reference of the position of this shape.
+    * Gets the reference of the position of this ramp.
     *
-    * @return the position of this shape.
+    * @return the position of this ramp.
     */
    @Override
    default Point3DBasics getPosition()
@@ -40,8 +66,14 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
       return getPose().getShapePosition();
    }
 
+   /**
+    * Changes the variable supplier to use with this shape.
+    * 
+    * @param newSupplier the new variable supplier.
+    */
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
 
+   /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
    {
@@ -119,24 +151,59 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
       getSize().set(size);
    }
 
+   /**
+    * Sets this ramp properties.
+    * 
+    * @param position the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param sizeX the size along the x-axis.
+    * @param sizeY the size along the y-axis.
+    * @param sizeZ the size along the z-axis.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
+    */
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(orientation, position);
       setSize(sizeX, sizeY, sizeZ);
    }
 
+   /**
+    * Sets this ramp properties.
+    * 
+    * @param pose the pose of this ramp. Not modified.
+    * @param sizeX the size along the x-axis.
+    * @param sizeY the size along the y-axis.
+    * @param sizeZ the size along the z-axis.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
+    */
    default void set(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(pose);
       setSize(sizeX, sizeY, sizeZ);
    }
 
+   /**
+    * Sets this ramp properties.
+    * 
+    * @param pose the pose of this ramp. Not modified.
+    * @param sizeX the size along the x-axis.
+    * @param sizeY the size along the y-axis.
+    * @param sizeZ the size along the z-axis.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
+    */
    default void set(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(pose);
       setSize(sizeX, sizeY, sizeZ);
    }
 
+   /**
+    * Sets this ramp properties.
+    * 
+    * @param pose the pose of this ramp. Not modified.
+    * @param size the size of this ramp along the x, y, and axes in order. Not modified.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
+    */
    default void set(RigidBodyTransformReadOnly pose, double[] size)
    {
       getPose().set(pose);

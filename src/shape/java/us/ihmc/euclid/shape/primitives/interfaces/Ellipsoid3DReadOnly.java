@@ -25,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
 {
    /**
-    * Get the read-only reference to the radii about the three local axes of this ellipsoid.
+    * Get the read-only reference to the radii along the three local axes of this ellipsoid.
     *
     * @return the size of this ellipsoid.
     */

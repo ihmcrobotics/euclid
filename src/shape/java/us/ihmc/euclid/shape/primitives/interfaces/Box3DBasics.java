@@ -10,7 +10,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
- * Write and read interface for box 3D.
+ * Write and read interface for a box 3D.
  * <p>
  * A box 3D is represented by its size, the position of its center, and its orientation.
  * </p>
@@ -19,11 +19,22 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  */
 public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 {
-   /** {@inheritDoc} */
+   /**
+    * Get the reference to the size along the three local axes of this box.
+    *
+    * @return the size of this box.
+    */
    @Override
    Vector3DBasics getSize();
 
-   /** {@inheritDoc} */
+   /**
+    * Gets the reference to the pose of this box.
+    * <p>
+    * The position part describes the coordinates of the center.
+    * </p>
+    *
+    * @return the pose of this box.
+    */
    @Override
    Shape3DPoseBasics getPose();
 
@@ -98,6 +109,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
     * @param sizeZ the size along the z-axis.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
@@ -112,6 +124,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
     * @param sizeZ the size along the z-axis.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
    default void set(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
@@ -126,6 +139,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
     * @param sizeZ the size along the z-axis.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
    default void set(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
@@ -138,6 +152,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
     * 
     * @param pose the pose of this box. Not modified.
     * @param size the size of this box along the x, y, and axes in order. Not modified.
+    * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
    default void set(RigidBodyTransformReadOnly pose, double[] size)
    {

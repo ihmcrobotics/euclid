@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * Read-only interface for box 3D.
+ * Read-only interface for a box 3D.
  * <p>
  * A box 3D is represented by its size, the position of its center, and its orientation.
  * </p>

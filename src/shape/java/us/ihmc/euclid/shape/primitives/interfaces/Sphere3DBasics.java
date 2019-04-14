@@ -4,8 +4,22 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Write and ready interface for a sphere 3D.
+ * <p>
+ * A sphere 3D is represented by its position and radius.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
 {
+   /**
+    * Sets this sphere radius.
+    * 
+    * @param radius the new radius for this sphere.
+    * @throws IllegalArgumentException if {@code radius < 0.0}.
+    */
    void setRadius(double radius);
 
    /**
@@ -16,6 +30,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
    @Override
    Point3DBasics getPosition();
 
+   /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
    {
@@ -49,12 +64,28 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
       setRadius(other.getRadius());
    }
 
+   /**
+    * Sets this sphere properties.
+    * 
+    * @param centerX the x-coordinate of the center.
+    * @param centerY the y-coordinate of the center.
+    * @param centerZ the z-coordinate of the center.
+    * @param radius the radius for this sphere.
+    * @throws IllegalArgumentException if {@code radius < 0.0}.
+    */
    default void set(double centerX, double centerY, double centerZ, double radius)
    {
       getPosition().set(centerX, centerY, centerZ);
       setRadius(radius);
    }
 
+   /**
+    * Sets this sphere properties.
+    * 
+    * @param center the position of this sphere center. Not modified.
+    * @param radius the radius for this sphere.
+    * @throws IllegalArgumentException if {@code radius < 0.0}.
+    */
    default void set(Point3DReadOnly center, double radius)
    {
       getPosition().set(center);
