@@ -395,7 +395,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       if (vertices.size() > 3)
       {
          EuclidPolytopeConstructionTools.computeCovariance3D(vertices, verticesCovariance);
-         EuclidPolytopeConstructionTools.updateNormal(eigenDecomposition, verticesCovariance, normal);
+         EuclidPolytopeConstructionTools.updateFace3DNormal(eigenDecomposition, verticesCovariance, normal);
       }
       else if (vertices.size() == 3)
       {

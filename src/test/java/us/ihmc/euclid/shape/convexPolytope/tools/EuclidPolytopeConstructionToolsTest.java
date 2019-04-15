@@ -54,7 +54,7 @@ public class EuclidPolytopeConstructionToolsTest
          EuclidPolytopeConstructionTools.computeCovariance3D(points, null, actualCovariance);
 
          Vector3D actualNormal = new Vector3D(1.0, 1.0, 1.0);
-         EuclidPolytopeConstructionTools.updateNormal(actualCovariance, actualNormal);
+         EuclidPolytopeConstructionTools.updateFace3DNormal(actualCovariance, actualNormal);
 
          Vector3D expectedNormal = new Vector3D(Axis.Z);
 
@@ -62,7 +62,7 @@ public class EuclidPolytopeConstructionToolsTest
          assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 0.30), errorMessage);
 
          actualNormal = new Vector3D(-1.0, -1.0, -1.0);
-         EuclidPolytopeConstructionTools.updateNormal(DecompositionFactory.eig(3, true, true), actualCovariance, actualNormal);
+         EuclidPolytopeConstructionTools.updateFace3DNormal(DecompositionFactory.eig(3, true, true), actualCovariance, actualNormal);
 
          expectedNormal.negate();
 
@@ -86,7 +86,7 @@ public class EuclidPolytopeConstructionToolsTest
             DenseMatrix64F actualCovariance = new DenseMatrix64F(3, 3);
             Vector3D actualNormal = new Vector3D();
             EuclidPolytopeConstructionTools.computeCovariance3D(vertices.subList(0, j), null, actualCovariance);
-            EuclidPolytopeConstructionTools.updateNormal(actualCovariance, actualNormal);
+            EuclidPolytopeConstructionTools.updateFace3DNormal(actualCovariance, actualNormal);
 
             String errorMessage = "Iteration" + i + ", nPoints: " + j + ", angle: " + expectedNormal.angle(actualNormal);
             assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5), errorMessage);

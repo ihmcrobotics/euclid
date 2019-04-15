@@ -13,6 +13,7 @@ import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
@@ -29,8 +30,16 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class a set of tools for building a {@link ConvexPolytope3D}.
+ * 
+ * @author Sylvain Bertrand
+ */
 public class EuclidPolytopeConstructionTools
 {
+   /**
+    * Default value for the construction epsilon of a {@link ConvexPolytope3D}.
+    */
    public static final double DEFAULT_CONSTRUCTION_EPSILON = 1.0e-10;
 
    private EuclidPolytopeConstructionTools()
@@ -45,6 +54,9 @@ public class EuclidPolytopeConstructionTools
     * the new vertex;
     * <li>otherwise, a new face is created from the vertex and the silhouette edge.
     * </ul>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     * 
     * @param vertex faces are modified and/or created to include this vertex.
     * @param silhouetteEdges the contour visible from the vertex. Each edge is expected to be
@@ -408,7 +420,7 @@ public class EuclidPolytopeConstructionTools
     * @return the new face.
     */
    public static Face3D newFace3DFromVertexAndTwinEdge(Vertex3D vertex, HalfEdge3D twinEdge, double epsilon)
-   { // TODO the epsilon should probably be set to zero here as otherwise we would probably not create the face.
+   {
       Vertex3D v1 = twinEdge.getDestination();
       Vertex3D v2 = twinEdge.getOrigin();
       Vertex3D v3 = vertex;
@@ -452,19 +464,57 @@ public class EuclidPolytopeConstructionTools
       return face;
    }
 
+   /**
+    * Computes the average and normal from the given {@code vertices} assuming they lying on the same
+    * plane.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @param vertices the face vertices. Not modified.
+    * @param averageToPack point in which the average from the vertices is stored. Modified. Can be
+    *           {@code null}.
+    * @param normalToUpdate the vector used to store the normal. The normal is updated such that
+    *           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
+    * @return whether the method succeeded or not.
+    */
    public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
    {
       DenseMatrix64F covarianceMatrix = new DenseMatrix64F(3, 3);
       computeCovariance3D(vertices, averageToPack, covarianceMatrix);
-      return updateNormal(covarianceMatrix, normalToUpdate);
+      return updateFace3DNormal(covarianceMatrix, normalToUpdate);
    }
 
-   public static boolean updateNormal(DenseMatrix64F covarianceMatrix, Vector3DBasics normalToUpdate)
+   /**
+    * Computes the face normal from its covariance matrix.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @param covarianceMatrix the covariance matrix computed from the face vertices. Not modified.
+    * @param normalToUpdate the vector used to store the normal. The normal is updated such that
+    *           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
+    * @return whether the method succeeded or not.
+    */
+   public static boolean updateFace3DNormal(DenseMatrix64F covarianceMatrix, Vector3DBasics normalToUpdate)
    {
-      return updateNormal(DecompositionFactory.eig(3, true, true), covarianceMatrix, normalToUpdate);
+      return updateFace3DNormal(DecompositionFactory.eig(3, true, true), covarianceMatrix, normalToUpdate);
    }
 
-   public static boolean updateNormal(EigenDecomposition<DenseMatrix64F> eigenDecomposition, DenseMatrix64F covarianceMatrix, Vector3DBasics normalToUpdate)
+   /**
+    * Computes the face normal from its covariance matrix.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @param eigenDecomposition the solver to use to computing the eigen vectors.
+    * @param covarianceMatrix the covariance matrix computed from the face vertices. Not modified.
+    * @param normalToUpdate the vector used to store the normal. The normal is updated such that
+    *           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
+    * @return whether the method succeeded or not.
+    */
+   public static boolean updateFace3DNormal(EigenDecomposition<DenseMatrix64F> eigenDecomposition, DenseMatrix64F covarianceMatrix,
+                                            Vector3DBasics normalToUpdate)
    {
       if (!eigenDecomposition.decompose(covarianceMatrix))
          return false;
@@ -512,11 +562,25 @@ public class EuclidPolytopeConstructionTools
       return true;
    }
 
+   /**
+    * Computes the covariance matrix from a list of 3D tuples.
+    * 
+    * @param input the list of tuples to use for computing the covariance matrix. Not modified.
+    * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
+    */
    public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, DenseMatrix64F covarianceToPack)
    {
       computeCovariance3D(input, null, covarianceToPack);
    }
 
+   /**
+    * Computes the covariance matrix from a list of 3D tuples.
+    * 
+    * @param input the list of tuples to use for computing the covariance matrix. Not modified.
+    * @param averageToPack tuple in which the average from the input is stored. Modified. Can be
+    *           {@code null}.
+    * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
+    */
    public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, DenseMatrix64F covarianceToPack)
    {
       double meanX = 0.0;
@@ -573,6 +637,17 @@ public class EuclidPolytopeConstructionTools
       covarianceToPack.set(8, covZZ);
    }
 
+   /**
+    * Computes the area and centroid of a 3D convex polygon defined by its vertices and normal.
+    * 
+    * @param convexPolygon3D the polygon vertices. Not modified.
+    * @param normal the normal of the plane on which the vertices are lying. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise ordered.
+    * @param centroidToPack point used to store the coordinates of the polygon centroid. Modified. Can
+    *           be {@code null}.
+    * @return the area of the polygon.
+    */
    public static double computeConvexPolygon3DArea(List<? extends Point3DReadOnly> convexPolygon3D, Vector3DReadOnly normal, int numberOfVertices,
                                                    boolean clockwiseOrdered, Point3DBasics centroidToPack)
    {
@@ -680,6 +755,13 @@ public class EuclidPolytopeConstructionTools
       }
    }
 
+   /**
+    * Computes the volume and centroid of a convex polytope.
+    * 
+    * @param convexPolytope3D the convex polytope to evaluate. Not modified.
+    * @param centroidToPack the point used to store the coordinates of the centroid. Modified.
+    * @return the volume of the convex polytope.
+    */
    public static double computeConvexPolytope3DVolume(ConvexPolytope3DReadOnly convexPolytope3D, Point3DBasics centroidToPack)
    {
       centroidToPack.setToZero();
