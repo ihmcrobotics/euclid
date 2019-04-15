@@ -70,7 +70,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(box3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(distance);
+         expected.setSignedDistance(distance);
          expected.getPointOnA().set(pointShape3D);
          expected.getNormalOnA().setAndNegate(shiftDirection);
          expected.getPointOnB().set(pointOnAFace);
@@ -107,7 +107,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(box3D);
          expected.setShapesAreColliding(true);
-         expected.setDistance(-closestFacePlane.distance(pointInside));
+         expected.setSignedDistance(-closestFacePlane.distance(pointInside));
          expected.getPointOnA().set(pointInside);
          expected.getNormalOnA().setAndNegate(closestFacePlane.getNormal());
          expected.getPointOnB().set(pointOnFace);
@@ -153,7 +153,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(box3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(pointOutside.distance(closestVertex));
+         expected.setSignedDistance(pointOutside.distance(closestVertex));
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(closestVertex);
@@ -200,7 +200,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(box3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(pointOutside.distance(pointOnEdge));
+         expected.setSignedDistance(pointOutside.distance(pointOnEdge));
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnEdge);
@@ -249,7 +249,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(capsule3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(distance);
+         expected.setSignedDistance(distance);
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -285,7 +285,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(capsule3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(distance);
+         expected.setSignedDistance(distance);
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -328,7 +328,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(capsule3D);
          expected.setShapesAreColliding(true);
-         expected.setDistance(-distance);
+         expected.setSignedDistance(-distance);
          expected.getPointOnA().set(pointInside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -364,7 +364,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(capsule3D);
          expected.setShapesAreColliding(true);
-         expected.setDistance(-distance);
+         expected.setSignedDistance(-distance);
          expected.getPointOnA().set(pointInside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -412,7 +412,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(cylinder3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(distance);
+         expected.setSignedDistance(distance);
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -447,7 +447,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(cylinder3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(distance);
+         expected.setSignedDistance(distance);
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -490,7 +490,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(cylinder3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(distance);
+         expected.setSignedDistance(distance);
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnEdge);
@@ -563,7 +563,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(cylinder3D);
          expected.setShapesAreColliding(true);
-         expected.setDistance(-distance);
+         expected.setSignedDistance(-distance);
          expected.getPointOnA().set(pointInside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -622,7 +622,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(cylinder3D);
          expected.setShapesAreColliding(true);
-         expected.setDistance(-distance);
+         expected.setSignedDistance(-distance);
          expected.getPointOnA().set(pointInside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -664,7 +664,7 @@ public class EuclidShapeCollisionToolsTest
             expected.setShapeA(pointShape3D);
             expected.setShapeB(ellipsoid3D);
             expected.setShapesAreColliding(false);
-            expected.setDistance(distance);
+            expected.setSignedDistance(distance);
             expected.getPointOnA().set(pointOutside);
             expected.getNormalOnA().setAndNegate(normal);
             expected.getPointOnB().set(pointOnSurface);
@@ -689,7 +689,7 @@ public class EuclidShapeCollisionToolsTest
             expected.setShapeA(pointShape3D);
             expected.setShapeB(ellipsoid3D);
             expected.setShapesAreColliding(true);
-            expected.setDistance(EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointInsideLocal, expected.getPointOnB()));
+            expected.setSignedDistance(EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointInsideLocal, expected.getPointOnB()));
             ellipsoid3D.transformToWorld(expected.getPointOnB());
             expected.getPointOnA().set(pointInsideWorld);
             expected.getNormalOnB().sub(expected.getPointOnB(), pointInsideWorld);
@@ -738,7 +738,7 @@ public class EuclidShapeCollisionToolsTest
             expected.setShapeA(pointShape3D);
             expected.setShapeB(ellipsoid3D);
             expected.setShapesAreColliding(false);
-            expected.setDistance(EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointOutsideLocal, expected.getPointOnB()));
+            expected.setSignedDistance(EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointOutsideLocal, expected.getPointOnB()));
             ellipsoid3D.transformToWorld(expected.getPointOnB());
             expected.getPointOnA().set(pointOutside);
             expected.getNormalOnB().sub(expected.getPointOnA(), expected.getPointOnB());
@@ -760,7 +760,7 @@ public class EuclidShapeCollisionToolsTest
             expected.setShapeA(pointShape3D);
             expected.setShapeB(ellipsoid3D);
             expected.setShapesAreColliding(true);
-            expected.setDistance(EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointInsideLocal, expected.getPointOnB()));
+            expected.setSignedDistance(EuclidEllipsoid3DTools.distancePoint3DEllipsoid3D(ellipsoid3D.getRadii(), pointInsideLocal, expected.getPointOnB()));
             ellipsoid3D.transformToWorld(expected.getPointOnB());
             expected.getPointOnA().set(pointInside);
             expected.getNormalOnB().sub(expected.getPointOnB(), expected.getPointOnA());
@@ -1207,7 +1207,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(ramp3D);
          expected.setShapesAreColliding(true);
-         expected.setDistance(-depth);
+         expected.setSignedDistance(-depth);
          expected.getPointOnA().set(pointInside);
          expected.getNormalOnA().setAndNegate(closestFace.getNormal());
          expected.getPointOnB().set(pointOnSurface);
@@ -1233,7 +1233,7 @@ public class EuclidShapeCollisionToolsTest
       expected.setShapeA(pointShape3D);
       expected.setShapeB(ramp3D);
       expected.setShapesAreColliding(false);
-      expected.setDistance(distance);
+      expected.setSignedDistance(distance);
       expected.getPointOnA().set(pointOutside);
       expected.getNormalOnA().setAndNegate(normal);
       expected.getPointOnB().set(pointOnShape);
@@ -1269,7 +1269,7 @@ public class EuclidShapeCollisionToolsTest
             expected.setShapeA(pointShape3D);
             expected.setShapeB(sphere3D);
             expected.setShapesAreColliding(false);
-            expected.setDistance(distance);
+            expected.setSignedDistance(distance);
             expected.getPointOnA().set(pointOutside);
             expected.getNormalOnA().setAndNegate(normal);
             expected.getPointOnB().set(pointOnSurface);
@@ -1293,7 +1293,7 @@ public class EuclidShapeCollisionToolsTest
             expected.setShapeA(pointShape3D);
             expected.setShapeB(sphere3D);
             expected.setShapesAreColliding(true);
-            expected.setDistance(-distance);
+            expected.setSignedDistance(-distance);
             expected.getPointOnA().set(pointInside);
             expected.getNormalOnA().setAndNegate(normal);
             expected.getPointOnB().set(pointOnSurface);
@@ -1358,7 +1358,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(torus3D);
          expected.setShapesAreColliding(false);
-         expected.setDistance(distance);
+         expected.setSignedDistance(distance);
          expected.getPointOnA().set(pointOutside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);
@@ -1399,7 +1399,7 @@ public class EuclidShapeCollisionToolsTest
          expected.setShapeA(pointShape3D);
          expected.setShapeB(torus3D);
          expected.setShapesAreColliding(true);
-         expected.setDistance(-distance);
+         expected.setSignedDistance(-distance);
          expected.getPointOnA().set(pointInside);
          expected.getNormalOnA().setAndNegate(normal);
          expected.getPointOnB().set(pointOnSurface);

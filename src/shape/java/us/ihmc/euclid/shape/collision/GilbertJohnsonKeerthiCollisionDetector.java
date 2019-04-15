@@ -153,7 +153,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       }
       else
       {
-         resultToPack.setDistance(simplex.closestPointNorm());
+         resultToPack.setSignedDistance(simplex.closestPointNorm());
          resultToPack.setShapeA(null);
          resultToPack.setShapeB(null);
          simplex.computePointOnA(resultToPack.getPointOnA());

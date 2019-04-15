@@ -611,11 +611,11 @@ public class EuclidShapeIOTools
       String string = "Collision test result: ";
       if (euclidShape3DCollisionResult.areShapesColliding())
       {
-         string += "colliding, depth: " + euclidShape3DCollisionResult.getDistance() + "\n";
+         string += "colliding, depth: " + euclidShape3DCollisionResult.getSignedDistance() + "\n";
       }
       else
       {
-         string += "non-colliding, separating distance: " + euclidShape3DCollisionResult.getDistance() + "\n";
+         string += "non-colliding, separating distance: " + euclidShape3DCollisionResult.getSignedDistance() + "\n";
       }
       string += "Shape A: " + (euclidShape3DCollisionResult.getShapeA() == null ? "null" : euclidShape3DCollisionResult.getShapeA().getClass().getSimpleName());
       string += ", location: " + getTuple3DString(format, euclidShape3DCollisionResult.getPointOnA());

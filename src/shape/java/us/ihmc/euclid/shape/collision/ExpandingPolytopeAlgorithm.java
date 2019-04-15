@@ -225,7 +225,7 @@ public class ExpandingPolytopeAlgorithm
       else
       {
          resultToPack.setShapesAreColliding(true);
-         resultToPack.setDistance(-lastResult.getNorm());
+         resultToPack.setSignedDistance(-lastResult.getNorm());
          lastResult.computePointOnA(resultToPack.getPointOnA());
          lastResult.computePointOnB(resultToPack.getPointOnB());
          resultToPack.getNormalOnA().setToNaN();

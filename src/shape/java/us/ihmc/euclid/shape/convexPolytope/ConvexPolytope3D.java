@@ -668,7 +668,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
    }
 
    /**
-    * Provides a {@code String} representation of this face 3D as follows:
+    * Provides a {@code String} representation of this convex polytope 3D as follows:
     *
     * <pre>
     * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
@@ -697,7 +697,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
     *    (-0.283, -0.207, -0.595 )
     * </pre>
     * 
-    * @return the {@code String} representing this face 3D.
+    * @return the {@code String} representing this convex polytope 3D.
     */
    @Override
    public String toString()

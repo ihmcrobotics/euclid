@@ -563,7 +563,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
       EuclidShape3DCollisionResult result = collisionDetector.evaluateCollision(polytopeA, polytopeB);
       boolean actualCollisionTestResult = result.areShapesColliding();
-      assertEquals(expectedCollisionTestResult, actualCollisionTestResult, messagePrefix + ", GJK distance: " + result.getDistance());
+      assertEquals(expectedCollisionTestResult, actualCollisionTestResult, messagePrefix + ", GJK distance: " + result.getSignedDistance());
 
       boolean isOnePolytopeEmpty = polytopeA.isEmpty() || polytopeB.isEmpty();
 
@@ -578,7 +578,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       if (isOnePolytopeEmpty)
       {
          assertFalse(result.areShapesColliding());
-         assertTrue(Double.isNaN(result.getDistance()));
+         assertTrue(Double.isNaN(result.getSignedDistance()));
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnA());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnA());
@@ -586,7 +586,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       }
       else if (actualCollisionTestResult)
       {
-         assertTrue(Double.isNaN(result.getDistance()));
+         assertTrue(Double.isNaN(result.getSignedDistance()));
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnA());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getPointOnB());
          EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(messagePrefix, result.getNormalOnA());
@@ -916,32 +916,32 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
          gjkDetector.evaluateCollision(shapeA, shapeB, gjkResult);
 
-         double distanceError = Math.abs(expectedResult.getDistance() - gjkResult.getDistance());
+         double distanceError = Math.abs(expectedResult.getSignedDistance() - gjkResult.getSignedDistance());
          if (verbose && (i % 5000) == 0)
          {
-            System.out.println(iterationPrefix + ", Number of its: " + gjkDetector.getNumberOfIterations() + " Analytical: " + expectedResult.getDistance()
-                  + ", GJK: " + gjkResult.getDistance() + ", diff: " + distanceError);
+            System.out.println(iterationPrefix + ", Number of its: " + gjkDetector.getNumberOfIterations() + " Analytical: " + expectedResult.getSignedDistance()
+                  + ", GJK: " + gjkResult.getSignedDistance() + ", diff: " + distanceError);
          }
 
          // Asserts the internal sanity of the collision result
          //         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding(), iterationPrefix);
 
          assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding(),
-                      iterationPrefix + " Analytical: " + expectedResult.getDistance() + ", GJK: " + gjkResult.getDistance() + ", diff: " + distanceError);
+                      iterationPrefix + " Analytical: " + expectedResult.getSignedDistance() + ", GJK: " + gjkResult.getSignedDistance() + ", diff: " + distanceError);
 
          if (gjkResult.areShapesColliding())
          {
             assertTrue(gjkResult.containsNaN(), iterationPrefix);
             assertTrue(gjkResult.getPointOnA().containsNaN(), iterationPrefix);
             assertTrue(gjkResult.getPointOnB().containsNaN(), iterationPrefix);
-            assertTrue(Double.isNaN(gjkResult.getDistance()), iterationPrefix);
+            assertTrue(Double.isNaN(gjkResult.getSignedDistance()), iterationPrefix);
          }
          else
          {
             double positionErrorOnA = expectedResult.getPointOnA().distance(gjkResult.getPointOnA());
             double positionErrorOnB = expectedResult.getPointOnB().distance(gjkResult.getPointOnB());
 
-            assertEquals(expectedResult.getDistance(), gjkResult.getDistance(), distanceMaxEpsilon, iterationPrefix + ", difference: " + distanceError);
+            assertEquals(expectedResult.getSignedDistance(), gjkResult.getSignedDistance(), distanceMaxEpsilon, iterationPrefix + ", difference: " + distanceError);
             EuclidCoreTestTools.assertPoint3DGeometricallyEquals(iterationPrefix, expectedResult.getPointOnA(), gjkResult.getPointOnA(), positionMaxEpsilon);
             EuclidCoreTestTools.assertPoint3DGeometricallyEquals(iterationPrefix, expectedResult.getPointOnB(), gjkResult.getPointOnB(), positionMaxEpsilon);
 
