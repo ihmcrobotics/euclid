@@ -1879,8 +1879,6 @@ public class ConvexPolytope3DTest
 
          List<Vector3D> normals = tetrahedron.getFaces().stream().map(face -> new Vector3D(face.getNormal())).collect(Collectors.toList());
 
-         tetrahedron.getFaces().forEach(Face3D::updateNormal);
-
          for (int j = 0; j < tetrahedron.getNumberOfFaces(); j++)
          {
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i + ", face index: " + j, normals.get(j), tetrahedron.getFace(j).getNormal(), EPSILON);

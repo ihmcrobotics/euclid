@@ -18,7 +18,6 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -27,43 +26,59 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * A template class for a DCEL face. A face is composed of
- * <li>{@code edges} list of half edges that make up this face
- * <li>{@code faceNormal} a vector normal to this face, can point in either direction
- *
- * @author Apoorv S
- *
+ * Read-only interface for a face 3D that belongs to a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ * 
+ * @author Apoorv Shrivastava
+ * @author Sylvain Bertrand
  */
 public class Face3D implements Face3DReadOnly, Clearable, Transformable
 {
+   /** The list, in order, of the edges composing this face. */
    private final List<HalfEdge3D> edges = new ArrayList<>();
+   /** The list, in order, of the vertices composing this face. */
    private final List<Vertex3D> vertices = new ArrayList<>();
-
-   /**
-    * A vector normal to the plane that this face lies on. Do not access directly since this is updated
-    * only when the getter is called
-    */
+   /** The normal vector of the support plane of this face. */
    private final Vector3D normal = new Vector3D();
-   /**
-    * The variable used to store the centroid of the polytope whenever updated Do not access directly
-    * since this is updated only when the getter is called
-    */
+   /** The centroid of this face. */
    private final Point3D centroid = new Point3D();
-
+   /** The area of this face. */
    private double area;
-
+   /** The tightest bounding box entirely containing this face. */
    private final BoundingBox3D boundingBox = new BoundingBox3D();
-
+   /**
+    * Tolerance used when constructing a face. It is used to trigger a series of edge-cases including
+    * for instance whether or not an edge should be extended.
+    */
    private final double constructionEpsilon;
-
+   /**
+    * 3-by-3 covariance matrix computed from the vertices location and used to compute this face
+    * normal.
+    */
    private final DenseMatrix64F verticesCovariance = new DenseMatrix64F(3, 3);
+   /** Eigen decomposition solver used to compute this face normal. */
    private final EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(3, true, true);
 
+   /**
+    * Creates a new empty face.
+    * 
+    * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
+    */
    public Face3D(Vector3DReadOnly initialGuessNormal)
    {
       this(initialGuessNormal, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
    }
 
+   /**
+    * Creates a new empty face.
+    * 
+    * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
+    * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
+    *           edge-cases.
+    */
    public Face3D(Vector3DReadOnly initialGuessNormal, double constructionEpsilon)
    {
       normal.setAndNormalize(initialGuessNormal);
@@ -71,6 +86,14 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       this.constructionEpsilon = constructionEpsilon;
    }
 
+   /**
+    * Creates a new face given its edges.
+    * 
+    * @param faceEdges the edges composing the new face. Not modified, reference to the edges saved.
+    * @param normal the face's normal. Not modified.
+    * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
+    *           edge-cases.
+    */
    public Face3D(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal, double constructionEpsilon)
    {
       boundingBox.setToNaN();
@@ -79,6 +102,15 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       set(faceEdges, normal);
    }
 
+   /**
+    * Clears this face and sets its edges and normal.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @param faceEdges the edges composing the new face. Not modified, reference to the edges saved.
+    * @param normal the face's normal. Not modified.
+    */
    public void set(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal)
    {
       edges.clear();
@@ -100,16 +132,32 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Adds a vertex to the face and updates all the associations accordingly
+    * Adds a vertex to the face and updates all the associations accordingly.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     *
-    * @param vertexToAdd the vertex that must be added to the face
-    * @param epsilon
+    * @param vertexToAdd the vertex that is to be added to the face. Not modified, reference saved.
+    * @return {@code true} if the vertex was added to this face, {@code false} if it was rejected.
     */
    public boolean addVertex(Vertex3D vertexToAdd)
    {
       return addVertex(vertexToAdd, null, false);
    }
 
+   /**
+    * Adds a vertex to the face and updates all the associations accordingly.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param vertexToAdd the vertex that is to be added to the face. Not modified, reference saved.
+    * @param faceVertexToLock (optional) vertex that already belongs to this face that must be
+    *           preserved when adding the new vertex. Not modified.
+    * @param lockEdgesWithTwin enforces edges with a non {@code null} to be preserved when adding the
+    *           new vertex.
+    * @return {@code true} if the vertex was added to this face, {@code false} if it was rejected.
+    */
    public boolean addVertex(Vertex3D vertexToAdd, Vertex3D faceVertexToLock, boolean lockEdgesWithTwin)
    {
       boolean isFaceModified = false;
@@ -223,7 +271,10 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       }
 
       secondEdge.setDestination(vertexToAdd);
-      HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin(), secondEdge, firstEdge, this);
+      HalfEdge3D newEdge = new HalfEdge3D(vertexToAdd, firstEdge.getOrigin());
+      newEdge.setFace(this);
+      newEdge.setPrevious(secondEdge);
+      newEdge.setNext(firstEdge);
       firstEdge.setPrevious(newEdge);
       secondEdge.setNext(newEdge);
       edges.add(newEdge);
@@ -323,12 +374,22 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       return true;
    }
 
-   public void updateVertices()
+   private void updateVertices()
    {
       vertices.clear();
       edges.forEach(edge -> vertices.add(edge.getOrigin()));
    }
 
+   /**
+    * Computes and updates the normal of the supporting plane of this face.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * There is usually no need to refresh a face properties as they are automatically updated when
+    * adding a new vertex.
+    * </p>
+    */
    public void updateNormal()
    {
       if (vertices.size() > 3)
@@ -349,11 +410,25 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       }
    }
 
+   /**
+    * Computes and updates the centroid and area of this face.
+    * <p>
+    * There is usually no need to refresh a face properties as they are automatically updated when
+    * adding a new vertex.
+    * </p>
+    */
    public void updateCentroidAndArea()
    {
       area = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(vertices, normal, vertices.size(), true, centroid);
    }
 
+   /**
+    * Re-evaluates the bounding box of this face.
+    * <p>
+    * There is usually no need to refresh a face properties as they are automatically updated when
+    * adding a new vertex.
+    * </p>
+    */
    public void refreshBoundingBox()
    {
       boundingBox.setToNaN();
@@ -364,6 +439,15 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       }
    }
 
+   /**
+    * Flips this face such that its normal points towards the opposite direction.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * <p>
+    * The edges and vertices are updated to preserve clockwise ordering.
+    * </p>
+    */
    public void flip()
    {
       for (int i = 0; i < edges.size(); i++)
@@ -375,6 +459,13 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       normal.negate();
    }
 
+   /**
+    * Destroys this face and its edges.
+    * <p>
+    * Besides invalidating internal data, this method remove the connection between this face's
+    * features and the rest of the convex polytope that owned this face.
+    * </p>
+    */
    public void destroy()
    {
       for (int i = 0; i < edges.size(); i++)
@@ -389,24 +480,15 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       area = Double.NaN;
    }
 
+   /** {@inheritDoc} */
+   @SuppressWarnings("unchecked")
    @Override
    public List<HalfEdge3D> lineOfSight(Point3DReadOnly observer)
    {
-      List<HalfEdge3D> lineOfSight = new ArrayList<>();
-
-      HalfEdge3D edgeUnderConsideration = lineOfSightStart(observer);
-
-      for (int i = 0; edgeUnderConsideration != null && i < edges.size(); i++)
-      {
-         lineOfSight.add(edgeUnderConsideration);
-         edgeUnderConsideration = edgeUnderConsideration.getNext();
-         if (!canObserverSeeEdge(observer, edgeUnderConsideration))
-            break;
-      }
-
-      return lineOfSight;
+      return (List<HalfEdge3D>) Face3DReadOnly.super.lineOfSight(observer);
    }
 
+   /** {@inheritDoc} */
    @SuppressWarnings("unchecked")
    @Override
    public List<HalfEdge3D> lineOfSight(Point3DReadOnly observer, double epsilon)
@@ -414,124 +496,136 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       return (List<HalfEdge3D>) Face3DReadOnly.super.lineOfSight(observer, epsilon);
    }
 
+   /** {@inheritDoc} */
    @Override
    public HalfEdge3D lineOfSightStart(Point3DReadOnly observer)
    {
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightStart(observer);
    }
 
+   /** {@inheritDoc} */
    @Override
    public HalfEdge3D lineOfSightEnd(Point3DReadOnly observer)
    {
       return (HalfEdge3D) Face3DReadOnly.super.lineOfSightEnd(observer);
    }
 
+   /** {@inheritDoc} */
    @Override
    public Face3D getNeighbor(int index)
    {
       return (Face3D) Face3DReadOnly.super.getNeighbor(index);
    }
 
+   /** {@inheritDoc} */
    @Override
    public HalfEdge3D getCommonEdgeWith(Face3DReadOnly neighbor)
    {
       return (HalfEdge3D) Face3DReadOnly.super.getCommonEdgeWith(neighbor);
    }
 
+   /** {@inheritDoc} */
    @Override
    public HalfEdge3D getClosestEdge(Point3DReadOnly point)
    {
       return (HalfEdge3D) Face3DReadOnly.super.getClosestEdge(point);
    }
 
+   /** {@inheritDoc} */
    @Override
    public HalfEdge3D getClosestVisibleEdge(Point3DReadOnly point)
    {
       return (HalfEdge3D) Face3DReadOnly.super.getClosestVisibleEdge(point);
    }
 
+   /** {@inheritDoc} */
    @Override
    public List<Vertex3D> getVertices()
    {
       return vertices;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Vertex3D getVertex(int index)
    {
       return vertices.get(index);
    }
 
-   /**
-    * {@inheritDoc}
-    */
+   /** {@inheritDoc} */
    @Override
    public List<HalfEdge3D> getEdges()
    {
       return edges;
    }
 
-   /**
-    * {@inheritDoc}
-    */
+   /** {@inheritDoc} */
    @Override
    public HalfEdge3D getEdge(int index)
    {
       return edges.get(index);
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3D getCentroid()
    {
       return centroid;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Vector3D getNormal()
    {
       return normal;
    }
 
+   /** {@inheritDoc} */
    @Override
    public double getArea()
    {
       return area;
    }
 
+   /** {@inheritDoc} */
    @Override
    public BoundingBox3DReadOnly getBoundingBox()
    {
       return boundingBox;
    }
 
+   /** {@inheritDoc} */
    @Override
    public boolean containsNaN()
    {
       return Face3DReadOnly.super.containsNaN();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setToNaN()
    {
-      for (int i = 0; i < edges.size(); i++)
-         edges.get(i).setToNaN();
+      edges.clear();
+      vertices.clear();
       centroid.setToNaN();
       normal.setToNaN();
       area = Double.NaN;
       boundingBox.setToNaN();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setToZero()
    {
-      for (int i = 0; i < edges.size(); i++)
-         edges.get(i).setToZero();
+      edges.clear();
+      vertices.clear();
       centroid.setToZero();
       normal.setToZero();
       area = 0.0;
       boundingBox.setToZero();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void applyTransform(Transform transform)
    {
@@ -541,6 +635,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       normal.applyTransform(transform);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void applyInverseTransform(Transform transform)
    {
@@ -550,28 +645,47 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       normal.applyInverseTransform(transform);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Face3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
    @Override
    public boolean equals(Object object)
    {
-      if (object == this)
-         return true;
-      else if (object instanceof Face3DReadOnly)
+      if (object instanceof Face3DReadOnly)
          return Face3DReadOnly.super.equals((Face3DReadOnly) object);
       else
          return false;
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of each component of this face 3D.
+    *
+    * @return the hash code value for this face 3D.
+    */
    @Override
    public int hashCode()
    {
       // Using ArrayList.hashCode() to combine the hash-codes of the vertices defining this face.
-      long hashCode = vertices.hashCode();
-      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, centroid.hashCode());
-      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, normal.hashCode());
-      hashCode = EuclidHashCodeTools.addToHashCode(hashCode, area);
-      return EuclidHashCodeTools.toIntHashCode(hashCode);
+      return vertices.hashCode();
    }
 
+   /**
+    * Provides a {@code String} representation of this face 3D as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    * </pre>
+    * 
+    * @return the {@code String} representing this face 3D.
+    */
    @Override
    public String toString()
    {

@@ -7,105 +7,57 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 /**
- * A template that defines the basic structure of a DCEL half edge. A half edge is composed of
- * <li>{@code originVertex} starting point reference for this directed edge
- * <li>{@code destinatioVertex} ending point reference for this directed edge
- * <li>{@code twinHalfEdge} reference to the twin half edge on an adjacent face, if defined
- * <li>{@code nextHalfEdge} reference to the half edge on {@code face} that succeeds this edge in a
- * counter clockwise sense
- * <li>{@code previousHalfEdge} reference to the half edge on {@code face} that precedes this edge
- * in a counter clockwise sense
- * <li>{@code face} the face that this half edge is a part of
- *
- * @author Apoorv S
- *
- * @param <V> Data structure representing a point in 3D space
- * @param <E> A class that extends this data structure Represents an directed edge formed by joining
- *           two vertices
- * @param <F> A collection of edges that constitute a face of the polytope
+ * Implementation of a half-edge 3D that belongs to a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ * 
+ * @author Apoorv Shrivastava
+ * @author Sylvain Bertrand
  */
 public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
 {
-   /**
-    * Specifies the spatial location at which the half edge originates
-    */
+   /** The vertex this half-edge starts from. */
    private Vertex3D origin;
-   /**
-    * Specifies the spatial location at which the half edge terminates
-    */
+   /** The vertex this half-edge ends at. */
    private Vertex3D destination;
    /**
-    * The half edge on an adjacent face that originates at the {@code destinatioVertex} and terminates
-    * at the {@code originVertex}. Represents the opposite spatial direction
+    * The half-edge on an adjacent face that starts from {@code destination} and ends at
+    * {@code origin}.
     */
    private HalfEdge3D twin;
    /**
-    * The half edge on the same face as this edge that originates at the {@code destinationVertex}
+    * The half-edge on the same face as this edge that starts from {@code destination}.
     */
    private HalfEdge3D next;
    /**
-    * The half edge on the same face as this edge that terminates at the {@code originVertex}
+    * The half-edge on the same face as this edge that ends at {@code origin}.
     */
    private HalfEdge3D previous;
-   /**
-    * The face that this edge is a part of
-    */
+   /** The face that this edge is part of. */
    private Face3D face;
 
-   public HalfEdge3D()
-   {
-   }
-
    /**
-    * Primary constructor for half edge
+    * Creates a new half-edge and initializes its origin and destination.
     *
-    * @param origin
-    * @param destination
+    * @param origin the vertex the half-edge starts from. Not modified, reference saved.
+    * @param destination the vertex the half-edge ends at. Not modified, reference saved.
     */
    public HalfEdge3D(Vertex3D origin, Vertex3D destination)
    {
-      this();
       setOrigin(origin);
       setDestination(destination);
    }
 
-   public HalfEdge3D(Vertex3D origin, Vertex3D destination, HalfEdge3D previous, HalfEdge3D next, Face3D face)
-   {
-      this(origin, destination);
-      setFace(face);
-      setPrevious(previous);
-      setNext(next);
-   }
-
    /**
-    * Creates a half edge using all specified values
+    * Sets the reference of this half-edge's origin.
+    * <p>
+    * This method also updates the old origin by removing this half-edge of its associated edges, and
+    * associating it to the new origin.
+    * </p>
     *
-    * @param origin the vertex that the new half edge will start at. Stored as a reference. Can be
-    *           {@code null}
-    * @param destination the vertex that the new half edge will end at. Stored as a reference. Can be
-    *           {@code null}
-    * @param twinEdge the half edge that is the DCEL twin of the new edge . Stored as a reference. Can
-    *           be {@code null}
-    * @param nextEdge the half edge that is originates at the destination vertex and comes after the
-    *           current edge when the face is traversed in a counter clockwise manner w.r.t. its face
-    *           normal. Can be {@code null}
-    * @param previousEdge the half edge that is terminates at the origin vertex and comes before the
-    *           current edge when the face is traversed in a counter clockwise manner w.r.t. its face
-    *           normal. Can be {@code null}
-    * @param face the face that this half edge is a part of. Can be {@code null}
-    */
-   public HalfEdge3D(Vertex3D origin, Vertex3D destination, HalfEdge3D twin, HalfEdge3D next, HalfEdge3D previous, Face3D face)
-   {
-      this(origin, destination, previous, next, face);
-      setTwin(twin);
-   }
-
-   /**
-    * Update the reference to the {@code originVertex} field to the specified value. Also updates the
-    * associated edges of the previously held and newly specified {@code originVertex} and the
-    * {@code twinEdge} of this edge
-    *
-    * @param origin the new vertex that the half edge originates at. Can be null. Is modified
+    * @param origin the new origin for this half-edge. Associated edges modified, reference saved.
     */
    public void setOrigin(Vertex3D origin)
    {
@@ -117,7 +69,9 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Returns a reference to the origin vertex for this half edge
+    * Gets the reference to the vertex this half-edge starts from.
+    * 
+    * @return the origin vertex for the half-edge.
     */
    @Override
    public Vertex3D getOrigin()
@@ -126,11 +80,9 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Update the reference to the {@code destinationVertex} to the specified value. Also updates the
-    * associated twin edge
+    * Sets the reference of this half-edge's destination.
     *
-    * @param destination the new vertex that the half edge originates at. Can be null. Is not modified
-    *           in this function
+    * @param destination the new destination for this half-edge. Not modified, reference saved.
     */
    public void setDestination(Vertex3D destination)
    {
@@ -138,7 +90,9 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Returns a reference to the {@code destinationVertex} of this half edge
+    * Gets the read-only reference to the vertex this half-edge ends to.
+    * 
+    * @return the destination vertex for the half-edge.
     */
    @Override
    public Vertex3D getDestination()
@@ -147,9 +101,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Store a reference to the specified half edge as a twin of this half edge.
+    * Sets the reference to the twin half-edge.
     *
-    * @param twinEdge the half edge to be stored as a twin edge of this half edge.
+    * @param twin the twin half-edge of this half-edge. Not modified, reference saved.
+    * @throws IllegalArgumentException if the given half-edge is not {@code null} and that its origin
+    *            and destination do not match this half-edge's destination and origin, respectively.
     */
    public void setTwin(HalfEdge3D twin)
    {
@@ -159,7 +115,13 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * {@inheritDoc}
+    * Gets the reference to this half-edge's twin.
+    * <p>
+    * The twin half-edge shares the same vertices with {@code this} and its direction is flipped. The
+    * faces associated to {@code this} and the twin are neighbors.
+    * </p>
+    * 
+    * @return this twin half-edge.
     */
    @Override
    public HalfEdge3D getTwin()
@@ -168,24 +130,28 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Update the reference to the {@code nextHalfEdge}. Checks to ensure that the origin of the
-    * specified edge and destination of the this half edge are the same
+    * Sets the reference to the next half-edge.
     *
-    * @param nextEdge the new next half edge for the current half edge. Can be null
-    * @throws RuntimeException in case the origin of this specified next half edge is not the same as
-    *            the destination of the this edge
+    * @param next the next half-edge of this half-edge. Not modified, reference saved.
+    * @throws IllegalArgumentException if the given half-edge is not {@code null} and that either
+    *            {@code next.getOrigin() != this.destination} or {@code next.getFace() != this.face}.
     */
    public void setNext(HalfEdge3D next)
    {
       if (next == null || next.getOrigin() == getDestination() && next.getFace() == getFace())
          this.next = next;
       else
-         throw new RuntimeException("Mismatch between vertices, destination vertex: " + getDestination().toString() + " , next origin: "
+         throw new IllegalArgumentException("Mismatch between vertices, destination vertex: " + getDestination().toString() + " , next origin: "
                + next.getOrigin().toString());
    }
 
    /**
-    * {@inheritDoc}
+    * Gets the reference to this half-edge's next.
+    * <p>
+    * The next half-edge starts from {@code this.getDestination()} and shares the same associated face.
+    * </p>
+    * 
+    * @return this next half-edge.
     */
    @Override
    public HalfEdge3D getNext()
@@ -194,24 +160,29 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Update the reference to the {@code previous HalfEdge}. Checks to ensure that the destination of
-    * the specified edge and origin of the this half edge are the same
+    * Sets the reference to the previous half-edge.
     *
-    * @param previousEdge the new previous half edge for the current half edge. Can be null
-    * @throws RuntimeException in case the destination of this specified next half edge is not the same
-    *            as the origin of the this edge
+    * @param previous the previous half-edge of this half-edge. Not modified, reference saved.
+    * @throws IllegalArgumentException if the given half-edge is not {@code null} and that either
+    *            {@code previous.getDestination() != this.origin} or
+    *            {@code previous.getFace() != this.face}.
     */
    public void setPrevious(HalfEdge3D previous)
    {
       if (previous == null || previous.getDestination() == getOrigin() && previous.getFace() == getFace())
          this.previous = previous;
       else
-         throw new RuntimeException("Mismatch between vertices, origin vertex: " + getOrigin().toString() + " , previous destination: "
+         throw new IllegalArgumentException("Mismatch between vertices, origin vertex: " + getOrigin().toString() + " , previous destination: "
                + previous.getDestination().toString());
    }
 
    /**
-    * {@inheritDoc}
+    * Gets the reference to this half-edge's previous.
+    * <p>
+    * The previous half-edge ends to {@code this.getOrigin()} and shares the same associated face.
+    * </p>
+    * 
+    * @return this previous half-edge.
     */
    @Override
    public HalfEdge3D getPrevious()
@@ -220,9 +191,9 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Update the reference to the face that this half edge is a part of
+    * Sets the reference to the associated face.
     *
-    * @param face the face reference to be stored. Can be null
+    * @param face the face this half-edge belongs to. Not modified, reference saved.
     */
    public void setFace(Face3D face)
    {
@@ -230,7 +201,12 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * {@inheritDoc}
+    * Gets the reference to the face associated to this half-edge.
+    * <p>
+    * This half-edge belongs to its associated face.
+    * </p>
+    * 
+    * @return this associated face.
     */
    @Override
    public Face3D getFace()
@@ -251,7 +227,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * Sets all the references that are held by this half edge to null and also updates the previously
+    * Sets all the references that are held by this half-edge to null and also updates the previously
     * associated objects
     */
    public void destroy()
