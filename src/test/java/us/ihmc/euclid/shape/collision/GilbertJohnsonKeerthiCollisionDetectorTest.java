@@ -620,7 +620,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                                    EuclidCoreRandomTools.nextVector3DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 1.0, 5.0)
                                          * (sphereA.getRadius() + sphereB.getRadius())));
          return new Pair<>(sphereA, sphereB);
-      }, EuclidShapeCollisionTools::doSphere3DSphere3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluateSphere3DSphere3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -645,7 +645,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          if (colliding)
             shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doPointShape3DBox3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluatePointShape3DBox3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -669,7 +669,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doSphere3DBox3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluateSphere3DBox3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -693,7 +693,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          shapeB.evaluatePoint3DCollision(shapeA, closestPointOnSurface, normal);
          shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doPointShape3DCapsule3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluatePointShape3DCapsule3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -713,7 +713,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          Capsule3D shapeA = EuclidShapeRandomTools.nextCapsule3D(random);
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doCapsule3DCapsule3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluateCapsule3DCapsule3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -737,7 +737,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doSphere3DCapsule3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluateSphere3DCapsule3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -761,7 +761,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          shapeB.evaluatePoint3DCollision(shapeA, closestPointOnSurface, normal);
          shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doPointShape3DCylinder3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluatePointShape3DCylinder3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -785,7 +785,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doSphere3DCylinder3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluateSphere3DCylinder3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -810,7 +810,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          if (colliding)
             shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doPointShape3DEllipsoid3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluatePointShape3DEllipsoid3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -834,7 +834,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doSphere3DEllipsoid3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluateSphere3DEllipsoid3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -859,7 +859,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          if (colliding)
             shapeA.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doPointShape3DRamp3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluatePointShape3DRamp3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
@@ -883,7 +883,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          shapeB.evaluatePoint3DCollision(shapeA.getPosition(), closestPointOnSurface, normal);
          shapeA.getPosition().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 4.0) + shapeA.getRadius(), normal, closestPointOnSurface);
          return new Pair<>(shapeA, shapeB);
-      }, EuclidShapeCollisionTools::doSphere3DRamp3DCollisionTest);
+      }, EuclidShapeCollisionTools::evaluateSphere3DRamp3DCollision);
 
       assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }

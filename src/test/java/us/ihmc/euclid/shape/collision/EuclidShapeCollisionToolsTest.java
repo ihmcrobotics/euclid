@@ -77,7 +77,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(shiftDirection);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DBox3DCollisionTest(pointShape3D, box3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DBox3DCollision(pointShape3D, box3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals(expected, actual, EPSILON);
       }
 
@@ -114,7 +114,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(closestFacePlane.getNormal());
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DBox3DCollisionTest(pointShape3D, box3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DBox3DCollision(pointShape3D, box3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals(expected, actual, EPSILON);
       }
 
@@ -160,7 +160,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DBox3DCollisionTest(pointShape3D, box3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DBox3DCollision(pointShape3D, box3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals(expected, actual, EPSILON);
       }
 
@@ -207,7 +207,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DBox3DCollisionTest(pointShape3D, box3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DBox3DCollision(pointShape3D, box3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals(expected, actual, EPSILON);
       }
    }
@@ -256,7 +256,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCapsule3DCollision(pointShape3D, capsule3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -292,7 +292,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCapsule3DCollision(pointShape3D, capsule3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -335,7 +335,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCapsule3DCollision(pointShape3D, capsule3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -371,7 +371,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCapsule3DCollisionTest(pointShape3D, capsule3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCapsule3DCollision(pointShape3D, capsule3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
    }
@@ -419,7 +419,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCylinder3DCollision(pointShape3D, cylinder3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -454,7 +454,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCylinder3DCollision(pointShape3D, cylinder3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -497,7 +497,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCylinder3DCollision(pointShape3D, cylinder3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -570,7 +570,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCylinder3DCollision(pointShape3D, cylinder3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -629,7 +629,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DCylinder3DCollisionTest(pointShape3D, cylinder3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DCylinder3DCollision(pointShape3D, cylinder3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
    }
@@ -671,7 +671,7 @@ public class EuclidShapeCollisionToolsTest
             expected.getNormalOnB().set(normal);
 
             EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeCollisionTools.evaluatePointShape3DEllipsoid3DCollision(pointShape3D, ellipsoid3D, actual);
             EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
          }
 
@@ -697,7 +697,7 @@ public class EuclidShapeCollisionToolsTest
             expected.getNormalOnA().setAndNegate(expected.getNormalOnB());
 
             EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeCollisionTools.evaluatePointShape3DEllipsoid3DCollision(pointShape3D, ellipsoid3D, actual);
             EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
          }
       }
@@ -746,7 +746,7 @@ public class EuclidShapeCollisionToolsTest
             expected.getNormalOnA().setAndNegate(expected.getNormalOnB());
 
             EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeCollisionTools.evaluatePointShape3DEllipsoid3DCollision(pointShape3D, ellipsoid3D, actual);
             EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
          }
 
@@ -768,7 +768,7 @@ public class EuclidShapeCollisionToolsTest
             expected.getNormalOnA().setAndNegate(expected.getNormalOnB());
 
             EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-            EuclidShapeCollisionTools.doPointShape3DEllipsoid3DCollisionTest(pointShape3D, ellipsoid3D, actual);
+            EuclidShapeCollisionTools.evaluatePointShape3DEllipsoid3DCollision(pointShape3D, ellipsoid3D, actual);
             EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
          }
       }
@@ -1214,7 +1214,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(closestFace.getNormal());
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DRamp3DCollisionTest(pointShape3D, ramp3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DRamp3DCollision(pointShape3D, ramp3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
    }
@@ -1240,7 +1240,7 @@ public class EuclidShapeCollisionToolsTest
       expected.getNormalOnB().set(normal);
 
       EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-      EuclidShapeCollisionTools.doPointShape3DRamp3DCollisionTest(pointShape3D, ramp3D, actual);
+      EuclidShapeCollisionTools.evaluatePointShape3DRamp3DCollision(pointShape3D, ramp3D, actual);
       EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + iteration + "\n", expected, actual, EPSILON);
    }
 
@@ -1276,7 +1276,7 @@ public class EuclidShapeCollisionToolsTest
             expected.getNormalOnB().set(normal);
 
             EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-            EuclidShapeCollisionTools.doPointShape3DSphere3DCollisionTest(pointShape3D, sphere3D, actual);
+            EuclidShapeCollisionTools.evaluatePointShape3DSphere3DCollision(pointShape3D, sphere3D, actual);
             EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
          }
 
@@ -1300,7 +1300,7 @@ public class EuclidShapeCollisionToolsTest
             expected.getNormalOnB().set(normal);
 
             EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-            EuclidShapeCollisionTools.doPointShape3DSphere3DCollisionTest(pointShape3D, sphere3D, actual);
+            EuclidShapeCollisionTools.evaluatePointShape3DSphere3DCollision(pointShape3D, sphere3D, actual);
             EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
          }
       }
@@ -1365,7 +1365,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DTorus3DCollisionTest(pointShape3D, torus3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DTorus3DCollision(pointShape3D, torus3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
 
@@ -1406,7 +1406,7 @@ public class EuclidShapeCollisionToolsTest
          expected.getNormalOnB().set(normal);
 
          EuclidShape3DCollisionResult actual = new EuclidShape3DCollisionResult();
-         EuclidShapeCollisionTools.doPointShape3DTorus3DCollisionTest(pointShape3D, torus3D, actual);
+         EuclidShapeCollisionTools.evaluatePointShape3DTorus3DCollision(pointShape3D, torus3D, actual);
          EuclidShapeTestTools.assertEuclidShape3DCollisionResultEquals("Iteration: " + i + "\n", expected, actual, EPSILON);
       }
    }
