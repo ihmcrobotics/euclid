@@ -14,26 +14,46 @@ import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
+/**
+ * This class provides a tool for exporting datasets that can then be used to generate a test case.
+ * 
+ * @author Sylvain Bertrand
+ */
 public abstract class ConvexPolytope3DTroublesomeDataset
 {
+   /** The convex polytope to evaluate. */
    protected ConvexPolytope3D convexPolytope3D;
+   /** The coordinates of a troublesome point. */
    protected final Point3D troublesomePoint = new Point3D();
 
-   public Point3D getTroublesomePoint()
-   {
-      return troublesomePoint;
-   }
-
-   public double getConstructionEpsilon()
-   {
-      return convexPolytope3D.getConstructionEpsilon();
-   }
-
+   /**
+    * Gets the reference to the convex polytope before the issue.
+    * 
+    * @return the convex polytope.
+    */
    public ConvexPolytope3D getConvexPolytope3D()
    {
       return convexPolytope3D;
    }
 
+   /**
+    * Gets the reference to the troublesome point.
+    * 
+    * @return the troublesome point.
+    */
+   public Point3D getTroublesomePoint()
+   {
+      return troublesomePoint;
+   }
+
+   /**
+    * Generates a {@code String} that can be used as dataset for test case.
+    * 
+    * @param pointsBeforeIssue the list of points before the issue. Not modified.
+    * @param troublesomePoint the coordinates of the point causing the issue. Not modified.
+    * @param constructionEpsilon the construction epsilon used with the convex polytope.
+    * @return the dataset as a {@code String}.
+    */
    public static String generateDatasetAsString(List<? extends Tuple3DReadOnly> pointsBeforeIssue, Tuple3DReadOnly troublesomePoint, double constructionEpsilon)
    {
       String stringFormat = EuclidCoreIOTools.getStringFormat(23, 20);
@@ -55,11 +75,24 @@ public abstract class ConvexPolytope3DTroublesomeDataset
       return result;
    }
 
+   /**
+    * Generates a {@code String} that can be used as dataset for test case.
+    * 
+    * @param convexPolytope3D the convex polytope to get a dataset from.
+    * @return the dataset as a {@code String}.
+    */
    public static String generateDatasetAsString(ConvexPolytope3DReadOnly convexPolytope3D)
    {
       return generateDatasetAsString(convexPolytope3D, new Point3D());
    }
 
+   /**
+    * Generates a {@code String} that can be used as dataset for test case.
+    * 
+    * @param convexPolytope3D the convex polytope before the issue. Not modified.
+    * @param troublesomePoint the coordinates of the point causing the issue. Not modified.
+    * @return the dataset as a {@code String}.
+    */
    public static String generateDatasetAsString(ConvexPolytope3DReadOnly convexPolytope3D, Tuple3DReadOnly troublesomePoint)
    {
       String stringFormat = EuclidCoreIOTools.getStringFormat(23, 20);
