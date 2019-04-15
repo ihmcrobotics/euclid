@@ -2,10 +2,8 @@ package us.ihmc.euclid.shape.convexPolytope.tools;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
@@ -18,7 +16,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-// TODO Remove unused/untested methods
+/**
+ * This class provides a set of tools for performing operations with convex polytopes.
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidPolytopeTools
 {
    private EuclidPolytopeTools()
@@ -26,12 +28,34 @@ public class EuclidPolytopeTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
-   // From nVertices - nEdges + nFaces = 2
+   /**
+    * Calculates the of vertices for a convex polytope using Euler's formula.
+    *
+    * @param numberOfFaces the number of faces the convex polytope has.
+    * @param numberOfEdges the number of edges the convex polytope has.
+    * @return the number of vertices.
+    */
    public static int computeConvexPolytopeNumberOfVertices(int numberOfFaces, int numberOfEdges)
    {
       return numberOfEdges - numberOfFaces + 2;
    }
 
+   /**
+    * Computes the cross product from two line segments as follows:
+    *
+    * <pre>
+    * (lineSegmentEnd1 - lineSegmentStart1) x (lineSegmentEnd2 - lineSegmentStart2)
+    * </pre>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param lineSegmentStart1 the start position of the first line segment. Not modified.
+    * @param lineSegmentEnd1 the end position of the first line segment. Not modified.
+    * @param lineSegmentStart2 the start position of the second line segment. Not modified.
+    * @param lineSegmentEnd2 the end position of the second line segment. Not modified.
+    * @return the result of the cross product.
+    */
    public static Vector3D crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
                                                        Point3DReadOnly lineSegmentEnd2)
    {
@@ -40,6 +64,19 @@ public class EuclidPolytopeTools
       return crossProduct;
    }
 
+   /**
+    * Computes the cross product from two line segments as follows:
+    *
+    * <pre>
+    * (lineSegmentEnd1 - lineSegmentStart1) x (lineSegmentEnd2 - lineSegmentStart2)
+    * </pre>
+    *
+    * @param lineSegmentStart1 the start position of the first line segment. Not modified.
+    * @param lineSegmentEnd1 the end position of the first line segment. Not modified.
+    * @param lineSegmentStart2 the start position of the second line segment. Not modified.
+    * @param lineSegmentEnd2 the end position of the second line segment. Not modified.
+    * @param crossProductToPack the vector used to store the result of the cross product. Modified.
+    */
    public static void crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
                                                    Point3DReadOnly lineSegmentEnd2, Vector3DBasics crossProductToPack)
    {
@@ -57,33 +94,119 @@ public class EuclidPolytopeTools
       crossProductToPack.set(crossX, crossY, crossZ);
    }
 
+   /**
+    * Tests whether the query is located on the left side of a line 3D.
+    * <p>
+    * The left side of the line is defined using a plane on which the line is lying. The left side of
+    * the line can be defined as the region located above the plane define by:<br>
+    * <tt>normal=(secondPointOnLine - firstPointOnLine) x planeNormal</tt> and<br>
+    * <tt>point=firstPointOnLine</tt>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @return {@code true} if the query is located on the left side of the line.
+    */
    public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                     Vector3DReadOnly planeNormal, double epsilon)
+                                                     Vector3DReadOnly planeNormal)
    {
-      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, true, epsilon);
+      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, true);
    }
 
+   /**
+    * Tests whether the query is located on the left side of a line 3D.
+    * <p>
+    * The left side of the line is defined using a plane on which the line is lying. The left side of
+    * the line can be defined as the region located above the plane define by:<br>
+    * <tt>normal=lineDirection x planeNormal</tt> and<br>
+    * <tt>point=pointOnLine</tt>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @return {@code true} if the query is located on the left side of the line.
+    */
    public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                     Vector3DReadOnly planeNormal, double epsilon)
+                                                     Vector3DReadOnly planeNormal)
    {
-      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, true, epsilon);
+      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, true);
    }
 
+   /**
+    * Tests whether the query is located on the right side of a line 3D.
+    * <p>
+    * The right side of the line is defined using a plane on which the line is lying. The right side of
+    * the line can be defined as the region located below the plane define by:<br>
+    * <tt>normal=(secondPointOnLine - firstPointOnLine) x planeNormal</tt> and<br>
+    * <tt>point=firstPointOnLine</tt>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @return {@code true} if the query is located on the right side of the line.
+    */
    public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                      Vector3DReadOnly planeNormal, double epsilon)
+                                                      Vector3DReadOnly planeNormal)
    {
-      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, false, epsilon);
+      return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, false);
    }
 
+   /**
+    * Tests whether the query is located on the right side of a line 3D.
+    * <p>
+    * The right side of the line is defined using a plane on which the line is lying. The right side of
+    * the line can be defined as the region located below the plane define by:<br>
+    * <tt>normal=lineDirection x planeNormal</tt> and<br>
+    * <tt>point=pointOnLine</tt>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @return {@code true} if the query is located on the right side of the line.
+    */
    public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                      Vector3DReadOnly planeNormal, double epsilon)
+                                                      Vector3DReadOnly planeNormal)
    {
-      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, false, epsilon);
+      return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, false);
    }
 
+   /**
+    * Tests whether the query is located on either the left or right of a line 3D.
+    * <p>
+    * The left side of the line is defined using a plane on which the line is lying. The left side of
+    * the line can be defined as the region located above the plane define by:<br>
+    * <tt>normal=(secondPointOnLine - firstPointOnLine) x planeNormal</tt> and<br>
+    * <tt>point=firstPointOnLine</tt>
+    * </p>
+    *
+    * @param pointX the x-coordinate of the query.
+    * @param pointY the y-coordinate of the query.
+    * @param pointZ the z-coordinate of the query.
+    * @param pointOnLineX the x-coordinate of the a point located on the line.
+    * @param pointOnLineY the y-coordinate of the a point located on the line.
+    * @param pointOnLineZ the z-coordinate of the a point located on the line.
+    * @param lineDirectionX the x-component of the line direction.
+    * @param lineDirectionY the y-component of the line direction.
+    * @param lineDirectionZ the z-component of the line direction.
+    * @param planeNormalX the x-component of the plane normal.
+    * @param planeNormalY the y-component of the plane normal.
+    * @param planeNormalZ the z-component of the plane normal.
+    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
+    *           side, {@code false} this will test for the right side.
+    * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
+    *         on the opposite side or exactly on the line.
+    */
    public static boolean isPoint3DOnSideOfLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
                                                  double lineDirectionX, double lineDirectionY, double lineDirectionZ, double planeNormalX, double planeNormalY,
-                                                 double planeNormalZ, boolean testLeftSide, double epsilon)
+                                                 double planeNormalZ, boolean testLeftSide)
    {
       double dx = pointX - pointOnLineX;
       double dy = pointY - pointOnLineY;
@@ -96,13 +219,31 @@ public class EuclidPolytopeTools
       double dotProduct = crossX * planeNormalX + crossY * planeNormalY + crossZ * planeNormalZ;
 
       if (testLeftSide)
-         return dotProduct > epsilon;
+         return dotProduct > 0.0;
       else
-         return dotProduct < -epsilon;
+         return dotProduct < 0.0;
    }
 
+   /**
+    * Tests whether the query is located on either the left or right of a line 3D.
+    * <p>
+    * The left side of the line is defined using a plane on which the line is lying. The left side of
+    * the line can be defined as the region located above the plane define by:<br>
+    * <tt>normal=(secondPointOnLine - firstPointOnLine) x planeNormal</tt> and<br>
+    * <tt>point=firstPointOnLine</tt>
+    * </p>
+    *
+    * @param point the coordinates of the query. Not modified.
+    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param secondPointOnLine a second point located on the line. Not modified.
+    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
+    *           side, {@code false} this will test for the right side.
+    * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
+    *         on the opposite side or exactly on the line.
+    */
    public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                 Vector3DReadOnly planeNormal, boolean testLeftSide, double epsilon)
+                                                 Vector3DReadOnly planeNormal, boolean testLeftSide)
    {
       double pointOnLineX = firstPointOnLine.getX();
       double pointOnLineY = firstPointOnLine.getY();
@@ -111,96 +252,41 @@ public class EuclidPolytopeTools
       double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
       double lineDirectionZ = secondPointOnLine.getZ() - firstPointOnLine.getZ();
       return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLineX, pointOnLineY, pointOnLineZ, lineDirectionX, lineDirectionY,
-                                     lineDirectionZ, planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide, epsilon);
-   }
-
-   public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                 Vector3DReadOnly planeNormal, boolean testLeftSide, double epsilon)
-   {
-      return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
-                                     lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide,
-                                     epsilon);
+                                     lineDirectionZ, planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide);
    }
 
    /**
-    * Returns the minimum signed distance between the projection of a 3D point and an infinitely long
-    * 3D line defined by a point and a direction onto a plane of given normal.
+    * Tests whether the query is located on either the left or right of a line 3D.
     * <p>
-    * The calculated distance is negative if the query is located on the right side of the line.
-    * </p>
-    * <p>
-    * The notion of left side is defined as the semi-open space that starts at {@code pointOnLine} and
-    * extends to the direction given by the vector <tt>planeNormal &times; lineDirection</tt> and the
-    * right side starts at {@code pointOnLine} and direction
-    * <tt>-planeNormal &times; lineDirection</tt>. In an intuitive manner, the left side refers to the
-    * side on the left of the line when looking at the line with the plane normal pointing toward you.
-    * </p>
-    * <p>
-    * Note that the position of the plane does not affect the distance separating the query from the
-    * line, so it not required.
-    * </p>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if {@code lineDirection.length() < }{@value #ONE_TRILLIONTH}, this method returns the
-    * distance between {@code pointOnLine} and the given {@code point}.
-    * </ul>
+    * The left side of the line is defined using a plane on which the line is lying. The left side of
+    * the line can be defined as the region located above the plane define by:<br>
+    * <tt>normal=(secondPointOnLine - firstPointOnLine) x planeNormal</tt> and<br>
+    * <tt>point=firstPointOnLine</tt>
     * </p>
     *
-    * @param pointX x-coordinate of the query.
-    * @param pointY y-coordinate of the query.
-    * @param pointZ z-coordinate of the query.
-    * @param pointOnLineX x-coordinate of a point located on the line.
-    * @param pointOnLineY y-coordinate of a point located on the line.
-    * @param pointOnLineZ z-coordinate of a point located on the line.
-    * @param lineDirectionX x-component of the line direction.
-    * @param lineDirectionY y-component of the line direction.
-    * @param lineDirectionZ y-component of the line direction.
-    * @param planeNormalX x-component of the plane normal.
-    * @param planeNormalY y-component of the plane normal.
-    * @param planeNormalZ z-component of the plane normal.
-    * @return the minimum distance between the projection of the 3D point and line onto the plane. The
-    *         distance is negative if the query is located on the right side of the line.
+    * @param point the coordinates of the query. Not modified.
+    * @param pointOnLine a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
+    *           side, {@code false} this will test for the right side.
+    * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
+    *         on the opposite side or exactly on the line.
     */
-   public static double signedDistanceFromPoint3DToLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY,
-                                                          double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ,
-                                                          double planeNormalX, double planeNormalY, double planeNormalZ)
+   public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
+                                                 Vector3DReadOnly planeNormal, boolean testLeftSide)
    {
-      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnLineX, pointOnLineY, pointOnLineZ, planeNormalX,
-                                                                    planeNormalY, planeNormalZ, lineDirectionX, lineDirectionY, lineDirectionZ);
+      return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
+                                     lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide);
    }
 
-   public static double signedDistanceFromPoint3DToLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                          Vector3DReadOnly planeNormal)
-   {
-      double pointOnLineX = firstPointOnLine.getX();
-      double pointOnLineY = firstPointOnLine.getY();
-      double pointOnLineZ = firstPointOnLine.getZ();
-      double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
-      double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
-      double lineDirectionZ = secondPointOnLine.getZ() - firstPointOnLine.getZ();
-      return signedDistanceFromPoint3DToLine3D(point.getX(), point.getY(), point.getZ(), pointOnLineX, pointOnLineY, pointOnLineZ, lineDirectionX,
-                                               lineDirectionY, lineDirectionZ, planeNormal.getX(), planeNormal.getY(), planeNormal.getZ());
-   }
-
-   public static double signedDistanceFromPoint3DToLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                          Vector3DReadOnly planeNormal)
-   {
-      return signedDistanceFromPoint3DToLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(),
-                                               lineDirection.getX(), lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(),
-                                               planeNormal.getZ());
-   }
-
-   public static boolean canObserverSeeFace(Point3DReadOnly observer, Face3DReadOnly face, double epsilon)
-   {
-      return face.signedDistanceFromSupportPlane(observer) > epsilon;
-   }
-
-   public static boolean isOnFaceSupportPlane(Point3DReadOnly observer, Face3DReadOnly face, double epsilon)
-   {
-      return face.distanceFromSupportPlane(observer) <= epsilon;
-   }
-
+   /**
+    * Computes the distance squared to the closest half-edge to the query.
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @param halfEdges the half-edges to search for the closest to the query. Not modified.
+    * @return the distance squared between the query and the closest half-edge to it.
+    */
    public static double distanceSquaredToClosestHalfEdge3D(Point3DReadOnly query, List<? extends HalfEdge3DReadOnly> halfEdges)
    {
       if (halfEdges.isEmpty())
@@ -215,133 +301,32 @@ public class EuclidPolytopeTools
       return minDistanceSquared;
    }
 
+   /**
+    * Computes the distance to the closest half-edge to the query.
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @param halfEdges the half-edges to search for the closest to the query. Not modified.
+    * @return the distance between the query and the closest half-edge to it.
+    */
    public static double distanceToClosestHalfEdge3D(Point3DReadOnly query, List<? extends HalfEdge3DReadOnly> halfEdges)
    {
       return Math.sqrt(distanceSquaredToClosestHalfEdge3D(query, halfEdges));
    }
 
    /**
-    * Filters the given {@code faces} to only return the ones that the given {@code observer} can see.
+    * Finds the silhouette that is the continuous set of half-edges separating the faces visible from
+    * the observer from the hidden faces.
     * <p>
-    * The least visible face is the first element of the returned list. Besides the latter, the
-    * returned list follows no particular order.
+    * WARNING: This method generates garbage.
     * </p>
     *
-    * @param faces the list of faces to be tested. Not modified.
-    * @param observer the location of the observer looking at the faces. Not modified.
-    * @param visibilityThreshold the minimum distance between the observer and a face's plane before
-    *           the face is consider visible. When negative, the observer can be below the face's plane
-    *           and still be able to see the face.
-    * @return the list of visible faces with in first position the least visible face.
-    */
-   public static <F extends Face3DReadOnly> List<F> extractVisibleFaces(List<F> faces, Point3DReadOnly observer, double visibilityThreshold)
-   {
-      List<F> visibleFaces = new ArrayList<>();
-
-      int leastVisibleFaceIndex = -1;
-      double minimumDistance = Double.POSITIVE_INFINITY;
-
-      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
-      {
-         F face = faces.get(faceIndex);
-
-         double signedDistance = face.signedDistanceFromSupportPlane(observer);
-
-         if (signedDistance <= visibilityThreshold)
-            continue;
-
-         if (signedDistance < minimumDistance)
-         {
-            leastVisibleFaceIndex = visibleFaces.size();
-            minimumDistance = signedDistance;
-         }
-
-         visibleFaces.add(face);
-      }
-
-      if (!visibleFaces.isEmpty())
-      { // Moving the least visible to first position
-         Collections.swap(visibleFaces, 0, leastVisibleFaceIndex);
-      }
-
-      return visibleFaces;
-   }
-
-   /**
-    * Finds for the given {@code observer} coordinates the visible faces and the faces for which the
-    * observer lies in their support plane.
-    *
-    * @param faces the list of faces to search through.
-    * @param observer the coordinates from where we look at the faces.
+    * @param faces the list of faces to search the silhouette from. Not modified.
+    * @param observer the coordinates of the observer. Not modified.
     * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
     *           face's support plane, or a face is not visible.
-    * @param visibleFacesToPack the list used to store the visible faces. It is cleared before starting
-    *           the search. The least visible face is packed as the first element of the list.
-    * @param inPlaneFacesToPack the list used to store the faces for which the observer lies in their
-    *           support plane. It is cleared before starting the search.
-    * @return {@code true} if the observer cannot see any of the faces or if the observer is inside one
-    *         of the faces, {@code false} otherwise.
-    */
-   public static <F extends Face3DReadOnly> boolean extractVisibleFaces(List<F> faces, Point3DReadOnly observer, double epsilon, List<F> visibleFacesToPack,
-                                                                        List<F> inPlaneFacesToPack)
-   {
-      visibleFacesToPack.clear();
-      inPlaneFacesToPack.clear();
-
-      int leastVisibleFaceIndex = -1;
-      double minimumDistance = Double.POSITIVE_INFINITY;
-
-      for (int faceIndex = 0; faceIndex < faces.size(); faceIndex++)
-      {
-         F face = faces.get(faceIndex);
-
-         double signedDistance = face.signedDistanceFromSupportPlane(observer);
-
-         if (signedDistance <= epsilon)
-         {
-            if (signedDistance > -epsilon)
-            {
-               inPlaneFacesToPack.add(face);
-               if (face.isPointDirectlyAboveOrBelow(observer))
-                  return true;
-            }
-            continue;
-         }
-
-         if (signedDistance < minimumDistance)
-         {
-            leastVisibleFaceIndex = visibleFacesToPack.size();
-            minimumDistance = signedDistance;
-         }
-
-         visibleFacesToPack.add(face);
-      }
-
-      if (!visibleFacesToPack.isEmpty())
-      { // Moving the least visible to first position
-         Collections.swap(visibleFacesToPack, 0, leastVisibleFaceIndex);
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   public static <F extends Face3DReadOnly> List<F> extractInPlaneFaces(List<F> faces, Point3DReadOnly query, double distanceThreshold)
-   {
-      return faces.stream().filter(face -> face.isPointInFaceSupportPlane(query, distanceThreshold)).collect(Collectors.toList());
-   }
-
-   /**
-    * Finds the silhouette representing the border of the visible set of faces from the perspective of
-    * an observer.
-    *
-    * @param faces the list of faces to search the silhouette from.
-    * @param observer the coordinates of the observer.
-    * @param observer the coordinates from where we look at the faces.
-    * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
-    *           face's support plane, or a face is not visible.
+    * @param <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
+    * @param <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly} and has to
+    *           be common to all the faces' edges.
     * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
     *         any face or if the observer is inside one of the faces.
     */
@@ -351,17 +336,19 @@ public class EuclidPolytopeTools
    }
 
    /**
-    * Finds the silhouette representing the border of the visible set of faces from the perspective of
-    * an observer.
+    * Finds the silhouette that is the continuous set of half-edges separating the faces visible from
+    * the observer from the hidden faces.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
     *
-    * @param faces the list of faces to search the silhouette from.
-    * @param observer the coordinates of the observer.
-    * @param observer the coordinates from where we look at the faces.
+    * @param faces the list of faces to search the silhouette from. Not modified.
+    * @param observer the coordinates of the observer. Not modified.
     * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
     *           face's support plane, or a face is not visible.
     * @param visibleFacesToPack the collection used to store the visible faces. It is cleared before
     *           starting the search. It preferable to provide an implementation that supports fast
-    *           queries for {@link Collection#contains(Object)}. Can be {@code null}.
+    *           queries for {@link Collection#contains(Object)}. Modified. Can be {@code null}.
     * @param <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
     * @param <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly} and has to
     *           be common to all the faces' edges.
@@ -453,16 +440,8 @@ public class EuclidPolytopeTools
 
       Vertex3DReadOnly currentVertex = silhouetteStartEdge.getDestination();
 
-      int iteration = 0;
-
       while (currentVertex != silhouetteStartEdge.getOrigin())
       {
-         if (iteration++ >= 10000000)
-         {
-            System.err.println(EuclidPolytopeTools.class.getSimpleName() + ": computeSilhouette got stuck in infinite loop.");
-            return null;
-         }
-
          boolean foundNextEdge = false;
 
          for (HalfEdge3DReadOnly candidate : currentVertex.getAssociatedEdges())
@@ -487,8 +466,21 @@ public class EuclidPolytopeTools
       return silhouette;
    }
 
+   /**
+    * Navigates the given silhouette and collects the faces which support plane is close enough to the
+    * query.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @param silhouette the list of the half-edges to navigate. Not modified.
+    * @param epsilon the tolerance used for determining whether the query is close to a face support
+    *           plane.
+    * @return the list of faces for which the support plane is close to the query.
+    */
    @SuppressWarnings("unchecked")
-   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<F> computeInPlaneFacesAroundSilhouette(Point3DReadOnly observer,
+   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<F> computeInPlaneFacesAroundSilhouette(Point3DReadOnly query,
                                                                                                                       Collection<E> silhouette, double epsilon)
    {
       List<F> inPlaneFacesToPack = new ArrayList<>();
@@ -500,16 +492,27 @@ public class EuclidPolytopeTools
          if (inPlaneFacesToPack.contains(face))
             continue;
 
-         if (arePoint3DAndFace3DInPlane(observer, face, epsilon))
+         if (arePoint3DAndFace3DInPlane(query, face, epsilon))
             inPlaneFacesToPack.add(face);
       }
 
       return inPlaneFacesToPack;
    }
 
-   public static boolean arePoint3DAndFace3DInPlane(Point3DReadOnly point, Face3DReadOnly face, double epsilon)
+   /**
+    * Tests whether a point is close enough to a face support plane such that it could be extended to
+    * include the query.
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @param face the face to evaluate. Not modified.
+    * @param epsilon the tolerance used for determining whether the query is close to the face support
+    *           plane.
+    * @return {@code true} if the point is considered to be close enough to the face support plane,
+    *         {@code false} otherwise.
+    */
+   public static boolean arePoint3DAndFace3DInPlane(Point3DReadOnly query, Face3DReadOnly face, double epsilon)
    {
-      double distanceToPlane = face.distanceFromSupportPlane(point);
+      double distanceToPlane = face.distanceFromSupportPlane(query);
 
       if (distanceToPlane <= epsilon)
       {
@@ -524,7 +527,7 @@ public class EuclidPolytopeTools
          Point3D average = new Point3D();
          Vector3D normal = new Vector3D(face.getNormal());
          List<Point3DReadOnly> extendedFaceVertices = new ArrayList<>(face.getVertices());
-         extendedFaceVertices.add(point);
+         extendedFaceVertices.add(query);
          EuclidPolytopeConstructionTools.updateFace3DNormal(extendedFaceVertices, average, normal);
 
          for (Point3DReadOnly extendedFaceVertex : extendedFaceVertices)
@@ -539,22 +542,33 @@ public class EuclidPolytopeTools
       }
    }
 
-   public static boolean arePoint3DAndHalfEdge3DInLine(Point3DReadOnly point, HalfEdge3DReadOnly halfEdge, double epsilon)
+   /**
+    * Tests whether a point is close enough to a half-edge support line such that it could be extended
+    * to include the query.
+    * 
+    * @param query the coordinates of the query. Not modified.
+    * @param halfEdge the half-edge to evaluate. Not modified.
+    * @param epsilon the tolerance used for determining whether the query is close to the half-edge
+    *           support line.
+    * @return {@code true} if the point is considered to be close enough to the half-edge support
+    *         plane, {@code false} otherwise.
+    */
+   public static boolean arePoint3DAndHalfEdge3DInLine(Point3DReadOnly query, HalfEdge3DReadOnly halfEdge, double epsilon)
    {
-      if (halfEdge.distanceFromSupportLine(point) <= epsilon)
+      if (halfEdge.distanceFromSupportLine(query) <= epsilon)
       {
          return true;
       }
       else
       {
-         if (halfEdge.getOrigin().distanceSquared(point) > halfEdge.getDestination().distanceSquared(point))
+         if (halfEdge.getOrigin().distanceSquared(query) > halfEdge.getDestination().distanceSquared(query))
          {
-            if (EuclidGeometryTools.distanceFromPoint3DToLine3D(halfEdge.getDestination(), point, halfEdge.getOrigin()) <= epsilon)
+            if (EuclidGeometryTools.distanceFromPoint3DToLine3D(halfEdge.getDestination(), query, halfEdge.getOrigin()) <= epsilon)
                return true;
          }
          else
          {
-            if (EuclidGeometryTools.distanceFromPoint3DToLine3D(halfEdge.getOrigin(), point, halfEdge.getDestination()) <= epsilon)
+            if (EuclidGeometryTools.distanceFromPoint3DToLine3D(halfEdge.getOrigin(), query, halfEdge.getDestination()) <= epsilon)
                return true;
          }
 
@@ -562,16 +576,15 @@ public class EuclidPolytopeTools
       }
    }
 
-   public static boolean isPointDirectlyAboveOrBelowAnyFace(List<? extends Face3DReadOnly> faces, Point3DReadOnly query)
-   {
-      for (int i = 0; i < faces.size(); i++)
-      {
-         if (faces.get(i).isPointDirectlyAboveOrBelow(query))
-            return true;
-      }
-      return false;
-   }
-
+   /**
+    * Tests whether the tetrahedron defined by the given vertices contains the origin.
+    * 
+    * @param p0 the first vertex of the tetrahedron. Not modified.
+    * @param p1 the second vertex of the tetrahedron. Not modified.
+    * @param p2 the third vertex of the tetrahedron. Not modified.
+    * @param p3 the fourth vertex of the tetrahedron. Not modified.
+    * @return {@code true} if the origin is located inside the tetrahedron, {@code false} otherwise.
+    */
    public static boolean tetrahedronContainsOrigin(Point3DReadOnly p0, Point3DReadOnly p1, Point3DReadOnly p2, Point3DReadOnly p3)
    {
       Vector3D n;

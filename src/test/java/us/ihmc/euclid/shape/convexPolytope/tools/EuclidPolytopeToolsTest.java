@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
@@ -23,7 +22,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
-import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.TriangleMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -37,27 +36,6 @@ public class EuclidPolytopeToolsTest
 {
    private final static int ITERATIONS = EuclidTestConstants.ITERATIONS;
    private static final double EPSILON = 1.0e-12;
-
-   @Test
-   public void testSignedDistanceFromPoint3DToLine3D() throws Exception
-   {
-      Random random = new Random(243234);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Ensure consistency with the 2D method.
-         Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random);
-         Line2D line2D = new Line2D(new Point2D(line3D.getPoint()), new Vector2D(line3D.getDirection()));
-
-         Point3D query3D = EuclidCoreRandomTools.nextPoint3D(random);
-         Point2D query2D = new Point2D(query3D);
-
-         Vector3DReadOnly planeNormal = Axis.Z;
-
-         double expected = EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(query2D, line2D.getPoint(), line2D.getDirection());
-         double actual = EuclidPolytopeTools.signedDistanceFromPoint3DToLine3D(query3D, line3D.getPoint(), line3D.getDirection(), planeNormal);
-         assertEquals(expected, actual, EPSILON);
-      }
-   }
 
    @Test
    public void testIsPoint3DOnSideOfLine3D() throws Exception
@@ -76,7 +54,7 @@ public class EuclidPolytopeToolsTest
 
          boolean testForLeftSide = random.nextBoolean();
          boolean expected = EuclidGeometryTools.isPoint2DOnSideOfLine2D(query2D, line2D.getPoint(), line2D.getDirection(), testForLeftSide);
-         boolean actual = EuclidPolytopeTools.isPoint3DOnSideOfLine3D(query3D, line3D.getPoint(), line3D.getDirection(), planeNormal, testForLeftSide, 0.0);
+         boolean actual = EuclidPolytopeTools.isPoint3DOnSideOfLine3D(query3D, line3D.getPoint(), line3D.getDirection(), planeNormal, testForLeftSide);
          assertEquals(expected, actual);
       }
 
@@ -108,44 +86,44 @@ public class EuclidPolytopeToolsTest
          pointOnRightSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 5.0), line.getDirection(), line.getPoint());
          pointOnRightSide.scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), orthogonalToLinePointingLeft, pointOnRightSide);
 
-         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal()));
 
-         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal()));
 
          // Now we move the query along the plane's normal, the result should be the same
          pointOnLeftSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), pointOnLeftSide);
          pointOnRightSide.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), pointOnRightSide);
 
-         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal()));
 
-         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal()));
 
          // Finally we move the 2 points defining along the plane's normal, the result should be the same
          firstPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), firstPointOnLine);
          secondPointOnLine.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), plane.getNormal(), secondPointOnLine);
          line = new Line3D(firstPointOnLine, secondPointOnLine);
 
-         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
-         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal()));
+         assertTrue(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal()));
 
-         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
-         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal(), 0.0));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, firstPointOnLine, secondPointOnLine, plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnRightSideOfLine3D(pointOnLeftSide, line.getPoint(), line.getDirection(), plane.getNormal()));
+         assertFalse(EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(pointOnRightSide, line.getPoint(), line.getDirection(), plane.getNormal()));
       }
    }
 
@@ -171,8 +149,8 @@ public class EuclidPolytopeToolsTest
 
          for (HalfEdge3D edge : convexPolytope3D.getHalfEdges())
          { // This edge is part of the silhouette if its face is not visible and the face of its twin is visible
-            boolean isEdgeFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getFace(), epsilon);
-            boolean isTwinFaceVisible = EuclidPolytopeTools.canObserverSeeFace(observer, edge.getTwin().getFace(), epsilon);
+            boolean isEdgeFaceVisible = edge.getFace().canObserverSeeFace(observer, epsilon);
+            boolean isTwinFaceVisible = edge.getTwin().getFace().canObserverSeeFace(observer, epsilon);
 
             if (!isEdgeFaceVisible && isTwinFaceVisible)
                expectedSilhouette.add(edge);
@@ -191,144 +169,6 @@ public class EuclidPolytopeToolsTest
             for (HalfEdge3D expectedSilhouetteEdge : expectedSilhouette)
             {
                assertTrue(actualSilhouette.contains(expectedSilhouetteEdge));
-            }
-         }
-      }
-   }
-
-   @Test
-   void testGetVisibleFaces() throws Exception
-   {
-      Random random = new Random(4456453);
-
-      { // Testing with a tetrahedron
-         Point3D top = new Point3D(0.0, 0.0, 1.0);
-         Point3D bottomP0 = new Point3D(-0.5, -0.5, 0.0);
-         Point3D bottomP1 = new Point3D(0.5, -0.5, 0.0);
-         Point3D bottomP2 = new Point3D(0.0, 0.5, 0.0);
-
-         ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
-         convexPolytope3D.addVertex(bottomP0);
-         convexPolytope3D.addVertex(bottomP1);
-         convexPolytope3D.addVertex(bottomP2);
-         convexPolytope3D.addVertex(top);
-
-         for (int i = 0; i < ITERATIONS; i++)
-         {
-            for (int faceIndex = 0; faceIndex < 4; faceIndex++)
-            { // Expecting only 1 visible face
-               Face3D face = convexPolytope3D.getFace(faceIndex);
-               Point3D pointOnFace = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, face.getVertex(0), face.getVertex(1), face.getVertex(2));
-               Point3D pointOutside = new Point3D();
-               pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), face.getNormal(), pointOnFace);
-
-               List<Face3D> actualVisibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
-
-               assertEquals(1, actualVisibleFaces.size());
-               assertTrue(face == actualVisibleFaces.get(0));
-            }
-
-            for (int faceIndex = 0; faceIndex < 4; faceIndex++)
-            { // Expecting only 2 visible faces
-               Face3D firstFace = convexPolytope3D.getFace(faceIndex);
-               HalfEdge3D edge = firstFace.getEdge(random.nextInt(3));
-               Face3D secondFace = edge.getTwin().getFace();
-
-               Vector3D edgeNormal = new Vector3D();
-               edgeNormal.interpolate(firstFace.getNormal(), secondFace.getNormal(), 0.5);
-               edgeNormal.normalize();
-
-               Point3D pointOnEdge = new Point3D();
-               pointOnEdge.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-
-               { // Case #1: the firstFace is the most visible
-                  Vector3D directionLimit = new Vector3D(); // Represents the limit before secondFace becomes invisible.
-                  directionLimit.cross(edge.getDirection(false), secondFace.getNormal());
-                  directionLimit.normalize();
-                  assertTrue(directionLimit.dot(firstFace.getNormal()) > 0.0); // This is only to ensure that we've constructed the limit such that it is on the firstFace side.
-
-                  Vector3D extractionDirection = new Vector3D();
-                  extractionDirection.interpolate(directionLimit, edgeNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-                  extractionDirection.normalize();
-
-                  Point3D pointOutside = new Point3D();
-                  pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
-
-                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
-
-                  assertEquals(2, actualVisibleFaces.size());
-                  assertTrue(actualVisibleFaces.contains(firstFace));
-                  assertTrue(actualVisibleFaces.contains(secondFace));
-                  assertTrue(secondFace == actualVisibleFaces.get(0));
-               }
-
-               { // Case #2: the secondFace is the most visible (redundant test)
-                  Vector3D directionLimit = new Vector3D(); // Represents the limit before firstFace becomes invisible.
-                  directionLimit.cross(firstFace.getNormal(), edge.getDirection(false));
-                  directionLimit.normalize();
-                  assertTrue(directionLimit.dot(secondFace.getNormal()) > 0.0); // This is only to ensure that we've constructed the limit such that it is on the secondFace side.
-
-                  Vector3D extractionDirection = new Vector3D();
-                  extractionDirection.interpolate(directionLimit, edgeNormal, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
-                  extractionDirection.normalize();
-
-                  Point3D pointOutside = new Point3D();
-                  pointOutside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), extractionDirection, pointOnEdge);
-
-                  List<Face3D> actualVisibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), pointOutside, 0.0);
-
-                  assertEquals(2, actualVisibleFaces.size());
-                  assertTrue(actualVisibleFaces.contains(firstFace));
-                  assertTrue(actualVisibleFaces.contains(secondFace));
-                  assertTrue(firstFace == actualVisibleFaces.get(0));
-               }
-            }
-         }
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random);
-         double epsilon = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0e-3);
-         // First we build an observer that is outside the polytope
-         // We pick a face at random and create a point that is above the face's support plane.
-         Face3D aFace = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
-         Point3D observer = new Point3D(aFace.getCentroid());
-         Vector3D tangential = EuclidCoreRandomTools.nextOrthogonalVector3D(random, aFace.getNormal(), true);
-         observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), tangential, observer);
-         observer.scaleAdd(EuclidCoreRandomTools.nextDouble(random, epsilon, 10.0), aFace.getNormal(), observer);
-
-         List<Face3D> visibleFaces = EuclidPolytopeTools.extractVisibleFaces(convexPolytope3D.getFaces(), observer, epsilon);
-         List<Face3D> hiddenFaces = convexPolytope3D.getFaces().stream().filter(face -> !visibleFaces.contains(face)).collect(Collectors.toList());
-
-         // Check consistency with EuclidPolytopeTools.canObserverSeeFace(...)
-         assertTrue(visibleFaces.stream().allMatch(face -> EuclidPolytopeTools.canObserverSeeFace(observer, face, epsilon)));
-         assertTrue(hiddenFaces.stream().noneMatch(face -> EuclidPolytopeTools.canObserverSeeFace(observer, face, epsilon)));
-
-         // Check that the set of visible faces form a continuous set without isolated faces.
-         if (visibleFaces.size() == 1)
-         {
-            Face3D visibleFace = visibleFaces.get(0);
-            for (int neighborIndex = 0; neighborIndex < visibleFace.getNumberOfEdges(); neighborIndex++)
-            {
-               assertFalse(EuclidPolytopeTools.canObserverSeeFace(observer, visibleFace.getNeighbor(neighborIndex), epsilon));
-            }
-         }
-         else
-         {
-            for (Face3D visibleFace : visibleFaces)
-            {
-               int numberOfVisibleNeighbors = 0;
-
-               for (int neighborIndex = 0; neighborIndex < visibleFace.getNumberOfEdges(); neighborIndex++)
-               {
-                  Face3D neighbor = visibleFace.getNeighbor(neighborIndex);
-
-                  if (EuclidPolytopeTools.canObserverSeeFace(observer, neighbor, epsilon))
-                     numberOfVisibleNeighbors++;
-               }
-
-               assertTrue(numberOfVisibleNeighbors > 0);
             }
          }
       }
@@ -397,7 +237,7 @@ public class EuclidPolytopeToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          // This generates a icosahedron that has a circumscribed unit-sphere
-         GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
+         TriangleMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
          // We can easily define the radius simply by scaling the vertices.
          double radius = EuclidCoreRandomTools.nextDouble(random, 0.1, 5.0);
          icosahedron.getVertices().forEach(vertex -> vertex.scale(radius));

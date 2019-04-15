@@ -15,7 +15,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
-import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.TriangleMesh3D;
 import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.primitives.Capsule3D;
 import us.ihmc.euclid.shape.primitives.Cylinder3D;
@@ -770,7 +770,7 @@ public class EuclidShapeRandomTools
     */
    public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax, int recursionLevel, double radiusMin, double radiusMax)
    {
-      GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
+      TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
       AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
       transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       transform.setScale(EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax));

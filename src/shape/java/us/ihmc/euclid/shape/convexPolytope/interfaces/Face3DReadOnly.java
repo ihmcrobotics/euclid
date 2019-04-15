@@ -365,7 +365,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     */
    default boolean canObserverSeeEdge(Point3DReadOnly observer, HalfEdge3DReadOnly edge)
    {
-      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(observer, edge.getOrigin(), edge.getDestination(), getNormal(), 0.0);
+      return EuclidPolytopeTools.isPoint3DOnLeftSideOfLine3D(observer, edge.getOrigin(), edge.getDestination(), getNormal());
    }
 
    /**
@@ -380,6 +380,23 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    default boolean canObserverSeeFace(Point3DReadOnly observer)
    {
       return EuclidGeometryTools.isPoint3DAbovePlane3D(observer, getCentroid(), getNormal());
+   }
+
+   /**
+    * Tests whether this face is visible from the observer.
+    * <p>
+    * The face is visible from an observer if the face's normal is pointing towards it and that the
+    * observer is located at a distance greater than {@code epsilon} from this face support plane.
+    * </p>
+    *
+    * @param observer the coordinates of the observer. Not modified.
+    * @param epsilon the minimum distance between the observer and this face support plane for the face
+    *           to be visible.
+    * @return {@code true} if the observer can see this face, {@code false} otherwise.
+    */
+   default boolean canObserverSeeFace(Point3DReadOnly observer, double epsilon)
+   {
+      return signedDistanceFromSupportPlane(observer) > epsilon;
    }
 
    /**

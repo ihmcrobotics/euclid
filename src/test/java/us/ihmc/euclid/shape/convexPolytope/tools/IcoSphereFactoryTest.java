@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.Triangle3D;
-import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.TriangleMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 
@@ -20,7 +20,7 @@ public class IcoSphereFactoryTest
    void testIcosahedron() throws Exception
    {
       int recursionLevel = 0;
-      GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
+      TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
 
       List<Point3D> vertices = icoSphere.getVertices();
 
@@ -46,7 +46,7 @@ public class IcoSphereFactoryTest
    void testIcosphereRecursion1() throws Exception
    {
       int recursionLevel = 1;
-      GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
+      TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
 
       List<Point3D> vertices = icoSphere.getVertices();
 
@@ -64,7 +64,7 @@ public class IcoSphereFactoryTest
    void testIcosphereRecursion2() throws Exception
    {
       int recursionLevel = 2;
-      GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
+      TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
 
       List<Point3D> vertices = icoSphere.getVertices();
 
@@ -81,7 +81,7 @@ public class IcoSphereFactoryTest
    void testIcosphereRecursion3() throws Exception
    {
       int recursionLevel = 3;
-      GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
+      TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
 
       List<Point3D> vertices = icoSphere.getVertices();
 
@@ -98,7 +98,7 @@ public class IcoSphereFactoryTest
    void testIcosphereRecursion4() throws Exception
    {
       int recursionLevel = 4;
-      GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
+      TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
 
       List<Point3D> vertices = icoSphere.getVertices();
 

@@ -83,7 +83,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
-import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.GeometryMesh3D;
+import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.TriangleMesh3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -467,7 +467,7 @@ public class ConvexPolytope3DTest
    {
       Random random = new Random(23423);
 
-      GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
+      TriangleMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
 
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -574,7 +574,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS / 10; i++)
       { // Now we transform the ico-sphere
-         GeometryMesh3D icoSphere = IcoSphereFactory.newIcoSphere(random.nextInt(2) + 1);
+         TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(random.nextInt(2) + 1);
          icoSphere.applyTransform(EuclidCoreRandomTools.nextRigidBodyTransform(random));
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
@@ -1143,7 +1143,7 @@ public class ConvexPolytope3DTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         GeometryMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
+         TriangleMesh3D icosahedron = IcoSphereFactory.newIcoSphere(0);
          ConvexPolytope3D originalPolytope = new ConvexPolytope3D();
          icosahedron.getVertices().forEach(vertex -> originalPolytope.addVertex(vertex));
          ConvexPolytope3D actualPolytope = new ConvexPolytope3D();
