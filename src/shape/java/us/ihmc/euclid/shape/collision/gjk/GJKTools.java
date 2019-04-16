@@ -94,9 +94,9 @@ public class GJKTools
     * distance to the origin, and its barycentric coordinates are also computed.
     * </p>
     * <p>
-    * This method is an implementation of the <i>Signed Volumes distance sub-algorithm introduced
-    * in</i>: <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for
-    * faster and more reliable distance queries between convex objects</a>
+    * This method is an implementation of the <i>Signed Volumes distance sub-algorithm</i> introduced
+    * in: <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster
+    * and more reliable distance queries between convex objects</a>
     * </p>
     * 
     * @param oldVertices the vertices that may be filtered out. The array should contain at most 3
@@ -122,6 +122,11 @@ public class GJKTools
     * <p>
     * As well as finding the smallest closest simplex, the projection of the origin onto it, its
     * distance to the origin, and its barycentric coordinates are also computed.
+    * </p>
+    * <p>
+    * This method is an implementation of the <i>Sub-routine for 3-simplex</i> introduced in:
+    * <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster and
+    * more reliable distance queries between convex objects</a>
     * </p>
     * 
     * @param s1 the first vertex of the tetrahedron. <b>This method assumes that this vertex should not
@@ -207,6 +212,11 @@ public class GJKTools
     * <p>
     * As well as finding the smallest closest simplex, the projection of the origin onto it, its
     * distance to the origin, and its barycentric coordinates are also computed.
+    * </p>
+    * <p>
+    * This method is an implementation of the <i>Sub-routine for 2-simplex</i> introduced in:
+    * <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster and
+    * more reliable distance queries between convex objects</a>
     * </p>
     * 
     * @param s1 the first vertex of the triangle. <b>This method assumes that this vertex should not be
@@ -323,6 +333,11 @@ public class GJKTools
     * <p>
     * As well as finding the smallest closest simplex, the projection of the origin onto it, its
     * distance to the origin, and its barycentric coordinates are also computed.
+    * </p>
+    * <p>
+    * This method is an implementation of the <i>Sub-routine for 1-simplex</i> introduced in:
+    * <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster and
+    * more reliable distance queries between convex objects</a>
     * </p>
     * 
     * @param s1 the first vertex of the line segment. <b>This method assumes that this vertex should
