@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.collision.interfaces;
 
-import us.ihmc.euclid.shape.collision.ExpandingPolytopeAlgorithm;
-import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetector;
+import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
+import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;

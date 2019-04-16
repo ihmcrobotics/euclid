@@ -12,6 +12,8 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest.AnalyticalShapeCollisionDetection;
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest.Pair;
+import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
+import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;

@@ -328,6 +328,17 @@ public class EuclidCoreTools
    }
 
    /**
+    * Calculates and returns {@code value}<sup>2</sup>
+    * 
+    * @param value the value to compute the square of.
+    * @return {@code value * value}.
+    */
+   public static double square(double value)
+   {
+      return value * value;
+   }
+
+   /**
     * Calculates and returns the norm squared of the given two elements.
     * <p>
     * norm<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup>
@@ -726,5 +737,4 @@ public class EuclidCoreTools
    {
       return (1.0 - alpha) * a + alpha * b;
    }
-
 }
