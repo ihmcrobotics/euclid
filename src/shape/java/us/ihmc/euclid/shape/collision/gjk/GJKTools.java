@@ -5,10 +5,11 @@ import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.TupleTools;
 
 /**
- * This class provides tools needed for the Gilbert-Johnson-Keerthi algorithm used for collision
+ * This class provides the tools needed for the Gilbert-Johnson-Keerthi algorithm used for collision
  * detection.
  * 
  * @author Sylvain Bertrand
+ * @see GilbertJohnsonKeerthiCollisionDetector
  */
 public class GJKTools
 {

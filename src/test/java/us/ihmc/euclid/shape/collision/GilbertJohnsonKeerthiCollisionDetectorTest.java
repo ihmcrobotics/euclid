@@ -572,9 +572,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       assertTrue(polytopeB == result.getShapeB());
 
       if (isOnePolytopeEmpty)
-         assertNull(collisionDetector.getSimplexVertices(), messagePrefix);
+         assertNull(collisionDetector.getSimplex(), messagePrefix);
       else
-         assertNotNull(collisionDetector.getSimplexVertices(), messagePrefix);
+         assertNotNull(collisionDetector.getSimplex().getVertices(), messagePrefix);
 
       if (isOnePolytopeEmpty)
       {

@@ -13,6 +13,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * </p>
  * 
  * @author Sylvain Bertrand
+ * @see GilbertJohnsonKeerthiCollisionDetector
  */
 public class GJKVertex3D implements Point3DReadOnly
 {

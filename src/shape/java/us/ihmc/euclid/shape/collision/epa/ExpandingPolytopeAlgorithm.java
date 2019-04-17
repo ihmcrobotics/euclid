@@ -36,11 +36,20 @@ public class ExpandingPolytopeAlgorithm
       return result;
    }
 
-   public void evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
+   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
    {
-      evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
+      if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
+         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
+      return areShapesColliding;
+   }
+
+   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, GJKVertex3D[] simplex, EuclidShape3DCollisionResult resultToPack)
+   {
+      boolean areShapesColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, simplex, resultToPack);
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
+      return areShapesColliding;
    }
 
    public EuclidShape3DCollisionResult evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB)
@@ -53,13 +62,13 @@ public class ExpandingPolytopeAlgorithm
    public boolean evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
       boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
-      if (areShapesColliding)
-         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplexVertices(), resultToPack);
+      if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
+         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
       return areShapesColliding;
    }
 
-   public void evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] simplex,
-                                 EuclidShape3DCollisionResultBasics resultToPack)
+   public boolean evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] simplex,
+                                    EuclidShape3DCollisionResultBasics resultToPack)
    {
       PriorityQueue<EPAFace3D> queue = new PriorityQueue<>();
       double mu = Double.POSITIVE_INFINITY;
@@ -215,6 +224,8 @@ public class ExpandingPolytopeAlgorithm
 
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
+
+      return true;
    }
 
    public void setMaxIterations(int maxIterations)

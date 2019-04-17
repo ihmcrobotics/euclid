@@ -19,6 +19,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
  * </p>
  * 
  * @author Sylvain Bertrand
+ * @see GilbertJohnsonKeerthiCollisionDetector
  */
 public class GJKSimplex3D
 {
