@@ -656,7 +656,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    public boolean equals(Object object)
    {
       if (object instanceof Face3DReadOnly)
-         return Face3DReadOnly.super.equals((Face3DReadOnly) object);
+         return equals((Face3DReadOnly) object);
       else
          return false;
    }

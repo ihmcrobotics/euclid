@@ -490,7 +490,12 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       return ConvexPolytope3DReadOnly.super.containsNaN();
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Gets the i<sup>th</sup> face of this polytope.
+    *
+    * @param index the face index &in; [0; {@link #getNumberOfFaces()}[.
+    * @return the reference to the face.
+    */
    @Override
    public Face3D getFace(int index)
    {
@@ -504,7 +509,12 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       return faces;
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Gets the i<sup>th</sup> half-edge of this polytope.
+    *
+    * @param index the half-edge index &in; [0; {@link #getNumberOfHalfEdges()}[.
+    * @return the reference to the half-edge.
+    */
    @Override
    public HalfEdge3D getHalfEdge(int index)
    {
@@ -518,7 +528,12 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
       return halfEdges;
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Gets the i<sup>th</sup> vertex of this polytope.
+    *
+    * @param index the vertex index &in; [0; {@link #getNumberOfVertices()}[.
+    * @return the reference to the vertex.
+    */
    @Override
    public Vertex3D getVertex(int index)
    {
@@ -649,7 +664,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
    public boolean equals(Object object)
    {
       if (object instanceof ConvexPolytope3DReadOnly)
-         return ConvexPolytope3DReadOnly.super.equals((ConvexPolytope3DReadOnly) object);
+         return equals((ConvexPolytope3DReadOnly) object);
       else
          return false;
    }

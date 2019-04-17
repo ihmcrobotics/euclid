@@ -214,12 +214,18 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
       return face;
    }
 
+   /**
+    * Redirects to {@link #getOrigin()} to comply to {@code LineSegment3DBasics}.
+    */
    @Override
    public Point3DBasics getFirstEndpoint()
    {
       return getOrigin();
    }
 
+   /**
+    * Redirects to {@link #getDestination()} to comply to {@code LineSegment3DBasics}.
+    */
    @Override
    public Point3DBasics getSecondEndpoint()
    {
@@ -263,6 +269,13 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
       this.next = newNext;
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(HalfEdge3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
    @Override
    public boolean equals(Object object)
    {
@@ -274,6 +287,11 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
          return false;
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of each component of this half-edge 3D.
+    *
+    * @return the hash code value for this half-edge 3D.
+    */
    @Override
    public int hashCode()
    {
@@ -281,7 +299,17 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    }
 
    /**
-    * {@inheritDoc}
+    * Provides a {@code String} representation of this half-edge 3D as follows:
+    *
+    * <pre>
+    * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
+    *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
+    *    Next    : [( 3.310,  6.118, -3.108 ); ( 3.411,  2.581, -3.144 )]
+    *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
+    *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
+    * </pre>
+    * 
+    * @return the {@code String} representing this half-edge 3D.
     */
    @Override
    public String toString()

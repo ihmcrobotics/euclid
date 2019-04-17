@@ -19,16 +19,44 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class provides the tools needed for the Expanding Polytope algorithm used for collision
+ * detection.
+ * 
+ * @author Sylvain Bertrand
+ * @see ExpandingPolytopeAlgorithm
+ */
 public class EPATools
 {
-
+   /**
+    * Enum used to provide additional information when calculation the barycentric coordinates.
+    * 
+    * @author Sylvain Bertrand
+    */
    public enum BarycentricCoordinatesOutput
    {
-      INSIDE, OUTSIDE, AFFINELY_DEPENDENT
+      /** The triangle is sane and the projection of the origin lies inside it. */
+      INSIDE,
+      /** The triangle is sane and the projection of the origin lies outside it. */
+      OUTSIDE,
+      /** The triangle is affinely dependent, the barycentric coordinates can not be evaluated. */
+      AFFINELY_DEPENDENT
    };
 
+   /**
+    * Computes the barycentric coordinates of the projection of the origin onto the triangle.
+    * 
+    * @param s1 the first vertex of the triangle. Not modified.
+    * @param s2 the second vertex of the triangle. Not modified.
+    * @param s3 the third vertex of the triangle. Not modified.
+    * @param epsilon tolerance used to determine if the triangle is affinely dependent and extend the
+    *           area of the triangle before indicating whether the projection is inside or outside.
+    * @param lambdasToPack the array used to store the barycentric coordinates. The array length should
+    *           be equal to 3. Modified.
+    * @return additional info about the location of the projection and the sanity of the triangle.
+    */
    public static BarycentricCoordinatesOutput barycentricCoordinatesFrom2Simplex(Point3DReadOnly s1, Point3DReadOnly s2, Point3DReadOnly s3, double epsilon,
-                                                                       double[] lambdasToPack)
+                                                                                 double[] lambdasToPack)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
       double s2x = s2.getX(), s2y = s2.getY(), s2z = s2.getZ();
@@ -175,6 +203,13 @@ public class EPATools
       }
    }
 
+   /**
+    * Computes the barycentric coordinates of the projection of the origin onto the line segment.
+    * 
+    * @param s1 the first vertex of the line segment. Not modified.
+    * @param s2 the second vertex of the line segment. Not modified.
+    * @return the barycentric coordinates.
+    */
    public static double[] barycentricCoordinatesFrom1Simplex(Point3DReadOnly s1, Point3DReadOnly s2)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
@@ -247,11 +282,36 @@ public class EPATools
       }
    }
 
+   /**
+    * Given a simplex defined by {@code gjkVertices}, construct a polytope usable for the initial
+    * iteration of the expanding polytope algorithm.
+    * <p>
+    * The method ensure the clockwise winding for the faces generated.
+    * </p>
+    * <p>
+    * In case the simplex provided is a line segment or a triangle, additional vertices are generated
+    * to guarantee the output is a polytope.
+    * </p>
+    * <p>
+    * In case the simplex provided is a point, or that the generated polytope has a triangle that is
+    * affinely dependent, this method fails and return {@code null}.
+    * </p>
+    * 
+    * @param shapeA the shape in the collision evaluation used in case additional vertices need to be
+    *           generated. Not modified.
+    * @param shapeB the shape in the collision evaluation used in case additional vertices need to be
+    *           generated. Not modified.
+    * @param gjkVertices the simplex that is commonly the output of the Gilbert-Johnson-Keerthi
+    *           algorithm. Not modified.
+    * @param epsilon tolerance required when constructing faces and notably used to determine whether a
+    *           triangle is affinely dependent or not.
+    * @return a convex polytope usable to initiate the Expanding Polytope algorithm.
+    */
    public static List<EPAFace3D> newEPAPolytopeFromGJKSimplex(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] gjkVertices,
                                                               double epsilon)
    {
       List<EPAFace3D> epaPolytope = new ArrayList<>();
-   
+
       if (gjkVertices == null)
       {
          return null;
@@ -262,12 +322,12 @@ public class EPATools
          EPAVertex3D y1 = new EPAVertex3D(gjkVertices[1]);
          EPAVertex3D y2 = new EPAVertex3D(gjkVertices[2]);
          EPAVertex3D y3 = new EPAVertex3D(gjkVertices[3]);
-   
+
          // Estimate the face's normal based on its vertices and knowing the expecting ordering based on the twin-edge: v1, v2, then v3.
          Vector3D n = EuclidPolytopeTools.crossProductOfLineSegment3Ds(y0, y1, y1, y2);
          // As the vertices are clockwise ordered the cross-product of 2 successive edges should be negated to obtain the face's normal.
          n.negate();
-   
+
          if (EuclidGeometryTools.isPoint3DAbovePlane3D(y3, y0, n))
          {
             EPAFace3D f0 = new EPAFace3D(y3, y0, y1, epsilon);
@@ -282,15 +342,15 @@ public class EPATools
             EPAFace3D f3 = new EPAFace3D(y0, y2, y1, epsilon);
             if (f3.isTriangleAffinelyDependent())
                return null;
-   
+
             f0.getEdge1().setTwin(f3.getEdge2()); // e01 <-> e10
             f3.getEdge0().setTwin(f2.getEdge1()); // e02 <-> e20
             f2.getEdge2().setTwin(f0.getEdge0()); // e03 <-> e30
-   
+
             f1.getEdge1().setTwin(f3.getEdge1()); // e12 <-> e21
             f0.getEdge2().setTwin(f1.getEdge0()); // e13 <-> e31
             f1.getEdge2().setTwin(f2.getEdge0()); // e23 <-> e32
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -310,15 +370,15 @@ public class EPATools
             EPAFace3D f3 = new EPAFace3D(y0, y1, y2, epsilon);
             if (f3.isTriangleAffinelyDependent())
                return null;
-   
+
             f3.getEdge0().setTwin(f0.getEdge1()); // e01 <-> e10
             f2.getEdge1().setTwin(f3.getEdge2()); // e02 <-> e20
             f0.getEdge2().setTwin(f2.getEdge0()); // e03 <-> e30
-   
+
             f3.getEdge1().setTwin(f1.getEdge1()); // e12 <-> e21
             f1.getEdge2().setTwin(f0.getEdge0()); // e13 <-> e31
             f2.getEdge2().setTwin(f1.getEdge0()); // e23 <-> e32
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -330,12 +390,12 @@ public class EPATools
          EPAVertex3D y0 = new EPAVertex3D(gjkVertices[0]);
          EPAVertex3D y1 = new EPAVertex3D(gjkVertices[1]);
          EPAVertex3D y2 = new EPAVertex3D(gjkVertices[2]);
-   
+
          // Estimate the face's normal based on its vertices and knowing the expecting ordering based on the twin-edge: v1, v2, then v3.
          Vector3D n = EuclidPolytopeTools.crossProductOfLineSegment3Ds(y0, y1, y1, y2);
          // As the vertices are clockwise ordered the cross-product of 2 successive edges should be negated to obtain the face's normal.
          n.negate();
-   
+
          Point3DReadOnly vertexA, vertexB;
          EPAVertex3D y3, y4;
          vertexA = shapeA.getSupportingVertex(n);
@@ -346,7 +406,7 @@ public class EPATools
          n.negate();
          vertexB = shapeB.getSupportingVertex(n);
          y4 = new EPAVertex3D(vertexA, vertexB);
-   
+
          if (EuclidPolytopeTools.tetrahedronContainsOrigin(y0, y1, y2, y3))
          {
             EPAFace3D f0 = new EPAFace3D(y3, y0, y1, epsilon);
@@ -361,15 +421,15 @@ public class EPATools
             EPAFace3D f3 = new EPAFace3D(y0, y2, y1, epsilon);
             if (f3.isTriangleAffinelyDependent())
                return null;
-   
+
             f0.getEdge1().setTwin(f3.getEdge2()); // e01 <-> e10
             f3.getEdge0().setTwin(f2.getEdge1()); // e02 <-> e20
             f2.getEdge2().setTwin(f0.getEdge0()); // e03 <-> e30
-   
+
             f1.getEdge1().setTwin(f3.getEdge1()); // e12 <-> e21
             f0.getEdge2().setTwin(f1.getEdge0()); // e13 <-> e31
             f1.getEdge2().setTwin(f2.getEdge0()); // e23 <-> e32
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -389,15 +449,15 @@ public class EPATools
             EPAFace3D f3 = new EPAFace3D(y0, y1, y2, epsilon);
             if (f3.isTriangleAffinelyDependent())
                return null;
-   
+
             f3.getEdge0().setTwin(f0.getEdge1()); // e01 <-> e10
             f2.getEdge1().setTwin(f3.getEdge2()); // e02 <-> e20
             f0.getEdge2().setTwin(f2.getEdge0()); // e04 <-> e40
-   
+
             f3.getEdge1().setTwin(f1.getEdge1()); // e12 <-> e21
             f1.getEdge2().setTwin(f0.getEdge0()); // e14 <-> e41
             f2.getEdge2().setTwin(f1.getEdge0()); // e24 <-> e42
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -423,19 +483,19 @@ public class EPATools
             EPAFace3D f5 = new EPAFace3D(y3, y2, y0, epsilon);
             if (f5.isTriangleAffinelyDependent())
                return null;
-   
+
             f3.getEdge0().setTwin(f5.getEdge2()); // e30 <-> e03
             f4.getEdge0().setTwin(f3.getEdge2()); // e31 <-> e13
             f5.getEdge0().setTwin(f4.getEdge2()); // e32 <-> e23
-   
+
             f2.getEdge0().setTwin(f0.getEdge2()); // e40 <-> e04
             f0.getEdge0().setTwin(f1.getEdge2()); // e41 <-> e14
             f1.getEdge0().setTwin(f2.getEdge2()); // e42 <-> e24
-   
+
             f3.getEdge1().setTwin(f0.getEdge1()); // e01 <-> e10
             f2.getEdge1().setTwin(f5.getEdge1()); // e02 <-> e20
             f4.getEdge1().setTwin(f1.getEdge1()); // e12 <-> e21
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -448,15 +508,15 @@ public class EPATools
       {
          EPAVertex3D y0 = new EPAVertex3D(gjkVertices[0]);
          EPAVertex3D y1 = new EPAVertex3D(gjkVertices[1]);
-   
+
          Vector3D d = new Vector3D();
          d.sub(y1, y0);
-   
+
          Vector3DReadOnly axis = Axis.X;
          double coord = Math.abs(d.getX());
          double yAbs = Math.abs(d.getY());
          double zAbs = Math.abs(d.getZ());
-   
+
          if (yAbs > coord)
          {
             coord = yAbs;
@@ -466,7 +526,7 @@ public class EPATools
          {
             axis = Axis.Z;
          }
-   
+
          Vector3D v1 = new Vector3D();
          v1.cross(d, axis);
          RotationMatrix r = new RotationMatrix(new AxisAngle(d, 2.0 / 3.0 * Math.PI));
@@ -474,7 +534,7 @@ public class EPATools
          Vector3D v3 = new Vector3D();
          r.transform(v1, v2);
          r.transform(v2, v3);
-   
+
          Point3DReadOnly vertexA, vertexB;
          EPAVertex3D y2, y3, y4;
          vertexA = shapeA.getSupportingVertex(v1);
@@ -489,7 +549,7 @@ public class EPATools
          v3.negate();
          vertexB = shapeB.getSupportingVertex(v3);
          y4 = new EPAVertex3D(vertexA, vertexB);
-   
+
          if (EuclidPolytopeTools.tetrahedronContainsOrigin(y0, y2, y3, y4))
          {
             // Building the faces such that clockwise winding
@@ -505,15 +565,15 @@ public class EPATools
             EPAFace3D f3 = new EPAFace3D(y2, y4, y3, epsilon);
             if (f3.isTriangleAffinelyDependent())
                return null;
-   
+
             f0.getEdge0().setTwin(f2.getEdge2()); // e02 <-> e20
             f1.getEdge0().setTwin(f0.getEdge2()); // e03 <-> e30
             f2.getEdge0().setTwin(f1.getEdge2()); // e04 <-> e40
-   
+
             f0.getEdge1().setTwin(f3.getEdge2()); // e23 <-> e32
             f3.getEdge0().setTwin(f2.getEdge1()); // e24 <-> e42
             f1.getEdge1().setTwin(f3.getEdge1()); // e34 <-> e43
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -534,15 +594,15 @@ public class EPATools
             EPAFace3D f3 = new EPAFace3D(y2, y3, y4, epsilon);
             if (f3.isTriangleAffinelyDependent())
                return null;
-   
+
             f2.getEdge0().setTwin(f0.getEdge2()); // e12 <-> e21
             f0.getEdge0().setTwin(f1.getEdge2()); // e13 <-> e31
             f1.getEdge0().setTwin(f2.getEdge2()); // e14 <-> e41
-   
+
             f3.getEdge0().setTwin(f0.getEdge1()); // e23 <-> e32
             f2.getEdge1().setTwin(f3.getEdge2()); // e24 <-> e42
             f3.getEdge1().setTwin(f1.getEdge1()); // e34 <-> e43
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -568,23 +628,23 @@ public class EPATools
             EPAFace3D f5 = new EPAFace3D(y1, y2, y4, epsilon);
             if (f5.isTriangleAffinelyDependent())
                return null;
-   
+
             f0.getEdge0().setTwin(f2.getEdge2()); // e02 <-> e20
             f1.getEdge0().setTwin(f0.getEdge2()); // e03 <-> e30
             f2.getEdge0().setTwin(f1.getEdge2()); // e04 <-> e40
-   
+
             f5.getEdge0().setTwin(f3.getEdge2()); // e12 <-> e21
             f3.getEdge0().setTwin(f4.getEdge2()); // e13 <-> e31
             f4.getEdge0().setTwin(f5.getEdge2()); // e14 <-> e41
-   
+
             f0.getEdge1().setTwin(f3.getEdge1()); // e23 <-> e32
             f5.getEdge1().setTwin(f2.getEdge1()); // e24 <-> e42
             f1.getEdge1().setTwin(f4.getEdge1()); // e34 <-> e43
-   
+
             f0.getEdge1().setTwin(f3.getEdge1()); // e23 <-> e32
             f5.getEdge1().setTwin(f2.getEdge1()); // e24 <-> e42
             f1.getEdge1().setTwin(f4.getEdge1()); // e34 <-> e43
-   
+
             epaPolytope.add(f0);
             epaPolytope.add(f1);
             epaPolytope.add(f2);
@@ -598,15 +658,23 @@ public class EPATools
          // Supposedly this case only occurs when 2 shapes are only touching with 0-depth.
          return null;
       }
-   
+
       return epaPolytope;
    }
 
-   public static void silhouette(EPAEdge3D edge, Point3DReadOnly observer, List<EPAEdge3D> silhouetteToPack)
+   /**
+    * Recursive flood-fill algorithm for retrieving the silhouette as seen from the given
+    * {@code observer}.
+    * 
+    * @param edge the starting point for the recursion. Not modified.
+    * @param observer the coordinates of the observer. Not modified.
+    * @param silhouetteToPack list used to store the edges composing the silhouette. Modified.
+    */
+   public static void silhouette(EPAHalfEdge3D edge, Point3DReadOnly observer, List<EPAHalfEdge3D> silhouetteToPack)
    {
       if (edge == null || edge.getFace().isObsolete())
          return;
-   
+
       if (!edge.getFace().canObserverSeeFace(observer))
       {
          silhouetteToPack.add(edge);

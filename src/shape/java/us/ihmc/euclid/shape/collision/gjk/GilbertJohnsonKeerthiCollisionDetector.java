@@ -48,13 +48,13 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private double epsilonTriangleNormalSwitch = DEFAULT_EPSILON_SUPPORT_DIRECTION_SWITCH;
    /** The limit to the number of iterations in case the algorithm does not succeed to converge. */
    private int maxIterations = 500;
+   /** The number of iterations the last evaluation required. */
+   private int numberOfIterations = 0;
    /**
     * The simplex that is the closest to the origin or at the origin resulting from the last collision
     * evaluation.
     */
    private GJKSimplex3D simplex = null;
-   /** The number of iterations the last evaluation required. */
-   private int numberOfIterations = 0;
    /**
     * The support direction to used for the first iteration. Can be used to reduce the number of
     * iterations.
