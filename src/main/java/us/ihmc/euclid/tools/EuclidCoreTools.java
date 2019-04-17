@@ -386,6 +386,99 @@ public class EuclidCoreTools
    }
 
    /**
+    * Tests whether the value is equal to zero to an epsilon.
+    * <p>
+    * This is equivalent to {@code epsilonEquals(value, 0.0, epsilon)}.
+    * </p>
+    * 
+    * @param value the query.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if the value can be considered zero, {@code false} otherwise.
+    */
+   public static boolean isZero(double value, double epsilon)
+   {
+      return Math.abs(value) <= epsilon;
+   }
+
+   /**
+    * Tests whether both values are equal to zero to an epsilon.
+    * 
+    * @param x the first value.
+    * @param y the second value.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if both values can be considered zero, {@code false} otherwise.
+    */
+   public static boolean areAllZero(double x, double y, double epsilon)
+   {
+      return isZero(x, epsilon) && isZero(y, epsilon);
+   }
+
+   /**
+    * Tests whether all values are equal to zero to an epsilon.
+    * 
+    * @param x the first value.
+    * @param y the second value.
+    * @param z the third value.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if all values can be considered zero, {@code false} otherwise.
+    */
+   public static boolean areAllZero(double x, double y, double z, double epsilon)
+   {
+      return isZero(x, epsilon) && isZero(y, epsilon) && isZero(z, epsilon);
+   }
+   
+   /**
+    * Tests whether all values are equal to zero to an epsilon.
+    * 
+    * @param x the first value.
+    * @param y the second value.
+    * @param z the third value.
+    * @param s the fourth value.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if all values can be considered zero, {@code false} otherwise.
+    */
+   public static boolean areAllZero(double x, double y, double z, double s, double epsilon)
+   {
+      return isZero(x, epsilon) && isZero(y, epsilon) && isZero(z, epsilon) && isZero(s, epsilon);
+   }
+
+   /**
+    * Tests whether the to angles represent the same physical angle to an {@code epsilon}.
+    * <p>
+    * If any of the two angles is equal to {@link Double#NaN}, this method fails and returns
+    * {@code false}.
+    * </p>
+    * 
+    * @param expectedAngle the first angle in the comparison.
+    * @param actualAngle the second angle in the comparison.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if the two angles are considered to be geometrically equal, {@code false}
+    *         otherwise.
+    */
+   public static boolean angleGeometricallyEquals(double expectedAngle, double actualAngle, double epsilon)
+   {
+      return Math.abs(angleDifferenceMinusPiToPi(expectedAngle, actualAngle)) <= epsilon;
+   }
+
+   /**
+    * Tests whether the angle is geometrically equal to the zero angle to an epsilon.
+    * <p>
+    * This is equivalent to {@code angleGeometricallyEquals(angle, 0.0, epsilon)}.
+    * </p>
+    * 
+    * @param angle the query.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if the angle can be considered zero, {@code false} otherwise.
+    */
+   public static boolean isAngleZero(double angle, double epsilon)
+   {
+      angle = Math.abs(angle) % TwoPI;
+      if (angle > Math.PI)
+         angle -= TwoPI;
+      return Math.abs(angle) <= epsilon;
+   }
+
+   /**
     * Clamps value to the given range, defined by {@code -minMax} and {@code minMax}, inclusive.
     *
     * @param value value

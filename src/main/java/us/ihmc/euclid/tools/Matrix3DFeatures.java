@@ -16,7 +16,7 @@ public abstract class Matrix3DFeatures
    /**
     * Default tolerance for determining whether a matrix 3D represents the identity matrix or not.
     */
-   public static final double EPS_CHECK_IDENTITY = 1.0e-7;
+   public static final double EPS_CHECK_IDENTITY = 1.0e-12;
    /**
     * Default tolerance for determining whether a matrix 3D represents a 3D rotation matrix or not.
     */

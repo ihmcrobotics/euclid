@@ -597,6 +597,47 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
+      { // Test subTransform(Tuple3DBasics tupleToTransform)
+         Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
+         Tuple3DBasics actualTuple = new Vector3D(tuple);
+         Tuple3DBasics expectedTuple = new Vector3D(tuple);
+         axisAngle = createRandomAxisAngle(random);
+         double scale = 0.5 + random.nextDouble();
+         axisAngle = createAxisAngle(scale * axisAngle.getX(), scale * axisAngle.getY(), scale * axisAngle.getZ(), axisAngle.getAngle());
+         quaternion.set(axisAngle);
+
+         QuaternionTools.subTransform(quaternion, tuple, expectedTuple);
+         axisAngle.subTransform(actualTuple);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+
+         axisAngle = createAxisAngle(0.0, 0.0, 0.0, 0.0);
+         axisAngle.transform(actualTuple);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+         Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
+         Tuple3DBasics actualTuple = EuclidCoreRandomTools.nextVector3D(random);
+         Tuple3DBasics expectedTuple = new Vector3D(actualTuple);
+         axisAngle = createRandomAxisAngle(random);
+         double scale = 0.5 + random.nextDouble();
+         axisAngle = createAxisAngle(scale * axisAngle.getX(), scale * axisAngle.getY(), scale * axisAngle.getZ(), axisAngle.getAngle());
+         quaternion.set(axisAngle);
+
+         QuaternionTools.subTransform(quaternion, tuple, expectedTuple);
+         axisAngle.subTransform(tuple, actualTuple);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+
+         actualTuple = new Vector3D();
+         axisAngle = createAxisAngle(0.0, 0.0, 0.0, 0.0);
+         axisAngle.transform(tuple, actualTuple);
+         EuclidCoreTestTools.assertTuple3DEquals(tuple, actualTuple, getEpsilon());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
       { // Test transform(Tuple2DBasics tupleToTransform)
          Tuple2DReadOnly tuple = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DBasics actualTuple = new Vector2D(tuple);

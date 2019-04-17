@@ -9,8 +9,9 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -325,7 +326,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * @param rigidBodyTransform rigid-body transform holding the new position and orientation for this
     *           shape. Not modified.
     */
-   public final void setPose(RigidBodyTransform rigidBodyTransform)
+   public final void setPose(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       shapePose.set(rigidBodyTransform);
    }
@@ -442,7 +443,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public RotationMatrixReadOnly getOrientation()
    {
-      return shapePose.getRotationMatrix();
+      return shapePose.getRotation();
    }
 
    /**
@@ -467,7 +468,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public final double getOrientationPitch()
    {
-      return shapePose.getRotationMatrix().getPitch();
+      return shapePose.getRotation().getPitch();
    }
 
    /**
@@ -482,7 +483,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public final double getOrientationRoll()
    {
-      return shapePose.getRotationMatrix().getRoll();
+      return shapePose.getRotation().getRoll();
    }
 
    /**
@@ -497,7 +498,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public final double getOrientationYaw()
    {
-      return shapePose.getRotationMatrix().getYaw();
+      return shapePose.getRotation().getYaw();
    }
 
    /**
@@ -532,7 +533,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     * @param transformToPack the rigid-body transform in which the position and orientation of this
     *           shape are stored. Modified.
     */
-   public final void getPose(RigidBodyTransform transformToPack)
+   public final void getPose(RigidBodyTransformBasics transformToPack)
    {
       transformToPack.set(shapePose);
    }
@@ -557,7 +558,7 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
     */
    public Tuple3DReadOnly getPosition()
    {
-      return shapePose.getTranslationVector();
+      return shapePose.getTranslation();
    }
 
    /**
@@ -601,23 +602,12 @@ public abstract class Shape3D<S extends Shape3D<S>> implements GeometryObject<S>
    }
 
    /**
-    * Transforms this shape with a quaternion based transform that is defined in the local coordinates
-    * of this shape.
-    *
-    * @param transform the transform to append to this shape pose. Not modified.
-    */
-   public final void appendTransform(QuaternionBasedTransform transform)
-   {
-      shapePose.multiply(transform);
-   }
-
-   /**
     * Transforms this shape with a rigid-body transform that is defined in the local coordinates of
     * this shape.
     *
     * @param transform the transform to append to this shape pose. Not modified.
     */
-   public final void appendTransform(RigidBodyTransform transform)
+   public final void appendTransform(RigidBodyTransformReadOnly transform)
    {
       shapePose.multiply(transform);
    }

@@ -1553,7 +1553,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
          secondPolygon = createConvexPolygon2D(firstPolygon);
 
-         secondPolygon.applyTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0.0, 0.0, 1.0), 10.0 * EPSILON), new Vector3D()));
+         secondPolygon.applyTransform(new RigidBodyTransform(new AxisAngle(new Vector3D(0.0, 0.0, 1.0), 1000.0 * EPSILON), new Vector3D()));
 
          assertFalse(firstPolygon.geometricallyEquals(secondPolygon, EPSILON));
       }

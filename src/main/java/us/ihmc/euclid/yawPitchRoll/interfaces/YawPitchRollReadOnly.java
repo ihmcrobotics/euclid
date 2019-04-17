@@ -30,7 +30,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * However, there is no algebra directly accessible for manipulating orientations represented as
  * yaw-pitch-roll making it highly computationally expensive when compared to rotation matrices or
  * quaternions. In addition, yaw-pitch-roll representation is sensitive to gimbal lock which happens
- * when the pitch angle is in the neighborhood of either <i>pi</i> or -<i>pi</i>. When close to such
+ * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to such
  * configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes lead
  * to unexpected results.
  * </p>
@@ -120,6 +120,18 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * @return {@code true} if the three angles are equal to zero, {@code false} otherwise.
     */
    default boolean isZero(double epsilon)
+   {
+      return isZeroOrientation(epsilon);
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * A yaw-pitch-roll is a zero orientation when all the three angles are equal to zero.
+    * </p>
+    */
+   @Override
+   default boolean isZeroOrientation(double epsilon)
    {
       return YawPitchRollTools.isZero(getYaw(), getPitch(), getRoll(), epsilon);
    }
@@ -310,13 +322,6 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    default void transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       YawPitchRollTools.transform(this, tupleOriginal, tupleTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
-   {
-      YawPitchRollTools.addTransform(this, tupleOriginal, tupleTransformed);
    }
 
    /** {@inheritDoc} */

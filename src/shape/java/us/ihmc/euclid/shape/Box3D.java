@@ -1,8 +1,6 @@
 package us.ihmc.euclid.shape;
 
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedX;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedY;
-import static us.ihmc.euclid.tools.TransformationTools.computeTransformedZ;
+import static us.ihmc.euclid.tools.TransformationTools.*;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -12,7 +10,7 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -139,7 +137,7 @@ public class Box3D extends Shape3D<Box3D>
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *            negative.
     */
-   public Box3D(RigidBodyTransform pose, double length, double width, double height)
+   public Box3D(RigidBodyTransformReadOnly pose, double length, double width, double height)
    {
       setPose(pose);
       setSize(length, width, height);
@@ -152,7 +150,7 @@ public class Box3D extends Shape3D<Box3D>
     * @param size the size of this box along in order the x, y, and z axes.
     * @throws IllegalArgumentException if any of {@code size}'s elements is negative.
     */
-   public Box3D(RigidBodyTransform pose, double[] size)
+   public Box3D(RigidBodyTransformReadOnly pose, double[] size)
    {
       this(pose, size[0], size[1], size[2]);
    }
@@ -570,15 +568,15 @@ public class Box3D extends Shape3D<Box3D>
    @Override
    public boolean geometricallyEquals(Box3D other, double epsilon)
    {
-      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon))
          return false;
 
-      RotationMatrixReadOnly otherRotation = other.shapePose.getRotationMatrix();
+      RotationMatrixReadOnly otherRotation = other.shapePose.getRotation();
       double otherSizeWorldX = TransformationTools.computeTransformedX(otherRotation, false, other.size);
       double otherSizeWorldY = TransformationTools.computeTransformedY(otherRotation, false, other.size);
       double otherSizeWorldZ = TransformationTools.computeTransformedZ(otherRotation, false, other.size);
 
-      RotationMatrixReadOnly thisRotation = shapePose.getRotationMatrix();
+      RotationMatrixReadOnly thisRotation = shapePose.getRotation();
       double otherSizeLocalX = Math.abs(TransformationTools.computeTransformedX(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
       double otherSizeLocalY = Math.abs(TransformationTools.computeTransformedY(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));
       double otherSizeLocalZ = Math.abs(TransformationTools.computeTransformedZ(thisRotation, true, otherSizeWorldX, otherSizeWorldY, otherSizeWorldZ));

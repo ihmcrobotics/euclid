@@ -5,7 +5,7 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -222,7 +222,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @throws NotAMatrix2DException if the rotation part of the transform does not represent a 2D
     *            transformation.
     */
-   default void set(RigidBodyTransform rigidBodyTransform)
+   default void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       set(rigidBodyTransform, true);
    }
@@ -236,13 +236,13 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the rotation
     *            part of the transform does not represent a 2D transformation.
     */
-   default void set(RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
+   default void set(RigidBodyTransformReadOnly rigidBodyTransform, boolean checkIsTransform2D)
    {
       if (checkIsTransform2D)
          rigidBodyTransform.checkIfRotation2D();
 
       setPosition(rigidBodyTransform.getTranslationX(), rigidBodyTransform.getTranslationY());
-      setOrientation(rigidBodyTransform.getRotationMatrix().getYaw());
+      setOrientation(rigidBodyTransform.getRotation().getYaw());
    }
 
    /**

@@ -124,6 +124,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -2142,6 +2143,8 @@ public class EuclidFrameAPITestTools
 
       if (Transform.class.equals(type))
          return EuclidCoreRandomTools.nextAffineTransform(random);
+      if (RigidBodyTransformReadOnly.class.isAssignableFrom(type))
+         return EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
       if (DenseMatrix64F.class.equals(type))
       {

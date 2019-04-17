@@ -47,8 +47,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    void setZ(double z);
 
    /**
-    * Sets the components of this axis-angle to represent a "zero" rotation. After calling the axis
-    * is equal to (1, 0, 0) and the angle to 0.
+    * Sets the components of this axis-angle to represent a "zero" rotation. After calling the axis is
+    * equal to (1, 0, 0) and the angle to 0.
     */
    @Override
    default void setToZero()
@@ -68,8 +68,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    /**
     * Tests if this axis-angle contains a {@link Double#NaN}.
     *
-    * @return {@code true} if this axis-angle contains a {@link Double#NaN}, {@code false}
-    *         otherwise.
+    * @return {@code true} if this axis-angle contains a {@link Double#NaN}, {@code false} otherwise.
     */
    @Override
    default boolean containsNaN()
@@ -101,8 +100,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Normalizes the axis of this axis-angle such that its norm is equal to 1 after calling this
-    * method and its direction remains unchanged.
+    * Normalizes the axis of this axis-angle such that its norm is equal to 1 after calling this method
+    * and its direction remains unchanged.
     * <p>
     * Edge cases:
     * <ul>
@@ -303,6 +302,24 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    default void setRotationMatrix(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
       AxisAngleConversion.convertMatrixToAxisAngle(m00, m01, m02, m10, m11, m12, m20, m21, m22, this);
+   }
+
+   @Override
+   default void setToYawOrientation(double yaw)
+   {
+      set(0.0, 0.0, 1.0, yaw);
+   }
+
+   @Override
+   default void setToPitchOrientation(double pitch)
+   {
+      set(0.0, 1.0, 0.0, pitch);
+   }
+
+   @Override
+   default void setToRollOrientation(double roll)
+   {
+      set(1.0, 0.0, 0.0, roll);
    }
 
    /**

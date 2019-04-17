@@ -454,6 +454,17 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
    }
 
    /**
+    * Sets the rotation part to the {@code orientation} and resets the scales.
+    *
+    * @param orientation the orientation used to set the rotation part to. Not modified.
+    */
+   public void set(Orientation3DReadOnly orientation)
+   {
+      setRotation(orientation);
+      resetScale();
+   }
+
+   /**
     * Sets the rotation part to the {@code orientation} and all three scale factors to {@code scale}.
     *
     * @param orientation the orientation used to set the rotation part to. Not modified.
@@ -666,7 +677,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationYaw(double yaw)
    {
-      rotationMatrix.setToYawMatrix(yaw);
+      rotationMatrix.setToYawOrientation(yaw);
    }
 
    /**
@@ -683,7 +694,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationPitch(double pitch)
    {
-      rotationMatrix.setToPitchMatrix(pitch);
+      rotationMatrix.setToPitchOrientation(pitch);
    }
 
    /**
@@ -700,7 +711,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationRoll(double roll)
    {
-      rotationMatrix.setToRollMatrix(roll);
+      rotationMatrix.setToRollOrientation(roll);
    }
 
    /**

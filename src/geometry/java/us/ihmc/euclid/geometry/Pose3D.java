@@ -6,7 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -77,7 +77,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     *
     * @param rigidBodyTransform the transform used to initialize this. Not modified.
     */
-   public Pose3D(RigidBodyTransform rigidBodyTransform)
+   public Pose3D(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       set(rigidBodyTransform);
    }

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
+import static us.ihmc.euclid.tools.EuclidCoreTools.*;
 
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -277,6 +277,6 @@ public class Sphere3D extends Shape3D<Sphere3D>
    public boolean geometricallyEquals(Sphere3D other, double epsilon)
    {
       return Math.abs(radius - other.radius) <= epsilon
-            && shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon);
+            && shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon);
    }
 }

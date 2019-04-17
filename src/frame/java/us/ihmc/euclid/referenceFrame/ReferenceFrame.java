@@ -12,6 +12,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -267,7 +268,7 @@ public abstract class ReferenceFrame
     * @param transformToParent the transform that can be used to transform a geometry object the new
     *           frame to its parent frame. Not modified.
     */
-   public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransform transformToParent)
+   public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent)
    {
       this(frameName, parentFrame, transformToParent, false, false);
    }
@@ -298,7 +299,7 @@ public abstract class ReferenceFrame
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
     *            {@code parentFrame} is not a stationary frame.
     */
-   public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransform transformToParent, boolean isAStationaryFrame, boolean isZupFrame)
+   public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent, boolean isAStationaryFrame, boolean isZupFrame)
    {
       if (frameName.contains(SEPARATOR))
       {

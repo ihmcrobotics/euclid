@@ -8,8 +8,10 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
@@ -54,6 +56,15 @@ public class YawPitchRollTest extends YawPitchRollBasicsTest<YawPitchRoll>
          assertTrue(ypr.getYaw() == yprArray[0]);
          assertTrue(ypr.getPitch() == yprArray[1]);
          assertTrue(ypr.getRoll() == yprArray[2]);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3DReadOnly rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
+         YawPitchRoll actual = new YawPitchRoll(rotationVector);
+         YawPitchRoll expected = new YawPitchRoll();
+         YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, expected);
+         EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, getEpsilon());
       }
    }
 

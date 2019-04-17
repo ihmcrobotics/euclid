@@ -12,7 +12,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -171,7 +171,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * @param rigidBodyTransform the rigid body transform used to initialize the this frame pose. Not
     *           modified.
     */
-   public FramePose3D(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform)
+   public FramePose3D(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform)
    {
       setIncludingFrame(referenceFrame, rigidBodyTransform);
    }

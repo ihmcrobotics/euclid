@@ -67,7 +67,7 @@ public abstract class EuclidCoreIOTools
       if (rigidBodyTransform == null)
          return "null";
       else
-         return getHomogeneousTransformString(format, rigidBodyTransform.getRotationMatrix(), rigidBodyTransform.getTranslationVector());
+         return getHomogeneousTransformString(format, rigidBodyTransform.getRotation(), rigidBodyTransform.getTranslation());
    }
 
    /**
@@ -165,7 +165,7 @@ public abstract class EuclidCoreIOTools
    {
       if (quaternionBasedTransform == null)
          return "null";
-      return getQuaternionBasedTransformString(format, quaternionBasedTransform.getQuaternion(), quaternionBasedTransform.getTranslationVector());
+      return getQuaternionBasedTransformString(format, quaternionBasedTransform.getRotation(), quaternionBasedTransform.getTranslation());
    }
 
    private static String getQuaternionBasedTransformString(String format, QuaternionReadOnly quaternion, Tuple3DReadOnly translation)

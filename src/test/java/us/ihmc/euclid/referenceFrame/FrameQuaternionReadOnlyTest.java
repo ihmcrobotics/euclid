@@ -21,7 +21,7 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
    public final F createRandom2DFrameTuple(Random random, ReferenceFrame referenceFrame)
    {
       Quaternion quaternion = new Quaternion();
-      quaternion.setToYawQuaternion(EuclidCoreRandomTools.nextDouble(random, Math.PI));
+      quaternion.setToYawOrientation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
       return createFrameTuple(referenceFrame, quaternion);
    }
 

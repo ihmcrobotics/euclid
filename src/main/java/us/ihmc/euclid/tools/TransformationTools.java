@@ -313,11 +313,11 @@ public class TransformationTools
          double x = pointOriginal.getX() - rigidBodyTransform.getTranslationX();
          double y = pointOriginal.getY() - rigidBodyTransform.getTranslationY();
          double z = pointOriginal.getZ() - rigidBodyTransform.getTranslationZ();
-         return computeTransformedX(rigidBodyTransform.getRotationMatrix(), invert, x, y, z);
+         return computeTransformedX(rigidBodyTransform.getRotation(), invert, x, y, z);
       }
       else
       {
-         return rigidBodyTransform.getTranslationX() + computeTransformedX(rigidBodyTransform.getRotationMatrix(), invert, pointOriginal);
+         return rigidBodyTransform.getTranslationX() + computeTransformedX(rigidBodyTransform.getRotation(), invert, pointOriginal);
       }
    }
 
@@ -338,11 +338,11 @@ public class TransformationTools
          double x = pointOriginal.getX() - rigidBodyTransform.getTranslationX();
          double y = pointOriginal.getY() - rigidBodyTransform.getTranslationY();
          double z = pointOriginal.getZ() - rigidBodyTransform.getTranslationZ();
-         return computeTransformedY(rigidBodyTransform.getRotationMatrix(), invert, x, y, z);
+         return computeTransformedY(rigidBodyTransform.getRotation(), invert, x, y, z);
       }
       else
       {
-         return rigidBodyTransform.getTranslationY() + computeTransformedY(rigidBodyTransform.getRotationMatrix(), invert, pointOriginal);
+         return rigidBodyTransform.getTranslationY() + computeTransformedY(rigidBodyTransform.getRotation(), invert, pointOriginal);
       }
    }
 
@@ -363,11 +363,11 @@ public class TransformationTools
          double x = pointOriginal.getX() - rigidBodyTransform.getTranslationX();
          double y = pointOriginal.getY() - rigidBodyTransform.getTranslationY();
          double z = pointOriginal.getZ() - rigidBodyTransform.getTranslationZ();
-         return computeTransformedZ(rigidBodyTransform.getRotationMatrix(), invert, x, y, z);
+         return computeTransformedZ(rigidBodyTransform.getRotation(), invert, x, y, z);
       }
       else
       {
-         return rigidBodyTransform.getTranslationZ() + computeTransformedZ(rigidBodyTransform.getRotationMatrix(), invert, pointOriginal);
+         return rigidBodyTransform.getTranslationZ() + computeTransformedZ(rigidBodyTransform.getRotation(), invert, pointOriginal);
       }
    }
 
@@ -383,7 +383,7 @@ public class TransformationTools
     */
    public static double computeTransformedX(RigidBodyTransform rigidBodyTransform, boolean invert, Vector3DReadOnly vectorOriginal)
    {
-      return computeTransformedX(rigidBodyTransform.getRotationMatrix(), invert, vectorOriginal);
+      return computeTransformedX(rigidBodyTransform.getRotation(), invert, vectorOriginal);
    }
 
    /**
@@ -398,7 +398,7 @@ public class TransformationTools
     */
    public static double computeTransformedY(RigidBodyTransform rigidBodyTransform, boolean invert, Vector3DReadOnly vectorOriginal)
    {
-      return computeTransformedY(rigidBodyTransform.getRotationMatrix(), invert, vectorOriginal);
+      return computeTransformedY(rigidBodyTransform.getRotation(), invert, vectorOriginal);
    }
 
    /**
@@ -413,7 +413,7 @@ public class TransformationTools
     */
    public static double computeTransformedZ(RigidBodyTransform rigidBodyTransform, boolean invert, Vector3DReadOnly vectorOriginal)
    {
-      return computeTransformedZ(rigidBodyTransform.getRotationMatrix(), invert, vectorOriginal);
+      return computeTransformedZ(rigidBodyTransform.getRotation(), invert, vectorOriginal);
    }
 
    /**
@@ -433,11 +433,11 @@ public class TransformationTools
          double x = pointOriginal.getX() - quaternionBasedTransform.getTranslationX();
          double y = pointOriginal.getY() - quaternionBasedTransform.getTranslationY();
          double z = pointOriginal.getZ() - quaternionBasedTransform.getTranslationZ();
-         return computeTransformedX(quaternionBasedTransform.getQuaternion(), invert, x, y, z);
+         return computeTransformedX(quaternionBasedTransform.getRotation(), invert, x, y, z);
       }
       else
       {
-         return quaternionBasedTransform.getTranslationX() + computeTransformedX(quaternionBasedTransform.getQuaternion(), invert, pointOriginal);
+         return quaternionBasedTransform.getTranslationX() + computeTransformedX(quaternionBasedTransform.getRotation(), invert, pointOriginal);
       }
    }
 
@@ -458,11 +458,11 @@ public class TransformationTools
          double x = pointOriginal.getX() - quaternionBasedTransform.getTranslationX();
          double y = pointOriginal.getY() - quaternionBasedTransform.getTranslationY();
          double z = pointOriginal.getZ() - quaternionBasedTransform.getTranslationZ();
-         return computeTransformedY(quaternionBasedTransform.getQuaternion(), invert, x, y, z);
+         return computeTransformedY(quaternionBasedTransform.getRotation(), invert, x, y, z);
       }
       else
       {
-         return quaternionBasedTransform.getTranslationY() + computeTransformedY(quaternionBasedTransform.getQuaternion(), invert, pointOriginal);
+         return quaternionBasedTransform.getTranslationY() + computeTransformedY(quaternionBasedTransform.getRotation(), invert, pointOriginal);
       }
    }
 
@@ -483,11 +483,11 @@ public class TransformationTools
          double x = pointOriginal.getX() - quaternionBasedTransform.getTranslationX();
          double y = pointOriginal.getY() - quaternionBasedTransform.getTranslationY();
          double z = pointOriginal.getZ() - quaternionBasedTransform.getTranslationZ();
-         return computeTransformedZ(quaternionBasedTransform.getQuaternion(), invert, x, y, z);
+         return computeTransformedZ(quaternionBasedTransform.getRotation(), invert, x, y, z);
       }
       else
       {
-         return quaternionBasedTransform.getTranslationZ() + computeTransformedZ(quaternionBasedTransform.getQuaternion(), invert, pointOriginal);
+         return quaternionBasedTransform.getTranslationZ() + computeTransformedZ(quaternionBasedTransform.getRotation(), invert, pointOriginal);
       }
    }
 
@@ -503,7 +503,7 @@ public class TransformationTools
     */
    public static double computeTransformedX(QuaternionBasedTransform quaternionBasedTransform, boolean invert, Vector3DReadOnly vectorOriginal)
    {
-      return computeTransformedX(quaternionBasedTransform.getQuaternion(), invert, vectorOriginal);
+      return computeTransformedX(quaternionBasedTransform.getRotation(), invert, vectorOriginal);
    }
 
    /**
@@ -518,7 +518,7 @@ public class TransformationTools
     */
    public static double computeTransformedY(QuaternionBasedTransform quaternionBasedTransform, boolean invert, Vector3DReadOnly vectorOriginal)
    {
-      return computeTransformedY(quaternionBasedTransform.getQuaternion(), invert, vectorOriginal);
+      return computeTransformedY(quaternionBasedTransform.getRotation(), invert, vectorOriginal);
    }
 
    /**
@@ -533,7 +533,7 @@ public class TransformationTools
     */
    public static double computeTransformedZ(QuaternionBasedTransform quaternionBasedTransform, boolean invert, Vector3DReadOnly vectorOriginal)
    {
-      return computeTransformedZ(quaternionBasedTransform.getQuaternion(), invert, vectorOriginal);
+      return computeTransformedZ(quaternionBasedTransform.getRotation(), invert, vectorOriginal);
    }
 
    /**

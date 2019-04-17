@@ -1,8 +1,7 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -212,18 +211,7 @@ public interface Pose3DReadOnly
     *
     * @param transformToPack the rigid-body transform that is set to represent this pose 3D. Modified.
     */
-   default void get(RigidBodyTransform transformToPack)
-   {
-      transformToPack.set(getOrientation(), getPosition());
-   }
-
-   /**
-    * Packs this pose 3D into the given {@code transformToPack}.
-    *
-    * @param transformToPack the quaternion-based transform that is set to represent this pose 3D.
-    *           Modified.
-    */
-   default void get(QuaternionBasedTransform transformToPack)
+   default void get(RigidBodyTransformBasics transformToPack)
    {
       transformToPack.set(getOrientation(), getPosition());
    }

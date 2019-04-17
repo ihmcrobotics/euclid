@@ -44,6 +44,26 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    /** Default tolerance used to verify that this quaternion is a unit-quaternion. */
    public static final double EPS_UNITARY = 1.0e-7;
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean containsNaN()
+   {
+      return Tuple4DReadOnly.super.containsNaN();
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * A quaternion is a zero orientation when it is equal to the neutral quaternion, i.e.
+    * {@code (x=0, y=0, z=0, s=1)}.
+    * </p>
+    */
+   @Override
+   default boolean isZeroOrientation(double epsilon)
+   {
+      return QuaternionTools.isNeutralQuaternion(this, epsilon);
+   }
+
    /**
     * Tests if this quaternion has a norm equal to 1+/-{@code epsilon}.
     *

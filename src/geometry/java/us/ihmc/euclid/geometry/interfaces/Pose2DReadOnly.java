@@ -1,6 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 /**
@@ -71,7 +71,7 @@ public interface Pose2DReadOnly
     *
     * @param transformToPack the rigid-body transform that is set to represent this pose 2D. Modified.
     */
-   default void get(RigidBodyTransform transformToPack)
+   default void get(RigidBodyTransformBasics transformToPack)
    {
       transformToPack.setTranslation(getX(), getY(), 0.0);
       transformToPack.setRotationYaw(getYaw());

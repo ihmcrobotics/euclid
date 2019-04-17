@@ -6,8 +6,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -180,7 +179,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void setOrientation(Orientation2DReadOnly orientation)
    {
-      getOrientation().setToYawQuaternion(orientation.getYaw());
+      getOrientation().setToYawOrientation(orientation.getYaw());
    }
 
    /**
@@ -229,21 +228,10 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param rigidBodyTransform the transform use to set this pose 3D. Not modified.
     */
-   default void set(RigidBodyTransform rigidBodyTransform)
+   default void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      setPosition(rigidBodyTransform.getTranslationVector());
-      setOrientation(rigidBodyTransform.getRotationMatrix());
-   }
-
-   /**
-    * Sets this pose 3D to match the given quaternion-based transform.
-    *
-    * @param quaternionBasedTransform the transform use to set this pose 3D. Not modified.
-    */
-   default void set(QuaternionBasedTransform quaternionBasedTransform)
-   {
-      setPosition(quaternionBasedTransform.getTranslationVector());
-      setOrientation(quaternionBasedTransform.getQuaternion());
+      setPosition(rigidBodyTransform.getTranslation());
+      setOrientation(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -440,20 +428,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param transform the transform to prepend to this pose 3D. Not modified.
     */
-   default void prependTransform(RigidBodyTransform transform)
-   {
-      applyTransform(transform);
-   }
-
-   /**
-    * Prepends the given transform to this pose 3D.
-    * <p>
-    * This is the same as {@link #applyTransform(Transform)}.
-    * </p>
-    *
-    * @param transform the transform to prepend to this pose 3D. Not modified.
-    */
-   default void prependTransform(QuaternionBasedTransform transform)
+   default void prependTransform(RigidBodyTransformReadOnly transform)
    {
       applyTransform(transform);
    }
@@ -573,21 +548,10 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param transform the rigid-body transform to append to this pose 3D. Not modified.
     */
-   default void appendTransform(RigidBodyTransform transform)
+   default void appendTransform(RigidBodyTransformReadOnly transform)
    {
-      QuaternionTools.addTransform(getOrientation(), transform.getTranslationVector(), getPosition());
-      getOrientation().append(transform.getRotationMatrix());
-   }
-
-   /**
-    * Appends the given {@code transform} to this pose 3D.
-    *
-    * @param transform the quaternion-based transform to append to this pose 3D. Not modified.
-    */
-   default void appendTransform(QuaternionBasedTransform transform)
-   {
-      QuaternionTools.addTransform(getOrientation(), transform.getTranslationVector(), getPosition());
-      getOrientation().multiply(transform.getQuaternion());
+      QuaternionTools.addTransform(getOrientation(), transform.getTranslation(), getPosition());
+      getOrientation().append(transform.getRotation());
    }
 
    /**

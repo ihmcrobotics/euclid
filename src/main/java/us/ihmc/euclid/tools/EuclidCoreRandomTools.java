@@ -8,6 +8,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
@@ -487,6 +488,30 @@ public abstract class EuclidCoreRandomTools
    public static Quaternion32 nextQuaternion32(Random random, double minMaxAngleRange)
    {
       return new Quaternion32(nextAxisAngle(random, minMaxAngleRange));
+   }
+
+   /**
+    * Generates an orientation which both value and type are random.
+    * <p>
+    * The type can be either: axis-angle, quaternion, rotation matrix, or yaw-pitch-roll.
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random orientation 3D.
+    */
+   public static Orientation3DBasics nextOrientation3D(Random random)
+   {
+      switch (random.nextInt(4))
+      {
+      case 0:
+         return nextAxisAngle(random);
+      case 1:
+         return nextQuaternion(random);
+      case 2:
+         return nextRotationMatrix(random);
+      default:
+         return nextYawPitchRoll(random);
+      }
    }
 
    /**

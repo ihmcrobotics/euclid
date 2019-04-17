@@ -7,7 +7,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -123,7 +123,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * @throws NotAMatrix2DException if the rotation part of the transform does not represent a 2D
     *            transformation.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform)
    {
       setIncludingFrame(referenceFrame, rigidBodyTransform, true);
    }
@@ -139,7 +139,7 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the rotation
     *            part of the transform does not represent a 2D transformation.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform, boolean checkIsTransform2D)
    {
       setReferenceFrame(referenceFrame);
       set(rigidBodyTransform, checkIsTransform2D);

@@ -599,7 +599,7 @@ public interface Matrix3DReadOnly
    }
 
    /**
-    * Transforms the given tuple by this matrix and add the result to the tuple.
+    * Transforms the given tuple by this matrix and adds the result to the tuple.
     * <p>
     * tupleToTransform = tupleToTransform + this * tupleToTransform
     * </p>
@@ -612,7 +612,7 @@ public interface Matrix3DReadOnly
    }
 
    /**
-    * Transforms the given tuple {@code tupleOriginal} by this matrix and add the result to
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and adds the result to
     * {@code tupleTransformed}.
     * <p>
     * tupleTransformed = tupleTransformed + this * tupleOriginal

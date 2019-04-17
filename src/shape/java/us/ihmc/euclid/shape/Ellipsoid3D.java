@@ -6,7 +6,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -78,7 +78,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * @param radiusZ radius of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
-   public Ellipsoid3D(RigidBodyTransform pose, double radiusX, double radiusY, double radiusZ)
+   public Ellipsoid3D(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       set(pose, radiusX, radiusY, radiusZ);
    }
@@ -311,7 +311,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
     * @param radiusZ radius of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
-   public void set(RigidBodyTransform pose, double radiusX, double radiusY, double radiusZ)
+   public void set(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       setPose(pose);
       setRadii(radiusX, radiusY, radiusZ);
@@ -415,7 +415,7 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
    @Override
    public boolean geometricallyEquals(Ellipsoid3D other, double epsilon)
    {
-      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon))
          return false;
 
       boolean areThisRadiiXYEqual = EuclidCoreTools.epsilonEquals(radii.getX(), radii.getY(), epsilon);
@@ -434,12 +434,12 @@ public class Ellipsoid3D extends Shape3D<Ellipsoid3D>
          return Math.abs(thisRadiiSum - otherRadiiSum) <= 3.0 * epsilon; // Comparing the average of each ellipsoid's radii.
       }
 
-      RotationMatrixReadOnly otherRotation = other.shapePose.getRotationMatrix();
+      RotationMatrixReadOnly otherRotation = other.shapePose.getRotation();
       double otherRadiusWorldX = TransformationTools.computeTransformedX(otherRotation, false, other.radii);
       double otherRadiusWorldY = TransformationTools.computeTransformedY(otherRotation, false, other.radii);
       double otherRadiusWorldZ = TransformationTools.computeTransformedZ(otherRotation, false, other.radii);
 
-      RotationMatrixReadOnly thisRotation = shapePose.getRotationMatrix();
+      RotationMatrixReadOnly thisRotation = shapePose.getRotation();
       double otherRadiusLocalX = Math.abs(TransformationTools.computeTransformedX(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));
       double otherRadiusLocalY = Math.abs(TransformationTools.computeTransformedY(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));
       double otherRadiusLocalZ = Math.abs(TransformationTools.computeTransformedZ(thisRotation, true, otherRadiusWorldX, otherRadiusWorldY, otherRadiusWorldZ));

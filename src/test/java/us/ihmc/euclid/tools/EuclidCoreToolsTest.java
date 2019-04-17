@@ -302,6 +302,59 @@ public class EuclidCoreToolsTest
    }
 
    @Test
+   public void testAngleGeometricallyEquals() throws Exception
+   {
+      Random random = new Random(35635);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with angle that are close-ish to each other
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 0.5);
+         double angleA = EuclidCoreRandomTools.nextDouble(random, 10.0 * Math.PI);
+         double angleNotEqual = angleA + (random.nextBoolean() ? -1.01 : 1.01) * epsilon;
+         double angleEqual = angleA + (random.nextBoolean() ? -0.99 : 0.99) * epsilon;
+
+         assertFalse(EuclidCoreTools.angleGeometricallyEquals(angleA, angleNotEqual, epsilon));
+         assertTrue(EuclidCoreTools.angleGeometricallyEquals(angleA, angleEqual, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test with angle that are far-ish to each other
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 0.5);
+         double angleA = EuclidCoreRandomTools.nextDouble(random, 10.0 * Math.PI);
+         double twoPIMutiple = random.nextInt(15) * 2.0 * Math.PI;
+         if (random.nextBoolean())
+            twoPIMutiple = -twoPIMutiple;
+         double angleNotEqual = angleA + (random.nextBoolean() ? -1.01 : 1.01) * epsilon + twoPIMutiple;
+         double angleEqual = angleA + (random.nextBoolean() ? -0.99 : 0.99) * epsilon + twoPIMutiple;
+
+         assertFalse(EuclidCoreTools.angleGeometricallyEquals(angleA, angleNotEqual, epsilon));
+         assertTrue(EuclidCoreTools.angleGeometricallyEquals(angleA, angleEqual, epsilon));
+      }
+   }
+
+   @Test
+   public void testIsAngleZero() throws Exception
+   {
+      Random random = new Random(35635);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 0.5);
+         double twoPIMutiple = random.nextInt(15) * 2.0 * Math.PI;
+         double zeroAngle = 0.99 * EuclidCoreRandomTools.nextDouble(random, epsilon);
+         double nonZeroAngle = EuclidCoreRandomTools.nextDouble(random, 1.01 * epsilon, Math.PI);
+         if (random.nextBoolean())
+            nonZeroAngle = -nonZeroAngle;
+
+         assertTrue(EuclidCoreTools.isAngleZero(zeroAngle, epsilon));
+         assertTrue(EuclidCoreTools.isAngleZero(zeroAngle + twoPIMutiple, epsilon));
+
+         assertFalse(EuclidCoreTools.isAngleZero(nonZeroAngle, epsilon));
+         assertFalse(EuclidCoreTools.isAngleZero(nonZeroAngle + twoPIMutiple, epsilon));
+      }
+   }
+
+   @Test
    public void testMax() throws Exception
    {
       Random random = new Random(45645L);
@@ -383,6 +436,48 @@ public class EuclidCoreToolsTest
             result = EuclidCoreTools.interpolate(a, b, alpha);
             assertEquals(result, a + alpha * (b - a), 1.0e-10);
          }
+      }
+   }
+
+   @Test
+   public void testClamp() throws Exception
+   {
+      Random random = new Random(3453);
+
+      { // Test clamp(double value, double minMax)
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            double minMax = EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+            double valueInside = EuclidCoreRandomTools.nextDouble(random, minMax);
+            double valueUnder = EuclidCoreRandomTools.nextDouble(random, -100.0, 0.0) - minMax;
+            double valueOver = EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0) + minMax;
+
+            assertTrue(valueInside == EuclidCoreTools.clamp(valueInside, minMax));
+            assertTrue(-minMax == EuclidCoreTools.clamp(valueUnder, minMax));
+            assertTrue(minMax == EuclidCoreTools.clamp(valueOver, minMax));
+         }
+
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> EuclidCoreTools.clamp(0.0, -EuclidCoreTools.CLAMP_EPS - 1.0e-12), RuntimeException.class);
+      }
+
+      { // Test clamp(double value, double minMax)
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            double min = EuclidCoreRandomTools.nextDouble(random, -100.0, 100.0);
+            double max = min + EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+            double valueInside = EuclidCoreRandomTools.nextDouble(random, min, max);
+            double valueUnder = min - EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+            double valueOver = max + EuclidCoreRandomTools.nextDouble(random, 0.0, 100.0);
+
+            assertTrue(valueInside == EuclidCoreTools.clamp(valueInside, min, max));
+            assertTrue(min == EuclidCoreTools.clamp(valueUnder, min, max));
+            assertTrue(max == EuclidCoreTools.clamp(valueOver, min, max));
+         }
+
+         double min = EuclidCoreRandomTools.nextDouble(random, -100.0, 100.0);
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> EuclidCoreTools.clamp(0.0, min, min - EuclidCoreTools.CLAMP_EPS - 1.0e-12), RuntimeException.class);
       }
    }
 }

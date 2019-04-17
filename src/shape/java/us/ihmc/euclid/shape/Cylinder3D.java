@@ -5,7 +5,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TransformationTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -70,7 +70,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
     * @param radius the radius of the cylinder.
     * @throws IllegalArgumentException if either {@code height} or {@code radius} is negative.
     */
-   public Cylinder3D(RigidBodyTransform pose, double height, double radius)
+   public Cylinder3D(RigidBodyTransformReadOnly pose, double height, double radius)
    {
       setPose(pose);
       setHeight(height);
@@ -427,7 +427,7 @@ public class Cylinder3D extends Shape3D<Cylinder3D>
       if (Math.abs(radius - other.radius) > epsilon || Math.abs(height - other.height) > epsilon)
          return false;
 
-      if (!shapePose.getTranslationVector().geometricallyEquals(other.shapePose.getTranslationVector(), epsilon))
+      if (!shapePose.getTranslation().geometricallyEquals(other.shapePose.getTranslation(), epsilon))
          return false;
 
       /*

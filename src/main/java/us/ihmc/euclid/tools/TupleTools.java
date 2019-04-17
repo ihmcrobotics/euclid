@@ -76,4 +76,43 @@ public abstract class TupleTools
 
       return true;
    }
+
+   /**
+    * Tests whether all the tuple's components are equal to zero to an {@code epsilon}.
+    * 
+    * @param tuple the query. Not modified.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if all the tuple's components are considered to be equal to zero,
+    *         {@code false} otherwise.
+    */
+   public static boolean isTupleZero(Tuple2DReadOnly tuple, double epsilon)
+   {
+      return EuclidCoreTools.areAllZero(tuple.getX(), tuple.getY(), epsilon);
+   }
+
+   /**
+    * Tests whether all the tuple's components are equal to zero to an {@code epsilon}.
+    * 
+    * @param tuple the query. Not modified.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if all the tuple's components are considered to be equal to zero,
+    *         {@code false} otherwise.
+    */
+   public static boolean isTupleZero(Tuple3DReadOnly tuple, double epsilon)
+   {
+      return EuclidCoreTools.areAllZero(tuple.getX(), tuple.getY(), tuple.getZ(), epsilon);
+   }
+
+   /**
+    * Tests whether all the tuple's components are equal to zero to an {@code epsilon}.
+    * 
+    * @param tuple the query. Not modified.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if all the tuple's components are considered to be equal to zero,
+    *         {@code false} otherwise.
+    */
+   public static boolean isTupleZero(Tuple4DReadOnly tuple, double epsilon)
+   {
+      return EuclidCoreTools.areAllZero(tuple.getX(), tuple.getY(), tuple.getZ(), tuple.getS(), epsilon);
+   }
 }

@@ -30,6 +30,18 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 public interface AxisAngleReadOnly extends Orientation3DReadOnly
 {
    /**
+    * {@inheritDoc}
+    * <p>
+    * An axis-angle is a zero orientation when its angle is equal to zero.
+    * </p>
+    */
+   @Override
+   default boolean isZeroOrientation(double epsilon)
+   {
+      return Math.abs(getAngle()) <= epsilon;
+   }
+
+   /**
     * Returns the angle of this axis-angle, usually expressed in radians.
     *
     * @return the angle.
@@ -100,8 +112,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    /**
     * Tests if this axis-angle contains a {@link Double#NaN}.
     *
-    * @return {@code true} if this axis-angle contains a {@link Double#NaN}, {@code false}
-    *         otherwise.
+    * @return {@code true} if this axis-angle contains a {@link Double#NaN}, {@code false} otherwise.
     */
    default boolean containsNaN()
    {
@@ -138,8 +149,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * An axis-angle is an orientation 2D if either:
     * <ul>
     * <li>the absolute value of the angle is less that {@code epsilon}.
-    * <li>the absolute value of the x and y components of the axis are both less than
-    * {@code epsilon}.
+    * <li>the absolute value of the x and y components of the axis are both less than {@code epsilon}.
     * </ul>
     * </p>
     */
@@ -153,8 +163,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * Computes and returns the distance from this axis-angle to {@code other}.
     *
     * @param other the other axis-angle to measure the distance. Not modified.
-    * @return the angle representing the distance between the two axis-angles. It is contained in
-    *         [0, 2<i>pi</i>]
+    * @return the angle representing the distance between the two axis-angles. It is contained in [0,
+    *         2<i>pi</i>]
     */
    default double distance(AxisAngleReadOnly other)
    {
@@ -233,8 +243,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Packs the components of this axis-angle in an array starting from its first index. The
-    * components are packed in the following order: x, y, z, and angle.
+    * Packs the components of this axis-angle in an array starting from its first index. The components
+    * are packed in the following order: x, y, z, and angle.
     *
     * @param axisAngleArrayToPack the array in which this axis-angle is stored. Modified.
     */
@@ -259,8 +269,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Packs the components of this axis-angle in an array starting from its first index. The
-    * components are packed in the following order: x, y, z, and angle.
+    * Packs the components of this axis-angle in an array starting from its first index. The components
+    * are packed in the following order: x, y, z, and angle.
     *
     * @param axisAngleArrayToPack the array in which this axis-angle is stored. Modified.
     */
@@ -349,13 +359,6 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
-   {
-      AxisAngleTools.addTransform(this, tupleOriginal, tupleTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
    default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfOrientation2D)
    {
       AxisAngleTools.transform(this, tupleOriginal, tupleTransformed, checkIfOrientation2D);
@@ -404,9 +407,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
-    * Tests on a per component basis, if this axis-angle is exactly equal to {@code other}. A
-    * failing test does not necessarily mean that the two axis-angles represent two different
-    * orientations.
+    * Tests on a per component basis, if this axis-angle is exactly equal to {@code other}. A failing
+    * test does not necessarily mean that the two axis-angles represent two different orientations.
     *
     * @param other the other axis-angle to compare against this. Not modified.
     * @return {@code true} if the two axis-angles are exactly equal component-wise, {@code false}
@@ -422,8 +424,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
    /**
     * Tests on a per component basis, if this axis-angle is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent
-    * two different orientations.
+    * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
+    * different orientations.
     *
     * @param other the other axis-angle to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
@@ -459,8 +461,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @param other the other axis-angle to compare against this. Not modified.
     * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two axis-angle represent the same geometry, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
     */
    default boolean geometricallyEquals(AxisAngleReadOnly other, double epsilon)
    {

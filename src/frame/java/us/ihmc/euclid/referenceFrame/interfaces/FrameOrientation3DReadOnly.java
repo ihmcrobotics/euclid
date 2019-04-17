@@ -390,6 +390,124 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    }
 
    /**
+    * Transforms the given tuple by this orientation and subtracts the result to the tuple.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleToTransform the 3D tuple to be transformed. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
+    */
+   default void subTransform(FixedFrameTuple3DBasics tupleToTransform)
+   {
+      checkReferenceFrameMatch(tupleToTransform);
+      subTransform((Tuple3DBasics) tupleToTransform);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleOriginal} do not match.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleTransformed} do not match.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
+   {
+      tupleTransformed.setReferenceFrame(getReferenceFrame());
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *            {@code tupleOriginal} do not match.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      tupleTransformed.setReferenceFrame(getReferenceFrame());
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
     * Transforms the given tuple {@code tupleToTransform} by this orientation.
     * <p>
     * If the given tuple is expressed in the local frame described by this orientation, then the tuple

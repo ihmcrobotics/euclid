@@ -4,6 +4,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
+import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -108,6 +109,27 @@ public abstract class RotationMatrixTools
          return;
       }
 
+      if (orientation1.isZeroOrientation())
+      {
+         if (orientation2.isZeroOrientation())
+            matrixToPack.setToZero();
+         else if (inverse2)
+            matrixToPack.setAndInvert(orientation2);
+         else
+            matrixToPack.set(orientation2);
+
+         return;
+      }
+      else if (orientation2.isZeroOrientation())
+      {
+         if (inverse1)
+            matrixToPack.setAndInvert(orientation1);
+         else
+            matrixToPack.set(orientation1);
+
+         return;
+      }
+
       double b00, b01, b02, b10, b11, b12, b20, b21, b22;
       if (orientation2 instanceof RotationMatrixReadOnly)
       { // In this case orientation2 might be the same object as matrixToPack, so let's save its components first.
@@ -176,6 +198,27 @@ public abstract class RotationMatrixTools
          return;
       }
 
+      if (orientation1.isZeroOrientation())
+      {
+         if (orientation2.isZeroOrientation())
+            matrixToPack.setToZero();
+         else if (inverse2)
+            matrixToPack.setAndInvert(orientation2);
+         else
+            matrixToPack.set(orientation2);
+
+         return;
+      }
+      else if (orientation2.isZeroOrientation())
+      {
+         if (inverse1)
+            matrixToPack.setAndInvert(orientation1);
+         else
+            matrixToPack.set(orientation1);
+
+         return;
+      }
+
       // In this case orientation2 might be the same object as matrixToPack, so let's save its components first.
       double b00 = orientation2.getM00();
       double b01 = orientation2.getM01();
@@ -226,6 +269,27 @@ public abstract class RotationMatrixTools
          return;
       }
 
+      if (orientation1.isZeroOrientation())
+      {
+         if (orientation2.isZeroOrientation())
+            matrixToPack.setToZero();
+         else if (inverse2)
+            matrixToPack.setAndInvert(orientation2);
+         else
+            matrixToPack.set(orientation2);
+
+         return;
+      }
+      else if (orientation2.isZeroOrientation())
+      {
+         if (inverse1)
+            matrixToPack.setAndInvert(orientation1);
+         else
+            matrixToPack.set(orientation1);
+
+         return;
+      }
+
       // In this case orientation1 might be the same object as matrixToPack, so let's save its components first.
       double a00 = orientation1.getM00();
       double a01 = orientation1.getM01();
@@ -250,8 +314,42 @@ public abstract class RotationMatrixTools
       multiplyImpl(a00, a01, a02, a10, a11, a12, a20, a21, a22, inverse1, b00, b01, b02, b10, b11, b12, b20, b21, b22, inverse2, matrixToPack);
    }
 
+   /**
+    * Performs the multiplication of {@code a} and {@code b} and stores the
+    * result in {@code matrixToPack}.
+    * <p>
+    * All three arguments can be the same object for in place operations.
+    * </p>
+    * 
+    * @param a the first rotation matrix in the multiplication. Not modified.
+    * @param transposeA whether the first matrix should be transposed in the multiplication.
+    * @param b the second rotation matrix in the multiplication. Not modified.
+    * @param transposeB whether the second matrix should be transposed in the multiplication.
+    * @param matrixToPack the rotation matrix in which the result is stored. Modified.
+    */
    private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB, RotationMatrix matrixToPack)
    {
+      if (a.isZeroOrientation())
+      {
+         if (b.isZeroOrientation())
+            matrixToPack.setToZero();
+         else if (transposeB)
+            matrixToPack.setAndInvert(b);
+         else
+            matrixToPack.set(b);
+
+         return;
+      }
+      else if (b.isZeroOrientation())
+      {
+         if (transposeA)
+            matrixToPack.setAndInvert(a);
+         else
+            matrixToPack.set(a);
+
+         return;
+      }
+
       multiplyImpl(a.getM00(), a.getM01(), a.getM02(), a.getM10(), a.getM11(), a.getM12(), a.getM20(), a.getM21(), a.getM22(), transposeA, b.getM00(),
                    b.getM01(), b.getM02(), b.getM10(), b.getM11(), b.getM12(), b.getM20(), b.getM21(), b.getM22(), transposeB, matrixToPack);
    }
@@ -339,6 +437,12 @@ public abstract class RotationMatrixTools
     */
    public static void prependYawRotation(double yaw, RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixToPack)
    {
+      if (matrixOriginal.isZeroOrientation())
+      {
+         RotationMatrixConversion.computeYawMatrix(yaw, matrixToPack);
+         return;
+      }
+
       double cYaw = Math.cos(yaw);
       double sYaw = Math.sin(yaw);
 
@@ -373,6 +477,12 @@ public abstract class RotationMatrixTools
     */
    public static void appendYawRotation(RotationMatrixReadOnly matrixOriginal, double yaw, RotationMatrix matrixToPack)
    {
+      if (matrixOriginal.isZeroOrientation())
+      {
+         RotationMatrixConversion.computeYawMatrix(yaw, matrixToPack);
+         return;
+      }
+
       double cYaw = Math.cos(yaw);
       double sYaw = Math.sin(yaw);
 
@@ -407,6 +517,12 @@ public abstract class RotationMatrixTools
     */
    public static void prependPitchRotation(double pitch, RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixToPack)
    {
+      if (matrixOriginal.isZeroOrientation())
+      {
+         RotationMatrixConversion.computePitchMatrix(pitch, matrixToPack);
+         return;
+      }
+
       double cPitch = Math.cos(pitch);
       double sPitch = Math.sin(pitch);
 
@@ -441,6 +557,12 @@ public abstract class RotationMatrixTools
     */
    public static void appendPitchRotation(RotationMatrixReadOnly matrixOriginal, double pitch, RotationMatrix matrixToPack)
    {
+      if (matrixOriginal.isZeroOrientation())
+      {
+         RotationMatrixConversion.computePitchMatrix(pitch, matrixToPack);
+         return;
+      }
+
       double cPitch = Math.cos(pitch);
       double sPitch = Math.sin(pitch);
 
@@ -475,6 +597,12 @@ public abstract class RotationMatrixTools
     */
    public static void prependRollRotation(double roll, RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixToPack)
    {
+      if (matrixOriginal.isZeroOrientation())
+      {
+         RotationMatrixConversion.computeRollMatrix(roll, matrixToPack);
+         return;
+      }
+
       double cRoll = Math.cos(roll);
       double sRoll = Math.sin(roll);
 
@@ -509,6 +637,12 @@ public abstract class RotationMatrixTools
     */
    public static void appendRollRotation(RotationMatrixReadOnly matrixOriginal, double roll, RotationMatrix matrixToPack)
    {
+      if (matrixOriginal.isZeroOrientation())
+      {
+         RotationMatrixConversion.computeRollMatrix(roll, matrixToPack);
+         return;
+      }
+
       double cRoll = Math.cos(roll);
       double sRoll = Math.sin(roll);
 
@@ -525,8 +659,8 @@ public abstract class RotationMatrixTools
    }
 
    /**
-    * Rotates the given {@code tupleOriginal} by a rotation about the z-axis and stores the result
-    * in {@code tupleTransformed}.
+    * Rotates the given {@code tupleOriginal} by a rotation about the z-axis and stores the result in
+    * {@code tupleTransformed}.
     * <p>
     * Both tuples can be the same object for performing in-place transformation.
     * </p>
@@ -553,8 +687,8 @@ public abstract class RotationMatrixTools
    }
 
    /**
-    * Rotates the given {@code tupleOriginal} by a rotation about the z-axis and stores the result
-    * in {@code tupleTransformed}.
+    * Rotates the given {@code tupleOriginal} by a rotation about the z-axis and stores the result in
+    * {@code tupleTransformed}.
     * <p>
     * Both tuples can be the same object for performing in-place transformation.
     * </p>
@@ -579,8 +713,8 @@ public abstract class RotationMatrixTools
    }
 
    /**
-    * Rotates the given {@code tupleOriginal} by a rotation about the y-axis and stores the result
-    * in {@code tupleTransformed}.
+    * Rotates the given {@code tupleOriginal} by a rotation about the y-axis and stores the result in
+    * {@code tupleTransformed}.
     * <p>
     * Both tuples can be the same object for performing in-place transformation.
     * </p>
@@ -607,8 +741,8 @@ public abstract class RotationMatrixTools
    }
 
    /**
-    * Rotates the given {@code tupleOriginal} by a rotation about the x-axis and stores the result
-    * in {@code tupleTransformed}.
+    * Rotates the given {@code tupleOriginal} by a rotation about the x-axis and stores the result in
+    * {@code tupleTransformed}.
     * <p>
     * Both tuples can be the same object for performing in-place transformation.
     * </p>
@@ -653,6 +787,12 @@ public abstract class RotationMatrixTools
     */
    public static void interpolate(RotationMatrixReadOnly r0, RotationMatrixReadOnly rf, double alpha, RotationMatrix matrixToPack)
    {
+      if (r0.isZeroOrientation() && rf.isZeroOrientation())
+      {
+         matrixToPack.setToZero();
+         return;
+      }
+
       if (r0.containsNaN() || rf.containsNaN())
       {
          matrixToPack.setToNaN();
@@ -761,8 +901,8 @@ public abstract class RotationMatrixTools
     *
     * @param m1 the first rotation matrix. Not modified.
     * @param m2 the second rotation matrix. Not modified.
-    * @return the angle representing the distance between the two rotation matrices. It is contained
-    *         in [0, <i>pi</i>].
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
     */
    public static double distance(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2)
    {

@@ -3,6 +3,8 @@ package us.ihmc.euclid.rotationConversion;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.QuaternionTools;
+import us.ihmc.euclid.tools.YawPitchRollTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
@@ -45,9 +47,16 @@ public abstract class RotationMatrixConversion
     */
    public static void computeYawMatrix(double yaw, RotationMatrix matrixToPack)
    {
-      double sinYaw = Math.sin(yaw);
-      double cosYaw = Math.cos(yaw);
-      matrixToPack.setUnsafe(cosYaw, -sinYaw, 0.0, sinYaw, cosYaw, 0.0, 0.0, 0.0, 1.0);
+      if (EuclidCoreTools.isAngleZero(yaw, EPS))
+      {
+         matrixToPack.setToZero();
+      }
+      else
+      {
+         double sinYaw = Math.sin(yaw);
+         double cosYaw = Math.cos(yaw);
+         matrixToPack.setUnsafe(cosYaw, -sinYaw, 0.0, sinYaw, cosYaw, 0.0, 0.0, 0.0, 1.0);
+      }
    }
 
    /**
@@ -65,9 +74,16 @@ public abstract class RotationMatrixConversion
     */
    public static void computePitchMatrix(double pitch, RotationMatrix matrixToPack)
    {
-      double sinPitch = Math.sin(pitch);
-      double cosPitch = Math.cos(pitch);
-      matrixToPack.setUnsafe(cosPitch, 0.0, sinPitch, 0.0, 1.0, 0.0, -sinPitch, 0.0, cosPitch);
+      if (EuclidCoreTools.isAngleZero(pitch, EPS))
+      {
+         matrixToPack.setToZero();
+      }
+      else
+      {
+         double sinPitch = Math.sin(pitch);
+         double cosPitch = Math.cos(pitch);
+         matrixToPack.setUnsafe(cosPitch, 0.0, sinPitch, 0.0, 1.0, 0.0, -sinPitch, 0.0, cosPitch);
+      }
    }
 
    /**
@@ -85,9 +101,16 @@ public abstract class RotationMatrixConversion
     */
    public static void computeRollMatrix(double roll, RotationMatrix matrixToPack)
    {
-      double sinRoll = Math.sin(roll);
-      double cosRoll = Math.cos(roll);
-      matrixToPack.setUnsafe(1.0, 0.0, 0.0, 0.0, cosRoll, -sinRoll, 0.0, sinRoll, cosRoll);
+      if (EuclidCoreTools.isAngleZero(roll, EPS))
+      {
+         matrixToPack.setToZero();
+      }
+      else
+      {
+         double sinRoll = Math.sin(roll);
+         double cosRoll = Math.cos(roll);
+         matrixToPack.setUnsafe(1.0, 0.0, 0.0, 0.0, cosRoll, -sinRoll, 0.0, sinRoll, cosRoll);
+      }
    }
 
    /**
@@ -137,6 +160,12 @@ public abstract class RotationMatrixConversion
       if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
       {
          matrixToPack.setToNaN();
+         return;
+      }
+
+      if (EuclidCoreTools.isAngleZero(angle, EPS))
+      {
+         matrixToPack.setToZero();
          return;
       }
 
@@ -226,6 +255,12 @@ public abstract class RotationMatrixConversion
       if (EuclidCoreTools.containsNaN(qx, qy, qz, qs))
       {
          matrixToPack.setToNaN();
+         return;
+      }
+
+      if (QuaternionTools.isNeutralQuaternion(qx, qy, qz, qs, EPS))
+      {
+         matrixToPack.setToZero();
          return;
       }
 
@@ -377,6 +412,18 @@ public abstract class RotationMatrixConversion
     */
    public static void convertYawPitchRollToMatrix(double yaw, double pitch, double roll, RotationMatrix matrixToPack)
    {
+      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      {
+         matrixToPack.setToNaN();
+         return;
+      }
+
+      if (YawPitchRollTools.isZero(yaw, pitch, roll, EPS))
+      {
+         matrixToPack.setToZero();
+         return;
+      }
+
       double cosc = Math.cos(yaw);
       double sinc = Math.sin(yaw);
 
@@ -460,7 +507,7 @@ public abstract class RotationMatrixConversion
 
       double norm = Math.sqrt(EuclidCoreTools.normSquared(rx, ry, rz));
 
-      if (norm < EPS)
+      if (EuclidCoreTools.isAngleZero(norm, EPS))
       {
          matrixToPack.setIdentity();
       }
