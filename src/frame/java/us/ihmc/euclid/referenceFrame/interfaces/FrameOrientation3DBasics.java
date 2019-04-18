@@ -38,9 +38,9 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
    }
 
    /**
-    * Sets this frame tuple to {@code other}.
+    * Sets this frame orientation to {@code other}.
     *
-    * @param other the other frame tuple to copy the values and reference frame from. Not modified.
+    * @param other the other frame orientation to copy the values and reference frame from. Not modified.
     */
    default void setIncludingFrame(FrameOrientation3DReadOnly other)
    {

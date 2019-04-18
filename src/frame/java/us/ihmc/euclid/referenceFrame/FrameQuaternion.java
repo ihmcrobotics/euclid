@@ -5,6 +5,7 @@ import org.ejml.data.DenseMatrix64F;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
@@ -186,6 +187,17 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    public FrameQuaternion(FrameQuaternionReadOnly other)
    {
       setIncludingFrame(other);
+   }
+
+   /**
+    * Creates a new frame quaternion and initializes it to {@code orientation}.
+    *
+    * @param orientation the frame orientation to copy the components and reference frame from. Not
+    *           modified.
+    */
+   public FrameQuaternion(FrameOrientation3DReadOnly orientation)
+   {
+      setIncludingFrame(orientation);
    }
 
    /**
