@@ -74,6 +74,11 @@ public class EuclidGeometryPolygonTools
       abstract boolean isFirstBetter(double first, double second);
    };
 
+   private EuclidGeometryPolygonTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Tests if the polygon defined by the given {@code vertices} is convex at the vertex defined by
     * the given {@code vertexIndex}.

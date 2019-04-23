@@ -44,6 +44,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidFrameRandomTools
 {
+   private EuclidFrameRandomTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Generates a reference frame with a random transform to world frame.
     *

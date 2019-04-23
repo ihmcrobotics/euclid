@@ -239,7 +239,9 @@ public interface Orientation2DReadOnly
     */
    default boolean equals(Orientation2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getYaw() == other.getYaw();

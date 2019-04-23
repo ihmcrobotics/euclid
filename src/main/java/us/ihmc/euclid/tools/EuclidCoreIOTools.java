@@ -1,7 +1,12 @@
 package us.ihmc.euclid.tools;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Function;
+
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -21,10 +26,15 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class EuclidCoreIOTools
+public class EuclidCoreIOTools
 {
    /** Default format used to print decimal numbers. */
    public static final String DEFAULT_FORMAT = getStringFormat(6, 3);
+
+   private EuclidCoreIOTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Gets a representative {@code String} of {@code rigidBodyTransform} as follows:
@@ -433,7 +443,7 @@ public abstract class EuclidCoreIOTools
     * Gets a representative {@code String} of {@code yawPitchRoll} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     *
     * @param yawPitchRoll the object to get the {@code String} of. Not modified.
@@ -450,7 +460,7 @@ public abstract class EuclidCoreIOTools
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     * </p>
     *
@@ -467,10 +477,51 @@ public abstract class EuclidCoreIOTools
    }
 
    /**
+    * Gets a representative {@code String} of {@code orientation} using a yaw-pitch-roll representation
+    * as follows:
+    *
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
+    * </pre>
+    *
+    * @param orientation the orientation to get the {@code String} of using a yaw-pitch-roll
+    *           representation. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getStringAsYawPitchRoll(Orientation3DReadOnly orientation)
+   {
+      return getStringAsYawPitchRoll(DEFAULT_FORMAT, orientation);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation} using a yaw-pitch-roll representation
+    * and given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param orientation the orientation to get the {@code String} of using a yaw-pitch-roll
+    *           representation. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getStringAsYawPitchRoll(String format, Orientation3DReadOnly orientation)
+   {
+      if (orientation == null)
+         return "null";
+      else
+         return getYawPitchRollString(format, orientation.getYaw(), orientation.getPitch(), orientation.getRoll());
+   }
+
+   /**
     * Gets a representative {@code String} of {@code yawPitchRoll} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     *
     * @param yaw the first angle representing the rotation around the z-axis.
@@ -489,7 +540,7 @@ public abstract class EuclidCoreIOTools
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
     * <pre>
-    * ( 0.674,  0.455,  0.582 )
+    * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     * </p>
     *
@@ -589,6 +640,69 @@ public abstract class EuclidCoreIOTools
       String ret = String.format(format, values[0]);
       for (int i = 1; i < values.length; i++)
          ret += separator + String.format(format, values[i]);
+      return ret;
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given {@code Collection}.
+    * <p>
+    * This provides an alternative to {@link Collection#toString()} where the format of the output can
+    * be controller by defining a custom {@code separator}. For instance, with {@code separator = \n}
+    * the resulting {@code String} is composed of one element per line as opposed to
+    * {@link Collection#toString()} which outputs all the elements in one line.
+    * </p>
+    * 
+    * @param prefix the {@code String} to prepend to the result.
+    * @param suffix the {@code String} to append to the result.
+    * @param separator the {@code String} used to separate elements of the collection.
+    * @param collection the series of elements to get the {@code String} of.
+    * @param elementToStringFunction the {@code Function} used to generate a representative
+    *           {@code String} for each element.
+    * @return the representative {@code String}.
+    */
+   public static <T> String getCollectionString(String prefix, String suffix, String separator, Collection<? extends T> collection,
+                                                Function<T, String> elementToStringFunction)
+   {
+      if (collection == null)
+         return "null";
+
+      String ret = getCollectionString(separator, collection, elementToStringFunction);
+
+      if (prefix != null)
+         ret = prefix + ret;
+
+      if (suffix != null)
+         ret += suffix;
+
+      return ret;
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given {@code Collection}.
+    * <p>
+    * This provides an alternative to {@link Collection#toString()} where the format of the output can
+    * be controller by defining a custom {@code separator}. For instance, with {@code separator = \n}
+    * the resulting {@code String} is composed of one element per line as opposed to
+    * {@link Collection#toString()} which outputs all the elements in one line.
+    * </p>
+    * 
+    * @param separator the {@code String} used to separate elements of the collection.
+    * @param collection the series of elements to get the {@code String} of.
+    * @param elementToStringFunction the {@code Function} used to generate a representative
+    *           {@code String} for each element.
+    * @return the representative {@code String}.
+    */
+   public static <T> String getCollectionString(String separator, Collection<? extends T> collection, Function<T, String> elementToStringFunction)
+   {
+      if (collection == null)
+         return "null";
+      if (collection.isEmpty())
+         return "";
+
+      Iterator<? extends T> iterator = collection.iterator();
+      String ret = elementToStringFunction.apply(iterator.next());
+      while (iterator.hasNext())
+         ret += separator + elementToStringFunction.apply(iterator.next());
       return ret;
    }
 

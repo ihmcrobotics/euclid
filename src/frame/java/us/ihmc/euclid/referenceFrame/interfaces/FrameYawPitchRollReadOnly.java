@@ -62,6 +62,8 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
     */
    default boolean equals(FrameYawPitchRollReadOnly other)
    {
+      if (other == this)
+         return true;
       if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 

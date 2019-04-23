@@ -16,13 +16,20 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * Note that in common situations, the use of {@code TransformationTools} should be avoided
  * preferring the use of the 'transform' or 'applyTransform' methods provided with the concerned
  * objects. Also note that these methods are possibly more computationally expensive than their
- * respective couterparts.
+ * respective counterparts.
  * </p>
  *
+ * @deprecated This tools class will be removed in a future release.
  * @author Sylvain Bertrand
  */
+@Deprecated
 public class TransformationTools
 {
+   private TransformationTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Computes and returns the x-coordinate resulting from the transformation of {@code tupleOriginal}
     * by {@code matrix}.

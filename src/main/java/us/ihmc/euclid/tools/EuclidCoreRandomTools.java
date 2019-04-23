@@ -40,8 +40,13 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  *
  * @author Sylvain Bertrand
  */
-public abstract class EuclidCoreRandomTools
+public class EuclidCoreRandomTools
 {
+   private EuclidCoreRandomTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Generates random yaw-pitch-roll angles and returns it in an array.
     * <p>
@@ -894,6 +899,11 @@ public abstract class EuclidCoreRandomTools
    {
       Vector3D v1 = new Vector3D(vectorToBeOrthogonalTo.getY(), -vectorToBeOrthogonalTo.getX(), 0.0);
       Vector3D v2 = new Vector3D(-vectorToBeOrthogonalTo.getZ(), 0.0, vectorToBeOrthogonalTo.getX());
+
+      if (v1.lengthSquared() < 1.0e-12)
+         v1.cross(vectorToBeOrthogonalTo, v2);
+      if (v2.lengthSquared() < 1.0e-12)
+         v2.cross(v1, vectorToBeOrthogonalTo);
 
       Vector3D randomPerpendicular = new Vector3D();
       double a = nextDouble(random, 1.0);

@@ -20,9 +20,14 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * @author Sylvain Bertrand
  *
  */
-public abstract class Matrix3DTools
+public class Matrix3DTools
 {
    static final double EPS_INVERT = 1.0e-16;
+
+   private Matrix3DTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Performs an in-place inversion of the given matrix such that: m = m<sup>-1</sup>.

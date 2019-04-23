@@ -1823,7 +1823,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean equals(FrameLine2DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
          return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());

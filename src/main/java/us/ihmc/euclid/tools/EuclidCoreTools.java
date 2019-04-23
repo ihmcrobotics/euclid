@@ -1,5 +1,12 @@
 package us.ihmc.euclid.tools;
 
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+
 /**
  * This class provides a variety of generic tools such as fast square-root algorithm
  * {@link #fastSquareRoot(double)}, or also an linear interpolation algorithm
@@ -28,6 +35,193 @@ public class EuclidCoreTools
     * Tolerance used in {@link #clamp(double, double, double)} to verify the bounds are sane.
     */
    public static final double CLAMP_EPS = 1.0e-10;
+
+   /**
+    * Constant representing the coordinates (0, 0) of the origin in the 2D plane.
+    */
+   public static final Point2DReadOnly origin2D = new Point2DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple2DReadOnly)
+            return Point2DReadOnly.super.equals((Tuple2DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple2DString(this);
+      }
+   };
+
+   /**
+    * Constant representing the coordinates (0, 0, 0) of the origin in 3D.
+    */
+   public static final Point3DReadOnly origin3D = new Point3DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getZ()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple3DReadOnly)
+            return Point3DReadOnly.super.equals((Tuple3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
+      }
+   };
+
+   /**
+    * Constant representing the zero vector 2D: (0, 0).
+    */
+   public static final Vector2DReadOnly zeroVector2D = new Vector2DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple2DReadOnly)
+            return Vector2DReadOnly.super.equals((Tuple2DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple2DString(this);
+      }
+   };
+
+   /**
+    * Constant representing the zero vector 3D: (0, 0, 0).
+    */
+   public static final Vector3DReadOnly zeroVector3D = new Vector3DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getZ()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple3DReadOnly)
+            return Vector3DReadOnly.super.equals((Tuple3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
+      }
+   };
+
+   private EuclidCoreTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Calculates and returns the square root of the given value.
@@ -131,6 +325,17 @@ public class EuclidCoreTools
             return true;
       }
       return false;
+   }
+
+   /**
+    * Calculates and returns {@code value}<sup>2</sup>
+    * 
+    * @param value the value to compute the square of.
+    * @return {@code value * value}.
+    */
+   public static double square(double value)
+   {
+      return value * value;
    }
 
    /**
@@ -426,7 +631,7 @@ public class EuclidCoreTools
    {
       return isZero(x, epsilon) && isZero(y, epsilon) && isZero(z, epsilon);
    }
-   
+
    /**
     * Tests whether all values are equal to zero to an epsilon.
     * 
@@ -532,5 +737,4 @@ public class EuclidCoreTools
    {
       return (1.0 - alpha) * a + alpha * b;
    }
-
 }

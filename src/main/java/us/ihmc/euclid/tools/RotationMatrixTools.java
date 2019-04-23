@@ -17,8 +17,13 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * 
  * @author Sylvain Bertrand
  */
-public abstract class RotationMatrixTools
+public class RotationMatrixTools
 {
+   private RotationMatrixTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Performs the multiplication: {@code m1} * {@code m2} and stores the result in
     * {@code matrixToPack}.
@@ -315,8 +320,8 @@ public abstract class RotationMatrixTools
    }
 
    /**
-    * Performs the multiplication of {@code a} and {@code b} and stores the
-    * result in {@code matrixToPack}.
+    * Performs the multiplication of {@code a} and {@code b} and stores the result in
+    * {@code matrixToPack}.
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>

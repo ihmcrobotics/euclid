@@ -252,7 +252,9 @@ public interface Pose3DReadOnly
     */
    default boolean equals(Pose3DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());

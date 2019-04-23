@@ -4,10 +4,10 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import java.util.List;
 
-import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -16,6 +16,7 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -37,13 +38,17 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public class EuclidGeometryIOTools
 {
+   private EuclidGeometryIOTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Gets a representative {@code String} of {@code line2D} as follows:
     *
     * <pre>
     * Line 2D: point = ( 0.174,  0.732 ), direction = (-0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param line2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -101,7 +106,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line 3D: point = ( 0.174,  0.732, -0.222 ), direction = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param line3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -159,7 +163,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line segment 1D: 1st endpoint = ( 0.732 ), 2nd endpoint = (-0.558 )
     * </pre>
-    * </p>
     *
     * @param lineSegment1D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -202,10 +205,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment1DString(String format, double lineSegmentStart, double lineSegmentEnd)
@@ -220,7 +223,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line segment 2D: 1st endpoint = ( 0.174,  0.732 ), 2nd endpoint = (-0.558,  0.130 )
     * </pre>
-    * </p>
     *
     * @param lineSegment2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -263,10 +265,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment2DString(String format, Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd)
@@ -280,7 +282,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Line segment 3D: 1st endpoint = ( 0.174,  0.732, -0.222 ), 2nd endpoint = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param lineSegment3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -323,10 +324,10 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of.
-    *           Not modified.
+    * @param lineSegmentStart the first endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
+    * @param lineSegmentEnd the second endpoint of the line segment to get the {@code String} of. Not
+    *           modified.
     * @return the representative {@code String}.
     */
    public static String getLineSegment3DString(String format, Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd)
@@ -340,7 +341,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Bounding Box 2D: min = ( 0.174,  0.732 ), max = (-0.558, -0.380 )
     * </pre>
-    * </p>
     *
     * @param boundingBox2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -400,12 +400,11 @@ public class EuclidGeometryIOTools
     * <pre>
     * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param boundingBox3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox3DString(BoundingBox3D boundingBox3D)
+   public static String getBoundingBox3DString(BoundingBox3DReadOnly boundingBox3D)
    {
       return getBoundingBox3DString(DEFAULT_FORMAT, boundingBox3D);
    }
@@ -424,7 +423,7 @@ public class EuclidGeometryIOTools
     * @param boundingBox3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getBoundingBox3DString(String format, BoundingBox3D boundingBox3D)
+   public static String getBoundingBox3DString(String format, BoundingBox3DReadOnly boundingBox3D)
    {
       if (boundingBox3D == null)
          return "null";
@@ -460,7 +459,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * (0.174)
     * </pre>
-    * </p>
     *
     * @param orientation2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -519,7 +517,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Plane 3D: point = ( 0.174,  0.732, -0.222 ), normal = (-0.558, -0.380,  0.130 )
     * </pre>
-    * </p>
     *
     * @param plane3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -577,7 +574,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Pose 2D: position = ( 0.174, -0.222 ), orientation = (-0.130 )
     * </pre>
-    * </p>
     *
     * @param pose2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -621,8 +617,7 @@ public class EuclidGeometryIOTools
     *
     * @param format the format to use for each number.
     * @param position the position part of the pose to get the {@code String} of. Not modified.
-    * @param orientation the orientation part of the pose to get the {@code String} of. Not
-    *           modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getPose2DString(String format, Point2DReadOnly position, double orientation)
@@ -636,7 +631,6 @@ public class EuclidGeometryIOTools
     * <pre>
     * Pose 3D: position = ( 0.174, -0.452, -0.222 ), orientation = (-0.052, -0.173, -0.371,  0.087 )
     * </pre>
-    * </p>
     *
     * @param pose3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -680,8 +674,7 @@ public class EuclidGeometryIOTools
     *
     * @param format the format to use for each number.
     * @param position the position part of the pose to get the {@code String} of. Not modified.
-    * @param orientation the orientation part of the pose to get the {@code String} of. Not
-    *           modified.
+    * @param orientation the orientation part of the pose to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getPose3DString(String format, Point3DReadOnly position, QuaternionReadOnly orientation)
@@ -697,7 +690,6 @@ public class EuclidGeometryIOTools
     * ( 0.174, -0.452 ),
     * (-0.052, -0.173 ) ]
     * </pre>
-    * </p>
     *
     * @param convexPolygon2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -708,8 +700,7 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to
-    * use.
+    * Gets a representative {@code String} of {@code convexPolygon2D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
@@ -745,7 +736,7 @@ public class EuclidGeometryIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param vertices the list of vertices of the polygon to get the string of. Not modifed.
+    * @param vertices the list of vertices of the polygon to get the string of. Not modified.
     * @param numberOfVertices the polygon size.
     * @return the representative {@code String}.
     */
@@ -762,6 +753,64 @@ public class EuclidGeometryIOTools
    }
 
    /**
+    * Gets a representative {@code String} of a triangle as follows:
+    * 
+    * <pre>
+    * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
+    * </pre>
+    * 
+    * @param triangle3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getTriangle3DString(Triangle3DReadOnly triangle3D)
+   {
+      return getTriangle3DString(DEFAULT_FORMAT, triangle3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of a triangle as follows:
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * 
+    * <pre>
+    * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param triangle3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getTriangle3DString(String format, Triangle3DReadOnly triangle3D)
+   {
+      if (triangle3D == null)
+         return "null";
+      else
+         return getTriangle3DString(format, triangle3D.getA(), triangle3D.getB(), triangle3D.getC());
+   }
+
+   /**
+    * Gets a representative {@code String} of a triangle as follows:
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    * 
+    * <pre>
+    * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
+    * </pre>
+    * </p>
+    * 
+    * @param format the format to use for each number.
+    * @param a the first vertex of the triangle to get the {@code String} of. Not modified.
+    * @param b the second vertex of the triangle to get the {@code String} of. Not modified.
+    * @param c the third vertex of the triangle to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getTriangle3DString(String format, Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c)
+   {
+      return "Triangle 3D: [" + getTuple3DString(format, a) + ", " + getTuple3DString(format, b) + ", " + getTuple3DString(format, c) + "]";
+   }
+
+   /**
     * Gets a representative {@code String} of {@code vertex2DSupplier} as follows:
     *
     * <pre>
@@ -769,7 +818,6 @@ public class EuclidGeometryIOTools
     * ( 0.174, -0.452 ),
     * (-0.052, -0.173 ) ]
     * </pre>
-    * </p>
     *
     * @param vertex2DSupplier the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -780,8 +828,7 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code vertex2DSupplier} given a specific format to
-    * use.
+    * Gets a representative {@code String} of {@code vertex2DSupplier} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *
@@ -819,7 +866,6 @@ public class EuclidGeometryIOTools
     * ( 0.174, -0.452, -0.222 ),
     * (-0.052, -0.173, -0.371 ) ]
     * </pre>
-    * </p>
     *
     * @param vertex3DSupplier the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -830,8 +876,7 @@ public class EuclidGeometryIOTools
    }
 
    /**
-    * Gets a representative {@code String} of {@code vertex3DSupplier} given a specific format to
-    * use.
+    * Gets a representative {@code String} of {@code vertex3DSupplier} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
     *

@@ -129,7 +129,7 @@ public interface BoundingBox2DReadOnly
     * Tests if the min and max points defining this bounding box contain at least one
     * {@link Double#NaN}.
     * 
-    * @return {@code true} if this bounding box contains at least one {@link Double#NaN}, {@code fasle}
+    * @return {@code true} if this bounding box contains at least one {@link Double#NaN}, {@code false}
     *         otherwise.
     */
    default boolean containsNaN()
@@ -294,9 +294,7 @@ public interface BoundingBox2DReadOnly
     */
    default boolean isInsideEpsilon(Point2DReadOnly query, double epsilon)
    {
-      double x = query.getX();
-      double y = query.getY();
-      return isInsideEpsilon(x, y, epsilon);
+      return isInsideEpsilon(query.getX(), query.getY(), epsilon);
    }
 
    /**
@@ -553,7 +551,9 @@ public interface BoundingBox2DReadOnly
     */
    default boolean equals(BoundingBox2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());

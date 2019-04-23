@@ -201,7 +201,7 @@ public interface Line2DReadOnly
    default boolean intersectionWith(Line2DReadOnly secondLine, Point2DBasics intersectionToPack)
    {
       return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(getPoint(), getDirection(), secondLine.getPoint(), secondLine.getDirection(),
-            intersectionToPack);
+                                                               intersectionToPack);
    }
 
    /**
@@ -228,7 +228,7 @@ public interface Line2DReadOnly
    default Point2DBasics intersectionWith(LineSegment2DReadOnly lineSegment)
    {
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
-            lineSegment.getSecondEndpoint());
+                                                                           lineSegment.getSecondEndpoint());
    }
 
    /**
@@ -253,7 +253,7 @@ public interface Line2DReadOnly
    default boolean intersectionWith(LineSegment2DReadOnly lineSegment, Point2DBasics intersectionToPack)
    {
       return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(getPoint(), getDirection(), lineSegment.getFirstEndpoint(),
-            lineSegment.getSecondEndpoint(), intersectionToPack);
+                                                                           lineSegment.getSecondEndpoint(), intersectionToPack);
    }
 
    /**
@@ -861,7 +861,9 @@ public interface Line2DReadOnly
     */
    default boolean equals(Line2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getPoint().equals(other.getPoint()) && getDirection().equals(other.getDirection());

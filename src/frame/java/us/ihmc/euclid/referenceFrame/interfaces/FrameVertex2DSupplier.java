@@ -37,8 +37,7 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
    FramePoint2DReadOnly getVertex(int index);
 
    /**
-    * Gets the reference frame of the first vertex or returns {@code null} if this supplier is
-    * empty.
+    * Gets the reference frame of the first vertex or returns {@code null} if this supplier is empty.
     */
    @Override
    default ReferenceFrame getReferenceFrame()
@@ -54,6 +53,8 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
     */
    default boolean equals(FrameVertex2DSupplier other)
    {
+      if (other == this)
+         return true;
       if (other == null)
          return false;
       if (getNumberOfVertices() != other.getNumberOfVertices())
@@ -67,8 +68,7 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
    }
 
    /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an
-    * {@code epsilon}.
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
     * 
     * @param other the other supplier to compare against this.
     * @param epsilon the tolerance to use.
@@ -121,8 +121,8 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given array specified by the first
-    * index {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
+    * {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the array by which the supplier will be backed.
     * @param startIndex the first vertex index.
@@ -165,8 +165,8 @@ public interface FrameVertex2DSupplier extends Vertex2DSupplier, ReferenceFrameH
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given list specified by the first
-    * index {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given list specified by the first index
+    * {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
     * @param vertices the list by which the supplier will be backed.
     * @param startIndex the first vertex index.

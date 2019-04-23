@@ -327,7 +327,9 @@ public interface Tuple4DReadOnly
     */
    default boolean equals(Tuple4DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();

@@ -28,13 +28,18 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * 
  * @author Sylvain Bertrand
  */
-public abstract class AxisAngleTools
+public class AxisAngleTools
 {
    /**
     * Tolerance used to identify edge cases, such as when the axis part of an axis-angle can not be
     * normalized.
     */
    public static final double EPS = 1.0e-12;
+
+   private AxisAngleTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Transforms the tuple {@code tupleOriginal} using {@code axisAngle} and stores the result in
@@ -277,8 +282,9 @@ public abstract class AxisAngleTools
     * Performs the inverse of the transform of the matrix {@code matrixOriginal} using
     * {@code axisAngle} and stores the result in {@code matrixTransformed}.
     * <p>
-    * This is equivalent to calling {@link #transform(AxisAngleReadOnly, Matrix3DReadOnly, Matrix3DBasics)}
-    * with an axis-angle that has an angle of opposite value compared to the given one.
+    * This is equivalent to calling
+    * {@link #transform(AxisAngleReadOnly, Matrix3DReadOnly, Matrix3DBasics)} with an axis-angle that
+    * has an angle of opposite value compared to the given one.
     * </p>
     * <p>
     * Both matrices can be the same object for performing in place transformation.

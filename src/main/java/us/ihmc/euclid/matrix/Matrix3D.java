@@ -1,5 +1,7 @@
 package us.ihmc.euclid.matrix;
 
+import org.ejml.data.DenseMatrix64F;
+
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -57,6 +59,16 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
    public Matrix3D(double[] matrixArray)
    {
       set(matrixArray);
+   }
+
+   /**
+    * Create a new 3D matrix and initializes it from the given dense-matrix.
+    * 
+    * @param matrix the dense-matrix containing the values for this matrix. Not modified.
+    */
+   public Matrix3D(DenseMatrix64F matrix)
+   {
+      set(matrix);
    }
 
    /**
@@ -221,9 +233,9 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Matrix3DReadOnly)}, it returns {@code false} otherwise or if the
-    * {@code object} is {@code null}.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Matrix3DReadOnly)}, it returns {@code false} otherwise or if the {@code object} is
+    * {@code null}.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.

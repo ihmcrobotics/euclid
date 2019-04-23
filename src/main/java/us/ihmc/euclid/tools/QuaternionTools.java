@@ -22,9 +22,14 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class QuaternionTools
+public class QuaternionTools
 {
    static final double EPS = 1.0e-12;
+
+   private QuaternionTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component

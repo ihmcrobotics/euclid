@@ -472,7 +472,9 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     */
    public boolean equals(QuaternionBasedTransform other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return quaternion.equals(other.quaternion) && translationVector.equals(other.translationVector);

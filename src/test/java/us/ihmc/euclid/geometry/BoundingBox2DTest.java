@@ -556,6 +556,26 @@ public class BoundingBox2DTest
             assertTrue(isMaxCoordinateFromOriginal, "Unexpected max coordinate for the combined bounding box, axis index = " + axisIndex);
          }
       }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test that combine is equivalent to set when one of the 2 BBX is NaN
+         BoundingBox2D boundingBoxOne = new BoundingBox2D();
+         boundingBoxOne.setToNaN();
+         BoundingBox2D boundingBoxTwo = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
+         BoundingBox2D combined = new BoundingBox2D();
+         combined.set(boundingBoxOne);
+         combined.combine(boundingBoxTwo);
+
+         EuclidGeometryTestTools.assertBoundingBox2DEquals(boundingBoxTwo, combined, EPSILON);
+
+         boundingBoxOne = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
+         boundingBoxTwo.setToNaN();
+         combined = new BoundingBox2D();
+         combined.set(boundingBoxOne);
+         combined.combine(boundingBoxTwo);
+
+         EuclidGeometryTestTools.assertBoundingBox2DEquals(boundingBoxOne, combined, EPSILON);
+      }
    }
 
    @Test

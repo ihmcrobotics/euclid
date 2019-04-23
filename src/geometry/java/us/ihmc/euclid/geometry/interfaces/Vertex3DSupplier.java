@@ -64,6 +64,8 @@ public interface Vertex3DSupplier
     */
    default boolean equals(Vertex3DSupplier other)
    {
+      if (other == this)
+         return true;
       if (other == null)
          return false;
       if (getNumberOfVertices() != other.getNumberOfVertices())

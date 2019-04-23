@@ -845,6 +845,6 @@ public interface Orientation3DReadOnly
     */
    default String toStringAsYawPitchRoll()
    {
-      return EuclidCoreIOTools.getStringOf("yaw-pitch-roll: (", ")", ", ", getYaw(), getPitch(), getRoll());
+      return EuclidCoreIOTools.getStringAsYawPitchRoll(this);
    }
 }
