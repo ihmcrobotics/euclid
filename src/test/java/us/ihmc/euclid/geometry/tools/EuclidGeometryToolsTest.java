@@ -1946,6 +1946,8 @@ public class EuclidGeometryToolsTest
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
                                                                                                lineSegmentEnd);
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
          // Before end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0));
@@ -1961,6 +1963,9 @@ public class EuclidGeometryToolsTest
                                                                                                lineSegmentEnd);
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
 
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+
          // After end points
          projection.interpolate(lineSegmentStart, lineSegmentEnd, EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
          testPoint.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, projection);
@@ -1972,6 +1977,8 @@ public class EuclidGeometryToolsTest
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
          actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint.getX(), testPoint.getY(), lineSegmentStart,
                                                                                                lineSegmentEnd);
+         assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
+         actualSquaredDistance = EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(testPoint, lineSegmentStart, lineSegmentEnd);
          assertEquals(expectedSquaredDistance, actualSquaredDistance, EuclidGeometryTools.ONE_TRILLIONTH);
       }
    }

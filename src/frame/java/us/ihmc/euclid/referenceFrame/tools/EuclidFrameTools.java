@@ -1110,6 +1110,32 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
+    * @param point coordinates of point to be tested.
+    * @param lineSegmentStart first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @return the square of the minimum distance between the 2D point and the 2D line segment.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static double distanceSquaredFromPoint2DToLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart,
+                                                                  FramePoint2DReadOnly lineSegmentEnd)
+   {
+      point.checkReferenceFrameMatch(lineSegmentStart);
+      point.checkReferenceFrameMatch(lineSegmentEnd);
+      return EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(point, lineSegmentStart, lineSegmentEnd);
+   }
+
+   /**
+    * Returns the square of the minimum distance between a point and a given line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
     * @param pointX x-coordinate of point to be tested.
     * @param pointY y-coordinate of point to be tested.
     * @param pointZ z-coordinate of point to be tested.
