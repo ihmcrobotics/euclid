@@ -39,7 +39,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     *
     * @param min the minimum coordinate for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMin(Point2DReadOnly min)
    {
@@ -52,7 +52,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     *
     * @param min the minimum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMin(double[] min)
    {
@@ -66,7 +66,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     * @param minX the new minimum x-coordinate for this bounding box.
     * @param minY the new minimum y-coordinate for this bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMin(double minX, double minY)
    {
@@ -79,7 +79,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     *
     * @param max the maximum coordinate for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMax(Point2DReadOnly max)
    {
@@ -92,7 +92,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     *
     * @param max the maximum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMax(double[] max)
    {
@@ -106,7 +106,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     * @param maxX the new maximum x-coordinate for this bounding box.
     * @param maxY the new maximum y-coordinate for this bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMax(double maxX, double maxY)
    {
@@ -122,7 +122,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     * @param maxX the new maximum x-coordinates for this bounding box.
     * @param maxY the new maximum y-coordinates for this bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void set(double minX, double minY, double maxX, double maxY)
    {
@@ -137,7 +137,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     * @param min the new minimum coordinates for this bounding box. Not modified.
     * @param max the new maximum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void set(double[] min, double[] max)
    {
@@ -152,7 +152,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     * @param min the new minimum coordinates for this bounding box. Not modified.
     * @param max the new maximum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void set(Point2DReadOnly min, Point2DReadOnly max)
    {
@@ -165,7 +165,7 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     * Redefines this bounding box given its {@code center} location and half its size along each axis
     * {@code halfSize}.
     *
-    * @param center the new center location of this bounding box. Not modified.
+    * @param center   the new center location of this bounding box. Not modified.
     * @param halfSize half the size of this bounding box. Not modified.
     */
    default void set(Point2DReadOnly center, Vector2DReadOnly halfSize)
@@ -189,6 +189,12 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
    /**
     * Combines this bounding box with {@code other} such that it becomes the smallest bounding box
     * containing this and {@code other}.
+    * <p>
+    * For each coordinates, if it is {@link Double#NaN} for one of the two bounding boxes, then the
+    * coordinate of the other bounding box is used to update this bounding box. As a result, if for
+    * instance {@code this} was set to {@link Double#NaN} beforehand, this operation would be
+    * equivalent to {@code this.set(other}.
+    * </p>
     *
     * @param other the other bounding box to combine with this. Not modified.
     */
@@ -203,17 +209,49 @@ public interface BoundingBox2DBasics extends BoundingBox2DReadOnly, Clearable
     * This bounding box is set such that it is the smallest bounding box containing the two given
     * bounding boxes.
     * </p>
+    * <p>
+    * For each coordinates, if it is {@link Double#NaN} for one of the two bounding boxes, then the
+    * coordinate of the other bounding box is used to update this bounding box. As a result, if for
+    * instance {@code boundingBoxOne} was set to {@link Double#NaN} beforehand, this operation would be
+    * equivalent to {@code this.set(boundingBoxTwo}.
+    * </p>
     *
     * @param boundingBoxOne the first bounding box. Can be the same instance as this. Not modified.
     * @param boundingBoxTwo the second bounding box. Can be the same instance as this. Not modified.
     */
    default void combine(BoundingBox2DReadOnly boundingBoxOne, BoundingBox2DReadOnly boundingBoxTwo)
    {
-      double minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
-      double minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
+      double minX, minY;
 
-      double maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
-      double maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
+      if (Double.isNaN(boundingBoxOne.getMinX()))
+         minX = boundingBoxTwo.getMinX();
+      else if (Double.isNaN(boundingBoxTwo.getMinX()))
+         minX = boundingBoxOne.getMinX();
+      else
+         minX = Math.min(boundingBoxOne.getMinX(), boundingBoxTwo.getMinX());
+
+      if (Double.isNaN(boundingBoxOne.getMinY()))
+         minY = boundingBoxTwo.getMinY();
+      else if (Double.isNaN(boundingBoxTwo.getMinY()))
+         minY = boundingBoxOne.getMinY();
+      else
+         minY = Math.min(boundingBoxOne.getMinY(), boundingBoxTwo.getMinY());
+
+      double maxX, maxY;
+
+      if (Double.isNaN(boundingBoxOne.getMaxX()))
+         maxX = boundingBoxTwo.getMaxX();
+      else if (Double.isNaN(boundingBoxTwo.getMaxX()))
+         maxX = boundingBoxOne.getMaxX();
+      else
+         maxX = Math.max(boundingBoxOne.getMaxX(), boundingBoxTwo.getMaxX());
+
+      if (Double.isNaN(boundingBoxOne.getMaxY()))
+         maxY = boundingBoxTwo.getMaxY();
+      else if (Double.isNaN(boundingBoxTwo.getMaxY()))
+         maxY = boundingBoxOne.getMaxY();
+      else
+         maxY = Math.max(boundingBoxOne.getMaxY(), boundingBoxTwo.getMaxY());
 
       set(minX, minY, maxX, maxY);
    }

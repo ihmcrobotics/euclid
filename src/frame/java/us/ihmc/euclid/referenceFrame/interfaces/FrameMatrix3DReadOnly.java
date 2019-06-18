@@ -34,11 +34,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    /**
     * Packs a column of this matrix into a 3D frame tuple.
     *
-    * @param column the index of the column to pack.
+    * @param column       the index of the column to pack.
     * @param columnToPack the tuple in which the column of this matrix is stored. Modified.
-    * @throws ArrayIndexOutOfBoundsException if {@code column} &notin; [0, 2].
+    * @throws ArrayIndexOutOfBoundsException  if {@code column} &notin; [0, 2].
     * @throws ReferenceFrameMismatchException if {@code columnToPack} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void getColumn(int column, FixedFrameTuple3DBasics columnToPack)
    {
@@ -49,7 +49,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    /**
     * Packs a column of this matrix into a 3D frame tuple.
     *
-    * @param column the index of the column to pack.
+    * @param column       the index of the column to pack.
     * @param columnToPack the tuple in which the column of this matrix is stored. Modified.
     * @throws ArrayIndexOutOfBoundsException if {@code column} &notin; [0, 2].
     */
@@ -62,11 +62,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    /**
     * Packs a row of this matrix into a 3D frame tuple.
     *
-    * @param row the index of the row to pack.
+    * @param row       the index of the row to pack.
     * @param rowToPack the array in which the row of this matrix is stored. Modified.
-    * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
+    * @throws ArrayIndexOutOfBoundsException  if {@code row} &notin; [0, 2].
     * @throws ReferenceFrameMismatchException if {@code rowToPack} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void getRow(int row, FixedFrameTuple3DBasics rowToPack)
    {
@@ -77,7 +77,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    /**
     * Packs a row of this matrix into a 3D frame tuple.
     *
-    * @param row the index of the row to pack.
+    * @param row       the index of the row to pack.
     * @param rowToPack the array in which the row of this matrix is stored. Modified.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
     */
@@ -94,8 +94,8 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -109,10 +109,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -127,10 +127,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -145,11 +145,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
-    *            {@code tupleTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -165,8 +165,8 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void addTransform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -180,10 +180,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = tupleTransformed + this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to add the result to. Modified.
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void addTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -198,10 +198,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = tupleTransformed + this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to add the result to. Modified.
-    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void addTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -216,11 +216,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = tupleTransformed + this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to add the result to. Modified.
     * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
-    *            {@code tupleTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void addTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -236,10 +236,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
-    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FixedFrameTuple2DBasics tupleToTransform)
    {
@@ -253,12 +253,12 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
@@ -272,12 +272,12 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
-    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -291,13 +291,13 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
     * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
-    *            {@code tupleTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -310,13 +310,14 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleToTransform = this * tupleToTransform
     * </p>
     *
-    * @param tupleToTransform the tuple to transform. Modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
-    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @param tupleToTransform          the tuple to transform. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FixedFrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
@@ -330,14 +331,15 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
-    * @param checkIfRotationInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
+    * @param tupleOriginal            the tuple to transform. Not modified.
+    * @param tupleTransformed         the tuple to store the result. Modified.
+    * @param checkIfRotationInXYPlane whether this method should assert that this matrix represents a
+    *                                 transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfRotationInXYPlane)
    {
@@ -352,14 +354,15 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
-    * @param checkIfRotationInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
-    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @param tupleOriginal            the tuple to transform. Not modified.
+    * @param tupleTransformed         the tuple to store the result. Modified.
+    * @param checkIfRotationInXYPlane whether this method should assert that this matrix represents a
+    *                                 transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfRotationInXYPlane)
    {
@@ -374,15 +377,16 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
-    * @param checkIfRotationInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
+    * @param tupleOriginal            the tuple to transform. Not modified.
+    * @param tupleTransformed         the tuple to store the result. Modified.
+    * @param checkIfRotationInXYPlane whether this method should assert that this matrix represents a
+    *                                 transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
-    *            {@code tupleTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfRotationInXYPlane)
    {
@@ -398,9 +402,9 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param matrixToTransform the matrix to transform. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code matrixToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code matrixToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FixedFrameMatrix3DBasics matrixToTransform)
    {
@@ -414,11 +418,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * matrixTransformed = this * matrixOriginal * this<sup>-1</sup>
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameMatrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
@@ -433,11 +437,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * matrixTransformed = this * matrixOriginal * this<sup>-1</sup>
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(Matrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -452,12 +456,12 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * matrixTransformed = this * matrixOriginal * this<sup>-1</sup>
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if either {@code matrixOriginal} or
-    *            {@code matrixTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code matrixTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameMatrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -474,8 +478,8 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param vectorToTransform the vector to transform. Modified.
-    * @throws ReferenceFrameMismatchException if {@code vectorToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code vectorToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FixedFrameVector4DBasics vectorToTransform)
    {
@@ -490,10 +494,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * vectorTransformed.xyz = this * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code vectorOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
@@ -509,10 +513,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * vectorTransformed.xyz = this * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code vectorTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code vectorTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -528,11 +532,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * vectorTransformed.xyz = this * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if either {@code vectorOriginal} or
-    *            {@code vectorTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code vectorTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void transform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -548,9 +552,9 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -558,17 +562,17 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -577,17 +581,17 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -596,18 +600,18 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
-    *            {@code tupleTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -623,11 +627,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FixedFrameTuple2DBasics tupleToTransform)
    {
@@ -635,19 +639,19 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
@@ -655,19 +659,19 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -675,20 +679,20 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY
-    *            plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws NotAMatrix2DException           if this matrix does not represent a transformation in the
+    *                                         XY plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
-    *            {@code tupleTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -701,14 +705,15 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * tupleToTransform = this<sup>-1</sup> * tupleToTransform
     * </p>
     *
-    * @param tupleToTransform the tuple to transform. Modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @param tupleToTransform          the tuple to transform. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FixedFrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
@@ -716,21 +721,22 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -739,21 +745,22 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -762,22 +769,23 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
-    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix
-    * and stores the result in {@code tupleTransformed}.
+    * Performs the inverse of the transform to the given tuple {@code tupleOriginal} by this matrix and
+    * stores the result in {@code tupleTransformed}.
     * <p>
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents
-    *           a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix
-    *            does not represent a transformation in the XY plane.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
-    *            {@code tupleTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -794,9 +802,9 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param matrixToTransform the matrix to transform. Not modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code matrixToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code matrixToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FixedFrameMatrix3DBasics matrixToTransform)
    {
@@ -810,11 +818,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * matrixTransformed = this<sup>-1</sup> * matrixOriginal * this
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameMatrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
@@ -829,11 +837,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * matrixTransformed = this<sup>-1</sup> * matrixOriginal * this
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -848,12 +856,12 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * matrixTransformed = this<sup>-1</sup> * matrixOriginal * this
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if either {@code matrixOriginal} or
-    *            {@code matrixTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code matrixTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameMatrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -870,9 +878,9 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * </p>
     *
     * @param vectorToTransform the vector to transform. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code vectorToTransform} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code vectorToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FixedFrameVector4DBasics vectorToTransform)
    {
@@ -887,11 +895,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if {@code vectorOriginal} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
@@ -907,11 +915,11 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code vectorTransformed} is not expressed in the
-    *            same reference frame as {@code this}.
+    * @throws SingularMatrixException         if this matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code vectorTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -927,12 +935,12 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
-    * @throws SingularMatrixException if this matrix is not invertible.
+    * @throws SingularMatrixException         if this matrix is not invertible.
     * @throws ReferenceFrameMismatchException if either {@code vectorOriginal} or
-    *            {@code vectorTransformed} is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code vectorTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
     */
    default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -956,7 +964,9 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default boolean equals(FrameMatrix3DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Matrix3DReadOnly.super.equals(other);
@@ -969,10 +979,10 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     * If the two matrices have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
+    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
     */
    default boolean epsilonEquals(FrameMatrix3DReadOnly other, double epsilon)
    {

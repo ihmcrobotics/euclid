@@ -46,8 +46,8 @@ public class AxisAngleConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
-    * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
+    *                            orientation part is used during the conversion. Not modified.
+    * @param axisAngleToPack     the axis-angle in which the result is stored. Modified.
     */
    public static void convertMatrixToAxisAngle(RotationScaleMatrixReadOnly rotationScaleMatrix, AxisAngleBasics axisAngleToPack)
    {
@@ -68,7 +68,7 @@ public class AxisAngleConversion
     * </ul>
     * </p>
     *
-    * @param rotationMatrix a 3-by-3 matrix representing an orientation. Not modified.
+    * @param rotationMatrix  a 3-by-3 matrix representing an orientation. Not modified.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertMatrixToAxisAngle(RotationMatrixReadOnly rotationMatrix, AxisAngleBasics axisAngleToPack)
@@ -100,15 +100,15 @@ public class AxisAngleConversion
     * </ul>
     * </p>
     * 
-    * @param m00 the 1st row 1st column coefficient of the rotation matrix.
-    * @param m01 the 1st row 2nd column coefficient of the rotation matrix.
-    * @param m02 the 1st row 3rd column coefficient of the rotation matrix.
-    * @param m10 the 2nd row 1st column coefficient of the rotation matrix.
-    * @param m11 the 2nd row 2nd column coefficient of the rotation matrix.
-    * @param m12 the 2nd row 3rd column coefficient of the rotation matrix.
-    * @param m20 the 3rd row 1st column coefficient of the rotation matrix.
-    * @param m21 the 3rd row 2nd column coefficient of the rotation matrix.
-    * @param m22 the 3rd row 3rd column coefficient of the rotation matrix.
+    * @param m00             the 1st row 1st column coefficient of the rotation matrix.
+    * @param m01             the 1st row 2nd column coefficient of the rotation matrix.
+    * @param m02             the 1st row 3rd column coefficient of the rotation matrix.
+    * @param m10             the 2nd row 1st column coefficient of the rotation matrix.
+    * @param m11             the 2nd row 2nd column coefficient of the rotation matrix.
+    * @param m12             the 2nd row 3rd column coefficient of the rotation matrix.
+    * @param m20             the 3rd row 1st column coefficient of the rotation matrix.
+    * @param m21             the 3rd row 2nd column coefficient of the rotation matrix.
+    * @param m22             the 3rd row 3rd column coefficient of the rotation matrix.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertMatrixToAxisAngle(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
@@ -190,7 +190,7 @@ public class AxisAngleConversion
     * </ul>
     * </p>
     *
-    * @param quaternion the unit quaternion to use for the conversion. Not modified.
+    * @param quaternion      the unit quaternion to use for the conversion. Not modified.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertQuaternionToAxisAngle(QuaternionReadOnly quaternion, AxisAngleBasics axisAngleToPack)
@@ -218,10 +218,10 @@ public class AxisAngleConversion
     * </ul>
     * </p>
     *
-    * @param qx the x-component of the quaternion.
-    * @param qy the y-component of the quaternion.
-    * @param qz the z-component of the quaternion.
-    * @param qs the s-component of the quaternion.
+    * @param qx              the x-component of the quaternion.
+    * @param qy              the y-component of the quaternion.
+    * @param qz              the z-component of the quaternion.
+    * @param qs              the s-component of the quaternion.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertQuaternionToAxisAngle(double qx, double qy, double qz, double qs, AxisAngleBasics axisAngleToPack)
@@ -266,7 +266,7 @@ public class AxisAngleConversion
     * same axis-angle.
     * </p>
     *
-    * @param rotationVector the rotation vector to use in the conversion. Not modified.
+    * @param rotationVector  the rotation vector to use in the conversion. Not modified.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertRotationVectorToAxisAngle(Vector3DReadOnly rotationVector, AxisAngleBasics axisAngleToPack)
@@ -292,9 +292,9 @@ public class AxisAngleConversion
     * same axis-angle.
     * </p>
     *
-    * @param rx the x-component of the rotation vector to use in the conversion.
-    * @param ry the y-component of the rotation vector to use in the conversion.
-    * @param rz the z-component of the rotation vector to use in the conversion.
+    * @param rx              the x-component of the rotation vector to use in the conversion.
+    * @param ry              the y-component of the rotation vector to use in the conversion.
+    * @param rz              the z-component of the rotation vector to use in the conversion.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertRotationVectorToAxisAngle(double rx, double ry, double rz, AxisAngleBasics axisAngleToPack)
@@ -341,7 +341,7 @@ public class AxisAngleConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
+    * @param yawPitchRoll    the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     * @deprecated Use {@link #convertYawPitchRollToAxisAngle(YawPitchRollReadOnly, AxisAngleBasics)}
     *             instead.
@@ -371,7 +371,7 @@ public class AxisAngleConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
+    * @param yawPitchRoll    the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertYawPitchRollToAxisAngle(YawPitchRollReadOnly yawPitchRoll, AxisAngleBasics axisAngleToPack)
@@ -399,9 +399,9 @@ public class AxisAngleConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yaw the yaw angle to use in the conversion.
-    * @param pitch the pitch angle to use in the conversion.
-    * @param roll the roll angle to use in the conversion.
+    * @param yaw             the yaw angle to use in the conversion.
+    * @param pitch           the pitch angle to use in the conversion.
+    * @param roll            the roll angle to use in the conversion.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertYawPitchRollToAxisAngle(double yaw, double pitch, double roll, AxisAngleBasics axisAngleToPack)

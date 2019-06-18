@@ -1,5 +1,12 @@
 package us.ihmc.euclid.tools;
 
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+
 /**
  * This class provides a variety of generic tools such as fast square-root algorithm
  * {@link #fastSquareRoot(double)}, or also an linear interpolation algorithm
@@ -28,6 +35,193 @@ public class EuclidCoreTools
     * Tolerance used in {@link #clamp(double, double, double)} to verify the bounds are sane.
     */
    public static final double CLAMP_EPS = 1.0e-10;
+
+   /**
+    * Constant representing the coordinates (0, 0) of the origin in the 2D plane.
+    */
+   public static final Point2DReadOnly origin2D = new Point2DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple2DReadOnly)
+            return Point2DReadOnly.super.equals((Tuple2DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple2DString(this);
+      }
+   };
+
+   /**
+    * Constant representing the coordinates (0, 0, 0) of the origin in 3D.
+    */
+   public static final Point3DReadOnly origin3D = new Point3DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getZ()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple3DReadOnly)
+            return Point3DReadOnly.super.equals((Tuple3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
+      }
+   };
+
+   /**
+    * Constant representing the zero vector 2D: (0, 0).
+    */
+   public static final Vector2DReadOnly zeroVector2D = new Vector2DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple2DReadOnly)
+            return Vector2DReadOnly.super.equals((Tuple2DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple2DString(this);
+      }
+   };
+
+   /**
+    * Constant representing the zero vector 3D: (0, 0, 0).
+    */
+   public static final Vector3DReadOnly zeroVector3D = new Vector3DReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getZ()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Tuple3DReadOnly)
+            return Vector3DReadOnly.super.equals((Tuple3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         long hashCode = 1L;
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
+         return EuclidHashCodeTools.toIntHashCode(hashCode);
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple3DString(this);
+      }
+   };
+
+   private EuclidCoreTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Calculates and returns the square root of the given value.
@@ -131,6 +325,17 @@ public class EuclidCoreTools
             return true;
       }
       return false;
+   }
+
+   /**
+    * Calculates and returns {@code value}<sup>2</sup>
+    * 
+    * @param value the value to compute the square of.
+    * @return {@code value * value}.
+    */
+   public static double square(double value)
+   {
+      return value * value;
    }
 
    /**
@@ -294,7 +499,7 @@ public class EuclidCoreTools
     * </p>
     *
     * @param angleToShift the angle to shift.
-    * @param angleStart the lowest admissible angle value.
+    * @param angleStart   the lowest admissible angle value.
     * @return the result that is in [{@code angleStart}, {@code angleStart} + 2<i>pi</i>[
     */
    public static double shiftAngleInRange(double angleToShift, double angleStart)
@@ -376,8 +581,8 @@ public class EuclidCoreTools
     * </p>
     *
     * @param expectedValue the first value to compare.
-    * @param actualValue the second value to compare.
-    * @param epsilon the tolerance to use for the test.
+    * @param actualValue   the second value to compare.
+    * @param epsilon       the tolerance to use for the test.
     * @return {@code true} if the two values are considered to be equal, {@code false otherwise}.
     */
    public static boolean epsilonEquals(double expectedValue, double actualValue, double epsilon)
@@ -386,9 +591,102 @@ public class EuclidCoreTools
    }
 
    /**
+    * Tests whether the value is equal to zero to an epsilon.
+    * <p>
+    * This is equivalent to {@code epsilonEquals(value, 0.0, epsilon)}.
+    * </p>
+    * 
+    * @param value   the query.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if the value can be considered zero, {@code false} otherwise.
+    */
+   public static boolean isZero(double value, double epsilon)
+   {
+      return Math.abs(value) <= epsilon;
+   }
+
+   /**
+    * Tests whether both values are equal to zero to an epsilon.
+    * 
+    * @param x       the first value.
+    * @param y       the second value.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if both values can be considered zero, {@code false} otherwise.
+    */
+   public static boolean areAllZero(double x, double y, double epsilon)
+   {
+      return isZero(x, epsilon) && isZero(y, epsilon);
+   }
+
+   /**
+    * Tests whether all values are equal to zero to an epsilon.
+    * 
+    * @param x       the first value.
+    * @param y       the second value.
+    * @param z       the third value.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if all values can be considered zero, {@code false} otherwise.
+    */
+   public static boolean areAllZero(double x, double y, double z, double epsilon)
+   {
+      return isZero(x, epsilon) && isZero(y, epsilon) && isZero(z, epsilon);
+   }
+
+   /**
+    * Tests whether all values are equal to zero to an epsilon.
+    * 
+    * @param x       the first value.
+    * @param y       the second value.
+    * @param z       the third value.
+    * @param s       the fourth value.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if all values can be considered zero, {@code false} otherwise.
+    */
+   public static boolean areAllZero(double x, double y, double z, double s, double epsilon)
+   {
+      return isZero(x, epsilon) && isZero(y, epsilon) && isZero(z, epsilon) && isZero(s, epsilon);
+   }
+
+   /**
+    * Tests whether the to angles represent the same physical angle to an {@code epsilon}.
+    * <p>
+    * If any of the two angles is equal to {@link Double#NaN}, this method fails and returns
+    * {@code false}.
+    * </p>
+    * 
+    * @param expectedAngle the first angle in the comparison.
+    * @param actualAngle   the second angle in the comparison.
+    * @param epsilon       the tolerance to use for the test.
+    * @return {@code true} if the two angles are considered to be geometrically equal, {@code false}
+    *         otherwise.
+    */
+   public static boolean angleGeometricallyEquals(double expectedAngle, double actualAngle, double epsilon)
+   {
+      return Math.abs(angleDifferenceMinusPiToPi(expectedAngle, actualAngle)) <= epsilon;
+   }
+
+   /**
+    * Tests whether the angle is geometrically equal to the zero angle to an epsilon.
+    * <p>
+    * This is equivalent to {@code angleGeometricallyEquals(angle, 0.0, epsilon)}.
+    * </p>
+    * 
+    * @param angle   the query.
+    * @param epsilon the tolerance to use for the test.
+    * @return {@code true} if the angle can be considered zero, {@code false} otherwise.
+    */
+   public static boolean isAngleZero(double angle, double epsilon)
+   {
+      angle = Math.abs(angle) % TwoPI;
+      if (angle > Math.PI)
+         angle -= TwoPI;
+      return Math.abs(angle) <= epsilon;
+   }
+
+   /**
     * Clamps value to the given range, defined by {@code -minMax} and {@code minMax}, inclusive.
     *
-    * @param value value
+    * @param value  value
     * @param minMax inclusive absolute boundary
     * @return
     *         <li>{@code -minMax} if {@code value} is less than {@code -minMax}</li>
@@ -405,8 +703,8 @@ public class EuclidCoreTools
     * Clamps value to the given range, inclusive.
     *
     * @param value value
-    * @param min inclusive boundary start
-    * @param max inclusive boundary end
+    * @param min   inclusive boundary start
+    * @param max   inclusive boundary end
     * @return
     *         <li>{@code min} if {@code value} is less than {@code min}</li>
     *         <li>{@code max} if {@code value} is greater than {@code max}</li>
@@ -429,15 +727,14 @@ public class EuclidCoreTools
     * result = (1.0 - alpha) * a + alpha * b
     * </p>
     *
-    * @param a the first value used in the interpolation.
-    * @param b the second value used in the interpolation.
+    * @param a     the first value used in the interpolation.
+    * @param b     the second value used in the interpolation.
     * @param alpha the percentage to use for the interpolation. A value of 0 will return {@code a},
-    *           while a value of 1 will return {@code b}.
+    *              while a value of 1 will return {@code b}.
     * @return the interpolated value.
     */
    public static double interpolate(double a, double b, double alpha)
    {
       return (1.0 - alpha) * a + alpha * b;
    }
-
 }

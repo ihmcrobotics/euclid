@@ -35,7 +35,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    /**
     * Initializes this line segment to have the given endpoints.
     *
-    * @param firstEndpoint coordinate of the first endpoint of this line segment.
+    * @param firstEndpoint  coordinate of the first endpoint of this line segment.
     * @param secondEndpoint coordinate of the second endpoint of this line segment.
     */
    public LineSegment1D(double firstEndpoint, double secondEndpoint)
@@ -57,7 +57,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * Initializes this line segment to have the given endpoints.
     *
     * @param endpoints a two-element array containing in order the first and second endpoints for this
-    *           line segment. Not modified.
+    *                  line segment. Not modified.
     * @throws IllegalArgumentException if the given array has a length different than 2.
     */
    public LineSegment1D(double[] endpoints)
@@ -76,7 +76,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * </ul>
     * </p>
     *
-    * @param other the other line segment. Not modified.
+    * @param other              the other line segment. Not modified.
     * @param intersectionToPack line segment used to store the result. Modified.
     * @return whether the two line segment overlap or no.
     */
@@ -240,9 +240,9 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * endpoints.
     * </p>
     *
-    * @param point the query.
+    * @param point   the query.
     * @param epsilon the tolerance to use for this test. If positive, the test becomes less
-    *           restrictive. If negative, the test becomes more conservative.
+    *                restrictive. If negative, the test becomes more conservative.
     * @return {@code true} if the point is considered to be between this line segment's endpoints,
     *         {@code false} otherwise.
     */
@@ -378,7 +378,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    /**
     * Sets this line segment's endpoints.
     *
-    * @param firstEndpoint coordinate of the first endpoint.
+    * @param firstEndpoint  coordinate of the first endpoint.
     * @param secondEndpoint coordinate of the second endpoint.
     */
    public void set(double firstEndpoint, double secondEndpoint)
@@ -392,7 +392,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * Redefines this line segment with new endpoints.
     *
     * @param endpoints a two-element array containing in order the first and second endpoints for this
-    *           line segment. Not modified.
+    *                  line segment. Not modified.
     * @throws IllegalArgumentException if the given array has a length different than 2.
     */
    public void set(double[] endpoints)
@@ -432,7 +432,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     *
     * @param newMinPoint the new coordinate for the endpoint with the lowest coordinate.
     * @throws RuntimeException if the argument is greater or equal to the endpoint with greatest
-    *            coordinate. This prevents to flip this line segment's direction.
+    *                          coordinate. This prevents to flip this line segment's direction.
     */
    public void setMinPoint(double newMinPoint)
    {
@@ -450,7 +450,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     *
     * @param newMaxPoint the new coordinate for the endpoint with the highest coordinate.
     * @throws RuntimeException if the argument is less or equal to the endpoint with lowest coordinate.
-    *            This prevents to flip this line segment's direction.
+    *                          This prevents to flip this line segment's direction.
     */
    public void setMaxPoint(double newMaxPoint)
    {
@@ -539,7 +539,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * Compute the 3D equivalent of this line segment. The 3D equivalent of each end point is computed
     * as follows: {@code endPoint3d = endPoint1d * direction3d + zero3d}.
     *
-    * @param zero3d position of the 3D equivalent of an endpoint equal to zero.
+    * @param zero3d      position of the 3D equivalent of an endpoint equal to zero.
     * @param direction3d direction toward greater values of {@code endPoint1d}.
     * @return the 3D equivalent of this line segment.
     */
@@ -556,7 +556,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * Compute the 2D equivalent of this line segment. The 2D equivalent of each end point is computed
     * as follows: {@code endPoint2d = endPoint1d * direction2d + zero2d}.
     *
-    * @param zero2d position of the 2D equivalent of an endpoint equal to zero.
+    * @param zero2d      position of the 2D equivalent of an endpoint equal to zero.
     * @param direction2d direction toward greater values of {@code endPoint1d}.
     * @return the 2D equivalent of this line segment.
     */
@@ -573,7 +573,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
@@ -595,7 +595,7 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param other the line segment to compare to. Not modified.
+    * @param other   the line segment to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.

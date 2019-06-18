@@ -18,9 +18,9 @@ import us.ihmc.euclid.tools.YawPitchRollTools;
  * However, there is no algebra directly accessible for manipulating orientations represented as
  * yaw-pitch-roll making it highly computationally expensive when compared to rotation matrices or
  * quaternions. In addition, yaw-pitch-roll representation is sensitive to gimbal lock which happens
- * when the pitch angle is in the neighborhood of either <i>pi</i> or -<i>pi</i>. When close to such
- * configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes lead
- * to unexpected results.
+ * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to
+ * such configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes
+ * lead to unexpected results.
  * </p>
  * <p>
  * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
@@ -113,9 +113,9 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    /**
     * Sets this yaw-pitch-roll angles.
     * 
-    * @param yaw the new yaw angle.
+    * @param yaw   the new yaw angle.
     * @param pitch the new pitch angle.
-    * @param roll the new roll angle.
+    * @param roll  the new roll angle.
     */
    default void set(double yaw, double pitch, double roll)
    {
@@ -161,7 +161,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * </ul>
     *
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(double[] yawPitchRollArray)
    {
@@ -176,9 +176,9 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * <li>{@code this.setRoll(yawPitchRollArray[startIndex + 2]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex        the first index to start reading from in the array.
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(int startIndex, double[] yawPitchRollArray)
    {
@@ -196,7 +196,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * </ul>
     *
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(float[] yawPitchRollArray)
    {
@@ -211,9 +211,9 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * <li>{@code this.setRoll(yawPitchRollArray[startIndex + 2]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex        the first index to start reading from in the array.
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(int startIndex, float[] yawPitchRollArray)
    {
@@ -250,6 +250,24 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
       set(yaw, pitch, roll);
    }
 
+   @Override
+   default void setToYawOrientation(double yaw)
+   {
+      set(yaw, 0.0, 0.0);
+   }
+
+   @Override
+   default void setToPitchOrientation(double pitch)
+   {
+      set(0.0, pitch, 0.0);
+   }
+
+   @Override
+   default void setToRollOrientation(double roll)
+   {
+      set(0.0, 0.0, roll);
+   }
+
    /** {@inheritDoc} */
    @Override
    default void setRotationMatrix(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
@@ -272,17 +290,17 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    {
       switch (index)
       {
-      case 0:
-         setYaw(value);
-         break;
-      case 1:
-         setPitch(value);
-         break;
-      case 2:
-         setRoll(value);
-         break;
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            setYaw(value);
+            break;
+         case 1:
+            setPitch(value);
+            break;
+         case 2:
+            setRoll(value);
+            break;
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 

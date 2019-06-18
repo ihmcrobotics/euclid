@@ -22,6 +22,7 @@ import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
 import us.ihmc.euclid.referenceFrame.FrameYawPitchRoll;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
@@ -43,6 +44,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidFrameRandomTools
 {
+   private EuclidFrameRandomTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Generates a reference frame with a random transform to world frame.
     *
@@ -57,9 +63,9 @@ public class EuclidFrameRandomTools
    /**
     * Generates a reference frame with a random transform to world frame.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param use2DTransform whether to use a 2D or 3D rotation for the transform used to create the
-    *           random frame.
+    *                       random frame.
     * @return the new random reference frame.
     */
    public static ReferenceFrame nextReferenceFrame(Random random, boolean use2DTransform)
@@ -70,7 +76,7 @@ public class EuclidFrameRandomTools
    /**
     * Generates a reference frame with a random transform to its parent frame.
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param parentFrame the parent frame of the new reference frame.
     * @return the new random reference frame.
     */
@@ -82,10 +88,10 @@ public class EuclidFrameRandomTools
    /**
     * Generates a reference frame with a random transform to its parent frame.
     *
-    * @param random the random generator to use.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param random         the random generator to use.
+    * @param parentFrame    the parent frame of the new reference frame.
     * @param use2DTransform whether to use a 2D or 3D rotation for the transform used to create the
-    *           random frame.
+    *                       random frame.
     * @return the new random reference frame.
     */
    public static ReferenceFrame nextReferenceFrame(Random random, ReferenceFrame parentFrame, boolean use2DTransform)
@@ -96,8 +102,8 @@ public class EuclidFrameRandomTools
    /**
     * Generates a reference frame with a random transform to its parent frame.
     *
-    * @param frameName the name of the new frame.
-    * @param random the random generator to use.
+    * @param frameName   the name of the new frame.
+    * @param random      the random generator to use.
     * @param parentFrame the parent frame of the new reference frame.
     * @return the new random reference frame.
     */
@@ -109,11 +115,11 @@ public class EuclidFrameRandomTools
    /**
     * Generates a reference frame with a random transform to its parent frame.
     *
-    * @param frameName the name of the new frame.
-    * @param random the random generator to use.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName      the name of the new frame.
+    * @param random         the random generator to use.
+    * @param parentFrame    the parent frame of the new reference frame.
     * @param use2DTransform whether to use a 2D or 3D rotation for the transform used to create the
-    *           random frame.
+    *                       random frame.
     * @return the new random reference frame.
     */
    public static ReferenceFrame nextReferenceFrame(String frameName, Random random, ReferenceFrame parentFrame, boolean use2DTransform)
@@ -143,9 +149,9 @@ public class EuclidFrameRandomTools
     * Creates a tree structure of 20 random reference frames start off
     * {@link ReferenceFrame#getWorldFrame()}.
     * 
-    * @param random the random generator to use.
+    * @param random          the random generator to use.
     * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
-    *           random frames.
+    *                        random frames.
     * @return the array containing the random reference frames and
     *         {@code ReferenceFrame.getWorldFrame()} at the first index.
     */
@@ -158,7 +164,7 @@ public class EuclidFrameRandomTools
     * Creates a tree structure of random reference frames starting off
     * {@code ReferenceFrame.getWorldFrame()}.
     *
-    * @param random the random generator to use.
+    * @param random                  the random generator to use.
     * @param numberOfReferenceFrames the number of reference frames to be created.
     * @return the array containing the random reference frames and
     *         {@code ReferenceFrame.getWorldFrame()} at the first index.
@@ -172,10 +178,10 @@ public class EuclidFrameRandomTools
     * Creates a tree structure of random reference frames starting off
     * {@code ReferenceFrame.getWorldFrame()}.
     *
-    * @param random the random generator to use.
+    * @param random                  the random generator to use.
     * @param numberOfReferenceFrames the number of reference frames to be created.
-    * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
-    *           random frames.
+    * @param use2DTransforms         whether to use a 2D or 3D rotation for the transform used to
+    *                                create the random frames.
     * @return the array containing the random reference frames and
     *         {@code ReferenceFrame.getWorldFrame()} at the first index.
     */
@@ -187,9 +193,9 @@ public class EuclidFrameRandomTools
    /**
     * Creates a tree structure of random reference frames starting off the given {@code rootFrame}.
     *
-    * @param frameNamePrefix prefix to use when creating each random reference frame.
-    * @param random the random generator to use.
-    * @param rootFrame the base frame from which the tree is to be expanded.
+    * @param frameNamePrefix         prefix to use when creating each random reference frame.
+    * @param random                  the random generator to use.
+    * @param rootFrame               the base frame from which the tree is to be expanded.
     * @param numberOfReferenceFrames the number of reference frames to be created.
     * @return the array containing the random reference frames and {@code rootFrame} at the first
     *         index.
@@ -202,12 +208,12 @@ public class EuclidFrameRandomTools
    /**
     * Creates a tree structure of random reference frames starting off the given {@code rootFrame}.
     *
-    * @param frameNamePrefix prefix to use when creating each random reference frame.
-    * @param random the random generator to use.
-    * @param rootFrame the base frame from which the tree is to be expanded.
+    * @param frameNamePrefix         prefix to use when creating each random reference frame.
+    * @param random                  the random generator to use.
+    * @param rootFrame               the base frame from which the tree is to be expanded.
     * @param numberOfReferenceFrames the number of reference frames to be created.
-    * @param use2DTransforms whether to use a 2D or 3D rotation for the transform used to create the
-    *           random frames.
+    * @param use2DTransforms         whether to use a 2D or 3D rotation for the transform used to
+    *                                create the random frames.
     * @return the array containing the random reference frames and {@code rootFrame} at the first
     *         index.
     */
@@ -233,7 +239,7 @@ public class EuclidFrameRandomTools
     * {@code framePoint}<sub>i</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
     * @return the random frame point.
     */
@@ -250,9 +256,9 @@ public class EuclidFrameRandomTools
     * {@code framePoint.z} &in; [-minMax; minMax]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minMax the maximum absolute value for each coordinate.
+    * @param minMax         the maximum absolute value for each coordinate.
     * @return the random frame point.
     * @throws RuntimeException if {@code minMax < 0}.
     */
@@ -269,10 +275,10 @@ public class EuclidFrameRandomTools
     * {@code framePoint.z} &in; [min; max]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param min the minimum value for each coordinate.
-    * @param max the maximum value for each coordinate.
+    * @param min            the minimum value for each coordinate.
+    * @param max            the maximum value for each coordinate.
     * @return the random frame point.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -289,14 +295,14 @@ public class EuclidFrameRandomTools
     * {@code framePoint.z} &in; [-maxAbsoluteZ; maxAbsoluteZ]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param maxAbsoluteX the maximum absolute value for the x-coordinate.
-    * @param maxAbsoluteY the maximum absolute value for the y-coordinate.
-    * @param maxAbsoluteZ the maximum absolute value for the z-coordinate.
+    * @param maxAbsoluteX   the maximum absolute value for the x-coordinate.
+    * @param maxAbsoluteY   the maximum absolute value for the y-coordinate.
+    * @param maxAbsoluteZ   the maximum absolute value for the z-coordinate.
     * @return the random frame point.
     * @throws RuntimeException if {@code maxAbsoluteX < 0}, {@code maxAbsoluteY < 0},
-    *            {@code maxAbsoluteZ < 0}.
+    *                          {@code maxAbsoluteZ < 0}.
     */
    public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
@@ -311,14 +317,14 @@ public class EuclidFrameRandomTools
     * {@code framePoint.z} &in; [minZ; maxZ]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minX the minimum value for the x-coordinate.
-    * @param maxX the maximum value for the x-coordinate.
-    * @param minY the minimum value for the y-coordinate.
-    * @param maxY the maximum value for the y-coordinate.
-    * @param minZ the minimum value for the z-coordinate.
-    * @param maxZ the maximum value for the z-coordinate.
+    * @param minX           the minimum value for the x-coordinate.
+    * @param maxX           the maximum value for the x-coordinate.
+    * @param minY           the minimum value for the y-coordinate.
+    * @param maxY           the maximum value for the y-coordinate.
+    * @param minZ           the minimum value for the z-coordinate.
+    * @param maxZ           the maximum value for the z-coordinate.
     * @return the random frame point.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
@@ -334,7 +340,7 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
     * @return the random frame vector.
     */
@@ -349,10 +355,10 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
-    *           frame vector. Not modified.
+    * @param minMax         tuple used to bound the maximum absolute value of each component of the
+    *                       generated frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -367,12 +373,12 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [{@code min}<sub>i</sub>; {@code max}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param min tuple used as upper-bound for each component of the generated frame vector. Not
-    *           modified.
-    * @param max tuple used as lower-bound for each component of the generated frame vector. Not
-    *           modified.
+    * @param min            tuple used as upper-bound for each component of the generated frame vector.
+    *                       Not modified.
+    * @param max            tuple used as lower-bound for each component of the generated frame vector.
+    *                       Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
     */
@@ -387,10 +393,10 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [{@code min}; {@code max}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param min upper-bound for each component of the generated frame vector. Not modified.
-    * @param max lower-bound for each component of the generated frame vector. Not modified.
+    * @param min            upper-bound for each component of the generated frame vector. Not modified.
+    * @param max            lower-bound for each component of the generated frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -407,14 +413,14 @@ public class EuclidFrameRandomTools
     * {@code frameVector.z} &in; [minZ; maxZ]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param minX the minimum value for the x-component.
-    * @param maxX the maximum value for the x-component.
-    * @param minY the minimum value for the y-component.
-    * @param maxY the maximum value for the y-component.
-    * @param minZ the minimum value for the z-component.
-    * @param maxZ the maximum value for the z-component.
+    * @param minX           the minimum value for the x-component.
+    * @param maxX           the maximum value for the x-component.
+    * @param minY           the minimum value for the y-component.
+    * @param maxY           the maximum value for the y-component.
+    * @param minZ           the minimum value for the z-component.
+    * @param maxZ           the maximum value for the z-component.
     * @return the random vector.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
@@ -427,9 +433,9 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector given its length {@code length}.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
-    * @param length the length of the generated frame vector.
+    * @param length         the length of the generated frame vector.
     * @return the random frame vector.
     */
    public static FrameVector3D nextFrameVector3DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
@@ -440,9 +446,9 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector that is perpendicular to {@code vectorToBeOrthogonalTo}.
     *
-    * @param random the random generator to use.
+    * @param random                 the random generator to use.
     * @param vectorToBeOrthogonalTo the frame vector to be orthogonal to. Not modified.
-    * @param normalize whether to normalize the generated frame vector or not.
+    * @param normalize              whether to normalize the generated frame vector or not.
     * @return the random frame vector.
     */
    public static FrameVector3D nextOrthogonalFrameVector3D(Random random, FrameVector3DReadOnly vectorToBeOrthogonalTo, boolean normalize)
@@ -453,10 +459,10 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector that is perpendicular to {@code vectorToBeOrthogonalTo}.
     *
-    * @param random the random generator to use.
-    * @param referenceFrame the random frame vector's reference frame.
+    * @param random                 the random generator to use.
+    * @param referenceFrame         the random frame vector's reference frame.
     * @param vectorToBeOrthogonalTo the vector to be orthogonal to. Not modified.
-    * @param normalize whether to normalize the generated frame vector or not.
+    * @param normalize              whether to normalize the generated frame vector or not.
     * @return the random frame vector.
     */
    public static FrameVector3D nextOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
@@ -471,7 +477,7 @@ public class EuclidFrameRandomTools
     * {@code framePoint}<sub>i</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
     * @return the random frame point.
     */
@@ -486,9 +492,9 @@ public class EuclidFrameRandomTools
     * {@code framePoint}<sub>i</sub> &in; [-minMax; minMax].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minMax the maximum absolute value for each coordinate.
+    * @param minMax         the maximum absolute value for each coordinate.
     * @return the random frame point.
     * @throws RuntimeException if {@code minMax < 0}.
     */
@@ -504,10 +510,10 @@ public class EuclidFrameRandomTools
     * {@code framePoint.y} &in; [min; max]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param min the minimum value for each coordinate.
-    * @param max the maximum value for each coordinate.
+    * @param min            the minimum value for each coordinate.
+    * @param max            the maximum value for each coordinate.
     * @return the random frame point.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -523,12 +529,12 @@ public class EuclidFrameRandomTools
     * {@code framePoint.y} &in; [minY; maxY]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minX the minimum value for the x-coordinate.
-    * @param maxX the maximum value for the x-coordinate.
-    * @param minY the minimum value for the y-coordinate.
-    * @param maxY the maximum value for the y-coordinate.
+    * @param minX           the minimum value for the x-coordinate.
+    * @param maxX           the maximum value for the x-coordinate.
+    * @param minY           the minimum value for the y-coordinate.
+    * @param maxY           the maximum value for the y-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code minX > maxX} or {@code minY > maxY}.
     */
@@ -543,7 +549,7 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
     * @return the random frame vector.
     */
@@ -558,10 +564,10 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [{@code min}; {@code max}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param min upper-bound for each component of the generated frame vector. Not modified.
-    * @param max lower-bound for each component of the generated frame vector. Not modified.
+    * @param min            upper-bound for each component of the generated frame vector. Not modified.
+    * @param max            lower-bound for each component of the generated frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -573,9 +579,9 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random frame vector given its length {@code length}.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param length the length of the generated frame vector.
+    * @param length         the length of the generated frame vector.
     * @return the random frame vector.
     */
    public static FrameVector2D nextFrameVector2DWithFixedLength(Random random, ReferenceFrame referenceFrame, double length)
@@ -589,10 +595,10 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
-    *           frame vector. Not modified.
+    * @param minMax         tuple used to bound the maximum absolute value of each component of the
+    *                       generated frame vector. Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -607,12 +613,12 @@ public class EuclidFrameRandomTools
     * {@code frameVector}<sub>i</sub> &in; [{@code min}<sub>i</sub>; {@code max}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame point's reference frame.
-    * @param min tuple used as upper-bound for each component of the generated frame vector. Not
-    *           modified.
-    * @param max tuple used as lower-bound for each component of the generated frame vector. Not
-    *           modified.
+    * @param min            tuple used as upper-bound for each component of the generated frame vector.
+    *                       Not modified.
+    * @param max            tuple used as lower-bound for each component of the generated frame vector.
+    *                       Not modified.
     * @return the random frame vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
     */
@@ -631,7 +637,7 @@ public class EuclidFrameRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame yaw-pitch-roll reference frame.
     * @return the random frame yaw-pitch-roll orientation.
     */
@@ -650,14 +656,14 @@ public class EuclidFrameRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame yaw-pitch-roll reference frame.
-    * @param minMaxYaw the maximum absolute angle for the generated yaw angle.
-    * @param minMaxPitch the maximum absolute angle for the generated pitch angle.
-    * @param minMaxRoll the maximum absolute angle for the generated roll angle.
+    * @param minMaxYaw      the maximum absolute angle for the generated yaw angle.
+    * @param minMaxPitch    the maximum absolute angle for the generated pitch angle.
+    * @param minMaxRoll     the maximum absolute angle for the generated roll angle.
     * @return the random frame yaw-pitch-roll orientation.
     * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *            {@code minMaxRoll < 0}.
+    *                          {@code minMaxRoll < 0}.
     */
    public static FrameYawPitchRoll nextFrameYawPitchRoll(Random random, ReferenceFrame referenceFrame, double minMaxYaw, double minMaxPitch, double minMaxRoll)
    {
@@ -671,9 +677,9 @@ public class EuclidFrameRandomTools
     * {@code minMaxAngle}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame yaw-pitch-roll reference frame.
-    * @param minMaxAngle the maximum absolute angle described by the generated orientation.
+    * @param minMaxAngle    the maximum absolute angle described by the generated orientation.
     * @return the random frame yaw-pitch-roll orientation.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
     */
@@ -688,7 +694,7 @@ public class EuclidFrameRandomTools
     * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame quaternion's reference frame.
     * @return the random frame quaternion.
     */
@@ -704,9 +710,9 @@ public class EuclidFrameRandomTools
     * {@code minMaxAngle}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame quaternion's reference frame.
-    * @param minMaxAngle the maximum absolute angle described by the generated quaternion.
+    * @param minMaxAngle    the maximum absolute angle described by the generated quaternion.
     * @return the random frame quaternion.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
     */
@@ -716,12 +722,33 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates an orientation which both value and type are random.
+    * <p>
+    * The type can be either: quaternion, or yaw-pitch-roll.
+    * </p>
+    * 
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame orientation's reference frame.
+    * @return the random orientation 3D.
+    */
+   public static FrameOrientation3DBasics nextFrameOrientation3D(Random random, ReferenceFrame referenceFrame)
+   {
+      switch (random.nextInt(2))
+      {
+         case 0:
+            return nextFrameQuaternion(random, referenceFrame);
+         default:
+            return nextFrameYawPitchRoll(random, referenceFrame);
+      }
+   }
+
+   /**
     * Generates a random 4D frame vector.
     * <p>
     * {@code vector}<sub>i</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame vector's reference frame.
     * @return the random 4D frame vector.
     */
@@ -734,7 +761,7 @@ public class EuclidFrameRandomTools
     * Generates a random 2D frame orientation with a yaw uniformly distributed in [-<i>pi</i>;
     * <i>pi</i>].
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame orientation's reference frame.
     * @return the random 2D frame orientation.
     */
@@ -746,7 +773,7 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random 2D frame pose with a yaw uniformly distributed in [-<i>pi</i>; <i>pi</i>].
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame pose reference frame.
     * @return the random 2D frame pose.
     */
@@ -763,9 +790,9 @@ public class EuclidFrameRandomTools
     * [-{@code orientationMinMax}; {@code orientationMinMax}].
     * </p>
     * 
-    * @param random the random generator to use.
-    * @param referenceFrame the random frame pose reference frame.
-    * @param positionMinMax the maximum absolute value of each position coordinate.
+    * @param random            the random generator to use.
+    * @param referenceFrame    the random frame pose reference frame.
+    * @param positionMinMax    the maximum absolute value of each position coordinate.
     * @param orientationMinMax the maximum absolute value of the orientation's magnitude.
     * @return the random 2D frame pose.
     */
@@ -780,7 +807,7 @@ public class EuclidFrameRandomTools
     * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame pose's reference frame.
     * @return the random 3D frame pose.
     */
@@ -798,11 +825,11 @@ public class EuclidFrameRandomTools
     * The rotation magnitude described by the generated quaternion is in [-<i>pi</i>; <i>pi</i>].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame pose's reference frame.
-    * @param maxAbsoluteX the maximum absolute value of the position x-coordinate.
-    * @param maxAbsoluteY the maximum absolute value of the position y-coordinate.
-    * @param maxAbsoluteZ the maximum absolute value of the position z-coordinate.
+    * @param maxAbsoluteX   the maximum absolute value of the position x-coordinate.
+    * @param maxAbsoluteY   the maximum absolute value of the position y-coordinate.
+    * @param maxAbsoluteZ   the maximum absolute value of the position z-coordinate.
     * @return the random 3D frame pose.
     */
    public static FramePose3D nextFramePose3D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
@@ -818,9 +845,9 @@ public class EuclidFrameRandomTools
     * [-{@code orientationMinMax}; {@code orientationMinMax}].
     * </p>
     * 
-    * @param random the random generator to use.
-    * @param referenceFrame the random frame pose's reference frame.
-    * @param positionMinMax the maximum absolute value of each position coordinate.
+    * @param random            the random generator to use.
+    * @param referenceFrame    the random frame pose's reference frame.
+    * @param positionMinMax    the maximum absolute value of each position coordinate.
     * @param orientationMinMax the maximum absolute value of the orientation's magnitude.
     * @return the random 3D frame pose.
     */
@@ -832,7 +859,7 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random 2D frame line.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame line's reference frame.
     * @return the random frame line.
     */
@@ -844,7 +871,7 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random 2D frame line.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame line's reference frame.
     * @return the random frame line.
     */
@@ -856,7 +883,7 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random 2D frame line segment.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame line segment's reference frame.
     * @return the random frame line segment.
     */
@@ -868,7 +895,7 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random 3D frame line segment.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the random frame line segment's reference frame.
     * @return the random frame line segment.
     */
@@ -881,12 +908,12 @@ public class EuclidFrameRandomTools
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     * 
-    * @param random the random generator to use.
-    * @param referenceFrame the polygon's reference frame.
-    * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
+    * @param random                 the random generator to use.
+    * @param referenceFrame         the polygon's reference frame.
+    * @param maxAbsoluteXY          the maximum absolute value for each coordinate of the vertices.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
-    *           the random convex polygon. The size of the resulting convex polygon will be less than
-    *           {@code numberOfPossiblePoints}.
+    *                               the random convex polygon. The size of the resulting convex polygon
+    *                               will be less than {@code numberOfPossiblePoints}.
     * @return the random convex polygon.
     * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
     */
@@ -898,8 +925,8 @@ public class EuclidFrameRandomTools
    /**
     * Generates a fixed-size supplier of random frame vertex 2D.
     * 
-    * @param random the random generator to use.
-    * @param referenceFrame the reference frame for the vertices.
+    * @param random           the random generator to use.
+    * @param referenceFrame   the reference frame for the vertices.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
     */
@@ -926,8 +953,8 @@ public class EuclidFrameRandomTools
    /**
     * Generates a fixed-size supplier of random frame vertex 3D.
     * 
-    * @param random the random generator to use.
-    * @param referenceFrame the reference frame for the vertices.
+    * @param random           the random generator to use.
+    * @param referenceFrame   the reference frame for the vertices.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
     */
@@ -957,7 +984,7 @@ public class EuclidFrameRandomTools
     * {@code matrix}<sub>ij</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the frame in which the generated matrix is to be created.
     * @return the random frame matrix.
     */
@@ -972,8 +999,8 @@ public class EuclidFrameRandomTools
     * {@code matrix}<sub>ij</sub> &in; [-{@code minMaxValue}; {@code minMaxValue}].
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minMaxValue the maximum absolute value for each element.
+    * @param random         the random generator to use.
+    * @param minMaxValue    the maximum absolute value for each element.
     * @param referenceFrame the frame in which the generated matrix is to be created.
     * @return the random frame matrix.
     * @throws RuntimeException if {@code minMaxValue < 0}.
@@ -989,9 +1016,9 @@ public class EuclidFrameRandomTools
     * {@code matrix}<sub>ij</sub> &in; [{@code minValue}; {@code maxValue}].
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minValue the minimum value for each element.
-    * @param maxValue the maximum value for each element.
+    * @param random         the random generator to use.
+    * @param minValue       the minimum value for each element.
+    * @param maxValue       the maximum value for each element.
     * @param referenceFrame the frame in which the generated matrix is to be created.
     * @return the random frame matrix.
     * @throws RuntimeException if {@code minValue > maxValue}.
@@ -1011,7 +1038,7 @@ public class EuclidFrameRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
     * @param referenceFrame the frame in which the generated matrix is to be created.
     * @return the random diagonal frame matrix.
     */
@@ -1030,8 +1057,8 @@ public class EuclidFrameRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minMaxValue the maximum absolute value for each diagonal element.
+    * @param random         the random generator to use.
+    * @param minMaxValue    the maximum absolute value for each diagonal element.
     * @param referenceFrame the frame in which the generated matrix is to be created.
     * @return the random diagonal frame matrix.
     * @throws RuntimeException if {@code minMaxValue < 0}.
@@ -1051,9 +1078,9 @@ public class EuclidFrameRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minValue the minimum value of each diagonal element.
-    * @param maxValue the maximum value of each diagonal element.
+    * @param random         the random generator to use.
+    * @param minValue       the minimum value of each diagonal element.
+    * @param maxValue       the maximum value of each diagonal element.
     * @param referenceFrame the frame in which the generated matrix is to be created.
     * @return the random diagonal frame matrix.
     * @throws RuntimeException if {@code minValue > maxValue}.

@@ -18,11 +18,15 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * Tools for performing operations on 3D matrices.
  * 
  * @author Sylvain Bertrand
- *
  */
-public abstract class Matrix3DTools
+public class Matrix3DTools
 {
    static final double EPS_INVERT = 1.0e-16;
+
+   private Matrix3DTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Performs an in-place inversion of the given matrix such that: m = m<sup>-1</sup>.
@@ -41,7 +45,7 @@ public abstract class Matrix3DTools
     * The matrices can be the same object.
     * </p>
     *
-    * @param matrix the matrix to compute the inverse of. Not modified.
+    * @param matrix        the matrix to compute the inverse of. Not modified.
     * @param inverseToPack the result to pack. Modified.
     * @return {@code true} if the inversion succeeds, {@code false} if the matrix is singular.
     */
@@ -75,8 +79,8 @@ public abstract class Matrix3DTools
     * All the matrices can be the same object.
     * </p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiply(Matrix3DReadOnly m1, Matrix3DReadOnly m2, Matrix3DBasics matrixToPack)
@@ -100,8 +104,8 @@ public abstract class Matrix3DTools
     * All the matrices can be the same object.
     * <p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiplyTransposeBoth(Matrix3DReadOnly m1, Matrix3DReadOnly m2, Matrix3DBasics matrixToPack)
@@ -125,8 +129,8 @@ public abstract class Matrix3DTools
     * All the matrices can be the same object.
     * <p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     * @throws SingularMatrixException if the matrix {@code m2} * {@code m1} is not invertible.
     */
@@ -145,8 +149,8 @@ public abstract class Matrix3DTools
     * All the matrices can be the same object.
     * <p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiplyTransposeLeft(Matrix3DReadOnly m1, Matrix3DReadOnly m2, Matrix3DBasics matrixToPack)
@@ -170,8 +174,8 @@ public abstract class Matrix3DTools
     * All the matrices can be the same object.
     * <p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     * @throws SingularMatrixException if {@code m1} is not invertible.
     */
@@ -217,8 +221,8 @@ public abstract class Matrix3DTools
     * of a rotation matrix preventing to actually compute the inverse of the rotation matrix.
     * </p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiplyInvertLeft(RotationMatrixReadOnly m1, Matrix3DReadOnly m2, Matrix3DBasics matrixToPack)
@@ -239,8 +243,8 @@ public abstract class Matrix3DTools
     * of the rotation-scale matrix preventing to actually compute its inverse.
     * </p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiplyInvertLeft(RotationScaleMatrixReadOnly m1, Matrix3DReadOnly m2, Matrix3DBasics matrixToPack)
@@ -256,8 +260,8 @@ public abstract class Matrix3DTools
     * All the matrices can be the same object.
     * <p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiplyTransposeRight(Matrix3DReadOnly m1, Matrix3DReadOnly m2, Matrix3DBasics matrixToPack)
@@ -281,8 +285,8 @@ public abstract class Matrix3DTools
     * All the matrices can be the same object.
     * <p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     * @throws SingularMatrixException if {@code m2} is not invertible.
     */
@@ -328,8 +332,8 @@ public abstract class Matrix3DTools
     * of a rotation matrix preventing to actually compute the inverse of the rotation matrix.
     * </p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiplyInvertRight(Matrix3DReadOnly m1, RotationMatrixReadOnly m2, Matrix3DBasics matrixToPack)
@@ -350,8 +354,8 @@ public abstract class Matrix3DTools
     * of the rotation-scale matrix preventing to actually compute its inverse.
     * </p>
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1           the first matrix. Not modified.
+    * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
    public static void multiplyInvertRight(Matrix3DReadOnly m1, RotationScaleMatrixReadOnly m2, Matrix3DBasics matrixToPack)
@@ -425,8 +429,8 @@ public abstract class Matrix3DTools
     * Both tuples can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param tupleOriginal the original tuple to use for the transformation. Not modified.
+    * @param matrix           the matrix used to transform {@code tupleOriginal}. Not modified.
+    * @param tupleOriginal    the original tuple to use for the transformation. Not modified.
     * @param tupleTransformed the tuple used to store the result of the transformation. Modified.
     */
    public static void transform(Matrix3DReadOnly matrix, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -447,10 +451,10 @@ public abstract class Matrix3DTools
     * Both tuples can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param tupleOriginal the original tuple to use for the transformation. Not modified.
+    * @param matrix           the matrix used to transform {@code tupleOriginal}. Not modified.
+    * @param tupleOriginal    the original tuple to use for the transformation. Not modified.
     * @param tupleTransformed the tuple to which the result of the transformation is added to.
-    *           Modified.
+    *                         Modified.
     */
    public static void addTransform(Matrix3DReadOnly matrix, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -470,10 +474,10 @@ public abstract class Matrix3DTools
     * Both tuples can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param tupleOriginal the original tuple to use for the transformation. Not modified.
+    * @param matrix           the matrix used to transform {@code tupleOriginal}. Not modified.
+    * @param tupleOriginal    the original tuple to use for the transformation. Not modified.
     * @param tupleTransformed the tuple to which the result of the transformation is added to.
-    *           Modified.
+    *                         Modified.
     */
    public static void subTransform(Matrix3DReadOnly matrix, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -498,13 +502,15 @@ public abstract class Matrix3DTools
     * Both tuples can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param tupleOriginal the original tuple to use for the transformation. Not modified.
-    * @param tupleTransformed the tuple used to stored the result of the transformation. Modified.
+    * @param matrix                    the matrix used to transform {@code tupleOriginal}. Not
+    *                                  modified.
+    * @param tupleOriginal             the original tuple to use for the transformation. Not modified.
+    * @param tupleTransformed          the tuple used to stored the result of the transformation.
+    *                                  Modified.
     * @param checkIfTransformInXYPlane whether {@link Matrix3DReadOnly#checkIfMatrix2D()} needs to be
-    *           called on the matrix.
+    *                                  called on the matrix.
     * @throws NotAMatrix2DException if the matrix is not a 2D matrix and
-    *            {@code checkIfTransformInXYPlane} is {@code true}.
+    *                               {@code checkIfTransformInXYPlane} is {@code true}.
     */
    public static void transform(Matrix3DReadOnly matrix, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -526,11 +532,11 @@ public abstract class Matrix3DTools
     * Both vectors can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param vectorOriginal the original vector to use for the transformation. Not modified.
+    * @param matrix            the matrix used to transform {@code tupleOriginal}. Not modified.
+    * @param vectorOriginal    the original vector to use for the transformation. Not modified.
     * @param vectorTransformed the vector used to stored the result of the transformation. Modified.
     * @throws NotAMatrix2DException if the matrix is not a 2D matrix and
-    *            {@code checkIfTransformInXYPlane} is {@code true}.
+    *                               {@code checkIfTransformInXYPlane} is {@code true}.
     */
    public static void transform(Matrix3DReadOnly matrix, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
@@ -555,8 +561,8 @@ public abstract class Matrix3DTools
     * transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code matrixOriginal}. Not modified.
-    * @param matrixOriginal the original matrix to use for the transformation. Not modified.
+    * @param matrix            the matrix used to transform {@code matrixOriginal}. Not modified.
+    * @param matrixOriginal    the original matrix to use for the transformation. Not modified.
     * @param matrixTransformed the matrix used to stored the result of the transformation. Modified.
     */
    public static void transform(Matrix3DReadOnly matrix, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -575,8 +581,8 @@ public abstract class Matrix3DTools
     * Both tuples can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param tupleOriginal the original tuple to use for the transformation. Not modified.
+    * @param matrix           the matrix used to transform {@code tupleOriginal}. Not modified.
+    * @param tupleOriginal    the original tuple to use for the transformation. Not modified.
     * @param tupleTransformed the tuple used to store the result of the transformation. Modified.
     * @throws SingularMatrixException if {@code matrix} is not invertible.
     */
@@ -618,13 +624,15 @@ public abstract class Matrix3DTools
     * Both tuples can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param tupleOriginal the original tuple to use for the transformation. Not modified.
-    * @param tupleTransformed the tuple used to stored the result of the transformation. Modified.
+    * @param matrix                    the matrix used to transform {@code tupleOriginal}. Not
+    *                                  modified.
+    * @param tupleOriginal             the original tuple to use for the transformation. Not modified.
+    * @param tupleTransformed          the tuple used to stored the result of the transformation.
+    *                                  Modified.
     * @param checkIfTransformInXYPlane whether {@link Matrix3DReadOnly#checkIfMatrix2D()} needs to be
-    *           called on the matrix.
-    * @throws NotAMatrix2DException if the matrix is not a 2D matrix and
-    *            {@code checkIfTransformInXYPlane} is {@code true}.
+    *                                  called on the matrix.
+    * @throws NotAMatrix2DException   if the matrix is not a 2D matrix and
+    *                                 {@code checkIfTransformInXYPlane} is {@code true}.
     * @throws SingularMatrixException if {@code matrix} is not invertible.
     */
    public static void inverseTransform(Matrix3DReadOnly matrix, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
@@ -681,11 +689,11 @@ public abstract class Matrix3DTools
     * Both vectors can be the same instance to perform in-place transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code tupleOriginal}. Not modified.
-    * @param vectorOriginal the original vector to use for the transformation. Not modified.
+    * @param matrix            the matrix used to transform {@code tupleOriginal}. Not modified.
+    * @param vectorOriginal    the original vector to use for the transformation. Not modified.
     * @param vectorTransformed the vector used to stored the result of the transformation. Modified.
-    * @throws NotAMatrix2DException if the matrix is not a 2D matrix and
-    *            {@code checkIfTransformInXYPlane} is {@code true}.
+    * @throws NotAMatrix2DException   if the matrix is not a 2D matrix and
+    *                                 {@code checkIfTransformInXYPlane} is {@code true}.
     * @throws SingularMatrixException if {@code matrix} is not invertible.
     */
    public static void inverseTransform(Matrix3DReadOnly matrix, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -726,8 +734,8 @@ public abstract class Matrix3DTools
     * transformation.
     * </p>
     *
-    * @param matrix the matrix used to transform {@code matrixOriginal}. Not modified.
-    * @param matrixOriginal the original matrix to use for the transformation. Not modified.
+    * @param matrix            the matrix used to transform {@code matrixOriginal}. Not modified.
+    * @param matrixOriginal    the original matrix to use for the transformation. Not modified.
     * @param matrixTransformed the matrix used to stored the result of the transformation. Modified.
     */
    public static void inverseTransform(Matrix3DReadOnly matrix, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -740,7 +748,7 @@ public abstract class Matrix3DTools
     * Create an {@linkplain ArrayIndexOutOfBoundsException} for a bad column index.
     *
     * @param maxColumnIndex maximum column index allowed.
-    * @param column the bad column index.
+    * @param column         the bad column index.
     * @return the exception
     */
    public static ArrayIndexOutOfBoundsException columnOutOfBoundsException(int maxColumnIndex, int column)
@@ -752,7 +760,7 @@ public abstract class Matrix3DTools
     * Create an {@linkplain ArrayIndexOutOfBoundsException} for a bad row index.
     *
     * @param maxRowIndex the maximum row index allowed.
-    * @param row the bad row index.
+    * @param row         the bad row index.
     * @return the exception
     */
    public static ArrayIndexOutOfBoundsException rowOutOfBoundsException(int maxRowIndex, int row)

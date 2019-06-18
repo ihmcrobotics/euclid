@@ -215,7 +215,7 @@ public class Vector4D32 implements Vector4DBasics, GeometryObject<Vector4D32>
     * Tests on a per component basis if this vector is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other vector to compare against this. Not modified.
+    * @param other   the other vector to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -236,9 +236,9 @@ public class Vector4D32 implements Vector4DBasics, GeometryObject<Vector4D32>
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other vector 4D to compare against this. Not modified.
+    * @param other   the other vector 4D to compare against this. Not modified.
     * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *           considered equal.
+    *                considered equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
    @Override

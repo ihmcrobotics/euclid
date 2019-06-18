@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
@@ -199,7 +199,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
+            if (!e.getClass().equals(expectedException.getClass()) || e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -238,7 +238,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
+            if (!e.getClass().equals(expectedException.getClass()) || e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -274,7 +274,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
+            if (!e.getClass().equals(expectedException.getClass()) || e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -311,7 +311,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
+            if (!e.getClass().equals(expectedException.getClass()) || e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -349,7 +349,7 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
          {
             if (expectedException == null)
                throw new AssertionError("Should not have thrown an exception.");
-            if (!e.getClass().equals(expectedException.getClass()) || (e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage())))
+            if (!e.getClass().equals(expectedException.getClass()) || e.getMessage() != null && !e.getMessage().equals(expectedException.getMessage()))
                throw new AssertionError("Unexpected exception:\nactual: " + e + "\nexpected: " + expectedException);
          }
       }
@@ -450,7 +450,8 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
    public void testReferenceFrameChecks() throws Throwable
    {
       Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
+            && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), methodFilter);
    }
 

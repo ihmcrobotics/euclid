@@ -1,10 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
@@ -96,10 +96,13 @@ public abstract class FrameTuple2DReadOnlyTest<F extends FrameTuple2DReadOnly>
       assertFalse(tuple3.equals(tuple2));
       assertTrue(tuple3.equals(tuple4));
 
-      assertTrue(tuple1.equals((Object) tuple2));
-      assertFalse(tuple1.equals((Object) tuple3));
-      assertFalse(tuple3.equals((Object) tuple2));
-      assertTrue(tuple3.equals((Object) tuple4));
+      Object tuple2AsObject = tuple2;
+      Object tuple3AsObject = tuple3;
+      Object tuple4AsObject = tuple4;
+      assertTrue(tuple1.equals(tuple2AsObject));
+      assertFalse(tuple1.equals(tuple3AsObject));
+      assertFalse(tuple3.equals(tuple2AsObject));
+      assertTrue(tuple3.equals(tuple4AsObject));
    }
 
    @Test

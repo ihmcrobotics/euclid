@@ -61,7 +61,7 @@ public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChan
     * Sets this matrix to {@code matrix3DReadOnly} and sets its reference frame to
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame to be associated with this matrix.
+    * @param referenceFrame   the new reference frame to be associated with this matrix.
     * @param matrix3DReadOnly the other matrix to copy the values of. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
@@ -90,7 +90,7 @@ public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChan
     * </pre>
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param matrixArray the array containing the new values for this matrix. Not modified.
+    * @param matrixArray    the array containing the new values for this matrix. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double[] matrixArray)
    {
@@ -108,8 +108,8 @@ public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChan
     * </pre>
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param startIndex the first index to start reading from in the array.
-    * @param matrixArray the array containing the new values for this matrix. Not modified.
+    * @param startIndex     the first index to start reading from in the array.
+    * @param matrixArray    the array containing the new values for this matrix. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startIndex, double[] matrixArray)
    {
@@ -121,7 +121,7 @@ public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChan
     * Copies the values in the given dense-matrix into this matrix.
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param matrix the dense-matrix containing the new values for this matrix. Not modified.
+    * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
    {
@@ -130,13 +130,13 @@ public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChan
    }
 
    /**
-    * Copies the values in the given dense-matrix into this matrix given index offsets for the row
-    * and column.
+    * Copies the values in the given dense-matrix into this matrix given index offsets for the row and
+    * column.
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param startRow the first row index to start reading from in the dense-matrix.
-    * @param startColumn the first column index to start reading from in the dense-matrix.
-    * @param matrix the dense-matrix containing the new values for this matrix. Not modified.
+    * @param startRow       the first row index to start reading from in the dense-matrix.
+    * @param startColumn    the first column index to start reading from in the dense-matrix.
+    * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int startColumn, DenseMatrix64F matrix)
    {

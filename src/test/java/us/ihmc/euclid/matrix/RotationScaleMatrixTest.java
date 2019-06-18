@@ -1,13 +1,13 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.EjmlUnitTests;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotARotationScaleMatrixException;
@@ -1243,7 +1243,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
       double pitch = 2.0 * Math.PI * random.nextDouble();
-      rotationMatrix.setToPitchMatrix(pitch);
+      rotationMatrix.setToPitchOrientation(pitch);
       rotationScaleMatrix.setToPitchMatrix(pitch);
       EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationScaleMatrix, EPS);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 1.0, 1.0), rotationScaleMatrix.getScale(), EPS);
@@ -1257,7 +1257,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
       double roll = 2.0 * Math.PI * random.nextDouble();
-      rotationMatrix.setToRollMatrix(roll);
+      rotationMatrix.setToRollOrientation(roll);
       rotationScaleMatrix.setToRollMatrix(roll);
       EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationScaleMatrix, EPS);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 1.0, 1.0), rotationScaleMatrix.getScale(), EPS);
@@ -1271,7 +1271,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
       double yaw = 2.0 * Math.PI * random.nextDouble();
-      rotationMatrix.setToYawMatrix(yaw);
+      rotationMatrix.setToYawOrientation(yaw);
       rotationScaleMatrix.setToYawMatrix(yaw);
       EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationScaleMatrix, EPS);
       EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1.0, 1.0, 1.0), rotationScaleMatrix.getScale(), EPS);
@@ -2343,7 +2343,8 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       assertFalse(m1.equals(new double[4]));
       m2.set(m1);
       assertTrue(m1.equals(m2));
-      assertTrue(m1.equals((Object) m2));
+      Object m2AsObject = m2;
+      assertTrue(m1.equals(m2AsObject));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[9];
@@ -2374,10 +2375,9 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
    public void testEpsilonEquals() throws Exception
    {
       /*
-       * This test needs to be custom as the method calls epsilonEquals on the rotationMatrix and
-       * the scale separately. This means that two rotation-scale matrices can have different
-       * rotation and scale parts but still being epsilon-equal when looking at the resulting
-       * matrix.
+       * This test needs to be custom as the method calls epsilonEquals on the rotationMatrix and the
+       * scale separately. This means that two rotation-scale matrices can have different rotation and
+       * scale parts but still being epsilon-equal when looking at the resulting matrix.
        */
       Random random = new Random(2354L);
       RotationScaleMatrix m1 = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);

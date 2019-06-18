@@ -31,8 +31,8 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    /**
     * Creates a new pose 2D and initializes it with the given parameters.
     *
-    * @param x the x-coordinate of the position.
-    * @param y the y-coordinate of the position.
+    * @param x   the x-coordinate of the position.
+    * @param y   the y-coordinate of the position.
     * @param yaw the angle in radians for the orientation.
     */
    public Pose2D(double x, double y, double yaw)
@@ -64,7 +64,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     * Creates a new pose 2D and initializes it from the given {@code position} and {@code yaw} angle.
     *
     * @param position the tuple used to initialize this pose's position. Not modified.
-    * @param yaw the angle used to initialize the pose's orientation.
+    * @param yaw      the angle used to initialize the pose's orientation.
     */
    public Pose2D(Tuple2DReadOnly position, double yaw)
    {
@@ -74,7 +74,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    /**
     * Creates a new pose 2D and initializes it with the given parameters.
     *
-    * @param position tuple used to initialize the position part of this pose. Not modified.
+    * @param position    tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
    public Pose2D(Tuple2DReadOnly position, Orientation2DReadOnly orientation)
@@ -131,7 +131,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
@@ -147,7 +147,7 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */

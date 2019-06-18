@@ -3,7 +3,7 @@ package us.ihmc.euclid.rotationConversion;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
@@ -66,28 +66,28 @@ public class CyclingConversionTest
 
          switch (initialRotationType)
          {
-         case MATRIX:
-            originalMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-            initialRotationType.rotationHolder = new RotationMatrix(originalMatrix);
-            break;
-         case AXISANGLE:
-            originalAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
-            initialRotationType.rotationHolder = new AxisAngle(originalAxisAngle);
-            break;
-         case QUATERNION:
-            originalQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
-            initialRotationType.rotationHolder = new Quaternion(originalQuaternion);
-            break;
-         case VECTOR:
-            originalRotationVector = EuclidCoreRandomTools.nextRotationVector(random);
-            initialRotationType.rotationHolder = new Vector3D(originalRotationVector);
-            break;
-         case YAW_PITCH_ROLL:
-            originalYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
-            initialRotationType.rotationHolder = new YawPitchRoll(originalYawPitchRoll);
-            break;
-         default:
-            throw AllRotations.exception(initialRotationType);
+            case MATRIX:
+               originalMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+               initialRotationType.rotationHolder = new RotationMatrix(originalMatrix);
+               break;
+            case AXISANGLE:
+               originalAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+               initialRotationType.rotationHolder = new AxisAngle(originalAxisAngle);
+               break;
+            case QUATERNION:
+               originalQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
+               initialRotationType.rotationHolder = new Quaternion(originalQuaternion);
+               break;
+            case VECTOR:
+               originalRotationVector = EuclidCoreRandomTools.nextRotationVector(random);
+               initialRotationType.rotationHolder = new Vector3D(originalRotationVector);
+               break;
+            case YAW_PITCH_ROLL:
+               originalYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+               initialRotationType.rotationHolder = new YawPitchRoll(originalYawPitchRoll);
+               break;
+            default:
+               throw AllRotations.exception(initialRotationType);
          }
 
          if (originalMatrix == null)
@@ -148,22 +148,24 @@ public class CyclingConversionTest
 
             switch (nextRotationType)
             {
-            case MATRIX:
-               EuclidCoreTestTools.assertMatrix3DEquals(originalMatrix, (Matrix3DReadOnly) nextRotationType.rotationHolder, epsilon);
-               break;
-            case AXISANGLE:
-               EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(originalAxisAngle, (AxisAngleReadOnly) nextRotationType.rotationHolder, epsilon);
-               break;
-            case QUATERNION:
-               EuclidCoreTestTools.assertQuaternionGeometricallyEquals(originalQuaternion, (QuaternionReadOnly) nextRotationType.rotationHolder, epsilon);
-               break;
-            case VECTOR:
-               EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(originalRotationVector, (Vector3DReadOnly) nextRotationType.rotationHolder, epsilon);
-               break;
-            case YAW_PITCH_ROLL:
-               EuclidCoreTestTools.assertYawPitchRollEquals(originalYawPitchRoll, (YawPitchRollReadOnly) nextRotationType.rotationHolder, epsilon);
-            default:
-               break;
+               case MATRIX:
+                  EuclidCoreTestTools.assertMatrix3DEquals(originalMatrix, (Matrix3DReadOnly) nextRotationType.rotationHolder, epsilon);
+                  break;
+               case AXISANGLE:
+                  EuclidCoreTestTools.assertAxisAngleGeometricallyEquals(originalAxisAngle, (AxisAngleReadOnly) nextRotationType.rotationHolder, epsilon);
+                  break;
+               case QUATERNION:
+                  EuclidCoreTestTools.assertQuaternionGeometricallyEquals(originalQuaternion, (QuaternionReadOnly) nextRotationType.rotationHolder, epsilon);
+                  break;
+               case VECTOR:
+                  EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(originalRotationVector,
+                                                                              (Vector3DReadOnly) nextRotationType.rotationHolder,
+                                                                              epsilon);
+                  break;
+               case YAW_PITCH_ROLL:
+                  EuclidCoreTestTools.assertYawPitchRollEquals(originalYawPitchRoll, (YawPitchRollReadOnly) nextRotationType.rotationHolder, epsilon);
+               default:
+                  break;
             }
 
             previousRotationType = nextRotationType;
@@ -186,18 +188,18 @@ public class CyclingConversionTest
       {
          switch (rotationTypeToConvertTo)
          {
-         case MATRIX:
-            return convertToMatrix();
-         case AXISANGLE:
-            return convertToAxisAngle();
-         case QUATERNION:
-            return convertToQuaternion();
-         case VECTOR:
-            return convertToRotationVector();
-         case YAW_PITCH_ROLL:
-            return convertToYawPitchRoll();
-         default:
-            throw exception(this);
+            case MATRIX:
+               return convertToMatrix();
+            case AXISANGLE:
+               return convertToAxisAngle();
+            case QUATERNION:
+               return convertToQuaternion();
+            case VECTOR:
+               return convertToRotationVector();
+            case YAW_PITCH_ROLL:
+               return convertToYawPitchRoll();
+            default:
+               throw exception(this);
          }
       }
 
@@ -206,23 +208,23 @@ public class CyclingConversionTest
          RotationMatrix matrix = new RotationMatrix();
          switch (this)
          {
-         case MATRIX:
-            matrix.set((Matrix3DReadOnly) rotationHolder);
-            break;
-         case AXISANGLE:
-            RotationMatrixConversion.convertAxisAngleToMatrix((AxisAngleReadOnly) rotationHolder, matrix);
-            break;
-         case QUATERNION:
-            RotationMatrixConversion.convertQuaternionToMatrix((QuaternionReadOnly) rotationHolder, matrix);
-            break;
-         case VECTOR:
-            RotationMatrixConversion.convertRotationVectorToMatrix((Vector3DReadOnly) rotationHolder, matrix);
-            break;
-         case YAW_PITCH_ROLL:
-            RotationMatrixConversion.convertYawPitchRollToMatrix((YawPitchRollReadOnly) rotationHolder, matrix);
-            break;
-         default:
-            throw exception(this);
+            case MATRIX:
+               matrix.set((Matrix3DReadOnly) rotationHolder);
+               break;
+            case AXISANGLE:
+               RotationMatrixConversion.convertAxisAngleToMatrix((AxisAngleReadOnly) rotationHolder, matrix);
+               break;
+            case QUATERNION:
+               RotationMatrixConversion.convertQuaternionToMatrix((QuaternionReadOnly) rotationHolder, matrix);
+               break;
+            case VECTOR:
+               RotationMatrixConversion.convertRotationVectorToMatrix((Vector3DReadOnly) rotationHolder, matrix);
+               break;
+            case YAW_PITCH_ROLL:
+               RotationMatrixConversion.convertYawPitchRollToMatrix((YawPitchRollReadOnly) rotationHolder, matrix);
+               break;
+            default:
+               throw exception(this);
          }
          return matrix;
       }
@@ -232,23 +234,23 @@ public class CyclingConversionTest
          AxisAngle axisAngle = new AxisAngle();
          switch (this)
          {
-         case MATRIX:
-            AxisAngleConversion.convertMatrixToAxisAngle((RotationMatrixReadOnly) rotationHolder, axisAngle);
-            break;
-         case AXISANGLE:
-            axisAngle.set((AxisAngleReadOnly) rotationHolder);
-            break;
-         case QUATERNION:
-            AxisAngleConversion.convertQuaternionToAxisAngle((QuaternionReadOnly) rotationHolder, axisAngle);
-            break;
-         case VECTOR:
-            AxisAngleConversion.convertRotationVectorToAxisAngle((Vector3DReadOnly) rotationHolder, axisAngle);
-            break;
-         case YAW_PITCH_ROLL:
-            AxisAngleConversion.convertYawPitchRollToAxisAngle((YawPitchRollReadOnly) rotationHolder, axisAngle);
-            break;
-         default:
-            throw exception(this);
+            case MATRIX:
+               AxisAngleConversion.convertMatrixToAxisAngle((RotationMatrixReadOnly) rotationHolder, axisAngle);
+               break;
+            case AXISANGLE:
+               axisAngle.set((AxisAngleReadOnly) rotationHolder);
+               break;
+            case QUATERNION:
+               AxisAngleConversion.convertQuaternionToAxisAngle((QuaternionReadOnly) rotationHolder, axisAngle);
+               break;
+            case VECTOR:
+               AxisAngleConversion.convertRotationVectorToAxisAngle((Vector3DReadOnly) rotationHolder, axisAngle);
+               break;
+            case YAW_PITCH_ROLL:
+               AxisAngleConversion.convertYawPitchRollToAxisAngle((YawPitchRollReadOnly) rotationHolder, axisAngle);
+               break;
+            default:
+               throw exception(this);
          }
          return axisAngle;
       }
@@ -258,23 +260,23 @@ public class CyclingConversionTest
          Quaternion quaternion = new Quaternion();
          switch (this)
          {
-         case MATRIX:
-            QuaternionConversion.convertMatrixToQuaternion((RotationMatrixReadOnly) rotationHolder, quaternion);
-            break;
-         case AXISANGLE:
-            QuaternionConversion.convertAxisAngleToQuaternion((AxisAngleReadOnly) rotationHolder, quaternion);
-            break;
-         case QUATERNION:
-            quaternion.set((QuaternionReadOnly) rotationHolder);
-            break;
-         case VECTOR:
-            QuaternionConversion.convertRotationVectorToQuaternion((Vector3DReadOnly) rotationHolder, quaternion);
-            break;
-         case YAW_PITCH_ROLL:
-            QuaternionConversion.convertYawPitchRollToQuaternion((YawPitchRollReadOnly) rotationHolder, quaternion);
-            break;
-         default:
-            throw exception(this);
+            case MATRIX:
+               QuaternionConversion.convertMatrixToQuaternion((RotationMatrixReadOnly) rotationHolder, quaternion);
+               break;
+            case AXISANGLE:
+               QuaternionConversion.convertAxisAngleToQuaternion((AxisAngleReadOnly) rotationHolder, quaternion);
+               break;
+            case QUATERNION:
+               quaternion.set((QuaternionReadOnly) rotationHolder);
+               break;
+            case VECTOR:
+               QuaternionConversion.convertRotationVectorToQuaternion((Vector3DReadOnly) rotationHolder, quaternion);
+               break;
+            case YAW_PITCH_ROLL:
+               QuaternionConversion.convertYawPitchRollToQuaternion((YawPitchRollReadOnly) rotationHolder, quaternion);
+               break;
+            default:
+               throw exception(this);
          }
          return quaternion;
       }
@@ -284,23 +286,23 @@ public class CyclingConversionTest
          Vector3D rotationVector = new Vector3D();
          switch (this)
          {
-         case MATRIX:
-            RotationVectorConversion.convertMatrixToRotationVector((RotationMatrixReadOnly) rotationHolder, rotationVector);
-            break;
-         case AXISANGLE:
-            RotationVectorConversion.convertAxisAngleToRotationVector((AxisAngleReadOnly) rotationHolder, rotationVector);
-            break;
-         case QUATERNION:
-            RotationVectorConversion.convertQuaternionToRotationVector((QuaternionReadOnly) rotationHolder, rotationVector);
-            break;
-         case VECTOR:
-            rotationVector.set((Vector3DReadOnly) rotationHolder);
-            break;
-         case YAW_PITCH_ROLL:
-            RotationVectorConversion.convertYawPitchRollToRotationVector((YawPitchRollReadOnly) rotationHolder, rotationVector);
-            break;
-         default:
-            throw exception(this);
+            case MATRIX:
+               RotationVectorConversion.convertMatrixToRotationVector((RotationMatrixReadOnly) rotationHolder, rotationVector);
+               break;
+            case AXISANGLE:
+               RotationVectorConversion.convertAxisAngleToRotationVector((AxisAngleReadOnly) rotationHolder, rotationVector);
+               break;
+            case QUATERNION:
+               RotationVectorConversion.convertQuaternionToRotationVector((QuaternionReadOnly) rotationHolder, rotationVector);
+               break;
+            case VECTOR:
+               rotationVector.set((Vector3DReadOnly) rotationHolder);
+               break;
+            case YAW_PITCH_ROLL:
+               RotationVectorConversion.convertYawPitchRollToRotationVector((YawPitchRollReadOnly) rotationHolder, rotationVector);
+               break;
+            default:
+               throw exception(this);
          }
          return rotationVector;
       }
@@ -310,23 +312,23 @@ public class CyclingConversionTest
          YawPitchRoll yawPitchRoll = new YawPitchRoll();
          switch (this)
          {
-         case MATRIX:
-            YawPitchRollConversion.convertMatrixToYawPitchRoll((RotationMatrixReadOnly) rotationHolder, yawPitchRoll);
-            break;
-         case AXISANGLE:
-            YawPitchRollConversion.convertAxisAngleToYawPitchRoll((AxisAngleReadOnly) rotationHolder, yawPitchRoll);
-            break;
-         case QUATERNION:
-            YawPitchRollConversion.convertQuaternionToYawPitchRoll((QuaternionReadOnly) rotationHolder, yawPitchRoll);
-            break;
-         case VECTOR:
-            YawPitchRollConversion.convertRotationVectorToYawPitchRoll((Vector3DReadOnly) rotationHolder, yawPitchRoll);
-            break;
-         case YAW_PITCH_ROLL:
-            yawPitchRoll.set((YawPitchRollReadOnly) rotationHolder);
-            break;
-         default:
-            throw exception(this);
+            case MATRIX:
+               YawPitchRollConversion.convertMatrixToYawPitchRoll((RotationMatrixReadOnly) rotationHolder, yawPitchRoll);
+               break;
+            case AXISANGLE:
+               YawPitchRollConversion.convertAxisAngleToYawPitchRoll((AxisAngleReadOnly) rotationHolder, yawPitchRoll);
+               break;
+            case QUATERNION:
+               YawPitchRollConversion.convertQuaternionToYawPitchRoll((QuaternionReadOnly) rotationHolder, yawPitchRoll);
+               break;
+            case VECTOR:
+               YawPitchRollConversion.convertRotationVectorToYawPitchRoll((Vector3DReadOnly) rotationHolder, yawPitchRoll);
+               break;
+            case YAW_PITCH_ROLL:
+               yawPitchRoll.set((YawPitchRollReadOnly) rotationHolder);
+               break;
+            default:
+               throw exception(this);
          }
          return yawPitchRoll;
       }

@@ -64,6 +64,8 @@ public interface Vertex3DSupplier
     */
    default boolean equals(Vertex3DSupplier other)
    {
+      if (other == this)
+         return true;
       if (other == null)
          return false;
       if (getNumberOfVertices() != other.getNumberOfVertices())
@@ -77,10 +79,9 @@ public interface Vertex3DSupplier
    }
 
    /**
-    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an
-    * {@code epsilon}.
+    * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
     * 
-    * @param other the other supplier to compare against this.
+    * @param other   the other supplier to compare against this.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
     */
@@ -121,7 +122,7 @@ public interface Vertex3DSupplier
     * Returns a fixed-size supplier backed by a portion of the given array starting with the first
     * element and specified by its length {@code numberOfVertices}.
     * 
-    * @param vertices the array by which the supplier will be backed.
+    * @param vertices         the array by which the supplier will be backed.
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */
@@ -131,11 +132,11 @@ public interface Vertex3DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given array specified by the first
-    * index {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
+    * {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
-    * @param vertices the array by which the supplier will be backed.
-    * @param startIndex the first vertex index.
+    * @param vertices         the array by which the supplier will be backed.
+    * @param startIndex       the first vertex index.
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */
@@ -165,7 +166,7 @@ public interface Vertex3DSupplier
     * Returns a fixed-size supplier backed by a portion of the given list starting with the first
     * element and specified by its length {@code numberOfVertices}.
     * 
-    * @param vertices the list by which the supplier will be backed.
+    * @param vertices         the list by which the supplier will be backed.
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */
@@ -175,11 +176,11 @@ public interface Vertex3DSupplier
    }
 
    /**
-    * Returns a fixed-size supplier backed by a portion of the given list specified by the first
-    * index {@code startIndex} and the portion length {@code numberOfVertices}.
+    * Returns a fixed-size supplier backed by a portion of the given list specified by the first index
+    * {@code startIndex} and the portion length {@code numberOfVertices}.
     * 
-    * @param vertices the list by which the supplier will be backed.
-    * @param startIndex the first vertex index.
+    * @param vertices         the list by which the supplier will be backed.
+    * @param startIndex       the first vertex index.
     * @param numberOfVertices the portion's length.
     * @return the supplier.
     */

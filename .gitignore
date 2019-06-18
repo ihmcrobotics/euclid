@@ -6,13 +6,13 @@
 /build
 
 # Top level directories in sub-projects
-*/classes
-*/bin
-*/out
 */target
-*/build
 
 # directories to always ignore
+**/classes
+**/bin
+**/out
+**/build
 **/.gradle
 **/build
 **/.project

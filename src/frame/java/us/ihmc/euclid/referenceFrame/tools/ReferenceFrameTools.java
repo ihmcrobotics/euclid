@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -26,6 +27,11 @@ public class ReferenceFrameTools
     * </p>
     */
    private static final ReferenceFrame worldFrame = constructARootFrame("World");
+
+   private ReferenceFrameTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Construct a new z-up root reference frame.
@@ -80,14 +86,14 @@ public class ReferenceFrameTools
     * new frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName           the name of the new frame.
+    * @param parentFrame         the parent frame of the new reference frame.
     * @param transformFromParent the transform that can be used to transform a geometry object from the
-    *           parent frame to this frame. Not modified.
+    *                            parent frame to this frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                RigidBodyTransform transformFromParent)
+                                                                                RigidBodyTransformReadOnly transformFromParent)
    {
       RigidBodyTransform transformToParent = new RigidBodyTransform(transformFromParent);
       transformToParent.invert();
@@ -101,10 +107,10 @@ public class ReferenceFrameTools
     * The new reference frame has the same orientation as its parent frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName                   the name of the new frame.
+    * @param parentFrame                 the parent frame of the new reference frame.
     * @param translationOffsetFromParent describes the position of the new reference frame's origin
-    *           expressed in the parent frame. Not modified.
+    *                                    expressed in the parent frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
@@ -123,14 +129,14 @@ public class ReferenceFrameTools
     * frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName         the name of the new frame.
+    * @param parentFrame       the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
-    *           frame to its parent frame. Not modified.
+    *                          frame to its parent frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
-                                                                              RigidBodyTransform transformToParent)
+                                                                              RigidBodyTransformReadOnly transformToParent)
    {
       boolean isZupFrame = parentFrame.isZupFrame() && transformToParent.isRotation2D();
       boolean isAStationaryFrame = parentFrame.isAStationaryFrame();

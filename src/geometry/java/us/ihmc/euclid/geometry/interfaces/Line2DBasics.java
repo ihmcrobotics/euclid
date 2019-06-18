@@ -40,8 +40,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Tests if this line contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #getPoint()} and/or {@link #getDirection()} contains {@link Double#NaN},
-    *         {@code false} otherwise.
+    * @return {@code true} if {@link #getPoint()} and/or {@link #getDirection()} contains
+    *         {@link Double#NaN}, {@code false} otherwise.
     */
    @Override
    default boolean containsNaN()
@@ -203,8 +203,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLineX the new x-coordinate of the point on this line.
-    * @param pointOnLineY the new y-coordinate of the point on this line.
+    * @param pointOnLineX   the new x-coordinate of the point on this line.
+    * @param pointOnLineY   the new y-coordinate of the point on this line.
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     */
@@ -217,7 +217,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Redefines this line such that it goes through the two given points.
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     */
    default void set(Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
@@ -236,7 +236,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Redefines this line such that it goes through the two given points.
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     */
    default void set(Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
@@ -256,7 +256,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     */
    default void set(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
@@ -268,7 +268,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     */
    default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
@@ -280,7 +280,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    /**
     * Translates this line perpendicularly to its direction.
     *
-    * @param shiftToLeft defines to which side this line is to be translated.
+    * @param shiftToLeft     defines to which side this line is to be translated.
     * @param distanceToShift the distance this line is to be shifted.
     */
    default void shift(boolean shiftToLeft, double distanceToShift)
@@ -350,7 +350,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     *
     * @param transform the transform to apply on this line's point and vector. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
+    *                               in the XY-plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -363,7 +363,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     *
     * @param transform the transform to apply on this line's point and vector. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
+    *                               in the XY-plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)
@@ -375,11 +375,12 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     * Transforms this line segment using the given homogeneous transformation matrix and project the
     * result onto the XY-plane.
     *
-    * @param transform the transform to apply on this line segment's endpoints. Not modified.
+    * @param transform                 the transform to apply on this line segment's endpoints. Not
+    *                                  modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    *                                  given transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    *                               of {@code transform} is not a transformation in the XY plane.
     */
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
@@ -391,11 +392,12 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     * Transforms this line segment using the given homogeneous transformation matrix and project the
     * result onto the XY-plane.
     *
-    * @param transform the transform to apply on this line segment's endpoints. Not modified.
+    * @param transform                 the transform to apply on this line segment's endpoints. Not
+    *                                  modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    *                                  given transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    *                               of {@code transform} is not a transformation in the XY plane.
     */
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {

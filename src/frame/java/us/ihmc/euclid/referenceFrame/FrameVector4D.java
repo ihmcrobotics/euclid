@@ -57,10 +57,10 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
     * frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
-    * @param x the x-component.
-    * @param y the y-component.
-    * @param z the z-component.
-    * @param s the s-component.
+    * @param x              the x-component.
+    * @param y              the y-component.
+    * @param z              the z-component.
+    * @param s              the s-component.
     */
    public FrameVector4D(ReferenceFrame referenceFrame, double x, double y, double z, double s)
    {
@@ -72,7 +72,7 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
     * {@code s} in order from the given array and initializes its reference frame.
     *
     * @param referenceFrame the initial frame for this frame vector.
-    * @param vectorArray the array containing this vector's components. Not modified.
+    * @param vectorArray    the array containing this vector's components. Not modified.
     */
    public FrameVector4D(ReferenceFrame referenceFrame, double[] vectorArray)
    {
@@ -83,7 +83,7 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
     * Creates a new frame vector and initializes it to {@code tuple4DReadOnly} and to the given
     * reference frame.
     *
-    * @param referenceFrame the initial frame for this frame vector.
+    * @param referenceFrame  the initial frame for this frame vector.
     * @param tuple4DReadOnly the tuple to copy the components from. Not modified.
     */
    public FrameVector4D(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
@@ -106,7 +106,7 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
     *
     * @param other the other frame vector to set this to. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    @Override
    public void set(FrameVector4D other)
@@ -249,7 +249,7 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
     * If the two vectors have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other vector to compare against this. Not modified.
+    * @param other   the other vector to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two vectors are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
@@ -271,12 +271,12 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other vector 4D to compare against this. Not modified.
+    * @param other   the other vector 4D to compare against this. Not modified.
     * @param epsilon the maximum distance that the two vectors can be spaced and still considered
-    *           equal.
+    *                equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FrameVector4D other, double epsilon)

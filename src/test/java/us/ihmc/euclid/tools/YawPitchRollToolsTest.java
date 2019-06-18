@@ -1,12 +1,12 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
@@ -145,8 +145,13 @@ public class YawPitchRollToolsTest
          Quaternion secondQ = new Quaternion(secondYPR);
 
          assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR, secondYPR), EPSILON);
-         assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR.getYaw(), firstYPR.getPitch(), firstYPR.getRoll(), secondYPR.getYaw(),
-                                                                           secondYPR.getPitch(), secondYPR.getRoll()),
+         assertEquals(firstQ.distance(secondQ),
+                      YawPitchRollTools.distance(firstYPR.getYaw(),
+                                                 firstYPR.getPitch(),
+                                                 firstYPR.getRoll(),
+                                                 secondYPR.getYaw(),
+                                                 secondYPR.getPitch(),
+                                                 secondYPR.getRoll()),
                       EPSILON);
       }
    }

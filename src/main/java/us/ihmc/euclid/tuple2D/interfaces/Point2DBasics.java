@@ -44,8 +44,8 @@ public interface Point2DBasics extends Tuple2DBasics, Point2DReadOnly
     * </p>
     *
     * @param transform the geometric transform to apply on this point. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *                               in the XY plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -64,11 +64,11 @@ public interface Point2DBasics extends Tuple2DBasics, Point2DReadOnly
     * </ul>
     * </p>
     *
-    * @param transform the geometric transform to apply on this point. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the given transform represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
-    *            part of {@code transform} is not a transformation in the XY plane.
+    * @param transform                 the geometric transform to apply on this point. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *                                  given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *                               of {@code transform} is not a transformation in the XY plane.
     */
    @Override
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
@@ -88,8 +88,8 @@ public interface Point2DBasics extends Tuple2DBasics, Point2DReadOnly
     * </p>
     *
     * @param transform the geometric transform to apply on this point. Not modified.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a
-    *            transformation in the XY plane.
+    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
+    *                               in the XY plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)
@@ -108,11 +108,11 @@ public interface Point2DBasics extends Tuple2DBasics, Point2DReadOnly
     * </ul>
     * </p>
     *
-    * @param transform the geometric transform to apply on this point. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the given transform represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
-    *            part of {@code transform} is not a transformation in the XY plane.
+    * @param transform                 the geometric transform to apply on this point. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *                                  given transform represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *                               of {@code transform} is not a transformation in the XY plane.
     */
    @Override
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYplane)

@@ -13,7 +13,7 @@ public interface EpsilonComparable<T>
     * achieved on a per component basis. Sometimes a failing test does not necessarily mean that the
     * two objects are different in a geometric way.
     *
-    * @param other the other object to compare against this. Not modified.
+    * @param other   the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */

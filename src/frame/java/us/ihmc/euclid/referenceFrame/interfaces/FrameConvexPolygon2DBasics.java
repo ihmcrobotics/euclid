@@ -35,8 +35,8 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
    /**
     * Clear this polygon, sets it reference frame.
     * <p>
-    * After calling this method, the polygon has no vertex, area, or centroid. Use only when an
-    * empty polygon is desired.
+    * After calling this method, the polygon has no vertex, area, or centroid. Use only when an empty
+    * polygon is desired.
     * </p>
     * 
     * @param referenceFrame the new reference frame for this frame convex polygon.
@@ -88,7 +88,7 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * <li>{@link #set(Vertex2DSupplier)}.
     * </ol>
     * 
-    * @param referenceFrame the new reference frame for this frame convex polygon.
+    * @param referenceFrame   the new reference frame for this frame convex polygon.
     * @param vertex2DSupplier the supplier of vertices.
     * @see Vertex2DSupplier
     * @see #set(Vertex2DSupplier)
@@ -106,7 +106,7 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * <li>{@link #set(Vertex3DSupplier)}.
     * </ol>
     * 
-    * @param referenceFrame the new reference frame for this frame convex polygon.
+    * @param referenceFrame   the new reference frame for this frame convex polygon.
     * @param vertex3DSupplier the supplier of vertices.
     * @see Vertex3DSupplier
     * @see #set(Vertex3DSupplier)
@@ -124,8 +124,8 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * <li>{@link #set(Vertex2DSupplier, Vertex2DSupplier)}.
     * </ol>
     * 
-    * @param referenceFrame the new reference frame for this frame convex polygon.
-    * @param firstVertexSupplier the first supplier of vertices.
+    * @param referenceFrame       the new reference frame for this frame convex polygon.
+    * @param firstVertexSupplier  the first supplier of vertices.
     * @param secondVertexSupplier the second supplier of vertices.
     * @see Vertex2DSupplier
     * @see #set(Vertex2DSupplier, Vertex2DSupplier)
@@ -148,7 +148,7 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * 
     * @param frameVertex2DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if the reference frame of the supplied vertices are
-    *            inconsistent.
+    *                                         inconsistent.
     * @see FrameVertex2DSupplier
     * @see #set(FrameVertex2DSupplier)
     */
@@ -180,7 +180,7 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
     * 
     * @param frameVertex3DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if the reference frame of the supplied vertices are
-    *            inconsistent.
+    *                                         inconsistent.
     * @see FrameVertex3DSupplier
     * @see #set(FrameVertex3DSupplier)
     */
@@ -203,15 +203,14 @@ public interface FrameConvexPolygon2DBasics extends FixedFrameConvexPolygon2DBas
    /**
     * This method does:
     * <ol>
-    * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of
-    * {@code firstPolygon}.
+    * <li>{@link #setReferenceFrame(ReferenceFrame)} using the reference frame of {@code firstPolygon}.
     * <li>{@link #set(FrameVertex2DSupplier, FrameVertex2DSupplier)}.
     * </ol>
     * 
-    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param firstVertex2DSupplier  the first supplier of vertices.
     * @param secondVertex2DSupplier the second supplier of vertices.
     * @throws ReferenceFrameMismatchException if the reference frame of the supplied vertices are
-    *            inconsistent.
+    *                                         inconsistent.
     * @see #set(FrameVertex2DSupplier, FrameVertex2DSupplier)
     */
    default void setIncludingFrame(FrameVertex2DSupplier firstVertex2DSupplier, FrameVertex2DSupplier secondVertex2DSupplier)

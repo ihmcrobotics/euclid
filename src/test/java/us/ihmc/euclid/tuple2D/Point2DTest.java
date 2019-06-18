@@ -1,12 +1,11 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -21,8 +20,8 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
       Point2D point = new Point2D();
 
       { // Test Point2D()
-         Assert.assertTrue(0 == point.getX());
-         Assert.assertTrue(0 == point.getY());
+         assertTrue(0 == point.getX());
+         assertTrue(0 == point.getY());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -32,8 +31,8 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
 
          point = new Point2D(newX, newY);
 
-         Assert.assertTrue(newX == point.getX());
-         Assert.assertTrue(newY == point.getY());
+         assertTrue(newX == point.getX());
+         assertTrue(newY == point.getY());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -41,8 +40,8 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
          double[] randomPoint2DArray = {random.nextDouble(), random.nextDouble()};
          Point2D pointArray = new Point2D(randomPoint2DArray);
 
-         Assert.assertTrue(randomPoint2DArray[0] == pointArray.getX());
-         Assert.assertTrue(randomPoint2DArray[1] == pointArray.getY());
+         assertTrue(randomPoint2DArray[0] == pointArray.getX());
+         assertTrue(randomPoint2DArray[1] == pointArray.getY());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -50,8 +49,8 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
          Point2D point2 = createRandomTuple(random);
          point = new Point2D(point2);
 
-         Assert.assertTrue(point.getX() == point2.getX());
-         Assert.assertTrue(point.getY() == point2.getY());
+         assertTrue(point.getX() == point2.getX());
+         assertTrue(point.getY() == point2.getY());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -59,8 +58,8 @@ public class Point2DTest extends Point2DBasicsTest<Point2D>
          Point3D point2 = EuclidCoreRandomTools.nextPoint3D(random);
          point = new Point2D(point2);
 
-         Assert.assertTrue(point.getX() == point2.getX());
-         Assert.assertTrue(point.getY() == point2.getY());
+         assertTrue(point.getX() == point2.getX());
+         assertTrue(point.getY() == point2.getY());
       }
    }
 

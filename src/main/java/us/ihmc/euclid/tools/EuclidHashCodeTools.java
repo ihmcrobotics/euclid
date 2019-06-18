@@ -15,6 +15,11 @@ public class EuclidHashCodeTools
     */
    public final static long MULTIPLIER = 31L;
 
+   private EuclidHashCodeTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Returns a hash bit stream as an integer hash value.
     *
@@ -30,7 +35,7 @@ public class EuclidHashCodeTools
     * Calls {@link #combineHashCode(long, long)} after converting {@code value} to long bits.
     *
     * @param hashCode long hash code bit stream to add to.
-    * @param value double value to add to the hash code.
+    * @param value    double value to add to the hash code.
     * @return new hash code bit stream
     */
    public static long addToHashCode(long hashCode, double value)
@@ -42,7 +47,7 @@ public class EuclidHashCodeTools
     * Calls {@link #combineHashCode(long, long)} after converting {@code value} to int bits.
     *
     * @param hashCode long hash code bit stream to add to.
-    * @param value float value to add to the hash code.
+    * @param value    float value to add to the hash code.
     * @return new hash code bit stream
     */
    public static long addToHashCode(long hashCode, float value)

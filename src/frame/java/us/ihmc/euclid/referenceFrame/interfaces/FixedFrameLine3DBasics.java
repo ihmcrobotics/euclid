@@ -46,7 +46,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     *
     * @param pointOnLine new point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
@@ -59,7 +59,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     *
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void setDirection(FrameVector3DReadOnly lineDirection)
    {
@@ -76,7 +76,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * @param referenceFrame the reference frame in which the given line is expressed.
     * @param line2DReadOnly the line to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, Line2DReadOnly line2DReadOnly)
    {
@@ -90,7 +90,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * @param referenceFrame the reference frame in which the given line is expressed.
     * @param line3DReadOnly the line to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, Line3DReadOnly line3DReadOnly)
    {
@@ -104,10 +104,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param referenceFrame the reference frame in which the given line segment is expressed.
+    * @param referenceFrame        the reference frame in which the given line segment is expressed.
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
    {
@@ -118,10 +118,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Sets this line to go through the endpoints of the given line segment.
     *
-    * @param referenceFrame the reference frame in which the given line segment is expressed.
+    * @param referenceFrame        the reference frame in which the given line segment is expressed.
     * @param lineSegment3DReadOnly the line segment to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
    {
@@ -136,10 +136,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * </p>
     *
     * @param referenceFrame the reference frame in which the given arguments are expressed.
-    * @param pointOnLine new point on this line. Not modified.
-    * @param lineDirection new direction of this line. Not modified.
+    * @param pointOnLine    new point on this line. Not modified.
+    * @param lineDirection  new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -151,10 +151,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * Redefines this line with a new point and a new direction vector.
     *
     * @param referenceFrame the reference frame in which the given arguments are expressed.
-    * @param pointOnLine new point on this line. Not modified.
-    * @param lineDirection new direction of this line. Not modified.
+    * @param pointOnLine    new point on this line. Not modified.
+    * @param lineDirection  new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -168,11 +168,11 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param referenceFrame the reference frame in which the given arguments are expressed.
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param referenceFrame    the reference frame in which the given arguments are expressed.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, Point2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -183,11 +183,11 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Redefines this line such that it goes through the two given points.
     *
-    * @param referenceFrame the reference frame in which the given arguments are expressed.
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param referenceFrame    the reference frame in which the given arguments are expressed.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame()} and
-    *            {@code referenceFrame} are not the same reference frame.
+    *                                         {@code referenceFrame} are not the same reference frame.
     */
    default void set(ReferenceFrame referenceFrame, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
    {
@@ -201,10 +201,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param referenceFrame the reference frame in which the given line is expressed.
+    * @param referenceFrame      the reference frame in which the given line is expressed.
     * @param frameLine2DReadOnly the line to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLine2DReadOnly} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(FrameLine2DReadOnly frameLine2DReadOnly)
    {
@@ -215,9 +215,9 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * Sets this line to be the same as the given line.
     *
     * @param referenceFrame the reference frame in which the given line is expressed.
-    * @param other the line to copy. Not modified.
+    * @param other          the line to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void set(FrameLine3DReadOnly other)
    {
@@ -251,7 +251,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     *
     * @param frameLineSegment2DReadOnly the line segment to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLineSegment2DReadOnly}
-    *            are not expressed in the same reference frame.
+    *                                         are not expressed in the same reference frame.
     */
    default void set(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
    {
@@ -263,7 +263,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     *
     * @param frameLineSegment3DReadOnly the line segment to copy. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLineSegment3DReadOnly}
-    *            are not expressed in the same reference frame.
+    *                                         are not expressed in the same reference frame.
     */
    default void set(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
    {
@@ -276,10 +276,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(Point2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -292,10 +292,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void set(FramePoint2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -308,10 +308,11 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pointOnLine},
-    *            {@code lineDirection} are not expressed in the same reference frame.
+    *                                         {@code lineDirection} are not expressed in the same
+    *                                         reference frame.
     */
    default void set(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -322,10 +323,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(Point3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
@@ -335,10 +336,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void set(FramePoint3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -348,10 +349,11 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pointOnLine},
-    *            {@code lineDirection} are not expressed in the same reference frame.
+    *                                         {@code lineDirection} are not expressed in the same
+    *                                         reference frame.
     */
    default void set(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
@@ -365,10 +367,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLine} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(Point2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -381,10 +383,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstPointOnLine} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(FramePoint2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -397,10 +399,11 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstPointOnLine},
-    *            {@code secondPointOnLine} are not expressed in the same reference frame.
+    *                                         {@code secondPointOnLine} are not expressed in the same
+    *                                         reference frame.
     */
    default void set(FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -411,10 +414,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Redefines this line such that it goes through the two given points.
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLine} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(Point3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
    {
@@ -424,10 +427,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Redefines this line such that it goes through the two given points.
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstPointOnLine} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(FramePoint3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
    {
@@ -437,10 +440,10 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
    /**
     * Redefines this line such that it goes through the two given points.
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondPointOnLine} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
    {

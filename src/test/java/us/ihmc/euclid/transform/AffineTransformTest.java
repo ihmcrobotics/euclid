@@ -1,14 +1,14 @@
 package us.ihmc.euclid.transform;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.RandomMatrices;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
@@ -1914,8 +1914,8 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          RigidBodyTransform rigidBodyTransform = new RigidBodyTransform();
          transform.getRigidBodyTransform(rigidBodyTransform);
-         EuclidCoreTestTools.assertMatrix3DEquals(rigidBodyTransform.getRotationMatrix(), transform.getRotationMatrix(), EPS);
-         EuclidCoreTestTools.assertTuple3DEquals(rigidBodyTransform.getTranslationVector(), transform.getTranslationVector(), EPS);
+         EuclidCoreTestTools.assertMatrix3DEquals(rigidBodyTransform.getRotation(), transform.getRotationMatrix(), EPS);
+         EuclidCoreTestTools.assertTuple3DEquals(rigidBodyTransform.getTranslation(), transform.getTranslationVector(), EPS);
       }
 
       { // Test get(DenseMatrix64F matrixToPack)
@@ -2237,7 +2237,8 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       assertFalse(t1.equals(new double[4]));
       t2.set(t1);
       assertTrue(t1.equals(t2));
-      assertTrue(t1.equals((Object) t2));
+      Object t2AsObject = t2;
+      assertTrue(t1.equals(t2AsObject));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[16];

@@ -47,8 +47,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    void setZ(double z);
 
    /**
-    * Sets the components of this axis-angle to represent a "zero" rotation. After calling the axis
-    * is equal to (1, 0, 0) and the angle to 0.
+    * Sets the components of this axis-angle to represent a "zero" rotation. After calling the axis is
+    * equal to (1, 0, 0) and the angle to 0.
     */
    @Override
    default void setToZero()
@@ -68,8 +68,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    /**
     * Tests if this axis-angle contains a {@link Double#NaN}.
     *
-    * @return {@code true} if this axis-angle contains a {@link Double#NaN}, {@code false}
-    *         otherwise.
+    * @return {@code true} if this axis-angle contains a {@link Double#NaN}, {@code false} otherwise.
     */
    @Override
    default boolean containsNaN()
@@ -101,8 +100,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Normalizes the axis of this axis-angle such that its norm is equal to 1 after calling this
-    * method and its direction remains unchanged.
+    * Normalizes the axis of this axis-angle such that its norm is equal to 1 after calling this method
+    * and its direction remains unchanged.
     * <p>
     * Edge cases:
     * <ul>
@@ -146,9 +145,9 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     * Sets this axis-angle to represent a new rotation of axis ({@code x}, {@code y}, {@code z}) and
     * angle of {@code angle}.
     *
-    * @param x x-component of the new axis.
-    * @param y y-component of the new axis.
-    * @param z z-component of the new axis.
+    * @param x     x-component of the new axis.
+    * @param y     y-component of the new axis.
+    * @param z     z-component of the new axis.
     * @param angle the new angle.
     */
    default void set(double x, double y, double z, double angle)
@@ -169,7 +168,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    /**
     * Sets the axis and the angle of this axis-angle.
     *
-    * @param axis the new axis. Not modified.
+    * @param axis  the new axis. Not modified.
     * @param angle the new angle.
     */
    default void set(Vector3DReadOnly axis, double angle)
@@ -223,7 +222,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     * <li>{@code this.setAngle(axisAngleArray[startIndex + 3]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex     the first index to start reading from in the array.
     * @param axisAngleArray the array containing the new values for this axis-angle. Not modified.
     */
    default void set(int startIndex, double[] axisAngleArray)
@@ -259,7 +258,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     * <li>{@code this.setAngle(axisAngleArray[startIndex + 3]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex     the first index to start reading from in the array.
     * @param axisAngleArray the array containing the new values for this axis-angle. Not modified.
     */
    default void set(int startIndex, float[] axisAngleArray)
@@ -305,6 +304,24 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
       AxisAngleConversion.convertMatrixToAxisAngle(m00, m01, m02, m10, m11, m12, m20, m21, m22, this);
    }
 
+   @Override
+   default void setToYawOrientation(double yaw)
+   {
+      set(0.0, 0.0, 1.0, yaw);
+   }
+
+   @Override
+   default void setToPitchOrientation(double pitch)
+   {
+      set(0.0, 1.0, 0.0, pitch);
+   }
+
+   @Override
+   default void setToRollOrientation(double roll)
+   {
+      set(1.0, 0.0, 0.0, roll);
+   }
+
    /**
     * Selects a component of this axis-angle based on {@code index} and sets it to {@code value}.
     * <p>
@@ -320,20 +337,20 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    {
       switch (index)
       {
-      case 0:
-         setX(value);
-         break;
-      case 1:
-         setY(value);
-         break;
-      case 2:
-         setZ(value);
-         break;
-      case 3:
-         setAngle(value);
-         break;
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            setX(value);
+            break;
+         case 1:
+            setY(value);
+            break;
+         case 2:
+            setZ(value);
+            break;
+         case 3:
+            setAngle(value);
+            break;
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 

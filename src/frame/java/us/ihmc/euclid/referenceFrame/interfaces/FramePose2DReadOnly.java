@@ -34,7 +34,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * @param other the other pose used to measure the distance. Not modified.
     * @return the distance between the position part of the two poses.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default double getPositionDistance(FramePose2DReadOnly other)
    {
@@ -47,7 +47,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * @param point the other point used to measure the distance. Not modified.
     * @return the distance between this pose and the given {@code point}.
     * @throws ReferenceFrameMismatchException if {@code point} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default double getPositionDistance(FramePoint2DReadOnly point)
    {
@@ -61,7 +61,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default double getOrientationDistance(FrameOrientation2DReadOnly orientation)
    {
@@ -75,7 +75,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * @return the absolute angle difference between {@code this.orientation} and
     *         {@code other.orientation}.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default double getOrientationDistance(FramePose2DReadOnly other)
    {
@@ -88,7 +88,7 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other pose to compare against this. Not modified.
+    * @param other   the other pose to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing..
     * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
@@ -107,11 +107,11 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default boolean geometricallyEquals(FramePose2DReadOnly other, double epsilon)
    {
@@ -131,7 +131,9 @@ public interface FramePose2DReadOnly extends Pose2DReadOnly, ReferenceFrameHolde
     */
    default boolean equals(FramePose2DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Pose2DReadOnly.super.equals(other);

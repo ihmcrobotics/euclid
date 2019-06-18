@@ -1,12 +1,12 @@
 package us.ihmc.euclid.yawPitchRoll;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
@@ -577,8 +577,10 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
       T ypr = createRandomYawPitchRoll(random);
 
       assertFalse(ypr.equals(createEmptyYawPitchRoll()));
-      assertFalse(ypr.equals((Object) createEmptyYawPitchRoll()));
-      assertTrue(ypr.equals((Object) ypr));
+      Object emptyYawPitchRollAsObject = createEmptyYawPitchRoll();
+      assertFalse(ypr.equals(emptyYawPitchRollAsObject));
+      Object yprAsObject = ypr;
+      assertTrue(ypr.equals(yprAsObject));
       assertFalse(ypr.equals(null));
       assertFalse(ypr.equals(new double[5]));
 

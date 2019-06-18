@@ -1,12 +1,11 @@
 package us.ihmc.euclid.axisAngle;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
@@ -395,25 +394,25 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
             YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, expectedYawPitchRoll);
 
             for (int j = 0; j < yawPitchRoll.length; j++)
-               Assert.assertEquals(yawPitchRoll[j], expectedYawPitchRoll[j], getEpsilon());
+               assertEquals(yawPitchRoll[j], expectedYawPitchRoll[j], getEpsilon());
          }
 
          { // Test getYaw()
             double yaw = axisAngle.getYaw();
             double expectedYaw = YawPitchRollConversion.computeYaw(axisAngle);
-            Assert.assertEquals(yaw, expectedYaw, getEpsilon());
+            assertEquals(yaw, expectedYaw, getEpsilon());
          }
 
          { // Test getPitch()
             double pitch = axisAngle.getPitch();
             double expectedPitch = YawPitchRollConversion.computePitch(axisAngle);
-            Assert.assertEquals(pitch, expectedPitch, getEpsilon());
+            assertEquals(pitch, expectedPitch, getEpsilon());
          }
 
          { // Test getRoll()
             double roll = axisAngle.getRoll();
             double expectedRoll = YawPitchRollConversion.computeRoll(axisAngle);
-            Assert.assertEquals(roll, expectedRoll, getEpsilon());
+            assertEquals(roll, expectedRoll, getEpsilon());
          }
       }
    }
@@ -588,6 +587,47 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
 
          QuaternionTools.addTransform(quaternion, tuple, expectedTuple);
          axisAngle.addTransform(tuple, actualTuple);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+
+         actualTuple = new Vector3D();
+         axisAngle = createAxisAngle(0.0, 0.0, 0.0, 0.0);
+         axisAngle.transform(tuple, actualTuple);
+         EuclidCoreTestTools.assertTuple3DEquals(tuple, actualTuple, getEpsilon());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test subTransform(Tuple3DBasics tupleToTransform)
+         Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
+         Tuple3DBasics actualTuple = new Vector3D(tuple);
+         Tuple3DBasics expectedTuple = new Vector3D(tuple);
+         axisAngle = createRandomAxisAngle(random);
+         double scale = 0.5 + random.nextDouble();
+         axisAngle = createAxisAngle(scale * axisAngle.getX(), scale * axisAngle.getY(), scale * axisAngle.getZ(), axisAngle.getAngle());
+         quaternion.set(axisAngle);
+
+         QuaternionTools.subTransform(quaternion, tuple, expectedTuple);
+         axisAngle.subTransform(actualTuple);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+
+         axisAngle = createAxisAngle(0.0, 0.0, 0.0, 0.0);
+         axisAngle.transform(actualTuple);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+         Tuple3DReadOnly tuple = EuclidCoreRandomTools.nextVector3D(random);
+         Tuple3DBasics actualTuple = EuclidCoreRandomTools.nextVector3D(random);
+         Tuple3DBasics expectedTuple = new Vector3D(actualTuple);
+         axisAngle = createRandomAxisAngle(random);
+         double scale = 0.5 + random.nextDouble();
+         axisAngle = createAxisAngle(scale * axisAngle.getX(), scale * axisAngle.getY(), scale * axisAngle.getZ(), axisAngle.getAngle());
+         quaternion.set(axisAngle);
+
+         QuaternionTools.subTransform(quaternion, tuple, expectedTuple);
+         axisAngle.subTransform(tuple, actualTuple);
 
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, getEpsilon());
 
@@ -993,8 +1033,10 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       T axisAngle = createRandomAxisAngle(random);
 
       assertFalse(axisAngle.equals(createEmptyAxisAngle()));
-      assertFalse(axisAngle.equals((Object) createEmptyAxisAngle()));
-      assertTrue(axisAngle.equals((Object) axisAngle));
+      Object emptyAxisAngleAsObject = createEmptyAxisAngle();
+      assertFalse(axisAngle.equals(emptyAxisAngleAsObject));
+      Object axisAngleAsObject = axisAngle;
+      assertTrue(axisAngle.equals(axisAngleAsObject));
       assertFalse(axisAngle.equals(null));
       assertFalse(axisAngle.equals(new double[5]));
 

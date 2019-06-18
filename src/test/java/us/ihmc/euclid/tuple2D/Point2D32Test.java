@@ -1,12 +1,11 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -20,8 +19,8 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
       Point2D32 point = new Point2D32();
 
       { // Test Point2D32()
-         Assert.assertTrue(0f == point.getX32());
-         Assert.assertTrue(0f == point.getY32());
+         assertTrue(0f == point.getX32());
+         assertTrue(0f == point.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -31,8 +30,8 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
 
          point = new Point2D32(newX, newY);
 
-         Assert.assertTrue(newX == point.getX32());
-         Assert.assertTrue(newY == point.getY32());
+         assertTrue(newX == point.getX32());
+         assertTrue(newY == point.getY32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -44,11 +43,11 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
 
          Point2D32 pointArray = new Point2D32(randomPoint2D32Array);
 
-         Assert.assertTrue(randomPoint2D32Array[0] == pointArray.getX32());
-         Assert.assertTrue(randomPoint2D32Array[1] == pointArray.getY32());
+         assertTrue(randomPoint2D32Array[0] == pointArray.getX32());
+         assertTrue(randomPoint2D32Array[1] == pointArray.getY32());
 
-         Assert.assertTrue(copyRandomPoint2D32Array[0] == randomPoint2D32Array[0]);
-         Assert.assertTrue(copyRandomPoint2D32Array[1] == randomPoint2D32Array[1]);
+         assertTrue(copyRandomPoint2D32Array[0] == randomPoint2D32Array[0]);
+         assertTrue(copyRandomPoint2D32Array[1] == randomPoint2D32Array[1]);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -57,8 +56,8 @@ public class Point2D32Test extends Point2DBasicsTest<Point2D32>
 
          point = new Point2D32(point2);
 
-         Assert.assertTrue(point.getX32() == point2.getX32());
-         Assert.assertTrue(point.getY32() == point2.getY32());
+         assertTrue(point.getX32() == point2.getX32());
+         assertTrue(point.getY32() == point2.getY32());
       }
    }
 

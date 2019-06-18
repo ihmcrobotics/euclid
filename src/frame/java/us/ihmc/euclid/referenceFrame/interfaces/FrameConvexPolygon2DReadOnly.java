@@ -87,8 +87,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * Adds a subset of this polygon's vertices into the given list.
     *
     * @param startIndexInclusive the index of the first vertex to add.
-    * @param endIndexInclusive the index of the last vertex to add.
-    * @param pointListToPack the list into which the vertices are to be added.
+    * @param endIndexInclusive   the index of the last vertex to add.
+    * @param pointListToPack     the list into which the vertices are to be added.
     * @see #getPointsInClockwiseOrder(int, int, List)
     */
    default void getFramePointsInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, List<FramePoint2DReadOnly> pointListToPack)
@@ -112,10 +112,10 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * Adds a subset of this polygon's vertices into the given polygon.
     *
     * @param startIndexInclusive the index of the first vertex to add.
-    * @param endIndexInclusive the index of the last vertex to add.
-    * @param polygonToPack the polygon into which the vertices are to be added.
+    * @param endIndexInclusive   the index of the last vertex to add.
+    * @param polygonToPack       the polygon into which the vertices are to be added.
     * @throws ReferenceFrameMismatchException if {@code polygonToPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #getVerticesInClockwiseOrder(int, int, ConvexPolygon2DBasics)
     */
    default void getVerticesInClockwiseOrder(int startIndexInclusive, int endIndexInclusive, FixedFrameConvexPolygon2DBasics polygonToPack)
@@ -130,7 +130,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param point the query. Not modified.
     * @return {@code true} if the query is inside this polygon, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #isPointInside(Point2DReadOnly)
     */
    default boolean isPointInside(FramePoint2DReadOnly point)
@@ -142,12 +142,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Determines if the point is inside this convex polygon given the tolerance {@code epsilon}.
     *
-    * @param point the query. Not modified.
+    * @param point   the query. Not modified.
     * @param epsilon the tolerance to use during the test.
     * @return {@code true} if the query is considered to be inside the polygon, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #isPointInside(Point2DReadOnly, double)
     */
    default boolean isPointInside(FramePoint2DReadOnly point, double epsilon)
@@ -159,12 +159,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     *
-    * @param ray the ray to find the closest point to. Not modified.
+    * @param ray                the ray to find the closest point to. Not modified.
     * @param closestPointToPack the point in which the coordinates of the closest point are stored.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code closestPointToPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #getClosestPointWithRay(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestPointWithRay(Line2DReadOnly ray, FixedFramePoint2DBasics closestPointToPack)
@@ -176,9 +176,9 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     *
-    * @param ray the ray to find the closest point to. Not modified.
+    * @param ray                the ray to find the closest point to. Not modified.
     * @param closestPointToPack the point in which the coordinates of the closest point are stored.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @see #getClosestPointWithRay(Line2DReadOnly, Point2DBasics)
     */
@@ -191,12 +191,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     *
-    * @param ray the ray to find the closest point to. Not modified.
+    * @param ray                the ray to find the closest point to. Not modified.
     * @param closestPointToPack the point in which the coordinates of the closest point are stored.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getClosestPointWithRay(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestPointWithRay(FrameLine2DReadOnly ray, Point2DBasics closestPointToPack)
@@ -208,12 +208,13 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     *
-    * @param ray the ray to find the closest point to. Not modified.
+    * @param ray                the ray to find the closest point to. Not modified.
     * @param closestPointToPack the point in which the coordinates of the closest point are stored.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code ray}, {@code closestPointToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #getClosestPointWithRay(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestPointWithRay(FrameLine2DReadOnly ray, FixedFramePoint2DBasics closestPointToPack)
@@ -226,12 +227,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the coordinates of the closest point to the ray that belongs to this convex polygon.
     *
-    * @param ray the ray to find the closest point to. Not modified.
+    * @param ray                the ray to find the closest point to. Not modified.
     * @param closestPointToPack the point in which the coordinates of the closest point are stored.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getClosestPointWithRay(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestPointWithRay(FrameLine2DReadOnly ray, FramePoint2DBasics closestPointToPack)
@@ -257,8 +258,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *
     * @param ray the ray to find the closest point to. Not modified.
     * @return the coordinates of the closest point if the method succeeds, {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getClosestPointWithRay(Line2DReadOnly)
     */
    default FramePoint2DBasics getClosestPointWithRay(FrameLine2DReadOnly ray)
@@ -273,7 +274,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param point the coordinates of the query. Not modified.
     * @return the value of the distance between the point and this polygon.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #distance(Point2DReadOnly)
     */
    default double distance(FramePoint2DReadOnly point)
@@ -286,10 +287,10 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * Returns minimum distance between the point and this polygon.
     *
     * @param point the coordinates of the query. Not modified.
-    * @return the distance between the query and the polygon, it is negative if the point is inside
-    *         the polygon.
+    * @return the distance between the query and the polygon, it is negative if the point is inside the
+    *         polygon.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #signedDistance(Point2DReadOnly)
     */
    default double signedDistance(FramePoint2DReadOnly point)
@@ -304,7 +305,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param pointToProject the point to project on this polygon. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code pointToProject} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #orthogonalProjection(Point2DBasics)
     */
    default boolean orthogonalProjection(FixedFramePoint2DBasics pointToProject)
@@ -329,12 +330,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the orthogonal projection of a 2D point this 2D convex polygon.
     *
-    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
+    * @param pointToProject   the coordinate of the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the convex polygon is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code projectionToPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #orthogonalProjection(Point2DReadOnly, Point2DBasics)
     */
    default boolean orthogonalProjection(Point2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
@@ -346,9 +347,9 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the orthogonal projection of a 2D point this 2D convex polygon.
     *
-    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
+    * @param pointToProject   the coordinate of the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the convex polygon is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @see #orthogonalProjection(Point2DReadOnly, Point2DBasics)
     */
@@ -361,12 +362,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the orthogonal projection of a 2D point this 2D convex polygon.
     *
-    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
+    * @param pointToProject   the coordinate of the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the convex polygon is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code pointToProject} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #orthogonalProjection(Point2DReadOnly, Point2DBasics)
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, Point2DBasics projectionToPack)
@@ -378,12 +379,13 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the orthogonal projection of a 2D point this 2D convex polygon.
     *
-    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
+    * @param pointToProject   the coordinate of the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the convex polygon is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code pointToProject}, {@code projectionToPack},
-    *            and {@code this} are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code pointToProject}, {@code projectionToPack}, and
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #orthogonalProjection(Point2DReadOnly, Point2DBasics)
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
@@ -396,12 +398,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Computes the orthogonal projection of a 2D point this 2D convex polygon.
     *
-    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
+    * @param pointToProject   the coordinate of the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the convex polygon is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code pointToProject} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #orthogonalProjection(Point2DReadOnly, Point2DBasics)
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FramePoint2DBasics projectionToPack)
@@ -428,7 +430,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
     * @return the coordinates of the projection, or {@code null} if the method failed.
     * @throws ReferenceFrameMismatchException if {@code pointToProject} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #orthogonalProjectionCopy(Point2DReadOnly)
     */
    default FramePoint2DBasics orthogonalProjectionCopy(FramePoint2DReadOnly pointToProject)
@@ -445,8 +447,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param observer the coordinates of the observer. Not modified.
     * @return the index of the first vertex that is in the line-of-sight, {@code -1} if this method
     *         fails.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightStartIndex(Point2DReadOnly)
     */
    default int lineOfSightStartIndex(FramePoint2DReadOnly observer)
@@ -457,14 +459,14 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the
-    * last vertex that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the index of the last
+    * vertex that is in the line-of-sight.
     *
     * @param observer the coordinates of the observer. Not modified.
     * @return the index of the last vertex that is in the line-of-sight, {@code -1} if this method
     *         fails.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightEndIndex(Point2DReadOnly)
     */
    default int lineOfSightEndIndex(FramePoint2DReadOnly observer)
@@ -481,8 +483,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param observer the coordinates of the observer. Not modified.
     * @return the indices in order of the first and last vertices that are in the line-of-sight,
     *         {@code null} if this method fails.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightIndices(Point2DReadOnly)
     */
    default int[] lineOfSightIndices(FramePoint2DReadOnly observer)
@@ -493,15 +495,15 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param startVertexToPack point in which the coordinates of the first vertex in the
-    *           line-of-sight are stored. Modified.
+    * @param observer          the coordinates of the observer. Not modified.
+    * @param startVertexToPack point in which the coordinates of the first vertex in the line-of-sight
+    *                          are stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code startVertexToPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #lineOfSightStartVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightStartVertex(Point2DReadOnly observer, FixedFramePoint2DBasics startVertexToPack)
@@ -512,12 +514,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param startVertexToPack point in which the coordinates of the first vertex in the
-    *           line-of-sight are stored. Modified.
+    * @param observer          the coordinates of the observer. Not modified.
+    * @param startVertexToPack point in which the coordinates of the first vertex in the line-of-sight
+    *                          are stored. Modified.
     * @return whether the method succeeded or not.
     * @see #lineOfSightStartVertex(Point2DReadOnly, Point2DBasics)
     */
@@ -529,15 +531,15 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param startVertexToPack point in which the coordinates of the first vertex in the
-    *           line-of-sight are stored. Modified.
+    * @param observer          the coordinates of the observer. Not modified.
+    * @param startVertexToPack point in which the coordinates of the first vertex in the line-of-sight
+    *                          are stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightStartVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightStartVertex(FramePoint2DReadOnly observer, Point2DBasics startVertexToPack)
@@ -548,15 +550,16 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param startVertexToPack point in which the coordinates of the first vertex in the
-    *           line-of-sight are stored. Modified.
+    * @param observer          the coordinates of the observer. Not modified.
+    * @param startVertexToPack point in which the coordinates of the first vertex in the line-of-sight
+    *                          are stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code observer}, {@code startVertexToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #lineOfSightStartVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightStartVertex(FramePoint2DReadOnly observer, FixedFramePoint2DBasics startVertexToPack)
@@ -568,15 +571,15 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param startVertexToPack point in which the coordinates of the first vertex in the
-    *           line-of-sight are stored. Modified.
+    * @param observer          the coordinates of the observer. Not modified.
+    * @param startVertexToPack point in which the coordinates of the first vertex in the line-of-sight
+    *                          are stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightStartVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightStartVertex(FramePoint2DReadOnly observer, FramePoint2DBasics startVertexToPack)
@@ -588,15 +591,15 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight
-    *           are stored. Modified.
+    * @param observer        the coordinates of the observer. Not modified.
+    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight are
+    *                        stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code endVertexToPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #lineOfSightEndVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightEndVertex(Point2DReadOnly observer, FixedFramePoint2DBasics endVertexToPack)
@@ -607,12 +610,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight
-    *           are stored. Modified.
+    * @param observer        the coordinates of the observer. Not modified.
+    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight are
+    *                        stored. Modified.
     * @return whether the method succeeded or not.
     * @see #lineOfSightEndVertex(Point2DReadOnly, Point2DBasics)
     */
@@ -624,15 +627,15 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight
-    *           are stored. Modified.
+    * @param observer        the coordinates of the observer. Not modified.
+    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight are
+    *                        stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightEndVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightEndVertex(FramePoint2DReadOnly observer, Point2DBasics endVertexToPack)
@@ -643,15 +646,16 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight
-    *           are stored. Modified.
+    * @param observer        the coordinates of the observer. Not modified.
+    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight are
+    *                        stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code observer}, {@code endVertexToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #lineOfSightEndVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightEndVertex(FramePoint2DReadOnly observer, FixedFramePoint2DBasics endVertexToPack)
@@ -663,15 +667,15 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
+    * is in the line-of-sight.
     *
-    * @param observer the coordinates of the observer. Not modified.
-    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight
-    *           are stored. Modified.
+    * @param observer        the coordinates of the observer. Not modified.
+    * @param endVertexToPack point in which the coordinates of the last vertex in the line-of-sight are
+    *                        stored. Modified.
     * @return whether the method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightEndVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean lineOfSightEndVertex(FramePoint2DReadOnly observer, FramePoint2DBasics endVertexToPack)
@@ -694,14 +698,14 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the first vertex that
+    * is in the line-of-sight.
     *
     * @param observer the coordinates of the observer. Not modified.
-    * @return the coordinates of the first vertex in the line-of-sight or {@code null} if this
-    *         method failed. Modified.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @return the coordinates of the first vertex in the line-of-sight or {@code null} if this method
+    *         failed. Modified.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightStartVertexCopy(Point2DReadOnly)
     */
    default FramePoint2DBasics lineOfSightStartVertexCopy(FramePoint2DReadOnly observer)
@@ -723,14 +727,14 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
 
    /**
     * From the point of view of an observer located outside the polygon, only a continuous subset of
-    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex
-    * that is in the line-of-sight.
+    * the polygon's edges can be seen defining a line-of-sight. This method finds the last vertex that
+    * is in the line-of-sight.
     *
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates of the last vertex in the line-of-sight or {@code null} if this method
     *         failed. Modified.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightEndVertexCopy(Point2DReadOnly)
     */
    default FramePoint2DBasics lineOfSightEndVertexCopy(FramePoint2DReadOnly observer)
@@ -759,8 +763,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param observer the coordinates of the observer. Not modified.
     * @return the coordinates in order of the first and last vertices in the line-of-sight or
     *         {@code null} if this method failed. Modified.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #lineOfSightVertices(Point2DReadOnly)
     */
    default FramePoint2DBasics[] lineOfSightVertices(FramePoint2DReadOnly observer)
@@ -773,11 +777,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * Determines whether an observer can see the outside of the given edge of this convex polygon.
     *
     * @param edgeIndex the vertex index of the start of the edge.
-    * @param observer the coordinates of the observer. Not modified.
+    * @param observer  the coordinates of the observer. Not modified.
     * @return {@code true} if the observer can see the outside of the edge, {@code false} if the
     *         observer cannot see the outside or is lying on the edge.
-    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code observer} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #canObserverSeeEdge(int, Point2DReadOnly)
     */
    default boolean canObserverSeeEdge(int edgeIndex, FramePoint2DReadOnly observer)
@@ -790,10 +794,10 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * Tests if the given point lies on an edge of this convex polygon.
     *
     * @param point the coordinates of the query. Not modified.
-    * @return {@code true} if the point is considered to be on an edge of this polygon,
-    *         {@code false} otherwise.
+    * @return {@code true} if the point is considered to be on an edge of this polygon, {@code false}
+    *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #pointIsOnPerimeter(Point2DReadOnly)
     */
    default boolean pointIsOnPerimeter(FramePoint2DReadOnly point)
@@ -803,17 +807,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code code secondIntersectionToPack} and
-    *            {@code this} are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code code secondIntersectionToPack} and {@code this}
+    *                                         are not expressed in the same reference frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(Line2DReadOnly line, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -823,17 +827,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws ReferenceFrameMismatchException {@code firstIntersectionToPack} and {@code this} are
-    *            not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException {@code firstIntersectionToPack} and {@code this} are not
+    *                                         expressed in the same reference frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(Line2DReadOnly line, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -843,18 +847,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack},
-    *            {@code code secondIntersectionToPack}, and {@code this} are not expressed in the
-    *            same reference frame.
+    *                                         {@code code secondIntersectionToPack}, and {@code this}
+    *                                         are not expressed in the same reference frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(Line2DReadOnly line, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -865,14 +869,14 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
@@ -884,17 +888,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLine2DReadOnly line, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -904,18 +908,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code line},
-    *            {@code code secondIntersectionToPack}, and {@code this} are not expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line}, {@code code secondIntersectionToPack},
+    *                                         and {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLine2DReadOnly line, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -926,17 +930,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code line}, {@code firstIntersectionToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLine2DReadOnly line, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -947,18 +952,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code line}, {@code firstIntersectionToPack},
-    *            {@code code secondIntersectionToPack}, and {@code this} are not expressed in the
-    *            same reference frame.
+    *                                         {@code code secondIntersectionToPack}, and {@code this}
+    *                                         are not expressed in the same reference frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLine2DReadOnly line, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -970,17 +975,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
-    * @param line the line that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param line                     the line that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #intersectionWith(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLine2DReadOnly line, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
@@ -1010,14 +1015,14 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line 2D and this convex
+    * polygon 2D.
     *
     * @param line the line that may intersect this polygon. Not modified.
-    * @return the coordinates of the intersections between the line and the polygon, or {@code null}
-    *         if they do not intersect.
-    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @return the coordinates of the intersections between the line and the polygon, or {@code null} if
+    *         they do not intersect.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #intersectionWith(Line2DReadOnly)
     */
    default FramePoint2DBasics[] intersectionWith(FrameLine2DReadOnly line)
@@ -1027,17 +1032,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code secondIntersectionToPack}, and {@code this}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(Line2DReadOnly ray, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -1047,17 +1052,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack}, and {@code this}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(Line2DReadOnly ray, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -1067,18 +1072,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack},
-    *            {@code secondIntersectionToPack}, and {@code this} are not expressed in the same
-    *            reference frame.
+    *                                         {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(Line2DReadOnly ray, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -1089,18 +1094,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack},
-    *            {@code secondIntersectionToPack}, and {@code this} are not expressed in the same
-    *            reference frame.
+    *                                         {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(Line2DReadOnly ray, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
@@ -1111,17 +1116,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -1131,17 +1136,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws ReferenceFrameMismatchException if {@code ray}, {@code secondIntersectionToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -1152,17 +1158,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws ReferenceFrameMismatchException if {@code ray}, {@code firstIntersectionToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -1173,18 +1180,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws ReferenceFrameMismatchException if {@code ray}, {@code firstIntersectionToPack},
-    *            {@code secondIntersectionToPack}, and {@code this} are not expressed in the same
-    *            reference frame.
+    *                                         {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -1196,18 +1203,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
-    * @param ray the ray that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param ray                      the ray that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the ray and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the ray and the polygon.
     * @throws ReferenceFrameMismatchException if {@code ray}, {@code firstIntersectionToPack},
-    *            {@code secondIntersectionToPack}, and {@code this} are not expressed in the same
-    *            reference frame.
+    *                                         {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
@@ -1237,13 +1244,13 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this
-    * convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given ray 2D and this convex
+    * polygon 2D.
     *
     * @param ray the ray that may intersect this polygon. Not modified.
     * @return the intersections between the ray and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code ray} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #intersectionWithRay(Line2DReadOnly)
     */
    default FramePoint2DBasics[] intersectionWithRay(FrameLine2DReadOnly ray)
@@ -1253,17 +1260,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code secondIntersectionToPack} and {@code this}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code secondIntersectionToPack} and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(LineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
@@ -1273,17 +1280,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
-    * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack} and {@code this}
-    *            are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack} and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(LineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -1293,18 +1300,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code firstIntersectionToPack},
-    *            {@code secondIntersectionToPack}, and {@code this} are not expressed in the same
-    *            reference frame.
+    *                                         {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(LineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
@@ -1316,14 +1323,14 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
@@ -1335,17 +1342,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code lineSegment2D} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
@@ -1355,18 +1362,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code lineSegment2D},
-    *            {@code secondIntersectionToPack}, and {@code this} are not expressed in the same
-    *            reference frame.
+    *                                         {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack,
@@ -1378,18 +1385,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code lineSegment2D},
-    *            {@code firstIntersectionToPack}, and {@code this} are not expressed in the same
-    *            reference frame.
+    *                                         {@code firstIntersectionToPack}, and {@code this} are not
+    *                                         expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
@@ -1401,18 +1408,19 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code lineSegment2D},
-    *            {@code firstIntersectionToPack}, {@code secondIntersectionToPack}, and {@code this}
-    *            are not expressed in the same reference frame.
+    *                                         {@code firstIntersectionToPack},
+    *                                         {@code secondIntersectionToPack}, and {@code this} are
+    *                                         not expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
@@ -1425,17 +1433,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
-    * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
-    * @param secondIntersectionToPack point in which the coordinates of the second intersection
-    *           between the line and the convex polygon. Can be {@code null}. Modified.
+    * @param lineSegment2D            the line segment that may intersect this polygon. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
+    * @param secondIntersectionToPack point in which the coordinates of the second intersection between
+    *                                 the line and the convex polygon. Can be {@code null}. Modified.
     * @return the number of intersections between the line and the polygon.
     * @throws ReferenceFrameMismatchException if {@code lineSegment2D} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly, Point2DBasics, Point2DBasics)
     */
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FramePoint2DBasics firstIntersectionToPack,
@@ -1466,13 +1474,13 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and
-    * this convex polygon 2D.
+    * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
+    * convex polygon 2D.
     *
     * @param lineSegment2D the line segment that may intersect this polygon. Not modified.
     * @return the intersections between the line segment and the polygon.
     * @throws ReferenceFrameMismatchException if {@code lineSegment2D} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #intersectionWith(LineSegment2DReadOnly)
     */
    default FramePoint2DBasics[] intersectionWith(FrameLineSegment2DReadOnly lineSegment2D)
@@ -1487,7 +1495,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param point the coordinates of the query. Not modified.
     * @return the index of the closest edge to the query.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestEdgeIndex(Point2DReadOnly)
     */
    default int getClosestEdgeIndex(FramePoint2DReadOnly point)
@@ -1499,11 +1507,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest edge to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point             the coordinates of the query. Not modified.
     * @param closestEdgeToPack the line segment used to store the result. Not modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestEdge(Point2DReadOnly, LineSegment2DBasics)
     */
    default boolean getClosestEdge(FramePoint2DReadOnly point, LineSegment2DBasics closestEdgeToPack)
@@ -1515,11 +1523,12 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest edge to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point             the coordinates of the query. Not modified.
     * @param closestEdgeToPack the line segment used to store the result. Not modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code point}, {@code closestEdgetoPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    *                                         {@code this} are not expressed in the same reference
+    *                                         frame.
     * @see #getClosestEdge(Point2DReadOnly, LineSegment2DBasics)
     */
    default boolean getClosestEdge(FramePoint2DReadOnly point, FixedFrameLineSegment2DBasics closestEdgeToPack)
@@ -1532,11 +1541,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest edge to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point             the coordinates of the query. Not modified.
     * @param closestEdgeToPack the line segment used to store the result. Not modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestEdge(Point2DReadOnly, LineSegment2DBasics)
     */
    default boolean getClosestEdge(FramePoint2DReadOnly point, FrameLineSegment2DBasics closestEdgeToPack)
@@ -1549,11 +1558,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest edge to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point             the coordinates of the query. Not modified.
     * @param closestEdgeToPack the line segment used to store the result. Not modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code closestEdgetoPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #getClosestEdge(Point2DReadOnly, LineSegment2DBasics)
     */
    default boolean getClosestEdge(Point2DReadOnly point, FixedFrameLineSegment2DBasics closestEdgeToPack)
@@ -1565,7 +1574,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest edge to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point             the coordinates of the query. Not modified.
     * @param closestEdgeToPack the line segment used to store the result. Not modified.
     * @return whether this method succeeded or not.
     * @see #getClosestEdge(Point2DReadOnly, LineSegment2DBasics)
@@ -1593,7 +1602,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param point the coordinates of the query. Not modified.
     * @return the line segment representing the closest edge or {@code null} if this method failed.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestEdgeCopy(Point2DReadOnly)
     */
    default FrameLineSegment2DBasics getClosestEdgeCopy(FramePoint2DReadOnly point)
@@ -1608,7 +1617,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param point the coordinates of the query. Not modified.
     * @return the index of the closest vertex to the query.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestVertexIndex(Point2DReadOnly)
     */
    default int getClosestVertexIndex(FramePoint2DReadOnly point)
@@ -1620,11 +1629,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point        the coordinates of the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code vertexToPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #getClosestVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(Point2DReadOnly point, FixedFramePoint2DBasics vertexToPack)
@@ -1636,7 +1645,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point        the coordinates of the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
     * @see #getClosestVertex(Point2DReadOnly, Point2DBasics)
@@ -1650,11 +1659,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point        the coordinates of the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(FramePoint2DReadOnly point, Point2DBasics vertexToPack)
@@ -1666,11 +1675,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point        the coordinates of the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code point}, {@code vertexToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code point}, {@code vertexToPack}, and {@code this}
+    *                                         are not expressed in the same reference frame.
     * @see #getClosestVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(FramePoint2DReadOnly point, FixedFramePoint2DBasics vertexToPack)
@@ -1683,11 +1692,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the query.
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point        the coordinates of the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestVertex(Point2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(FramePoint2DReadOnly point, FramePoint2DBasics vertexToPack)
@@ -1714,7 +1723,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * @param point the coordinates of the query. Not modified.
     * @return the coordinates of the closest vertex, or {@code null} if this method failed.
     * @throws ReferenceFrameMismatchException if {@code point} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #getClosestVertexCopy(Point2DReadOnly)
     */
    default FramePoint2DBasics getClosestVertexCopy(FramePoint2DReadOnly point)
@@ -1728,8 +1737,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *
     * @param line the query. Not modified.
     * @return the index of the closest vertex to the query.
-    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getClosestVertexIndex(Line2DReadOnly)
     */
    default int getClosestVertexIndex(FrameLine2DReadOnly line)
@@ -1741,11 +1750,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the given line.
     *
-    * @param line the query. Not modified.
+    * @param line         the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code vertexToPack} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #getClosestVertex(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(Line2DReadOnly line, FixedFramePoint2DBasics vertexToPack)
@@ -1757,7 +1766,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the given line.
     *
-    * @param line the query. Not modified.
+    * @param line         the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
     * @see #getClosestVertex(Line2DReadOnly, Point2DBasics)
@@ -1771,11 +1780,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the given line.
     *
-    * @param line the query. Not modified.
+    * @param line         the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getClosestVertex(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(FrameLine2DReadOnly line, Point2DBasics vertexToPack)
@@ -1787,11 +1796,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the given line.
     *
-    * @param line the query. Not modified.
+    * @param line         the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code line}, {@code vertexToPack}, and
-    *            {@code this} are not expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line}, {@code vertexToPack}, and {@code this}
+    *                                         are not expressed in the same reference frame.
     * @see #getClosestVertex(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(FrameLine2DReadOnly line, FixedFramePoint2DBasics vertexToPack)
@@ -1804,11 +1813,11 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Finds the index of the closest vertex to the given line.
     *
-    * @param line the query. Not modified.
+    * @param line         the query. Not modified.
     * @param vertexToPack point used to store the result. Modified.
     * @return whether this method succeeded or not.
-    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getClosestVertex(Line2DReadOnly, Point2DBasics)
     */
    default boolean getClosestVertex(FrameLine2DReadOnly line, FramePoint2DBasics vertexToPack)
@@ -1834,8 +1843,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *
     * @param line the query. Not modified.
     * @return the coordinates of the closest vertex or {@code null} if this method failed.
-    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code line} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getClosestVertexCopy(Line2DReadOnly)
     */
    default FramePoint2DBasics getClosestVertexCopy(FrameLine2DReadOnly line)
@@ -1847,10 +1856,10 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Packs the endpoints of an edge of this polygon into {@code edgeToPack}.
     *
-    * @param edgeIndex index of the vertex that starts the edge.
+    * @param edgeIndex  index of the vertex that starts the edge.
     * @param edgeToPack line segment used to store the edge endpoints. Modified.
-    * @throws ReferenceFrameMismatchException if {@code edge} and {@code this} are not expressed in
-    *            the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code edge} and {@code this} are not expressed in the
+    *                                         same reference frame.
     * @see #getEdge(int, LineSegment2DBasics)
     */
    default void getEdge(int edgeIndex, FixedFrameLineSegment2DBasics edgeToPack)
@@ -1862,7 +1871,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    /**
     * Packs the endpoints of an edge of this polygon into {@code edgeToPack}.
     *
-    * @param edgeIndex index of the vertex that starts the edge.
+    * @param edgeIndex  index of the vertex that starts the edge.
     * @param edgeToPack line segment used to store the edge endpoints. Modified.
     * @see #getEdge(int, LineSegment2DBasics)
     */
@@ -1886,8 +1895,8 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     *
     * @param translation the translation to apply to the copy of this polygon. Not modified.
     * @return the copy of this polygon translated.
-    * @throws ReferenceFrameMismatchException if {@code translation} and {@code this} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code translation} and {@code this} are not expressed
+    *                                         in the same reference frame.
     * @see #translateCopy(Tuple2DReadOnly)
     */
    default FrameConvexPolygon2DBasics translateCopy(FrameTuple2DReadOnly translation)
@@ -1897,8 +1906,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Tests on a per vertex and per component basis, if this polygon is exactly equal to
-    * {@code other}.
+    * Tests on a per vertex and per component basis, if this polygon is exactly equal to {@code other}.
     *
     * @param other the other polygon to compare against this. Not modified.
     * @return {@code true} if the two polygons are exactly equal component-wise and expressed in the
@@ -1907,15 +1915,17 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean equals(FrameConvexPolygon2DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
          return ConvexPolygon2DReadOnly.super.equals(other);
    }
 
    /**
-    * Tests on a per-component basis on every vertices if this convex polygon is equal to
-    * {@code other} with the tolerance {@code epsilon}.
+    * Tests on a per-component basis on every vertices if this convex polygon is equal to {@code other}
+    * with the tolerance {@code epsilon}.
     * <p>
     * The method returns {@code false} if the two polygons have different size.
     * </p>
@@ -1923,7 +1933,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * The method returns {@code false} if the two polygons are expressed in different frames.
     * </p>
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     * @see #epsilonEquals(ConvexPolygon2DReadOnly, double)
@@ -1937,21 +1947,20 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    }
 
    /**
-    * Compares {@code this} and {@code other} to determine if the two convex polygons are
-    * geometrically similar.
+    * Compares {@code this} and {@code other} to determine if the two convex polygons are geometrically
+    * similar.
     * <p>
-    * This method performs the comparison on a per vertex basis while accounting for a possible
-    * shift in the polygon indexing. For instance, two polygons that have the same vertices in
-    * clockwise or counter-clockwise order, are considered geometrically equal even if they do not
-    * start with the same vertex.
+    * This method performs the comparison on a per vertex basis while accounting for a possible shift
+    * in the polygon indexing. For instance, two polygons that have the same vertices in clockwise or
+    * counter-clockwise order, are considered geometrically equal even if they do not start with the
+    * same vertex.
     * </p>
     *
-    * @param other the convex polygon to compare to.
+    * @param other   the convex polygon to compare to.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the convex polygons represent the same geometry, {@code false}
-    *         otherwise.
+    * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} and {@code this} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see #geometricallyEquals(ConvexPolygon2DReadOnly, double)
     */
    default boolean geometricallyEquals(FrameConvexPolygon2DReadOnly other, double epsilon)

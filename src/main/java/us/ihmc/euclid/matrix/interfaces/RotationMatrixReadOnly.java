@@ -36,6 +36,37 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  */
 public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DReadOnly
 {
+   /** {@inheritDoc} */
+   @Override
+   default boolean containsNaN()
+   {
+      return Matrix3DReadOnly.super.containsNaN();
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * A rotation matrix is a zero orientation when it is equal to the identity matrix.
+    * </p>
+    */
+   @Override
+   default boolean isZeroOrientation()
+   {
+      return isIdentity();
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * A rotation matrix is a zero orientation when it is equal to the identity matrix.
+    * </p>
+    */
+   @Override
+   default boolean isZeroOrientation(double epsilon)
+   {
+      return isIdentity(epsilon);
+   }
+
    /**
     * {@inheritDoc}
     * <p>
@@ -50,7 +81,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    @Override
    default boolean isOrientation2D(double epsilon)
    {
-      return isMatrix2D(epsilon);
+      return isIdentity() || isMatrix2D(epsilon);
    }
 
    /**
@@ -69,7 +100,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    @Override
    default void get(RotationMatrix rotationMatrixToPack)
    {
-      rotationMatrixToPack.setRotationMatrix(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+      rotationMatrixToPack.set(this);
    }
 
    /** {@inheritDoc} */
@@ -139,167 +170,245 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    @Override
    default void addTransform(Tuple3DBasics tupleToTransform)
    {
-      Matrix3DReadOnly.super.addTransform(tupleToTransform);
+      addTransform(tupleToTransform, tupleToTransform);
    }
 
    /** {@inheritDoc} */
    @Override
    default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      Matrix3DReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
+      if (isIdentity())
+         tupleTransformed.add(tupleOriginal);
+      else
+         Matrix3DReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple by this matrix and subtracts the result to the tuple.
+    * <p>
+    * tupleToTransform = tupleToTransform - this * tupleToTransform
+    * </p>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void subTransform(Tuple3DBasics tupleToTransform)
+   {
+      subTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and subtracts the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = tupleTransformed - this * tupleOriginal
+    * </p>
+    *
+    * @param tupleOriginal    the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to add the result to. Modified.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      if (isIdentity())
+         tupleTransformed.sub(tupleOriginal);
+      else
+         Matrix3DTools.subTransform(this, tupleOriginal, tupleTransformed);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Tuple3DBasics tupleToTransform)
    {
-      Matrix3DReadOnly.super.transform(tupleToTransform);
+      transform(tupleToTransform, tupleToTransform);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      Matrix3DReadOnly.super.transform(tupleOriginal, tupleTransformed);
+      if (isIdentity() && tupleOriginal != tupleTransformed)
+         tupleTransformed.set(tupleOriginal);
+      else
+         Matrix3DReadOnly.super.transform(tupleOriginal, tupleTransformed);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Tuple2DBasics tupleToTransform)
    {
-      Matrix3DReadOnly.super.transform(tupleToTransform);
+      transform(tupleToTransform, true);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
-      Matrix3DReadOnly.super.transform(tupleOriginal, tupleTransformed);
+      transform(tupleOriginal, tupleTransformed, true);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Tuple2DBasics tupleToTransform, boolean checkIfOrientation2D)
    {
-      Matrix3DReadOnly.super.transform(tupleToTransform, checkIfOrientation2D);
+      transform(tupleToTransform, tupleToTransform, checkIfOrientation2D);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfOrientation2D)
    {
-      Matrix3DReadOnly.super.transform(tupleOriginal, tupleTransformed, checkIfOrientation2D);
+      if (isIdentity() && tupleOriginal != tupleTransformed)
+         tupleTransformed.set(tupleOriginal);
+      else
+         Matrix3DReadOnly.super.transform(tupleOriginal, tupleTransformed, checkIfOrientation2D);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Vector4DBasics vectorToTransform)
    {
-      Matrix3DReadOnly.super.transform(vectorToTransform);
+      transform(vectorToTransform, vectorToTransform);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
-      Matrix3DReadOnly.super.transform(vectorOriginal, vectorTransformed);
+      if (isIdentity() && vectorOriginal != vectorTransformed)
+         vectorTransformed.set(vectorOriginal);
+      else
+         Matrix3DReadOnly.super.transform(vectorOriginal, vectorTransformed);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Matrix3DBasics matrixToTransform)
    {
-      Matrix3DReadOnly.super.transform(matrixToTransform);
+      transform(matrixToTransform, matrixToTransform);
    }
 
    /** {@inheritDoc} */
    @Override
    default void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
-      Matrix3DTools.multiply(this, matrixOriginal, matrixTransformed);
-      Matrix3DTools.multiplyTransposeRight(matrixTransformed, this, matrixTransformed);
+      if (isIdentity() && matrixOriginal != matrixTransformed)
+      {
+         matrixTransformed.set(matrixOriginal);
+      }
+      else
+      {
+         Matrix3DTools.multiply(this, matrixOriginal, matrixTransformed);
+         Matrix3DTools.multiplyTransposeRight(matrixTransformed, this, matrixTransformed);
+      }
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Tuple3DBasics tupleToTransform)
    {
-      Matrix3DReadOnly.super.inverseTransform(tupleToTransform);
+      inverseTransform(tupleToTransform, tupleToTransform);
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      double x = getM00() * tupleOriginal.getX() + getM10() * tupleOriginal.getY() + getM20() * tupleOriginal.getZ();
-      double y = getM01() * tupleOriginal.getX() + getM11() * tupleOriginal.getY() + getM21() * tupleOriginal.getZ();
-      double z = getM02() * tupleOriginal.getX() + getM12() * tupleOriginal.getY() + getM22() * tupleOriginal.getZ();
-      tupleTransformed.set(x, y, z);
+      if (isIdentity() && tupleOriginal != tupleTransformed)
+      {
+         tupleTransformed.set(tupleOriginal);
+      }
+      else
+      {
+         double x = getM00() * tupleOriginal.getX() + getM10() * tupleOriginal.getY() + getM20() * tupleOriginal.getZ();
+         double y = getM01() * tupleOriginal.getX() + getM11() * tupleOriginal.getY() + getM21() * tupleOriginal.getZ();
+         double z = getM02() * tupleOriginal.getX() + getM12() * tupleOriginal.getY() + getM22() * tupleOriginal.getZ();
+         tupleTransformed.set(x, y, z);
+      }
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Tuple2DBasics tupleToTransform)
    {
-      Matrix3DReadOnly.super.inverseTransform(tupleToTransform);
+      inverseTransform(tupleToTransform, true);
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
-      Matrix3DReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
+      inverseTransform(tupleOriginal, tupleTransformed, true);
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Tuple2DBasics tupleToTransform, boolean checkIfOrientation2D)
    {
-      Matrix3DReadOnly.super.inverseTransform(tupleToTransform, checkIfOrientation2D);
+      inverseTransform(tupleToTransform, tupleToTransform, checkIfOrientation2D);
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfOrientation2D)
    {
-      if (checkIfOrientation2D)
-         checkIfOrientation2D();
+      if (isIdentity() && tupleOriginal != tupleTransformed)
+      {
+         tupleTransformed.set(tupleOriginal);
+      }
+      else
+      {
+         if (checkIfOrientation2D)
+            checkIfOrientation2D();
 
-      double x = getM00() * tupleOriginal.getX() + getM10() * tupleOriginal.getY();
-      double y = getM01() * tupleOriginal.getX() + getM11() * tupleOriginal.getY();
-      tupleTransformed.set(x, y);
+         double x = getM00() * tupleOriginal.getX() + getM10() * tupleOriginal.getY();
+         double y = getM01() * tupleOriginal.getX() + getM11() * tupleOriginal.getY();
+         tupleTransformed.set(x, y);
+      }
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Vector4DBasics vectorToTransform)
    {
-      Matrix3DReadOnly.super.inverseTransform(vectorToTransform);
+      inverseTransform(vectorToTransform, vectorToTransform);
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
-      double x = getM00() * vectorOriginal.getX() + getM10() * vectorOriginal.getY() + getM20() * vectorOriginal.getZ();
-      double y = getM01() * vectorOriginal.getX() + getM11() * vectorOriginal.getY() + getM21() * vectorOriginal.getZ();
-      double z = getM02() * vectorOriginal.getX() + getM12() * vectorOriginal.getY() + getM22() * vectorOriginal.getZ();
-      vectorTransformed.set(x, y, z, vectorOriginal.getS());
+      if (isIdentity() && vectorOriginal != vectorTransformed)
+      {
+         vectorTransformed.set(vectorOriginal);
+      }
+      else
+      {
+         double x = getM00() * vectorOriginal.getX() + getM10() * vectorOriginal.getY() + getM20() * vectorOriginal.getZ();
+         double y = getM01() * vectorOriginal.getX() + getM11() * vectorOriginal.getY() + getM21() * vectorOriginal.getZ();
+         double z = getM02() * vectorOriginal.getX() + getM12() * vectorOriginal.getY() + getM22() * vectorOriginal.getZ();
+         vectorTransformed.set(x, y, z, vectorOriginal.getS());
+      }
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Matrix3DBasics matrixToTransform)
    {
-      Matrix3DReadOnly.super.inverseTransform(matrixToTransform);
+      inverseTransform(matrixToTransform, matrixToTransform);
    }
 
    /** {@inheritDoc} */
    @Override
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
-      Matrix3DTools.multiplyTransposeLeft(this, matrixOriginal, matrixTransformed);
-      Matrix3DTools.multiply(matrixTransformed, this, matrixTransformed);
+      if (isIdentity() && matrixOriginal != matrixTransformed)
+      {
+         matrixTransformed.set(matrixOriginal);
+      }
+      else
+      {
+         Matrix3DTools.multiplyTransposeLeft(this, matrixOriginal, matrixTransformed);
+         Matrix3DTools.multiply(matrixTransformed, this, matrixTransformed);
+      }
    }
 
    /**
@@ -313,7 +422,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other rotation matrix to compare against this. Not modified.
+    * @param other   the other rotation matrix to compare against this. Not modified.
     * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
     * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
     *         otherwise.

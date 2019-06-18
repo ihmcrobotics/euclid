@@ -34,10 +34,10 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Add a vertex to this polygon.
     *
     * @param referenceFrame the reference frame in which the given vertex is expressed.
-    * @param x the x-coordinate of the new vertex.
-    * @param y the y-coordinate of the new vertex.
+    * @param x              the x-coordinate of the new vertex.
+    * @param y              the y-coordinate of the new vertex.
     * @throws ReferenceFrameMismatchException if {@code referenceFrame} and
-    *            {@code this.getReferenceFrame()} are not the same.
+    *                                         {@code this.getReferenceFrame()} are not the same.
     * @see #addVertex(double, double)
     */
    default void addVertex(ReferenceFrame referenceFrame, double x, double y)
@@ -50,9 +50,9 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Add a vertex to this polygon.
     *
     * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
-    * @param vertex the new vertex. Not modified.
+    * @param vertex         the new vertex. Not modified.
     * @throws ReferenceFrameMismatchException if {@code referenceFrame} and
-    *            {@code this.getReferenceFrame()} are not the same.
+    *                                         {@code this.getReferenceFrame()} are not the same.
     * @see #addVertex(Point2DReadOnly)
     */
    default void addVertex(ReferenceFrame referenceFrame, Point2DReadOnly vertex)
@@ -68,17 +68,18 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * {@link #addVertex(Point2DReadOnly)}.
     * </p>
     * <p>
-    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex}
-    * is added once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex} is
+    * added once transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
-    * @param vertex the new vertex. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the transform from the vertex's frame to this frame represents a transformation in
-    *           the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation
-    *            part of the transform is not a transformation in the XY plane.
+    * @param referenceFrame            the reference frame in which the given {@code vertex} is
+    *                                  expressed.
+    * @param vertex                    the new vertex. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *                                  transform from the vertex's frame to this frame represents a
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
+    *                               of the transform is not a transformation in the XY plane.
     * @see #addVertex(Point2DReadOnly)
     */
    void addVertexMatchingFrame(ReferenceFrame referenceFrame, Point2DReadOnly vertex, boolean checkIfTransformInXYPlane);
@@ -87,9 +88,9 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Add a vertex to this polygon using only the x and y coordinates of the given {@code vertex}.
     *
     * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
-    * @param vertex the new vertex. Not modified.
+    * @param vertex         the new vertex. Not modified.
     * @throws ReferenceFrameMismatchException if {@code referenceFrame} and
-    *            {@code this.getReferenceFrame()} are not the same.
+    *                                         {@code this.getReferenceFrame()} are not the same.
     * @see #addVertex(Point3DReadOnly)
     */
    default void addVertex(ReferenceFrame referenceFrame, Point3DReadOnly vertex)
@@ -105,12 +106,12 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * {@link #addVertex(Point2DReadOnly)}.
     * </p>
     * <p>
-    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex}
-    * is added once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex} is
+    * added once transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
     *
     * @param referenceFrame the reference frame in which the given {@code vertex} is expressed.
-    * @param vertex the new vertex. Not modified.
+    * @param vertex         the new vertex. Not modified.
     * @see #addVertex(Point3DReadOnly)
     */
    void addVertexMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly vertex);
@@ -119,8 +120,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Add a vertex to this polygon.
     *
     * @param vertex the new vertex. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code vertex} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code vertex} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #addVertex(Point2DReadOnly)
     */
    default void addVertex(FramePoint2DReadOnly vertex)
@@ -136,14 +137,14 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * {@link #addVertex(Point2DReadOnly)}.
     * </p>
     * <p>
-    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex}
-    * is added once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * If {@code vertex} is expressed in a different frame than {@code this}, then the {@code vertex} is
+    * added once transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param vertex the new vertex. Not modified.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the transform from the vertex's frame to this frame represents a transformation in
-    *           the XY plane.
+    * @param vertex                    the new vertex. Not modified.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *                                  transform from the vertex's frame to this frame represents a
+    *                                  transformation in the XY plane.
     * @see #addVertexMatchingFrame(ReferenceFrame, Point2DReadOnly, boolean)
     * @see #addVertex(Point2DReadOnly)
     */
@@ -156,8 +157,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Add a vertex to this polygon using only the x and y coordinates of the given {@code vertex}.
     *
     * @param vertex the new vertex. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code vertex} and {@code this} are not expressed
-    *            in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code vertex} and {@code this} are not expressed in
+    *                                         the same reference frame.
     * @see #addVertex(Point3DReadOnly)
     */
    default void addVertex(FramePoint3DReadOnly vertex)
@@ -187,8 +188,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *
     * @param frameVertex2DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
-    *            {@code FramePoint2DReadOnly} and is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code FramePoint2DReadOnly} and is not expressed in the
+    *                                         same reference frame as {@code this}.
     * @see FrameVertex2DSupplier
     * @see #addVertex(FramePoint2DReadOnly)
     */
@@ -207,10 +208,10 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * called afterward before being able to perform operations with this polygon.
     * </p>
     *
-    * @param frameVertex2DSupplier the supplier of vertices.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the transform from the vertex's frame to this frame represents a transformation in
-    *           the XY plane.
+    * @param frameVertex2DSupplier     the supplier of vertices.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *                                  transform from the vertex's frame to this frame represents a
+    *                                  transformation in the XY plane.
     * @see FrameVertex2DSupplier
     * @see #addVertexMatchingFrame(FramePoint2DReadOnly, boolean)
     */
@@ -234,8 +235,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *
     * @param frameVertex3DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
-    *            {@code FramePoint3DReadOnly} and is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code FramePoint3DReadOnly} and is not expressed in the
+    *                                         same reference frame as {@code this}.
     * @see FrameVertex3DSupplier
     * @see #addVertex(FramePoint3DReadOnly)
     */
@@ -276,8 +277,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *
     * @param frameVertex2DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
-    *            {@code FramePoint2DReadOnly} and is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code FramePoint2DReadOnly} and is not expressed in the
+    *                                         same reference frame as {@code this}.
     * @see FrameVertex2DSupplier
     * @see #addVertices(FrameVertex2DSupplier)
     */
@@ -296,10 +297,10 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * <li>{@link #update()}.
     * </ol>
     *
-    * @param frameVertex2DSupplier the supplier of vertices.
-    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of
-    *           the transform from the vertex's frame to this frame represents a transformation in
-    *           the XY plane.
+    * @param frameVertex2DSupplier     the supplier of vertices.
+    * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
+    *                                  transform from the vertex's frame to this frame represents a
+    *                                  transformation in the XY plane.
     * @see FrameVertex2DSupplier
     * @see #addVerticesMatchingFrame(FrameVertex2DSupplier, boolean)
     */
@@ -320,8 +321,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     *
     * @param frameVertex3DSupplier the supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the given {@code vertices} is a
-    *            {@code FramePoint3DReadOnly} and is not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code FramePoint3DReadOnly} and is not expressed in the
+    *                                         same reference frame as {@code this}.
     * @see FrameVertex3DSupplier
     * @see #addVertices(FrameVertex3DSupplier)
     */
@@ -352,18 +353,18 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    }
 
    /**
-    * Sets this polygon such that it represents the smallest convex hull that contains both
-    * polygons.
+    * Sets this polygon such that it represents the smallest convex hull that contains both polygons.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
     *
-    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param firstVertex2DSupplier  the first supplier of vertices.
     * @param secondVertex2DSupplier the second supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the vertices provided by
-    *            {@code firstVertexSupplier} and {@code secondVertexSupplier} are not expressed in
-    *            the same reference frame as {@code this}.
+    *                                         {@code firstVertexSupplier} and
+    *                                         {@code secondVertexSupplier} are not expressed in the
+    *                                         same reference frame as {@code this}.
     * @see FrameVertex2DSupplier
     * @see #addVertices(FrameVertex2DSupplier)
     */
@@ -376,18 +377,17 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    }
 
    /**
-    * Sets this polygon such that it represents the smallest convex hull that contains both
-    * polygons.
+    * Sets this polygon such that it represents the smallest convex hull that contains both polygons.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
     *
-    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param firstVertex2DSupplier  the first supplier of vertices.
     * @param secondVertex2DSupplier the second supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the vertices provided by
-    *            {@code firstVertexSupplier} are not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code firstVertexSupplier} are not expressed in the same
+    *                                         reference frame as {@code this}.
     * @see FrameVertex2DSupplier
     * @see #addVertices(FrameVertex2DSupplier)
     */
@@ -400,18 +400,17 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
    }
 
    /**
-    * Sets this polygon such that it represents the smallest convex hull that contains both
-    * polygons.
+    * Sets this polygon such that it represents the smallest convex hull that contains both polygons.
     * <p>
     * Note that the resulting polygon is ready to be used for any operations, no need to call
     * {@link #update()}.
     * </p>
     *
-    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param firstVertex2DSupplier  the first supplier of vertices.
     * @param secondVertex2DSupplier the second supplier of vertices.
     * @throws ReferenceFrameMismatchException if any of the vertices provided by
-    *            {@code secondVertexSupplier} are not expressed in the same reference frame as
-    *            {@code this}.
+    *                                         {@code secondVertexSupplier} are not expressed in the
+    *                                         same reference frame as {@code this}.
     * @see FrameVertex2DSupplier
     * @see #addVertices(FrameVertex2DSupplier)
     */
@@ -427,11 +426,10 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Scale this convex polygon about {@code pointToScaleAbout}.
     *
     * @param pointToScaleAbout the center of the scale transformation. Not modified.
-    *
-    * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
-    *           nothing.
+    * @param scaleFactor       the scale factor to apply to this polygon. A value of {@code 1.0} does
+    *                          nothing.
     * @throws ReferenceFrameMismatchException if {@code pointToScaleAbout} and {@code this} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     * @see #scale(Point2DReadOnly, double)
     */
    default void scale(FramePoint2DReadOnly pointToScaleAbout, double scaleFactor)
@@ -444,8 +442,8 @@ public interface FixedFrameConvexPolygon2DBasics extends FrameConvexPolygon2DRea
     * Translates this polygon.
     *
     * @param translation the translation to apply to this polygon's vertices. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code translation} and {@code this} are not
-    *            expressed in the same reference frame.
+    * @throws ReferenceFrameMismatchException if {@code translation} and {@code this} are not expressed
+    *                                         in the same reference frame.
     * @see #translate(Tuple2DReadOnly)
     */
    default void translate(FrameTuple2DReadOnly translation)

@@ -122,8 +122,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code rotationMatrix} and all three scale factors initialized to {@code scale}.
     *
     * @param rotationMatrix the 3-by-3 matrix used to initialize the rotation part. Not modified.
-    * @param scale non-zero and positive scalar used to initialize the scale factors.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scale          non-zero and positive scalar used to initialize the scale factors.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public RotationScaleMatrix(DenseMatrix64F rotationMatrix, double scale)
@@ -137,10 +138,14 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * and {@code scaleZ}.
     *
     * @param rotationMatrix the 3-by-3 matrix used to initialize the rotation part. Not modified.
-    * @param scaleX the non-zero and positive scalar used to initialize the x-axis scale factor.
-    * @param scaleY the non-zero and positive scalar used to initialize the y-axis scale factor.
-    * @param scaleZ the non-zero and positive scalar used to initialize the z-axis scale factor.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scaleX         the non-zero and positive scalar used to initialize the x-axis scale
+    *                       factor.
+    * @param scaleY         the non-zero and positive scalar used to initialize the y-axis scale
+    *                       factor.
+    * @param scaleZ         the non-zero and positive scalar used to initialize the z-axis scale
+    *                       factor.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public RotationScaleMatrix(DenseMatrix64F rotationMatrix, double scaleX, double scaleY, double scaleZ)
@@ -153,9 +158,10 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code rotationMatrix} and all three scale factors initialized to {@code scales}.
     *
     * @param rotationMatrix the 3-by-3 matrix used to initialize the rotation part. Not modified.
-    * @param scales tuple holding on the non-zero and positive scalars used to initialize the scale
-    *           factors. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scales         tuple holding on the non-zero and positive scalars used to initialize the
+    *                       scale factors. Not modified.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public RotationScaleMatrix(DenseMatrix64F rotationMatrix, Tuple3DReadOnly scales)
@@ -168,7 +174,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * and all three scale factors initialized to {@code scale}.
     *
     * @param orientation the orientation used to initialize the rotation part. Not modified.
-    * @param scale non-zero and positive scalar used to initialize the scale factors.
+    * @param scale       non-zero and positive scalar used to initialize the scale factors.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public RotationScaleMatrix(Orientation3DReadOnly orientation, double scale)
@@ -181,9 +187,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * and all three scale factors initialized to {@code scaleX}, {@code scaleY}, and {@code scaleZ}.
     *
     * @param orientation the orientation used to initialize the rotation part. Not modified.
-    * @param scaleX the non-zero and positive scalar used to initialize the x-axis scale factor.
-    * @param scaleY the non-zero and positive scalar used to initialize the y-axis scale factor.
-    * @param scaleZ the non-zero and positive scalar used to initialize the z-axis scale factor.
+    * @param scaleX      the non-zero and positive scalar used to initialize the x-axis scale factor.
+    * @param scaleY      the non-zero and positive scalar used to initialize the y-axis scale factor.
+    * @param scaleZ      the non-zero and positive scalar used to initialize the z-axis scale factor.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public RotationScaleMatrix(Orientation3DReadOnly orientation, double scaleX, double scaleY, double scaleZ)
@@ -196,8 +202,8 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * and all three scale factors initialized to {@code scales}.
     *
     * @param orientation the orientation used to initialize the rotation part. Not modified.
-    * @param scales tuple holding on the non-zero and positive scalars used to initialize the scale
-    *           factors. Not modified.
+    * @param scales      tuple holding on the non-zero and positive scalars used to initialize the
+    *                    scale factors. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public RotationScaleMatrix(Orientation3DReadOnly orientation, Tuple3DReadOnly scales)
@@ -210,7 +216,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code rotationMatrix} and all three scale factors initialized to {@code scale}.
     *
     * @param rotationMatrix the rotation matrix used to initialize the rotation part. Not modified.
-    * @param scale non-zero and positive scalar used to initialize the scale factors.
+    * @param scale          non-zero and positive scalar used to initialize the scale factors.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public RotationScaleMatrix(RotationMatrixReadOnly rotationMatrix, double scale)
@@ -224,9 +230,12 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * and {@code scaleZ}.
     *
     * @param rotationMatrix the rotation matrix used to initialize the rotation part. Not modified.
-    * @param scaleX the non-zero and positive scalar used to initialize the x-axis scale factor.
-    * @param scaleY the non-zero and positive scalar used to initialize the y-axis scale factor.
-    * @param scaleZ the non-zero and positive scalar used to initialize the z-axis scale factor.
+    * @param scaleX         the non-zero and positive scalar used to initialize the x-axis scale
+    *                       factor.
+    * @param scaleY         the non-zero and positive scalar used to initialize the y-axis scale
+    *                       factor.
+    * @param scaleZ         the non-zero and positive scalar used to initialize the z-axis scale
+    *                       factor.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public RotationScaleMatrix(RotationMatrixReadOnly rotationMatrix, double scaleX, double scaleY, double scaleZ)
@@ -239,8 +248,8 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code rotationMatrix} and all three scale factors initialized to {@code scales}.
     *
     * @param rotationMatrix the rotation matrix used to initialize the rotation part. Not modified.
-    * @param scales tuple holding on the non-zero and positive scalars used to initialize the scale
-    *           factors. Not modified.
+    * @param scales         tuple holding on the non-zero and positive scalars used to initialize the
+    *                       scale factors. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public RotationScaleMatrix(RotationMatrixReadOnly rotationMatrix, Tuple3DReadOnly scales)
@@ -412,8 +421,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scale}.
     *
     * @param rotationMatrix the 3-by-3 matrix used to set the rotation part to. Not modified.
-    * @param scale non-zero and positive scalar used to initialize the scale factors.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scale          non-zero and positive scalar used to initialize the scale factors.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public void set(DenseMatrix64F rotationMatrix, double scale)
@@ -426,10 +436,11 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scaleX}, {@code scaleY}, and {@code scaleZ}.
     *
     * @param rotationMatrix the 3-by-3 matrix used to set the rotation part to. Not modified.
-    * @param scaleX the non-zero and positive scalar used to set the x-axis scale factor to.
-    * @param scaleY the non-zero and positive scalar used to set the y-axis scale factor to.
-    * @param scaleZ the non-zero and positive scalar used to set the z-axis scale factor to.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scaleX         the non-zero and positive scalar used to set the x-axis scale factor to.
+    * @param scaleY         the non-zero and positive scalar used to set the y-axis scale factor to.
+    * @param scaleZ         the non-zero and positive scalar used to set the z-axis scale factor to.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(DenseMatrix64F rotationMatrix, double scaleX, double scaleY, double scaleZ)
@@ -443,9 +454,10 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scales}.
     *
     * @param rotationMatrix the 3-by-3 matrix used to set the rotation part to. Not modified.
-    * @param scales tuple holding on the non-zero and positive scalars used to set the scale factors
-    *           to. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scales         tuple holding on the non-zero and positive scalars used to set the scale
+    *                       factors to. Not modified.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(DenseMatrix64F rotationMatrix, Tuple3DReadOnly scales)
@@ -454,10 +466,21 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
    }
 
    /**
+    * Sets the rotation part to the {@code orientation} and resets the scales.
+    *
+    * @param orientation the orientation used to set the rotation part to. Not modified.
+    */
+   public void set(Orientation3DReadOnly orientation)
+   {
+      setRotation(orientation);
+      resetScale();
+   }
+
+   /**
     * Sets the rotation part to the {@code orientation} and all three scale factors to {@code scale}.
     *
     * @param orientation the orientation used to set the rotation part to. Not modified.
-    * @param scale the non-zero and positive scalar used to set the scale factors to.
+    * @param scale       the non-zero and positive scalar used to set the scale factors to.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public void set(Orientation3DReadOnly orientation, double scale)
@@ -470,9 +493,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scaleY}, and {@code scaleZ}.
     *
     * @param orientation the orientation used to set the rotation part to. Not modified.
-    * @param scaleX the non-zero and positive scalar used to set the x-axis scale factor to.
-    * @param scaleY the non-zero and positive scalar used to set the y-axis scale factor to.
-    * @param scaleZ the non-zero and positive scalar used to set the z-axis scale factor to.
+    * @param scaleX      the non-zero and positive scalar used to set the x-axis scale factor to.
+    * @param scaleY      the non-zero and positive scalar used to set the y-axis scale factor to.
+    * @param scaleZ      the non-zero and positive scalar used to set the z-axis scale factor to.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(Orientation3DReadOnly orientation, double scaleX, double scaleY, double scaleZ)
@@ -485,8 +508,8 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * Sets the rotation part to the {@code orientation} and all three scale factors to {@code scales}.
     *
     * @param orientation the orientation used to set the rotation part to. Not modified.
-    * @param scales tuple holding on the non-zero and positive scalars used to set the scale factors
-    *           to. Not modified.
+    * @param scales      tuple holding on the non-zero and positive scalars used to set the scale
+    *                    factors to. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(Orientation3DReadOnly orientation, Tuple3DReadOnly scales)
@@ -499,8 +522,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scale}.
     *
     * @param rotationMatrix the matrix used to set the rotation part to. Not modified.
-    * @param scale the non-zero and positive scalar used to set the scale factors to.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scale          the non-zero and positive scalar used to set the scale factors to.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public void set(Matrix3DReadOnly rotationMatrix, double scale)
@@ -513,10 +537,11 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scaleX}, {@code scaleY}, and {@code scaleZ}.
     *
     * @param rotationMatrix the rotation matrix used to set the rotation part to. Not modified.
-    * @param scaleX the non-zero and positive scalar used to set the x-axis scale factor to.
-    * @param scaleY the non-zero and positive scalar used to set the y-axis scale factor to.
-    * @param scaleZ the non-zero and positive scalar used to set the z-axis scale factor to.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scaleX         the non-zero and positive scalar used to set the x-axis scale factor to.
+    * @param scaleY         the non-zero and positive scalar used to set the y-axis scale factor to.
+    * @param scaleZ         the non-zero and positive scalar used to set the z-axis scale factor to.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(Matrix3DReadOnly rotationMatrix, double scaleX, double scaleY, double scaleZ)
@@ -530,9 +555,10 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scales}.
     *
     * @param rotationMatrix the rotation matrix used to set the rotation part to. Not modified.
-    * @param scales tuple holding on the non-zero and positive scalars used to set the scale factors
-    *           to. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scales         tuple holding on the non-zero and positive scalars used to set the scale
+    *                       factors to. Not modified.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(Matrix3DReadOnly rotationMatrix, Tuple3DReadOnly scales)
@@ -545,7 +571,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scale}.
     *
     * @param rotationMatrix the matrix used to set the rotation part to. Not modified.
-    * @param scale the non-zero and positive scalar used to set the scale factors to.
+    * @param scale          the non-zero and positive scalar used to set the scale factors to.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public void set(RotationMatrixReadOnly rotationMatrix, double scale)
@@ -558,9 +584,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scaleX}, {@code scaleY}, and {@code scaleZ}.
     *
     * @param rotationMatrix the rotation matrix used to set the rotation part to. Not modified.
-    * @param scaleX the non-zero and positive scalar used to set the x-axis scale factor to.
-    * @param scaleY the non-zero and positive scalar used to set the y-axis scale factor to.
-    * @param scaleZ the non-zero and positive scalar used to set the z-axis scale factor to.
+    * @param scaleX         the non-zero and positive scalar used to set the x-axis scale factor to.
+    * @param scaleY         the non-zero and positive scalar used to set the y-axis scale factor to.
+    * @param scaleZ         the non-zero and positive scalar used to set the z-axis scale factor to.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(RotationMatrixReadOnly rotationMatrix, double scaleX, double scaleY, double scaleZ)
@@ -574,8 +600,8 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code scales}.
     *
     * @param rotationMatrix the rotation matrix used to set the rotation part to. Not modified.
-    * @param scales tuple holding on the non-zero and positive scalars used to set the scale factors
-    *           to. Not modified.
+    * @param scales         tuple holding on the non-zero and positive scalars used to set the scale
+    *                       factors to. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(RotationMatrixReadOnly rotationMatrix, Tuple3DReadOnly scales)
@@ -599,7 +625,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *
     * @param rotationMatrixArray the array containing the rotation part values. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrixArray} is not a rotation
-    *            matrix.
+    *                                     matrix.
     */
    public void setRotation(double[] rotationMatrixArray)
    {
@@ -666,7 +692,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationYaw(double yaw)
    {
-      rotationMatrix.setToYawMatrix(yaw);
+      rotationMatrix.setToYawOrientation(yaw);
    }
 
    /**
@@ -683,7 +709,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationPitch(double pitch)
    {
-      rotationMatrix.setToPitchMatrix(pitch);
+      rotationMatrix.setToPitchOrientation(pitch);
    }
 
    /**
@@ -700,7 +726,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     */
    public void setRotationRoll(double roll)
    {
-      rotationMatrix.setToRollMatrix(roll);
+      rotationMatrix.setToRollOrientation(roll);
    }
 
    /**
@@ -731,9 +757,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
     * </pre>
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll  the angle to rotate about the x-axis.
     */
    public void setRotationYawPitchRoll(double yaw, double pitch, double roll)
    {
@@ -813,7 +839,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * Sets the scale factors to {@code scales}.
     *
     * @param scales tuple holding on the non-zero and positive scalars used to set the scale factors
-    *           to. Not modified.
+    *               to. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void setScale(Tuple3DReadOnly scales)
@@ -909,9 +935,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *        \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
     * </pre>
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll  the angle to rotate about the x-axis.
     */
    public void setYawPitchRoll(double yaw, double pitch, double roll)
    {
@@ -1219,7 +1245,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
    /**
     * Tests the rotation parts and scales of both matrices are equal to an {@code epsilon}.
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two matrix are equal, {@code false} otherwise.
     */
@@ -1240,9 +1266,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other rotation-scale matrix to compare against this. Not modified.
+    * @param other   the other rotation-scale matrix to compare against this. Not modified.
     * @param epsilon the threshold used when comparing the internal rotation and scale to
-    *           {@code other}'s rotation and scale.
+    *                {@code other}'s rotation and scale.
     * @return {@code true} if the two rotation-scale matrices represent the same geometry,
     *         {@code false} otherwise.
     */

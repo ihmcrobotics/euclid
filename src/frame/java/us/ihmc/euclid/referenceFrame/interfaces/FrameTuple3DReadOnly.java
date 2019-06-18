@@ -26,7 +26,7 @@ public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, ReferenceFrameHol
     * If the two tuples have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param other   the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
@@ -51,7 +51,9 @@ public interface FrameTuple3DReadOnly extends Tuple3DReadOnly, ReferenceFrameHol
     */
    default boolean equals(FrameTuple3DReadOnly other)
    {
-      if (other == null || getReferenceFrame() != other.getReferenceFrame())
+      if (other == this)
+         return true;
+      else if (other == null || getReferenceFrame() != other.getReferenceFrame())
          return false;
 
       return Tuple3DReadOnly.super.equals(other);

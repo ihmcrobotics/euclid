@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
@@ -26,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class EuclidFrameToolsTest
 {
-   private static final Class<?> d = Double.TYPE;
+   private static final Class<?> d = double.class;
    private static final double EPSILON = 1.0e-12;
 
    @Test
@@ -39,8 +39,11 @@ public class EuclidFrameToolsTest
       methodsToIgnore.put("orthogonalProjectionOnLineSegment3D", new Class<?>[] {Point3DReadOnly.class, d, d, d, d, d, d, Point3DBasics.class});
       methodsToIgnore.put("intersectionBetweenLine3DAndBoundingBox3D",
                           new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
-      methodsToIgnore.put("intersectionBetweenLine3DAndCylinder3D", new Class<?>[] {d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
+      methodsToIgnore.put("intersectionBetweenLine3DAndCylinder3D",
+                          new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
       methodsToIgnore.put("intersectionBetweenLine3DAndEllipsoid3D", new Class<?>[] {d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
+      methodsToIgnore.put("closestPoint3DsBetweenTwoLineSegment3Ds",
+                          new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
 
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodsToIgnore);
    }

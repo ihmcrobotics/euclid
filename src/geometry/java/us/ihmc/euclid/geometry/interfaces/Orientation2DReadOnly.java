@@ -85,7 +85,7 @@ public interface Orientation2DReadOnly
     *                    \ sin(yaw)  cos(yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
@@ -119,7 +119,7 @@ public interface Orientation2DReadOnly
     *                    \    0         0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -152,7 +152,7 @@ public interface Orientation2DReadOnly
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
@@ -187,7 +187,7 @@ public interface Orientation2DReadOnly
     *                    \     0          0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -203,7 +203,7 @@ public interface Orientation2DReadOnly
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two orientations are equal, {@code false} otherwise.
     */
@@ -217,7 +217,7 @@ public interface Orientation2DReadOnly
     * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the orientation to compare to. Not modified.
+    * @param other   the orientation to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
@@ -239,7 +239,9 @@ public interface Orientation2DReadOnly
     */
    default boolean equals(Orientation2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getYaw() == other.getYaw();

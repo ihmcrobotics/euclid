@@ -1,10 +1,10 @@
 package us.ihmc.euclid;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -25,7 +25,7 @@ public class AxisTest
       assertEquals(zAxis.ordinal(), 2, allowedDelta);
    }
 
-   @Test(timeout = 30000)
+   @Test
    public void testAxisValuesGetter()
    {
       assertEquals(3, Axis.values().length);
@@ -38,20 +38,20 @@ public class AxisTest
       {
          switch (axis)
          {
-         case X:
-            touchedX = true;
+            case X:
+               touchedX = true;
 
-            break;
+               break;
 
-         case Y:
-            touchedY = true;
+            case Y:
+               touchedY = true;
 
-            break;
+               break;
 
-         case Z:
-            touchedZ = true;
+            case Z:
+               touchedZ = true;
 
-            break;
+               break;
          }
       }
 
@@ -73,20 +73,20 @@ public class AxisTest
       {
          switch (axis)
          {
-         case X:
-            touchedX = true;
+            case X:
+               touchedX = true;
 
-            break;
+               break;
 
-         case Y:
-            touchedY = true;
+            case Y:
+               touchedY = true;
 
-            break;
+               break;
 
-         case Z:
-            touchedZ = true;
+            case Z:
+               touchedZ = true;
 
-            break;
+               break;
          }
       }
 

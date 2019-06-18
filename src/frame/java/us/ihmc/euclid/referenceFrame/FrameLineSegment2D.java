@@ -139,7 +139,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    /**
     * Creates a new line segment and initializes it to be same as the given line segment.
     *
-    * @param referenceFrame the initial reference frame for this line segment.
+    * @param referenceFrame        the initial reference frame for this line segment.
     * @param lineSegment2DReadOnly the other line segment to copy. Not modified.
     */
    public FrameLineSegment2D(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
@@ -160,10 +160,10 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    /**
     * Creates a new line segment and initializes to with the given endpoints.
     *
-    * @param firstEndpoint new endpoint of this line segment. Not modified
+    * @param firstEndpoint  new endpoint of this line segment. Not modified
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
-    *            frame.
+    *                                         frame.
     */
    public FrameLineSegment2D(FramePoint2DReadOnly firstEndpoint, FramePoint2DReadOnly secondEndpoint)
    {
@@ -242,7 +242,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
@@ -260,11 +260,11 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
     * opposite direction.
     * </p>
     *
-    * @param other the line to compare to. Not modified.
+    * @param other   the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    @Override
    public boolean geometricallyEquals(FrameLineSegment2D other, double epsilon)

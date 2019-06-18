@@ -90,66 +90,66 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    /**
     * Sets the value of the component of this matrix located by its row and column indices.
     *
-    * @param row the index of the component's row.
+    * @param row    the index of the component's row.
     * @param column the index of the component's column.
-    * @param value the new value of the component.
+    * @param value  the new value of the component.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2] or {@code column} &notin;
-    *            [0, 2]
+    *                                        [0, 2]
     */
    default void setElement(int row, int column, double value)
    {
       switch (row)
       {
-      case 0:
-         switch (column)
-         {
          case 0:
-            setM00(value);
-            return;
-         case 1:
-            setM01(value);
-            return;
-         case 2:
-            setM02(value);
-            return;
-         default:
-            throw Matrix3DTools.columnOutOfBoundsException(2, column);
-         }
+            switch (column)
+            {
+               case 0:
+                  setM00(value);
+                  return;
+               case 1:
+                  setM01(value);
+                  return;
+               case 2:
+                  setM02(value);
+                  return;
+               default:
+                  throw Matrix3DTools.columnOutOfBoundsException(2, column);
+            }
 
-      case 1:
-         switch (column)
-         {
-         case 0:
-            setM10(value);
-            return;
          case 1:
-            setM11(value);
-            return;
-         case 2:
-            setM12(value);
-            return;
-         default:
-            throw Matrix3DTools.columnOutOfBoundsException(2, column);
-         }
+            switch (column)
+            {
+               case 0:
+                  setM10(value);
+                  return;
+               case 1:
+                  setM11(value);
+                  return;
+               case 2:
+                  setM12(value);
+                  return;
+               default:
+                  throw Matrix3DTools.columnOutOfBoundsException(2, column);
+            }
 
-      case 2:
-         switch (column)
-         {
-         case 0:
-            setM20(value);
-            return;
-         case 1:
-            setM21(value);
-            return;
          case 2:
-            setM22(value);
-            return;
-         default:
-            throw Matrix3DTools.columnOutOfBoundsException(2, column);
-         }
+            switch (column)
+            {
+               case 0:
+                  setM20(value);
+                  return;
+               case 1:
+                  setM21(value);
+                  return;
+               case 2:
+                  setM22(value);
+                  return;
+               default:
+                  throw Matrix3DTools.columnOutOfBoundsException(2, column);
+            }
 
-      default:
-         throw Matrix3DTools.rowOutOfBoundsException(2, row);
+         default:
+            throw Matrix3DTools.rowOutOfBoundsException(2, row);
       }
    }
 
@@ -381,8 +381,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    }
 
    /**
-    * Sets this matrix to represent to represent a counter clockwise rotation around the z-axis of
-    * an angle {@code yaw}.
+    * Sets this matrix to represent to represent a counter clockwise rotation around the z-axis of an
+    * angle {@code yaw}.
     *
     * <pre>
     *        / cos(yaw) -sin(yaw) 0 \
@@ -473,7 +473,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * Sets the {@code row}<sup>th</sup> row components to the values contained in the given array
     * {@code rowArray}.
     *
-    * @param row the index of the row to set the values of.
+    * @param row      the index of the row to set the values of.
     * @param rowArray the array containing the new values for the row. Not modified.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
     */
@@ -486,7 +486,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * Sets the {@code row}<sup>th</sup> row components to the values contained in the given tuple
     * {@code rowValues}.
     *
-    * @param row the index of the row to set the values of.
+    * @param row       the index of the row to set the values of.
     * @param rowValues the tuple containing the new values for the row. Not modified.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
     */
@@ -499,43 +499,43 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * Sets the {@code row}<sup>th</sup> row components to the given values.
     *
     * @param row the index of the row to set the values of.
-    * @param x the new value of the first component in the row.
-    * @param y the new value of the second component in the row.
-    * @param z the new value of the third component in the row.
+    * @param x   the new value of the first component in the row.
+    * @param y   the new value of the second component in the row.
+    * @param z   the new value of the third component in the row.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
     */
    default void setRow(int row, double x, double y, double z)
    {
       switch (row)
       {
-      case 0:
-         setM00(x);
-         setM01(y);
-         setM02(z);
-         return;
+         case 0:
+            setM00(x);
+            setM01(y);
+            setM02(z);
+            return;
 
-      case 1:
-         setM10(x);
-         setM11(y);
-         setM12(z);
-         return;
+         case 1:
+            setM10(x);
+            setM11(y);
+            setM12(z);
+            return;
 
-      case 2:
-         setM20(x);
-         setM21(y);
-         setM22(z);
-         return;
+         case 2:
+            setM20(x);
+            setM21(y);
+            setM22(z);
+            return;
 
-      default:
-         throw Matrix3DTools.rowOutOfBoundsException(2, row);
+         default:
+            throw Matrix3DTools.rowOutOfBoundsException(2, row);
       }
    }
 
    /**
-    * Sets the {@code column}<sup>th</sup> column components to the values contained in the given
-    * array {@code columnArray}.
+    * Sets the {@code column}<sup>th</sup> column components to the values contained in the given array
+    * {@code columnArray}.
     *
-    * @param column the index of the column to set the values of.
+    * @param column      the index of the column to set the values of.
     * @param columnArray the array containing the new values for the column. Not modified.
     * @throws ArrayIndexOutOfBoundsException if {@code column} &notin; [0, 2].
     */
@@ -545,10 +545,10 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    }
 
    /**
-    * Sets the {@code column}<sup>th</sup> column components to the values contained in the given
-    * tuple {@code columnValues}.
+    * Sets the {@code column}<sup>th</sup> column components to the values contained in the given tuple
+    * {@code columnValues}.
     *
-    * @param column the index of the column to set the values of.
+    * @param column       the index of the column to set the values of.
     * @param columnValues the tuple containing the new values for the column. Not modified.
     * @throws ArrayIndexOutOfBoundsException if {@code column} &notin; [0, 2].
     */
@@ -561,35 +561,35 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * Sets the {@code column}<sup>th</sup> column components to the given values.
     *
     * @param column the index of the column to set the values of.
-    * @param x the new value of the first component in the column.
-    * @param y the new value of the second component in the column.
-    * @param z the new value of the third component in the column.
+    * @param x      the new value of the first component in the column.
+    * @param y      the new value of the second component in the column.
+    * @param z      the new value of the third component in the column.
     * @throws ArrayIndexOutOfBoundsException if {@code column} &notin; [0, 2].
     */
    default void setColumn(int column, double x, double y, double z)
    {
       switch (column)
       {
-      case 0:
-         setM00(x);
-         setM10(y);
-         setM20(z);
-         break;
+         case 0:
+            setM00(x);
+            setM10(y);
+            setM20(z);
+            break;
 
-      case 1:
-         setM01(x);
-         setM11(y);
-         setM21(z);
-         break;
+         case 1:
+            setM01(x);
+            setM11(y);
+            setM21(z);
+            break;
 
-      case 2:
-         setM02(x);
-         setM12(y);
-         setM22(z);
-         break;
+         case 2:
+            setM02(x);
+            setM12(y);
+            setM22(z);
+            break;
 
-      default:
-         throw Matrix3DTools.columnOutOfBoundsException(2, column);
+         default:
+            throw Matrix3DTools.columnOutOfBoundsException(2, column);
       }
    }
 
@@ -1053,8 +1053,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     *        \ scalarColumn0 * m20 scalarColumn1 * m21 scalarColumn2 * m22 /
     * </pre>
     * <p>
-    * This operation is equivalent to multiplying this matrix, i.e. this = this * D, by the
-    * following diagonal matrix D:
+    * This operation is equivalent to multiplying this matrix, i.e. this = this * D, by the following
+    * diagonal matrix D:
     *
     * <pre>
     *     / scalarColumn0       0             0       \
@@ -1085,7 +1085,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    /**
     * Scales the components of the {@code row}<sup>th</sup> row of this matrix.
     *
-    * @param row the index of the row to scale.
+    * @param row    the index of the row to scale.
     * @param scalar the scale factor to apply.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
     */
@@ -1093,26 +1093,26 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    {
       switch (row)
       {
-      case 0:
-         scaleM00(scalar);
-         scaleM01(scalar);
-         scaleM02(scalar);
-         return;
+         case 0:
+            scaleM00(scalar);
+            scaleM01(scalar);
+            scaleM02(scalar);
+            return;
 
-      case 1:
-         scaleM10(scalar);
-         scaleM11(scalar);
-         scaleM12(scalar);
-         return;
+         case 1:
+            scaleM10(scalar);
+            scaleM11(scalar);
+            scaleM12(scalar);
+            return;
 
-      case 2:
-         scaleM20(scalar);
-         scaleM21(scalar);
-         scaleM22(scalar);
-         return;
+         case 2:
+            scaleM20(scalar);
+            scaleM21(scalar);
+            scaleM22(scalar);
+            return;
 
-      default:
-         throw Matrix3DTools.rowOutOfBoundsException(2, row);
+         default:
+            throw Matrix3DTools.rowOutOfBoundsException(2, row);
       }
    }
 
@@ -1127,26 +1127,26 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    {
       switch (column)
       {
-      case 0:
-         scaleM00(scalar);
-         scaleM10(scalar);
-         scaleM20(scalar);
-         break;
+         case 0:
+            scaleM00(scalar);
+            scaleM10(scalar);
+            scaleM20(scalar);
+            break;
 
-      case 1:
-         scaleM01(scalar);
-         scaleM11(scalar);
-         scaleM21(scalar);
-         break;
+         case 1:
+            scaleM01(scalar);
+            scaleM11(scalar);
+            scaleM21(scalar);
+            break;
 
-      case 2:
-         scaleM02(scalar);
-         scaleM12(scalar);
-         scaleM22(scalar);
-         break;
+         case 2:
+            scaleM02(scalar);
+            scaleM12(scalar);
+            scaleM22(scalar);
+            break;
 
-      default:
-         throw Matrix3DTools.columnOutOfBoundsException(2, column);
+         default:
+            throw Matrix3DTools.columnOutOfBoundsException(2, column);
       }
    }
 

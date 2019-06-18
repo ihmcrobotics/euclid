@@ -1,10 +1,10 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -196,7 +196,9 @@ public class YawPitchRollConversionTest
             {
                QuaternionConversion.convertYawPitchRollToQuaternion(yaw, pitch, roll, quaternion);
                double randomScale = EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0);
-               quaternion.setUnsafe(quaternion.getX() * randomScale, quaternion.getY() * randomScale, quaternion.getZ() * randomScale,
+               quaternion.setUnsafe(quaternion.getX() * randomScale,
+                                    quaternion.getY() * randomScale,
+                                    quaternion.getZ() * randomScale,
                                     quaternion.getS() * randomScale);
 
                double actualYaw = YawPitchRollConversion.computeYaw(quaternion);

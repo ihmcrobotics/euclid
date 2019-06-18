@@ -170,7 +170,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * {@link #update()}.
     * </p>
     *
-    * @param referenceFrame the initial reference frame for this polygon.
+    * @param referenceFrame   the initial reference frame for this polygon.
     * @param vertex2DSupplier the supplier of vertices.
     * @see #setIncludingFrame(ReferenceFrame, Vertex2DSupplier)
     */
@@ -187,7 +187,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * {@link #update()}.
     * </p>
     *
-    * @param referenceFrame the initial reference frame for this polygon.
+    * @param referenceFrame   the initial reference frame for this polygon.
     * @param vertex3DSupplier the supplier of vertices.
     * @see #setIncludingFrame(ReferenceFrame, Vertex3DSupplier)
     */
@@ -236,7 +236,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * {@link #update()}.
     * </p>
     *
-    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param firstVertex2DSupplier  the first supplier of vertices.
     * @param secondVertex2DSupplier the second supplier of vertices.
     * @see #setIncludingFrame(FrameVertex2DSupplier, FrameVertex2DSupplier)
     */
@@ -528,15 +528,15 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
       }
 
       /**
-       * Tests if the given {@code object}'s class is the same as this, in which case the method
-       * returns {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
+       * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+       * {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
        * <p>
        * If the two points have different frames, this method returns {@code false}.
        * </p>
        *
        * @param object the object to compare against this. Not modified.
-       * @return {@code true} if the two points are exactly equal component-wise and are expressed
-       *         in the same reference frame, {@code false} otherwise.
+       * @return {@code true} if the two points are exactly equal component-wise and are expressed in the
+       *         same reference frame, {@code false} otherwise.
        */
       @Override
       public boolean equals(Object object)

@@ -22,9 +22,42 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class QuaternionTools
+public class QuaternionTools
 {
    static final double EPS = 1.0e-12;
+
+   private QuaternionTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
+   /**
+    * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
+    * basis.
+    * 
+    * @param quaternion the query. Not modified.
+    * @param epsilon    the tolerance used for the comparison.
+    * @return {@code true} if the quaternion equal to the neutral quaternion, {@code false} otherwise.
+    */
+   public static boolean isNeutralQuaternion(QuaternionReadOnly quaternion, double epsilon)
+   {
+      return isNeutralQuaternion(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), epsilon);
+   }
+
+   /**
+    * Tests that the given quaternion is equal to the neutral quaternion on a per-component basis.
+    * 
+    * @param qx      the x-component of the quaternion. Not modified.
+    * @param qy      the y-component of the quaternion. Not modified.
+    * @param qz      the z-component of the quaternion. Not modified.
+    * @param qs      the s-component of the quaternion. Not modified.
+    * @param epsilon the tolerance used for the comparison.
+    * @return {@code true} if the quaternion equal to the neutral quaternion, {@code false} otherwise.
+    */
+   public static boolean isNeutralQuaternion(double qx, double qy, double qz, double qs, double epsilon)
+   {
+      return EuclidCoreTools.epsilonEquals(1.0, qs, epsilon) && Math.abs(qx) <= epsilon && Math.abs(qy) <= epsilon && Math.abs(qz) <= epsilon;
+   }
 
    /**
     * Performs the multiplication of {@code q1} and {@code q2} and stores the result in
@@ -36,8 +69,8 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param q1 the first quaternion in the multiplication. Not modified.
-    * @param q2 the second quaternion in the multiplication. Not modified.
+    * @param q1               the first quaternion in the multiplication. Not modified.
+    * @param q2               the second quaternion in the multiplication. Not modified.
     * @param quaternionToPack the quaternion in which the result is stores. Modified.
     */
    public static void multiply(QuaternionReadOnly q1, QuaternionReadOnly q2, QuaternionBasics quaternionToPack)
@@ -55,8 +88,8 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param q1 the first quaternion in the multiplication. Not modified.
-    * @param q2 the second quaternion in the multiplication. Not modified.
+    * @param q1               the first quaternion in the multiplication. Not modified.
+    * @param q2               the second quaternion in the multiplication. Not modified.
     * @param quaternionToPack the quaternion in which the result is stores. Modified.
     */
    public static void multiplyConjugateLeft(QuaternionReadOnly q1, QuaternionReadOnly q2, QuaternionBasics quaternionToPack)
@@ -74,8 +107,8 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param q1 the first quaternion in the multiplication. Not modified.
-    * @param q2 the second quaternion in the multiplication. Not modified.
+    * @param q1               the first quaternion in the multiplication. Not modified.
+    * @param q2               the second quaternion in the multiplication. Not modified.
     * @param quaternionToPack the quaternion in which the result is stores. Modified.
     */
    public static void multiplyConjugateRight(QuaternionReadOnly q1, QuaternionReadOnly q2, QuaternionBasics quaternionToPack)
@@ -93,8 +126,8 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param q1 the first quaternion in the multiplication. Not modified.
-    * @param q2 the second quaternion in the multiplication. Not modified.
+    * @param q1               the first quaternion in the multiplication. Not modified.
+    * @param q2               the second quaternion in the multiplication. Not modified.
     * @param quaternionToPack the quaternion in which the result is stores. Modified.
     */
    public static void multiplyConjugateBoth(QuaternionReadOnly q1, QuaternionReadOnly q2, QuaternionBasics quaternionToPack)
@@ -113,10 +146,10 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     * 
-    * @param orientation1 the first orientation in the multiplication. Not modified.
-    * @param inverse1 whether the first orientation should be inverted in the multiplication.
-    * @param orientation2 the second orientation in the multiplication. Not modified.
-    * @param inverse2 whether the second orientation should be inverted in the multiplication.
+    * @param orientation1     the first orientation in the multiplication. Not modified.
+    * @param inverse1         whether the first orientation should be inverted in the multiplication.
+    * @param orientation2     the second orientation in the multiplication. Not modified.
+    * @param inverse2         whether the second orientation should be inverted in the multiplication.
     * @param quaternionToPack the quaternion in which the result is stored. Modified.
     */
    public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
@@ -166,10 +199,10 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     * 
-    * @param orientation1 the first orientation in the multiplication. Not modified.
-    * @param inverse1 whether the first orientation should be inverted in the multiplication.
-    * @param orientation2 the second orientation in the multiplication. Not modified.
-    * @param inverse2 whether the second orientation should be inverted in the multiplication.
+    * @param orientation1     the first orientation in the multiplication. Not modified.
+    * @param inverse1         whether the first orientation should be inverted in the multiplication.
+    * @param orientation2     the second orientation in the multiplication. Not modified.
+    * @param inverse2         whether the second orientation should be inverted in the multiplication.
     * @param quaternionToPack the quaternion in which the result is stored. Modified.
     */
    public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, QuaternionReadOnly orientation2, boolean inverse2,
@@ -206,10 +239,10 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     * 
-    * @param orientation1 the first orientation in the multiplication. Not modified.
-    * @param inverse1 whether the first orientation should be inverted in the multiplication.
-    * @param orientation2 the second orientation in the multiplication. Not modified.
-    * @param inverse2 whether the second orientation should be inverted in the multiplication.
+    * @param orientation1     the first orientation in the multiplication. Not modified.
+    * @param inverse1         whether the first orientation should be inverted in the multiplication.
+    * @param orientation2     the second orientation in the multiplication. Not modified.
+    * @param inverse2         whether the second orientation should be inverted in the multiplication.
     * @param quaternionToPack the quaternion in which the result is stored. Modified.
     */
    public static void multiply(QuaternionReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
@@ -247,10 +280,10 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param q1 the first quaternion in the multiplication. Not modified.
-    * @param conjugateQ1 whether to conjugate {@code q1} or not.
-    * @param q2 the second quaternion in the multiplication. Not modified.
-    * @param conjugateQ2 whether to conjugate {@code q2} or not.
+    * @param q1               the first quaternion in the multiplication. Not modified.
+    * @param conjugateQ1      whether to conjugate {@code q1} or not.
+    * @param q2               the second quaternion in the multiplication. Not modified.
+    * @param conjugateQ2      whether to conjugate {@code q2} or not.
     * @param quaternionToPack the quaternion in which the result is stores. Modified.
     */
    private static void multiplyImpl(QuaternionReadOnly q1, boolean conjugateQ1, QuaternionReadOnly q2, boolean conjugateQ2, QuaternionBasics quaternionToPack)
@@ -271,16 +304,24 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param q1x the x-component of the first quaternion in the multiplication. Not modified.
-    * @param q1y the y-component of the first quaternion in the multiplication. Not modified.
-    * @param q1z the z-component of the first quaternion in the multiplication. Not modified.
-    * @param q1s the s-component of the first quaternion in the multiplication. Not modified.
-    * @param conjugateQ1 whether to conjugate {@code q1} or not.
-    * @param q2x the x-component of the second quaternion in the multiplication. Not modified.
-    * @param q2y the y-component of the second quaternion in the multiplication. Not modified.
-    * @param q2z the z-component of the second quaternion in the multiplication. Not modified.
-    * @param q2s the s-component of the second quaternion in the multiplication. Not modified.
-    * @param conjugateQ2 whether to conjugate {@code q2} or not.
+    * @param q1x               the x-component of the first quaternion in the multiplication. Not
+    *                          modified.
+    * @param q1y               the y-component of the first quaternion in the multiplication. Not
+    *                          modified.
+    * @param q1z               the z-component of the first quaternion in the multiplication. Not
+    *                          modified.
+    * @param q1s               the s-component of the first quaternion in the multiplication. Not
+    *                          modified.
+    * @param conjugateQ1       whether to conjugate {@code q1} or not.
+    * @param q2x               the x-component of the second quaternion in the multiplication. Not
+    *                          modified.
+    * @param q2y               the y-component of the second quaternion in the multiplication. Not
+    *                          modified.
+    * @param q2z               the z-component of the second quaternion in the multiplication. Not
+    *                          modified.
+    * @param q2s               the s-component of the second quaternion in the multiplication. Not
+    *                          modified.
+    * @param conjugateQ2       whether to conjugate {@code q2} or not.
     * @param orientationToPack the orientation in which the result is stored. Modified.
     */
    static void multiplyImpl(double q1x, double q1y, double q1z, double q1s, boolean conjugateQ1, double q2x, double q2y, double q2z, double q2s,
@@ -319,8 +360,8 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param t1 the first tuple in the multiplication. Not modified.
-    * @param t2 the second tuple in the multiplication. Not modified.
+    * @param t1           the first tuple in the multiplication. Not modified.
+    * @param t2           the second tuple in the multiplication. Not modified.
     * @param vectorToPack the vector in which the result is stores. Modified.
     */
    public static void multiply(Tuple4DReadOnly t1, Tuple4DReadOnly t2, Vector4DBasics vectorToPack)
@@ -340,8 +381,8 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param t1 the first tuple in the multiplication. Not modified.
-    * @param t2 the second tuple in the multiplication. Not modified.
+    * @param t1           the first tuple in the multiplication. Not modified.
+    * @param t2           the second tuple in the multiplication. Not modified.
     * @param vectorToPack the vector in which the result is stores. Modified.
     */
    public static void multiplyConjugateLeft(Tuple4DReadOnly t1, Tuple4DReadOnly t2, Vector4DBasics vectorToPack)
@@ -361,8 +402,8 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param t1 the first tuple in the multiplication. Not modified.
-    * @param t2 the second tuple in the multiplication. Not modified.
+    * @param t1           the first tuple in the multiplication. Not modified.
+    * @param t2           the second tuple in the multiplication. Not modified.
     * @param vectorToPack the vector in which the result is stores. Modified.
     */
    public static void multiplyConjugateRight(Tuple4DReadOnly t1, Tuple4DReadOnly t2, Vector4DBasics vectorToPack)
@@ -382,10 +423,10 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param t1 the first tuple in the multiplication. Not modified.
-    * @param conjugateT1 whether to conjugate {@code t1} or not.
-    * @param t2 the second tuple in the multiplication. Not modified.
-    * @param conjugateT2 whether to conjugate {@code t2} or not.
+    * @param t1           the first tuple in the multiplication. Not modified.
+    * @param conjugateT1  whether to conjugate {@code t1} or not.
+    * @param t2           the second tuple in the multiplication. Not modified.
+    * @param conjugateT2  whether to conjugate {@code t2} or not.
     * @param vectorToPack the vector in which the result is stores. Modified.
     */
    private static void multiplyImpl(Tuple4DReadOnly t1, boolean conjugateT1, Tuple4DReadOnly t2, boolean conjugateT2, Vector4DBasics vectorToPack)
@@ -406,16 +447,16 @@ public abstract class QuaternionTools
     * All three arguments can be the same object for in place operations.
     * </p>
     *
-    * @param x1 the x-component of the first tuple in the multiplication. Not modified.
-    * @param y1 the y-component of the first tuple in the multiplication. Not modified.
-    * @param z1 the z-component of the first tuple in the multiplication. Not modified.
-    * @param s1 the s-component of the first tuple in the multiplication. Not modified.
-    * @param conjugateT1 whether to conjugate {@code t1} or not.
-    * @param x2 the x-component of the second tuple in the multiplication. Not modified.
-    * @param y2 the y-component of the second tuple in the multiplication. Not modified.
-    * @param z2 the z-component of the second tuple in the multiplication. Not modified.
-    * @param s2 the s-component of the second tuple in the multiplication. Not modified.
-    * @param conjugateT2 whether to conjugate {@code t2} or not.
+    * @param x1           the x-component of the first tuple in the multiplication. Not modified.
+    * @param y1           the y-component of the first tuple in the multiplication. Not modified.
+    * @param z1           the z-component of the first tuple in the multiplication. Not modified.
+    * @param s1           the s-component of the first tuple in the multiplication. Not modified.
+    * @param conjugateT1  whether to conjugate {@code t1} or not.
+    * @param x2           the x-component of the second tuple in the multiplication. Not modified.
+    * @param y2           the y-component of the second tuple in the multiplication. Not modified.
+    * @param z2           the z-component of the second tuple in the multiplication. Not modified.
+    * @param s2           the s-component of the second tuple in the multiplication. Not modified.
+    * @param conjugateT2  whether to conjugate {@code t2} or not.
     * @param vectorToPack the vector in which the result is stores. Modified.
     */
    private static void multiplyImpl(double x1, double y1, double z1, double s1, boolean conjugateT1, double x2, double y2, double z2, double s2,
@@ -452,8 +493,8 @@ public abstract class QuaternionTools
     * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param quaternion       the quaternion used to transform the tuple. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void transform(QuaternionReadOnly quaternion, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -476,8 +517,8 @@ public abstract class QuaternionTools
     * tupleTransformed = quaternion<sup>-1</sup> * tupleOriginal * quaternion
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param quaternion       the quaternion used to transform the tuple. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void inverseTransform(QuaternionReadOnly quaternion, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -498,10 +539,10 @@ public abstract class QuaternionTools
     * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
+    * @param quaternion          the quaternion used to transform the tuple. Not modified.
     * @param conjugateQuaternion whether to conjugate the quaternion or not.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param tupleOriginal       the tuple to transform. Not modified.
+    * @param tupleTransformed    the tuple in which the result is stored. Modified.
     */
    private static void transformImpl(QuaternionReadOnly quaternion, boolean conjugateQuaternion, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -560,8 +601,8 @@ public abstract class QuaternionTools
     * tupleTransformed = tupleTransformed + quaternion * tupleOriginal * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param quaternion       the quaternion used to transform the tuple. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void addTransform(QuaternionReadOnly quaternion, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -579,8 +620,8 @@ public abstract class QuaternionTools
     * tupleTransformed = tupleTransformed - quaternion * tupleOriginal * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param quaternion       the quaternion used to transform the tuple. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void subTransform(QuaternionReadOnly quaternion, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -601,11 +642,11 @@ public abstract class QuaternionTools
     * tupleTransformed = tupleTransformed +/- quaternion * tupleOriginal * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param subtract whether to perform a subtraction instead or not.
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
+    * @param subtract            whether to perform a subtraction instead or not.
+    * @param quaternion          the quaternion used to transform the tuple. Not modified.
     * @param conjugateQuaternion whether to conjugate the quaternion or not.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param tupleOriginal       the tuple to transform. Not modified.
+    * @param tupleTransformed    the tuple in which the result is stored. Modified.
     */
    private static void addTransform(boolean subtract, QuaternionReadOnly quaternion, boolean conjugateQuaternion, Tuple3DReadOnly tupleOriginal,
                                     Tuple3DBasics tupleTransformed)
@@ -673,13 +714,13 @@ public abstract class QuaternionTools
     * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param quaternion                the quaternion used to transform the tuple. Not modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the quaternion represents
-    *           a transformation in the XY plane.
+    *                                  a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the quaternion
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    public static void transform(QuaternionReadOnly quaternion, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -701,13 +742,13 @@ public abstract class QuaternionTools
     * tupleTransformed = quaternion<sup>-1</sup> * tupleOriginal * quaternion
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param quaternion                the quaternion used to transform the tuple. Not modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the quaternion represents
-    *           a transformation in the XY plane.
+    *                                  a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the quaternion
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    public static void inverseTransform(QuaternionReadOnly quaternion, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
@@ -728,14 +769,14 @@ public abstract class QuaternionTools
     * tupleTransformed = quaternion * tupleOriginal * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the tuple. Not modified.
-    * @param conjugateQuaternion whether to conjugate the quaternion or not.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param quaternion                the quaternion used to transform the tuple. Not modified.
+    * @param conjugateQuaternion       whether to conjugate the quaternion or not.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the quaternion represents
-    *           a transformation in the XY plane.
+    *                                  a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the quaternion
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    private static void transformImpl(QuaternionReadOnly quaternion, boolean conjugateQuaternion, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
                                      boolean checkIfTransformInXYPlane)
@@ -793,8 +834,8 @@ public abstract class QuaternionTools
     * {@code quaternion} and {@code quaternionOriginal}.
     * </p>
     *
-    * @param quaternion the quaternion used to transform the quaternion. Not modified.
-    * @param quaternionOriginal the quaternion to transform. Not modified.
+    * @param quaternion            the quaternion used to transform the quaternion. Not modified.
+    * @param quaternionOriginal    the quaternion to transform. Not modified.
     * @param quaternionTransformed the quaternion in which the result is stored. Modified.
     */
    public static void transform(QuaternionReadOnly quaternion, QuaternionReadOnly quaternionOriginal, QuaternionBasics quaternionTransformed)
@@ -818,8 +859,8 @@ public abstract class QuaternionTools
     * quaternionTransformed = quaternion<sup>-1</sup> * quaternionOriginal
     * </p>
     *
-    * @param quaternion the quaternion used to transform the quaternion. Not modified.
-    * @param quaternionOriginal the quaternion to transform. Not modified.
+    * @param quaternion            the quaternion used to transform the quaternion. Not modified.
+    * @param quaternionOriginal    the quaternion to transform. Not modified.
     * @param quaternionTransformed the quaternion in which the result is stored. Modified.
     */
    public static void inverseTransform(QuaternionReadOnly quaternion, QuaternionReadOnly quaternionOriginal, QuaternionBasics quaternionTransformed)
@@ -838,8 +879,8 @@ public abstract class QuaternionTools
     * vectorTransformed.xyz = quaternion * vectorOriginal.xyz * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the vector. Not modified.
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param quaternion        the quaternion used to transform the vector. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     */
    public static void transform(QuaternionReadOnly quaternion, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -863,8 +904,8 @@ public abstract class QuaternionTools
     * vectorTransformed.xyz = quaternion<sup>-1</sup> * vectorOriginal.xyz * quaternion
     * </p>
     *
-    * @param quaternion the quaternion used to transform the vector. Not modified.
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param quaternion        the quaternion used to transform the vector. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     */
    public static void inverseTransform(QuaternionReadOnly quaternion, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -886,10 +927,10 @@ public abstract class QuaternionTools
     * vectorTransformed.xyz = quaternion * vectorOriginal.xyz * quaternion<sup>-1</sup>
     * </p>
     *
-    * @param quaternion the quaternion used to transform the vector. Not modified.
+    * @param quaternion          the quaternion used to transform the vector. Not modified.
     * @param conjugateQuaternion whether to conjugate the quaternion or not.
-    * @param vectorOriginal the vector to transform. Not modified.
-    * @param vectorTransformed the vector in which the result is stored. Modified.
+    * @param vectorOriginal      the vector to transform. Not modified.
+    * @param vectorTransformed   the vector in which the result is stored. Modified.
     */
    private static void transformImpl(QuaternionReadOnly quaternion, boolean conjugateQuaternion, Vector4DReadOnly vectorOriginal,
                                      Vector4DBasics vectorTransformed)
@@ -952,8 +993,8 @@ public abstract class QuaternionTools
     * where R(quaternion) is the function to convert a quaternion into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param quaternion the quaternion used to transform the matrix. Not modified.
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param quaternion        the quaternion used to transform the matrix. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     */
    public static void transform(QuaternionReadOnly quaternion, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -977,8 +1018,8 @@ public abstract class QuaternionTools
     * where R(quaternion) is the function to convert a quaternion into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param quaternion the quaternion used to transform the matrix. Not modified.
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param quaternion        the quaternion used to transform the matrix. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(QuaternionReadOnly quaternion, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -1001,10 +1042,10 @@ public abstract class QuaternionTools
     * where R(quaternion) is the function to convert a quaternion into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param quaternion the quaternion used to transform the matrix. Not modified.
+    * @param quaternion          the quaternion used to transform the matrix. Not modified.
     * @param conjugateQuaternion whether to conjugate the quaternion or not.
-    * @param matrixOriginal the matrix to transform. Not modified.
-    * @param matrixTransformed the matrix in which the result is stored. Modified.
+    * @param matrixOriginal      the matrix to transform. Not modified.
+    * @param matrixTransformed   the matrix in which the result is stored. Modified.
     */
    private static void transformImpl(QuaternionReadOnly quaternion, boolean conjugateQuaternion, Matrix3DReadOnly matrixOriginal,
                                      Matrix3DBasics matrixTransformed)
@@ -1031,13 +1072,13 @@ public abstract class QuaternionTools
     * where R(quaternion) is the function to convert a quaternion into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param qx the x-component of the quaternion used to transform the matrix.
-    * @param qy the y-component of the quaternion used to transform the matrix.
-    * @param qz the z-component of the quaternion used to transform the matrix.
-    * @param qs the s-component of the quaternion used to transform the matrix.
+    * @param qx                  the x-component of the quaternion used to transform the matrix.
+    * @param qy                  the y-component of the quaternion used to transform the matrix.
+    * @param qz                  the z-component of the quaternion used to transform the matrix.
+    * @param qs                  the s-component of the quaternion used to transform the matrix.
     * @param conjugateQuaternion whether to conjugate the quaternion or not.
-    * @param matrixOriginal the matrix to transform. Not modified.
-    * @param matrixTransformed the matrix in which the result is stored. Modified.
+    * @param matrixOriginal      the matrix to transform. Not modified.
+    * @param matrixTransformed   the matrix in which the result is stored. Modified.
     */
    static void transformImpl(double qx, double qy, double qz, double qs, boolean conjugateQuaternion, Matrix3DReadOnly matrixOriginal,
                              Matrix3DBasics matrixTransformed)
@@ -1121,8 +1162,9 @@ public abstract class QuaternionTools
     * {@code quaternion} and {@code rotationMatrixOriginal}.
     * </p>
     *
-    * @param quaternion the quaternion used to transform the rotation matrix. Not modified.
-    * @param rotationMatrixOriginal the rotation matrix to transform. Not modified.
+    * @param quaternion                the quaternion used to transform the rotation matrix. Not
+    *                                  modified.
+    * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void transform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
@@ -1150,8 +1192,9 @@ public abstract class QuaternionTools
     * {@code quaternion} and {@code rotationMatrixOriginal}.
     * </p>
     *
-    * @param quaternion the quaternion used to transform the rotation matrix. Not modified.
-    * @param rotationMatrixOriginal the rotation matrix to transform. Not modified.
+    * @param quaternion                the quaternion used to transform the rotation matrix. Not
+    *                                  modified.
+    * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
@@ -1173,9 +1216,9 @@ public abstract class QuaternionTools
     *                    \ qs = cos(yaw/2) /
     * </pre>
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw                the angle to rotate about the z-axis.
     * @param quaternionOriginal the quaternion on which the yaw rotation is prepended. Not modified.
-    * @param quaternionToPack the quaternion in which the result is stored. Modified.
+    * @param quaternionToPack   the quaternion in which the result is stored. Modified.
     */
    public static void prependYawRotation(double yaw, QuaternionReadOnly quaternionOriginal, QuaternionBasics quaternionToPack)
    {
@@ -1210,8 +1253,8 @@ public abstract class QuaternionTools
     * </pre>
     *
     * @param quaternionOriginal the quaternion on which the yaw rotation is appended. Not modified.
-    * @param yaw the angle to rotate about the z-axis.
-    * @param quaternionToPack the quaternion in which the result is stored. Modified.
+    * @param yaw                the angle to rotate about the z-axis.
+    * @param quaternionToPack   the quaternion in which the result is stored. Modified.
     */
    public static void appendYawRotation(QuaternionReadOnly quaternionOriginal, double yaw, QuaternionBasics quaternionToPack)
    {
@@ -1245,9 +1288,9 @@ public abstract class QuaternionTools
     *                    \ qs = cos(pitch/2) /
     * </pre>
     *
-    * @param pitch the angle to rotate about the y-axis.
+    * @param pitch              the angle to rotate about the y-axis.
     * @param quaternionOriginal the quaternion on which the pitch rotation is prepended. Not modified.
-    * @param quaternionToPack the quaternion in which the result is stored. Modified.
+    * @param quaternionToPack   the quaternion in which the result is stored. Modified.
     */
    public static void prependPitchRotation(double pitch, QuaternionReadOnly quaternionOriginal, QuaternionBasics quaternionToPack)
    {
@@ -1282,8 +1325,8 @@ public abstract class QuaternionTools
     * </pre>
     *
     * @param quaternionOriginal the quaternion on which the pitch rotation is appended. Not modified.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param quaternionToPack the quaternion in which the result is stored. Modified.
+    * @param pitch              the angle to rotate about the y-axis.
+    * @param quaternionToPack   the quaternion in which the result is stored. Modified.
     */
    public static void appendPitchRotation(QuaternionReadOnly quaternionOriginal, double pitch, QuaternionBasics quaternionToPack)
    {
@@ -1317,9 +1360,9 @@ public abstract class QuaternionTools
     *                    \ qs = cos(roll/2) /
     * </pre>
     *
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll               the angle to rotate about the x-axis.
     * @param quaternionOriginal the quaternion on which the roll rotation is prepended. Not modified.
-    * @param quaternionToPack the quaternion in which the result is stored. Modified.
+    * @param quaternionToPack   the quaternion in which the result is stored. Modified.
     */
    public static void prependRollRotation(double roll, QuaternionReadOnly quaternionOriginal, QuaternionBasics quaternionToPack)
    {
@@ -1354,8 +1397,8 @@ public abstract class QuaternionTools
     * </pre>
     *
     * @param quaternionOriginal the quaternion on which the roll rotation is appended. Not modified.
-    * @param roll the angle to rotate about the x-axis.
-    * @param quaternionToPack the quaternion in which the result is stored. Modified.
+    * @param roll               the angle to rotate about the x-axis.
+    * @param quaternionToPack   the quaternion in which the result is stored. Modified.
     */
    public static void appendRollRotation(QuaternionReadOnly quaternionOriginal, double roll, QuaternionBasics quaternionToPack)
    {

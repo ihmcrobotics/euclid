@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -11,12 +11,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidMutationTesting;
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
-import us.ihmc.euclid.testSuite.EuclidTestSuite;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -83,12 +84,12 @@ public class ReferenceFrameTest
       for (int i = 0; i < numberOfTests; i++)
       {
          runGarbageCollector();
-         long usedMemoryStart = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+         long usedMemoryStart = runtime.totalMemory() - runtime.freeMemory() >> 20;
 
          EuclidFrameRandomTools.nextReferenceFrameTree(random, 100000);
          runGarbageCollector();
 
-         long usedMemoryEnd = (runtime.totalMemory() - runtime.freeMemory()) >> 20;
+         long usedMemoryEnd = runtime.totalMemory() - runtime.freeMemory() >> 20;
          long difference = usedMemoryEnd - usedMemoryStart;
          if (verbose)
          {
@@ -466,14 +467,14 @@ public class ReferenceFrameTest
             }
 
             long frameIndex = referenceFrame.getFrameIndex();
-            assertFalse("Already has ID " + frameIndex, existingIds.contains(frameIndex));
+            assertFalse(existingIds.contains(frameIndex), "Already has ID " + frameIndex);
             existingIds.add(frameIndex);
          }
       }
    }
 
    // TODO Re-enable when unique names are enforce in ReferenceFrame.
-   @Ignore
+   @Disabled
    @Test
    public void testUniqueNaming()
    {
@@ -573,8 +574,8 @@ public class ReferenceFrameTest
 
    public static void main(String[] args)
    {
-      String targetTests = EuclidTestSuite.class.getName();
+      String targetTests = EuclidTestConstants.class.getName();
       String targetClasses = ReferenceFrame.class.getName() + " " + ReferenceFrameTools.class.getName();
-      EuclidTestSuite.doPITMutationTestAndOpenResult(targetTests, targetClasses);
+      EuclidMutationTesting.doPITMutationTestAndOpenResult(targetTests, targetClasses);
    }
 }

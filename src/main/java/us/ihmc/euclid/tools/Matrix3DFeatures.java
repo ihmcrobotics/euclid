@@ -11,12 +11,12 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
  * 
  * @author Sylvain Bertrand
  */
-public abstract class Matrix3DFeatures
+public class Matrix3DFeatures
 {
    /**
     * Default tolerance for determining whether a matrix 3D represents the identity matrix or not.
     */
-   public static final double EPS_CHECK_IDENTITY = 1.0e-7;
+   public static final double EPS_CHECK_IDENTITY = 1.0e-12;
    /**
     * Default tolerance for determining whether a matrix 3D represents a 3D rotation matrix or not.
     */
@@ -29,6 +29,11 @@ public abstract class Matrix3DFeatures
     * Default tolerance for determining whether a matrix 3D is skew symmetric or not.
     */
    public static final double EPS_CHECK_SKEW = 1.0e-8;
+
+   private Matrix3DFeatures()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Computes the determinant of the matrix described by the given 9 coefficients.
@@ -94,12 +99,19 @@ public abstract class Matrix3DFeatures
     * </p>
     *
     * @param matrixArray the matrix to verify, not null, not modified. The array is expected to be
-    *           encoded in a row-major format.
+    *                    encoded in a row-major format.
     * @throws NotARotationMatrixException if the matrix is not a rotation matrix.
     */
    public static void checkIfRotationMatrix(double[] matrixArray)
    {
-      checkIfRotationMatrix(matrixArray[0], matrixArray[1], matrixArray[2], matrixArray[3], matrixArray[4], matrixArray[5], matrixArray[6], matrixArray[7],
+      checkIfRotationMatrix(matrixArray[0],
+                            matrixArray[1],
+                            matrixArray[2],
+                            matrixArray[3],
+                            matrixArray[4],
+                            matrixArray[5],
+                            matrixArray[6],
+                            matrixArray[7],
                             matrixArray[8]);
    }
 
@@ -176,15 +188,15 @@ public abstract class Matrix3DFeatures
     * The assertion is done on a per coefficient basis using {@code epsilon} as the tolerance.
     * </p>
     *
-    * @param m00 first matrix element in the first row.
-    * @param m01 second matrix element in the first row.
-    * @param m02 third matrix element in the first row.
-    * @param m10 first matrix element in the second row.
-    * @param m11 second matrix element in the second row.
-    * @param m12 third matrix element in the second row.
-    * @param m20 first matrix element in the third row.
-    * @param m21 second matrix element in the third row.
-    * @param m22 third matrix element in the third row.
+    * @param m00     first matrix element in the first row.
+    * @param m01     second matrix element in the first row.
+    * @param m02     third matrix element in the first row.
+    * @param m10     first matrix element in the second row.
+    * @param m11     second matrix element in the second row.
+    * @param m12     third matrix element in the second row.
+    * @param m20     first matrix element in the third row.
+    * @param m21     second matrix element in the third row.
+    * @param m22     third matrix element in the third row.
     * @param epsilon the tolerance as shown above.
     * @return {@code true} if the matrix is considered to be equal to the identity matrix,
     *         {@code false} otherwise.
@@ -218,8 +230,15 @@ public abstract class Matrix3DFeatures
     */
    public static boolean isRotationMatrix(DenseMatrix64F matrix)
    {
-      return isRotationMatrix(matrix.get(0, 0), matrix.get(0, 1), matrix.get(0, 2), matrix.get(1, 0), matrix.get(1, 1), matrix.get(1, 2), matrix.get(2, 0),
-                              matrix.get(2, 1), matrix.get(2, 2));
+      return isRotationMatrix(matrix.get(0, 0),
+                              matrix.get(0, 1),
+                              matrix.get(0, 2),
+                              matrix.get(1, 0),
+                              matrix.get(1, 1),
+                              matrix.get(1, 2),
+                              matrix.get(2, 0),
+                              matrix.get(2, 1),
+                              matrix.get(2, 2));
    }
 
    /**
@@ -234,12 +253,19 @@ public abstract class Matrix3DFeatures
     * </p>
     *
     * @param matrixArray the matrix to verify, not null, not modified. The array is expected to be
-    *           encoded in a row-major format.
+    *                    encoded in a row-major format.
     * @return {@code true} if the given matrix is a rotation matrix, {@code false} otherwise.
     */
    public static boolean isRotationMatrix(double[] matrixArray)
    {
-      return isRotationMatrix(matrixArray[0], matrixArray[1], matrixArray[2], matrixArray[3], matrixArray[4], matrixArray[5], matrixArray[6], matrixArray[7],
+      return isRotationMatrix(matrixArray[0],
+                              matrixArray[1],
+                              matrixArray[2],
+                              matrixArray[3],
+                              matrixArray[4],
+                              matrixArray[5],
+                              matrixArray[6],
+                              matrixArray[7],
                               matrixArray[8]);
    }
 
@@ -281,15 +307,15 @@ public abstract class Matrix3DFeatures
     * </ul>
     * </p>
     *
-    * @param m00 first matrix element in the first row.
-    * @param m01 second matrix element in the first row.
-    * @param m02 third matrix element in the first row.
-    * @param m10 first matrix element in the second row.
-    * @param m11 second matrix element in the second row.
-    * @param m12 third matrix element in the second row.
-    * @param m20 first matrix element in the third row.
-    * @param m21 second matrix element in the third row.
-    * @param m22 third matrix element in the third row.
+    * @param m00     first matrix element in the first row.
+    * @param m01     second matrix element in the first row.
+    * @param m02     third matrix element in the first row.
+    * @param m10     first matrix element in the second row.
+    * @param m11     second matrix element in the second row.
+    * @param m12     third matrix element in the second row.
+    * @param m20     first matrix element in the third row.
+    * @param m21     second matrix element in the third row.
+    * @param m22     third matrix element in the third row.
     * @param epsilon the tolerance as shown above.
     * @return {@code true} if the given matrix is a rotation matrix, {@code false} otherwise.
     */
@@ -344,15 +370,15 @@ public abstract class Matrix3DFeatures
     * </ul>
     * </p>
     *
-    * @param m00 first matrix element in the first row.
-    * @param m01 second matrix element in the first row.
-    * @param m02 third matrix element in the first row.
-    * @param m10 first matrix element in the second row.
-    * @param m11 second matrix element in the second row.
-    * @param m12 third matrix element in the second row.
-    * @param m20 first matrix element in the third row.
-    * @param m21 second matrix element in the third row.
-    * @param m22 third matrix element in the third row.
+    * @param m00     first matrix element in the first row.
+    * @param m01     second matrix element in the first row.
+    * @param m02     third matrix element in the first row.
+    * @param m10     first matrix element in the second row.
+    * @param m11     second matrix element in the second row.
+    * @param m12     third matrix element in the second row.
+    * @param m20     first matrix element in the third row.
+    * @param m21     second matrix element in the third row.
+    * @param m22     third matrix element in the third row.
     * @param epsilon the tolerance used as shown above.
     * @return {@code true} if the given matrix describes a 2D transformation in the XY plane,
     *         {@code false} otherwise.
@@ -412,15 +438,15 @@ public abstract class Matrix3DFeatures
     * </ul>
     * </p>
     *
-    * @param m00 first matrix element in the first row.
-    * @param m01 second matrix element in the first row.
-    * @param m02 third matrix element in the first row.
-    * @param m10 first matrix element in the second row.
-    * @param m11 second matrix element in the second row.
-    * @param m12 third matrix element in the second row.
-    * @param m20 first matrix element in the third row.
-    * @param m21 second matrix element in the third row.
-    * @param m22 third matrix element in the third row.
+    * @param m00     first matrix element in the first row.
+    * @param m01     second matrix element in the first row.
+    * @param m02     third matrix element in the first row.
+    * @param m10     first matrix element in the second row.
+    * @param m11     second matrix element in the second row.
+    * @param m12     third matrix element in the second row.
+    * @param m20     first matrix element in the third row.
+    * @param m21     second matrix element in the third row.
+    * @param m22     third matrix element in the third row.
     * @param epsilon the tolerance used as shown above.
     * @return {@code true} if the matrix is skew symmetric, {@code false} otherwise.
     */
@@ -438,8 +464,8 @@ public abstract class Matrix3DFeatures
    /**
     * Tests on a per component basis if the two given matrices are equal to an {@code epsilon}.
     *
-    * @param m1 the first matrix. Not modified.
-    * @param m2 the second matrix. Not modified.
+    * @param m1      the first matrix. Not modified.
+    * @param m2      the second matrix. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
@@ -500,7 +526,11 @@ public abstract class Matrix3DFeatures
     */
    public static boolean equals(Matrix3DReadOnly m1, Matrix3DReadOnly m2)
    {
-      if (m1 == null || m2 == null)
+      if (m1 == m2)
+      {
+         return true;
+      }
+      else if (m1 == null || m2 == null)
       {
          return false;
       }

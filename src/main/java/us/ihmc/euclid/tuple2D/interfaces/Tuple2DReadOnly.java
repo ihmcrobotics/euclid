@@ -79,8 +79,7 @@ public interface Tuple2DReadOnly
    /**
     * Selects a component of this tuple based on {@code index} and returns its value.
     * <p>
-    * For an {@code index} of 0, the corresponding component is {@code x}, while for 1 it is
-    * {@code y}.
+    * For an {@code index} of 0, the corresponding component is {@code x}, while for 1 it is {@code y}.
     * </p>
     *
     * @param index the index of the component to get.
@@ -91,12 +90,12 @@ public interface Tuple2DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX();
-      case 1:
-         return getY();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX();
+         case 1:
+            return getY();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -112,12 +111,12 @@ public interface Tuple2DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX32();
-      case 1:
-         return getY32();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX32();
+         case 1:
+            return getY32();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -132,10 +131,9 @@ public interface Tuple2DReadOnly
    }
 
    /**
-    * Packs the components {@code x}, {@code y} in order in an array starting from
-    * {@code startIndex}.
+    * Packs the components {@code x}, {@code y} in order in an array starting from {@code startIndex}.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex       the index in the array where the first component is stored.
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
    default void get(int startIndex, double[] tupleArrayToPack)
@@ -155,10 +153,9 @@ public interface Tuple2DReadOnly
    }
 
    /**
-    * Packs the components {@code x}, {@code y} in order in an array starting from
-    * {@code startIndex}.
+    * Packs the components {@code x}, {@code y} in order in an array starting from {@code startIndex}.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex       the index in the array where the first component is stored.
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
    default void get(int startIndex, float[] tupleArrayToPack)
@@ -168,8 +165,8 @@ public interface Tuple2DReadOnly
    }
 
    /**
-    * Packs the components {@code x}, {@code y} in order in a column vector starting from its first
-    * row index.
+    * Packs the components {@code x}, {@code y} in order in a column vector starting from its first row
+    * index.
     *
     * @param tupleMatrixToPack the array in which this tuple is stored. Modified.
     */
@@ -182,7 +179,7 @@ public interface Tuple2DReadOnly
     * Packs the components {@code x}, {@code y} in order in a column vector starting from
     * {@code startRow}.
     *
-    * @param startRow the first row index to start writing in the dense-matrix.
+    * @param startRow          the first row index to start writing in the dense-matrix.
     * @param tupleMatrixToPack the column vector in which this tuple is stored. Modified.
     */
    default void get(int startRow, DenseMatrix64F tupleMatrixToPack)
@@ -194,8 +191,8 @@ public interface Tuple2DReadOnly
     * Packs the components {@code x}, {@code y} in order in a column vector starting from
     * {@code startRow} at the column index {@code column}.
     *
-    * @param startRow the first row index to start writing in the dense-matrix.
-    * @param column the column index to write in the dense-matrix.
+    * @param startRow          the first row index to start writing in the dense-matrix.
+    * @param column            the column index to write in the dense-matrix.
     * @param tupleMatrixToPack the matrix in which this tuple is stored. Modified.
     */
    default void get(int startRow, int column, DenseMatrix64F tupleMatrixToPack)
@@ -208,7 +205,7 @@ public interface Tuple2DReadOnly
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param other   the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -221,12 +218,13 @@ public interface Tuple2DReadOnly
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
     * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
     */
    default boolean equals(Tuple2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getX() == other.getX() && getY() == other.getY();

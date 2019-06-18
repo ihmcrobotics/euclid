@@ -1,12 +1,11 @@
 package us.ihmc.euclid.axisAngle;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -26,10 +25,10 @@ public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
       Random random = new Random(613615L);
       AxisAngle32 axisAngle = new AxisAngle32(), expected;
       { // Test AxisAngle32()
-         Assert.assertTrue(axisAngle.getX() == 1.0);
-         Assert.assertTrue(axisAngle.getY() == 0.0);
-         Assert.assertTrue(axisAngle.getZ() == 0.0);
-         Assert.assertTrue(axisAngle.getAngle() == 0.0);
+         assertTrue(axisAngle.getX() == 1.0);
+         assertTrue(axisAngle.getY() == 0.0);
+         assertTrue(axisAngle.getZ() == 0.0);
+         assertTrue(axisAngle.getAngle() == 0.0);
       }
 
       { // Test AxisAngle32(AxisAngleBasics other)
@@ -67,7 +66,7 @@ public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
             EuclidCoreTestTools.assertAxisAngleEquals(axisAngle, expected, EPS);
 
             for (int j = 0; j < axisAngleArray.length; j++)
-               Assert.assertTrue(axisAngleArray[j] == axisAngleArrayCopy[j]);
+               assertTrue(axisAngleArray[j] == axisAngleArrayCopy[j]);
          }
       }
 
@@ -82,13 +81,13 @@ public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
 
             axisAngle = new AxisAngle32(vectorAxis, angle);
 
-            Assert.assertEquals(axisAngle.getX(), vectorAxis.getX(), EPS);
-            Assert.assertEquals(axisAngle.getY(), vectorAxis.getY(), EPS);
-            Assert.assertEquals(axisAngle.getZ(), vectorAxis.getZ(), EPS);
-            Assert.assertEquals(axisAngle.getAngle(), angle, EPS);
+            assertEquals(axisAngle.getX(), vectorAxis.getX(), EPS);
+            assertEquals(axisAngle.getY(), vectorAxis.getY(), EPS);
+            assertEquals(axisAngle.getZ(), vectorAxis.getZ(), EPS);
+            assertEquals(axisAngle.getAngle(), angle, EPS);
 
             EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(vectorAxis, vectorAxisCopy, EPS);
-            Assert.assertTrue(angle == angleCopy);
+            assertTrue(angle == angleCopy);
          }
       }
 
@@ -123,7 +122,7 @@ public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
 
             EuclidCoreTestTools.assertAxisAngleEquals(axisAngle, expectedAxisAngle32, EPS);
 
-            Assert.assertTrue(angle == angleCopy);
+            assertTrue(angle == angleCopy);
 
             EuclidCoreTestTools.assertMatrix3DEquals(matrix, matrixCopy, EPS);
          }

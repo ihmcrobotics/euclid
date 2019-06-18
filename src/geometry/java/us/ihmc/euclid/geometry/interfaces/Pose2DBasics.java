@@ -5,7 +5,7 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -178,8 +178,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    /**
     * Sets all the components of this pose 2D.
     *
-    * @param x the x-coordinate of the position.
-    * @param y the y-coordinate of the position.
+    * @param x   the x-coordinate of the position.
+    * @param y   the y-coordinate of the position.
     * @param yaw the orientation angle value.
     */
    default void set(double x, double y, double yaw)
@@ -192,7 +192,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets this pose 2D from the given {@code position} and {@code yaw} angle.
     *
     * @param position the tuple used to initialize this pose's position. Not modified.
-    * @param yaw the angle used to initialize the pose's orientation.
+    * @param yaw      the angle used to initialize the pose's orientation.
     */
    default void set(Tuple2DReadOnly position, double yaw)
    {
@@ -203,7 +203,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
    /**
     * Sets both position and orientation.
     *
-    * @param position the tuple with the new position coordinates. Not modified.
+    * @param position    the tuple with the new position coordinates. Not modified.
     * @param orientation the orientation with the new angle value for this. Not modified.
     */
    default void set(Tuple2DReadOnly position, Orientation2DReadOnly orientation)
@@ -220,9 +220,9 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     *
     * @param rigidBodyTransform the transform use to set this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of the transform does not represent a 2D
-    *            transformation.
+    *                               transformation.
     */
-   default void set(RigidBodyTransform rigidBodyTransform)
+   default void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       set(rigidBodyTransform, true);
    }
@@ -232,17 +232,17 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     *
     * @param rigidBodyTransform the transform use to set this pose 2D. Not modified.
     * @param checkIsTransform2D indicates whether or not the method should check that the rotation part
-    *           of the given transform represents a 2D rotation in the XY-plane.
+    *                           of the given transform represents a 2D rotation in the XY-plane.
     * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the rotation
-    *            part of the transform does not represent a 2D transformation.
+    *                               part of the transform does not represent a 2D transformation.
     */
-   default void set(RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
+   default void set(RigidBodyTransformReadOnly rigidBodyTransform, boolean checkIsTransform2D)
    {
       if (checkIsTransform2D)
          rigidBodyTransform.checkIfRotation2D();
 
       setPosition(rigidBodyTransform.getTranslationX(), rigidBodyTransform.getTranslationY());
-      setOrientation(rigidBodyTransform.getRotationMatrix().getYaw());
+      setOrientation(rigidBodyTransform.getRotation().getYaw());
    }
 
    /**
@@ -255,8 +255,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     *
     * @param other the other pose 2D used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
-    *           {@code other}.
+    *              {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    *              {@code other}.
     */
    default void interpolate(Pose2DReadOnly other, double alpha)
    {
@@ -275,8 +275,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param pose1 the first pose 2D used in the interpolation. Not modified.
     * @param pose2 the second pose 2D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting {@code this}
-    *           to {@code pose2}.
+    *              {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
+    *              {@code this} to {@code pose2}.
     */
    default void interpolate(Pose2DReadOnly pose1, Pose2DReadOnly pose2, double alpha)
    {
@@ -412,7 +412,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     *
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY plane.
+    *                               in the XY plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -427,7 +427,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     *
     * @param transform the geometric transform to apply on this pose 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY plane.
+    *                               in the XY plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)

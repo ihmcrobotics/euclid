@@ -17,9 +17,9 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  * However, there is no algebra directly accessible for manipulating orientations represented as
  * yaw-pitch-roll making it highly computationally expensive when compared to rotation matrices or
  * quaternions. In addition, yaw-pitch-roll representation is sensitive to gimbal lock which happens
- * when the pitch angle is in the neighborhood of either <i>pi</i> or -<i>pi</i>. When close to such
- * configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes lead
- * to unexpected results.
+ * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to
+ * such configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes
+ * lead to unexpected results.
  * </p>
  * <p>
  * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
@@ -79,9 +79,9 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
    /**
     * Creates a yaw-pitch-roll with the given angles.
     * 
-    * @param yaw the angle representing the first rotation around the z-axis.
+    * @param yaw   the angle representing the first rotation around the z-axis.
     * @param pitch the angle representing the second rotation around the y-axis.
-    * @param roll the angle representing the third rotation around the x-axis.
+    * @param roll  the angle representing the third rotation around the x-axis.
     */
    public YawPitchRoll(double yaw, double pitch, double roll)
    {
@@ -179,7 +179,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
     * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
     * two different orientations.
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
     *         otherwise.
@@ -201,7 +201,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other axis-angle to compare against this. Not modified.
+    * @param other   the other axis-angle to compare against this. Not modified.
     * @param epsilon the maximum angle for the two quaternions to be considered equal.
     * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
     */

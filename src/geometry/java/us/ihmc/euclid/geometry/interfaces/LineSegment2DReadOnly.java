@@ -36,10 +36,10 @@ public interface LineSegment2DReadOnly
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
-    *           are stored. Modified.
+    * @param firstEndpointToPack  point in which the coordinates of this line segment's first endpoint
+    *                             are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
-    *           are stored. Modified.
+    *                             are stored. Modified.
     */
    default void get(Point2DBasics firstEndpointToPack, Point2DBasics secondEndpointToPack)
    {
@@ -178,9 +178,9 @@ public interface LineSegment2DReadOnly
     * endpoints.
     * </ul>
     *
-    * @param x the x-coordinate of the query point.
-    * @param y the y-coordinate of the query point.
-    * @param z the z-coordinate of the query point.
+    * @param x       the x-coordinate of the query point.
+    * @param y       the y-coordinate of the query point.
+    * @param z       the z-coordinate of the query point.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the projection of the point is between the endpoints of this line
     *         segment, {@code false} otherwise.
@@ -222,7 +222,7 @@ public interface LineSegment2DReadOnly
     * endpoints.
     * </ul>
     *
-    * @param point the query. Not modified.
+    * @param point   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the projection of the point is between the endpoints of this line
     *         segment, {@code false} otherwise.
@@ -273,7 +273,7 @@ public interface LineSegment2DReadOnly
    /**
     * Computes the vector going from the first to the second endpoint of this line segment.
     *
-    * @param normalize whether the direction vector is to be normalized.
+    * @param normalize       whether the direction vector is to be normalized.
     * @param directionToPack vector in which the direction is stored. Modified.
     */
    default void direction(boolean normalize, Vector2DBasics directionToPack)
@@ -324,6 +324,7 @@ public interface LineSegment2DReadOnly
     * <p>
     * WARNING: This method generates garbage.
     * </p>
+    * 
     * @return copy of this line segment flipped.
     */
    default LineSegment2D flipDirectionCopy()
@@ -358,8 +359,8 @@ public interface LineSegment2DReadOnly
     *
     * @param convexPolygon the polygon this line segment may intersect. Not modified.
     * @return the intersections between the line segment and the polygon.
-    * @throws OutdatedPolygonException if {@link ConvexPolygon2D#update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    * @throws OutdatedPolygonException if {@link ConvexPolygon2D#update()} has not been called since
+    *                                  last time this polygon's vertices were edited.
     */
    default Point2DBasics[] intersectionWith(ConvexPolygon2DReadOnly convexPolygon)
    {
@@ -391,11 +392,11 @@ public interface LineSegment2DReadOnly
     * </ul>
     * </p>
     *
-    * @param convexPolygon the convex polygon this line segment may intersect. Not modified.
-    * @param firstIntersectionToPack point in which the coordinates of the first intersection. Can be
-    *           {@code null}. Modified.
+    * @param convexPolygon            the convex polygon this line segment may intersect. Not modified.
+    * @param firstIntersectionToPack  point in which the coordinates of the first intersection. Can be
+    *                                 {@code null}. Modified.
     * @param secondIntersectionToPack point in which the coordinates of the second intersection. Can be
-    *           {@code null}. Modified.
+    *                                 {@code null}. Modified.
     * @return the number of intersections between this line segment and the polygon.
     * @throws OutdatedPolygonException if the convex polygon is not up-to-date.
     */
@@ -444,14 +445,17 @@ public interface LineSegment2DReadOnly
     * </ul>
     * </p>
     *
-    * @param line the line that may intersect this line segment. Not modified.
+    * @param line               the line that may intersect this line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the line intersects this line segment, {@code false} otherwise.
     */
    default boolean intersectionWith(Line2DReadOnly line, Point2DBasics intersectionToPack)
    {
-      return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(line.getPoint(), line.getDirection(), getFirstEndpoint(), getSecondEndpoint(),
+      return EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(line.getPoint(),
+                                                                           line.getDirection(),
+                                                                           getFirstEndpoint(),
+                                                                           getSecondEndpoint(),
                                                                            intersectionToPack);
    }
 
@@ -478,7 +482,9 @@ public interface LineSegment2DReadOnly
     */
    default Point2DBasics intersectionWith(LineSegment2DReadOnly other)
    {
-      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(),
+      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(),
+                                                                      getSecondEndpoint(),
+                                                                      other.getFirstEndpoint(),
                                                                       other.getSecondEndpoint());
    }
 
@@ -496,14 +502,18 @@ public interface LineSegment2DReadOnly
     * </ul>
     * </p>
     *
-    * @param other the other line segment that may intersect this line segment. Not modified.
+    * @param other              the other line segment that may intersect this line segment. Not
+    *                           modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
    default boolean intersectionWith(LineSegment2DReadOnly other, Point2DBasics intersectionToPack)
    {
-      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(), getSecondEndpoint(), other.getFirstEndpoint(),
-                                                                      other.getSecondEndpoint(), intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(getFirstEndpoint(),
+                                                                      getSecondEndpoint(),
+                                                                      other.getFirstEndpoint(),
+                                                                      other.getSecondEndpoint(),
+                                                                      intersectionToPack);
    }
 
    /**
@@ -528,7 +538,7 @@ public interface LineSegment2DReadOnly
     * less than {@code epsilon} from it.
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point   the coordinates of the query. Not modified.
     * @param epsilon the tolerance used for this test.
     * @return {@code true} if the point is located on this line segment, {@code false} otherwise.
     */
@@ -672,9 +682,9 @@ public interface LineSegment2DReadOnly
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point2DReadOnly pointToProject, Point2DBasics projectionToPack)
@@ -706,9 +716,9 @@ public interface LineSegment2DReadOnly
    /**
     * Computes the vector perpendicular to the direction of this line segment.
     *
-    * @param normalize whether the perpendicular vector is to be normalized.
+    * @param normalize                 whether the perpendicular vector is to be normalized.
     * @param perpendicularVectorToPack vector in which the perpendicular vector components are stored.
-    *           Modified.
+    *                                  Modified.
     */
    default void perpendicular(boolean normalize, Vector2DBasics perpendicularVectorToPack)
    {
@@ -738,7 +748,7 @@ public interface LineSegment2DReadOnly
     * Computes the coordinates of the point located at a given percentage on this line segment: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
+    * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
     */
@@ -771,7 +781,7 @@ public interface LineSegment2DReadOnly
     * Computes the coordinates of the point located on the line this line segment is lying on: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point.
+    * @param percentage  the percentage along this line segment of the point.
     * @param pointToPack where the result is stored. Modified.
     */
    default void pointOnLineGivenPercentage(double percentage, Point2DBasics pointToPack)
@@ -783,7 +793,7 @@ public interface LineSegment2DReadOnly
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
@@ -801,7 +811,9 @@ public interface LineSegment2DReadOnly
     */
    default boolean equals(LineSegment2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getFirstEndpoint().equals(other.getFirstEndpoint()) && getSecondEndpoint().equals(other.getSecondEndpoint());
@@ -815,7 +827,7 @@ public interface LineSegment2DReadOnly
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param other the line segment to compare to. Not modified.
+    * @param other   the line segment to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.

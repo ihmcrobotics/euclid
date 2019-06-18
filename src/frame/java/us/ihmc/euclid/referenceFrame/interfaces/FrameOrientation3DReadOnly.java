@@ -40,7 +40,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param quaternionToPack the quaternion into which this orientation is to be stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code frameQuaternionToPack} is not expressed in the
-    *            same frame as this.
+    *                                         same frame as this.
     */
    default void get(FixedFrameQuaternionBasics quaternionToPack)
    {
@@ -63,9 +63,9 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * Converts, if necessary, and packs this orientation in a yaw-pitch-roll.
     *
     * @param yawPitchRollToPack the yaw-pitch-roll into which this orientation is to be stored.
-    *           Modified.
+    *                           Modified.
     * @throws ReferenceFrameMismatchException if {@code frameYawPitchRollToPack} is not expressed in
-    *            the same frame as this.
+    *                                         the same frame as this.
     */
    default void get(FixedFrameYawPitchRollBasics yawPitchRollToPack)
    {
@@ -77,7 +77,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * Converts, if necessary, and packs this orientation in a yaw-pitch-roll.
     *
     * @param yawPitchRollToPack the yaw-pitch-roll into which this orientation is to be stored.
-    *           Modified.
+    *                           Modified.
     */
    default void get(FrameYawPitchRollBasics yawPitchRollToPack)
    {
@@ -94,9 +94,9 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * </p>
     *
     * @param rotationVectorToPack the rotation vector in which this orientation is to be stored.
-    *           Modified.
+    *                             Modified.
     * @throws ReferenceFrameMismatchException if {@code rotationVectorToPack} is not expressed in the
-    *            same frame as this.
+    *                                         same frame as this.
     */
    default void getRotationVector(FixedFrameVector3DBasics rotationVectorToPack)
    {
@@ -113,7 +113,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * </p>
     *
     * @param rotationVectorToPack the rotation vector in which this orientation is to be stored.
-    *           Modified.
+    *                             Modified.
     */
    default void getRotationVector(FrameVector3DBasics rotationVectorToPack)
    {
@@ -130,7 +130,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code frameEulerAnglesToPack} is not expressed in the
-    *            same frame as this.
+    *                                         same frame as this.
     */
    default void getEuler(FixedFrameTuple3DBasics eulerAnglesToPack)
    {
@@ -163,7 +163,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param tupleToTransform the tuple to transform. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void transform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -180,10 +180,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -200,10 +200,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void transform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -220,7 +220,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     */
    default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
@@ -238,10 +238,11 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -259,10 +260,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
@@ -281,7 +282,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param tupleToTransform the 3D tuple to be transformed. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void addTransform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -298,10 +299,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void addTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -318,10 +319,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void addTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -338,7 +339,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     */
    default void addTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
@@ -356,10 +357,11 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void addTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -377,16 +379,135 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void addTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
       tupleTransformed.setReferenceFrame(getReferenceFrame());
       addTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple by this orientation and subtracts the result to the tuple.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleToTransform the 3D tuple to be transformed. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *                                         {@code tupleTransformed} do not match.
+    */
+   default void subTransform(FixedFrameTuple3DBasics tupleToTransform)
+   {
+      checkReferenceFrameMatch(tupleToTransform);
+      subTransform((Tuple3DBasics) tupleToTransform);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *                                         {@code tupleOriginal} do not match.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *                                         {@code tupleTransformed} do not match.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
+   {
+      tupleTransformed.setReferenceFrame(getReferenceFrame());
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this},
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      checkReferenceFrameMatch(tupleTransformed);
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+   }
+
+   /**
+    * Transforms the tuple {@code tupleOriginal} by this orientation and <b>subtracts</b> the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * If the given tuple is expressed in the local frame described by this orientation, then the tuple
+    * is transformed such that it is, after this method is called, expressed in the base frame in which
+    * this orientation is expressed.
+    * </p>
+    *
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
+    *                                         {@code tupleOriginal} do not match.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      tupleTransformed.setReferenceFrame(getReferenceFrame());
+      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -398,10 +519,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void transform(FixedFrameTuple2DBasics tupleToTransform)
    {
@@ -418,12 +539,13 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
-    *            not represent a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
@@ -440,12 +562,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -462,10 +584,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    *                               plane.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
@@ -482,12 +604,13 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, {@code tupleTransformed} do not
+    *                                         match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -505,12 +628,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
@@ -527,13 +650,14 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleToTransform the tuple to transform. Modified.
+    * @param tupleToTransform          the tuple to transform. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void transform(FixedFrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
@@ -550,14 +674,15 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
-    *            not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         matrix does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -574,14 +699,16 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -598,14 +725,15 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -622,14 +750,16 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, {@code tupleTransformed} do not
+    *                                         match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -647,14 +777,15 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -673,7 +804,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param matrixToTransform the 3D matrix to be transformed. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixToTransform} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void transform(FixedFrameMatrix3DBasics matrixToTransform)
    {
@@ -690,10 +821,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * in which this orientation is expressed.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void transform(FrameMatrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
@@ -710,10 +841,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * in which this orientation is expressed.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void transform(Matrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -730,10 +861,11 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * in which this orientation is expressed.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if either {@code matrixOriginal} or
-    *            {@code matrixTransformed} is not expressed in the same frame as {@code this}.
+    *                                         {@code matrixTransformed} is not expressed in the same
+    *                                         frame as {@code this}.
     */
    default void transform(FrameMatrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -751,10 +883,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * in which this orientation is expressed.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void transform(FrameMatrix3DReadOnly matrixOriginal, FrameMatrix3DBasics matrixTransformed)
    {
@@ -774,7 +906,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param vectorToTransform the 4D tuple to be transformed. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorToTransform} do not match.
+    *                                         {@code vectorToTransform} do not match.
     */
    default void transform(FixedFrameVector4DBasics vectorToTransform)
    {
@@ -794,10 +926,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorOriginal} do not match.
+    *                                         {@code vectorOriginal} do not match.
     */
    default void transform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
@@ -817,10 +949,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorTransformed} do not match.
+    *                                         {@code vectorTransformed} do not match.
     */
    default void transform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -840,7 +972,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     */
    default void transform(Vector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
@@ -861,10 +993,11 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code vectorOriginal}, and {@code vectorTransformed} do not match.
+    *                                         {@code vectorOriginal}, and {@code vectorTransformed} do
+    *                                         not match.
     */
    default void transform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -885,10 +1018,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorOriginal} do not match.
+    *                                         {@code vectorOriginal} do not match.
     */
    default void transform(FrameVector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
@@ -906,7 +1039,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param orientationToTransform the orientation to be transformed. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationToTransform} do not match.
+    *                                         {@code orientationToTransform} do not match.
     */
    default void transform(FixedFrameOrientation3DBasics orientationToTransform)
    {
@@ -922,11 +1055,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationOriginal} do not match.
+    *                                         {@code orientationOriginal} do not match.
     */
    default void transform(FrameOrientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
    {
@@ -942,11 +1076,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationTransformed} do not match.
+    *                                         {@code orientationTransformed} do not match.
     */
    default void transform(Orientation3DReadOnly orientationOriginal, FixedFrameOrientation3DBasics orientationTransformed)
    {
@@ -962,9 +1097,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     */
    default void transform(Orientation3DReadOnly orientationOriginal, FrameOrientation3DBasics orientationTransformed)
    {
@@ -980,11 +1116,13 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code orientationOriginal}, and {@code orientationTransformed} do not match.
+    *                                         {@code orientationOriginal}, and
+    *                                         {@code orientationTransformed} do not match.
     */
    default void transform(FrameOrientation3DReadOnly orientationOriginal, FixedFrameOrientation3DBasics orientationTransformed)
    {
@@ -1001,11 +1139,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationOriginal} do not match.
+    *                                         {@code orientationOriginal} do not match.
     */
    default void transform(FrameOrientation3DReadOnly orientationOriginal, FrameOrientation3DBasics orientationTransformed)
    {
@@ -1024,7 +1163,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param tupleToTransform the tuple to transform. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void inverseTransform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -1041,10 +1180,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -1061,10 +1200,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -1081,7 +1220,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     */
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
@@ -1099,10 +1238,11 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -1120,10 +1260,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
@@ -1141,10 +1281,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void inverseTransform(FixedFrameTuple2DBasics tupleToTransform)
    {
@@ -1161,12 +1301,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
@@ -1183,12 +1323,13 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -1206,12 +1347,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
@@ -1229,12 +1370,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
-    * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    * @throws NotAMatrix2DException           if this orientation does not represent a transformation
+    *                                         in the XY plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -1251,10 +1392,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws NotAMatrix2DException if this orientation does not represent a transformation in the XY
-    *            plane.
+    *                               plane.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
@@ -1270,13 +1411,14 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleToTransform the tuple to transform. Modified.
+    * @param tupleToTransform          the tuple to transform. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void inverseTransform(FixedFrameTuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
@@ -1293,14 +1435,15 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -1317,12 +1460,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -1339,14 +1482,16 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -1364,14 +1509,15 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -1389,14 +1535,15 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple to store the result. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this orientation
-    *           represents a transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this orientation
-    *            does not represent a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
+    * @throws NotAMatrix2DException           if {@code checkIfTransformInXYPlane == true} and this
+    *                                         orientation does not represent a transformation in the XY
+    *                                         plane.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
@@ -1414,7 +1561,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param matrixToTransform the 3D matrix to be transformed. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixToTransform} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void inverseTransform(FixedFrameMatrix3DBasics matrixToTransform)
    {
@@ -1431,10 +1578,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void inverseTransform(FrameMatrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
@@ -1451,10 +1598,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -1471,10 +1618,11 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if either {@code matrixOriginal} or
-    *            {@code matrixTransformed} is not expressed in the same frame as {@code this}.
+    *                                         {@code matrixTransformed} is not expressed in the same
+    *                                         frame as {@code this}.
     */
    default void inverseTransform(FrameMatrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
@@ -1492,10 +1640,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame described by this orientation.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void inverseTransform(FrameMatrix3DReadOnly matrixOriginal, FrameMatrix3DBasics matrixTransformed)
    {
@@ -1516,7 +1664,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param vectorToTransform the 4D tuple to be transformed. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorToTransform} do not match.
+    *                                         {@code vectorToTransform} do not match.
     */
    default void inverseTransform(FixedFrameVector4DBasics vectorToTransform)
    {
@@ -1537,10 +1685,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorOriginal} do not match.
+    *                                         {@code vectorOriginal} do not match.
     */
    default void inverseTransform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
@@ -1561,10 +1709,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorTransformed} do not match.
+    *                                         {@code vectorTransformed} do not match.
     */
    default void inverseTransform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -1585,7 +1733,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     */
    default void inverseTransform(Vector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
@@ -1607,10 +1755,11 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code vectorOriginal}, and {@code vectorTransformed} do not match.
+    *                                         {@code vectorOriginal}, and {@code vectorTransformed} do
+    *                                         not match.
     */
    default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
@@ -1632,10 +1781,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code vectorOriginal} do not match.
+    *                                         {@code vectorOriginal} do not match.
     */
    default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
@@ -1652,7 +1801,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param orientationToTransform the orientation to be transformed. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationToTransform} do not match.
+    *                                         {@code orientationToTransform} do not match.
     */
    default void inverseTransform(FixedFrameOrientation3DBasics orientationToTransform)
    {
@@ -1668,11 +1817,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * {@code orientationOriginal} and store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationOriginal} do not match.
+    *                                         {@code orientationOriginal} do not match.
     */
    default void inverseTransform(FrameOrientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
    {
@@ -1688,11 +1838,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * {@code orientationOriginal} and store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationTransformed} do not match.
+    *                                         {@code orientationTransformed} do not match.
     */
    default void inverseTransform(Orientation3DReadOnly orientationOriginal, FixedFrameOrientation3DBasics orientationTransformed)
    {
@@ -1708,9 +1859,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * {@code orientationOriginal} and store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     */
    default void inverseTransform(Orientation3DReadOnly orientationOriginal, FrameOrientation3DBasics orientationTransformed)
    {
@@ -1726,11 +1878,13 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * {@code orientationOriginal} and store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code orientationOriginal}, and {@code orientationTransformed} do not match.
+    *                                         {@code orientationOriginal}, and
+    *                                         {@code orientationTransformed} do not match.
     */
    default void inverseTransform(FrameOrientation3DReadOnly orientationOriginal, FixedFrameOrientation3DBasics orientationTransformed)
    {
@@ -1747,11 +1901,12 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * {@code orientationOriginal} and store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code orientationOriginal} do not match.
+    *                                         {@code orientationOriginal} do not match.
     */
    default void inverseTransform(FrameOrientation3DReadOnly orientationOriginal, FrameOrientation3DBasics orientationTransformed)
    {

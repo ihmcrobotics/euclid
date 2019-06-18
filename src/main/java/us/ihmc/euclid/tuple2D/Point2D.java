@@ -129,8 +129,8 @@ public class Point2D implements Point2DBasics, GeometryObject<Point2D>
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -148,7 +148,7 @@ public class Point2D implements Point2DBasics, GeometryObject<Point2D>
     * Tests on a per component basis if this point is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other point to compare against this. Not modified.
+    * @param other   the other point to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -161,17 +161,16 @@ public class Point2D implements Point2DBasics, GeometryObject<Point2D>
    /**
     * Tests if {@code this} and {@code other} represent the same point 2D to an {@code epsilon}.
     * <p>
-    * Two points are considered geometrically equal if they are at a distance of less than or equal
-    * to {@code epsilon}.
+    * Two points are considered geometrically equal if they are at a distance of less than or equal to
+    * {@code epsilon}.
     * </p>
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other point 2D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two points can be spaced and still considered
-    *           equal.
+    * @param other   the other point 2D to compare against this. Not modified.
+    * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
     * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
     */
    @Override

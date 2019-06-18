@@ -1,6 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 /**
@@ -71,7 +71,7 @@ public interface Pose2DReadOnly
     *
     * @param transformToPack the rigid-body transform that is set to represent this pose 2D. Modified.
     */
-   default void get(RigidBodyTransform transformToPack)
+   default void get(RigidBodyTransformBasics transformToPack)
    {
       transformToPack.setTranslation(getX(), getY(), 0.0);
       transformToPack.setRotationYaw(getYaw());
@@ -131,7 +131,9 @@ public interface Pose2DReadOnly
     */
    default boolean equals(Pose2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
@@ -141,7 +143,7 @@ public interface Pose2DReadOnly
     * Tests on a per-component basis if this pose is equal to {@code other} with separate tolerances
     * for the position {@code positionEpsilon} and the orientation {@code orientationEpsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
@@ -156,7 +158,7 @@ public interface Pose2DReadOnly
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */

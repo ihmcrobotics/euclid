@@ -61,6 +61,9 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    /** The 3rd row 3rd column coefficient of this matrix. */
    private double m22;
 
+   private boolean dirty = false;
+   private boolean isIdentity = true;
+
    /**
     * Create a new rotation matrix initialized to identity.
     */
@@ -172,6 +175,14 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       setIdentity();
    }
 
+   @Override
+   public void setIdentity()
+   {
+      setUnsafe(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+      isIdentity = true;
+      dirty = false;
+   }
+
    /**
     * {@inheritDoc}
     * <p>
@@ -182,6 +193,15 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    public void setToNaN()
    {
       setUnsafe(Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN);
+      isIdentity = false;
+      dirty = false;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public boolean containsNaN()
+   {
+      return CommonMatrix3DBasics.super.containsNaN();
    }
 
    /**
@@ -193,7 +213,38 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public void normalize()
    {
-      Matrix3DTools.normalize(this);
+      if (isIdentity())
+         setIdentity();
+      else
+         Matrix3DTools.normalize(this);
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * The state of this rotation matrix is saved for performance improvement. It updated only when this
+    * matrix is marked as dirty which can be set by calling {@link #markAsDirty()}. The matrix is
+    * marked as dirty whenever its elements are updated.
+    * </p>
+    */
+   @Override
+   public boolean isIdentity()
+   {
+      if (dirty)
+         isIdentity = RotationMatrixReadOnly.super.isIdentity();
+      return isIdentity;
+   }
+
+   /**
+    * Marks this rotation matrix as dirty.
+    * <p>
+    * When a rotation matrix is marked as dirty, {@link #isIdentity()} will perform a thorough test to
+    * update the state of this matrix.
+    * </p>
+    */
+   public void markAsDirty()
+   {
+      dirty = true;
    }
 
    /**
@@ -248,6 +299,8 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       this.m20 = m20;
       this.m21 = m21;
       this.m22 = m22;
+
+      markAsDirty();
    }
 
    /**
@@ -259,7 +312,8 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
       setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      checkIfRotationMatrix();
+      if (!isIdentity())
+         checkIfRotationMatrix();
    }
 
    /**
@@ -271,26 +325,24 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     *        \  thirdRow.getX()  thirdRow.getY()  thirdRow.getZ() /
     * </pre>
     *
-    * @param firstRow the tuple holding onto the values of the first row. Not modified.
+    * @param firstRow  the tuple holding onto the values of the first row. Not modified.
     * @param secondRow the tuple holding onto the values of the second row. Not modified.
-    * @param thirdRow the tuple holding onto the values of the third row. Not modified.
+    * @param thirdRow  the tuple holding onto the values of the third row. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
     */
    public void setRows(Tuple3DReadOnly firstRow, Tuple3DReadOnly secondRow, Tuple3DReadOnly thirdRow)
    {
-      m00 = firstRow.getX();
-      m01 = firstRow.getY();
-      m02 = firstRow.getZ();
+      set(firstRow.getX(),
+          firstRow.getY(),
+          firstRow.getZ(),
 
-      m10 = secondRow.getX();
-      m11 = secondRow.getY();
-      m12 = secondRow.getZ();
+          secondRow.getX(),
+          secondRow.getY(),
+          secondRow.getZ(),
 
-      m20 = thirdRow.getX();
-      m21 = thirdRow.getY();
-      m22 = thirdRow.getZ();
-
-      checkIfRotationMatrix();
+          thirdRow.getX(),
+          thirdRow.getY(),
+          thirdRow.getZ());
    }
 
    /**
@@ -302,26 +354,24 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     *        \ firstColumn.getZ() secondColumn.getZ() thirdColumn.getZ() /
     * </pre>
     *
-    * @param firstColumn the tuple holding onto the values of the first column. Not modified.
+    * @param firstColumn  the tuple holding onto the values of the first column. Not modified.
     * @param secondColumn the tuple holding onto the values of the second column. Not modified.
-    * @param thirdColumn the tuple holding onto the values of the third column. Not modified.
+    * @param thirdColumn  the tuple holding onto the values of the third column. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
     */
    public void setColumns(Tuple3DReadOnly firstColumn, Tuple3DReadOnly secondColumn, Tuple3DReadOnly thirdColumn)
    {
-      m00 = firstColumn.getX();
-      m10 = firstColumn.getY();
-      m20 = firstColumn.getZ();
+      set(firstColumn.getX(),
+          secondColumn.getX(),
+          thirdColumn.getX(),
 
-      m01 = secondColumn.getX();
-      m11 = secondColumn.getY();
-      m21 = secondColumn.getZ();
+          firstColumn.getY(),
+          secondColumn.getY(),
+          thirdColumn.getY(),
 
-      m02 = thirdColumn.getX();
-      m12 = thirdColumn.getY();
-      m22 = thirdColumn.getZ();
-
-      checkIfRotationMatrix();
+          firstColumn.getZ(),
+          secondColumn.getZ(),
+          thirdColumn.getZ());
    }
 
    /**
@@ -371,6 +421,9 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       m20 = other.getM20();
       m21 = other.getM21();
       m22 = other.getM22();
+
+      // TODO Need to copy the dirty and isIdentity bits over.
+      markAsDirty();
    }
 
    @Override
@@ -396,6 +449,8 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       m20 = matrix.getM20();
       m21 = matrix.getM21();
       m22 = matrix.getM22();
+
+      markAsDirty();
       normalize();
    }
 
@@ -505,8 +560,28 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * </pre>
     *
     * @param yaw the angle to rotate about the z-axis.
+    * @deprecated Use {@link #setToYawOrientation(double)} instead
     */
+   @Deprecated
    public void setToYawMatrix(double yaw)
+   {
+      setToYawOrientation(yaw);
+   }
+
+   /**
+    * Sets this rotation matrix to represent a counter clockwise rotation around the z-axis of an angle
+    * {@code yaw}.
+    *
+    * <pre>
+    *        / cos(yaw) -sin(yaw) 0 \
+    * this = | sin(yaw)  cos(yaw) 0 |
+    *        \    0         0     1 /
+    * </pre>
+    *
+    * @param yaw the angle to rotate about the z-axis.
+    */
+   @Override
+   public void setToYawOrientation(double yaw)
    {
       RotationMatrixConversion.computeYawMatrix(yaw, this);
    }
@@ -522,8 +597,28 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * </pre>
     *
     * @param pitch the angle to rotate about the y-axis.
+    * @deprecated Use {@link #setToPitchOrientation(double)} instead
     */
+   @Deprecated
    public void setToPitchMatrix(double pitch)
+   {
+      setToPitchOrientation(pitch);
+   }
+
+   /**
+    * Sets this rotation matrix to represent a counter clockwise rotation around the y-axis of an angle
+    * {@code pitch}.
+    *
+    * <pre>
+    *        /  cos(pitch) 0 sin(pitch) \
+    * this = |      0      1     0      |
+    *        \ -sin(pitch) 0 cos(pitch) /
+    * </pre>
+    *
+    * @param pitch the angle to rotate about the y-axis.
+    */
+   @Override
+   public void setToPitchOrientation(double pitch)
    {
       RotationMatrixConversion.computePitchMatrix(pitch, this);
    }
@@ -539,8 +634,28 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * </pre>
     *
     * @param roll the angle to rotate about the x-axis.
+    * @deprecated Use {@link #setToRollOrientation(double)} instead
     */
+   @Deprecated
    public void setToRollMatrix(double roll)
+   {
+      setToRollOrientation(roll);
+   }
+
+   /**
+    * Sets this rotation matrix to represent a counter clockwise rotation around the x-axis of an angle
+    * {@code roll}.
+    *
+    * <pre>
+    *        / 1     0          0     \
+    * this = | 0 cos(roll) -sin(roll) |
+    *        \ 0 sin(roll)  cos(roll) /
+    * </pre>
+    *
+    * @param roll the angle to rotate about the x-axis.
+    */
+   @Override
+   public void setToRollOrientation(double roll)
    {
       RotationMatrixConversion.computeRollMatrix(roll, this);
    }
@@ -664,9 +779,9 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Append a rotation about the x-axis to this rotation matrix.
     *
     * <pre>
-    *               /  cos(pitch) 0 sin(pitch) \
-    * this = this * |      0      1     0      |
-    *               \ -sin(pitch) 0 cos(pitch) /
+    *               / 1     0          0     \
+    * this = this * | 0 cos(roll) -sin(roll) |
+    *               \ 0 sin(roll)  cos(roll) /
     * </pre>
     *
     * @param roll the angle to rotate about the x-axis.
@@ -779,9 +894,9 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Append a rotation about the x-axis to this rotation matrix.
     *
     * <pre>
-    *        /  cos(pitch) 0 sin(pitch) \
-    * this = |      0      1     0      | * this
-    *        \ -sin(pitch) 0 cos(pitch) /
+    *        / 1     0          0     \
+    * this = | 0 cos(roll) -sin(roll) | * this
+    *        \ 0 sin(roll)  cos(roll) /
     * </pre>
     *
     * @param roll the angle to rotate about the x-axis.
@@ -800,10 +915,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Interpolation</i> performed with quaternions.
     * </p>
     *
-    * @param rf the other rotation matrix used for the interpolation. Not modified.
+    * @param rf    the other rotation matrix used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           this rotation matrix, while a value of 1 is equivalent to setting this rotation matrix
-    *           to {@code rf}.
+    *              this rotation matrix, while a value of 1 is equivalent to setting this rotation
+    *              matrix to {@code rf}.
     */
    public void interpolate(RotationMatrixReadOnly rf, double alpha)
    {
@@ -818,11 +933,11 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Interpolation</i> performed with quaternions.
     * </p>
     *
-    * @param r0 the first rotation matrix used in the interpolation. Not modified.
-    * @param rf the second rotation matrix used in the interpolation. Not modified.
+    * @param r0    the first rotation matrix used in the interpolation. Not modified.
+    * @param rf    the second rotation matrix used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this rotation matrix to {@code r0}, while a value of 1 is equivalent to setting this
-    *           rotation matrix to {@code rf}.
+    *              this rotation matrix to {@code r0}, while a value of 1 is equivalent to setting this
+    *              rotation matrix to {@code rf}.
     */
    public void interpolate(RotationMatrixReadOnly r0, RotationMatrixReadOnly rf, double alpha)
    {
@@ -947,7 +1062,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
@@ -968,7 +1083,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other rotation matrix to compare against this. Not modified.
+    * @param other   the other rotation matrix to compare against this. Not modified.
     * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
     * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
     *         otherwise.

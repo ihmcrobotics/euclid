@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -73,7 +71,7 @@ public interface BoundingBox2DReadOnly
     * Gets the minimum coordinate of this bounding box and stores it in the given {@code minToPack}.
     *
     * @param minToPack point 2D in which the minimum coordinate of this bounding box is stored.
-    *           Modified.
+    *                  Modified.
     */
    default void getMinPoint(Point2DBasics minToPack)
    {
@@ -84,7 +82,7 @@ public interface BoundingBox2DReadOnly
     * Gets the maximum coordinate of this bounding box and stores it in the given {@code maxToPack}.
     *
     * @param maxToPack point 2D in which the maximum coordinate of this bounding box is stored.
-    *           Modified.
+    *                  Modified.
     */
    default void getMaxPoint(Point2DBasics maxToPack)
    {
@@ -117,7 +115,7 @@ public interface BoundingBox2DReadOnly
     * Asserts that the minimum coordinates are less or equal to the maximum coordinates.
     *
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void checkBounds()
    {
@@ -131,7 +129,7 @@ public interface BoundingBox2DReadOnly
     * Tests if the min and max points defining this bounding box contain at least one
     * {@link Double#NaN}.
     * 
-    * @return {@code true} if this bounding box contains at least one {@link Double#NaN}, {@code fasle}
+    * @return {@code true} if this bounding box contains at least one {@link Double#NaN}, {@code false}
     *         otherwise.
     */
    default boolean containsNaN()
@@ -165,8 +163,8 @@ public interface BoundingBox2DReadOnly
     * </ul>
     * </p>
     *
-    * @param xParameter the parameter to use for the interpolation along the x-axis.
-    * @param yParameter the parameter to use for the interpolation along the y-axis.
+    * @param xParameter  the parameter to use for the interpolation along the x-axis.
+    * @param yParameter  the parameter to use for the interpolation along the y-axis.
     * @param pointToPack the point 2D in which the result is stored. Modified.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
@@ -213,9 +211,9 @@ public interface BoundingBox2DReadOnly
     * </p>
     *
     * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
     *         this bounding box.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -255,9 +253,9 @@ public interface BoundingBox2DReadOnly
     * </p>
     *
     * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @return {@code true} if the query is inside or located on an edge of this bounding box,
     *         {@code false} if outside.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -288,7 +286,7 @@ public interface BoundingBox2DReadOnly
     * </ul>
     * </p>
     *
-    * @param query the query to test if it is located inside this bounding box. Not modified.
+    * @param query   the query to test if it is located inside this bounding box. Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
@@ -296,9 +294,7 @@ public interface BoundingBox2DReadOnly
     */
    default boolean isInsideEpsilon(Point2DReadOnly query, double epsilon)
    {
-      double x = query.getX();
-      double y = query.getY();
-      return isInsideEpsilon(x, y, epsilon);
+      return isInsideEpsilon(query.getX(), query.getY(), epsilon);
    }
 
    /**
@@ -315,10 +311,10 @@ public interface BoundingBox2DReadOnly
     * </ul>
     * </p>
     *
-    * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
-    * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    * @param x       the x-coordinate of the query to test if it is located inside this bounding box.
+    *                Not modified.
+    * @param y       the y-coordinate of the query to test if it is located inside this bounding box.
+    *                Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
@@ -343,7 +339,7 @@ public interface BoundingBox2DReadOnly
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    *              Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
    default boolean intersectsExclusive(BoundingBox2DReadOnly other)
@@ -365,7 +361,7 @@ public interface BoundingBox2DReadOnly
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    *              Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
@@ -389,13 +385,13 @@ public interface BoundingBox2DReadOnly
     * {@link #intersectsExclusive(BoundingBox2DReadOnly)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
     * {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * <li>if {@code epsilon < 0}, the size of this bounding box is scaled down by shifting the edges of
     * {@code epsilon} toward the inside.
     * </ul>
     * </p>
     *
-    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    * @param other   the other bounding box to test if it is intersecting with this bounding box. Not
+    *                Modified.
     * @param epsilon the tolerance to use in this test.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -415,7 +411,7 @@ public interface BoundingBox2DReadOnly
    /**
     * Tests if this the given line 2D intersects this bounding box.
     *
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
+    * @param pointOnLine   a point located on the infinitely long line. Not modified.
     * @param lineDirection the line direction. Not modified.
     * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -429,7 +425,7 @@ public interface BoundingBox2DReadOnly
     * Tests if this the given line segment 2D intersects this bounding box.
     *
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return {@code true} if the line segment and this bounding box intersect, {@code false}
     *         otherwise.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -442,7 +438,7 @@ public interface BoundingBox2DReadOnly
    /**
     * Tests if this the given ray 2D intersects this bounding box.
     *
-    * @param rayOrigin the origin of the ray. Not modified.
+    * @param rayOrigin    the origin of the ray. Not modified.
     * @param rayDirection the ray direction. Not modified.
     * @return {@code true} if the ray and this bounding box intersect, {@code false} otherwise.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -460,12 +456,12 @@ public interface BoundingBox2DReadOnly
     * {@link Double#NaN}.
     * </p>
     *
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the line direction. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the line direction. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and this bounding box. It is either equal to
     *         0 or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -474,7 +470,11 @@ public interface BoundingBox2DReadOnly
                                       Point2DBasics secondIntersectionToPack)
    {
       checkBounds();
-      return intersectionBetweenLine2DAndBoundingBox2D(getMinPoint(), getMaxPoint(), pointOnLine, lineDirection, firstIntersectionToPack,
+      return intersectionBetweenLine2DAndBoundingBox2D(getMinPoint(),
+                                                       getMaxPoint(),
+                                                       pointOnLine,
+                                                       lineDirection,
+                                                       firstIntersectionToPack,
                                                        secondIntersectionToPack);
    }
 
@@ -495,12 +495,12 @@ public interface BoundingBox2DReadOnly
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -509,7 +509,11 @@ public interface BoundingBox2DReadOnly
                                              Point2DBasics secondIntersectionToPack)
    {
       checkBounds();
-      return intersectionBetweenLineSegment2DAndBoundingBox2D(getMinPoint(), getMaxPoint(), lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
+      return intersectionBetweenLineSegment2DAndBoundingBox2D(getMinPoint(),
+                                                              getMaxPoint(),
+                                                              lineSegmentStart,
+                                                              lineSegmentEnd,
+                                                              firstIntersectionToPack,
                                                               secondIntersectionToPack);
    }
 
@@ -529,12 +533,12 @@ public interface BoundingBox2DReadOnly
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the ray and this bounding box. It is either equal to
     *         0, 1, or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
@@ -555,7 +559,9 @@ public interface BoundingBox2DReadOnly
     */
    default boolean equals(BoundingBox2DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
@@ -565,7 +571,7 @@ public interface BoundingBox2DReadOnly
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
@@ -579,7 +585,7 @@ public interface BoundingBox2DReadOnly
     * similar, i.e. the distance between their min and max points is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the bounding box to compare to. Not modified.
+    * @param other   the bounding box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
     *         otherwise.

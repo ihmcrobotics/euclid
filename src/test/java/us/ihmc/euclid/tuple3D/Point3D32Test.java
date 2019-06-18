@@ -1,12 +1,11 @@
 package us.ihmc.euclid.tuple3D;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -24,9 +23,9 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
       { // Test Point32()
          Point3D32 point = new Point3D32();
 
-         Assert.assertTrue(0 == point.getX());
-         Assert.assertTrue(0 == point.getY());
-         Assert.assertTrue(0 == point.getZ());
+         assertTrue(0 == point.getX());
+         assertTrue(0 == point.getY());
+         assertTrue(0 == point.getZ());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -39,9 +38,9 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
 
          point = new Point3D32(newX, newY, newZ);
 
-         Assert.assertTrue(newX == point.getX32());
-         Assert.assertTrue(newY == point.getY32());
-         Assert.assertTrue(newZ == point.getZ32());
+         assertTrue(newX == point.getX32());
+         assertTrue(newY == point.getY32());
+         assertTrue(newZ == point.getZ32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -50,9 +49,9 @@ public class Point3D32Test extends Point3DBasicsTest<Point3D32>
 
          Point3D32 point = new Point3D32(randomPoint32Array);
 
-         Assert.assertTrue(randomPoint32Array[0] == point.getX32());
-         Assert.assertTrue(randomPoint32Array[1] == point.getY32());
-         Assert.assertTrue(randomPoint32Array[2] == point.getZ32());
+         assertTrue(randomPoint32Array[0] == point.getX32());
+         assertTrue(randomPoint32Array[1] == point.getY32());
+         assertTrue(randomPoint32Array[2] == point.getZ32());
       }
 
       for (int i = 0; i < ITERATIONS; i++)

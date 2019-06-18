@@ -32,8 +32,8 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * Sets this frame orientation to {@code orientation2DReadOnly} and checks that its current frame
     * equals {@code referenceFrame}.
     *
-    * @param referenceFrame the coordinate system in which the given {@code orientation2DReadOnly} is
-    *           expressed.
+    * @param referenceFrame        the coordinate system in which the given
+    *                              {@code orientation2DReadOnly} is expressed.
     * @param orientation2DReadOnly the orientation 2D to copy the value from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
@@ -47,8 +47,8 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * Sets this frame orientation to the yaw angle of the given {@code orientationReadOnly} and checks
     * that its current frame equals {@code referenceFrame}.
     * 
-    * @param referenceFrame the coordinate system in which the given {@code orientation3DReadOnly} is
-    *           expressed.
+    * @param referenceFrame        the coordinate system in which the given
+    *                              {@code orientation3DReadOnly} is expressed.
     * @param orientation3DReadOnly the orientation to get the yaw angle from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
@@ -63,7 +63,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     *
     * @param other the other orientation 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default void set(FrameOrientation2DReadOnly other)
    {
@@ -95,7 +95,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * 
     * @param frameOrientation3DReadOnly the orientation to get the yaw angle from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameOrientation3DReadOnly} is not expressed in
-    *            the same frame as {@code this}.
+    *                                         the same frame as {@code this}.
     */
    default void set(FrameOrientation3DReadOnly frameOrientation3DReadOnly)
    {
@@ -112,7 +112,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     *
     * @param other the other orientation 2D to add to this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default void add(FrameOrientation2DReadOnly other)
    {
@@ -130,7 +130,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void add(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2)
    {
@@ -148,7 +148,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void add(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -166,7 +166,8 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and
-    *            {@code orientation2} are not expressed in the same reference frame.
+    *                                         {@code orientation2} are not expressed in the same
+    *                                         reference frame.
     */
    default void add(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -184,7 +185,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     *
     * @param other the other orientation 2D to add to this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default void sub(FrameOrientation2DReadOnly other)
    {
@@ -202,7 +203,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void sub(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2)
    {
@@ -220,7 +221,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void sub(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -238,7 +239,8 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     * @param orientation1 the first orientation 2D. Not modified.
     * @param orientation2 the second orientation 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and
-    *            {@code orientation2} are not expressed in the same reference frame.
+    *                                         {@code orientation2} are not expressed in the same
+    *                                         reference frame.
     */
    default void sub(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
@@ -256,10 +258,10 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     *
     * @param other the other orientation 2D used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
-    *           {@code other}.
+    *              {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    *              {@code other}.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default void interpolate(FrameOrientation2DReadOnly other, double alpha)
    {
@@ -276,11 +278,11 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     *
     * @param orientation1 the first orientation 2D used in the interpolation. Not modified.
     * @param orientation2 the second orientation 2D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code orientation2}.
+    * @param alpha        the percentage to use for the interpolation. A value of 0 will result in
+    *                     setting {@code this} to {@code orientation1}, while a value of 1 is
+    *                     equivalent to setting {@code this} to {@code orientation2}.
     * @throws ReferenceFrameMismatchException if {@code orientation1} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void interpolate(FrameOrientation2DReadOnly orientation1, Orientation2DReadOnly orientation2, double alpha)
    {
@@ -297,11 +299,11 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     *
     * @param orientation1 the first orientation 2D used in the interpolation. Not modified.
     * @param orientation2 the second orientation 2D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code orientation2}.
+    * @param alpha        the percentage to use for the interpolation. A value of 0 will result in
+    *                     setting {@code this} to {@code orientation1}, while a value of 1 is
+    *                     equivalent to setting {@code this} to {@code orientation2}.
     * @throws ReferenceFrameMismatchException if {@code orientation2} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void interpolate(Orientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2, double alpha)
    {
@@ -318,11 +320,12 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     *
     * @param orientation1 the first orientation 2D used in the interpolation. Not modified.
     * @param orientation2 the second orientation 2D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code orientation2}.
+    * @param alpha        the percentage to use for the interpolation. A value of 0 will result in
+    *                     setting {@code this} to {@code orientation1}, while a value of 1 is
+    *                     equivalent to setting {@code this} to {@code orientation2}.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code orientation1}, and
-    *            {@code orientation2} are not expressed in the same reference frame.
+    *                                         {@code orientation2} are not expressed in the same
+    *                                         reference frame.
     */
    default void interpolate(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2, double alpha)
    {

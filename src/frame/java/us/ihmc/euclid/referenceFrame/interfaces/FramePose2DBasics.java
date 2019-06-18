@@ -7,7 +7,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -64,9 +64,9 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * Sets the position, orientation, and reference frame.
     *
     * @param referenceFrame the new reference frame.
-    * @param x the x-coordinate for the position.
-    * @param y the y-coordinate for the position.
-    * @param yaw the angle for the orientation.
+    * @param x              the x-coordinate for the position.
+    * @param y              the y-coordinate for the position.
+    * @param yaw            the angle for the orientation.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double x, double y, double yaw)
    {
@@ -102,8 +102,8 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * Sets the position, orientation, and reference frame.
     *
     * @param referenceFrame the new reference frame.
-    * @param position the new position. Not modified.
-    * @param orientation the new orientation. Not modified.
+    * @param position       the new position. Not modified.
+    * @param orientation    the new orientation. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly position, Orientation2DReadOnly orientation)
    {
@@ -117,13 +117,13 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * The given transform has to represent a 2D transformation.
     * </p>
     *
-    * @param referenceFrame the new reference frame.
+    * @param referenceFrame     the new reference frame.
     * @param rigidBodyTransform the transform used to update the position and orientation. Not
-    *           modified.
+    *                           modified.
     * @throws NotAMatrix2DException if the rotation part of the transform does not represent a 2D
-    *            transformation.
+    *                               transformation.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform)
    {
       setIncludingFrame(referenceFrame, rigidBodyTransform, true);
    }
@@ -131,15 +131,15 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
    /**
     * Sets this pose 2D to match the given rigid-body transform and sets the reference frame.
     *
-    * @param referenceFrame the new reference frame.
+    * @param referenceFrame     the new reference frame.
     * @param rigidBodyTransform the transform used to update the position and orientation. Not
-    *           modified.
+    *                           modified.
     * @param checkIsTransform2D indicates whether or not the method should check that the rotation part
-    *           of the given transform represents a 2D rotation in the XY-plane.
+    *                           of the given transform represents a 2D rotation in the XY-plane.
     * @throws NotAMatrix2DException if {@code checkIsTransform2D} is {@code true} and if the rotation
-    *            part of the transform does not represent a 2D transformation.
+    *                               part of the transform does not represent a 2D transformation.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform, boolean checkIsTransform2D)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform, boolean checkIsTransform2D)
    {
       setReferenceFrame(referenceFrame);
       set(rigidBodyTransform, checkIsTransform2D);
@@ -150,8 +150,8 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
     * frame.
     *
     * @param referenceFrame the new reference frame.
-    * @param position the tuple used to initialize this pose's position. Not modified.
-    * @param yaw the angle used to initialize the pose's orientation.
+    * @param position       the tuple used to initialize this pose's position. Not modified.
+    * @param yaw            the angle used to initialize the pose's orientation.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly position, double yaw)
    {
@@ -162,10 +162,10 @@ public interface FramePose2DBasics extends FixedFramePose2DBasics, FrameChangeab
    /**
     * Sets position, orientation, and reference frame.
     *
-    * @param position the tuple with the new position coordinates. Not modified.
+    * @param position    the tuple with the new position coordinates. Not modified.
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void setIncludingFrame(FrameTuple2DReadOnly position, FrameOrientation2DReadOnly orientation)
    {

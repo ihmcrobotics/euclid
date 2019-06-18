@@ -28,8 +28,8 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    /**
     * Initializes this line segment to have the given endpoints.
     *
-    * @param firstEndpointX x-coordinate of the first endpoint of this line segment.
-    * @param firstEndpointY y-coordinate of the first endpoint of this line segment.
+    * @param firstEndpointX  x-coordinate of the first endpoint of this line segment.
+    * @param firstEndpointY  y-coordinate of the first endpoint of this line segment.
     * @param secondEndpointX x-coordinate of the second endpoint of this line segment.
     * @param secondEndpointY y-coordinate of the second endpoint of this line segment.
     */
@@ -61,7 +61,7 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    /**
     * Initializes this line segment to have the given endpoints.
     *
-    * @param firstEndpoint the first endpoint of this line segment. Not modified.
+    * @param firstEndpoint  the first endpoint of this line segment. Not modified.
     * @param secondEndpoint the second endpoint of this line segment. Not modified.
     */
    public LineSegment2D(Point2DReadOnly firstEndpoint, Point2DReadOnly secondEndpoint)
@@ -98,7 +98,7 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
     * Tests on a per-component basis on both endpoints if this line segment is equal to {@code other}
     * with the tolerance {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     */
@@ -116,7 +116,7 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
     * considered geometrically equal even if they are defined with opposite direction.
     * </p>
     *
-    * @param other the line segment to compare to. Not modified.
+    * @param other   the line segment to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two line segments represent the same geometry, {@code false}
     *         otherwise.

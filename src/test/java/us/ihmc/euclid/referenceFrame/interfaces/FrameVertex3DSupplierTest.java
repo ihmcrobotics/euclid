@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -147,7 +147,8 @@ public class FrameVertex3DSupplierTest
          while (original.size() < listSize)
             original.add(EuclidFrameRandomTools.nextFramePoint3D(random, worldFrame));
 
-         FrameVertex3DSupplier supplier = FrameVertex3DSupplier.asFrameVertex3DSupplier(original.toArray(new FramePoint3DReadOnly[0]), startIndex,
+         FrameVertex3DSupplier supplier = FrameVertex3DSupplier.asFrameVertex3DSupplier(original.toArray(new FramePoint3DReadOnly[0]),
+                                                                                        startIndex,
                                                                                         numberOfVertices);
 
          assertEquals(numberOfVertices, supplier.getNumberOfVertices());
@@ -209,14 +210,14 @@ public class FrameVertex3DSupplierTest
          List<FramePoint3D> listB = IntStream.range(0, sizeB).mapToObj(v -> EuclidFrameRandomTools.nextFramePoint3D(random, worldFrame))
                                              .collect(Collectors.toList());
 
-         assertTrue("Iteration: " + i,
-                    FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA), epsilon));
-         assertTrue("Iteration: " + i,
-                    FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listAPrime), epsilon));
-         assertFalse("Iteration: " + i,
-                     FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listSizeA), epsilon));
-         assertFalse("Iteration: " + i,
-                     FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listB), epsilon));
+         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA), epsilon),
+                    "Iteration: " + i);
+         assertTrue(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listAPrime), epsilon),
+                    "Iteration: " + i);
+         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listSizeA), epsilon),
+                     "Iteration: " + i);
+         assertFalse(FrameVertex3DSupplier.asFrameVertex3DSupplier(listA).epsilonEquals(FrameVertex3DSupplier.asFrameVertex3DSupplier(listB), epsilon),
+                     "Iteration: " + i);
       }
    }
 }

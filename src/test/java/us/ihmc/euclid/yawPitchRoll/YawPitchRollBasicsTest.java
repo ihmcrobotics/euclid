@@ -1,11 +1,11 @@
 package us.ihmc.euclid.yawPitchRoll;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -324,18 +324,18 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
          Orientation3DReadOnly orientation;
          switch (random.nextInt(5))
          {
-         case 0:
-            orientation = EuclidCoreRandomTools.nextAxisAngle(random);
-            break;
-         case 1:
-            orientation = EuclidCoreRandomTools.nextQuaternion(random);
-            break;
-         case 2:
-            orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
-            break;
-         default:
-            orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
-            break;
+            case 0:
+               orientation = EuclidCoreRandomTools.nextAxisAngle(random);
+               break;
+            case 1:
+               orientation = EuclidCoreRandomTools.nextQuaternion(random);
+               break;
+            case 2:
+               orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
+               break;
+            default:
+               orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+               break;
          }
 
          T original = createRandomYawPitchRoll(random);
@@ -362,18 +362,18 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
          Orientation3DReadOnly orientation;
          switch (random.nextInt(5))
          {
-         case 0:
-            orientation = EuclidCoreRandomTools.nextAxisAngle(random);
-            break;
-         case 1:
-            orientation = EuclidCoreRandomTools.nextQuaternion(random);
-            break;
-         case 2:
-            orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
-            break;
-         default:
-            orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
-            break;
+            case 0:
+               orientation = EuclidCoreRandomTools.nextAxisAngle(random);
+               break;
+            case 1:
+               orientation = EuclidCoreRandomTools.nextQuaternion(random);
+               break;
+            case 2:
+               orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
+               break;
+            default:
+               orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+               break;
          }
 
          T original = createRandomYawPitchRoll(random);
@@ -463,18 +463,18 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
          Orientation3DReadOnly orientation;
          switch (random.nextInt(5))
          {
-         case 0:
-            orientation = EuclidCoreRandomTools.nextAxisAngle(random);
-            break;
-         case 1:
-            orientation = EuclidCoreRandomTools.nextQuaternion(random);
-            break;
-         case 2:
-            orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
-            break;
-         default:
-            orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
-            break;
+            case 0:
+               orientation = EuclidCoreRandomTools.nextAxisAngle(random);
+               break;
+            case 1:
+               orientation = EuclidCoreRandomTools.nextQuaternion(random);
+               break;
+            case 2:
+               orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
+               break;
+            default:
+               orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+               break;
          }
 
          T original = createRandomYawPitchRoll(random);
@@ -501,18 +501,18 @@ public abstract class YawPitchRollBasicsTest<T extends YawPitchRollBasics> exten
          Orientation3DReadOnly orientation;
          switch (random.nextInt(5))
          {
-         case 0:
-            orientation = EuclidCoreRandomTools.nextAxisAngle(random);
-            break;
-         case 1:
-            orientation = EuclidCoreRandomTools.nextQuaternion(random);
-            break;
-         case 2:
-            orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
-            break;
-         default:
-            orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
-            break;
+            case 0:
+               orientation = EuclidCoreRandomTools.nextAxisAngle(random);
+               break;
+            case 1:
+               orientation = EuclidCoreRandomTools.nextQuaternion(random);
+               break;
+            case 2:
+               orientation = EuclidCoreRandomTools.nextYawPitchRoll(random);
+               break;
+            default:
+               orientation = EuclidCoreRandomTools.nextRotationMatrix(random);
+               break;
          }
 
          T original = createRandomYawPitchRoll(random);

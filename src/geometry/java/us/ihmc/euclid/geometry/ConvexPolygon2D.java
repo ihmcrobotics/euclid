@@ -142,7 +142,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * {@link #update()}.
     * </p>
     *
-    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param firstVertex2DSupplier  the first supplier of vertices.
     * @param secondVertex2DSupplier the second supplier of vertices.
     * @see #set(Vertex2DSupplier, Vertex2DSupplier)
     */
@@ -157,12 +157,11 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     *
     * @deprecated Use {@link EuclidGeometryRandomTools#nextConvexPolygon2D(Random, double, int)}
     *             instead.
-    *
-    * @param random the random generator to use.
-    * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
+    * @param random                 the random generator to use.
+    * @param maxAbsoluteXY          the maximum absolute value for each coordinate of the vertices.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
-    *           the random convex polygon. The size of the resulting convex polygon will be less than
-    *           {@code numberOfPossiblePoints}.
+    *                               the random convex polygon. The size of the resulting convex polygon
+    *                               will be less than {@code numberOfPossiblePoints}.
     * @return the random convex polygon.
     * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
     */
@@ -261,7 +260,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     *
     * @param other the other convex polygon to copy. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time the
-    *            other polygon's vertices were edited.
+    *                                  other polygon's vertices were edited.
     */
    @Override
    public void set(ConvexPolygon2D other)
@@ -270,8 +269,8 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /**
-    * Compute centroid and area of this polygon. Formula taken from
-    * <a href= "http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/">here</a>.
+    * Compute centroid and area of this polygon. Formula taken from <a href=
+    * "https://www.seas.upenn.edu/~sys502/extra_materials/Polygon%20Area%20and%20Centroid.pdf">here</a>.
     */
    public void updateCentroidAndArea()
    {
@@ -362,12 +361,12 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * The method returns {@code false} if the two polygons have different size.
     * </p>
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
     */
    @Override
    public boolean epsilonEquals(ConvexPolygon2D other, double epsilon)
@@ -385,7 +384,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * same vertex.
     * </p>
     *
-    * @param other the convex polygon to compare to.
+    * @param other   the convex polygon to compare to.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
     */

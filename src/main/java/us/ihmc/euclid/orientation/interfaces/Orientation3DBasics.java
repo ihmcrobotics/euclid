@@ -18,7 +18,6 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  * </p>
  * 
  * @author Sylvain Bertrand
- *
  */
 public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, Transformable
 {
@@ -64,9 +63,9 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
    /**
     * Sets this orientation to represents the same orientation as an axis-angle given its 4 components.
     *
-    * @param x x-component of the axis part of the axis-angle.
-    * @param y y-component of the axis part of the axis-angle.
-    * @param z z-component of the axis part of the axis-angle.
+    * @param x     x-component of the axis part of the axis-angle.
+    * @param y     y-component of the axis part of the axis-angle.
+    * @param z     z-component of the axis part of the axis-angle.
     * @param angle the angle part of the axis-angle.
     */
    void setAxisAngle(double x, double y, double z, double angle);
@@ -121,9 +120,9 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
     * </pre>
     * </p>
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll  the angle to rotate about the x-axis.
     */
    void setYawPitchRoll(double yaw, double pitch, double roll);
 
@@ -208,6 +207,30 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
    }
 
    /**
+    * Sets this orientation to represent a counter clockwise rotation around the z-axis of an angle
+    * {@code yaw}.
+    * 
+    * @param yaw the angle to rotate about the z-axis.
+    */
+   void setToYawOrientation(double yaw);
+
+   /**
+    * Sets this orientation to represent a counter clockwise rotation around the y-axis of an angle
+    * {@code pitch}.
+    * 
+    * @param pitch the angle to rotate about the y-axis.
+    */
+   void setToPitchOrientation(double pitch);
+
+   /**
+    * Sets this orientation to represent a counter clockwise rotation around the x-axis of an angle
+    * {@code roll}.
+    * 
+    * @param roll the angle to rotate about the x-axis.
+    */
+   void setToRollOrientation(double roll);
+
+   /**
     * Converts, if necessary, and sets this orientation to represents the same orientation as
     * {@code orientation3DReadOnly}.
     *
@@ -278,7 +301,7 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     */
    void appendInvertOther(Orientation3DReadOnly orientation);
 
@@ -325,7 +348,7 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     */
    default void appendInvertBoth(Orientation3DReadOnly orientation)
    {
@@ -421,7 +444,7 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     */
    void prependInvertOther(Orientation3DReadOnly orientation);
 
@@ -468,7 +491,7 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     */
    default void prependInvertBoth(Orientation3DReadOnly orientation)
    {

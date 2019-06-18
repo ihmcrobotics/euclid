@@ -6,7 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
@@ -87,10 +87,10 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
    /**
     * Sets this pose 3D from the given reference frame and transform.
     *
-    * @param referenceFrame the new reference frame.
+    * @param referenceFrame     the new reference frame.
     * @param rigidBodyTransform the transform used to set the pose. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransform rigidBodyTransform)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform)
    {
       setReferenceFrame(referenceFrame);
       set(rigidBodyTransform);
@@ -100,8 +100,8 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
     * Sets reference frame, position, and orientation.
     *
     * @param referenceFrame the new reference frame.
-    * @param position the tuple with the new position coordinates. Not modified.
-    * @param orientation the new orientation. Not modified.
+    * @param position       the tuple with the new position coordinates. Not modified.
+    * @param orientation    the new orientation. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
@@ -112,10 +112,10 @@ public interface FramePose3DBasics extends FixedFramePose3DBasics, FrameChangeab
    /**
     * Sets reference frame, position, and orientation.
     *
-    * @param position the tuple with the new position coordinates. Not modified.
+    * @param position    the tuple with the new position coordinates. Not modified.
     * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void setIncludingFrame(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {

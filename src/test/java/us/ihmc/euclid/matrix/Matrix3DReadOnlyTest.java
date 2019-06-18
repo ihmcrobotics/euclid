@@ -1,12 +1,12 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
@@ -252,8 +252,15 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
       {
          matrix = createRandomMatrix(random);
          double actualDeterminant = matrix.determinant();
-         double expectedDeterminant = Matrix3DFeatures.determinant(matrix.getM00(), matrix.getM01(), matrix.getM02(), matrix.getM10(), matrix.getM11(),
-                                                                   matrix.getM12(), matrix.getM20(), matrix.getM21(), matrix.getM22());
+         double expectedDeterminant = Matrix3DFeatures.determinant(matrix.getM00(),
+                                                                   matrix.getM01(),
+                                                                   matrix.getM02(),
+                                                                   matrix.getM10(),
+                                                                   matrix.getM11(),
+                                                                   matrix.getM12(),
+                                                                   matrix.getM20(),
+                                                                   matrix.getM21(),
+                                                                   matrix.getM22());
          assertEquals(expectedDeterminant, actualDeterminant, SMALL_EPS);
       }
    }
@@ -264,7 +271,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
       // Let's just do a trivial test here. A more thorough test is done in Matrix3DFeaturesTest
 
       T matrix1 = createMatrix(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      EuclidCoreTestTools.assertExceptionIsThrown(() -> matrix1.checkIfRotationMatrix(), "The matrix is not a rotation matrix: \n" + matrix1,
+      EuclidCoreTestTools.assertExceptionIsThrown(() -> matrix1.checkIfRotationMatrix(),
+                                                  "The matrix is not a rotation matrix: \n" + matrix1,
                                                   NotARotationMatrixException.class);
 
       T matrix2 = createMatrix(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
@@ -434,7 +442,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrix.transform(actual);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(actual), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(actual),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
       }
 
@@ -454,7 +463,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrix.transform(original, actual);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(original, actual), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(original, actual),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
       }
 
@@ -475,7 +485,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrix.transform(actual, true);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(actual, true), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(actual, true),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
 
          matrix = createRandomMatrix(random);
@@ -501,7 +512,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrix.transform(original, actual, true);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(original, actual, true), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).transform(original, actual, true),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
 
          matrix = createRandomMatrix(random);
@@ -634,7 +646,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrixInverse.transform(original, expected);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(actual), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(actual),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
       }
 
@@ -659,7 +672,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrixInverse.transform(original, expected);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(original, actual), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(original, actual),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
       }
 
@@ -685,7 +699,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrixInverse.transform(original, expected);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(actual, true), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(actual, true),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
 
          matrix = createRandomMatrix(random);
@@ -716,7 +731,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          matrixInverse.transform(original, expected);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, SMALL_EPS);
 
-         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(original, actual, true), NotAMatrix2DException.class,
+         EuclidCoreTestTools.assertExceptionIsThrown(() -> createRandomMatrix(random).inverseTransform(original, actual, true),
+                                                     NotAMatrix2DException.class,
                                                      NotAnOrientation2DException.class);
 
          matrix = createRandomMatrix(random);

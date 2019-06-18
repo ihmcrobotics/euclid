@@ -1,8 +1,7 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
-import us.ihmc.euclid.transform.QuaternionBasedTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -198,7 +197,7 @@ public interface Pose3DReadOnly
    /**
     * Gets the position and orientation parts of this pose 3D.
     *
-    * @param positionToPack tuple in which the position is stored. Modified.
+    * @param positionToPack    tuple in which the position is stored. Modified.
     * @param orientationToPack orientation in which the orientation is stored. Modified.
     */
    default void get(Tuple3DBasics positionToPack, Orientation3DBasics orientationToPack)
@@ -212,18 +211,7 @@ public interface Pose3DReadOnly
     *
     * @param transformToPack the rigid-body transform that is set to represent this pose 3D. Modified.
     */
-   default void get(RigidBodyTransform transformToPack)
-   {
-      transformToPack.set(getOrientation(), getPosition());
-   }
-
-   /**
-    * Packs this pose 3D into the given {@code transformToPack}.
-    *
-    * @param transformToPack the quaternion-based transform that is set to represent this pose 3D.
-    *           Modified.
-    */
-   default void get(QuaternionBasedTransform transformToPack)
+   default void get(RigidBodyTransformBasics transformToPack)
    {
       transformToPack.set(getOrientation(), getPosition());
    }
@@ -232,7 +220,7 @@ public interface Pose3DReadOnly
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
@@ -247,7 +235,7 @@ public interface Pose3DReadOnly
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */
@@ -264,7 +252,9 @@ public interface Pose3DReadOnly
     */
    default boolean equals(Pose3DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());

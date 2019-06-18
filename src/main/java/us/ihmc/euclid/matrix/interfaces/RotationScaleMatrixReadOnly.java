@@ -172,7 +172,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * Packs the rotation part as a rotation matrix and stores it into a row-major 1D array.
     *
     * @param rotationMatrixArrayToPack the array in which the coefficients of the rotation part are
-    *           stored. Modified.
+    *                                  stored. Modified.
     */
    default void getRotation(double[] rotationMatrixArrayToPack)
    {
@@ -337,7 +337,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * orientationToTransform = this.getRotationMatrix() * orientationOriginal <br>
     * </p>
     *
-    * @param orientationOriginal the orientation to transform. Not modified.
+    * @param orientationOriginal    the orientation to transform. Not modified.
     * @param orientationTransformed the orientation in which the result is stored. Modified.
     */
    default void transform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
@@ -377,7 +377,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * matrixTransformed = this.getRotationMatrix() * matrixOriginal
     * </p>
     *
-    * @param matrixOriginal the rotation matrix to transform. Not modified.
+    * @param matrixOriginal    the rotation matrix to transform. Not modified.
     * @param matrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
@@ -439,7 +439,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * orientationTransformed = this.getRotationMatrix()<sup>-1</sup> * orientationOriginal <br>
     * </p>
     *
-    * @param orientationOriginal the orientation to transform. Not modified.
+    * @param orientationOriginal    the orientation to transform. Not modified.
     * @param orientationTransformed the orientation in which the result is stored. Modified.
     */
    default void inverseTransform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
@@ -489,7 +489,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * of a rotation matrix preventing to actually compute the inverse of the matrix.
     * </p>
     *
-    * @param matrixOriginal the rotation matrix to transform. Not modified.
+    * @param matrixOriginal    the rotation matrix to transform. Not modified.
     * @param matrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
@@ -511,7 +511,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    /**
     * Tests the rotation parts and scales of both matrices are equal to an {@code epsilon}.
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two matrix are equal, {@code false} otherwise.
     */
@@ -531,9 +531,9 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other rotation-scale matrix to compare against this. Not modified.
+    * @param other   the other rotation-scale matrix to compare against this. Not modified.
     * @param epsilon the threshold used when comparing the internal rotation and scale to
-    *           {@code other}'s rotation and scale.
+    *                {@code other}'s rotation and scale.
     * @return {@code true} if the two rotation-scale matrices represent the same geometry,
     *         {@code false} otherwise.
     */

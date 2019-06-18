@@ -62,8 +62,8 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     * frame.
     *
     * @param referenceFrame the initial frame for this frame point.
-    * @param x the x-coordinate.
-    * @param y the y-coordinate.
+    * @param x              the x-coordinate.
+    * @param y              the y-coordinate.
     */
    public FramePoint2D(ReferenceFrame referenceFrame, double x, double y)
    {
@@ -75,7 +75,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     * given array and initializes its reference frame.
     *
     * @param referenceFrame the initial frame for this frame point.
-    * @param pointArray the array containing this point's coordinates. Not modified.
+    * @param pointArray     the array containing this point's coordinates. Not modified.
     */
    public FramePoint2D(ReferenceFrame referenceFrame, double[] pointArray)
    {
@@ -86,7 +86,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     * Creates a new frame point and initializes it to {@code tuple2DReadOnly} and to the given
     * reference frame.
     *
-    * @param referenceFrame the initial frame for this frame point.
+    * @param referenceFrame  the initial frame for this frame point.
     * @param tuple2DReadOnly the tuple to copy the coordinates from. Not modified.
     */
    public FramePoint2D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
@@ -98,7 +98,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     * Creates a new frame point and initializes it to the x and y coordinates of
     * {@code tuple3DReadOnly} and to the given reference frame.
     *
-    * @param referenceFrame the initial frame for this frame point.
+    * @param referenceFrame  the initial frame for this frame point.
     * @param tuple3DReadOnly the tuple to copy the coordinates from. Not modified.
     */
    public FramePoint2D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -121,7 +121,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     * {@code frameTuple3DReadOnly}.
     *
     * @param frameTuple3DReadOnly the tuple to copy the coordinates and reference frame from. Not
-    *           modified.
+    *                             modified.
     */
    public FramePoint2D(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
@@ -133,7 +133,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     *
     * @param other the other frame point to set this to. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    @Override
    public void set(FramePoint2D other)
@@ -258,7 +258,7 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     * If the two points have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other point to compare against this. Not modified.
+    * @param other   the other point to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two points are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
@@ -280,11 +280,11 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other point 2D to compare against this. Not modified.
+    * @param other   the other point 2D to compare against this. Not modified.
     * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
     * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FramePoint2D other, double epsilon)

@@ -1,13 +1,13 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
@@ -1275,7 +1275,7 @@ public class Matrix3DToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          RotationMatrix rotationMatrix = new RotationMatrix();
-         rotationMatrix.setToYawMatrix(2.0 * Math.PI * random.nextDouble());
+         rotationMatrix.setToYawOrientation(2.0 * Math.PI * random.nextDouble());
          matrix.set(rotationMatrix);
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
 

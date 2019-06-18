@@ -51,7 +51,7 @@ public abstract class RotationVectorConversion
     * </ul>
     * </p>
     *
-    * @param axisAngle the axis-angle to use for the conversion. Not modified.
+    * @param axisAngle            the axis-angle to use for the conversion. Not modified.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertAxisAngleToRotationVector(AxisAngleReadOnly axisAngle, Vector3DBasics rotationVectorToPack)
@@ -73,10 +73,10 @@ public abstract class RotationVectorConversion
     * </ul>
     * </p>
     *
-    * @param ux the axis x-component of the axis-angle to use for the conversion.
-    * @param uy the axis y-component of the axis-angle to use for the conversion.
-    * @param uz the axis z-component of the axis-angle to use for the conversion.
-    * @param angle the angle of the axis-angle to use for the conversion.
+    * @param ux                   the axis x-component of the axis-angle to use for the conversion.
+    * @param uy                   the axis y-component of the axis-angle to use for the conversion.
+    * @param uz                   the axis z-component of the axis-angle to use for the conversion.
+    * @param angle                the angle of the axis-angle to use for the conversion.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertAxisAngleToRotationVectorImpl(double ux, double uy, double uz, double angle, Vector3DBasics rotationVectorToPack)
@@ -116,7 +116,7 @@ public abstract class RotationVectorConversion
     * </ul>
     * </p>
     *
-    * @param quaternion the quaternion to use for the conversion. Not modified.
+    * @param quaternion           the quaternion to use for the conversion. Not modified.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertQuaternionToRotationVector(QuaternionReadOnly quaternion, Vector3DBasics rotationVectorToPack)
@@ -166,8 +166,8 @@ public abstract class RotationVectorConversion
     * </ul>
     * </p>
     *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
+    * @param rotationScaleMatrix  a 3-by-3 matrix representing an orientation and a scale. Only the
+    *                             orientation part is used during the conversion. Not modified.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertMatrixToRotationVector(RotationScaleMatrixReadOnly rotationScaleMatrix, Vector3DBasics rotationVectorToPack)
@@ -189,7 +189,7 @@ public abstract class RotationVectorConversion
     * </ul>
     * </p>
     *
-    * @param rotationMatrix a 3-by-3 matrix representing an orientation. Not modified.
+    * @param rotationMatrix       a 3-by-3 matrix representing an orientation. Not modified.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertMatrixToRotationVector(RotationMatrixReadOnly rotationMatrix, Vector3DBasics rotationVectorToPack)
@@ -226,15 +226,24 @@ public abstract class RotationVectorConversion
     * </ul>
     * </p>
     *
-    * @param m00 the new 1st row 1st column coefficient for the matrix to use for the conversion.
-    * @param m01 the new 1st row 2nd column coefficient for the matrix to use for the conversion.
-    * @param m02 the new 1st row 3rd column coefficient for the matrix to use for the conversion.
-    * @param m10 the new 2nd row 1st column coefficient for the matrix to use for the conversion.
-    * @param m11 the new 2nd row 2nd column coefficient for the matrix to use for the conversion.
-    * @param m12 the new 2nd row 3rd column coefficient for the matrix to use for the conversion.
-    * @param m20 the new 3rd row 1st column coefficient for the matrix to use for the conversion.
-    * @param m21 the new 3rd row 2nd column coefficient for the matrix to use for the conversion.
-    * @param m22 the new 3rd row 3rd column coefficient for the matrix to use for the conversion.
+    * @param m00                  the new 1st row 1st column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m01                  the new 1st row 2nd column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m02                  the new 1st row 3rd column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m10                  the new 2nd row 1st column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m11                  the new 2nd row 2nd column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m12                  the new 2nd row 3rd column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m20                  the new 3rd row 1st column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m21                  the new 3rd row 2nd column coefficient for the matrix to use for the
+    *                             conversion.
+    * @param m22                  the new 3rd row 3rd column coefficient for the matrix to use for the
+    *                             conversion.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    static void convertMatrixToRotationVectorImpl(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
@@ -325,7 +334,7 @@ public abstract class RotationVectorConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
+    * @param yawPitchRoll         the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     * @deprecated Use
     *             {@link #convertYawPitchRollToRotationVector(YawPitchRollReadOnly, Vector3DBasics)}
@@ -357,7 +366,7 @@ public abstract class RotationVectorConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
+    * @param yawPitchRoll         the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertYawPitchRollToRotationVector(YawPitchRollReadOnly yawPitchRoll, Vector3DBasics rotationVectorToPack)
@@ -386,9 +395,9 @@ public abstract class RotationVectorConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yaw the yaw angle to use in the conversion.
-    * @param pitch the pitch angle to use in the conversion.
-    * @param roll the roll angle to use in the conversion.
+    * @param yaw                  the yaw angle to use in the conversion.
+    * @param pitch                the pitch angle to use in the conversion.
+    * @param roll                 the roll angle to use in the conversion.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertYawPitchRollToRotationVector(double yaw, double pitch, double roll, Vector3DBasics rotationVectorToPack)

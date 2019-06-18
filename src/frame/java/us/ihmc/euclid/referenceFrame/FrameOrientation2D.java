@@ -14,7 +14,6 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  * reference frame.
  * 
  * @author Sylvain Bertrand
- *
  */
 public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObject<FrameOrientation2D>
 {
@@ -57,7 +56,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
     * Creates a new orientation 2D and initializes its yaw angle and reference frame.
     * 
     * @param referenceFrame the initial reference frame for this orientation 2D.
-    * @param yaw the initial yaw angle for this orientation 2D.
+    * @param yaw            the initial yaw angle for this orientation 2D.
     */
    public FrameOrientation2D(ReferenceFrame referenceFrame, double yaw)
    {
@@ -79,7 +78,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
     * Creates a new frame vector and initializes its orientation components to the given
     * {@link Orientation2DReadOnly} and its reference frame to the given {@link ReferenceFrame}.
     *
-    * @param referenceFrame the initial frame for this orientation.
+    * @param referenceFrame        the initial frame for this orientation.
     * @param orientation2DReadOnly the orientation this frame orientation will represent. Not modified.
     */
    public FrameOrientation2D(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation2DReadOnly)
@@ -101,7 +100,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
     * Creates a new frame orientation 2D and initializes it using a frame quaternion.
     * 
     * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame
-    *           from. Not modified.
+    *                                from. Not modified.
     */
    public FrameOrientation2D(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {
@@ -181,11 +180,11 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
     * -<i>pi</i> &ne; <i>pi</i>.
     * </p>
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two orientations are equal, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    @Override
    public boolean epsilonEquals(FrameOrientation2D other, double epsilon)
@@ -198,12 +197,12 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
     * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the orientation to compare to. Not modified.
+    * @param other   the orientation to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FrameOrientation2D other, double epsilon)

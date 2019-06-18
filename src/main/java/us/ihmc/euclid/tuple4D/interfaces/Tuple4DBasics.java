@@ -101,11 +101,10 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
-    * given array {@code tupleArray}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
+    * array {@code tupleArray}.
     *
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(double[] tupleArray)
    {
@@ -113,12 +112,11 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
-    * given array {@code tupleArray}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
+    * array {@code tupleArray}.
     *
     * @param startIndex the first index to start reading from in the array.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(int startIndex, double[] tupleArray)
    {
@@ -126,11 +124,10 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
-    * given array {@code tupleArray}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
+    * array {@code tupleArray}.
     *
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(float[] tupleArray)
    {
@@ -138,12 +135,11 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
-    * given array {@code tupleArray}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
+    * array {@code tupleArray}.
     *
     * @param startIndex the first index to start reading from in the array.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(int startIndex, float[] tupleArray)
    {
@@ -151,11 +147,11 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
-    * given column vector starting to read from its first row index.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
+    * column vector starting to read from its first row index.
     *
     * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    *               modified.
     */
    default void set(DenseMatrix64F matrix)
    {
@@ -163,12 +159,12 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
-    * given column vector starting to read from {@code startRow}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
+    * column vector starting to read from {@code startRow}.
     *
     * @param startRow the first row index to start reading in the dense-matrix.
-    * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    * @param matrix   the column vector containing the new values for this tuple's components. Not
+    *                 modified.
     */
    default void set(int startRow, DenseMatrix64F matrix)
    {
@@ -176,13 +172,13 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the
-    * given matrix starting to read from {@code startRow} at the column index {@code column}.
+    * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
+    * matrix starting to read from {@code startRow} at the column index {@code column}.
     *
     * @param startRow the first row index to start reading in the dense-matrix.
-    * @param column the column index to read in the dense-matrix.
-    * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    * @param column   the column index to read in the dense-matrix.
+    * @param matrix   the column vector containing the new values for this tuple's components. Not
+    *                 modified.
     */
    default void set(int startRow, int column, DenseMatrix64F matrix)
    {

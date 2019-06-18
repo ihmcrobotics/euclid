@@ -1,15 +1,19 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
@@ -209,5 +213,198 @@ public class TupleToolsTest
       tuple2.setZ(tuple1.getZ() - epsilon);
       tuple2.setS(tuple1.getS() - epsilon);
       assertTrue(TupleTools.epsilonEquals(tuple1, tuple2, epsilon));
+   }
+
+   @Test
+   public void testIsTupleZero2D() throws Exception
+   {
+      Random random = new Random(621541L);
+      Vector2DBasics tuple = new Vector2D();
+
+      double epsilon = random.nextDouble();
+
+      tuple.setX(random.nextDouble());
+      tuple.setY(random.nextDouble());
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-1.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-1.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+1.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+1.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+epsilon);
+      tuple.setY(+epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-epsilon);
+      tuple.setY(-epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+   }
+
+   @Test
+   public void testIsTupleZero3D() throws Exception
+   {
+      Random random = new Random(621541L);
+      Vector3DBasics tuple = new Vector3D();
+
+      double epsilon = random.nextDouble();
+
+      tuple.setX(random.nextDouble());
+      tuple.setY(random.nextDouble());
+      tuple.setZ(random.nextDouble());
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      tuple.setZ(+0.1 * epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      tuple.setZ(-0.1 * epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-1.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      tuple.setZ(-0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-1.1 * epsilon);
+      tuple.setZ(-0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      tuple.setZ(-1.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+1.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      tuple.setZ(+0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+1.1 * epsilon);
+      tuple.setZ(+0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      tuple.setZ(+1.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+epsilon);
+      tuple.setY(+epsilon);
+      tuple.setZ(+epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-epsilon);
+      tuple.setY(-epsilon);
+      tuple.setZ(-epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+   }
+
+   @Test
+   public void testIsTupleZero4D() throws Exception
+   {
+      Random random = new Random(621541L);
+      Vector4DBasics tuple = new Vector4D();
+
+      double epsilon = random.nextDouble();
+
+      tuple.setX(random.nextDouble());
+      tuple.setY(random.nextDouble());
+      tuple.setZ(random.nextDouble());
+      tuple.setS(random.nextDouble());
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      tuple.setZ(+0.1 * epsilon);
+      tuple.setS(+0.1 * epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      tuple.setZ(-0.1 * epsilon);
+      tuple.setS(-0.1 * epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-1.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      tuple.setZ(-0.1 * epsilon);
+      tuple.setS(-0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-1.1 * epsilon);
+      tuple.setZ(-0.1 * epsilon);
+      tuple.setS(-0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      tuple.setZ(-1.1 * epsilon);
+      tuple.setS(-0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-0.1 * epsilon);
+      tuple.setY(-0.1 * epsilon);
+      tuple.setZ(-0.1 * epsilon);
+      tuple.setS(-1.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+1.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      tuple.setZ(+0.1 * epsilon);
+      tuple.setS(+0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+1.1 * epsilon);
+      tuple.setZ(+0.1 * epsilon);
+      tuple.setS(+0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      tuple.setZ(+1.1 * epsilon);
+      tuple.setS(+0.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+0.1 * epsilon);
+      tuple.setY(+0.1 * epsilon);
+      tuple.setZ(+0.1 * epsilon);
+      tuple.setS(+1.1 * epsilon);
+      assertFalse(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(+epsilon);
+      tuple.setY(+epsilon);
+      tuple.setZ(+epsilon);
+      tuple.setS(+epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
+
+      tuple.setX(-epsilon);
+      tuple.setY(-epsilon);
+      tuple.setZ(-epsilon);
+      tuple.setS(-epsilon);
+      assertTrue(TupleTools.isTupleZero(tuple, epsilon));
    }
 }

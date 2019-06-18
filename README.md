@@ -35,7 +35,7 @@ Euclid is composed of 4 modules.
 - Euclid Frame: Framework introducing the notion of reference frames and re-defines the types in Euclid Core & Geometry to attach them to reference frames and add options to easily transform object from a frame to another.
 	This module comes from the frustration of never knowing the right combination of transforms to get a set of coordinates that currently are expressed with respect to a referential to be expressed with respect to another object or referential.
 	It is very similar to the ROS tf framework.
-- Euclid Shape (under development): Defines 3D shapes such as boxes, cylinders, spheres, ellipsoids. Additional shapes, ray casting, and shape-to-shape collision detection are part of the current effort put in this module.
+- Euclid Shape (under development): Defines 3D shapes such as boxes, cylinders, spheres, ellipsoids, and convex polytopes. It also provides collision detection algorithms. Additional shapes, ray casting, and other geometric operations will be added in future releases.
 
 This library is continuously being improved and will be extended in the near future as the result of migrating progressively content from the IHMC open source software [here](https://github.com/ihmcrobotics/ihmc-open-robotics-software).
 
@@ -63,7 +63,7 @@ Note that most of the modules define the following tools:
 	- as a quaternion: `Quaternion`, `Quaternion32`.
 	- as an axis-angle: `AxisAngle`, `AxisAngle32`.
 	- as yaw-pitch-roll angles: `YawPitchRoll`.
-	- it also provides tools to convert any rotation definition to a rotation vector, also called Euler vector, and to yaw-pitch-roll angles, also called Euler angles.
+	- it also provides tools to convert any rotation definition to a rotation vector, also called Euler vector.
 - A set of tools to easily convert from one orientation definition to another: `AxisAngleConversion`, `QuaternionConversion`, `RotationMatrixConversion`, `RotationVectorConversion`, and `YawPitchRollConversion`.
 - A general 3-by-3 matrix: `Matrix3D`.
 - A 3-by-3 matrix for rotating and scaling geometry objects: `RotationScaleMatrix`.
@@ -71,6 +71,7 @@ Note that most of the modules define the following tools:
 	 - A 4-by-4 homogeneous matrix for rotating and translating geometry objects: `RigidBodyTransform`.
 	 - The more concise equivalent of the RigidBodyTransform using a quaternion instead of a 3-by-3 rotation matrix: `QuaternionBasedTransform`.
 	 - A 4-by-4 homogeneous matrix for scaling, rotation, and translating geometry objects: `AffineTransform`.
+
 #### Euclid Geometry
 - Infinitely long lines in 2 and 3 dimensions: `Line2D`, `Line3D`.
 - Line segments in 2 and 3 dimensions: `LineSegment2D`, `LineSegment3D`.
@@ -78,15 +79,23 @@ Note that most of the modules define the following tools:
 - Convex polygons in 2 dimensions: `ConvexPolygon2D`.
 - Infinitely long planes in 3 dimensions: `Plane3D`.
 - Poses in 2 and 3 dimensions: `Pose2D` and `Pose3D`.
+
 #### Euclid Frame
 - Reference frames in 3 dimensions: `ReferenceFrame`. 
 - Contains the equivalent to most of the previous types where the geometry is represented in the same manner but simply with specification of the reference frame in which it is expressed. For instance, the equivalent of `Point3D` is `FramePoint3D`.
+
 #### Euclid Shape
 - Boxes in 3 dimensions: `Box3D`.
+- Capsules in 3 dimensions: `Capsule3D`.
 - Cylinders in 3 dimensions: `Cylinder3D`.
 - Spheres and ellipsoids in 3 dimensions: `Sphere3D` and `Ellipsoid3D`.
 - Ramps/Wedges in 3 dimensions: `Ramp3D`.
 - Tori in 3 dimensions: `Torus3D`.
+- Convex polytopes in 3 dimensions: `ConvexPolytope3D`.
+- Collision detection between primitive shapes: `EuclidShapeCollisionTools`.
+- Gilbert-Johnson-Keerthi algorithm for collision detection: `GilbertJohnsonKeerthiCollisionDetector`.
+- Expanding polytope algorithm for collision detection: `ExpandingPolytopeAlgorithm`.
+
 ## Using Euclid from .jar releases with Maven/Gradle
 The releases .jars for Euclid are hosted on Bintray.
 You can browse the IHMC release packages at https://bintray.com/ihmcrobotics/maven-release.
@@ -105,6 +114,7 @@ repositories {
 ```
 
 Euclid currently publishes 4 distinct modules of interest. Here is an example for adding the dependency to each module of Euclid using your build script:
+
 ```gradle
 dependencies {
    compile group: "us.ihmc", name: "euclid", version: "x.x"

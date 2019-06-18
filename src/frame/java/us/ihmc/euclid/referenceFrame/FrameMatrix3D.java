@@ -65,10 +65,10 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    }
 
    /**
-    * Creates a new frame matrix and initializes it to the given matrix and sets its reference frame
-    * to {@code referenceFrame}.
+    * Creates a new frame matrix and initializes it to the given matrix and sets its reference frame to
+    * {@code referenceFrame}.
     * 
-    * @param referenceFrame the initial reference frame for this frame matrix.
+    * @param referenceFrame   the initial reference frame for this frame matrix.
     * @param matrix3DReadOnly the matrix to copy the coefficients from. Not modified.
     */
    public FrameMatrix3D(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
@@ -81,7 +81,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
     *
     * @param other the other frame matrix to set this to. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    @Override
    public void set(FrameMatrix3D other)
@@ -249,7 +249,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
     * This method is equivalent to {@link #epsilonEquals(FrameMatrix3D, double)}.
     * </p>
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
@@ -266,10 +266,10 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
     * If the two matrices have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
+    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(FrameMatrix3D other, double epsilon)
@@ -278,15 +278,15 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(FrameMatrix3DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameMatrix3DReadOnly)}, it returns {@code false} otherwise.
     * <p>
     * If the two points have different frames, this method returns {@code false}.
     * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if the two points are exactly equal component-wise and are expressed in
-    *         the same reference frame, {@code false} otherwise.
+    * @return {@code true} if the two points are exactly equal component-wise and are expressed in the
+    *         same reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)

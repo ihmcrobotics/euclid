@@ -1,11 +1,11 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -208,8 +208,11 @@ public class Line3DTest
          Point3D actualClosestPointOnLine = new Point3D();
          Point3D actualClosestPointOnOtherLine = new Point3D();
 
-         double expectedDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(line.getPoint(), line.getDirection(), otherLine.getPoint(),
-                                                                                        otherLine.getDirection(), expectedClosestPointOnLine,
+         double expectedDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(line.getPoint(),
+                                                                                        line.getDirection(),
+                                                                                        otherLine.getPoint(),
+                                                                                        otherLine.getDirection(),
+                                                                                        expectedClosestPointOnLine,
                                                                                         expectedClosestPointOnOtherLine);
          double actualDistance = line.closestPointsWith(otherLine, actualClosestPointOnLine, actualClosestPointOnOtherLine);
          assertEquals(expectedDistance, actualDistance, EPSILON);
@@ -325,10 +328,13 @@ public class Line3DTest
          Line3D line2 = new Line3D(line1);
          double epsilon = 1.0e-12;
          //assertTrue(line1.equals(line2));
-         //assertTrue(line1.equals((Object) line2));
+         //Object line2AsObject = line2;
+         //assertTrue(line1.equals(line2AsObject));
 
-         assertFalse(line1.equals((Line3D) null));
-         assertFalse(line1.equals((Object) null));
+         Line3D nullAsLine3D = null;
+         assertFalse(line1.equals(nullAsLine3D));
+         Object nullAsObject = null;
+         assertFalse(line1.equals(nullAsObject));
          assertFalse(line1.equals(new double[3]));
 
          for (int j = 0; j < 3; j++)

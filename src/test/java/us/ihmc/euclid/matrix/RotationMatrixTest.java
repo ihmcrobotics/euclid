@@ -1,7 +1,7 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,8 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
@@ -193,7 +192,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          {
             rotationMatrix = new RotationMatrix(matrix);
             rotationMatrix.checkIfRotationMatrix();
-            Assert.assertTrue(matrix.isRotationMatrix());
+            assertTrue(matrix.isRotationMatrix());
          }
          catch (RuntimeException e)
          {
@@ -480,7 +479,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix yawRotation = new RotationMatrix();
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         yawRotation.setToYawMatrix(yaw);
+         yawRotation.setToYawOrientation(yaw);
          RotationMatrixTools.multiply(original, yawRotation, expected);
 
          actual.set(original);
@@ -495,7 +494,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix pitchRotation = new RotationMatrix();
          double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         pitchRotation.setToPitchMatrix(pitch);
+         pitchRotation.setToPitchOrientation(pitch);
          RotationMatrixTools.multiply(original, pitchRotation, expected);
 
          actual.set(original);
@@ -510,7 +509,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix rollRotation = new RotationMatrix();
          double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         rollRotation.setToRollMatrix(roll);
+         rollRotation.setToRollOrientation(roll);
          RotationMatrixTools.multiply(original, rollRotation, expected);
 
          actual.set(original);
@@ -534,7 +533,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix yawRotation = new RotationMatrix();
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         yawRotation.setToYawMatrix(yaw);
+         yawRotation.setToYawOrientation(yaw);
          RotationMatrixTools.multiply(yawRotation, original, expected);
 
          actual.set(original);
@@ -549,7 +548,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix pitchRotation = new RotationMatrix();
          double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         pitchRotation.setToPitchMatrix(pitch);
+         pitchRotation.setToPitchOrientation(pitch);
          RotationMatrixTools.multiply(pitchRotation, original, expected);
 
          actual.set(original);
@@ -564,7 +563,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix rollRotation = new RotationMatrix();
          double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-         rollRotation.setToRollMatrix(roll);
+         rollRotation.setToRollOrientation(roll);
          RotationMatrixTools.multiply(rollRotation, original, expected);
 
          actual.set(original);
@@ -638,12 +637,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             rotationMatrix.setToNaN();
             rotationMatrixCopy.setToNaN();
 
-            rotationMatrix.setToPitchMatrix(pitch);
+            rotationMatrix.setToPitchOrientation(pitch);
             RotationMatrixConversion.computePitchMatrix(pitch, rotationMatrixCopy);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
 
-            Assert.assertTrue(pitch == pitchCopy);
+            assertTrue(pitch == pitchCopy);
          }
 
          { // Test setToRollMatrix()
@@ -653,12 +652,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             rotationMatrix.setToNaN();
             rotationMatrixCopy.setToNaN();
 
-            rotationMatrix.setToRollMatrix(roll);
+            rotationMatrix.setToRollOrientation(roll);
             RotationMatrixConversion.computeRollMatrix(roll, rotationMatrixCopy);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
 
-            Assert.assertTrue(roll == rollCopy);
+            assertTrue(roll == rollCopy);
          }
 
          { // Test setToYawMatrix()
@@ -668,12 +667,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             rotationMatrix.setToNaN();
             rotationMatrixCopy.setToNaN();
 
-            rotationMatrix.setToYawMatrix(yaw);
+            rotationMatrix.setToYawOrientation(yaw);
             RotationMatrixConversion.computeYawMatrix(yaw, rotationMatrixCopy);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
 
-            Assert.assertTrue(yaw == yawCopy);
+            assertTrue(yaw == yawCopy);
          }
       }
    }
@@ -696,7 +695,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, rotationMatrixCopy);
 
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
-         Assert.assertTrue(yawPitchRoll == yawPitchRollCopy);
+         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -711,7 +710,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, rotationMatrixCopy);
 
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
-         Assert.assertTrue(yawPitchRoll == yawPitchRollCopy);
+         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
    }
 
@@ -826,7 +825,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             double pitch = rotationMatrix.getPitch();
             double expectedPitch = YawPitchRollConversion.computePitch(expectedMatrix);
 
-            Assert.assertEquals(pitch, expectedPitch, EPS);
+            assertEquals(pitch, expectedPitch, EPS);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
          }
@@ -836,7 +835,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             double roll = rotationMatrix.getRoll();
             double expectedRoll = YawPitchRollConversion.computeRoll(expectedMatrix);
 
-            Assert.assertEquals(roll, expectedRoll, EPS);
+            assertEquals(roll, expectedRoll, EPS);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
          }
@@ -845,7 +844,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             double yaw = rotationMatrix.getYaw();
             double expectedYaw = YawPitchRollConversion.computeYaw(expectedMatrix);
 
-            Assert.assertEquals(yaw, expectedYaw, EPS);
+            assertEquals(yaw, expectedYaw, EPS);
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
 
@@ -872,7 +871,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, expectedMatrix);
 
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
-         Assert.assertTrue(yawPitchRoll == yawPitchRollCopy);
+         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
    }
 
@@ -889,7 +888,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix actual = new RotationMatrix();
 
          expected.set(original);
-         expected.preMultiply(transform.getRotationMatrix());
+         expected.preMultiply(transform.getRotation());
          actual.set(original);
          actual.applyTransform(transform);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);
@@ -916,7 +915,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix actual = new RotationMatrix();
 
          expected.set(original);
-         expected.prepend(transform.getQuaternion());
+         expected.prepend(transform.getRotation());
          actual.set(original);
          actual.applyTransform(transform);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);
@@ -1103,7 +1102,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             normalized.multiply(multiplyWith);
             normalized.normalize();
             EuclidCoreTestTools.assertMatrix3DEquals(normalized, unnormalized, EPS);
-            assertTrue("At multiplication #" + i + ".", unnormalized.isRotationMatrix(1.0e-11));
+            assertTrue(unnormalized.isRotationMatrix(1.0e-11), "At multiplication #" + i + ".");
          }
       }
 
@@ -1118,7 +1117,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             normalized.append(multiplyWith);
             normalized.normalize();
             EuclidCoreTestTools.assertMatrix3DEquals(normalized, unnormalized, EPS);
-            assertTrue("At multiplication #" + i + ".", unnormalized.isRotationMatrix(1.0e-11));
+            assertTrue(unnormalized.isRotationMatrix(1.0e-11), "At multiplication #" + i + ".");
          }
       }
 
@@ -1133,7 +1132,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
             normalized.append(multiplyWith);
             normalized.normalize();
             EuclidCoreTestTools.assertMatrix3DEquals(normalized, unnormalized, EPS);
-            assertTrue("At multiplication #" + i + ".", unnormalized.isRotationMatrix(1.0e-11));
+            assertTrue(unnormalized.isRotationMatrix(1.0e-11), "At multiplication #" + i + ".");
          }
       }
    }
@@ -1402,11 +1401,11 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
    public void testTransformTuple() throws Exception
    {
       Random random = new Random(435L);
-      Vector3D actual = new Vector3D();
-      Vector3D expected = new Vector3D();
 
       for (int i = 0; i < ITERATIONS; i++)
       {
+         Vector3D actual = new Vector3D();
+         Vector3D expected = new Vector3D();
          RotationMatrix matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Vector3D original = EuclidCoreRandomTools.nextVector3D(random);
 
@@ -1417,6 +1416,68 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
          actual.setToNaN();
          matrix.transform(original, actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         Matrix3DTools.transform(matrix, original, expected);
+         actual.setToNaN();
+         matrix.transform(original, actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D actual = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
+         RotationMatrix matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Vector3D original0 = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D original1 = EuclidCoreRandomTools.nextVector3D(random);
+
+         expected.set(original1);
+         actual.set(original1);
+         Matrix3DTools.addTransform(matrix, expected, expected);
+         matrix.addTransform(actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
+
+         expected.set(original1);
+         actual.set(original1);
+         Matrix3DTools.addTransform(matrix, original0, expected);
+         matrix.addTransform(original0, actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         expected.set(original1);
+         actual.set(original1);
+         Matrix3DTools.addTransform(matrix, original0, expected);
+         matrix.addTransform(original0, actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D actual = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
+         RotationMatrix matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Vector3D original0 = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D original1 = EuclidCoreRandomTools.nextVector3D(random);
+
+         expected.set(original1);
+         actual.set(original1);
+         Matrix3DTools.subTransform(matrix, expected, expected);
+         matrix.subTransform(actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
+
+         expected.set(original1);
+         actual.set(original1);
+         Matrix3DTools.subTransform(matrix, original0, expected);
+         matrix.subTransform(original0, actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         expected.set(original1);
+         actual.set(original1);
+         Matrix3DTools.subTransform(matrix, original0, expected);
+         matrix.subTransform(original0, actual);
          EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPS);
       }
    }
@@ -1431,7 +1492,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       for (int i = 0; i < ITERATIONS; i++)
       {
          RotationMatrix matrix = new RotationMatrix();
-         matrix.setToYawMatrix(2.0 * Math.PI * random.nextDouble());
+         matrix.setToYawOrientation(2.0 * Math.PI * random.nextDouble());
          Vector2D original = EuclidCoreRandomTools.nextVector2D(random);
 
          Matrix3DTools.transform(matrix, original, expected, true);
@@ -1451,6 +1512,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
          actual.setToNaN();
          matrix.transform(original, actual, true);
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         Matrix3DTools.transform(matrix, original, expected, true);
+         actual.set(original);
+         matrix.transform(actual);
          EuclidCoreTestTools.assertTuple2DEquals(expected, actual, EPS);
       }
    }
@@ -1475,6 +1542,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          actual.setToNaN();
          matrix.transform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         Matrix3DTools.transform(matrix, original, expected);
+         actual.set(original);
+         matrix.transform(actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
 
@@ -1497,6 +1570,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
          actual.setToNaN();
          matrix.transform(original, actual);
+         EuclidCoreTestTools.assertQuaternionEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         matrix.transform(original, expected);
+         actual.set(original);
+         matrix.transform(actual);
          EuclidCoreTestTools.assertQuaternionEquals(expected, actual, EPS);
       }
    }
@@ -1521,6 +1600,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          actual.setToNaN();
          matrix.transform(original, actual);
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         matrix.transform(original, expected);
+         actual.set(original);
+         matrix.transform(actual);
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
       }
    }
 
@@ -1539,8 +1624,14 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Matrix3DTools.multiply(matrix, original, expected);
          matrix.transform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
          actual.set(original);
          matrix.transform(actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         Matrix3DTools.multiply(matrix, original, expected);
+         matrix.transform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
@@ -1562,11 +1653,17 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
          matrix.transform(originalRotation, expectedRotation);
          expected.set(expectedRotation, scales);
-
          matrix.transform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
          actual.set(original);
          matrix.transform(actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         matrix.transform(originalRotation, expectedRotation);
+         expected.set(expectedRotation, scales);
+         matrix.transform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
@@ -1589,7 +1686,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
          Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple);
          rotationMatrix.inverseTransform(actualTuple);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
 
+         rotationMatrix.setToZero();
+         Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple);
+         actualTuple.set(tuple);
+         rotationMatrix.inverseTransform(actualTuple);
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
       }
 
@@ -1602,7 +1704,11 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
          Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple);
          rotationMatrix.inverseTransform(tuple, actualTuple);
+         EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
 
+         rotationMatrix.setToZero();
+         Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple);
+         rotationMatrix.inverseTransform(tuple, actualTuple);
          EuclidCoreTestTools.assertTuple3DEquals(expectedTuple, actualTuple, EPS);
       }
 
@@ -1612,7 +1718,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Tuple2DBasics actualTuple = new Vector2D(tuple);
          Tuple2DBasics expectedTuple = EuclidCoreRandomTools.nextVector2D(random);
          double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         rotationMatrix.setToYawMatrix(theta);
+         rotationMatrix.setToYawOrientation(theta);
 
          Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple, false);
          rotationMatrix.inverseTransform(actualTuple);
@@ -1623,6 +1729,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          actualTuple.set(tuple);
          rotationMatrix.inverseTransform(actualTuple, false);
          EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
+
+         rotationMatrix.setToZero();
+         Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple, false);
+         actualTuple.set(tuple);
+         rotationMatrix.inverseTransform(actualTuple);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1631,7 +1743,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Tuple2DBasics actualTuple = new Vector2D(tuple);
          Tuple2DBasics expectedTuple = EuclidCoreRandomTools.nextVector2D(random);
          double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         rotationMatrix.setToYawMatrix(theta);
+         rotationMatrix.setToYawOrientation(theta);
 
          Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple, false);
          rotationMatrix.inverseTransform(tuple, actualTuple);
@@ -1639,6 +1751,11 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          rotationMatrix.inverseTransform(tuple, actualTuple, true);
          EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
          rotationMatrix.inverseTransform(tuple, actualTuple, false);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
+
+         rotationMatrix.setToZero();
+         Matrix3DTools.inverseTransform(rotationMatrix, tuple, expectedTuple, false);
+         rotationMatrix.inverseTransform(tuple, actualTuple);
          EuclidCoreTestTools.assertTuple2DEquals(expectedTuple, actualTuple, EPS);
       }
 
@@ -1696,6 +1813,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          QuaternionTools.multiply(rotationMatrix, true, original, false, expected);
          rotationMatrix.inverseTransform(actual);
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
+         QuaternionTools.multiply(rotationMatrix, true, original, false, expected);
+         actual.set(original);
+         rotationMatrix.inverseTransform(actual);
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1705,6 +1828,11 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          QuaternionBasics expected = EuclidCoreRandomTools.nextQuaternion(random);
          rotationMatrix = createRandomMatrix(random);
 
+         QuaternionTools.multiply(rotationMatrix, true, original, false, expected);
+         rotationMatrix.inverseTransform(original, actual);
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
          QuaternionTools.multiply(rotationMatrix, true, original, false, expected);
          rotationMatrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
@@ -1720,6 +1848,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(actual);
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
+         Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
+         actual.set(original);
+         rotationMatrix.inverseTransform(actual);
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1729,6 +1863,11 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Vector4DBasics expected = EuclidCoreRandomTools.nextVector4D(random);
          rotationMatrix = createRandomMatrix(random);
 
+         Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
+         rotationMatrix.inverseTransform(original, actual);
+         EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
          Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
@@ -1744,6 +1883,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
+         Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
+         actual.set(original);
+         rotationMatrix.inverseTransform(actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1753,6 +1898,11 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Matrix3D expected = EuclidCoreRandomTools.nextMatrix3D(random);
          rotationMatrix = createRandomMatrix(random);
 
+         Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
+         rotationMatrix.inverseTransform(original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
          Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
@@ -1768,6 +1918,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrixTools.multiplyTransposeLeft(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
+         RotationMatrixTools.multiplyTransposeLeft(rotationMatrix, original, expected);
+         actual.set(original);
+         rotationMatrix.inverseTransform(actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -1777,6 +1933,11 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix expected = EuclidCoreRandomTools.nextRotationMatrix(random);
          rotationMatrix = createRandomMatrix(random);
 
+         RotationMatrixTools.multiplyTransposeLeft(rotationMatrix, original, expected);
+         rotationMatrix.inverseTransform(original, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         rotationMatrix.setToZero();
          RotationMatrixTools.multiplyTransposeLeft(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
@@ -1794,11 +1955,17 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
          matrix.inverseTransform(originalRotation, expectedRotation);
          expected.set(expectedRotation, scales);
-
          matrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
          actual.set(original);
          matrix.inverseTransform(actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+
+         matrix.setToZero();
+         matrix.inverseTransform(originalRotation, expectedRotation);
+         expected.set(expectedRotation, scales);
+         matrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
@@ -1816,7 +1983,8 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       assertFalse(m1.equals(new double[4]));
       m2.set(m1);
       assertTrue(m1.equals(m2));
-      assertTrue(m1.equals((Object) m2));
+      Object m2AsObject = m2;
+      assertTrue(m1.equals(m2AsObject));
 
       double smallestEpsilon = 1.0e-16;
       double[] coeffs = new double[9];
@@ -1859,22 +2027,23 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mB = new RotationMatrix(aa);
          mB.preMultiply(mA);
 
-         assertTrue("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertTrue(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-12, 1.0e-11);
+         double epsilon = EuclidCoreRandomTools.nextDouble(random, 1.0e-11, 1.0e-10);
          mA = createRandomMatrix(random);
          double angleDiff = 1.01 * epsilon;
          AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), angleDiff);
+         RotationMatrix rDiff = new RotationMatrix(aa);
 
-         mB = new RotationMatrix(aa);
+         mB = new RotationMatrix(rDiff);
          mB.preMultiply(mA);
 
-         assertFalse("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertFalse(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
@@ -1889,7 +2058,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mB = new RotationMatrix(aa);
          mB.preMultiply(mA);
 
-         assertTrue("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertTrue(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
@@ -1904,7 +2073,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mB = new RotationMatrix(aa);
          mB.preMultiply(mA);
 
-         assertFalse("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertFalse(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
          assertTrue(mA.geometricallyEquals(mA, 0.0));
          assertTrue(mB.geometricallyEquals(mB, 0.0));
       }
@@ -1915,7 +2084,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          mA = createRandomMatrix(random);
          mB = createRandomMatrix(random);
 
-         assertTrue("Epsilon = " + epsilon, mA.geometricallyEquals(mB, epsilon));
+         assertTrue(mA.geometricallyEquals(mB, epsilon), "Epsilon = " + epsilon);
       }
    }
 

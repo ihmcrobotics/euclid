@@ -3,19 +3,23 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.Collection;
 import java.util.List;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
@@ -37,11 +41,15 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class EuclidFrameTools
 {
+   private EuclidFrameTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Tests if the two given lines are collinear given a tolerance on the angle between in the range
     * ]0; <i>pi</i>/2[. This method returns {@code true} if the two lines are collinear, whether they
     * are pointing in the same direction or in opposite directions.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -50,16 +58,16 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param firstPointOnLine1 a first point located on the first line. Not modified.
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
     * @param secondPointOnLine1 a second point located on the first line. Not modified.
-    * @param firstPointOnLine2 a first point located on the second line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
     * @param secondPointOnLine2 a second point located on the second line. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians.
-    * @param distanceEpsilon tolerance on the distance to determine if {@code firstPointOnLine2}
-    *           belongs to the first line segment.
+    * @param angleEpsilon       tolerance on the angle in radians.
+    * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
+    *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
                                              FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon,
@@ -68,7 +76,11 @@ public class EuclidFrameTools
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1);
       firstPointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine2);
-      return EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
+      return EuclidGeometryTools.areLine2DsCollinear(firstPointOnLine1,
+                                                     secondPointOnLine1,
+                                                     firstPointOnLine2,
+                                                     secondPointOnLine2,
+                                                     angleEpsilon,
                                                      distanceEpsilon);
    }
 
@@ -76,7 +88,6 @@ public class EuclidFrameTools
     * Tests if the two given lines are collinear given a tolerance on the angle between in the range
     * ]0; <i>pi</i>/2[. This method returns {@code true} if the two lines are collinear, whether they
     * are pointing in the same direction or in opposite directions.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -85,16 +96,16 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine1 point located on the first line. Not modified.
-    * @param lineDirection1 the first line direction. Not modified.
-    * @param firstPointOnLine2 a first point located on the second line. Not modified.
+    * @param pointOnLine1       point located on the first line. Not modified.
+    * @param lineDirection1     the first line direction. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
     * @param secondPointOnLine2 a second point located on the second line. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians.
-    * @param distanceEpsilon tolerance on the distance to determine if {@code firstPointOnLine2}
-    *           belongs to the first line segment.
+    * @param angleEpsilon       tolerance on the angle in radians.
+    * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
+    *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly firstPointOnLine2,
                                              FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
@@ -109,7 +120,6 @@ public class EuclidFrameTools
     * Tests if the two given lines are collinear given a tolerance on the angle between in the range
     * ]0; <i>pi</i>/2[. This method returns {@code true} if the two lines are collinear, whether they
     * are pointing in the same direction or in opposite directions.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -118,16 +128,16 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine1 point located on the first line. Not modified.
-    * @param lineDirection1 the first line direction. Not modified.
-    * @param pointOnLine2 point located on the second line. Not modified.
-    * @param lineDirection2 the second line direction. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians.
+    * @param pointOnLine1    point located on the first line. Not modified.
+    * @param lineDirection1  the first line direction. Not modified.
+    * @param pointOnLine2    point located on the second line. Not modified.
+    * @param lineDirection2  the second line direction. Not modified.
+    * @param angleEpsilon    tolerance on the angle in radians.
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
-    *           the first line segment.
+    *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly pointOnLine2,
                                              FrameVector2DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
@@ -142,7 +152,6 @@ public class EuclidFrameTools
     * Tests if the two given lines are collinear given a tolerance on the angle between in the range
     * ]0; <i>pi</i>/2[. This method returns {@code true} if the two lines are collinear, whether they
     * are pointing in the same direction or in opposite directions.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -151,16 +160,16 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param firstPointOnLine1 a first point located on the first line. Not modified.
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
     * @param secondPointOnLine1 a second point located on the first line. Not modified.
-    * @param firstPointOnLine2 a first point located on the second line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
     * @param secondPointOnLine2 a second point located on the second line. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians.
-    * @param distanceEpsilon tolerance on the distance to determine if {@code firstPointOnLine2}
-    *           belongs to the first line segment.
+    * @param angleEpsilon       tolerance on the angle in radians.
+    * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
+    *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean areLine3DsCollinear(FramePoint3DReadOnly firstPointOnLine1, FramePoint3DReadOnly secondPointOnLine1,
                                              FramePoint3DReadOnly firstPointOnLine2, FramePoint3DReadOnly secondPointOnLine2, double angleEpsilon,
@@ -169,7 +178,11 @@ public class EuclidFrameTools
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1);
       firstPointOnLine1.checkReferenceFrameMatch(firstPointOnLine2);
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine2);
-      return EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, angleEpsilon,
+      return EuclidGeometryTools.areLine3DsCollinear(firstPointOnLine1,
+                                                     secondPointOnLine1,
+                                                     firstPointOnLine2,
+                                                     secondPointOnLine2,
+                                                     angleEpsilon,
                                                      distanceEpsilon);
    }
 
@@ -177,7 +190,6 @@ public class EuclidFrameTools
     * Tests if the two given lines are collinear given a tolerance on the angle between in the range
     * ]0; <i>pi</i>/2[. This method returns {@code true} if the two lines are collinear, whether they
     * are pointing in the same direction or in opposite directions.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -186,16 +198,16 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine1 point located on the first line. Not modified.
-    * @param lineDirection1 the first line direction. Not modified.
-    * @param pointOnLine2 point located on the second line. Not modified.
-    * @param lineDirection2 the second line direction. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians.
+    * @param pointOnLine1    point located on the first line. Not modified.
+    * @param lineDirection1  the first line direction. Not modified.
+    * @param pointOnLine2    point located on the second line. Not modified.
+    * @param lineDirection2  the second line direction. Not modified.
+    * @param angleEpsilon    tolerance on the angle in radians.
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
-    *           the first line segment.
+    *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean areLine3DsCollinear(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1, FramePoint3DReadOnly pointOnLine2,
                                              FrameVector3DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
@@ -222,17 +234,17 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane1 a point on the first plane. Not modified.
-    * @param planeNormal1 the normal of the first plane. Not modified.
-    * @param pointOnPlane2 a point on the second plane. Not modified.
-    * @param planeNormal2 the normal of the second plane. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians to determine if the plane normals are
-    *           parallel.
+    * @param pointOnPlane1   a point on the first plane. Not modified.
+    * @param planeNormal1    the normal of the first plane. Not modified.
+    * @param pointOnPlane2   a point on the second plane. Not modified.
+    * @param planeNormal2    the normal of the second plane. Not modified.
+    * @param angleEpsilon    tolerance on the angle in radians to determine if the plane normals are
+    *                        parallel.
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnPlane2} belongs to
-    *           the first plane.
+    *                        the first plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean arePlane3DsCoincident(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1, FramePoint3DReadOnly pointOnPlane2,
                                                FrameVector3DReadOnly planeNormal2, double angleEpsilon, double distanceEpsilon)
@@ -247,7 +259,6 @@ public class EuclidFrameTools
     * Tests if the two given vectors are parallel given a tolerance on the angle between the two vector
     * axes in the range ]0; <i>pi</i>/2[. This method returns {@code true} if the two vectors are
     * parallel, whether they are pointing in the same direction or in opposite directions.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -256,12 +267,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param firstVector the first vector. Not modified.
+    * @param firstVector  the first vector. Not modified.
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean areVector2DsParallel(FrameVector2DReadOnly firstVector, FrameVector2DReadOnly secondVector, double angleEpsilon)
    {
@@ -273,7 +284,6 @@ public class EuclidFrameTools
     * Tests if the two given vectors are parallel given a tolerance on the angle between the two vector
     * axes in the range ]0; <i>pi</i>/2[. This method returns {@code true} if the two vectors are
     * parallel, whether they are pointing in the same direction or in opposite directions.
-    *
     * <p>
     * Edge cases:
     * <ul>
@@ -282,12 +292,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param firstVector the first vector. Not modified.
+    * @param firstVector  the first vector. Not modified.
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean areVector3DsParallel(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, double angleEpsilon)
    {
@@ -304,7 +314,7 @@ public class EuclidFrameTools
     * @param points the collection of 2D points to compute the average from. Not modified.
     * @return the computed average.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static FramePoint2D averagePoint2Ds(Collection<? extends FramePoint2DReadOnly> points)
    {
@@ -332,7 +342,7 @@ public class EuclidFrameTools
     * @param points the collection of 3D points to compute the average from. Not modified.
     * @return the computed average.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static FramePoint3D averagePoint3Ds(Collection<? extends FramePoint3DReadOnly> points)
    {
@@ -361,7 +371,7 @@ public class EuclidFrameTools
     * @param b the second 3D point. Not modified.
     * @return the computed average.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static FramePoint3D averagePoint3Ds(FramePoint3DReadOnly a, FramePoint3DReadOnly b)
    {
@@ -374,11 +384,13 @@ public class EuclidFrameTools
 
    /**
     * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
-    * packs it into an {@link AxisAngle}. The rotation axis if perpendicular to both vectors. The
-    * rotation angle is computed as the angle from the {@code firstVector} to the {@code secondVector}:
-    * <br>
+    * packs it into an {@link AxisAngleBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the
+    * {@code secondVector}: <br>
     * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
     * Note: the vectors do not need to be unit length.
+    * </p>
     * <p>
     * Edge cases:
     * <ul>
@@ -394,18 +406,247 @@ public class EuclidFrameTools
     * Note: The calculation becomes less accurate as the two vectors are more parallel.
     * </p>
     *
-    * @param firstVector the first vector. Not modified.
-    * @param secondVector the second vector that is rotated with respect to the first vector. Not
-    *           modified.
+    * @param firstVector    the first vector. Not modified.
+    * @param secondVector   the second vector that is rotated with respect to the first vector. Not
+    *                       modified.
     * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
-    *           Modified.
+    *                       Modified.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
+    * @deprecated Use
+    *             {@link #orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly,FrameVector3DReadOnly,Orientation3DBasics)}
+    *             instead
     */
    public static void axisAngleFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, AxisAngleBasics rotationToPack)
    {
+      orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * packs it into an {@link Orientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the
+    * {@code secondVector}: <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param firstVector    the first vector. Not modified.
+    * @param secondVector   the second vector that is rotated with respect to the first vector. Not
+    *                       modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *                       Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector,
+                                                             Orientation3DBasics rotationToPack)
+   {
       firstVector.checkReferenceFrameMatch(secondVector);
-      EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * packs it into an {@link FixedFrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the
+    * {@code secondVector}: <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param firstVector    the first vector. Not modified.
+    * @param secondVector   the second vector that is rotated with respect to the first vector. Not
+    *                       modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *                       Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector,
+                                                             FixedFrameOrientation3DBasics rotationToPack)
+   {
+      firstVector.checkReferenceFrameMatch(secondVector);
+      firstVector.checkReferenceFrameMatch(rotationToPack);
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * packs it into an {@link FrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the
+    * {@code secondVector}: <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param firstVector    the first vector. Not modified.
+    * @param secondVector   the second vector that is rotated with respect to the first vector. Not
+    *                       modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *                       Modified.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
+    *                                         same reference frame.
+    */
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector,
+                                                             FrameOrientation3DBasics rotationToPack)
+   {
+      firstVector.checkReferenceFrameMatch(secondVector);
+      rotationToPack.setReferenceFrame(firstVector.getReferenceFrame());
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * returns the result as an {@link AxisAngle}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the
+    * {@code secondVector}: <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param firstVector  the first vector. Not modified.
+    * @param secondVector the second vector that is rotated with respect to the first vector. Not
+    *                     modified.
+    * @return the minimum rotation from {@code zUp} to the given {@code vector}.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static AxisAngle axisAngleFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector)
+   {
+      firstVector.checkReferenceFrameMatch(secondVector);
+      return EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code zUp = (0, 0, 1)} to the given {@code vector}
+    * and packs it into an {@link FixedFrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code zUp} to the {@code vector}: <br>
+    * {@code rotationAngle = zUp.angle(vector)}. </br>
+    * Note: the vector does not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vector is aligned with {@code zUp}: the rotation angle is equal to {@code 0.0} and the
+    * rotation axis is set to: (1, 0, 0).
+    * <li>the vector is parallel pointing opposite direction of {@code zUp}: the rotation angle is
+    * equal to {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of the given normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param vector         the vector that is rotated with respect to {@code zUp}. Not modified.
+    * @param rotationToPack the minimum rotation from {@code zUp} to the given {@code vector}.
+    *                       Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static void orientation3DFromZUpToVector3D(FrameVector3DReadOnly vector, FixedFrameOrientation3DBasics rotationToPack)
+   {
+      rotationToPack.checkReferenceFrameMatch(vector.getReferenceFrame());
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis.Z, vector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code zUp = (0, 0, 1)} to the given {@code vector}
+    * and packs it into an {@link FrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code zUp} to the {@code vector}: <br>
+    * {@code rotationAngle = zUp.angle(vector)}. </br>
+    * Note: the vector does not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vector is aligned with {@code zUp}: the rotation angle is equal to {@code 0.0} and the
+    * rotation axis is set to: (1, 0, 0).
+    * <li>the vector is parallel pointing opposite direction of {@code zUp}: the rotation angle is
+    * equal to {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of the given normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param vector         the vector that is rotated with respect to {@code zUp}. Not modified.
+    * @param rotationToPack the minimum rotation from {@code zUp} to the given {@code vector}.
+    *                       Modified.
+    */
+   public static void orientation3DFromZUpToVector3D(FrameVector3DReadOnly vector, FrameOrientation3DBasics rotationToPack)
+   {
+      rotationToPack.setReferenceFrame(vector.getReferenceFrame());
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis.Z, vector, rotationToPack);
    }
 
    /**
@@ -413,17 +654,17 @@ public class EuclidFrameTools
     * such that the distance || P - Q || is the minimum distance between the two 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
-    * @param pointOnLine1 a 3D point on the first line. Not modified.
-    * @param lineDirection1 the 3D direction of the first line. Not modified.
-    * @param pointOnLine2 a 3D point on the second line. Not modified.
-    * @param lineDirection2 the 3D direction of the second line. Not modified.
+    * @param pointOnLine1              a 3D point on the first line. Not modified.
+    * @param lineDirection1            the 3D direction of the first line. Not modified.
+    * @param pointOnLine2              a 3D point on the second line. Not modified.
+    * @param lineDirection2            the 3D direction of the second line. Not modified.
     * @param closestPointOnLine1ToPack the 3D coordinates of the point P are packed in this 3D point.
-    *           Modified. Can be {@code null}.
+    *                                  Modified. Can be {@code null}.
     * @param closestPointOnLine2ToPack the 3D coordinates of the point Q are packed in this 3D point.
-    *           Modified. Can be {@code null}.
+    *                                  Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static double closestPoint3DsBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1,
                                                          FramePoint3DReadOnly pointOnLine2, FrameVector3DReadOnly lineDirection2,
@@ -436,7 +677,11 @@ public class EuclidFrameTools
          closestPointOnLine1ToPack.checkReferenceFrameMatch(pointOnLine1);
       if (closestPointOnLine2ToPack != null)
          closestPointOnLine2ToPack.checkReferenceFrameMatch(pointOnLine1);
-      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, closestPointOnLine1ToPack,
+      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1,
+                                                                  lineDirection1,
+                                                                  pointOnLine2,
+                                                                  lineDirection2,
+                                                                  closestPointOnLine1ToPack,
                                                                   closestPointOnLine2ToPack);
    }
 
@@ -445,17 +690,17 @@ public class EuclidFrameTools
     * such that the distance || P - Q || is the minimum distance between the two 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
-    * @param pointOnLine1 a 3D point on the first line. Not modified.
-    * @param lineDirection1 the 3D direction of the first line. Not modified.
-    * @param pointOnLine2 a 3D point on the second line. Not modified.
-    * @param lineDirection2 the 3D direction of the second line. Not modified.
+    * @param pointOnLine1              a 3D point on the first line. Not modified.
+    * @param lineDirection1            the 3D direction of the first line. Not modified.
+    * @param pointOnLine2              a 3D point on the second line. Not modified.
+    * @param lineDirection2            the 3D direction of the second line. Not modified.
     * @param closestPointOnLine1ToPack the 3D coordinates of the point P are packed in this 3D point.
-    *           Modified. Can be {@code null}.
+    *                                  Modified. Can be {@code null}.
     * @param closestPointOnLine2ToPack the 3D coordinates of the point Q are packed in this 3D point.
-    *           Modified. Can be {@code null}.
+    *                                  Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static double closestPoint3DsBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1,
                                                          FramePoint3DReadOnly pointOnLine2, FrameVector3DReadOnly lineDirection2,
@@ -468,7 +713,11 @@ public class EuclidFrameTools
          closestPointOnLine1ToPack.setReferenceFrame(pointOnLine1.getReferenceFrame());
       if (closestPointOnLine2ToPack != null)
          closestPointOnLine2ToPack.setReferenceFrame(pointOnLine1.getReferenceFrame());
-      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, closestPointOnLine1ToPack,
+      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1,
+                                                                  lineDirection1,
+                                                                  pointOnLine2,
+                                                                  lineDirection2,
+                                                                  closestPointOnLine1ToPack,
                                                                   closestPointOnLine2ToPack);
    }
 
@@ -478,17 +727,21 @@ public class EuclidFrameTools
     * between the two 3D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
     * link</a>.
     *
-    * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the second endpoint of the first line segment. Not modified.
-    * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the second endpoint of the second line segment. Not modified.
+    * @param lineSegmentStart1                the first endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd1                  the second endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentStart2                the first endpoint of the second line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd2                  the second endpoint of the second line segment. Not
+    *                                         modified.
     * @param closestPointOnLineSegment1ToPack the 3D coordinates of the point P are packed in this 3D
-    *           point. Modified. Can be {@code null}.
+    *                                         point. Modified. Can be {@code null}.
     * @param closestPointOnLineSegment2ToPack the 3D coordinates of the point Q are packed in this 3D
-    *           point. Modified. Can be {@code null}.
+    *                                         point. Modified. Can be {@code null}.
     * @return the minimum distance between the two line segments.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static double closestPoint3DsBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
                                                                 FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2,
@@ -502,8 +755,12 @@ public class EuclidFrameTools
          closestPointOnLineSegment1ToPack.checkReferenceFrameMatch(lineSegmentStart1);
       if (closestPointOnLineSegment2ToPack != null)
          closestPointOnLineSegment2ToPack.checkReferenceFrameMatch(lineSegmentStart1);
-      return EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
-                                                                         closestPointOnLineSegment1ToPack, closestPointOnLineSegment2ToPack);
+      return EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1,
+                                                                         lineSegmentEnd1,
+                                                                         lineSegmentStart2,
+                                                                         lineSegmentEnd2,
+                                                                         closestPointOnLineSegment1ToPack,
+                                                                         closestPointOnLineSegment2ToPack);
    }
 
    /**
@@ -512,17 +769,21 @@ public class EuclidFrameTools
     * between the two 3D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
     * link</a>.
     *
-    * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the second endpoint of the first line segment. Not modified.
-    * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the second endpoint of the second line segment. Not modified.
+    * @param lineSegmentStart1                the first endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd1                  the second endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentStart2                the first endpoint of the second line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd2                  the second endpoint of the second line segment. Not
+    *                                         modified.
     * @param closestPointOnLineSegment1ToPack the 3D coordinates of the point P are packed in this 3D
-    *           point. Modified. Can be {@code null}.
+    *                                         point. Modified. Can be {@code null}.
     * @param closestPointOnLineSegment2ToPack the 3D coordinates of the point Q are packed in this 3D
-    *           point. Modified. Can be {@code null}.
+    *                                         point. Modified. Can be {@code null}.
     * @return the minimum distance between the two line segments.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double closestPoint3DsBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
                                                                 FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2,
@@ -536,8 +797,12 @@ public class EuclidFrameTools
          closestPointOnLineSegment1ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
       if (closestPointOnLineSegment2ToPack != null)
          closestPointOnLineSegment2ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
-      return EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
-                                                                         closestPointOnLineSegment1ToPack, closestPointOnLineSegment2ToPack);
+      return EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1,
+                                                                         lineSegmentEnd1,
+                                                                         lineSegmentStart2,
+                                                                         lineSegmentEnd2,
+                                                                         closestPointOnLineSegment1ToPack,
+                                                                         closestPointOnLineSegment2ToPack);
    }
 
    /**
@@ -548,10 +813,31 @@ public class EuclidFrameTools
     * @param b second vertex of the triangle. Not modified.
     * @param c third vertex of the triangle. Not modified.
     * @return the are of the triangle.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double triangleArea(FramePoint2DReadOnly a, FramePoint2DReadOnly b, FramePoint2DReadOnly c)
+   {
+      a.checkReferenceFrameMatch(b);
+      a.checkReferenceFrameMatch(c);
+      return EuclidGeometryTools.triangleArea(a, b, c);
+   }
+
+   /**
+    * Computes the area of a triangle defined by its three vertices: a, b, and c. No specific ordering
+    * of the vertices is required.
+    * <p>
+    * This method uses {@link EuclidGeometryTools#triangleAreaHeron2(double, double, double)}.
+    * </p>
+    *
+    * @param a first vertex of the triangle. Not modified.
+    * @param b second vertex of the triangle. Not modified.
+    * @param c third vertex of the triangle. Not modified.
+    * @return the area of the triangle.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double triangleArea(FramePoint3DReadOnly a, FramePoint3DReadOnly b, FramePoint3DReadOnly c)
    {
       a.checkReferenceFrameMatch(b);
       a.checkReferenceFrameMatch(c);
@@ -562,13 +848,13 @@ public class EuclidFrameTools
     * This methods computes the minimum distance between the two infinitely long 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
-    * @param pointOnLine1 a 3D point on the first line. Not modified.
+    * @param pointOnLine1   a 3D point on the first line. Not modified.
     * @param lineDirection1 the 3D direction of the first line. Not modified.
-    * @param pointOnLine2 a 3D point on the second line. Not modified.
+    * @param pointOnLine2   a 3D point on the second line. Not modified.
     * @param lineDirection2 the 3D direction of the second line. Not modified.
     * @return the minimum distance between the two lines.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1, FramePoint3DReadOnly pointOnLine2,
                                                   FrameVector3DReadOnly lineDirection2)
@@ -584,12 +870,12 @@ public class EuclidFrameTools
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
     * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the second endpoint of the first line segment. Not modified.
+    * @param lineSegmentEnd1   the second endpoint of the first line segment. Not modified.
     * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the second endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2   the second endpoint of the second line segment. Not modified.
     * @return the minimum distance between the two line segments.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
                                                          FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2)
@@ -612,13 +898,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x-coordinate of the query.
-    * @param pointY y-coordinate of the query.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param pointX            x-coordinate of the query.
+    * @param pointY            y-coordinate of the query.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToLine2D(double pointX, double pointY, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -637,13 +923,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x-coordinate of the query.
-    * @param pointY y-coordinate of the query.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param pointX        x-coordinate of the query.
+    * @param pointY        y-coordinate of the query.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -663,12 +949,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point 2D point to compute the distance from the line. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             2D point to compute the distance from the line. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -688,12 +974,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point 2D point to compute the distance from the line. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param point         2D point to compute the distance from the line. Not modified.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -713,13 +999,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x coordinate of point to be tested.
-    * @param pointY y coordinate of point to be tested.
+    * @param pointX           x coordinate of point to be tested.
+    * @param pointY           y coordinate of point to be tested.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the minimum distance between the 2D point and the 2D line segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToLineSegment2D(double pointX, double pointY, FramePoint2DReadOnly lineSegmentStart,
                                                            FramePoint2DReadOnly lineSegmentEnd)
@@ -739,12 +1025,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point 2D point to compute the distance from the line segment. Not modified.
+    * @param point            2D point to compute the distance from the line segment. Not modified.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the minimum distance between the 2D point and the 2D line segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart,
                                                            FramePoint2DReadOnly lineSegmentEnd)
@@ -771,13 +1057,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x-coordinate of the query.
-    * @param pointY y-coordinate of the query.
-    * @param rayOrigin a point located on the line. Not modified.
+    * @param pointX       x-coordinate of the query.
+    * @param pointY       y-coordinate of the query.
+    * @param rayOrigin    a point located on the line. Not modified.
     * @param rayDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToRay2D(double pointX, double pointY, FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection)
    {
@@ -802,12 +1088,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point the coordinates of the query.
-    * @param rayOrigin a point located on the line. Not modified.
+    * @param point        the coordinates of the query.
+    * @param rayOrigin    a point located on the line. Not modified.
     * @param rayDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint2DToRay2D(FramePoint2DReadOnly point, FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection)
    {
@@ -829,12 +1115,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point 3D point to compute the distance from the line. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             3D point to compute the distance from the line. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the minimum distance between the 3D point and the 3D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint3DToLine3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
    {
@@ -855,12 +1141,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point 3D point to compute the distance from the line. Not modified.
-    * @param pointOnLine point located on the line. Not modified.
+    * @param point         3D point to compute the distance from the line. Not modified.
+    * @param pointOnLine   point located on the line. Not modified.
     * @param lineDirection direction of the line. Not modified.
     * @return the minimum distance between the 3D point and the 3D line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint3DToLine3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
@@ -880,14 +1166,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x-coordinate of point to be tested.
-    * @param pointY y-coordinate of point to be tested.
-    * @param pointZ z-coordinate of point to be tested.
+    * @param pointX           x-coordinate of point to be tested.
+    * @param pointY           y-coordinate of point to be tested.
+    * @param pointZ           z-coordinate of point to be tested.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the minimum distance between the 3D point and the 3D line segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
                                                            FramePoint3DReadOnly lineSegmentEnd)
@@ -907,12 +1193,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point 3D point to compute the distance from the line segment. Not modified.
+    * @param point            3D point to compute the distance from the line segment. Not modified.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the minimum distance between the 3D point and the 3D line segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint3DToLineSegment3D(FramePoint3DReadOnly point, FramePoint3DReadOnly lineSegmentStart,
                                                            FramePoint3DReadOnly lineSegmentEnd)
@@ -925,14 +1211,14 @@ public class EuclidFrameTools
    /**
     * Computes the minimum distance between a given point and a plane.
     *
-    * @param pointX the x-coordinate of the query. Not modified.
-    * @param pointY the y-coordinate of the query. Not modified.
-    * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointX       the x-coordinate of the query. Not modified.
+    * @param pointY       the y-coordinate of the query. Not modified.
+    * @param pointZ       the z-coordinate of the query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param planeNormal  the normal of the plane. Not modified.
     * @return the distance between the point and the plane.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
                                                      FrameVector3DReadOnly planeNormal)
@@ -944,12 +1230,12 @@ public class EuclidFrameTools
    /**
     * Computes the minimum distance between a given point and a plane.
     *
-    * @param point the 3D query. Not modified.
+    * @param point        the 3D query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param planeNormal  the normal of the plane. Not modified.
     * @return the distance between the point and the plane.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceFromPoint3DToPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
    {
@@ -964,14 +1250,14 @@ public class EuclidFrameTools
     * The returned value is negative when the query is located below the plane, positive otherwise.
     * </p>
     *
-    * @param pointX the x-coordinate of the query. Not modified.
-    * @param pointY the y-coordinate of the query. Not modified.
-    * @param pointZ the z-coordinate of the query. Not modified.
+    * @param pointX       the x-coordinate of the query. Not modified.
+    * @param pointY       the y-coordinate of the query. Not modified.
+    * @param pointZ       the z-coordinate of the query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param planeNormal  the normal of the plane. Not modified.
     * @return the signed distance between the point and the plane.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
                                                            FrameVector3DReadOnly planeNormal)
@@ -986,18 +1272,65 @@ public class EuclidFrameTools
     * The returned value is negative when the query is located below the plane, positive otherwise.
     * </p>
     *
-    * @param point the query. Not modified.
+    * @param point        the query. Not modified.
     * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param planeNormal  the normal of the plane. Not modified.
     * @return the signed distance between the point and the plane.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double signedDistanceFromPoint3DToPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
    {
       point.checkReferenceFrameMatch(pointOnPlane);
       point.checkReferenceFrameMatch(planeNormal);
       return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeNormal);
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param pointX             the x-coordinate of the query. Not modified.
+    * @param pointY             the y-coordinate of the query. Not modified.
+    * @param pointZ             the z-coordinate of the query. Not modified.
+    * @param pointOnPlane       a point located on the plane. Not modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                                           FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeFirstTangent);
+      pointOnPlane.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent);
+   }
+
+   /**
+    * Computes the minimum signed distance between a given point and a plane.
+    * <p>
+    * The returned value is negative when the query is located below the plane, positive otherwise.
+    * </p>
+    *
+    * @param point              the query. Not modified.
+    * @param pointOnPlane       a point located on the plane. Not modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return the signed distance between the point and the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double signedDistanceFromPoint3DToPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane,
+                                                           FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane);
+      point.checkReferenceFrameMatch(planeFirstTangent);
+      point.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent);
    }
 
    /**
@@ -1011,13 +1344,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x coordinate of point to be tested.
-    * @param pointY y coordinate of point to be tested.
+    * @param pointX           x coordinate of point to be tested.
+    * @param pointY           y coordinate of point to be tested.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the square of the minimum distance between the 2D point and the 2D line segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceSquaredFromPoint2DToLineSegment2D(double pointX, double pointY, FramePoint2DReadOnly lineSegmentStart,
                                                                   FramePoint2DReadOnly lineSegmentEnd)
@@ -1037,14 +1370,40 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x-coordinate of point to be tested.
-    * @param pointY y-coordinate of point to be tested.
-    * @param pointZ z-coordinate of point to be tested.
+    * @param point            coordinates of point to be tested.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
+    * @return the square of the minimum distance between the 2D point and the 2D line segment.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double distanceSquaredFromPoint2DToLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart,
+                                                                  FramePoint2DReadOnly lineSegmentEnd)
+   {
+      point.checkReferenceFrameMatch(lineSegmentStart);
+      point.checkReferenceFrameMatch(lineSegmentEnd);
+      return EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D(point, lineSegmentStart, lineSegmentEnd);
+   }
+
+   /**
+    * Returns the square of the minimum distance between a point and a given line segment.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if
+    * {@code lineSegmentStart.distanceSquared(lineSegmentEnd) < }{@link EuclidGeometryTools#ONE_TRILLIONTH},
+    * this method returns the distance between {@code lineSegmentStart} and the given {@code point}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX           x-coordinate of point to be tested.
+    * @param pointY           y-coordinate of point to be tested.
+    * @param pointZ           z-coordinate of point to be tested.
+    * @param lineSegmentStart first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the square of the minimum distance between the 3D point and the 3D line segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceSquaredFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
                                                                   FramePoint3DReadOnly lineSegmentEnd)
@@ -1064,12 +1423,12 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point 3D point to compute the distance from the line segment. Not modified.
+    * @param point            3D point to compute the distance from the line segment. Not modified.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the square of the minimum distance between the 3D point and the 3D line segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double distanceSquaredFromPoint3DToLineSegment3D(FramePoint3DReadOnly point, FramePoint3DReadOnly lineSegmentStart,
                                                                   FramePoint3DReadOnly lineSegmentEnd)
@@ -1090,13 +1449,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param pointOnPlane     a point located on the plane. Not modified.
+    * @param planeNormal      the normal of the plane. Not modified.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return {@code true} if an intersection line segment - plane exists, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean doesLineSegment3DIntersectPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
                                                            FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
@@ -1120,21 +1479,25 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLineX the x-coordinate of a point located on the line.
-    * @param pointOnLineY the y-coordinate of a point located on the line.
-    * @param lineDirectionX the x-component of the line direction.
-    * @param lineDirectionY the y-component of the line direction.
+    * @param pointOnLineX     the x-coordinate of a point located on the line.
+    * @param pointOnLineY     the y-coordinate of a point located on the line.
+    * @param lineDirectionX   the x-component of the line direction.
+    * @param lineDirectionY   the y-component of the line direction.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   the second endpoint of the line segment. Not modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean doLine2DAndLineSegment2DIntersect(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
                                                            FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      return EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, lineSegmentStart,
+      return EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLineX,
+                                                                   pointOnLineY,
+                                                                   lineDirectionX,
+                                                                   lineDirectionY,
+                                                                   lineSegmentStart,
                                                                    lineSegmentEnd);
    }
 
@@ -1151,13 +1514,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the line direction. Not modified.
+    * @param pointOnLine      a point located on the line. Not modified.
+    * @param lineDirection    the line direction. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   the second endpoint of the line segment. Not modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean doLine2DAndLineSegment2DIntersect(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
                                                            FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
@@ -1181,12 +1544,12 @@ public class EuclidFrameTools
     * </p>
     *
     * @param lineSegmentStart1 first endpoint of the first line segment. Not modified.
-    * @param lineSegmentEnd1 second endpoint of the first line segment. Not modified.
+    * @param lineSegmentEnd1   second endpoint of the first line segment. Not modified.
     * @param lineSegmentStart2 first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd2 second endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2   second endpoint of the second line segment. Not modified.
     * @return {@code true} if the two line segments intersect, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean doLineSegment2DsIntersect(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
                                                    FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
@@ -1209,13 +1572,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param rayOrigin a point located on the ray. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
+    * @param rayOrigin        a point located on the ray. Not modified.
+    * @param rayDirection     the direction of the ray. Not modified.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return {@code true} if the ray and line segment intersect, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean doRay2DAndLineSegment2DIntersect(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
                                                           FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
@@ -1234,12 +1597,12 @@ public class EuclidFrameTools
     * </ul>
     *
     * @param start1 the origin of the first vector. Not modified.
-    * @param end1 the end of the first vector. Not modified.
+    * @param end1   the end of the first vector. Not modified.
     * @param start2 the origin of the second vector. Not modified.
-    * @param end2 the end of the second vector. Not modified.
+    * @param end2   the end of the second vector. Not modified.
     * @return the value of the dot product of the two vectors.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double dotProduct(FramePoint2DReadOnly start1, FramePoint2DReadOnly end1, FramePoint2DReadOnly start2, FramePoint2DReadOnly end2)
    {
@@ -1257,12 +1620,12 @@ public class EuclidFrameTools
     * </ul>
     *
     * @param start1 the origin of the first vector. Not modified.
-    * @param end1 the end of the first vector. Not modified.
+    * @param end1   the end of the first vector. Not modified.
     * @param start2 the origin of the second vector. Not modified.
-    * @param end2 the end of the second vector. Not modified.
+    * @param end2   the end of the second vector. Not modified.
     * @return the value of the dot product of the two vectors.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double dotProduct(FramePoint3DReadOnly start1, FramePoint3DReadOnly end1, FramePoint3DReadOnly start2, FramePoint3DReadOnly end2)
    {
@@ -1289,20 +1652,21 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0 or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                                FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
@@ -1316,8 +1680,11 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
-                                                                                                secondPointOnLine, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                firstPointOnLine,
+                                                                                                secondPointOnLine,
+                                                                                                firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -1340,20 +1707,21 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0 or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                                FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
@@ -1362,8 +1730,11 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(firstPointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
-                                                                                                secondPointOnLine, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                firstPointOnLine,
+                                                                                                secondPointOnLine,
+                                                                                                firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -1389,20 +1760,21 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                                FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
@@ -1416,8 +1788,12 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
-                                                                                                firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                pointOnLine,
+                                                                                                lineDirection,
+                                                                                                firstIntersectionToPack,
+                                                                                                secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1436,20 +1812,21 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                                FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
@@ -1458,8 +1835,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(pointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
-                                                                                                firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                pointOnLine,
+                                                                                                lineDirection,
+                                                                                                firstIntersectionToPack,
+                                                                                                secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -1488,13 +1869,13 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the line direction. Not modified.
+    * @param pointOnLine      a point located on the line. Not modified.
+    * @param lineDirection    the line direction. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   the second endpoint of the line segment. Not modified.
     * @return the 2D point of intersection if it exist, {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint2D intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
                                                                         FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
@@ -1525,15 +1906,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the line direction. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param pointOnLine        a point located on the line. Not modified.
+    * @param lineDirection      the line direction. Not modified.
+    * @param lineSegmentStart   the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd     the second endpoint of the line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
                                                                    FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
@@ -1544,7 +1925,10 @@ public class EuclidFrameTools
       pointOnLine.checkReferenceFrameMatch(lineSegmentEnd);
       if (intersectionToPack != null)
          pointOnLine.checkReferenceFrameMatch(intersectionToPack);
-      boolean success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
+      boolean success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine,
+                                                                                      lineDirection,
+                                                                                      lineSegmentStart,
+                                                                                      lineSegmentEnd,
                                                                                       intersectionToPack);
 
       return success;
@@ -1566,15 +1950,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the line direction. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param pointOnLine        a point located on the line. Not modified.
+    * @param lineDirection      the line direction. Not modified.
+    * @param lineSegmentStart   the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd     the second endpoint of the line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the line intersects the line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
                                                                    FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
@@ -1583,7 +1967,10 @@ public class EuclidFrameTools
       pointOnLine.checkReferenceFrameMatch(lineDirection);
       pointOnLine.checkReferenceFrameMatch(lineSegmentStart);
       pointOnLine.checkReferenceFrameMatch(lineSegmentEnd);
-      boolean success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd,
+      boolean success = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine,
+                                                                                      lineDirection,
+                                                                                      lineSegmentStart,
+                                                                                      lineSegmentEnd,
                                                                                       intersectionToPack);
 
       if (intersectionToPack != null)
@@ -1609,20 +1996,21 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                                FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
@@ -1636,8 +2024,11 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
-                                                                                                secondPointOnLine, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                firstPointOnLine,
+                                                                                                secondPointOnLine,
+                                                                                                firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -1660,20 +2051,21 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                                FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
@@ -1682,8 +2074,11 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(firstPointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, firstPointOnLine,
-                                                                                                secondPointOnLine, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                firstPointOnLine,
+                                                                                                secondPointOnLine,
+                                                                                                firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -1708,20 +2103,21 @@ public class EuclidFrameTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                                FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
@@ -1735,8 +2131,12 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
-                                                                                                firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                pointOnLine,
+                                                                                                lineDirection,
+                                                                                                firstIntersectionToPack,
+                                                                                                secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -1754,20 +2154,21 @@ public class EuclidFrameTools
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                                FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
@@ -1776,8 +2177,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(pointOnLine);
       boundingBoxMin.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, pointOnLine, lineDirection,
-                                                                                                firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                boundingBoxMax,
+                                                                                                pointOnLine,
+                                                                                                lineDirection,
+                                                                                                firstIntersectionToPack,
+                                                                                                secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -1802,24 +2207,25 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMinX the minimum x-coordinate of the bounding box.
-    * @param boundingBoxMinY the minimum y-coordinate of the bounding box.
-    * @param boundingBoxMinZ the minimum z-coordinate of the bounding box.
-    * @param boundingBoxMaxX the maximum x-coordinate of the bounding box.
-    * @param boundingBoxMaxY the maximum y-coordinate of the bounding box.
-    * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
+    * @param boundingBoxMinY          the minimum y-coordinate of the bounding box.
+    * @param boundingBoxMinZ          the minimum z-coordinate of the bounding box.
+    * @param boundingBoxMaxX          the maximum x-coordinate of the bounding box.
+    * @param boundingBoxMaxY          the maximum y-coordinate of the bounding box.
+    * @param boundingBoxMaxZ          the maximum z-coordinate of the bounding box.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX,
                                                                double boundingBoxMaxY, double boundingBoxMaxZ, FramePoint3DReadOnly pointOnLine,
@@ -1831,9 +2237,15 @@ public class EuclidFrameTools
          pointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          pointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ,
-                                                                                                boundingBoxMaxX, boundingBoxMaxY, boundingBoxMaxZ, pointOnLine,
-                                                                                                lineDirection, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMinX,
+                                                                                                boundingBoxMinY,
+                                                                                                boundingBoxMinZ,
+                                                                                                boundingBoxMaxX,
+                                                                                                boundingBoxMaxY,
+                                                                                                boundingBoxMaxZ,
+                                                                                                pointOnLine,
+                                                                                                lineDirection,
+                                                                                                firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -1853,24 +2265,25 @@ public class EuclidFrameTools
     * {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMinX the minimum x-coordinate of the bounding box.
-    * @param boundingBoxMinY the minimum y-coordinate of the bounding box.
-    * @param boundingBoxMinZ the minimum z-coordinate of the bounding box.
-    * @param boundingBoxMaxX the maximum x-coordinate of the bounding box.
-    * @param boundingBoxMaxY the maximum y-coordinate of the bounding box.
-    * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMinX          the minimum x-coordinate of the bounding box.
+    * @param boundingBoxMinY          the minimum y-coordinate of the bounding box.
+    * @param boundingBoxMinZ          the minimum z-coordinate of the bounding box.
+    * @param boundingBoxMaxX          the maximum x-coordinate of the bounding box.
+    * @param boundingBoxMaxY          the maximum y-coordinate of the bounding box.
+    * @param boundingBoxMaxZ          the maximum z-coordinate of the bounding box.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX,
                                                                double boundingBoxMaxY, double boundingBoxMaxZ, FramePoint3DReadOnly pointOnLine,
@@ -1878,9 +2291,15 @@ public class EuclidFrameTools
                                                                FramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ,
-                                                                                                boundingBoxMaxX, boundingBoxMaxY, boundingBoxMaxZ, pointOnLine,
-                                                                                                lineDirection, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMinX,
+                                                                                                boundingBoxMinY,
+                                                                                                boundingBoxMinZ,
+                                                                                                boundingBoxMaxX,
+                                                                                                boundingBoxMaxY,
+                                                                                                boundingBoxMaxZ,
+                                                                                                pointOnLine,
+                                                                                                lineDirection,
+                                                                                                firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -1898,53 +2317,54 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
-                                                            FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly firstPointOnLine,
+                                                            FramePoint3DReadOnly secondPointOnLine, FixedFramePoint3DBasics firstIntersectionToPack,
+                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(firstPointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(secondPointOnLine);
+
       if (firstIntersectionToPack != null)
          firstPointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          firstPointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, firstPointOnLine,
-                                                                                             secondPointOnLine, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength,
+                                                                                             cylinderRadius,
+                                                                                             cylinderPosition,
+                                                                                             cylinderAxis,
+                                                                                             firstPointOnLine,
+                                                                                             secondPointOnLine,
+                                                                                             firstIntersectionToPack,
                                                                                              secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -1956,49 +2376,49 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
-                                                            FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly firstPointOnLine,
+                                                            FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics firstIntersectionToPack,
+                                                            FramePoint3DBasics secondIntersectionToPack)
    {
-      firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, firstPointOnLine,
-                                                                                             secondPointOnLine, firstIntersectionToPack,
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(firstPointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(secondPointOnLine);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength,
+                                                                                             cylinderRadius,
+                                                                                             cylinderPosition,
+                                                                                             cylinderAxis,
+                                                                                             firstPointOnLine,
+                                                                                             secondPointOnLine,
+                                                                                             firstIntersectionToPack,
                                                                                              secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -2016,53 +2436,54 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
-                                                            FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly pointOnLine,
+                                                            FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      pointOnLine.checkReferenceFrameMatch(lineDirection);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(pointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(lineDirection);
       if (firstIntersectionToPack != null)
          pointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          pointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, pointOnLine,
-                                                                                             lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength,
+                                                                                             cylinderRadius,
+                                                                                             cylinderPosition,
+                                                                                             cylinderAxis,
+                                                                                             pointOnLine,
+                                                                                             lineDirection,
+                                                                                             firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2073,49 +2494,50 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the line and the cylinder. It is either equal to 0,
     *         1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                            FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
-                                                            FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly pointOnLine,
+                                                            FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+                                                            FramePoint3DBasics secondIntersectionToPack)
    {
-      pointOnLine.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, pointOnLine,
-                                                                                             lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(pointOnLine);
+      cylinderPosition.checkReferenceFrameMatch(lineDirection);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndCylinder3D(cylinderLength,
+                                                                                             cylinderRadius,
+                                                                                             cylinderPosition,
+                                                                                             cylinderAxis,
+                                                                                             pointOnLine,
+                                                                                             lineDirection,
+                                                                                             firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -2144,21 +2566,21 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly firstPointOnLine,
                                                              FramePoint3DReadOnly secondPointOnLine, FixedFramePoint3DBasics firstIntersectionToPack,
@@ -2169,8 +2591,13 @@ public class EuclidFrameTools
          firstPointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          firstPointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
-                                                                                              firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
+                                                                                              radiusY,
+                                                                                              radiusZ,
+                                                                                              firstPointOnLine,
+                                                                                              secondPointOnLine,
+                                                                                              firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2193,29 +2620,34 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param firstPointOnLine a first point located on the infinitely long line. Not modified.
-    * @param secondPointOnLine a second point located on the infinitely long line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param firstPointOnLine         a first point located on the infinitely long line. Not modified.
+    * @param secondPointOnLine        a second point located on the infinitely long line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly firstPointOnLine,
                                                              FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics firstIntersectionToPack,
                                                              FramePoint3DBasics secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, firstPointOnLine, secondPointOnLine,
-                                                                                              firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
+                                                                                              radiusY,
+                                                                                              radiusZ,
+                                                                                              firstPointOnLine,
+                                                                                              secondPointOnLine,
+                                                                                              firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -2244,21 +2676,21 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly pointOnLine,
                                                              FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
@@ -2269,8 +2701,13 @@ public class EuclidFrameTools
          pointOnLine.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          pointOnLine.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, pointOnLine, lineDirection,
-                                                                                              firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
+                                                                                              radiusY,
+                                                                                              radiusZ,
+                                                                                              pointOnLine,
+                                                                                              lineDirection,
+                                                                                              firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2293,29 +2730,34 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the direction of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly pointOnLine,
                                                              FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
                                                              FramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX, radiusY, radiusZ, pointOnLine, lineDirection,
-                                                                                              firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(radiusX,
+                                                                                              radiusY,
+                                                                                              radiusZ,
+                                                                                              pointOnLine,
+                                                                                              lineDirection,
+                                                                                              firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -2339,14 +2781,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param pointOnPlane  a point located on the plane. Not modified.
+    * @param planeNormal   the normal of the plane. Not modified.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the coordinates of the intersection, or {@code null} if the line is parallel to the
     *         plane.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint3D intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
                                                                   FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
@@ -2373,14 +2815,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    * @param pointOnPlane       a point located on the plane. Not modified.
+    * @param planeNormal        the normal of the plane. Not modified.
+    * @param pointOnLine        a point located on the line. Not modified.
+    * @param lineDirection      the direction of the line. Not modified.
     * @param intersectionToPack point in which the coordinates of the intersection are stored.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
                                                              FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
@@ -2404,14 +2846,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    * @param pointOnPlane       a point located on the plane. Not modified.
+    * @param planeNormal        the normal of the plane. Not modified.
+    * @param pointOnLine        a point located on the line. Not modified.
+    * @param lineDirection      the direction of the line. Not modified.
     * @param intersectionToPack point in which the coordinates of the intersection are stored.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
                                                              FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
@@ -2451,20 +2893,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line segment and the bounding box. It is either
     *         equal to 0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLineSegment2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                                       FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
@@ -2478,8 +2921,11 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, lineSegmentStart,
-                                                                                                       lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                       boundingBoxMax,
+                                                                                                       lineSegmentStart,
+                                                                                                       lineSegmentEnd,
+                                                                                                       firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -2508,20 +2954,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line segment and the bounding box. It is either
     *         equal to 0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLineSegment2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                                       FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
@@ -2530,8 +2977,11 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentStart);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentEnd);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, lineSegmentStart,
-                                                                                                       lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin,
+                                                                                                       boundingBoxMax,
+                                                                                                       lineSegmentStart,
+                                                                                                       lineSegmentEnd,
+                                                                                                       firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -2566,20 +3016,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line segment and the bounding box. It is either
     *         equal to 0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLineSegment3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                                       FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
@@ -2593,8 +3044,11 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, lineSegmentStart,
-                                                                                                       lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                       boundingBoxMax,
+                                                                                                       lineSegmentStart,
+                                                                                                       lineSegmentEnd,
+                                                                                                       firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -2623,20 +3077,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line segment and the bounding box. It is either
     *         equal to 0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLineSegment3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                                       FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
@@ -2645,8 +3100,11 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentStart);
       boundingBoxMin.checkReferenceFrameMatch(lineSegmentEnd);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, lineSegmentStart,
-                                                                                                       lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBoxMin,
+                                                                                                       boundingBoxMax,
+                                                                                                       lineSegmentStart,
+                                                                                                       lineSegmentEnd,
+                                                                                                       firstIntersectionToPack,
                                                                                                        secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -2664,54 +3122,53 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line segment and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the line segment and the cylinder. It is either equal
     *         to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                                   FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                                                   FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                                   FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly lineSegmentStart,
+                                                                   FramePoint3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics firstIntersectionToPack,
                                                                    FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentStart);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentEnd);
       if (firstIntersectionToPack != null)
          lineSegmentStart.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          lineSegmentStart.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius,
-                                                                                                    lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderLength,
+                                                                                                    cylinderRadius,
+                                                                                                    cylinderPosition,
+                                                                                                    cylinderAxis,
+                                                                                                    lineSegmentStart,
+                                                                                                    lineSegmentEnd,
+                                                                                                    firstIntersectionToPack,
                                                                                                     secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -2723,49 +3180,49 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the line segment and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the line segment and the cylinder. It is either equal
     *         to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius,
-                                                                   FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                                                   FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                                   FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly lineSegmentStart,
+                                                                   FramePoint3DReadOnly lineSegmentEnd, FramePoint3DBasics firstIntersectionToPack,
+                                                                   FramePoint3DBasics secondIntersectionToPack)
    {
-      lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius,
-                                                                                                    lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentStart);
+      cylinderPosition.checkReferenceFrameMatch(lineSegmentEnd);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndCylinder3D(cylinderLength,
+                                                                                                    cylinderRadius,
+                                                                                                    cylinderPosition,
+                                                                                                    cylinderAxis,
+                                                                                                    lineSegmentStart,
+                                                                                                    lineSegmentEnd,
+                                                                                                    firstIntersectionToPack,
                                                                                                     secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -2795,21 +3252,21 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly lineSegmentStart,
                                                                     FramePoint3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics firstIntersectionToPack,
@@ -2820,8 +3277,12 @@ public class EuclidFrameTools
          lineSegmentStart.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          lineSegmentStart.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart,
-                                                                                                     lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
+                                                                                                     radiusY,
+                                                                                                     radiusZ,
+                                                                                                     lineSegmentStart,
+                                                                                                     lineSegmentEnd,
+                                                                                                     firstIntersectionToPack,
                                                                                                      secondIntersectionToPack);
 
       return numberOfIntersections;
@@ -2845,29 +3306,33 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly lineSegmentStart,
                                                                     FramePoint3DReadOnly lineSegmentEnd, FramePoint3DBasics firstIntersectionToPack,
                                                                     FramePoint3DBasics secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX, radiusY, radiusZ, lineSegmentStart,
-                                                                                                     lineSegmentEnd, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndEllipsoid3D(radiusX,
+                                                                                                     radiusY,
+                                                                                                     radiusZ,
+                                                                                                     lineSegmentStart,
+                                                                                                     lineSegmentEnd,
+                                                                                                     firstIntersectionToPack,
                                                                                                      secondIntersectionToPack);
 
       // Set the correct reference frame.
@@ -2897,13 +3362,13 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param pointOnPlane a point located on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param pointOnPlane     a point located on the plane. Not modified.
+    * @param planeNormal      the normal of the plane. Not modified.
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return the intersection, or {@code null} if there is no intersection.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint3D intersectionBetweenLineSegment3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
                                                                          FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
@@ -2945,20 +3410,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenRay2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                               FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
@@ -2971,8 +3437,12 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
-                                                                                               firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin,
+                                                                                               boundingBoxMax,
+                                                                                               rayOrigin,
+                                                                                               rayDirection,
+                                                                                               firstIntersectionToPack,
+                                                                                               secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -2999,20 +3469,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenRay2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
                                                               FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
@@ -3021,8 +3492,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(rayOrigin);
       boundingBoxMin.checkReferenceFrameMatch(rayDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
-                                                                                               firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin,
+                                                                                               boundingBoxMax,
+                                                                                               rayOrigin,
+                                                                                               rayDirection,
+                                                                                               firstIntersectionToPack,
+                                                                                               secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -3050,13 +3525,13 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param rayOrigin a point located on the ray. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
+    * @param rayOrigin        a point located on the ray. Not modified.
+    * @param rayDirection     the direction of the ray. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   the second endpoint of the line segment. Not modified.
     * @return the 2D point of intersection if it exist, {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint2D intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
                                                                        FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
@@ -3087,15 +3562,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param rayOrigin a point located on the ray. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param rayOrigin          a point located on the ray. Not modified.
+    * @param rayDirection       the direction of the ray. Not modified.
+    * @param lineSegmentStart   the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd     the second endpoint of the line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the ray intersects the line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
                                                                   FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
@@ -3107,7 +3582,10 @@ public class EuclidFrameTools
       if (intersectionToPack != null)
          rayOrigin.checkReferenceFrameMatch(intersectionToPack);
 
-      boolean success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd,
+      boolean success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin,
+                                                                                     rayDirection,
+                                                                                     lineSegmentStart,
+                                                                                     lineSegmentEnd,
                                                                                      intersectionToPack);
 
       return success;
@@ -3128,15 +3606,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param rayOrigin a point located on the ray. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param rayOrigin          a point located on the ray. Not modified.
+    * @param rayDirection       the direction of the ray. Not modified.
+    * @param lineSegmentStart   the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd     the second endpoint of the line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
-    *           Modified.
+    *                           Modified.
     * @return {@code true} if the ray intersects the line segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
                                                                   FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
@@ -3146,7 +3624,10 @@ public class EuclidFrameTools
       rayOrigin.checkReferenceFrameMatch(lineSegmentStart);
       rayOrigin.checkReferenceFrameMatch(lineSegmentEnd);
 
-      boolean success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd,
+      boolean success = EuclidGeometryTools.intersectionBetweenRay2DAndLineSegment2D(rayOrigin,
+                                                                                     rayDirection,
+                                                                                     lineSegmentStart,
+                                                                                     lineSegmentEnd,
                                                                                      intersectionToPack);
 
       if (intersectionToPack != null)
@@ -3177,20 +3658,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenRay3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                               FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection,
@@ -3203,8 +3685,12 @@ public class EuclidFrameTools
          boundingBoxMin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          boundingBoxMin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
-                                                                                               firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin,
+                                                                                               boundingBoxMax,
+                                                                                               rayOrigin,
+                                                                                               rayDirection,
+                                                                                               firstIntersectionToPack,
+                                                                                               secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3231,20 +3717,21 @@ public class EuclidFrameTools
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param boundingBoxMin the minimum coordinate of the bounding box. Not modified.
-    * @param boundingBoxMax the maximum coordinate of the bounding box. Not modified.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param boundingBoxMin           the minimum coordinate of the bounding box. Not modified.
+    * @param boundingBoxMax           the maximum coordinate of the bounding box. Not modified.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws BoundingBoxException if any of the minimum coordinates of the bounding box is strictly
-    *            greater than the maximum coordinate of the bounding box on the same axis.
+    * @throws BoundingBoxException            if any of the minimum coordinates of the bounding box is
+    *                                         strictly greater than the maximum coordinate of the
+    *                                         bounding box on the same axis.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenRay3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
                                                               FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection,
@@ -3253,8 +3740,12 @@ public class EuclidFrameTools
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax);
       boundingBoxMin.checkReferenceFrameMatch(rayOrigin);
       boundingBoxMin.checkReferenceFrameMatch(rayDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin, boundingBoxMax, rayOrigin, rayDirection,
-                                                                                               firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin,
+                                                                                               boundingBoxMax,
+                                                                                               rayOrigin,
+                                                                                               rayDirection,
+                                                                                               firstIntersectionToPack,
+                                                                                               secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -3271,53 +3762,54 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the ray and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, FramePoint3DReadOnly rayOrigin,
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                           FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly rayOrigin,
                                                            FrameVector3DReadOnly rayDirection, FixedFramePoint3DBasics firstIntersectionToPack,
                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
-      rayOrigin.checkReferenceFrameMatch(rayDirection);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(rayOrigin);
+      cylinderPosition.checkReferenceFrameMatch(rayDirection);
       if (firstIntersectionToPack != null)
          rayOrigin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          rayOrigin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, rayOrigin,
-                                                                                            rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderLength,
+                                                                                            cylinderRadius,
+                                                                                            cylinderPosition,
+                                                                                            cylinderAxis,
+                                                                                            rayOrigin,
+                                                                                            rayDirection,
+                                                                                            firstIntersectionToPack,
+                                                                                            secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3328,49 +3820,50 @@ public class EuclidFrameTools
     * <a href= "http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf">Useful link</a>.
     * </p>
     * <p>
-    * The cylinder pose is as follows:
-    * <ul>
-    * <li>the cylinder axis is aligned with the z-axis.
-    * <li>the bottom center is located at (0, 0, {@code cylinderBottomZ}).
-    * <li>the top center is located at (0, 0, {@code cylinderTopZ}).
-    * </ul>
-    * </p>
-    * <p>
     * In the case the ray and the cylinder do not intersect, this method returns {@code 0} and
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set {@link Double#NaN}.
     * </p>
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if either {@code cylinderBottomZ == cylinderTopZ} or {@code cylinderRadius == 0}, this method
-    * fails and return {@code 0}.
+    * <li>if either {@code cylinderLength == 0} or {@code cylinderRadius == 0}, this method fails and
+    * return {@code 0}.
     * </ul>
     * </p>
     *
-    * @param cylinderBottomZ the z-coordinate of the cylinder's bottom face.
-    * @param cylinderTopZ the z-coordinate of the cylinder's top face.
-    * @param cylinderRadius radius of the cylinder.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param cylinderLength           length of the cylinder.
+    * @param cylinderRadius           radius of the cylinder.
+    * @param cylinderPosition         the center of the cylinder.
+    * @param cylinderAxis             the cylinder's axis.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
-    *
+    *                                 Modified.
     * @return the number of intersections between the ray and the bounding box. It is either equal to
     *         0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code cylinderBottomZ > cylinderTopZ} or
-    *            {@code cylinderRadius < 0}.
+    * @throws IllegalArgumentException        if either {@code cylinderLength < 0} or
+    *                                         {@code cylinderRadius < 0}.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderBottomZ, double cylinderTopZ, double cylinderRadius, FramePoint3DReadOnly rayOrigin,
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
+                                                           FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly rayOrigin,
                                                            FrameVector3DReadOnly rayDirection, FramePoint3DBasics firstIntersectionToPack,
                                                            FramePoint3DBasics secondIntersectionToPack)
    {
-      rayOrigin.checkReferenceFrameMatch(rayDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderBottomZ, cylinderTopZ, cylinderRadius, rayOrigin,
-                                                                                            rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+      cylinderPosition.checkReferenceFrameMatch(cylinderAxis);
+      cylinderPosition.checkReferenceFrameMatch(rayOrigin);
+      cylinderPosition.checkReferenceFrameMatch(rayDirection);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndCylinder3D(cylinderLength,
+                                                                                            cylinderRadius,
+                                                                                            cylinderPosition,
+                                                                                            cylinderAxis,
+                                                                                            rayOrigin,
+                                                                                            rayDirection,
+                                                                                            firstIntersectionToPack,
+                                                                                            secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -3399,21 +3892,21 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly rayOrigin,
                                                             FrameVector3DReadOnly rayDirection, FixedFramePoint3DBasics firstIntersectionToPack,
@@ -3424,8 +3917,13 @@ public class EuclidFrameTools
          rayOrigin.checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          rayOrigin.checkReferenceFrameMatch(secondIntersectionToPack);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
-                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX,
+                                                                                             radiusY,
+                                                                                             radiusZ,
+                                                                                             rayOrigin,
+                                                                                             rayDirection,
+                                                                                             firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
 
       return numberOfIntersections;
    }
@@ -3448,29 +3946,34 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param radiusX                  radius of the ellipsoid along the x-axis.
+    * @param radiusY                  radius of the ellipsoid along the y-axis.
+    * @param radiusZ                  radius of the ellipsoid along the z-axis.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line/line-segment/ray and the ellipsoid. It is
     *         either equal to 0, 1, or 2.
-    * @throws IllegalArgumentException if either {@code radiusX}, {@code radiusY}, or {@code radiusZ}
-    *            is negative.
+    * @throws IllegalArgumentException        if either {@code radiusX}, {@code radiusY}, or
+    *                                         {@code radiusZ} is negative.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly rayOrigin,
                                                             FrameVector3DReadOnly rayDirection, FramePoint3DBasics firstIntersectionToPack,
                                                             FramePoint3DBasics secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX, radiusY, radiusZ, rayOrigin, rayDirection,
-                                                                                             firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndEllipsoid3D(radiusX,
+                                                                                             radiusY,
+                                                                                             radiusZ,
+                                                                                             rayOrigin,
+                                                                                             rayDirection,
+                                                                                             firstIntersectionToPack,
+                                                                                             secondIntersectionToPack);
 
       // Set the correct reference frame.
       if (firstIntersectionToPack != null)
@@ -3496,13 +3999,13 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param firstPointOnLine1 a first point located on the first line. Not modified.
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
     * @param secondPointOnLine1 a second point located on the first line. Not modified.
-    * @param firstPointOnLine2 a first point located on the second line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
     * @param secondPointOnLine2 a second point located on the second line. Not modified.
     * @return the 2D point of intersection if the two lines intersect, {@code null} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
                                                             FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2)
@@ -3534,13 +4037,13 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param pointOnLine1 point located on the first line. Not modified.
+    * @param pointOnLine1   point located on the first line. Not modified.
     * @param lineDirection1 the first line direction. Not modified.
-    * @param pointOnLine2 point located on the second line. Not modified.
+    * @param pointOnLine2   point located on the second line. Not modified.
     * @param lineDirection2 the second line direction. Not modified.
     * @return the 2D point of intersection if the two lines intersect, {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
                                                             FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
@@ -3570,14 +4073,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine1 point located on the first line. Not modified.
-    * @param lineDirection1 the first line direction. Not modified.
-    * @param pointOnLine2 point located on the second line. Not modified.
-    * @param lineDirection2 the second line direction. Not modified.
+    * @param pointOnLine1       point located on the first line. Not modified.
+    * @param lineDirection1     the first line direction. Not modified.
+    * @param pointOnLine2       point located on the second line. Not modified.
+    * @param lineDirection2     the second line direction. Not modified.
     * @param intersectionToPack 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
                                                        FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2,
@@ -3607,14 +4110,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine1 point located on the first line. Not modified.
-    * @param lineDirection1 the first line direction. Not modified.
-    * @param pointOnLine2 point located on the second line. Not modified.
-    * @param lineDirection2 the second line direction. Not modified.
+    * @param pointOnLine1       point located on the first line. Not modified.
+    * @param lineDirection1     the first line direction. Not modified.
+    * @param pointOnLine2       point located on the second line. Not modified.
+    * @param lineDirection2     the second line direction. Not modified.
     * @param intersectionToPack 2D point in which the result is stored. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
                                                        FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2,
@@ -3649,12 +4152,12 @@ public class EuclidFrameTools
     * </p>
     *
     * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the second endpoint of the first line segment. Not modified.
+    * @param lineSegmentEnd1   the second endpoint of the first line segment. Not modified.
     * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the second endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2   the second endpoint of the second line segment. Not modified.
     * @return the intersection point if it exists, {@code null} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.s
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.s
     */
    public static FramePoint2D intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
                                                                    FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
@@ -3684,14 +4187,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the second endpoint of the first line segment. Not modified.
-    * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the second endpoint of the second line segment. Not modified.
+    * @param lineSegmentStart1  the first endpoint of the first line segment. Not modified.
+    * @param lineSegmentEnd1    the second endpoint of the first line segment. Not modified.
+    * @param lineSegmentStart2  the first endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2    the second endpoint of the second line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two line segments intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
                                                               FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
@@ -3702,7 +4205,10 @@ public class EuclidFrameTools
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd2);
       if (intersectionToPack != null)
          lineSegmentStart1.checkReferenceFrameMatch(intersectionToPack);
-      boolean success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
+      boolean success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                                 lineSegmentEnd1,
+                                                                                 lineSegmentStart2,
+                                                                                 lineSegmentEnd2,
                                                                                  intersectionToPack);
 
       return success;
@@ -3723,14 +4229,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the second endpoint of the first line segment. Not modified.
-    * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the second endpoint of the second line segment. Not modified.
+    * @param lineSegmentStart1  the first endpoint of the first line segment. Not modified.
+    * @param lineSegmentEnd1    the second endpoint of the first line segment. Not modified.
+    * @param lineSegmentStart2  the first endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2    the second endpoint of the second line segment. Not modified.
     * @param intersectionToPack the 2D point in which the result is stored. Modified.
     * @return {@code true} if the two line segments intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
                                                               FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
@@ -3739,7 +4245,10 @@ public class EuclidFrameTools
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentStart2);
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd2);
-      boolean success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2,
+      boolean success = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                                 lineSegmentEnd1,
+                                                                                 lineSegmentStart2,
+                                                                                 lineSegmentEnd2,
                                                                                  intersectionToPack);
 
       if (intersectionToPack != null)
@@ -3769,18 +4278,19 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane1 a point on the first plane. Not modified.
-    * @param planeNormal1 the normal of the first plane. Not modified.
-    * @param pointOnPlane2 a point on the second plane. Not modified.
-    * @param planeNormal2 the normal of the second plane. Not modified.
-    * @param angleThreshold the minimum angle between the two planes required to do the calculation.
-    * @param pointOnIntersectionToPack a 3D point that is set such that it belongs to the line of
-    *           intersection between the two planes. Modified.
+    * @param pointOnPlane1               a point on the first plane. Not modified.
+    * @param planeNormal1                the normal of the first plane. Not modified.
+    * @param pointOnPlane2               a point on the second plane. Not modified.
+    * @param planeNormal2                the normal of the second plane. Not modified.
+    * @param angleThreshold              the minimum angle between the two planes required to do the
+    *                                    calculation.
+    * @param pointOnIntersectionToPack   a 3D point that is set such that it belongs to the line of
+    *                                    intersection between the two planes. Modified.
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
-    *           intersection between the two planes. Modified.
+    *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
                                                         FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2, double angleThreshold,
@@ -3793,8 +4303,13 @@ public class EuclidFrameTools
          pointOnPlane1.checkReferenceFrameMatch(pointOnIntersectionToPack);
       if (intersectionDirectionToPack != null)
          pointOnPlane1.checkReferenceFrameMatch(intersectionDirectionToPack);
-      boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, angleThreshold,
-                                                                           pointOnIntersectionToPack, intersectionDirectionToPack);
+      boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1,
+                                                                           planeNormal1,
+                                                                           pointOnPlane2,
+                                                                           planeNormal2,
+                                                                           angleThreshold,
+                                                                           pointOnIntersectionToPack,
+                                                                           intersectionDirectionToPack);
 
       return success;
    }
@@ -3820,18 +4335,19 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane1 a point on the first plane. Not modified.
-    * @param planeNormal1 the normal of the first plane. Not modified.
-    * @param pointOnPlane2 a point on the second plane. Not modified.
-    * @param planeNormal2 the normal of the second plane. Not modified.
-    * @param angleThreshold the minimum angle between the two planes required to do the calculation.
-    * @param pointOnIntersectionToPack a 3D point that is set such that it belongs to the line of
-    *           intersection between the two planes. Modified.
+    * @param pointOnPlane1               a point on the first plane. Not modified.
+    * @param planeNormal1                the normal of the first plane. Not modified.
+    * @param pointOnPlane2               a point on the second plane. Not modified.
+    * @param planeNormal2                the normal of the second plane. Not modified.
+    * @param angleThreshold              the minimum angle between the two planes required to do the
+    *                                    calculation.
+    * @param pointOnIntersectionToPack   a 3D point that is set such that it belongs to the line of
+    *                                    intersection between the two planes. Modified.
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
-    *           intersection between the two planes. Modified.
+    *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
                                                         FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2, double angleThreshold,
@@ -3840,8 +4356,13 @@ public class EuclidFrameTools
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1);
       pointOnPlane1.checkReferenceFrameMatch(pointOnPlane2);
       pointOnPlane1.checkReferenceFrameMatch(planeNormal2);
-      boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, angleThreshold,
-                                                                           pointOnIntersectionToPack, intersectionDirectionToPack);
+      boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1,
+                                                                           planeNormal1,
+                                                                           pointOnPlane2,
+                                                                           planeNormal2,
+                                                                           angleThreshold,
+                                                                           pointOnIntersectionToPack,
+                                                                           intersectionDirectionToPack);
 
       if (pointOnIntersectionToPack != null)
          pointOnIntersectionToPack.setReferenceFrame(planeNormal1.getReferenceFrame());
@@ -3869,17 +4390,17 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane1 a point on the first plane. Not modified.
-    * @param planeNormal1 the normal of the first plane. Not modified.
-    * @param pointOnPlane2 a point on the second plane. Not modified.
-    * @param planeNormal2 the normal of the second plane. Not modified.
-    * @param pointOnIntersectionToPack a 3D point that is set such that it belongs to the line of
-    *           intersection between the two planes. Modified.
+    * @param pointOnPlane1               a point on the first plane. Not modified.
+    * @param planeNormal1                the normal of the first plane. Not modified.
+    * @param pointOnPlane2               a point on the second plane. Not modified.
+    * @param planeNormal2                the normal of the second plane. Not modified.
+    * @param pointOnIntersectionToPack   a 3D point that is set such that it belongs to the line of
+    *                                    intersection between the two planes. Modified.
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
-    *           intersection between the two planes. Modified.
+    *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
                                                         FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2,
@@ -3892,7 +4413,11 @@ public class EuclidFrameTools
          pointOnPlane1.checkReferenceFrameMatch(pointOnIntersectionToPack);
       if (intersectionDirectionToPack != null)
          pointOnPlane1.checkReferenceFrameMatch(intersectionDirectionToPack);
-      return EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, pointOnIntersectionToPack,
+      return EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1,
+                                                                planeNormal1,
+                                                                pointOnPlane2,
+                                                                planeNormal2,
+                                                                pointOnIntersectionToPack,
                                                                 intersectionDirectionToPack);
    }
 
@@ -3914,17 +4439,17 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnPlane1 a point on the first plane. Not modified.
-    * @param planeNormal1 the normal of the first plane. Not modified.
-    * @param pointOnPlane2 a point on the second plane. Not modified.
-    * @param planeNormal2 the normal of the second plane. Not modified.
-    * @param pointOnIntersectionToPack a 3D point that is set such that it belongs to the line of
-    *           intersection between the two planes. Modified.
+    * @param pointOnPlane1               a point on the first plane. Not modified.
+    * @param planeNormal1                the normal of the first plane. Not modified.
+    * @param pointOnPlane2               a point on the second plane. Not modified.
+    * @param planeNormal2                the normal of the second plane. Not modified.
+    * @param pointOnIntersectionToPack   a 3D point that is set such that it belongs to the line of
+    *                                    intersection between the two planes. Modified.
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
-    *           intersection between the two planes. Modified.
+    *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
                                                         FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2,
@@ -3933,7 +4458,11 @@ public class EuclidFrameTools
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1);
       pointOnPlane1.checkReferenceFrameMatch(pointOnPlane2);
       pointOnPlane1.checkReferenceFrameMatch(planeNormal2);
-      boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, pointOnIntersectionToPack,
+      boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1,
+                                                                           planeNormal1,
+                                                                           pointOnPlane2,
+                                                                           planeNormal2,
+                                                                           pointOnIntersectionToPack,
                                                                            intersectionDirectionToPack);
       if (success)
       {
@@ -3950,12 +4479,12 @@ public class EuclidFrameTools
     * through the ray origin and which direction is perpendicular to the ray and directed towards the
     * left side.
     *
-    * @param point the query. Not modified.
-    * @param rayOrigin the ray's origin. Not modified.
+    * @param point        the query. Not modified.
+    * @param rayOrigin    the ray's origin. Not modified.
     * @param rayDirection the ray's direction. Not modified.
     * @return {@code true} if the query is located in front of the ray.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DInFrontOfRay2D(FramePoint2DReadOnly point, FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection)
    {
@@ -3969,13 +4498,13 @@ public class EuclidFrameTools
     * c. The triangle can be clockwise or counter-clockwise ordered.
     *
     * @param point the point to check if lying inside the triangle. Not modified.
-    * @param a first vertex of the triangle. Not modified.
-    * @param b second vertex of the triangle. Not modified.
-    * @param c third vertex of the triangle. Not modified.
+    * @param a     first vertex of the triangle. Not modified.
+    * @param b     second vertex of the triangle. Not modified.
+    * @param c     third vertex of the triangle. Not modified.
     * @return {@code true} if the query is exactly inside the triangle. {@code false} if the query
     *         point is outside triangle or exactly on an edge of the triangle.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DInsideTriangleABC(FramePoint2DReadOnly point, FramePoint2DReadOnly a, FramePoint2DReadOnly b, FramePoint2DReadOnly c)
    {
@@ -3992,13 +4521,13 @@ public class EuclidFrameTools
     * is below {@link EuclidGeometryTools#IS_POINT_ON_LINE_EPS} this method returns {@code true}.
     * </p>
     *
-    * @param pointX the x-coordinate of the query.
-    * @param pointY the y-coordinate of the query.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param pointX        the x-coordinate of the query.
+    * @param pointY        the y-coordinate of the query.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return {@code true} if the query is considered to be lying on the line, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -4013,12 +4542,12 @@ public class EuclidFrameTools
     * is below {@link EuclidGeometryTools#IS_POINT_ON_LINE_EPS} this method returns {@code true}.
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param point         the coordinates of the query. Not modified.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return {@code true} if the query is considered to be lying on the line, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -4034,12 +4563,12 @@ public class EuclidFrameTools
     * is below {@link EuclidGeometryTools#IS_POINT_ON_LINE_EPS} this method returns {@code true}.
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point            the coordinates of the query. Not modified.
     * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   the second endpoint of the line segment. Not modified.
     * @return {@code true} if the query is considered to be lying on the line, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
@@ -4059,13 +4588,13 @@ public class EuclidFrameTools
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
-    * @param point the query point. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             the query point. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return {@code true} if the point is on the left side of the line, {@code false} if the point is
     *         on the right side or exactly on the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnLeftSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -4085,13 +4614,13 @@ public class EuclidFrameTools
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
-    * @param point the query point. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             the query point. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return {@code true} if the point is on the right side of the line, {@code false} if the point is
     *         on the left side or exactly on the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnRightSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -4114,16 +4643,16 @@ public class EuclidFrameTools
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
-    * @param pointX the x-coordinate of the query point.
-    * @param pointY the y-coordinate of the query point.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param pointX            the x-coordinate of the query point.
+    * @param pointY            the y-coordinate of the query point.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
-    *           side, {@code false} this will test for the right side.
+    * @param testLeftSide      the query of the side, when equal to {@code true} this will test for the
+    *                          left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(double pointX, double pointY, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
                                                  boolean testLeftSide)
@@ -4145,16 +4674,16 @@ public class EuclidFrameTools
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
-    * @param pointX the x-coordinate of the query point.
-    * @param pointY the y-coordinate of the query point.
-    * @param pointOnLine a point positioned on the infinite line. Not modified.
+    * @param pointX        the x-coordinate of the query point.
+    * @param pointY        the y-coordinate of the query point.
+    * @param pointOnLine   a point positioned on the infinite line. Not modified.
     * @param lineDirection the direction of the infinite line. Not modified.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
-    *           side, {@code false} this will test for the right side.
+    * @param testLeftSide  the query of the side, when equal to {@code true} this will test for the
+    *                      left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
                                                  boolean testLeftSide)
@@ -4177,15 +4706,15 @@ public class EuclidFrameTools
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
-    * @param point the query point. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             the query point. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
-    *           side, {@code false} this will test for the right side.
+    * @param testLeftSide      the query of the side, when equal to {@code true} this will test for the
+    *                          left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
                                                  boolean testLeftSide)
@@ -4208,15 +4737,15 @@ public class EuclidFrameTools
     * </p>
     * This method will return {@code false} if the point is on the line.
     *
-    * @param point the query point. Not modified.
-    * @param pointOnLine a point positioned on the infinite line. Not modified.
+    * @param point         the query point. Not modified.
+    * @param pointOnLine   a point positioned on the infinite line. Not modified.
     * @param lineDirection the direction of the infinite line. Not modified.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
-    *           side, {@code false} this will test for the right side.
+    * @param testLeftSide  the query of the side, when equal to {@code true} this will test for the
+    *                      left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
                                                  boolean testLeftSide)
@@ -4224,6 +4753,380 @@ public class EuclidFrameTools
       point.checkReferenceFrameMatch(pointOnLine);
       point.checkReferenceFrameMatch(lineDirection);
       return EuclidGeometryTools.isPoint2DOnSideOfLine2D(point, pointOnLine, lineDirection, testLeftSide);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX       the x-coordinate of the query point.
+    * @param pointY       the y-coordinate of the query point.
+    * @param pointZ       the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *                     above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeNormal, boolean testForAbove)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeNormal);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point        the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @param testForAbove the query of the side, when equal to {@code true} this will test for the
+    *                     above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
+                                                      boolean testForAbove)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane);
+      point.checkReferenceFrameMatch(planeNormal);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX       the x-coordinate of the query point.
+    * @param pointY       the y-coordinate of the query point.
+    * @param pointZ       the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point        the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param pointX       the x-coordinate of the query point.
+    * @param pointY       the y-coordinate of the query point.
+    * @param pointZ       the z-coordinate of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, false);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * For instance, given the {@code planeNormal} components x = 0, y = 0, and z = 1, and the
+    * {@code pointOnPlane} coordinates x = 0, y = 0, and z = 0, a point located:
+    * <ul>
+    * <li>above this plane has a positive z coordinate.
+    * <li>below this plane has a negative z coordinate.
+    * </ul>
+    * </p>
+    * This method will return {@code false} if the point is on the plane.
+    *
+    * @param point        the coordinates of the query point.
+    * @param pointOnPlane the coordinates of a point positioned on the infinite plane. Not modified.
+    * @param planeNormal  the normal of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeNormal, false);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX             the x-coordinate of the query point.
+    * @param pointY             the y-coordinate of the query point.
+    * @param pointZ             the z-coordinate of the query point.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @param testForAbove       the query of the side, when equal to {@code true} this will test for
+    *                           the above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent, boolean testForAbove)
+   {
+      pointOnPlane.checkReferenceFrameMatch(planeFirstTangent);
+      pointOnPlane.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating whether a 3D point is strictly above or below of an infinitely
+    * large 3D plane. The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point              the coordinates of the query point. Not modified.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @param testForAbove       the query of the side, when equal to {@code true} this will test for
+    *                           the above side, {@code false} this will test for the below side.
+    * @return {@code true} if the point is on the query side of the plane, {@code false} if the point
+    *         is on the opposite side or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+                                                      FrameVector3DReadOnly planeSecondTangent, boolean testForAbove)
+   {
+      point.checkReferenceFrameMatch(pointOnPlane);
+      point.checkReferenceFrameMatch(planeFirstTangent);
+      point.checkReferenceFrameMatch(planeSecondTangent);
+      return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX             the x-coordinate of the query point.
+    * @param pointY             the y-coordinate of the query point.
+    * @param pointZ             the z-coordinate of the query point.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly above an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point              the coordinates of the query point.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly above the plane, {@code false} if the point is
+    *         below or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DAbovePlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+                                               FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param pointX             the x-coordinate of the query point.
+    * @param pointY             the y-coordinate of the query point.
+    * @param pointZ             the z-coordinate of the query point.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
+   }
+
+   /**
+    * Returns a boolean value, stating if a 3D point is strictly below an infinitely large 3D plane.
+    * The idea of "above" and "below" is determined based on the normal of the plane.
+    * <p>
+    * The plane's normal is retrieved using the two given tangents:<br>
+    * <tt>planeNormal = planeFirstTangent &times; planeSecondTangent</tt><br>
+    * Given the plane's normal, this method then calls
+    * {@link EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double, double, double, double, double, boolean)}.
+    * </p>
+    * <p>
+    * This method will fail if the two given tangents are parallel.
+    * </p>
+    * 
+    * @param point              the coordinates of the query point.
+    * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
+    *                           modified.
+    * @param planeFirstTangent  a first tangent of the infinite plane. Not modified.
+    * @param planeSecondTangent a second tangent of the infinite plane. Not modified.
+    * @return {@code true} if the point is strictly below the plane, {@code false} if the point is
+    *         above or exactly on the plane.
+    * @see EuclidGeometryTools#isPoint3DAboveOrBelowPlane3D(double, double, double, double, double,
+    *      double, double, double, double, boolean)
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean isPoint3DBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+                                               FrameVector3DReadOnly planeSecondTangent)
+   {
+      return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
    }
 
    /**
@@ -4239,12 +5142,12 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param firstPointOnPlane first point on the plane. Not modified.
+    * @param firstPointOnPlane  first point on the plane. Not modified.
     * @param secondPointOnPlane second point on the plane. Not modified.
-    * @param thirdPointOnPlane third point on the plane. Not modified.
+    * @param thirdPointOnPlane  third point on the plane. Not modified.
     * @return the plane normal or {@code null} when the normal could not be determined.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FrameVector3D normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
                                                          FramePoint3DReadOnly thirdPointOnPlane)
@@ -4268,13 +5171,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param firstPointOnPlane first point on the plane. Not modified.
+    * @param firstPointOnPlane  first point on the plane. Not modified.
     * @param secondPointOnPlane second point on the plane. Not modified.
-    * @param thirdPointOnPlane third point on the plane. Not modified.
-    * @param normalToPack the vector in which the result is stored. Modified.
+    * @param thirdPointOnPlane  third point on the plane. Not modified.
+    * @param normalToPack       the vector in which the result is stored. Modified.
     * @return whether the plane normal is properly determined.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
                                                    FramePoint3DReadOnly thirdPointOnPlane, FixedFrameVector3DBasics normalToPack)
@@ -4295,13 +5198,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param firstPointOnPlane first point on the plane. Not modified.
+    * @param firstPointOnPlane  first point on the plane. Not modified.
     * @param secondPointOnPlane second point on the plane. Not modified.
-    * @param thirdPointOnPlane third point on the plane. Not modified.
-    * @param normalToPack the vector in which the result is stored. Modified.
+    * @param thirdPointOnPlane  third point on the plane. Not modified.
+    * @param normalToPack       the vector in which the result is stored. Modified.
     * @return whether the plane normal is properly determined.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
                                                    FramePoint3DReadOnly thirdPointOnPlane, FrameVector3DBasics normalToPack)
@@ -4327,12 +5230,12 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param pointToProject    the point to compute the projection of. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the projection of the point onto the line or {@code null} if the method failed.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
                                                            FramePoint2DReadOnly secondPointOnLine)
@@ -4358,14 +5261,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param pointToProject    the point to compute the projection of. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
-    * @param projectionToPack point in which the projection of the point onto the line is stored.
-    *           Modified.
+    * @param projectionToPack  point in which the projection of the point onto the line is stored.
+    *                          Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
                                                       FramePoint2DReadOnly secondPointOnLine, FixedFramePoint2DBasics projectionToPack)
@@ -4388,14 +5291,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param pointToProject    the point to compute the projection of. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
-    * @param projectionToPack point in which the projection of the point onto the line is stored.
-    *           Modified.
+    * @param projectionToPack  point in which the projection of the point onto the line is stored.
+    *                          Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
                                                       FramePoint2DReadOnly secondPointOnLine, FramePoint2DBasics projectionToPack)
@@ -4422,11 +5325,11 @@ public class EuclidFrameTools
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    * @param pointOnLine    a point located on the line. Not modified.
+    * @param lineDirection  the direction of the line. Not modified.
     * @return the projection of the point onto the line or {@code null} if the method failed.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
                                                            FrameVector2DReadOnly lineDirection)
@@ -4453,14 +5356,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
+    * @param pointOnLine      a point located on the line. Not modified.
+    * @param lineDirection    the direction of the line. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
                                                       FrameVector2DReadOnly lineDirection, FixedFramePoint2DBasics projectionToPack)
@@ -4483,14 +5386,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
+    * @param pointOnLine      a point located on the line. Not modified.
+    * @param lineDirection    the direction of the line. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
                                                       FrameVector2DReadOnly lineDirection, FramePoint2DBasics projectionToPack)
@@ -4517,11 +5420,11 @@ public class EuclidFrameTools
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnLine point located on the line. Not modified.
-    * @param lineDirection direction of the line. Not modified.
+    * @param pointOnLine    point located on the line. Not modified.
+    * @param lineDirection  direction of the line. Not modified.
     * @return the projection of the point onto the line or {@code null} if the method failed.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint3D orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
                                                            FrameVector3DReadOnly lineDirection)
@@ -4548,14 +5451,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnLine point located on the line. Not modified.
-    * @param lineDirection direction of the line. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
+    * @param pointOnLine      point located on the line. Not modified.
+    * @param lineDirection    direction of the line. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
                                                       FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics projectionToPack)
@@ -4578,14 +5481,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnLine point located on the line. Not modified.
-    * @param lineDirection direction of the line. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
+    * @param pointOnLine      point located on the line. Not modified.
+    * @param lineDirection    direction of the line. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
                                                       FrameVector3DReadOnly lineDirection, FramePoint3DBasics projectionToPack)
@@ -4613,12 +5516,12 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the projection of the point onto the line segment or {@code null} if the method failed.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint2D orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
                                                                   FramePoint2DReadOnly lineSegmentEnd)
@@ -4647,15 +5550,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProjectX the x-coordinate of the point to compute the projection of.
-    * @param pointToProjectY the y-coordinate of the point to compute the projection of.
+    * @param pointToProjectX  the x-coordinate of the point to compute the projection of.
+    * @param pointToProjectY  the y-coordinate of the point to compute the projection of.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX, double pointToProjectY, FramePoint2DReadOnly lineSegmentStart,
                                                              FramePoint2DReadOnly lineSegmentEnd, FixedFramePoint2DBasics projectionToPack)
@@ -4679,15 +5582,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProjectX the x-coordinate of the point to compute the projection of.
-    * @param pointToProjectY the y-coordinate of the point to compute the projection of.
+    * @param pointToProjectX  the x-coordinate of the point to compute the projection of.
+    * @param pointToProjectY  the y-coordinate of the point to compute the projection of.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX, double pointToProjectY, FramePoint2DReadOnly lineSegmentStart,
                                                              FramePoint2DReadOnly lineSegmentEnd, FramePoint2DBasics projectionToPack)
@@ -4711,14 +5614,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
                                                              FramePoint2DReadOnly lineSegmentEnd, FixedFramePoint2DBasics projectionToPack)
@@ -4743,14 +5646,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
                                                              FramePoint2DReadOnly lineSegmentEnd, FramePoint2DBasics projectionToPack)
@@ -4778,12 +5681,12 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the projection of the point onto the line segment or {@code null} if the method failed.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint3D orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
                                                                   FramePoint3DReadOnly lineSegmentEnd)
@@ -4811,14 +5714,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
                                                              FramePoint3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics projectionToPack)
@@ -4843,14 +5746,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
                                                              FramePoint3DReadOnly lineSegmentEnd, FramePoint3DBasics projectionToPack)
@@ -4873,11 +5776,11 @@ public class EuclidFrameTools
     * </p>
     *
     * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnPlane a point on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param pointOnPlane   a point on the plane. Not modified.
+    * @param planeNormal    the normal of the plane. Not modified.
     * @return the projection of the point onto the plane, or {@code null} if the method failed.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint3D orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
                                                             FrameVector3DReadOnly planeNormal)
@@ -4902,14 +5805,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnPlane a point on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
+    * @param pointOnPlane     a point on the plane. Not modified.
+    * @param planeNormal      the normal of the plane. Not modified.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
                                                        FrameVector3DReadOnly planeNormal, FixedFramePoint3DBasics projectionToPack)
@@ -4931,14 +5834,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @param pointOnPlane a point on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
+    * @param pointOnPlane     a point on the plane. Not modified.
+    * @param planeNormal      the normal of the plane. Not modified.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
                                                        FrameVector3DReadOnly planeNormal, FramePoint3DBasics projectionToPack)
@@ -4960,16 +5863,16 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param x the x-coordinate of the point to compute the projection of. Not modified.
-    * @param y the y-coordinate of the point to compute the projection of. Not modified.
-    * @param z the z-coordinate of the point to compute the projection of. Not modified.
-    * @param pointOnPlane a point on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param x                the x-coordinate of the point to compute the projection of. Not modified.
+    * @param y                the y-coordinate of the point to compute the projection of. Not modified.
+    * @param z                the z-coordinate of the point to compute the projection of. Not modified.
+    * @param pointOnPlane     a point on the plane. Not modified.
+    * @param planeNormal      the normal of the plane. Not modified.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean orthogonalProjectionOnPlane3D(double x, double y, double z, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
                                                        FixedFramePoint3DBasics projectionToPack)
@@ -4990,16 +5893,16 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param x the x-coordinate of the point to compute the projection of. Not modified.
-    * @param y the y-coordinate of the point to compute the projection of. Not modified.
-    * @param z the z-coordinate of the point to compute the projection of. Not modified.
-    * @param pointOnPlane a point on the plane. Not modified.
-    * @param planeNormal the normal of the plane. Not modified.
+    * @param x                the x-coordinate of the point to compute the projection of. Not modified.
+    * @param y                the y-coordinate of the point to compute the projection of. Not modified.
+    * @param z                the z-coordinate of the point to compute the projection of. Not modified.
+    * @param pointOnPlane     a point on the plane. Not modified.
+    * @param planeNormal      the normal of the plane. Not modified.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean orthogonalProjectionOnPlane3D(double x, double y, double z, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
                                                        FramePoint3DBasics projectionToPack)
@@ -5024,14 +5927,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointOnLine1 a point located on the first line. Not modified.
+    * @param pointOnLine1   a point located on the first line. Not modified.
     * @param lineDirection1 the first line direction. Not modified.
-    * @param pointOnLine2 a point located on the second line. Not modified.
+    * @param pointOnLine2   a point located on the second line. Not modified.
     * @param lineDirection2 the second line direction. Not modified.
     * @return {@code alpha} the percentage along the first line of the intersection location. This
     *         method returns {@link Double#NaN} if the lines do not intersect.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double percentageOfIntersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
                                                                   FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
@@ -5061,13 +5964,13 @@ public class EuclidFrameTools
     * </p>
     *
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the line direction. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
+    * @param pointOnLine      a point located on the line. Not modified.
+    * @param lineDirection    the line direction. Not modified.
     * @return {@code alpha} the percentage along the line segment of the intersection location. This
     *         method returns {@link Double#NaN} if the line segment and the line do not intersect.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double percentageOfIntersectionBetweenLineSegment2DAndLine2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                                                               FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
@@ -5076,6 +5979,66 @@ public class EuclidFrameTools
       lineSegmentStart.checkReferenceFrameMatch(pointOnLine);
       lineSegmentStart.checkReferenceFrameMatch(lineDirection);
       return EuclidGeometryTools.percentageOfIntersectionBetweenLineSegment2DAndLine2D(lineSegmentStart, lineSegmentEnd, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param point         the coordinates of the query point.
+    * @param pointOnLine   a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double percentageAlongLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   {
+      point.checkReferenceFrameMatch(pointOnLine);
+      point.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine2D(point, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX        the x-coordinate of the query point.
+    * @param pointY        the y-coordinate of the query point.
+    * @param pointOnLine   a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double percentageAlongLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   {
+      pointOnLine.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine2D(pointX, pointY, pointOnLine, lineDirection);
    }
 
    /**
@@ -5099,14 +6062,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX the x-coordinate of the query point.
-    * @param pointY the y-coordinate of the query point.
+    * @param pointX           the x-coordinate of the query point.
+    * @param pointY           the y-coordinate of the query point.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
     *         located.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double percentageAlongLineSegment2D(double pointX, double pointY, FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
@@ -5135,19 +6098,81 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point the query. Not modified.
+    * @param point            the query. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
     *         located.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double percentageAlongLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart);
       point.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.percentageAlongLineSegment2D(point, lineSegmentStart, lineSegmentEnd);
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param point         the coordinates of the query point.
+    * @param pointOnLine   a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double percentageAlongLine3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
+   {
+      point.checkReferenceFrameMatch(pointOnLine);
+      point.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine3D(point, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Computes a percentage along the line representing the location of the given point once projected
+    * onto the line. The returned percentage is in ] -&infin;; &infin; [, {@code 0.0} representing
+    * {@code pointOnLine}, and for any given {@code point} the percentage {@code alpha} is computed
+    * such that:<br>
+    * {@code point = pointOnLine + alpha * lineDirection}.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the length of the line direction is too small, i.e.
+    * {@code lineDirection.leangthSquared() < }{@value EuclidGeometryTools#ONE_TRILLIONTH}, this method
+    * fails and returns {@code 0.0}.
+    * </ul>
+    * </p>
+    *
+    * @param pointX        the x-coordinate of the query point.
+    * @param pointY        the y-coordinate of the query point.
+    * @param pointZ        the z-coordinate of the query point.
+    * @param pointOnLine   a point located on the line. Not modified.
+    * @param lineDirection the direction of the line. Not modified.
+    * @return the computed percentage along the line representing where the point projection is
+    *         located.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double percentageAlongLine3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnLine,
+                                              FrameVector3DReadOnly lineDirection)
+   {
+      pointOnLine.checkReferenceFrameMatch(lineDirection);
+      return EuclidGeometryTools.percentageAlongLine3D(pointX, pointY, pointZ, pointOnLine, lineDirection);
    }
 
    /**
@@ -5171,15 +6196,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX the x-coordinate of the query point.
-    * @param pointY the y-coordinate of the query point.
-    * @param pointZ the z-coordinate of the query point.
+    * @param pointX           the x-coordinate of the query point.
+    * @param pointY           the y-coordinate of the query point.
+    * @param pointZ           the z-coordinate of the query point.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
     *         located.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double percentageAlongLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
                                                      FramePoint3DReadOnly lineSegmentEnd)
@@ -5209,13 +6234,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point the query. Not modified.
+    * @param point            the query. Not modified.
     * @param lineSegmentStart the line segment first endpoint. Not modified.
-    * @param lineSegmentEnd the line segment second endpoint. Not modified.
+    * @param lineSegmentEnd   the line segment second endpoint. Not modified.
     * @return the computed percentage along the line segment representing where the point projection is
     *         located.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double percentageAlongLineSegment3D(FramePoint3DReadOnly point, FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
    {
@@ -5237,14 +6262,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param bisectorStartToPack a 2D point in which the origin of the bisector is stored. Modified.
+    * @param lineSegmentStart        the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd          the second endpoint of the line segment. Not modified.
+    * @param bisectorStartToPack     a 2D point in which the origin of the bisector is stored.
+    *                                Modified.
     * @param bisectorDirectionToPack a 2D vector in which the direction of the bisector is stored.
-    *           Modified.
+    *                                Modified.
     * @return whether the perpendicular bisector could be determined or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean perpendicularBisector2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                                  FixedFramePoint2DBasics bisectorStartToPack, FixedFrameVector2DBasics bisectorDirectionToPack)
@@ -5268,14 +6294,15 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param bisectorStartToPack a 2D point in which the origin of the bisector is stored. Modified.
+    * @param lineSegmentStart        the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd          the second endpoint of the line segment. Not modified.
+    * @param bisectorStartToPack     a 2D point in which the origin of the bisector is stored.
+    *                                Modified.
     * @param bisectorDirectionToPack a 2D vector in which the direction of the bisector is stored.
-    *           Modified.
+    *                                Modified.
     * @return whether the perpendicular bisector could be determined or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean perpendicularBisector2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                                  FramePoint2DBasics bisectorStartToPack, FrameVector2DBasics bisectorDirectionToPack)
@@ -5308,15 +6335,15 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param lineSegmentStart the first endpoint of the line segment from which the perpendicular
-    *           bisector is to be computed. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment from which the perpendicular
-    *           bisector is to be computed. Not modified.
+    * @param lineSegmentStart          the first endpoint of the line segment from which the
+    *                                  perpendicular bisector is to be computed. Not modified.
+    * @param lineSegmentEnd            the second endpoint of the line segment from which the
+    *                                  perpendicular bisector is to be computed. Not modified.
     * @param bisectorSegmentHalfLength distance from the line segment each endpoint of the
-    *           perpendicular bisector segment will be positioned.
+    *                                  perpendicular bisector segment will be positioned.
     * @return a list containing the two endpoints of the perpendicular bisector segment.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static List<Point2D> perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                                               double bisectorSegmentHalfLength)
@@ -5344,19 +6371,19 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param lineSegmentStart the first endpoint of the line segment from which the perpendicular
-    *           bisector is to be computed. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment from which the perpendicular
-    *           bisector is to be computed. Not modified.
-    * @param bisectorSegmentHalfLength distance from the line segment each endpoint of the
-    *           perpendicular bisector segment will be positioned.
+    * @param lineSegmentStart           the first endpoint of the line segment from which the
+    *                                   perpendicular bisector is to be computed. Not modified.
+    * @param lineSegmentEnd             the second endpoint of the line segment from which the
+    *                                   perpendicular bisector is to be computed. Not modified.
+    * @param bisectorSegmentHalfLength  distance from the line segment each endpoint of the
+    *                                   perpendicular bisector segment will be positioned.
     * @param bisectorSegmentStartToPack the first endpoint of the perpendicular bisector segment to be
-    *           computed. Modified.
-    * @param bisectorSegmentEndToPack the second endpoint of the perpendicular bisector segment to be
-    *           computed. Modified.
+    *                                   computed. Modified.
+    * @param bisectorSegmentEndToPack   the second endpoint of the perpendicular bisector segment to be
+    *                                   computed. Modified.
     * @return whether the perpendicular bisector could be determined or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                                         double bisectorSegmentHalfLength, FixedFramePoint2DBasics bisectorSegmentStartToPack,
@@ -5365,7 +6392,10 @@ public class EuclidFrameTools
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       bisectorSegmentStartToPack.checkReferenceFrameMatch(lineSegmentStart);
       bisectorSegmentEndToPack.checkReferenceFrameMatch(lineSegmentStart);
-      return EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength, bisectorSegmentStartToPack,
+      return EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart,
+                                                                lineSegmentEnd,
+                                                                bisectorSegmentHalfLength,
+                                                                bisectorSegmentStartToPack,
                                                                 bisectorSegmentEndToPack);
    }
 
@@ -5388,19 +6418,19 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param lineSegmentStart the first endpoint of the line segment from which the perpendicular
-    *           bisector is to be computed. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment from which the perpendicular
-    *           bisector is to be computed. Not modified.
-    * @param bisectorSegmentHalfLength distance from the line segment each endpoint of the
-    *           perpendicular bisector segment will be positioned.
+    * @param lineSegmentStart           the first endpoint of the line segment from which the
+    *                                   perpendicular bisector is to be computed. Not modified.
+    * @param lineSegmentEnd             the second endpoint of the line segment from which the
+    *                                   perpendicular bisector is to be computed. Not modified.
+    * @param bisectorSegmentHalfLength  distance from the line segment each endpoint of the
+    *                                   perpendicular bisector segment will be positioned.
     * @param bisectorSegmentStartToPack the first endpoint of the perpendicular bisector segment to be
-    *           computed. Modified.
-    * @param bisectorSegmentEndToPack the second endpoint of the perpendicular bisector segment to be
-    *           computed. Modified.
+    *                                   computed. Modified.
+    * @param bisectorSegmentEndToPack   the second endpoint of the perpendicular bisector segment to be
+    *                                   computed. Modified.
     * @return whether the perpendicular bisector could be determined or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                                         double bisectorSegmentHalfLength, FramePoint2DBasics bisectorSegmentStartToPack,
@@ -5409,7 +6439,10 @@ public class EuclidFrameTools
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       bisectorSegmentStartToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
       bisectorSegmentEndToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
-      return EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart, lineSegmentEnd, bisectorSegmentHalfLength, bisectorSegmentStartToPack,
+      return EuclidGeometryTools.perpendicularBisectorSegment2D(lineSegmentStart,
+                                                                lineSegmentEnd,
+                                                                bisectorSegmentHalfLength,
+                                                                bisectorSegmentStartToPack,
                                                                 bisectorSegmentEndToPack);
    }
 
@@ -5425,8 +6458,6 @@ public class EuclidFrameTools
     *
     * @param vector the vector to compute the perpendicular of. Not modified.
     * @return the perpendicular vector.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
     */
    public static FrameVector2D perpendicularVector2D(FrameVector2DReadOnly vector)
    {
@@ -5440,11 +6471,11 @@ public class EuclidFrameTools
     * <li>{@code vector.angle(perpendicularVector) == Math.PI / 2.0}.
     * </ul>
     *
-    * @param vector the vector to compute the perpendicular of. Not modified.
+    * @param vector                    the vector to compute the perpendicular of. Not modified.
     * @param perpendicularVectorToPack a 2D vector in which the perpendicular vector is stored.
-    *           Modified.
+    *                                  Modified.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static void perpendicularVector2D(FrameVector2DReadOnly vector, FixedFrameVector2DBasics perpendicularVectorToPack)
    {
@@ -5458,11 +6489,9 @@ public class EuclidFrameTools
     * <li>{@code vector.angle(perpendicularVector) == Math.PI / 2.0}.
     * </ul>
     *
-    * @param vector the vector to compute the perpendicular of. Not modified.
+    * @param vector                    the vector to compute the perpendicular of. Not modified.
     * @param perpendicularVectorToPack a 2D vector in which the perpendicular vector is stored.
-    *           Modified.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                  Modified.
     */
    public static void perpendicularVector2D(FrameVector2DReadOnly vector, FrameVector2DBasics perpendicularVectorToPack)
    {
@@ -5488,16 +6517,16 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param point the 3D point towards which the perpendicular vector should be pointing at. Not
-    *           modified.
-    * @param firstPointOnLine a first point on the line. Not modified.
-    * @param secondPointOnLine a second point on the line. Not modified.
+    * @param point                      the 3D point towards which the perpendicular vector should be
+    *                                   pointing at. Not modified.
+    * @param firstPointOnLine           a first point on the line. Not modified.
+    * @param secondPointOnLine          a second point on the line. Not modified.
     * @param orthogonalProjectionToPack a 3D point in which the projection of {@code point} onto the
-    *           line is stored. Modified. Can be {@code null}.
+    *                                   line is stored. Modified. Can be {@code null}.
     * @return the vector perpendicular to the line and pointing to the {@code point}, or {@code null}
     *         when the method fails.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static FrameVector3D perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
                                                                         FramePoint3DReadOnly secondPointOnLine,
@@ -5506,7 +6535,9 @@ public class EuclidFrameTools
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
       orthogonalProjectionToPack.checkReferenceFrameMatch(point);
-      Vector3D perpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine,
+      Vector3D perpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point,
+                                                                                                  firstPointOnLine,
+                                                                                                  secondPointOnLine,
                                                                                                   orthogonalProjectionToPack);
       if (perpendicularVector == null)
          return null;
@@ -5532,16 +6563,16 @@ public class EuclidFrameTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param point the 3D point towards which the perpendicular vector should be pointing at. Not
-    *           modified.
-    * @param firstPointOnLine a first point on the line. Not modified.
-    * @param secondPointOnLine a second point on the line. Not modified.
+    * @param point                      the 3D point towards which the perpendicular vector should be
+    *                                   pointing at. Not modified.
+    * @param firstPointOnLine           a first point on the line. Not modified.
+    * @param secondPointOnLine          a second point on the line. Not modified.
     * @param orthogonalProjectionToPack a 3D point in which the projection of {@code point} onto the
-    *           line is stored. Modified. Can be {@code null}.
+    *                                   line is stored. Modified. Can be {@code null}.
     * @return the vector perpendicular to the line and pointing to the {@code point}, or {@code null}
     *         when the method fails.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static FrameVector3D perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
                                                                         FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics orthogonalProjectionToPack)
@@ -5549,7 +6580,9 @@ public class EuclidFrameTools
       point.checkReferenceFrameMatch(firstPointOnLine);
       point.checkReferenceFrameMatch(secondPointOnLine);
       orthogonalProjectionToPack.setReferenceFrame(point.getReferenceFrame());
-      Vector3D perpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine,
+      Vector3D perpendicularVector = EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point,
+                                                                                                  firstPointOnLine,
+                                                                                                  secondPointOnLine,
                                                                                                   orthogonalProjectionToPack);
       if (perpendicularVector == null)
          return null;
@@ -5572,17 +6605,18 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point the 3D point towards which the perpendicular vector should be pointing at. Not
-    *           modified.
-    * @param firstPointOnLine a first point on the line. Not modified.
-    * @param secondPointOnLine a second point on the line. Not modified.
+    * @param point                      the 3D point towards which the perpendicular vector should be
+    *                                   pointing at. Not modified.
+    * @param firstPointOnLine           a first point on the line. Not modified.
+    * @param secondPointOnLine          a second point on the line. Not modified.
     * @param orthogonalProjectionToPack a 3D point in which the projection of {@code point} onto the
-    *           line is stored. Modified. Can be {@code null}.
-    * @param perpendicularVectorToPack a 3D vector in which the vector perpendicular to the line and
-    *           pointing to the {@code point} is stored. Modified. Can NOT be {@code null}.
+    *                                   line is stored. Modified. Can be {@code null}.
+    * @param perpendicularVectorToPack  a 3D vector in which the vector perpendicular to the line and
+    *                                   pointing to the {@code point} is stored. Modified. Can NOT be
+    *                                   {@code null}.
     * @return {@code true} if the method succeeded, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
                                                                   FramePoint3DReadOnly secondPointOnLine, FixedFramePoint3DBasics orthogonalProjectionToPack,
@@ -5592,7 +6626,10 @@ public class EuclidFrameTools
       point.checkReferenceFrameMatch(secondPointOnLine);
       orthogonalProjectionToPack.checkReferenceFrameMatch(point);
       perpendicularVectorToPack.checkReferenceFrameMatch(point);
-      return EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine, orthogonalProjectionToPack,
+      return EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point,
+                                                                          firstPointOnLine,
+                                                                          secondPointOnLine,
+                                                                          orthogonalProjectionToPack,
                                                                           perpendicularVectorToPack);
    }
 
@@ -5611,17 +6648,18 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point the 3D point towards which the perpendicular vector should be pointing at. Not
-    *           modified.
-    * @param firstPointOnLine a first point on the line. Not modified.
-    * @param secondPointOnLine a second point on the line. Not modified.
+    * @param point                      the 3D point towards which the perpendicular vector should be
+    *                                   pointing at. Not modified.
+    * @param firstPointOnLine           a first point on the line. Not modified.
+    * @param secondPointOnLine          a second point on the line. Not modified.
     * @param orthogonalProjectionToPack a 3D point in which the projection of {@code point} onto the
-    *           line is stored. Modified. Can be {@code null}.
-    * @param perpendicularVectorToPack a 3D vector in which the vector perpendicular to the line and
-    *           pointing to the {@code point} is stored. Modified. Can NOT be {@code null}.
+    *                                   line is stored. Modified. Can be {@code null}.
+    * @param perpendicularVectorToPack  a 3D vector in which the vector perpendicular to the line and
+    *                                   pointing to the {@code point} is stored. Modified. Can NOT be
+    *                                   {@code null}.
     * @return {@code true} if the method succeeded, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
                                                                   FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics orthogonalProjectionToPack,
@@ -5631,7 +6669,10 @@ public class EuclidFrameTools
       point.checkReferenceFrameMatch(secondPointOnLine);
       orthogonalProjectionToPack.setReferenceFrame(point.getReferenceFrame());
       perpendicularVectorToPack.setReferenceFrame(point.getReferenceFrame());
-      return EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point, firstPointOnLine, secondPointOnLine, orthogonalProjectionToPack,
+      return EuclidGeometryTools.perpendicularVector3DFromLine3DToPoint3D(point,
+                                                                          firstPointOnLine,
+                                                                          secondPointOnLine,
+                                                                          orthogonalProjectionToPack,
                                                                           perpendicularVectorToPack);
    }
 
@@ -5650,14 +6691,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x-coordinate of the query.
-    * @param pointY y-coordinate of the query.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param pointX            x-coordinate of the query.
+    * @param pointY            y-coordinate of the query.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
     *         the query is located on the right side of the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, FramePoint2DReadOnly firstPointOnLine,
                                                           FramePoint2DReadOnly secondPointOnLine)
@@ -5680,14 +6721,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param pointX x-coordinate of the query.
-    * @param pointY y-coordinate of the query.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param pointX        x-coordinate of the query.
+    * @param pointY        y-coordinate of the query.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
     *         the query is located on the right side of the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -5710,13 +6751,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             the coordinates of the query. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
     *         the query is located on the right side of the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double signedDistanceFromPoint2DToLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine,
                                                           FramePoint2DReadOnly secondPointOnLine)
@@ -5740,13 +6781,13 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param point         the coordinates of the query. Not modified.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
     * @return the minimum distance between the 2D point and the 2D line. The distance is negative if
     *         the query is located on the right side of the line.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static double signedDistanceFromPoint2DToLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -5761,13 +6802,15 @@ public class EuclidFrameTools
     * angle ABC that is equal to the angle at B from the the leg BA to the leg BC.
     * <a href="https://en.wikipedia.org/wiki/Isosceles_triangle"> Useful link</a>.
     *
-    * @param baseVertexA the first base vertex of the isosceles triangle ABC. Not modified.
-    * @param baseVertexC the second base vertex of the isosceles triangle ABC. Not modified.
-    * @param trianglePlaneNormal the normal of the plane on which is lying. Not modified.
+    * @param baseVertexA                    the first base vertex of the isosceles triangle ABC. Not
+    *                                       modified.
+    * @param baseVertexC                    the second base vertex of the isosceles triangle ABC. Not
+    *                                       modified.
+    * @param trianglePlaneNormal            the normal of the plane on which is lying. Not modified.
     * @param ccwAngleAboutNormalAtTopVertex the angle at B from the the leg BA to the leg BC.
-    * @param topVertexBToPack the missing vertex B. Modified.
+    * @param topVertexBToPack               the missing vertex B. Modified.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static void topVertex3DOfIsoscelesTriangle3D(FramePoint3DReadOnly baseVertexA, FramePoint3DReadOnly baseVertexC,
                                                        FrameVector3DReadOnly trianglePlaneNormal, double ccwAngleAboutNormalAtTopVertex,
@@ -5785,13 +6828,15 @@ public class EuclidFrameTools
     * angle ABC that is equal to the angle at B from the the leg BA to the leg BC.
     * <a href="https://en.wikipedia.org/wiki/Isosceles_triangle"> Useful link</a>.
     *
-    * @param baseVertexA the first base vertex of the isosceles triangle ABC. Not modified.
-    * @param baseVertexC the second base vertex of the isosceles triangle ABC. Not modified.
-    * @param trianglePlaneNormal the normal of the plane on which is lying. Not modified.
+    * @param baseVertexA                    the first base vertex of the isosceles triangle ABC. Not
+    *                                       modified.
+    * @param baseVertexC                    the second base vertex of the isosceles triangle ABC. Not
+    *                                       modified.
+    * @param trianglePlaneNormal            the normal of the plane on which is lying. Not modified.
     * @param ccwAngleAboutNormalAtTopVertex the angle at B from the the leg BA to the leg BC.
-    * @param topVertexBToPack the missing vertex B. Modified.
+    * @param topVertexBToPack               the missing vertex B. Modified.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static void topVertex3DOfIsoscelesTriangle3D(FramePoint3DReadOnly baseVertexA, FramePoint3DReadOnly baseVertexC,
                                                        FrameVector3DReadOnly trianglePlaneNormal, double ccwAngleAboutNormalAtTopVertex,
@@ -5820,11 +6865,11 @@ public class EuclidFrameTools
     *
     * @param A the first vertex of the triangle. Not modified.
     * @param B the second vertex of the triangle, this is the first endpoint of the bisector. Not
-    *           modified.
+    *          modified.
     * @param C the third vertex of the triangle. Not modified.
     * @return the second endpoint of the bisector, or {@code null} if the method failed.
-    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
     */
    public static FramePoint2D triangleBisector2D(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C)
    {
@@ -5849,14 +6894,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param A the first vertex of the triangle. Not modified.
-    * @param B the second vertex of the triangle, this is the first endpoint of the bisector. Not
-    *           modified.
-    * @param C the third vertex of the triangle. Not modified.
+    * @param A       the first vertex of the triangle. Not modified.
+    * @param B       the second vertex of the triangle, this is the first endpoint of the bisector. Not
+    *                modified.
+    * @param C       the third vertex of the triangle. Not modified.
     * @param XToPack point in which the second endpoint of the bisector is stored. Modified.
     * @return whether the bisector could be calculated or not.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *            reference frame.
+    *                                         reference frame.
     */
    public static boolean triangleBisector2D(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C, FixedFramePoint2DBasics XToPack)
    {
@@ -5878,14 +6923,14 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     *
-    * @param A the first vertex of the triangle. Not modified.
-    * @param B the second vertex of the triangle, this is the first endpoint of the bisector. Not
-    *           modified.
-    * @param C the third vertex of the triangle. Not modified.
+    * @param A       the first vertex of the triangle. Not modified.
+    * @param B       the second vertex of the triangle, this is the first endpoint of the bisector. Not
+    *                modified.
+    * @param C       the third vertex of the triangle. Not modified.
     * @param XToPack point in which the second endpoint of the bisector is stored. Modified.
     * @return whether the bisector could be calculated or not.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
-    *            same reference frame.
+    *                                         same reference frame.
     */
    public static boolean triangleBisector2D(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C, FramePoint2DBasics XToPack)
    {

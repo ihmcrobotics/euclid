@@ -123,9 +123,9 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
    /**
     * Redefines this line segments with new endpoints.
     *
-    * @param firstEndpointX x-coordinate of the new first endpoint.
-    * @param firstEndpointY y-coordinate of the new first endpoint.
-    * @param firstEndpointZ z-coordinate of the new first endpoint.
+    * @param firstEndpointX  x-coordinate of the new first endpoint.
+    * @param firstEndpointY  y-coordinate of the new first endpoint.
+    * @param firstEndpointZ  z-coordinate of the new first endpoint.
     * @param secondEndpointX x-coordinate of the new second endpoint.
     * @param secondEndpointY y-coordinate of the new second endpoint.
     * @param secondEndpointZ z-coordinate of the new second endpoint.
@@ -139,7 +139,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
    /**
     * Redefines this line segment with new endpoints.
     *
-    * @param firstEndpoint new endpoint of this line segment. Not modified
+    * @param firstEndpoint  new endpoint of this line segment. Not modified
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     */
    default void set(Point3DReadOnly firstEndpoint, Point3DReadOnly secondEndpoint)
@@ -152,9 +152,9 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * Redefines this line segment with a new first endpoint and a vector going from the first to the
     * second endpoint.
     *
-    * @param firstEndpoint new first endpoint. Not modified.
+    * @param firstEndpoint             new first endpoint. Not modified.
     * @param fromFirstToSecondEndpoint vector going from the first to the second endpoint. Not
-    *           modified.
+    *                                  modified.
     */
    default void set(Point3DReadOnly firstEndpoint, Vector3DReadOnly fromFirstToSecondEndpoint)
    {

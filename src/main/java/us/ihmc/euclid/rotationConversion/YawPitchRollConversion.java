@@ -169,7 +169,7 @@ public abstract class YawPitchRollConversion
     */
    public static double computeYaw(RotationMatrixReadOnly rotationMatrix)
    {
-      return computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10());
+      return rotationMatrix.isZeroOrientation() ? 0.0 : computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10());
    }
 
    /**
@@ -187,7 +187,7 @@ public abstract class YawPitchRollConversion
     */
    public static double computePitch(RotationMatrixReadOnly rotationMatrix)
    {
-      return computePitchImpl(rotationMatrix.getM20());
+      return rotationMatrix.isZeroOrientation() ? 0.0 : computePitchImpl(rotationMatrix.getM20());
    }
 
    /**
@@ -205,7 +205,7 @@ public abstract class YawPitchRollConversion
     */
    public static double computeRoll(RotationMatrixReadOnly rotationMatrix)
    {
-      return computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22());
+      return rotationMatrix.isZeroOrientation() ? 0.0 : computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22());
    }
 
    /**
@@ -219,7 +219,7 @@ public abstract class YawPitchRollConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
+    *                            orientation part is used during the conversion. Not modified.
     * @return the yaw angle.
     */
    public static double computeYaw(RotationScaleMatrixReadOnly rotationScaleMatrix)
@@ -238,7 +238,7 @@ public abstract class YawPitchRollConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
+    *                            orientation part is used during the conversion. Not modified.
     * @return the pitch angle.
     */
    public static double computePitch(RotationScaleMatrixReadOnly rotationScaleMatrix)
@@ -257,7 +257,7 @@ public abstract class YawPitchRollConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
+    *                            orientation part is used during the conversion. Not modified.
     * @return the roll angle.
     */
    public static double computeRoll(RotationScaleMatrixReadOnly rotationScaleMatrix)
@@ -280,8 +280,8 @@ public abstract class YawPitchRollConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
-    * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
+    *                            orientation part is used during the conversion. Not modified.
+    * @param yawPitchRollToPack  the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly rotationScaleMatrix, YawPitchRollBasics yawPitchRollToPack)
    {
@@ -303,9 +303,9 @@ public abstract class YawPitchRollConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
+    *                            orientation part is used during the conversion. Not modified.
+    * @param yawPitchRollToPack  the array in which the yaw-pitch-roll angles are stored, in the order
+    *                            {@code yaw}, {@code pitch}, then {@code roll}. Modified.
     * @deprecated Use
     *             {@link #convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly, YawPitchRollBasics)}
     *             instead.
@@ -329,7 +329,7 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param rotationMatrix a 3-by-3 matrix representing an orientation. Not modified.
+    * @param rotationMatrix     a 3-by-3 matrix representing an orientation. Not modified.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertMatrixToYawPitchRoll(RotationMatrixReadOnly rotationMatrix, YawPitchRollBasics yawPitchRollToPack)
@@ -361,19 +361,19 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param m00 the 1st row 1st column coefficient of the rotation matrix.
-    * @param m01 the 1st row 2nd column coefficient of the rotation matrix.
-    * @param m02 the 1st row 3rd column coefficient of the rotation matrix.
-    * @param m10 the 2nd row 1st column coefficient of the rotation matrix.
-    * @param m11 the 2nd row 2nd column coefficient of the rotation matrix.
-    * @param m12 the 2nd row 3rd column coefficient of the rotation matrix.
-    * @param m20 the 3rd row 1st column coefficient of the rotation matrix.
-    * @param m21 the 3rd row 2nd column coefficient of the rotation matrix.
-    * @param m22 the 3rd row 3rd column coefficient of the rotation matrix.
+    * @param m00                the 1st row 1st column coefficient of the rotation matrix.
+    * @param m01                the 1st row 2nd column coefficient of the rotation matrix.
+    * @param m02                the 1st row 3rd column coefficient of the rotation matrix.
+    * @param m10                the 2nd row 1st column coefficient of the rotation matrix.
+    * @param m11                the 2nd row 2nd column coefficient of the rotation matrix.
+    * @param m12                the 2nd row 3rd column coefficient of the rotation matrix.
+    * @param m20                the 3rd row 1st column coefficient of the rotation matrix.
+    * @param m21                the 3rd row 2nd column coefficient of the rotation matrix.
+    * @param m22                the 3rd row 3rd column coefficient of the rotation matrix.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertMatrixToYawPitchRoll(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-         YawPitchRollBasics yawPitchRollToPack)
+                                                  YawPitchRollBasics yawPitchRollToPack)
    {
       double yaw = computeYawImpl(m00, m10);
       double pitch = computePitchImpl(m20);
@@ -395,9 +395,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param rotationMatrix a 3-by-3 matrix representing an orientation. Not modified.
+    * @param rotationMatrix     a 3-by-3 matrix representing an orientation. Not modified.
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
+    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
     * @deprecated Use {@link #convertMatrixToYawPitchRoll(RotationMatrixReadOnly, YawPitchRollBasics)}
     *             instead.
     */
@@ -423,9 +423,9 @@ public abstract class YawPitchRollConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
-    * @param eulerAnglesToPack the tuple in which the yaw-pitch-roll angles are stored, i.e.
-    *           {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
+    *                            orientation part is used during the conversion. Not modified.
+    * @param eulerAnglesToPack   the tuple in which the yaw-pitch-roll angles are stored, i.e.
+    *                            {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
     */
    public static void convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly rotationScaleMatrix, Tuple3DBasics eulerAnglesToPack)
    {
@@ -446,9 +446,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param rotationMatrix a 3-by-3 matrix representing an orientation. Not modified.
+    * @param rotationMatrix    a 3-by-3 matrix representing an orientation. Not modified.
     * @param eulerAnglesToPack the tuple in which the yaw-pitch-roll angles are stored, i.e.
-    *           {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
+    *                          {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
     */
    public static void convertMatrixToYawPitchRoll(RotationMatrixReadOnly rotationMatrix, Tuple3DBasics eulerAnglesToPack)
    {
@@ -637,7 +637,7 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param quaternion the quaternion to use in the conversion. Not modified.
+    * @param quaternion         the quaternion to use in the conversion. Not modified.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertQuaternionToYawPitchRoll(QuaternionReadOnly quaternion, YawPitchRollBasics yawPitchRollToPack)
@@ -659,10 +659,10 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param qx the x-component of the quaternion to use in the conversion.
-    * @param qy the y-component of the quaternion to use in the conversion.
-    * @param qz the z-component of the quaternion to use in the conversion.
-    * @param qs the s-component of the quaternion to use in the conversion.
+    * @param qx                 the x-component of the quaternion to use in the conversion.
+    * @param qy                 the y-component of the quaternion to use in the conversion.
+    * @param qz                 the z-component of the quaternion to use in the conversion.
+    * @param qs                 the s-component of the quaternion to use in the conversion.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertQuaternionToYawPitchRoll(double qx, double qy, double qz, double qs, YawPitchRollBasics yawPitchRollToPack)
@@ -707,9 +707,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param quaternion the quaternion to use in the conversion. Not modified.
+    * @param quaternion         the quaternion to use in the conversion. Not modified.
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
+    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
     * @deprecated Use {@link #convertQuaternionToYawPitchRoll(QuaternionReadOnly, YawPitchRollBasics)}
     *             instead.
     */
@@ -762,9 +762,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param quaternion the quaternion to use in the conversion. Not modified.
+    * @param quaternion        the quaternion to use in the conversion. Not modified.
     * @param eulerAnglesToPack the tuple in which the yaw-pitch-roll angles are stored, i.e.
-    *           {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
+    *                          {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
     */
    public static void convertQuaternionToYawPitchRoll(QuaternionReadOnly quaternion, Tuple3DBasics eulerAnglesToPack)
    {
@@ -803,9 +803,9 @@ public abstract class YawPitchRollConversion
     * <b> This method is for internal use. Use {@link #computeYaw(AxisAngleReadOnly)} instead. </b>
     * </p>
     *
-    * @param ux the x-component of the axis of the axis-angle to use in the conversion.
-    * @param uy the y-component of the axis of the axis-angle to use in the conversion.
-    * @param uz the z-component of the axis of the axis-angle to use in the conversion.
+    * @param ux    the x-component of the axis of the axis-angle to use in the conversion.
+    * @param uy    the y-component of the axis of the axis-angle to use in the conversion.
+    * @param uz    the z-component of the axis of the axis-angle to use in the conversion.
     * @param angle the angle of the axis-angle to use in the conversion.
     * @return the yaw angle.
     */
@@ -825,9 +825,9 @@ public abstract class YawPitchRollConversion
     * <b> This method is for internal use. Use {@link #computePitch(AxisAngleReadOnly)} instead. </b>
     * </p>
     *
-    * @param ux the x-component of the axis of the axis-angle to use in the conversion.
-    * @param uy the y-component of the axis of the axis-angle to use in the conversion.
-    * @param uz the z-component of the axis of the axis-angle to use in the conversion.
+    * @param ux    the x-component of the axis of the axis-angle to use in the conversion.
+    * @param uy    the y-component of the axis of the axis-angle to use in the conversion.
+    * @param uz    the z-component of the axis of the axis-angle to use in the conversion.
     * @param angle the angle of the axis-angle to use in the conversion.
     * @return the pitch angle.
     */
@@ -843,9 +843,9 @@ public abstract class YawPitchRollConversion
     * <b> This method is for internal use. Use {@link #computeRoll(AxisAngleReadOnly)} instead. </b>
     * </p>
     *
-    * @param ux the x-component of the axis of the axis-angle to use in the conversion.
-    * @param uy the y-component of the axis of the axis-angle to use in the conversion.
-    * @param uz the z-component of the axis of the axis-angle to use in the conversion.
+    * @param ux    the x-component of the axis of the axis-angle to use in the conversion.
+    * @param uy    the y-component of the axis of the axis-angle to use in the conversion.
+    * @param uz    the z-component of the axis of the axis-angle to use in the conversion.
     * @param angle the angle of the axis-angle to use in the conversion.
     * @return the roll angle.
     */
@@ -981,7 +981,7 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param axisAngle the axis-angle to use in the conversion. Not modified.
+    * @param axisAngle          the axis-angle to use in the conversion. Not modified.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertAxisAngleToYawPitchRoll(AxisAngleReadOnly axisAngle, YawPitchRollBasics yawPitchRollToPack)
@@ -1009,10 +1009,10 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param ux the x-component of the axis of the axis-angle to use in the conversion.
-    * @param uy the y-component of the axis of the axis-angle to use in the conversion.
-    * @param uz the z-component of the axis of the axis-angle to use in the conversion.
-    * @param angle the angle of the axis-angle to use in the conversion.
+    * @param ux                 the x-component of the axis of the axis-angle to use in the conversion.
+    * @param uy                 the y-component of the axis of the axis-angle to use in the conversion.
+    * @param uz                 the z-component of the axis of the axis-angle to use in the conversion.
+    * @param angle              the angle of the axis-angle to use in the conversion.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertAxisAngleToYawPitchRoll(double ux, double uy, double uz, double angle, YawPitchRollBasics yawPitchRollToPack)
@@ -1063,9 +1063,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param axisAngle the axis-angle to use in the conversion. Not modified.
+    * @param axisAngle          the axis-angle to use in the conversion. Not modified.
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
+    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
     * @deprecated Use {@link #convertAxisAngleToYawPitchRoll(AxisAngleReadOnly, YawPitchRollBasics)}
     *             instead.
     */
@@ -1113,9 +1113,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param axisAngle the axis-angle to use in the conversion. Not modified.
+    * @param axisAngle         the axis-angle to use in the conversion. Not modified.
     * @param eulerAnglesToPack the tuple in which the yaw-pitch-roll angles are stored, i.e.
-    *           {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
+    *                          {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
     */
    public static void convertAxisAngleToYawPitchRoll(AxisAngleReadOnly axisAngle, Tuple3DBasics eulerAnglesToPack)
    {
@@ -1153,12 +1153,12 @@ public abstract class YawPitchRollConversion
     * orientation.
     * </p>
     *
-    * @param ux the x-component of the axis of the axis-angle to use in the conversion.
-    * @param uy the y-component of the axis of the axis-angle to use in the conversion.
-    * @param uz the z-component of the axis of the axis-angle to use in the conversion.
-    * @param angle the angle of the axis-angle to use in the conversion.
+    * @param ux                 the x-component of the axis of the axis-angle to use in the conversion.
+    * @param uy                 the y-component of the axis of the axis-angle to use in the conversion.
+    * @param uz                 the z-component of the axis of the axis-angle to use in the conversion.
+    * @param angle              the angle of the axis-angle to use in the conversion.
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
+    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
     * @deprecated Use
     *             {@link #convertAxisAngleToYawPitchRollImpl(double, double, double, double, double[])}
     *             instead.
@@ -1189,12 +1189,12 @@ public abstract class YawPitchRollConversion
     * orientation.
     * </p>
     *
-    * @param ux the x-component of the axis of the axis-angle to use in the conversion.
-    * @param uy the y-component of the axis of the axis-angle to use in the conversion.
-    * @param uz the z-component of the axis of the axis-angle to use in the conversion.
-    * @param angle the angle of the axis-angle to use in the conversion.
+    * @param ux                the x-component of the axis of the axis-angle to use in the conversion.
+    * @param uy                the y-component of the axis of the axis-angle to use in the conversion.
+    * @param uz                the z-component of the axis of the axis-angle to use in the conversion.
+    * @param angle             the angle of the axis-angle to use in the conversion.
     * @param eulerAnglesToPack the tuple in which the yaw-pitch-roll angles are stored, i.e.
-    *           {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
+    *                          {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
     */
    static void convertAxisAngleToYawPitchRollImpl(double ux, double uy, double uz, double angle, Tuple3DBasics eulerAnglesToPack)
    {
@@ -1333,7 +1333,7 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param rotationVector the rotation vector to use in the conversion. Not modified.
+    * @param rotationVector     the rotation vector to use in the conversion. Not modified.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertRotationVectorToYawPitchRoll(Vector3DReadOnly rotationVector, YawPitchRollBasics yawPitchRollToPack)
@@ -1355,9 +1355,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param rx the x-component of the rotation vector to use in the conversion.
-    * @param ry the y-component of the rotation vector to use in the conversion.
-    * @param rz the z-component of the rotation vector to use in the conversion.
+    * @param rx                 the x-component of the rotation vector to use in the conversion.
+    * @param ry                 the y-component of the rotation vector to use in the conversion.
+    * @param rz                 the z-component of the rotation vector to use in the conversion.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
    public static void convertRotationVectorToYawPitchRoll(double rx, double ry, double rz, YawPitchRollBasics yawPitchRollToPack)
@@ -1411,9 +1411,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param rotationVector the rotation vector to use in the conversion. Not modified.
+    * @param rotationVector     the rotation vector to use in the conversion. Not modified.
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
+    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
     * @deprecated Use
     *             {@link #convertRotationVectorToYawPitchRoll(Vector3DReadOnly, YawPitchRollBasics)}
     *             instead.
@@ -1465,9 +1465,9 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param rotationVector the rotation vector to use in the conversion. Not modified.
+    * @param rotationVector    the rotation vector to use in the conversion. Not modified.
     * @param eulerAnglesToPack the tuple in which the yaw-pitch-roll angles are stored, i.e.
-    *           {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
+    *                          {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
     */
    public static void convertRotationVectorToYawPitchRoll(Vector3DReadOnly rotationVector, Vector3DBasics eulerAnglesToPack)
    {

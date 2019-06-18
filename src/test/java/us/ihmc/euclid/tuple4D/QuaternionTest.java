@@ -1,11 +1,11 @@
 package us.ihmc.euclid.tuple4D;
 
-import static org.junit.Assert.*;
-import static us.ihmc.euclid.testSuite.EuclidTestSuite.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static us.ihmc.euclid.EuclidTestConstants.*;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.rotationConversion.QuaternionConversion;
@@ -118,18 +118,18 @@ public class QuaternionTest extends QuaternionBasicsTest<Quaternion>
          double qs = q.getS();
          switch (random.nextInt(4))
          {
-         case 0:
-            qx = random.nextDouble();
-            break;
-         case 1:
-            qy = random.nextDouble();
-            break;
-         case 2:
-            qz = random.nextDouble();
-            break;
-         case 3:
-            qs = random.nextDouble();
-            break;
+            case 0:
+               qx = random.nextDouble();
+               break;
+            case 1:
+               qy = random.nextDouble();
+               break;
+            case 2:
+               qz = random.nextDouble();
+               break;
+            case 3:
+               qs = random.nextDouble();
+               break;
          }
          q.setUnsafe(qx, qy, qz, qs);
          newHashCode = q.hashCode();

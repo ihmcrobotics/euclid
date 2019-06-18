@@ -128,16 +128,16 @@ public interface Tuple4DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX();
-      case 1:
-         return getY();
-      case 2:
-         return getZ();
-      case 3:
-         return getS();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX();
+         case 1:
+            return getY();
+         case 2:
+            return getZ();
+         case 3:
+            return getS();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -156,16 +156,16 @@ public interface Tuple4DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX32();
-      case 1:
-         return getY32();
-      case 2:
-         return getZ32();
-      case 3:
-         return getS32();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX32();
+         case 1:
+            return getY32();
+         case 2:
+            return getZ32();
+         case 3:
+            return getS32();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -184,7 +184,7 @@ public interface Tuple4DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z}, {@code s} in order in an array starting
     * from {@code startIndex}.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex       the index in the array where the first component is stored.
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
    default void get(int startIndex, double[] tupleArrayToPack)
@@ -210,7 +210,7 @@ public interface Tuple4DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z}, {@code s} in order in an array starting
     * from {@code startIndex}.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex       the index in the array where the first component is stored.
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
    default void get(int startIndex, float[] tupleArrayToPack)
@@ -236,7 +236,7 @@ public interface Tuple4DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z}, {@code s} in order in a column vector
     * starting from {@code startRow}.
     *
-    * @param startRow the first row index to start writing in the dense-matrix.
+    * @param startRow          the first row index to start writing in the dense-matrix.
     * @param tupleMatrixToPack the column vector in which this tuple is stored. Modified.
     */
    default void get(int startRow, DenseMatrix64F tupleMatrixToPack)
@@ -248,8 +248,8 @@ public interface Tuple4DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z}, {@code s} in order in a column vector
     * starting from {@code startRow} at the column index {@code column}.
     *
-    * @param startRow the first row index to start writing in the dense-matrix.
-    * @param column the column index to write in the dense-matrix.
+    * @param startRow          the first row index to start writing in the dense-matrix.
+    * @param column            the column index to write in the dense-matrix.
     * @param tupleMatrixToPack the matrix in which this tuple is stored. Modified.
     */
    default void get(int startRow, int column, DenseMatrix64F tupleMatrixToPack)
@@ -309,7 +309,7 @@ public interface Tuple4DReadOnly
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param other   the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -322,12 +322,13 @@ public interface Tuple4DReadOnly
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
     * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
     */
    default boolean equals(Tuple4DReadOnly other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();

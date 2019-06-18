@@ -1,18 +1,11 @@
-buildscript {
-   repositories {
-      maven { url "https://plugins.gradle.org/m2/" }
-      mavenLocal()
-   }
-   dependencies {
-      classpath "us.ihmc:ihmc-build:0.15.3"
-   }
+plugins {
+   id("us.ihmc.ihmc-build") version "0.15.7"
+   id("us.ihmc.ihmc-ci") version "4.25"
 }
-
-apply plugin: "us.ihmc.ihmc-build"
 
 ihmc {
    group = "us.ihmc"
-   version = "0.11.0"
+   version = "0.12.0"
    vcsUrl = "https://github.com/ihmcrobotics/euclid"
    openSource = true
 
@@ -43,7 +36,6 @@ testDependencies {
     compile ihmc.sourceSetProject("frame")
     compile ihmc.sourceSetProject("shape")
 
-    compile group: "junit", name: "junit", version: "4.11"
-    compile group: "org.pitest", name: "pitest", version: "1.2.0"
-    compile group: "org.pitest", name: "pitest-command-line", version: "1.2.0"
+    compile group: "org.pitest", name: "pitest", version: "1.4.3"
+    compile group: "org.pitest", name: "pitest-command-line", version: "1.4.3"
 }

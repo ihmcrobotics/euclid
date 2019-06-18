@@ -72,7 +72,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
     * Creates a new frame yaw-pitch-roll and initializes its angles {@code yaw}, {@code pitch}, and
     * {@code roll} in order from the given array and initializes its reference frame.
     *
-    * @param referenceFrame the initial frame for this frame yaw-pitch-roll.
+    * @param referenceFrame    the initial frame for this frame yaw-pitch-roll.
     * @param yawPitchRollArray the array containing this yaw-pitch-roll's angles. Not modified.
     */
    public FrameYawPitchRoll(ReferenceFrame referenceFrame, double[] yawPitchRollArray)
@@ -84,7 +84,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
     * Creates a new frame yaw-pitch-roll and initializes such that it represents the same orientation
     * as the given {@code orientation3DReadOnly} and initializes its reference frame.
     *
-    * @param referenceFrame the initial frame for this frame yaw-pitch-roll.
+    * @param referenceFrame        the initial frame for this frame yaw-pitch-roll.
     * @param orientation3DReadOnly the orientation to initialize this yaw-pitch-roll. Not modified.
     */
    public FrameYawPitchRoll(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
@@ -113,9 +113,9 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
     * Creates a new frame yaw-pitch-roll and initializes its angles to the given ones.
     *
     * @param referenceFrame the initial frame for this frame yaw-pitch-roll.
-    * @param yaw the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param yaw            the angle to rotate about the z-axis.
+    * @param pitch          the angle to rotate about the y-axis.
+    * @param roll           the angle to rotate about the x-axis.
     */
    public FrameYawPitchRoll(ReferenceFrame referenceFrame, double yaw, double pitch, double roll)
    {
@@ -126,7 +126,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
     * Creates a new frame yaw-pitch-roll and initializes it to {@code other}.
     *
     * @param other the frame yaw-pitch-roll to copy the components and reference frame from. Not
-    *           modified.
+    *              modified.
     */
    public FrameYawPitchRoll(FrameYawPitchRollReadOnly other)
    {
@@ -222,7 +222,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
     * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param other   the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
@@ -244,12 +244,12 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
     * @param epsilon the maximum angle for the two quaternions to be considered equal.
     * @return {@code true} if the two yaw-pitch-roll represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FrameYawPitchRoll other, double epsilon)

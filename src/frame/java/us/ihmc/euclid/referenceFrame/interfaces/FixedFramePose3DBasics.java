@@ -54,7 +54,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void setPosition(FrameTuple2DReadOnly position)
    {
@@ -66,9 +66,9 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * Sets the position from the given frame tuple 2D and the given {@code z} coordinate.
     *
     * @param position the tuple with the x and y position coordinates. Not modified.
-    * @param z the new z-coordinate.
+    * @param z        the new z-coordinate.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void setPosition(FrameTuple2DReadOnly position, double z)
    {
@@ -81,7 +81,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void setPosition(FrameTuple3DReadOnly position)
    {
@@ -94,7 +94,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void setOrientation(FrameOrientation2DReadOnly orientation)
    {
@@ -107,7 +107,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param orientation the orientation to set the orientation part of this frame pose. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void setOrientation(FrameOrientation3DReadOnly orientation)
    {
@@ -120,7 +120,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * the given {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame in which the given {@code pose2DReadOnly} is expressed
-    *           in.
+    *                       in.
     * @param pose2DReadOnly the pose 2D used to set the pose of this frame pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
     */
@@ -135,7 +135,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame in which the given {@code pose3DReadOnly} is expressed
-    *           in.
+    *                       in.
     * @param pose3DReadOnly the pose 3D used to set the pose of this frame pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
     */
@@ -150,7 +150,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param framePose2DReadOnly the other frame pose 2D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code framePose2DReadOnly} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void set(FramePose2DReadOnly framePose2DReadOnly)
    {
@@ -163,7 +163,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param other the other frame pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void set(FramePose3DReadOnly other)
    {
@@ -193,10 +193,10 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    /**
     * Sets both position and orientation.
     *
-    * @param position the tuple with the new position coordinates. Not modified.
+    * @param position    the tuple with the new position coordinates. Not modified.
     * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void set(FrameTuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
@@ -207,10 +207,10 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    /**
     * Sets both position and orientation.
     *
-    * @param position the tuple with the new position coordinates. Not modified.
+    * @param position    the tuple with the new position coordinates. Not modified.
     * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void set(Tuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
@@ -221,10 +221,11 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    /**
     * Sets both position and orientation.
     *
-    * @param position the tuple with the new position coordinates. Not modified.
+    * @param position    the tuple with the new position coordinates. Not modified.
     * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code position}, and
-    *            {@code orientation} are not expressed in the same reference frame.
+    *                                         {@code orientation} are not expressed in the same
+    *                                         reference frame.
     */
    default void set(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
@@ -243,7 +244,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code translation} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void prependTranslation(FrameTuple3DReadOnly translation)
    {
@@ -257,7 +258,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param rotation the rotation to prepend to this pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code rotation} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see Orientation3DBasics#prepend(Orientation3DReadOnly)
     */
    default void prependRotation(FrameOrientation3DReadOnly rotation)
@@ -275,7 +276,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param translation tuple containing the translation to apply to this pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code translation} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void appendTranslation(FrameTuple3DReadOnly translation)
    {
@@ -293,7 +294,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param rotation the rotation to append to this pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code rotation} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     * @see Orientation3DBasics#append(Orientation3DReadOnly)
     */
    default void appendRotation(FrameOrientation3DReadOnly rotation)
@@ -312,10 +313,10 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     *
     * @param other the other pose 3D used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
-    *           {@code other}.
+    *              {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    *              {@code other}.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void interpolate(FramePose3DReadOnly other, double alpha)
    {
@@ -334,10 +335,10 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param pose1 the first pose 3D used in the interpolation. Not modified.
     * @param pose2 the second pose 3D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting {@code this}
-    *           to {@code pose2}.
+    *              {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
+    *              {@code this} to {@code pose2}.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pose1} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void interpolate(FramePose3DReadOnly pose1, Pose3DReadOnly pose2, double alpha)
    {
@@ -356,10 +357,10 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param pose1 the first pose 3D used in the interpolation. Not modified.
     * @param pose2 the second pose 3D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting {@code this}
-    *           to {@code pose2}.
+    *              {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
+    *              {@code this} to {@code pose2}.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pose2} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default void interpolate(Pose3DReadOnly pose1, FramePose3DReadOnly pose2, double alpha)
    {
@@ -378,10 +379,10 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param pose1 the first pose 3D used in the interpolation. Not modified.
     * @param pose2 the second pose 3D used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code pose1}, while a value of 1 is equivalent to setting {@code this}
-    *           to {@code pose2}.
+    *              {@code this} to {@code pose1}, while a value of 1 is equivalent to setting
+    *              {@code this} to {@code pose2}.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pose1}, and {@code pose2} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void interpolate(FramePose3DReadOnly pose1, FramePose3DReadOnly pose2, double alpha)
    {

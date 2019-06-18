@@ -1,7 +1,7 @@
 package us.ihmc.euclid.geometry.exceptions;
 
-import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -10,7 +10,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * {@code RuntimeException} dedicated to improper 2D or 3D bounding boxes.
  *
  * @author Sylvain Bertrand
- *
  */
 public class BoundingBoxException extends RuntimeException
 {
@@ -49,9 +48,9 @@ public class BoundingBoxException extends RuntimeException
     * given minimum and maximum coordinates of the bounding box.
     *
     * @param boundingBoxMin the minimum coordinate of the bounding box to be displayed in the detail
-    *           message. Not modified.
+    *                       message. Not modified.
     * @param boundingBoxMax the maximum coordinate of the bounding box to be displayed in the detail
-    *           message. Not modified.
+    *                       message. Not modified.
     */
    public BoundingBoxException(Point2DReadOnly boundingBoxMin, Point2DReadOnly boundingBoxMax)
    {
@@ -64,7 +63,7 @@ public class BoundingBoxException extends RuntimeException
     *
     * @param badBoundingBox3D the bounding box 3D to be displayed in the detail message. Not modified.
     */
-   public BoundingBoxException(BoundingBox3D badBoundingBox3D)
+   public BoundingBoxException(BoundingBox3DReadOnly badBoundingBox3D)
    {
       super("Improper bounding box 3D: " + (badBoundingBox3D == null ? "bounding box is null" : badBoundingBox3D.toString()));
    }
@@ -74,9 +73,9 @@ public class BoundingBoxException extends RuntimeException
     * given minimum and maximum coordinates of the bounding box.
     *
     * @param boundingBoxMin the minimum coordinate of the bounding box to be displayed in the detail
-    *           message. Not modified.
+    *                       message. Not modified.
     * @param boundingBoxMax the maximum coordinate of the bounding box to be displayed in the detail
-    *           message. Not modified.
+    *                       message. Not modified.
     */
    public BoundingBoxException(Point3DReadOnly boundingBoxMin, Point3DReadOnly boundingBoxMax)
    {
@@ -88,17 +87,17 @@ public class BoundingBoxException extends RuntimeException
     * given minimum and maximum coordinates of the bounding box.
     *
     * @param boundingBoxMinX the minimum x-coordinate of the bounding box to be displayed in the detail
-    *           message.
+    *                        message.
     * @param boundingBoxMinY the minimum y-coordinate of the bounding box to be displayed in the detail
-    *           message.
+    *                        message.
     * @param boundingBoxMinZ the minimum z-coordinate of the bounding box to be displayed in the detail
-    *           message.
+    *                        message.
     * @param boundingBoxMaxX the maximum x-coordinate of the bounding box to be displayed in the detail
-    *           message.
+    *                        message.
     * @param boundingBoxMaxY the maximum y-coordinate of the bounding box to be displayed in the detail
-    *           message.
+    *                        message.
     * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box to be displayed in the detail
-    *           message.
+    *                        message.
     */
    public BoundingBoxException(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX, double boundingBoxMaxY,
                                double boundingBoxMaxZ)

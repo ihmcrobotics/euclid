@@ -142,7 +142,7 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
     * </p>
     *
     * @param referenceFrame the initial reference frame in which the given pose is expressed in.
-    * @param pose the pose that is to be used internally. Copied. Not modified.
+    * @param pose           the pose that is to be used internally. Copied. Not modified.
     */
    public FramePose2D(ReferenceFrame referenceFrame, Pose2DReadOnly pose)
    {
@@ -154,8 +154,10 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
     * angle.
     *
     * @param referenceFrame the initial reference frame for this frame pose 2D.
-    * @param position the tuple used to initialize the position of this frame pose 2D. Not modified.
-    * @param yaw the angle used to initialize the orientation of this frame pose 2D. Not modified.
+    * @param position       the tuple used to initialize the position of this frame pose 2D. Not
+    *                       modified.
+    * @param yaw            the angle used to initialize the orientation of this frame pose 2D. Not
+    *                       modified.
     */
    public FramePose2D(ReferenceFrame referenceFrame, Tuple2DReadOnly position, double yaw)
    {
@@ -165,10 +167,10 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    /**
     * Creates a new pose 2D initialize it from the given position and orientation.
     *
-    * @param position the position used to initialize this frame pose. Not modified.
+    * @param position    the position used to initialize this frame pose. Not modified.
     * @param orientation the orientation used to initialize this frame pose. Not modified.
     * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    public FramePose2D(FrameTuple2DReadOnly position, FrameOrientation2DReadOnly orientation)
    {
@@ -257,7 +259,7 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other pose to compare against this. Not modified.
+    * @param other   the other pose to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
@@ -274,11 +276,11 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FramePose2D other, double epsilon)

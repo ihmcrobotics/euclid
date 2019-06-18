@@ -35,7 +35,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * </p>
     *
     * @param geometryObject the geometry object that is to be used internally. Reference saved. Will be
-    *           modified.
+    *                       modified.
     */
    public FrameGeometryObject(G geometryObject)
    {
@@ -50,9 +50,9 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * </p>
     *
     * @param referenceFrame the initial reference frame in which the given geometry object is expressed
-    *           in.
+    *                       in.
     * @param geometryObject the geometry object that is to be used internally. Reference saved. Will be
-    *           modified.
+    *                       modified.
     */
    public FrameGeometryObject(ReferenceFrame referenceFrame, G geometryObject)
    {
@@ -128,7 +128,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * </p>
     *
     * @param geometryObject the geometry object used to update the geometry object in {@code this}. Not
-    *           modified.
+    *                       modified.
     */
    public final void set(G geometryObject)
    {
@@ -147,7 +147,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     *
     * @param referenceFrame the coordinate system in which {@code geometryObject} is expressed.
     * @param geometryObject the geometry object used to update the geometry object in {@code this}. Not
-    *           modified.
+    *                       modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    public final void set(ReferenceFrame referenceFrame, G geometryObject)
@@ -166,7 +166,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     *
     * @param referenceFrame the coordinate system in which {@code geometryObject} is expressed.
     * @param geometryObject the geometry object used to update the geometry object in {@code this}. Not
-    *           modified.
+    *                       modified.
     */
    public final void setIncludingFrame(ReferenceFrame referenceFrame, G geometryObject)
    {
@@ -185,7 +185,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * </p>
     *
     * @param other the other frame geometry object used to update the geometry object in {@code this}.
-    *           Not modified.
+    *              Not modified.
     */
    @Override
    public final void set(F other)
@@ -282,7 +282,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * Packs the geometry object in {@code this} into the given {@code geometryToPack}.
     *
     * @param geometryObjectToPack the other geometry object used to stored the current values of the
-    *           geometry object in {@code this}. Modified.
+    *                             geometry object in {@code this}. Modified.
     */
    public void get(G geometryObjectToPack)
    {
@@ -309,7 +309,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * different in a geometric way.
     * </p>
     *
-    * @param other the other object to compare against this. Not modified.
+    * @param other   the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
@@ -337,7 +337,7 @@ public abstract class FrameGeometryObject<F extends FrameGeometryObject<F, G>, G
     * versa.
     * </p>
     *
-    * @param other the other geometry object to compare against this. Not modified.
+    * @param other   the other geometry object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing the two objects, usually refers to a distance.
     * @return {@code true} if the two objects represent the same geometry, {@code false} otherwise.
     */
