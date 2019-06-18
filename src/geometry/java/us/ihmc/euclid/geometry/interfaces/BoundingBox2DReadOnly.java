@@ -385,7 +385,7 @@ public interface BoundingBox2DReadOnly
     * {@link #intersectsExclusive(BoundingBox2DReadOnly)}.
     * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
     * {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * <li>if {@code epsilon < 0}, the size of this bounding box is scaled down by shifting the edges of
     * {@code epsilon} toward the inside.
     * </ul>
     * </p>

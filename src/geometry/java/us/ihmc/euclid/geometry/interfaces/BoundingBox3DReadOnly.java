@@ -501,7 +501,7 @@ public interface BoundingBox3DReadOnly
    /**
     * Tests if this bounding box and {@code other} intersects.
     * <p>
-    * The two bounding boxes are considered to not be intersecting if they share a corner or an edge.
+    * The two bounding boxes are considered to not be intersecting if they share a corner, an edge, or a face.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -525,7 +525,7 @@ public interface BoundingBox3DReadOnly
    /**
     * Tests if this bounding box and {@code other} intersects.
     * <p>
-    * The two bounding boxes are considered to be intersecting if they share a corner or an edge.
+    * The two bounding boxes are considered to be intersecting if they share a corner, an edge, or a face.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
@@ -552,9 +552,9 @@ public interface BoundingBox3DReadOnly
     * <ul>
     * <li>if {@code epsilon == 0}, this method is equivalent to
     * {@link #intersectsExclusive(BoundingBox3DReadOnly)}.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the edges of
+    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled up by shifting the faces of
     * {@code epsilon} toward the outside.
-    * <li>if {@code epsilon > 0}, the size of this bounding box is scaled down by shifting the edges of
+    * <li>if {@code epsilon < 0}, the size of this bounding box is scaled down by shifting the faces of
     * {@code epsilon} toward the inside.
     * </ul>
     * </p>
