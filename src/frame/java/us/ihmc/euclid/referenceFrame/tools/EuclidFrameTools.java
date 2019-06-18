@@ -3,19 +3,23 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.Collection;
 import java.util.List;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
@@ -379,11 +383,51 @@ public class EuclidFrameTools
 
    /**
     * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
-    * packs it into an {@link AxisAngle}. The rotation axis if perpendicular to both vectors. The
-    * rotation angle is computed as the angle from the {@code firstVector} to the {@code secondVector}:
+    * packs it into an {@link AxisAngleBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the {@code secondVector}:
     * <br>
     * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
     * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param firstVector the first vector. Not modified.
+    * @param secondVector the second vector that is rotated with respect to the first vector. Not
+    *           modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    * @deprecated Use {@link #orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly,FrameVector3DReadOnly,Orientation3DBasics)} instead
+    */
+   public static void axisAngleFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, AxisAngleBasics rotationToPack)
+   {
+      orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * packs it into an {@link Orientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the {@code secondVector}:
+    * <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
     * <p>
     * Edge cases:
     * <ul>
@@ -407,10 +451,196 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *            reference frame.
     */
-   public static void axisAngleFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, AxisAngleBasics rotationToPack)
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, Orientation3DBasics rotationToPack)
    {
       firstVector.checkReferenceFrameMatch(secondVector);
-      EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * packs it into an {@link FixedFrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the {@code secondVector}:
+    * <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param firstVector the first vector. Not modified.
+    * @param secondVector the second vector that is rotated with respect to the first vector. Not
+    *           modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, FixedFrameOrientation3DBasics rotationToPack)
+   {
+      firstVector.checkReferenceFrameMatch(secondVector);
+      firstVector.checkReferenceFrameMatch(rotationToPack);
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * packs it into an {@link FrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the {@code secondVector}:
+    * <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param firstVector the first vector. Not modified.
+    * @param secondVector the second vector that is rotated with respect to the first vector. Not
+    *           modified.
+    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, FrameOrientation3DBasics rotationToPack)
+   {
+      firstVector.checkReferenceFrameMatch(secondVector);
+      rotationToPack.setReferenceFrame(firstVector.getReferenceFrame());
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
+    * returns the result as an {@link AxisAngle}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code firstVector} to the {@code secondVector}:
+    * <br>
+    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
+    * Note: the vectors do not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
+    * set to: (1, 0, 0).
+    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
+    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @param firstVector the first vector. Not modified.
+    * @param secondVector the second vector that is rotated with respect to the first vector. Not
+    *           modified.
+    * @return the minimum rotation from {@code zUp} to the given {@code vector}.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static AxisAngle axisAngleFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector)
+   {
+      firstVector.checkReferenceFrameMatch(secondVector);
+      return EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code zUp = (0, 0, 1)} to the given {@code vector}
+    * and packs it into an {@link FixedFrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code zUp} to the {@code vector}: <br>
+    * {@code rotationAngle = zUp.angle(vector)}. </br>
+    * Note: the vector does not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vector is aligned with {@code zUp}: the rotation angle is equal to {@code 0.0} and the
+    * rotation axis is set to: (1, 0, 0).
+    * <li>the vector is parallel pointing opposite direction of {@code zUp}: the rotation angle is
+    * equal to {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of the given normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param vector the vector that is rotated with respect to {@code zUp}. Not modified.
+    * @param rotationToPack the minimum rotation from {@code zUp} to the given {@code vector}.
+    *           Modified.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *            reference frame.
+    */
+   public static void orientation3DFromZUpToVector3D(FrameVector3DReadOnly vector, FixedFrameOrientation3DBasics rotationToPack)
+   {
+      rotationToPack.checkReferenceFrameMatch(vector.getReferenceFrame());
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis.Z, vector, rotationToPack);
+   }
+
+   /**
+    * Computes the complete minimum rotation from {@code zUp = (0, 0, 1)} to the given {@code vector}
+    * and packs it into an {@link FrameOrientation3DBasics}.
+    * <p>
+    * The rotation angle is computed as the angle from the {@code zUp} to the {@code vector}: <br>
+    * {@code rotationAngle = zUp.angle(vector)}. </br>
+    * Note: the vector does not need to be unit length.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>the vector is aligned with {@code zUp}: the rotation angle is equal to {@code 0.0} and the
+    * rotation axis is set to: (1, 0, 0).
+    * <li>the vector is parallel pointing opposite direction of {@code zUp}: the rotation angle is
+    * equal to {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
+    * <li>if the length of the given normal is below {@code 1.0E-7}: the rotation angle is equal to
+    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
+    * </ul>
+    * </p>
+    * <p>
+    * Note: The calculation becomes less accurate as the two vectors are more parallel.
+    * </p>
+    *
+    * @param vector the vector that is rotated with respect to {@code zUp}. Not modified.
+    * @param rotationToPack the minimum rotation from {@code zUp} to the given {@code vector}.
+    *           Modified.
+    */
+   public static void orientation3DFromZUpToVector3D(FrameVector3DReadOnly vector, FrameOrientation3DBasics rotationToPack)
+   {
+      rotationToPack.setReferenceFrame(vector.getReferenceFrame());
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis.Z, vector, rotationToPack);
    }
 
    /**

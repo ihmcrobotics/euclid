@@ -639,7 +639,7 @@ public class EuclidGeometryToolsTest
          secondVector.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
 
          AxisAngle actualAxisAngle = new AxisAngle();
-         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
+         EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
@@ -676,7 +676,7 @@ public class EuclidGeometryToolsTest
          secondVector.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0));
 
          AxisAngle actualAxisAngle = new AxisAngle();
-         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
+         EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
@@ -716,7 +716,7 @@ public class EuclidGeometryToolsTest
          secondVector.scale(EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0));
 
          AxisAngle actualAxisAngle = new AxisAngle();
-         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
+         EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
@@ -750,7 +750,7 @@ public class EuclidGeometryToolsTest
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
 
          AxisAngle actualAxisAngle = new AxisAngle();
-         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
+         EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(firstVector, secondVector, actualAxisAngle);
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
@@ -779,7 +779,7 @@ public class EuclidGeometryToolsTest
          AxisAngle expectedAxisAngle = new AxisAngle(expectedAxis, expectedAngle);
 
          AxisAngle actualAxisAngle = new AxisAngle();
-         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(referenceNormal, rotatedNormal, actualAxisAngle);
+         EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(referenceNormal, rotatedNormal, actualAxisAngle);
 
          Vector3D actualAxis = new Vector3D(actualAxisAngle.getX(), actualAxisAngle.getY(), actualAxisAngle.getZ());
 
@@ -802,8 +802,8 @@ public class EuclidGeometryToolsTest
          Vector3D vector = EuclidCoreRandomTools.nextVector3D(random, -10.0, 10.0);
          AxisAngle expectedAxisAngle = new AxisAngle();
          AxisAngle actualAxisAngle = new AxisAngle();
-         EuclidGeometryTools.axisAngleFromFirstToSecondVector3D(zUp, vector, expectedAxisAngle);
-         EuclidGeometryTools.axisAngleFromZUpToVector3D(vector, actualAxisAngle);
+         EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(zUp, vector, expectedAxisAngle);
+         EuclidGeometryTools.orientation3DFromZUpToVector3D(vector, actualAxisAngle);
          EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
          actualAxisAngle = EuclidGeometryTools.axisAngleFromZUpToVector3D(vector);
          EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, EuclidGeometryTools.ONE_TRILLIONTH);
