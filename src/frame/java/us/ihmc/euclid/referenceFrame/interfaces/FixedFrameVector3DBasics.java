@@ -27,7 +27,7 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     *
     * @param other the other frame vector to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void setAndNormalize(FrameTuple3DReadOnly other)
    {
@@ -43,7 +43,7 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     *
     * @param other the second frame vector in the cross product. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void cross(FrameVector3DReadOnly other)
    {
@@ -58,7 +58,7 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     *
     * @param frameTuple3DReadOnly the second frame tuple in the cross product. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple3DReadOnly} is not expressed in the
-    *            same reference frame as {@code this}.
+    *                                         same reference frame as {@code this}.
     */
    default void cross(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
@@ -75,7 +75,8 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     * @param frameVector1 the first frame vector in the cross product. Not modified.
     * @param frameVector2 the second frame vector in the cross product. Not modified.
     * @throws ReferenceFrameMismatchException if either {@code frameVector1} or {@code frameVector2} is
-    *            not expressed in the same reference frame as {@code this}.
+    *                                         not expressed in the same reference frame as
+    *                                         {@code this}.
     */
    default void cross(FrameVector3DReadOnly frameVector1, FrameVector3DReadOnly frameVector2)
    {
@@ -91,7 +92,8 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     * @param frameTuple1 the first frame tuple in the cross product. Not modified.
     * @param frameTuple2 the second frame tuple in the cross product. Not modified.
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
-    *            not expressed in the same reference frame as {@code this}.
+    *                                         not expressed in the same reference frame as
+    *                                         {@code this}.
     */
    default void cross(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
@@ -107,9 +109,9 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     * </p>
     *
     * @param frameTuple1 the first frame tuple in the cross product. Not modified.
-    * @param tuple2 the second tuple in the cross product. Not modified.
+    * @param tuple2      the second tuple in the cross product. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void cross(FrameTuple3DReadOnly frameTuple1, Tuple3DReadOnly tuple2)
    {
@@ -123,10 +125,10 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     * this = tuple1 &times; frameTuple2
     * </p>
     *
-    * @param tuple1 the first tuple in the cross product. Not modified.
+    * @param tuple1      the first tuple in the cross product. Not modified.
     * @param frameTuple2 the second frame tuple in the cross product. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void cross(Tuple3DReadOnly tuple1, FrameTuple3DReadOnly frameTuple2)
    {

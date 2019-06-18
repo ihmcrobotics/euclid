@@ -44,9 +44,9 @@ public class YawPitchRollTools
    /**
     * Tests whether the three given angles yaw, pitch, and roll are equal to zero.
     * 
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
+    * @param yaw     the first angle representing the rotation around the z-axis.
+    * @param pitch   the second angle representing the rotation around the y-axis.
+    * @param roll    the third angle representing the rotation around the x-axis.
     * @param epsilon the tolerance to use for the comparison.
     * @return {@code true} if the three angles are equal to zero, {@code false} otherwise.
     */
@@ -59,9 +59,9 @@ public class YawPitchRollTools
     * Tests whether the orientation represented by the given three angles yaw, pitch, and roll
     * represent an orientation 2D, i.e. only the yaw angle is non-zero.
     * 
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
+    * @param yaw     the first angle representing the rotation around the z-axis.
+    * @param pitch   the second angle representing the rotation around the y-axis.
+    * @param roll    the third angle representing the rotation around the x-axis.
     * @param epsilon the tolerance to use for the comparison.
     * @return {@code true} if the query is considered a 2D orientation, {@code false} otherwise.
     */
@@ -81,7 +81,11 @@ public class YawPitchRollTools
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll1, YawPitchRollReadOnly yawPitchRoll2)
    {
-      return distance(yawPitchRoll1.getYaw(), yawPitchRoll1.getPitch(), yawPitchRoll1.getRoll(), yawPitchRoll2.getYaw(), yawPitchRoll2.getPitch(),
+      return distance(yawPitchRoll1.getYaw(),
+                      yawPitchRoll1.getPitch(),
+                      yawPitchRoll1.getRoll(),
+                      yawPitchRoll2.getYaw(),
+                      yawPitchRoll2.getPitch(),
                       yawPitchRoll2.getRoll());
    }
 
@@ -89,17 +93,18 @@ public class YawPitchRollTools
     * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and
     * {@code yawPitchRoll2}.
     *
-    * @param yaw1 the first angle of the first orientation representing the rotation around the z-axis.
+    * @param yaw1   the first angle of the first orientation representing the rotation around the
+    *               z-axis.
     * @param pitch1 the second angle of the first orientation representing the rotation around the
-    *           y-axis.
-    * @param roll1 the third angle of the first orientation representing the rotation around the
-    *           x-axis.
-    * @param yaw2 the first angle of the second orientation representing the rotation around the
-    *           z-axis.
+    *               y-axis.
+    * @param roll1  the third angle of the first orientation representing the rotation around the
+    *               x-axis.
+    * @param yaw2   the first angle of the second orientation representing the rotation around the
+    *               z-axis.
     * @param pitch2 the second angle of the second orientation representing the rotation around the
-    *           y-axis.
-    * @param roll2 the third angle of the second orientation representing the rotation around the
-    *           x-axis.
+    *               y-axis.
+    * @param roll2  the third angle of the second orientation representing the rotation around the
+    *               x-axis.
     * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
     *         [0, 2<i>pi</i>]
     */
@@ -160,9 +165,9 @@ public class YawPitchRollTools
     * Calculates the inverse of the orientation represented by the given {@code yaw}, {@code pitch},
     * and {@code roll}.
     * 
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
+    * @param yaw               the first angle representing the rotation around the z-axis.
+    * @param pitch             the second angle representing the rotation around the y-axis.
+    * @param roll              the third angle representing the rotation around the x-axis.
     * @param orientationToPack the orientation used to store the inverse. Modified.
     */
    public static void invert(double yaw, double pitch, double roll, Orientation3DBasics orientationToPack)
@@ -193,10 +198,10 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param yaw              the first angle representing the rotation around the z-axis.
+    * @param pitch            the second angle representing the rotation around the y-axis.
+    * @param roll             the third angle representing the rotation around the x-axis.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void transform(double yaw, double pitch, double roll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -211,8 +216,8 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param yawPitchRoll     the yaw-pitch-roll used to transform the tuple. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void transform(YawPitchRollReadOnly yawPitchRoll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -233,10 +238,10 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param yaw              the first angle representing the rotation around the z-axis.
+    * @param pitch            the second angle representing the rotation around the y-axis.
+    * @param roll             the third angle representing the rotation around the x-axis.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void inverseTransform(double yaw, double pitch, double roll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -256,8 +261,8 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param yawPitchRoll     the yaw-pitch-roll used to transform the tuple. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -323,10 +328,10 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param yaw              the first angle representing the rotation around the z-axis.
+    * @param pitch            the second angle representing the rotation around the y-axis.
+    * @param roll             the third angle representing the rotation around the x-axis.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void addTransform(double yaw, double pitch, double roll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -345,8 +350,8 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param yawPitchRoll     the yaw-pitch-roll used to transform the tuple. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    public static void addTransform(YawPitchRollReadOnly yawPitchRoll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -361,15 +366,15 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param yaw                       the first angle representing the rotation around the z-axis.
+    * @param pitch                     the second angle representing the rotation around the y-axis.
+    * @param roll                      the third angle representing the rotation around the x-axis.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
-    *           represents a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    public static void transform(double yaw, double pitch, double roll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
                                 boolean checkIfTransformInXYPlane)
@@ -384,13 +389,13 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param yawPitchRoll              the yaw-pitch-roll used to transform the tuple. Not modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
-    *           represents a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    public static void transform(YawPitchRollReadOnly yawPitchRoll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
                                 boolean checkIfTransformInXYPlane)
@@ -410,15 +415,15 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param yaw                       the first angle representing the rotation around the z-axis.
+    * @param pitch                     the second angle representing the rotation around the y-axis.
+    * @param roll                      the third angle representing the rotation around the x-axis.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
-    *           represents a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    public static void inverseTransform(double yaw, double pitch, double roll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
@@ -438,13 +443,13 @@ public class YawPitchRollTools
     * Both tuples can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the tuple. Not modified.
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param yawPitchRoll              the yaw-pitch-roll used to transform the tuple. Not modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the yaw-pitch-roll
-    *           represents a transformation in the XY plane.
+    *                                  represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
-    *            does not represent a transformation in the XY plane.
+    *                               does not represent a transformation in the XY plane.
     */
    public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
@@ -510,10 +515,10 @@ public class YawPitchRollTools
     * where R(yawPitchRoll) is the function to convert an yaw-pitch-roll into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param yaw               the first angle representing the rotation around the z-axis.
+    * @param pitch             the second angle representing the rotation around the y-axis.
+    * @param roll              the third angle representing the rotation around the x-axis.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     */
    public static void transform(double yaw, double pitch, double roll, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -532,8 +537,8 @@ public class YawPitchRollTools
     * where R(yawPitchRoll) is the function to convert an yaw-pitch-roll into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the matrix. Not modified.
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param yawPitchRoll      the yaw-pitch-roll used to transform the matrix. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     */
    public static void transform(YawPitchRollReadOnly yawPitchRoll, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -557,10 +562,10 @@ public class YawPitchRollTools
     * where R(yawPitchRoll) is the function to convert an yaw-pitch-roll into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param yaw               the first angle representing the rotation around the z-axis.
+    * @param pitch             the second angle representing the rotation around the y-axis.
+    * @param roll              the third angle representing the rotation around the x-axis.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(double yaw, double pitch, double roll, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -584,8 +589,8 @@ public class YawPitchRollTools
     * where R(yawPitchRoll) is the function to convert an yaw-pitch-roll into a 3-by-3 rotation matrix.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the matrix. Not modified.
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param yawPitchRoll      the yaw-pitch-roll used to transform the matrix. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
@@ -682,10 +687,10 @@ public class YawPitchRollTools
     * {@code yawPitchRoll} and {@code rotationMatrixOriginal}.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param rotationMatrixOriginal the rotation matrix to transform. Not modified.
+    * @param yaw                       the first angle representing the rotation around the z-axis.
+    * @param pitch                     the second angle representing the rotation around the y-axis.
+    * @param roll                      the third angle representing the rotation around the x-axis.
+    * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void transform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
@@ -708,8 +713,9 @@ public class YawPitchRollTools
     * {@code yawPitchRoll} and {@code rotationMatrixOriginal}.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the rotation matrix. Not modified.
-    * @param rotationMatrixOriginal the rotation matrix to transform. Not modified.
+    * @param yawPitchRoll              the yaw-pitch-roll used to transform the rotation matrix. Not
+    *                                  modified.
+    * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void transform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
@@ -737,10 +743,10 @@ public class YawPitchRollTools
     * {@code yawPitchRoll} and {@code rotationMatrixOriginal}.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param rotationMatrixOriginal the rotation matrix to transform. Not modified.
+    * @param yaw                       the first angle representing the rotation around the z-axis.
+    * @param pitch                     the second angle representing the rotation around the y-axis.
+    * @param roll                      the third angle representing the rotation around the x-axis.
+    * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal,
@@ -769,8 +775,9 @@ public class YawPitchRollTools
     * {@code yawPitchRoll} and {@code rotationMatrixOriginal}.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the rotation matrix. Not modified.
-    * @param rotationMatrixOriginal the rotation matrix to transform. Not modified.
+    * @param yawPitchRoll              the yaw-pitch-roll used to transform the rotation matrix. Not
+    *                                  modified.
+    * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal,
@@ -850,10 +857,10 @@ public class YawPitchRollTools
     * Both vectors can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param yaw               the first angle representing the rotation around the z-axis.
+    * @param pitch             the second angle representing the rotation around the y-axis.
+    * @param roll              the third angle representing the rotation around the x-axis.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     */
    public static void transform(double yaw, double pitch, double roll, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -868,8 +875,8 @@ public class YawPitchRollTools
     * Both vectors can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the tuple. Not modified.
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param yawPitchRoll      the yaw-pitch-roll used to transform the tuple. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     */
    public static void transform(YawPitchRollReadOnly yawPitchRoll, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -889,10 +896,10 @@ public class YawPitchRollTools
     * Both vectors can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param yaw               the first angle representing the rotation around the z-axis.
+    * @param pitch             the second angle representing the rotation around the y-axis.
+    * @param roll              the third angle representing the rotation around the x-axis.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     */
    public static void inverseTransform(double yaw, double pitch, double roll, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -912,8 +919,8 @@ public class YawPitchRollTools
     * Both vectors can be the same object for performing in place transformation.
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll used to transform the tuple. Not modified.
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param yawPitchRoll      the yaw-pitch-roll used to transform the tuple. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     */
    public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -984,10 +991,11 @@ public class YawPitchRollTools
     * All three arguments can be the same object for in place operations.
     * </p>
     * 
-    * @param orientation1 the first orientation in the multiplication. Not modified.
-    * @param inverse1 whether the first orientation should be inverted in the multiplication.
-    * @param orientation2 the second orientation in the multiplication. Not modified.
-    * @param inverse2 whether the second orientation should be inverted in the multiplication.
+    * @param orientation1       the first orientation in the multiplication. Not modified.
+    * @param inverse1           whether the first orientation should be inverted in the multiplication.
+    * @param orientation2       the second orientation in the multiplication. Not modified.
+    * @param inverse2           whether the second orientation should be inverted in the
+    *                           multiplication.
     * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
     */
    public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
@@ -1083,10 +1091,10 @@ public class YawPitchRollTools
     * All the yaw-pitch-rolls can be the same object.
     * </p>
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw                  the angle to rotate about the z-axis.
     * @param yawPitchRollOriginal the yaw-pitch-roll on which the yaw rotation is prepended. Not
-    *           modified.
-    * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
+    *                             modified.
+    * @param yawPitchRollToPack   the yaw-pitch-roll in which the result is stored. Modified.
     */
    public static void prependYawRotation(YawPitchRollReadOnly yawPitchRollOriginal, double yaw, YawPitchRollBasics yawPitchRollToPack)
    {
@@ -1104,9 +1112,9 @@ public class YawPitchRollTools
     * </p>
     *
     * @param yawPitchRollOriginal the yaw-pitch-roll on which the yaw rotation is appended. Not
-    *           modified.
-    * @param yaw the angle to rotate about the z-axis.
-    * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
+    *                             modified.
+    * @param yaw                  the angle to rotate about the z-axis.
+    * @param yawPitchRollToPack   the yaw-pitch-roll in which the result is stored. Modified.
     */
    public static void appendYawRotation(YawPitchRollReadOnly yawPitchRollOriginal, double yaw, YawPitchRollBasics yawPitchRollToPack)
    {
@@ -1149,10 +1157,10 @@ public class YawPitchRollTools
     * All the yaw-pitch-rolls can be the same object.
     * </p>
     *
-    * @param pitch the angle to rotate about the y-axis.
+    * @param pitch                the angle to rotate about the y-axis.
     * @param yawPitchRollOriginal the yaw-pitch-roll on which the yaw rotation is prepended. Not
-    *           modified.
-    * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
+    *                             modified.
+    * @param yawPitchRollToPack   the yaw-pitch-roll in which the result is stored. Modified.
     */
    public static void prependPitchRotation(YawPitchRollReadOnly yawPitchRollOriginal, double pitch, YawPitchRollBasics yawPitchRollToPack)
    {
@@ -1206,9 +1214,9 @@ public class YawPitchRollTools
     * </p>
     *
     * @param yawPitchRollOriginal the yaw-pitch-roll on which the yaw rotation is appended. Not
-    *           modified.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
+    *                             modified.
+    * @param pitch                the angle to rotate about the y-axis.
+    * @param yawPitchRollToPack   the yaw-pitch-roll in which the result is stored. Modified.
     */
    public static void appendPitchRotation(YawPitchRollReadOnly yawPitchRollOriginal, double pitch, YawPitchRollBasics yawPitchRollToPack)
    {
@@ -1261,10 +1269,10 @@ public class YawPitchRollTools
     * All the yaw-pitch-rolls can be the same object.
     * </p>
     *
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll                 the angle to rotate about the x-axis.
     * @param yawPitchRollOriginal the yaw-pitch-roll on which the yaw rotation is prepended. Not
-    *           modified.
-    * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
+    *                             modified.
+    * @param yawPitchRollToPack   the yaw-pitch-roll in which the result is stored. Modified.
     */
    public static void prependRollRotation(YawPitchRollReadOnly yawPitchRollOriginal, double roll, YawPitchRollBasics yawPitchRollToPack)
    {
@@ -1308,9 +1316,9 @@ public class YawPitchRollTools
     * </p>
     *
     * @param yawPitchRollOriginal the yaw-pitch-roll on which the yaw rotation is appended. Not
-    *           modified.
-    * @param roll the angle to rotate about the x-axis.
-    * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
+    *                             modified.
+    * @param roll                 the angle to rotate about the x-axis.
+    * @param yawPitchRollToPack   the yaw-pitch-roll in which the result is stored. Modified.
     */
    public static void appendRollRotation(YawPitchRollReadOnly yawPitchRollOriginal, double roll, YawPitchRollBasics yawPitchRollToPack)
    {

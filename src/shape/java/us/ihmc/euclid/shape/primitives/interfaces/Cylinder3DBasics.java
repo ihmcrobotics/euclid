@@ -118,9 +118,9 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
     * Sets this cylinder properties.
     * 
     * @param position the position of this cylinder center. Not modified.
-    * @param axis the axis of revolution of this cylinder. Not modified.
-    * @param length the new length.
-    * @param radius the new radius.
+    * @param axis     the axis of revolution of this cylinder. Not modified.
+    * @param length   the new length.
+    * @param radius   the new radius.
     */
    default void set(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {

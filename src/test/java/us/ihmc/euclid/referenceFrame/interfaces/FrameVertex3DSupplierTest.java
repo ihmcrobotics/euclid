@@ -147,7 +147,8 @@ public class FrameVertex3DSupplierTest
          while (original.size() < listSize)
             original.add(EuclidFrameRandomTools.nextFramePoint3D(random, worldFrame));
 
-         FrameVertex3DSupplier supplier = FrameVertex3DSupplier.asFrameVertex3DSupplier(original.toArray(new FramePoint3DReadOnly[0]), startIndex,
+         FrameVertex3DSupplier supplier = FrameVertex3DSupplier.asFrameVertex3DSupplier(original.toArray(new FramePoint3DReadOnly[0]),
+                                                                                        startIndex,
                                                                                         numberOfVertices);
 
          assertEquals(numberOfVertices, supplier.getNumberOfVertices());

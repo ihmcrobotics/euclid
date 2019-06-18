@@ -1035,8 +1035,12 @@ public class BoundingBox2DTest
          Point2DReadOnly pointOnLine = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Vector2DReadOnly lineDirection = EuclidCoreRandomTools.nextVector2D(random);
          BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
-         boolean expected = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), pointOnLine,
-                                                                                          lineDirection, null, null) != 0;
+         boolean expected = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBox2D.getMinPoint(),
+                                                                                          boundingBox2D.getMaxPoint(),
+                                                                                          pointOnLine,
+                                                                                          lineDirection,
+                                                                                          null,
+                                                                                          null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithLine2D(pointOnLine, lineDirection);
          assertEquals(expected, actual);
       }
@@ -1052,8 +1056,12 @@ public class BoundingBox2DTest
          Point2DReadOnly lineSegmentStart = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Point2DReadOnly lineSegmentEnd = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
-         boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(),
-                                                                                                 lineSegmentStart, lineSegmentEnd, null, null) != 0;
+         boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBox2D.getMinPoint(),
+                                                                                                 boundingBox2D.getMaxPoint(),
+                                                                                                 lineSegmentStart,
+                                                                                                 lineSegmentEnd,
+                                                                                                 null,
+                                                                                                 null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithLineSegment2D(lineSegmentStart, lineSegmentEnd);
          assertEquals(expected, actual);
       }
@@ -1069,8 +1077,12 @@ public class BoundingBox2DTest
          Point2DReadOnly rayOrigin = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
          Vector2DReadOnly rayDirection = EuclidCoreRandomTools.nextVector2D(random);
          BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
-         boolean expected = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), rayOrigin,
-                                                                                         rayDirection, null, null) != 0;
+         boolean expected = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBox2D.getMinPoint(),
+                                                                                         boundingBox2D.getMaxPoint(),
+                                                                                         rayOrigin,
+                                                                                         rayDirection,
+                                                                                         null,
+                                                                                         null) != 0;
          boolean actual = boundingBox2D.doesIntersectWithRay2D(rayOrigin, rayDirection);
          assertEquals(expected, actual);
       }
@@ -1092,8 +1104,12 @@ public class BoundingBox2DTest
          Point2D expectedSecondIntersection = new Point2D();
          Point2D actualFirstIntersection = new Point2D();
          Point2D actualSecondIntersection = new Point2D();
-         expectedN = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), pointOnLine,
-                                                                                   lineDirection, expectedFirstIntersection, expectedSecondIntersection);
+         expectedN = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBox2D.getMinPoint(),
+                                                                                   boundingBox2D.getMaxPoint(),
+                                                                                   pointOnLine,
+                                                                                   lineDirection,
+                                                                                   expectedFirstIntersection,
+                                                                                   expectedSecondIntersection);
          actualN = boundingBox2D.intersectionWithLine2D(pointOnLine, lineDirection, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
@@ -1135,8 +1151,11 @@ public class BoundingBox2DTest
          Point2D expectedSecondIntersection = new Point2D();
          Point2D actualFirstIntersection = new Point2D();
          Point2D actualSecondIntersection = new Point2D();
-         expectedN = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(),
-                                                                                          lineSegmentStart, lineSegmentEnd, expectedFirstIntersection,
+         expectedN = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBox2D.getMinPoint(),
+                                                                                          boundingBox2D.getMaxPoint(),
+                                                                                          lineSegmentStart,
+                                                                                          lineSegmentEnd,
+                                                                                          expectedFirstIntersection,
                                                                                           expectedSecondIntersection);
          actualN = boundingBox2D.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, actualFirstIntersection, actualSecondIntersection);
 
@@ -1179,8 +1198,12 @@ public class BoundingBox2DTest
          Point2D expectedSecondIntersection = new Point2D();
          Point2D actualFirstIntersection = new Point2D();
          Point2D actualSecondIntersection = new Point2D();
-         expectedN = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBox2D.getMinPoint(), boundingBox2D.getMaxPoint(), rayOrigin,
-                                                                                  rayDirection, expectedFirstIntersection, expectedSecondIntersection);
+         expectedN = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBox2D.getMinPoint(),
+                                                                                  boundingBox2D.getMaxPoint(),
+                                                                                  rayOrigin,
+                                                                                  rayDirection,
+                                                                                  expectedFirstIntersection,
+                                                                                  expectedSecondIntersection);
          actualN = boundingBox2D.intersectionWithRay2D(rayOrigin, rayDirection, actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);

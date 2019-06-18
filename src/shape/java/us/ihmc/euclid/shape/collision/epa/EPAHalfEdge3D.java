@@ -37,8 +37,8 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
    /**
     * Creates a new edge and initializes its endpoints and the face it belongs to.
     * 
-    * @param v0 the vertex the half-edge starts from. Not modified, reference saved.
-    * @param v1 the vertex the half-edge ends at. Not modified, reference saved.
+    * @param v0   the vertex the half-edge starts from. Not modified, reference saved.
+    * @param v1   the vertex the half-edge ends at. Not modified, reference saved.
     * @param face the face the half-edge belongs to. Not modified, reference saved.
     */
    public EPAHalfEdge3D(EPAVertex3D v0, EPAVertex3D v1, EPAFace3D face)
@@ -54,7 +54,8 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
     *
     * @param twin the twin half-edge of this half-edge. Not modified, reference saved.
     * @throws IllegalArgumentException if the given half-edge is not {@code null} and that its origin
-    *            and destination do not match this half-edge's destination and origin, respectively.
+    *                                  and destination do not match this half-edge's destination and
+    *                                  origin, respectively.
     */
    public void setTwin(EPAHalfEdge3D twin)
    {

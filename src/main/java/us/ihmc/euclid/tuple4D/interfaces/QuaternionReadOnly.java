@@ -317,9 +317,9 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other quaternion to compare against this. Not modified.
+    * @param other   the other quaternion to compare against this. Not modified.
     * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
-    *           be considered equal.
+    *                be considered equal.
     * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
     */
    default boolean geometricallyEquals(QuaternionReadOnly other, double epsilon)

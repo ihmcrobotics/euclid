@@ -45,8 +45,12 @@ public class LineSegment3DTest
 
       expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-      lineSegment3D = new LineSegment3D(expectedFirstEndpoint.getX(), expectedFirstEndpoint.getY(), expectedFirstEndpoint.getZ(), expectedSecondEndpoint.getX(),
-                                        expectedSecondEndpoint.getY(), expectedSecondEndpoint.getZ());
+      lineSegment3D = new LineSegment3D(expectedFirstEndpoint.getX(),
+                                        expectedFirstEndpoint.getY(),
+                                        expectedFirstEndpoint.getZ(),
+                                        expectedSecondEndpoint.getX(),
+                                        expectedSecondEndpoint.getY(),
+                                        expectedSecondEndpoint.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
@@ -96,8 +100,12 @@ public class LineSegment3DTest
       Point3D expectedFirstEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
       Point3D expectedSecondEndpoint = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
 
-      lineSegment3D.set(expectedFirstEndpoint.getX(), expectedFirstEndpoint.getY(), expectedFirstEndpoint.getZ(), expectedSecondEndpoint.getX(),
-                        expectedSecondEndpoint.getY(), expectedSecondEndpoint.getZ());
+      lineSegment3D.set(expectedFirstEndpoint.getX(),
+                        expectedFirstEndpoint.getY(),
+                        expectedFirstEndpoint.getZ(),
+                        expectedSecondEndpoint.getX(),
+                        expectedSecondEndpoint.getY(),
+                        expectedSecondEndpoint.getZ());
       EuclidCoreTestTools.assertTuple3DEquals(expectedFirstEndpoint, lineSegment3D.getFirstEndpoint(), EPSILON);
       EuclidCoreTestTools.assertTuple3DEquals(expectedSecondEndpoint, lineSegment3D.getSecondEndpoint(), EPSILON);
 
@@ -200,7 +208,8 @@ public class LineSegment3DTest
       { // distanceSquared(Point3DReadOnly point)
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         double expected = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(query, lineSegment3D.getFirstEndpoint(),
+         double expected = EuclidGeometryTools.distanceSquaredFromPoint3DToLineSegment3D(query,
+                                                                                         lineSegment3D.getFirstEndpoint(),
                                                                                          lineSegment3D.getSecondEndpoint());
          double actual = lineSegment3D.distanceSquared(query);
          assertEquals(expected, actual, EPSILON);
@@ -219,8 +228,10 @@ public class LineSegment3DTest
       { // distance(LineSegment3D otherLineSegment)
          LineSegment3D lineSegment1 = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          LineSegment3D lineSegment2 = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
-         double expected = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegment1.getFirstEndpoint(), lineSegment1.getSecondEndpoint(),
-                                                                                lineSegment2.getFirstEndpoint(), lineSegment2.getSecondEndpoint());
+         double expected = EuclidGeometryTools.distanceBetweenTwoLineSegment3Ds(lineSegment1.getFirstEndpoint(),
+                                                                                lineSegment1.getSecondEndpoint(),
+                                                                                lineSegment2.getFirstEndpoint(),
+                                                                                lineSegment2.getSecondEndpoint());
          double actual = lineSegment1.distance(lineSegment2);
          assertEquals(expected, actual, EPSILON);
       }
@@ -447,10 +458,14 @@ public class LineSegment3DTest
          assertTrue(lineSegment3D.isBetweenEndpoints(new Point3D(lineSegment3D.getSecondEndpoint())));
          assertFalse(lineSegment3D.isBetweenEndpoints(new Point3D(lineSegment3D.getFirstEndpoint()), Double.MIN_VALUE));
          assertFalse(lineSegment3D.isBetweenEndpoints(new Point3D(lineSegment3D.getSecondEndpoint()), 0.555555e-16));
-         assertFalse(lineSegment3D.isBetweenEndpoints(lineSegment3D.getFirstEndpoint().getX(), lineSegment3D.getFirstEndpoint().getY(),
-                                                      lineSegment3D.getFirstEndpoint().getZ(), Double.MIN_VALUE));
-         assertFalse(lineSegment3D.isBetweenEndpoints(lineSegment3D.getSecondEndpoint().getX(), lineSegment3D.getSecondEndpoint().getY(),
-                                                      lineSegment3D.getSecondEndpoint().getZ(), 0.555555e-16));
+         assertFalse(lineSegment3D.isBetweenEndpoints(lineSegment3D.getFirstEndpoint().getX(),
+                                                      lineSegment3D.getFirstEndpoint().getY(),
+                                                      lineSegment3D.getFirstEndpoint().getZ(),
+                                                      Double.MIN_VALUE));
+         assertFalse(lineSegment3D.isBetweenEndpoints(lineSegment3D.getSecondEndpoint().getX(),
+                                                      lineSegment3D.getSecondEndpoint().getY(),
+                                                      lineSegment3D.getSecondEndpoint().getZ(),
+                                                      0.555555e-16));
 
          Vector3D orthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, lineSegment3D.getDirection(true), true);
          pointInside.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), orthogonal, pointInside);

@@ -115,7 +115,8 @@ public class Line2DTest
    @Test
    public void testPointPointConstructorForException()
    {
-      Assertions.assertThrows(RuntimeException.class, () -> {
+      Assertions.assertThrows(RuntimeException.class, () ->
+      {
          // TODO: Test this at various random points, or is this sufficient?
          Point2D firstPointOnLine = new Point2D(0.0, 0.0);
          new Line2D(firstPointOnLine, firstPointOnLine);
@@ -353,7 +354,8 @@ public class Line2DTest
    @Test
    public void testSetPointPointException()
    {
-      Assertions.assertThrows(RuntimeException.class, () -> {
+      Assertions.assertThrows(RuntimeException.class, () ->
+      {
          Point2D firstPointOnLine = new Point2D(0.0, 0.0);
          Point2D secondPointOnLine = new Point2D(1.0, 1.0);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
@@ -587,8 +589,10 @@ public class Line2DTest
          Line2DBasics perpendicularLine = line2d.perpendicularLineThroughPoint(pointOnPerpendicularLine);
 
          assertTrue(perpendicularLine.isPointOnLine(pointOnPerpendicularLine, delta));
-         assertEquals(0.0, perpendicularLine.getDirection().getX() * line2d.getDirection().getX()
-               + perpendicularLine.getDirection().getY() * line2d.getDirection().getY(), delta);
+         assertEquals(0.0,
+                      perpendicularLine.getDirection().getX() * line2d.getDirection().getX()
+                            + perpendicularLine.getDirection().getY() * line2d.getDirection().getY(),
+                      delta);
       }
    }
 
@@ -1214,7 +1218,8 @@ public class Line2DTest
    @Test
    public void testApplyTransformRotationXaxisException()
    {
-      Assertions.assertThrows(RuntimeException.class, () -> {
+      Assertions.assertThrows(RuntimeException.class, () ->
+      {
          Random random = new Random(1776L);
          RigidBodyTransform transform = new RigidBodyTransform();
          Point2D firstPointOnLine = randomPoint(random);
@@ -1236,7 +1241,8 @@ public class Line2DTest
    @Test
    public void testApplyTransformRotationYaxisException()
    {
-      Assertions.assertThrows(RuntimeException.class, () -> {
+      Assertions.assertThrows(RuntimeException.class, () ->
+      {
          Random random = new Random(1776L);
          RigidBodyTransform transform = new RigidBodyTransform();
          Point2D firstPointOnLine = randomPoint(random);

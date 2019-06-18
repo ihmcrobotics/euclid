@@ -1552,8 +1552,12 @@ public class BoundingBox3DTest
       {
          Line3D line3D = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
          BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
-         boolean expected = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
-                                                                                          line3D.getPoint(), line3D.getDirection(), null, null) != 0;
+         boolean expected = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBox3D.getMinPoint(),
+                                                                                          boundingBox3D.getMaxPoint(),
+                                                                                          line3D.getPoint(),
+                                                                                          line3D.getDirection(),
+                                                                                          null,
+                                                                                          null) != 0;
          boolean actual = boundingBox3D.doesIntersectWithLine3D(line3D);
          assertEquals(expected, actual);
 
@@ -1571,9 +1575,12 @@ public class BoundingBox3DTest
       {
          LineSegment3D lineSegment3D = EuclidGeometryRandomTools.nextLineSegment3D(random, 10.0);
          BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
-         boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
+         boolean expected = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBox3D.getMinPoint(),
+                                                                                                 boundingBox3D.getMaxPoint(),
                                                                                                  lineSegment3D.getFirstEndpoint(),
-                                                                                                 lineSegment3D.getSecondEndpoint(), null, null) != 0;
+                                                                                                 lineSegment3D.getSecondEndpoint(),
+                                                                                                 null,
+                                                                                                 null) != 0;
          boolean actual = boundingBox3D.doesIntersectWithLineSegment3D(lineSegment3D);
          assertEquals(expected, actual);
 
@@ -1591,8 +1598,12 @@ public class BoundingBox3DTest
       {
          Line3D ray3D = EuclidGeometryRandomTools.nextLine3D(random, 10.0);
          BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
-         boolean expected = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
-                                                                                         ray3D.getPoint(), ray3D.getDirection(), null, null) != 0;
+         boolean expected = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBox3D.getMinPoint(),
+                                                                                         boundingBox3D.getMaxPoint(),
+                                                                                         ray3D.getPoint(),
+                                                                                         ray3D.getDirection(),
+                                                                                         null,
+                                                                                         null) != 0;
          boolean actual = boundingBox3D.doesIntersectWithRay3D(ray3D.getPoint(), ray3D.getDirection());
          assertEquals(expected, actual);
       }
@@ -1613,8 +1624,11 @@ public class BoundingBox3DTest
          Point3D expectedSecondIntersection = new Point3D();
          Point3D actualFirstIntersection = new Point3D();
          Point3D actualSecondIntersection = new Point3D();
-         expectedN = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(), line3D.getPoint(),
-                                                                                   line3D.getDirection(), expectedFirstIntersection,
+         expectedN = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBox3D.getMinPoint(),
+                                                                                   boundingBox3D.getMaxPoint(),
+                                                                                   line3D.getPoint(),
+                                                                                   line3D.getDirection(),
+                                                                                   expectedFirstIntersection,
                                                                                    expectedSecondIntersection);
          actualN = boundingBox3D.intersectionWithLine3D(line3D.getPoint(), line3D.getDirection(), actualFirstIntersection, actualSecondIntersection);
 
@@ -1682,10 +1696,15 @@ public class BoundingBox3DTest
          Point3D expectedSecondIntersection = new Point3D();
          Point3D actualFirstIntersection = new Point3D();
          Point3D actualSecondIntersection = new Point3D();
-         expectedN = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(),
-                                                                                          lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(),
-                                                                                          expectedFirstIntersection, expectedSecondIntersection);
-         actualN = boundingBox3D.intersectionWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), actualFirstIntersection,
+         expectedN = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBox3D.getMinPoint(),
+                                                                                          boundingBox3D.getMaxPoint(),
+                                                                                          lineSegment3D.getFirstEndpoint(),
+                                                                                          lineSegment3D.getSecondEndpoint(),
+                                                                                          expectedFirstIntersection,
+                                                                                          expectedSecondIntersection);
+         actualN = boundingBox3D.intersectionWithLineSegment3D(lineSegment3D.getFirstEndpoint(),
+                                                               lineSegment3D.getSecondEndpoint(),
+                                                               actualFirstIntersection,
                                                                actualSecondIntersection);
 
          assertEquals(expectedN, actualN);
@@ -1752,8 +1771,12 @@ public class BoundingBox3DTest
          Point3D expectedSecondIntersection = new Point3D();
          Point3D actualFirstIntersection = new Point3D();
          Point3D actualSecondIntersection = new Point3D();
-         expectedN = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBox3D.getMinPoint(), boundingBox3D.getMaxPoint(), ray3D.getPoint(),
-                                                                                  ray3D.getDirection(), expectedFirstIntersection, expectedSecondIntersection);
+         expectedN = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBox3D.getMinPoint(),
+                                                                                  boundingBox3D.getMaxPoint(),
+                                                                                  ray3D.getPoint(),
+                                                                                  ray3D.getDirection(),
+                                                                                  expectedFirstIntersection,
+                                                                                  expectedSecondIntersection);
          actualN = boundingBox3D.intersectionWithRay3D(ray3D.getPoint(), ray3D.getDirection(), actualFirstIntersection, actualSecondIntersection);
 
          assertEquals(expectedN, actualN);

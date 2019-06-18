@@ -96,8 +96,8 @@ public interface Tuple3DReadOnly
    /**
     * Selects a component of this tuple based on {@code index} and returns its value.
     * <p>
-    * For an {@code index} of 0, the corresponding component is {@code x}, 1 it is {@code y}, 2 it
-    * is {@code z}.
+    * For an {@code index} of 0, the corresponding component is {@code x}, 1 it is {@code y}, 2 it is
+    * {@code z}.
     * </p>
     *
     * @param index the index of the component to get.
@@ -108,22 +108,22 @@ public interface Tuple3DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX();
-      case 1:
-         return getY();
-      case 2:
-         return getZ();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX();
+         case 1:
+            return getY();
+         case 2:
+            return getZ();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
    /**
     * Selects a component of this tuple based on {@code index} and returns its value.
     * <p>
-    * For an {@code index} of 0, the corresponding component is {@code x}, 1 it is {@code y}, 2 it
-    * is {@code z}.
+    * For an {@code index} of 0, the corresponding component is {@code x}, 1 it is {@code y}, 2 it is
+    * {@code z}.
     * </p>
     *
     * @param index the index of the component to get.
@@ -134,20 +134,20 @@ public interface Tuple3DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX32();
-      case 1:
-         return getY32();
-      case 2:
-         return getZ32();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX32();
+         case 1:
+            return getY32();
+         case 2:
+            return getZ32();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
    /**
-    * Packs the components {@code x}, {@code y}, {@code z} in order in an array starting from its
-    * first index.
+    * Packs the components {@code x}, {@code y}, {@code z} in order in an array starting from its first
+    * index.
     *
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
@@ -160,7 +160,7 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in an array starting from
     * {@code startIndex}.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex       the index in the array where the first component is stored.
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
    default void get(int startIndex, double[] tupleArrayToPack)
@@ -171,8 +171,8 @@ public interface Tuple3DReadOnly
    }
 
    /**
-    * Packs the components {@code x}, {@code y}, {@code z} in order in an array starting from its
-    * first index.
+    * Packs the components {@code x}, {@code y}, {@code z} in order in an array starting from its first
+    * index.
     *
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
@@ -185,7 +185,7 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in an array starting from
     * {@code startIndex}.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex       the index in the array where the first component is stored.
     * @param tupleArrayToPack the array in which this tuple is stored. Modified.
     */
    default void get(int startIndex, float[] tupleArrayToPack)
@@ -210,7 +210,7 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in a column vector starting from
     * {@code startRow}.
     *
-    * @param startRow the first row index to start writing in the dense-matrix.
+    * @param startRow          the first row index to start writing in the dense-matrix.
     * @param tupleMatrixToPack the column vector in which this tuple is stored. Modified.
     */
    default void get(int startRow, DenseMatrix64F tupleMatrixToPack)
@@ -222,8 +222,8 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in a column vector starting from
     * {@code startRow} at the column index {@code column}.
     *
-    * @param startRow the first row index to start writing in the dense-matrix.
-    * @param column the column index to write in the dense-matrix.
+    * @param startRow          the first row index to start writing in the dense-matrix.
+    * @param column            the column index to write in the dense-matrix.
     * @param tupleMatrixToPack the matrix in which this tuple is stored. Modified.
     */
    default void get(int startRow, int column, DenseMatrix64F tupleMatrixToPack)
@@ -237,7 +237,7 @@ public interface Tuple3DReadOnly
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param other   the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -250,8 +250,7 @@ public interface Tuple3DReadOnly
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
     * @param other the other tuple to compare against this. Not modified.
-    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two tuples are exactly equal component-wise, {@code false} otherwise.
     */
    default boolean equals(Tuple3DReadOnly other)
    {

@@ -26,7 +26,7 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
     * If the two tuples have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param other   the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.

@@ -195,7 +195,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * </p>
     * 
     * @param observer the coordinates of the observer. Not modified.
-    * @param epsilon tolerance to determine whether to extend the line-of-sight.
+    * @param epsilon  tolerance to determine whether to extend the line-of-sight.
     * @return the edges in order that are in the line-of-sight.
     */
    default List<? extends HalfEdge3DReadOnly> lineOfSight(Point3DReadOnly observer, double epsilon)
@@ -345,7 +345,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * Tests whether the i<sup>th</sup> edge of this face is visible from the observer.
     *
     * @param observer the coordinates of the observer. Not modified.
-    * @param index the index &in; [0; {@link #getNumberOfEdges()}[ of the edge to test.
+    * @param index    the index &in; [0; {@link #getNumberOfEdges()}[ of the edge to test.
     * @return {@code true} if the observer can see the edge, {@code false} otherwise.
     */
    default boolean canObserverSeeEdge(Point3DReadOnly observer, int index)
@@ -360,7 +360,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * </p>
     *
     * @param observer the coordinates of the observer. Not modified.
-    * @param edge the edge to test. Not modified.
+    * @param edge     the edge to test. Not modified.
     * @return {@code true} if the observer can see the edge, {@code false} otherwise.
     */
    default boolean canObserverSeeEdge(Point3DReadOnly observer, HalfEdge3DReadOnly edge)
@@ -390,8 +390,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * </p>
     *
     * @param observer the coordinates of the observer. Not modified.
-    * @param epsilon the minimum distance between the observer and this face support plane for the face
-    *           to be visible.
+    * @param epsilon  the minimum distance between the observer and this face support plane for the
+    *                 face to be visible.
     * @return {@code true} if the observer can see this face, {@code false} otherwise.
     */
    default boolean canObserverSeeFace(Point3DReadOnly observer, double epsilon)
@@ -402,7 +402,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests whether the query is within {@code epsilon} of this face's support plane.
     *
-    * @param query the coordinates of the query. Not modified.
+    * @param query   the coordinates of the query. Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be on this face's support plane, {@code false}
     *         otherwise.
@@ -418,7 +418,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests whether the query is located inside this face.
     *
-    * @param query the coordinates of the query. Not modified.
+    * @param query   the coordinates of the query. Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the point is an interior point, {@code false} otherwise.
     */
@@ -665,9 +665,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Computes the orthogonal projection of a point on this face.
     * 
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this face is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
@@ -722,7 +722,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
     * 
-    * @param other the other face to compare against this. Not modified.
+    * @param other   the other face to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
     */
@@ -742,7 +742,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
     * 
-    * @param other the other face to compare against this. Not modified.
+    * @param other   the other face to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.
     */

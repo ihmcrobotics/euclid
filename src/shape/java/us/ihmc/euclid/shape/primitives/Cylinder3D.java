@@ -72,9 +72,9 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * Creates a new cylinder 3D and initializes its pose and size.
     * 
     * @param position the position of the center. Not modified.
-    * @param axis the axis of revolution. Not modified.
-    * @param length the length of this cylinder.
-    * @param radius the radius of this cylinder.
+    * @param axis     the axis of revolution. Not modified.
+    * @param length   the length of this cylinder.
+    * @param radius   the radius of this cylinder.
     * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
     */
    public Cylinder3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
@@ -191,7 +191,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other cylinder to compare against this. Not modified.
+    * @param other   the other cylinder to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.
     */
@@ -205,7 +205,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
     * Compares {@code this} and {@code other} to determine if the two cylinders are geometrically
     * similar.
     *
-    * @param other the cylinder to compare to. Not modified.
+    * @param other   the cylinder to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
     */

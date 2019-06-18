@@ -1295,155 +1295,235 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
          Vertex3D v42 = new Vertex3D(-0.18942754382228977000, 0.11906857959442607000, 0.15182676701982100000);
          List<Face3D> faces = new ArrayList<>();
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v1), new HalfEdge3D(v1, v2), new HalfEdge3D(v2, v0)),
-                              new Vector3D(0.77974192263920370000, -0.00000000000000009521, -0.62610105740121360000), constructionEpsilon));
+                              new Vector3D(0.77974192263920370000, -0.00000000000000009521, -0.62610105740121360000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v3), new HalfEdge3D(v3, v2), new HalfEdge3D(v2, v1)),
-                              new Vector3D(0.54979538036117710000, -0.70910871118184650000, -0.44146333421874234000), constructionEpsilon));
+                              new Vector3D(0.54979538036117710000, -0.70910871118184650000, -0.44146333421874234000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v0), new HalfEdge3D(v0, v4), new HalfEdge3D(v4, v1)),
-                              new Vector3D(-0.07454392332283849000, 0.64180156697008430000, -0.76323911857974300000), constructionEpsilon));
+                              new Vector3D(-0.07454392332283849000, 0.64180156697008430000, -0.76323911857974300000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v2), new HalfEdge3D(v2, v5), new HalfEdge3D(v5, v0)),
-                              new Vector3D(0.72912135612061290000, 0.64180156697008430000, 0.23764005698447144000), constructionEpsilon));
+                              new Vector3D(0.72912135612061290000, 0.64180156697008430000, 0.23764005698447144000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v4), new HalfEdge3D(v4, v6), new HalfEdge3D(v6, v1)),
-                              new Vector3D(-0.89895151216755550000, 0.18855645528825300000, -0.39538922840764710000), constructionEpsilon));
+                              new Vector3D(-0.89895151216755550000, 0.18855645528825300000, -0.39538922840764710000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v3, v1), new HalfEdge3D(v1, v6), new HalfEdge3D(v6, v3)),
-                              new Vector3D(-0.52592770943899230000, -0.75017489699518560000, -0.40079629285026770000), constructionEpsilon));
+                              new Vector3D(-0.52592770943899230000, -0.75017489699518560000, -0.40079629285026770000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v2, v3), new HalfEdge3D(v3, v7), new HalfEdge3D(v7, v2)),
-                              new Vector3D(0.27773757000445903000, -0.75017489699518560000, 0.60008288271394690000), constructionEpsilon));
+                              new Vector3D(0.27773757000445903000, -0.75017489699518560000, 0.60008288271394690000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v5, v2), new HalfEdge3D(v2, v7), new HalfEdge3D(v7, v5)),
-                              new Vector3D(0.19188689125933103000, 0.18855645528825307000, 0.96313336778037050000), constructionEpsilon));
+                              new Vector3D(0.19188689125933103000, 0.18855645528825307000, 0.96313336778037050000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v5), new HalfEdge3D(v5, v8), new HalfEdge3D(v8, v0)),
-                              new Vector3D(0.05935264926148290000, 0.90518507577347680000, 0.42085299288778740000), constructionEpsilon));
+                              new Vector3D(0.05935264926148290000, 0.90518507577347680000, 0.42085299288778740000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v0), new HalfEdge3D(v0, v9), new HalfEdge3D(v9, v4)),
-                              new Vector3D(-0.43676301882924334000, 0.89940760930531040000, -0.01743610354614344000), constructionEpsilon));
+                              new Vector3D(-0.43676301882924334000, 0.89940760930531040000, -0.01743610354614344000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v8), new HalfEdge3D(v8, v9), new HalfEdge3D(v9, v0)),
-                              new Vector3D(-0.43604452678201550000, 0.89981012662538550000, -0.01438425131370123000), constructionEpsilon));
+                              new Vector3D(-0.43604452678201550000, 0.89981012662538550000, -0.01438425131370123000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v5, v7), new HalfEdge3D(v7, v10), new HalfEdge3D(v10, v5)),
-                              new Vector3D(-0.08140272784372796000, 0.27578042616710907000, 0.95776758790569220000), constructionEpsilon));
+                              new Vector3D(-0.08140272784372796000, 0.27578042616710907000, 0.95776758790569220000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v8, v5), new HalfEdge3D(v5, v10), new HalfEdge3D(v10, v8)),
-                              new Vector3D(-0.17603085564385015000, 0.75138234096607160000, 0.63595417723735430000), constructionEpsilon));
+                              new Vector3D(-0.17603085564385015000, 0.75138234096607160000, 0.63595417723735430000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v8, v10), new HalfEdge3D(v10, v11), new HalfEdge3D(v11, v8)),
-                              new Vector3D(-0.40783426164494840000, 0.69283716564324720000, 0.59468300541713100000), constructionEpsilon));
+                              new Vector3D(-0.40783426164494840000, 0.69283716564324720000, 0.59468300541713100000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v9, v8), new HalfEdge3D(v8, v11), new HalfEdge3D(v11, v9)),
-                              new Vector3D(-0.55632270745373100000, 0.77297110680139450000, 0.30499297241342743000), constructionEpsilon));
+                              new Vector3D(-0.55632270745373100000, 0.77297110680139450000, 0.30499297241342743000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v9), new HalfEdge3D(v9, v12), new HalfEdge3D(v12, v4)),
-                              new Vector3D(-0.87774416956391610000, 0.47912860765248216000, -0.00097474383569708630), constructionEpsilon));
+                              new Vector3D(-0.87774416956391610000, 0.47912860765248216000, -0.00097474383569708630),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v6, v4), new HalfEdge3D(v4, v12), new HalfEdge3D(v12, v6)),
-                              new Vector3D(-0.93886549465982120000, 0.24023839562892355000, -0.24661122481105790000), constructionEpsilon));
+                              new Vector3D(-0.93886549465982120000, 0.24023839562892355000, -0.24661122481105790000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v12, v13), new HalfEdge3D(v13, v14), new HalfEdge3D(v14, v12)),
-                              new Vector3D(-0.86381177330430940000, 0.06517396091166652000, 0.49958139989390005000), constructionEpsilon));
+                              new Vector3D(-0.86381177330430940000, 0.06517396091166652000, 0.49958139989390005000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v6, v12), new HalfEdge3D(v12, v14), new HalfEdge3D(v14, v6)),
-                              new Vector3D(-0.92337707251808760000, -0.11556401088414471000, 0.36608706797194523000), constructionEpsilon));
+                              new Vector3D(-0.92337707251808760000, -0.11556401088414471000, 0.36608706797194523000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v3, v6), new HalfEdge3D(v6, v14), new HalfEdge3D(v14, v3)),
-                              new Vector3D(-0.85828364091065290000, -0.39923562533379914000, 0.32242845285347240000), constructionEpsilon));
+                              new Vector3D(-0.85828364091065290000, -0.39923562533379914000, 0.32242845285347240000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v7, v3), new HalfEdge3D(v3, v14), new HalfEdge3D(v14, v7)),
-                              new Vector3D(-0.39119566121186483000, -0.48421494998826620000, 0.78262496564885590000), constructionEpsilon));
+                              new Vector3D(-0.39119566121186483000, -0.48421494998826620000, 0.78262496564885590000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v9, v11), new HalfEdge3D(v11, v15), new HalfEdge3D(v15, v9)),
-                              new Vector3D(-0.68040773809443640000, 0.63777895053491530000, 0.36094780813269270000), constructionEpsilon));
+                              new Vector3D(-0.68040773809443640000, 0.63777895053491530000, 0.36094780813269270000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v12, v9), new HalfEdge3D(v9, v15), new HalfEdge3D(v15, v12)),
-                              new Vector3D(-0.86408904005581990000, 0.46464624680883765000, 0.19353034951105855000), constructionEpsilon));
+                              new Vector3D(-0.86408904005581990000, 0.46464624680883765000, 0.19353034951105855000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v14, v13), new HalfEdge3D(v13, v16), new HalfEdge3D(v16, v14)),
-                              new Vector3D(-0.72400262863476380000, 0.10477105963985398000, 0.68179411759848340000), constructionEpsilon));
+                              new Vector3D(-0.72400262863476380000, 0.10477105963985398000, 0.68179411759848340000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v7, v14), new HalfEdge3D(v14, v16), new HalfEdge3D(v16, v7)),
-                              new Vector3D(-0.46836011998279030000, -0.15016447478870562000, 0.87068331126830390000), constructionEpsilon));
+                              new Vector3D(-0.46836011998279030000, -0.15016447478870562000, 0.87068331126830390000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v10, v7), new HalfEdge3D(v7, v16), new HalfEdge3D(v16, v10)),
-                              new Vector3D(-0.08334517953812422000, 0.27529722201467943000, 0.95773953692993090000), constructionEpsilon));
+                              new Vector3D(-0.08334517953812422000, 0.27529722201467943000, 0.95773953692993090000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v10, v16), new HalfEdge3D(v16, v17), new HalfEdge3D(v17, v10)),
-                              new Vector3D(-0.46961519763372760000, 0.36191976922094204000, 0.80527985619813880000), constructionEpsilon));
+                              new Vector3D(-0.46961519763372760000, 0.36191976922094204000, 0.80527985619813880000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v11, v10), new HalfEdge3D(v10, v17), new HalfEdge3D(v17, v11)),
-                              new Vector3D(-0.43541679761518950000, 0.66321358945884230000, 0.60873635271080320000), constructionEpsilon));
+                              new Vector3D(-0.43541679761518950000, 0.66321358945884230000, 0.60873635271080320000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v11, v17), new HalfEdge3D(v17, v18), new HalfEdge3D(v18, v11)),
-                              new Vector3D(-0.59027046098820020000, 0.56892553373242140000, 0.57262947876620630000), constructionEpsilon));
+                              new Vector3D(-0.59027046098820020000, 0.56892553373242140000, 0.57262947876620630000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v15, v11), new HalfEdge3D(v11, v18), new HalfEdge3D(v18, v15)),
-                              new Vector3D(-0.68237631262196360000, 0.58955332858006870000, 0.43219143991131220000), constructionEpsilon));
+                              new Vector3D(-0.68237631262196360000, 0.58955332858006870000, 0.43219143991131220000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v17, v16), new HalfEdge3D(v16, v19), new HalfEdge3D(v19, v17)),
-                              new Vector3D(-0.57297770148089210000, 0.31599154140635877000, 0.75620493212178090000), constructionEpsilon));
+                              new Vector3D(-0.57297770148089210000, 0.31599154140635877000, 0.75620493212178090000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v18, v17), new HalfEdge3D(v17, v19), new HalfEdge3D(v19, v18)),
-                              new Vector3D(-0.60344663802777170000, 0.54455351498763290000, 0.58250632989487180000), constructionEpsilon));
+                              new Vector3D(-0.60344663802777170000, 0.54455351498763290000, 0.58250632989487180000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v12, v15), new HalfEdge3D(v15, v20), new HalfEdge3D(v20, v12)),
-                              new Vector3D(-0.86760220789455310000, 0.35443459563009800000, 0.34877288638457205000), constructionEpsilon));
+                              new Vector3D(-0.86760220789455310000, 0.35443459563009800000, 0.34877288638457205000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v18, v19), new HalfEdge3D(v19, v21), new HalfEdge3D(v21, v18)),
-                              new Vector3D(-0.65810405783623990000, 0.49311416277672654000, 0.56897932434182800000), constructionEpsilon));
+                              new Vector3D(-0.65810405783623990000, 0.49311416277672654000, 0.56897932434182800000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v16, v13), new HalfEdge3D(v13, v22), new HalfEdge3D(v22, v16)),
-                              new Vector3D(-0.63720615128903680000, 0.24676755083455865000, 0.73011923451894270000), constructionEpsilon));
+                              new Vector3D(-0.63720615128903680000, 0.24676755083455865000, 0.73011923451894270000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v19, v16), new HalfEdge3D(v16, v22), new HalfEdge3D(v22, v19)),
-                              new Vector3D(-0.57694180564348130000, 0.31271529855622304000, 0.75455105523067930000), constructionEpsilon));
+                              new Vector3D(-0.57694180564348130000, 0.31271529855622304000, 0.75455105523067930000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v13, v12), new HalfEdge3D(v12, v23), new HalfEdge3D(v23, v13)),
-                              new Vector3D(-0.86846849503871360000, 0.20121576656995235000, 0.45307249796126280000), constructionEpsilon));
+                              new Vector3D(-0.86846849503871360000, 0.20121576656995235000, 0.45307249796126280000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v12, v20), new HalfEdge3D(v20, v23), new HalfEdge3D(v23, v12)),
-                              new Vector3D(-0.86867054800199670000, 0.21046189859871320000, 0.44846099972253520000), constructionEpsilon));
+                              new Vector3D(-0.86867054800199670000, 0.21046189859871320000, 0.44846099972253520000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v13, v23), new HalfEdge3D(v23, v24), new HalfEdge3D(v24, v13)),
-                              new Vector3D(-0.72630448391905990000, 0.40279199330498633000, 0.55699228609421840000), constructionEpsilon));
+                              new Vector3D(-0.72630448391905990000, 0.40279199330498633000, 0.55699228609421840000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v22, v13), new HalfEdge3D(v13, v24), new HalfEdge3D(v24, v22)),
-                              new Vector3D(-0.70052659988671840000, 0.40017745323459910000, 0.59086418809555850000), constructionEpsilon));
+                              new Vector3D(-0.70052659988671840000, 0.40017745323459910000, 0.59086418809555850000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v22, v24), new HalfEdge3D(v24, v25), new HalfEdge3D(v25, v22)),
-                              new Vector3D(-0.69360761582348750000, 0.42076727405888470000, 0.58469083826644030000), constructionEpsilon));
+                              new Vector3D(-0.69360761582348750000, 0.42076727405888470000, 0.58469083826644030000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v19, v22), new HalfEdge3D(v22, v25), new HalfEdge3D(v25, v19)),
-                              new Vector3D(-0.66607567833391500000, 0.44471088828418565000, 0.59881167037183360000), constructionEpsilon));
+                              new Vector3D(-0.66607567833391500000, 0.44471088828418565000, 0.59881167037183360000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v24, v23), new HalfEdge3D(v23, v26), new HalfEdge3D(v26, v24)),
-                              new Vector3D(-0.72332337926704910000, 0.41173701913067150000, 0.55432473883373220000), constructionEpsilon));
+                              new Vector3D(-0.72332337926704910000, 0.41173701913067150000, 0.55432473883373220000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v25, v24), new HalfEdge3D(v24, v27), new HalfEdge3D(v27, v25)),
-                              new Vector3D(-0.69667679566416640000, 0.42783137533501725000, 0.57584872723837530000), constructionEpsilon));
+                              new Vector3D(-0.69667679566416640000, 0.42783137533501725000, 0.57584872723837530000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v19, v25), new HalfEdge3D(v25, v28), new HalfEdge3D(v28, v19)),
-                              new Vector3D(-0.66507095264885750000, 0.46552084667686080000, 0.58392719516391720000), constructionEpsilon));
+                              new Vector3D(-0.66507095264885750000, 0.46552084667686080000, 0.58392719516391720000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v21, v19), new HalfEdge3D(v19, v28), new HalfEdge3D(v28, v21)),
-                              new Vector3D(-0.65922950841118770000, 0.48995398977437990000, 0.57040471872531910000), constructionEpsilon));
+                              new Vector3D(-0.65922950841118770000, 0.48995398977437990000, 0.57040471872531910000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v29, v21), new HalfEdge3D(v21, v30), new HalfEdge3D(v30, v29)),
-                              new Vector3D(-0.70114434300667240000, 0.44852535088474504000, 0.55427576158754970000), constructionEpsilon));
+                              new Vector3D(-0.70114434300667240000, 0.44852535088474504000, 0.55427576158754970000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v23, v20), new HalfEdge3D(v20, v31), new HalfEdge3D(v31, v23)),
-                              new Vector3D(-0.73282019574173680000, 0.44677430385297495000, 0.51319322104810800000), constructionEpsilon));
+                              new Vector3D(-0.73282019574173680000, 0.44677430385297495000, 0.51319322104810800000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v26, v23), new HalfEdge3D(v23, v31), new HalfEdge3D(v31, v26)),
-                              new Vector3D(-0.72836410096192520000, 0.44766087198529586000, 0.51873449868240970000), constructionEpsilon));
+                              new Vector3D(-0.72836410096192520000, 0.44766087198529586000, 0.51873449868240970000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v29, v26), new HalfEdge3D(v26, v31), new HalfEdge3D(v31, v29)),
-                              new Vector3D(-0.71501163875767040000, 0.45693177292667970000, 0.52912353125820440000), constructionEpsilon));
+                              new Vector3D(-0.71501163875767040000, 0.45693177292667970000, 0.52912353125820440000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v21, v29), new HalfEdge3D(v29, v31), new HalfEdge3D(v31, v21)),
-                              new Vector3D(-0.70856159221403430000, 0.46306077685711730000, 0.53246144177357660000), constructionEpsilon));
+                              new Vector3D(-0.70856159221403430000, 0.46306077685711730000, 0.53246144177357660000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v18, v21), new HalfEdge3D(v21, v31), new HalfEdge3D(v31, v18)),
-                              new Vector3D(-0.69047474628578290000, 0.48527136661633985000, 0.53642923623148460000), constructionEpsilon));
+                              new Vector3D(-0.69047474628578290000, 0.48527136661633985000, 0.53642923623148460000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v15, v18), new HalfEdge3D(v18, v31), new HalfEdge3D(v31, v15)),
-                              new Vector3D(-0.71276846310571180000, 0.53442230722506070000, 0.45426194595427494000), constructionEpsilon));
+                              new Vector3D(-0.71276846310571180000, 0.53442230722506070000, 0.45426194595427494000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v20, v15), new HalfEdge3D(v15, v31), new HalfEdge3D(v31, v20)),
-                              new Vector3D(-0.74133949575435320000, 0.49509937789431450000, 0.45309199732873650000), constructionEpsilon));
+                              new Vector3D(-0.74133949575435320000, 0.49509937789431450000, 0.45309199732873650000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v25, v27), new HalfEdge3D(v27, v32), new HalfEdge3D(v32, v25)),
-                              new Vector3D(-0.69452811078689790000, 0.43510681876864320000, 0.57298582843541010000), constructionEpsilon));
+                              new Vector3D(-0.69452811078689790000, 0.43510681876864320000, 0.57298582843541010000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v28, v25), new HalfEdge3D(v25, v32), new HalfEdge3D(v32, v28)),
-                              new Vector3D(-0.69187737803803810000, 0.43976659756973124000, 0.57263516607099130000), constructionEpsilon));
+                              new Vector3D(-0.69187737803803810000, 0.43976659756973124000, 0.57263516607099130000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v24, v26), new HalfEdge3D(v26, v33), new HalfEdge3D(v33, v24)),
-                              new Vector3D(-0.71106398826683910000, 0.42648348767489920000, 0.55901685066794790000), constructionEpsilon));
+                              new Vector3D(-0.71106398826683910000, 0.42648348767489920000, 0.55901685066794790000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v27, v24), new HalfEdge3D(v24, v33), new HalfEdge3D(v33, v27)),
-                              new Vector3D(-0.70860113346811680000, 0.42748999606631740000, 0.56137040972153140000), constructionEpsilon));
+                              new Vector3D(-0.70860113346811680000, 0.42748999606631740000, 0.56137040972153140000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v26, v29), new HalfEdge3D(v29, v33), new HalfEdge3D(v33, v26)),
-                              new Vector3D(-0.70978355893156320000, 0.43508079539005884000, 0.55399639074022660000), constructionEpsilon));
+                              new Vector3D(-0.70978355893156320000, 0.43508079539005884000, 0.55399639074022660000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v27, v33), new HalfEdge3D(v33, v34), new HalfEdge3D(v34, v35), new HalfEdge3D(v35, v27)),
-                              new Vector3D(-0.70175342024421780000, 0.43780435108074900000, 0.56202267512112560000), constructionEpsilon));
+                              new Vector3D(-0.70175342024421780000, 0.43780435108074900000, 0.56202267512112560000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v32, v27), new HalfEdge3D(v27, v35), new HalfEdge3D(v35, v32)),
-                              new Vector3D(-0.69799007937168470000, 0.43900177475399390000, 0.56576257463847220000), constructionEpsilon));
+                              new Vector3D(-0.69799007937168470000, 0.43900177475399390000, 0.56576257463847220000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v29, v30), new HalfEdge3D(v30, v36), new HalfEdge3D(v36, v37), new HalfEdge3D(v37, v29)),
-                              new Vector3D(-0.70207503239470800000, 0.44482862644756510000, 0.55607386378137050000), constructionEpsilon));
+                              new Vector3D(-0.70207503239470800000, 0.44482862644756510000, 0.55607386378137050000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v33, v29), new HalfEdge3D(v29, v37), new HalfEdge3D(v37, v33)),
-                              new Vector3D(-0.70348169396268320000, 0.44205825363331763000, 0.55650517217188090000), constructionEpsilon));
+                              new Vector3D(-0.70348169396268320000, 0.44205825363331763000, 0.55650517217188090000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v21, v28), new HalfEdge3D(v28, v38), new HalfEdge3D(v38, v21)),
-                              new Vector3D(-0.69377446233767970000, 0.44966481132332026000, 0.56256426554272580000), constructionEpsilon));
+                              new Vector3D(-0.69377446233767970000, 0.44966481132332026000, 0.56256426554272580000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v30, v21), new HalfEdge3D(v21, v38), new HalfEdge3D(v38, v30)),
-                              new Vector3D(-0.69499918040443040000, 0.44912483371224965000, 0.56148287861707250000), constructionEpsilon));
+                              new Vector3D(-0.69499918040443040000, 0.44912483371224965000, 0.56148287861707250000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v32, v35), new HalfEdge3D(v35, v39), new HalfEdge3D(v39, v38), new HalfEdge3D(v38, v32)),
-                              new Vector3D(-0.69759573778429120000, 0.44141468321204136000, 0.56436979372571260000), constructionEpsilon));
+                              new Vector3D(-0.69759573778429120000, 0.44141468321204136000, 0.56436979372571260000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v28, v32), new HalfEdge3D(v32, v38), new HalfEdge3D(v38, v28)),
-                              new Vector3D(-0.69410024963427760000, 0.44600740212414575000, 0.56506835047461620000), constructionEpsilon));
-         faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v30, v38), new HalfEdge3D(v38, v39), new HalfEdge3D(v39, v40), new HalfEdge3D(v40, v41),
+                              new Vector3D(-0.69410024963427760000, 0.44600740212414575000, 0.56506835047461620000),
+                              constructionEpsilon));
+         faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v30, v38),
+                                            new HalfEdge3D(v38, v39),
+                                            new HalfEdge3D(v39, v40),
+                                            new HalfEdge3D(v40, v41),
                                             new HalfEdge3D(v41, v30)),
-                              new Vector3D(-0.69822959062416780000, 0.44380048177333326000, 0.56170861766093970000), constructionEpsilon));
+                              new Vector3D(-0.69822959062416780000, 0.44380048177333326000, 0.56170861766093970000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v33, v37), new HalfEdge3D(v37, v34), new HalfEdge3D(v34, v33)),
-                              new Vector3D(-0.70189294643401580000, 0.43944726247160830000, 0.56056435424702590000), constructionEpsilon));
-         faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v34, v37), new HalfEdge3D(v37, v36), new HalfEdge3D(v36, v41), new HalfEdge3D(v41, v42),
+                              new Vector3D(-0.70189294643401580000, 0.43944726247160830000, 0.56056435424702590000),
+                              constructionEpsilon));
+         faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v34, v37),
+                                            new HalfEdge3D(v37, v36),
+                                            new HalfEdge3D(v36, v41),
+                                            new HalfEdge3D(v41, v42),
                                             new HalfEdge3D(v42, v34)),
-                              new Vector3D(-0.70016999203383450000, 0.44211587774038110000, 0.56062066756871560000), constructionEpsilon));
+                              new Vector3D(-0.70016999203383450000, 0.44211587774038110000, 0.56062066756871560000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v35, v34), new HalfEdge3D(v34, v42), new HalfEdge3D(v42, v39), new HalfEdge3D(v39, v35)),
-                              new Vector3D(-0.69947759231787510000, 0.44126117424480665000, 0.56215627182242020000), constructionEpsilon));
+                              new Vector3D(-0.69947759231787510000, 0.44126117424480665000, 0.56215627182242020000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v40, v39), new HalfEdge3D(v39, v42), new HalfEdge3D(v42, v40)),
-                              new Vector3D(-0.69913829852196350000, 0.44204525633165100000, 0.56196230380204190000), constructionEpsilon));
+                              new Vector3D(-0.69913829852196350000, 0.44204525633165100000, 0.56196230380204190000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v36, v30), new HalfEdge3D(v30, v41), new HalfEdge3D(v41, v36)),
-                              new Vector3D(-0.69959231065829750000, 0.44370213829446964000, 0.56008839600611220000), constructionEpsilon));
+                              new Vector3D(-0.69959231065829750000, 0.44370213829446964000, 0.56008839600611220000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v40, v42), new HalfEdge3D(v42, v41), new HalfEdge3D(v41, v40)),
-                              new Vector3D(-0.70027522920976590000, 0.44235288603661520000, 0.56030217523251400000), constructionEpsilon));
+                              new Vector3D(-0.70027522920976590000, 0.44235288603661520000, 0.56030217523251400000),
+                              constructionEpsilon));
          convexPolytope3D = new ConvexPolytope3D(faces, constructionEpsilon);
          troublesomePoint.set(-0.18974063099743910000, 0.11980345470548110000, 0.15085730736946484000);
       }
@@ -1460,7 +1540,8 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
          Vertex3D v3 = new Vertex3D(2.45520990991262800000, -0.98917066217772060000, 0.05290903670859981000);
          List<Face3D> faces = new ArrayList<>();
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v1), new HalfEdge3D(v1, v2), new HalfEdge3D(v2, v3), new HalfEdge3D(v3, v0)),
-                              new Vector3D(-0.92452616874505020000, 0.37970580001758520000, 0.03278519084288889000), constructionEpsilon));
+                              new Vector3D(-0.92452616874505020000, 0.37970580001758520000, 0.03278519084288889000),
+                              constructionEpsilon));
          convexPolytope3D = new ConvexPolytope3D(faces, constructionEpsilon);
          troublesomePoint.set(2.63188242034863700000, -0.54493368729793970000, -0.10996947561500714000);
       }
@@ -1551,261 +1632,389 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
          Vertex3D v69 = new Vertex3D(0.61079926615714570000, 0.05573606365719769000, -0.77195010197004300000);
          List<Face3D> faces = new ArrayList<>();
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v1), new HalfEdge3D(v1, v2), new HalfEdge3D(v2, v0)),
-                              new Vector3D(-0.53343389697778020000, -0.73955087529481420000, -0.41050308209046754000), constructionEpsilon));
+                              new Vector3D(-0.53343389697778020000, -0.73955087529481420000, -0.41050308209046754000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v3), new HalfEdge3D(v3, v4), new HalfEdge3D(v4, v1)),
-                              new Vector3D(0.52225030474281360000, -0.73955087529481420000, 0.42463999110624530000), constructionEpsilon));
+                              new Vector3D(0.52225030474281360000, -0.73955087529481420000, 0.42463999110624530000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v5, v0), new HalfEdge3D(v0, v6), new HalfEdge3D(v6, v5)),
-                              new Vector3D(-0.71809487864477720000, 0.67304031945918660000, -0.17707759216348860000), constructionEpsilon));
+                              new Vector3D(-0.71809487864477720000, 0.67304031945918660000, -0.17707759216348860000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v3, v5), new HalfEdge3D(v5, v7), new HalfEdge3D(v7, v3)),
-                              new Vector3D(0.33758932307581650000, 0.67304031945918660000, 0.65806548103322370000), constructionEpsilon));
+                              new Vector3D(0.33758932307581650000, 0.67304031945918660000, 0.65806548103322370000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v5), new HalfEdge3D(v5, v8), new HalfEdge3D(v8, v0)),
-                              new Vector3D(-0.83204526346120360000, 0.47930678004792265000, 0.27922336963776623000), constructionEpsilon));
+                              new Vector3D(-0.83204526346120360000, 0.47930678004792265000, 0.27922336963776623000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v0), new HalfEdge3D(v0, v8), new HalfEdge3D(v8, v1)),
-                              new Vector3D(-0.63601387424549530000, -0.76122168658611360000, -0.12660132557847903000), constructionEpsilon));
+                              new Vector3D(-0.63601387424549530000, -0.76122168658611360000, -0.12660132557847903000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v3, v1), new HalfEdge3D(v1, v8), new HalfEdge3D(v8, v3)),
-                              new Vector3D(0.26957757461803783000, -0.76122168658611360000, 0.58980460758970780000), constructionEpsilon));
+                              new Vector3D(0.26957757461803783000, -0.76122168658611360000, 0.58980460758970780000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v5, v3), new HalfEdge3D(v3, v8), new HalfEdge3D(v8, v5)),
-                              new Vector3D(-0.08023800787100821000, 0.47930678004792270000, 0.87397189468139320000), constructionEpsilon));
+                              new Vector3D(-0.08023800787100821000, 0.47930678004792270000, 0.87397189468139320000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v2, v1), new HalfEdge3D(v1, v9), new HalfEdge3D(v9, v2)),
-                              new Vector3D(0.17667773796444133000, -0.68743831064915520000, -0.70442426559538950000), constructionEpsilon));
+                              new Vector3D(0.17667773796444133000, -0.68743831064915520000, -0.70442426559538950000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v4), new HalfEdge3D(v4, v9), new HalfEdge3D(v9, v1)),
-                              new Vector3D(0.64485385726953810000, -0.68743831064915520000, -0.33405399536068090000), constructionEpsilon));
+                              new Vector3D(0.64485385726953810000, -0.68743831064915520000, -0.33405399536068090000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v2), new HalfEdge3D(v2, v10), new HalfEdge3D(v10, v0)),
-                              new Vector3D(-0.38117859819855304000, 0.01647788529582807000, -0.92435456161127030000), constructionEpsilon));
+                              new Vector3D(-0.38117859819855304000, 0.01647788529582807000, -0.92435456161127030000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v6, v0), new HalfEdge3D(v0, v10), new HalfEdge3D(v10, v6)),
-                              new Vector3D(-0.40281734336076440000, 0.18200663211461800000, -0.89700154612691160000), constructionEpsilon));
+                              new Vector3D(-0.40281734336076440000, 0.18200663211461800000, -0.89700154612691160000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v3, v7), new HalfEdge3D(v7, v11), new HalfEdge3D(v11, v3)),
-                              new Vector3D(0.96562891965509190000, 0.18200663211461793000, 0.18556501661691013000), constructionEpsilon));
+                              new Vector3D(0.96562891965509190000, 0.18200663211461793000, 0.18556501661691013000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v3), new HalfEdge3D(v3, v11), new HalfEdge3D(v11, v4)),
-                              new Vector3D(0.98726766481730310000, 0.01647788529582871700, 0.15821200113255166000), constructionEpsilon));
+                              new Vector3D(0.98726766481730310000, 0.01647788529582871700, 0.15821200113255166000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v5, v6), new HalfEdge3D(v6, v12), new HalfEdge3D(v12, v5)),
-                              new Vector3D(-0.03033480671910025400, 0.89613443538402670000, -0.44274470433904284000), constructionEpsilon));
+                              new Vector3D(-0.03033480671910025400, 0.89613443538402670000, -0.44274470433904284000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v7, v5), new HalfEdge3D(v5, v12), new HalfEdge3D(v12, v7)),
-                              new Vector3D(0.43784131258599750000, 0.89613443538402680000, -0.07237443410433325000), constructionEpsilon));
+                              new Vector3D(0.43784131258599750000, 0.89613443538402680000, -0.07237443410433325000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v11), new HalfEdge3D(v11, v13), new HalfEdge3D(v13, v4)),
-                              new Vector3D(0.93688567003073890000, -0.11684807863016765000, -0.32953265060004533000), constructionEpsilon));
+                              new Vector3D(0.93688567003073890000, -0.11684807863016765000, -0.32953265060004533000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v2, v9), new HalfEdge3D(v9, v14), new HalfEdge3D(v14, v2)),
-                              new Vector3D(0.27112452691889900000, -0.42164997122471370000, -0.86527613665765770000), constructionEpsilon));
+                              new Vector3D(0.27112452691889900000, -0.42164997122471370000, -0.86527613665765770000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v10, v2), new HalfEdge3D(v2, v14), new HalfEdge3D(v14, v10)),
-                              new Vector3D(0.10506844777430578000, -0.11684807863016812000, -0.98757640099525260000), constructionEpsilon));
+                              new Vector3D(0.10506844777430578000, -0.11684807863016812000, -0.98757640099525260000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v6, v10), new HalfEdge3D(v10, v15), new HalfEdge3D(v15, v6)),
-                              new Vector3D(0.03152554391539832000, 0.44572912360236650000, -0.89461259126702710000), constructionEpsilon));
+                              new Vector3D(0.03152554391539832000, 0.44572912360236650000, -0.89461259126702710000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v12, v6), new HalfEdge3D(v6, v15), new HalfEdge3D(v15, v12)),
-                              new Vector3D(0.12090366033912281000, 0.72748652465708990000, -0.67538556496193450000), constructionEpsilon));
+                              new Vector3D(0.12090366033912281000, 0.72748652465708990000, -0.67538556496193450000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v12, v15), new HalfEdge3D(v15, v16), new HalfEdge3D(v16, v12)),
-                              new Vector3D(0.51363065513530670000, 0.56092287001550810000, -0.64926811410914140000), constructionEpsilon));
+                              new Vector3D(0.51363065513530670000, 0.56092287001550810000, -0.64926811410914140000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v7, v12), new HalfEdge3D(v12, v16), new HalfEdge3D(v16, v7)),
-                              new Vector3D(0.62943071184101750000, 0.72748652465709000000, -0.27309400475597995000), constructionEpsilon));
+                              new Vector3D(0.62943071184101750000, 0.72748652465709000000, -0.27309400475597995000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v11, v7), new HalfEdge3D(v7, v16), new HalfEdge3D(v16, v11)),
-                              new Vector3D(0.86334276617183180000, 0.44572912360236660000, -0.23656884087181926000), constructionEpsilon));
+                              new Vector3D(0.86334276617183180000, 0.44572912360236660000, -0.23656884087181926000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v15, v17), new HalfEdge3D(v17, v16), new HalfEdge3D(v16, v15)),
-                              new Vector3D(0.55019605343337610000, 0.46214563339872740000, -0.69548955155115510000), constructionEpsilon));
+                              new Vector3D(0.55019605343337610000, 0.46214563339872740000, -0.69548955155115510000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v16, v17), new HalfEdge3D(v17, v18), new HalfEdge3D(v18, v16)),
-                              new Vector3D(0.69945784819127650000, 0.33868767594496590000, -0.62932454009567050000), constructionEpsilon));
+                              new Vector3D(0.69945784819127650000, 0.33868767594496590000, -0.62932454009567050000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v11, v16), new HalfEdge3D(v16, v18), new HalfEdge3D(v18, v11)),
-                              new Vector3D(0.83911196281210610000, 0.32502673046230780000, -0.43617512348894555000), constructionEpsilon));
+                              new Vector3D(0.83911196281210610000, 0.32502673046230780000, -0.43617512348894555000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v13, v11), new HalfEdge3D(v11, v18), new HalfEdge3D(v18, v13)),
-                              new Vector3D(0.89283056974527410000, 0.01387051019632242000, -0.45017905623787400000), constructionEpsilon));
+                              new Vector3D(0.89283056974527410000, 0.01387051019632242000, -0.45017905623787400000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v10, v14), new HalfEdge3D(v14, v19), new HalfEdge3D(v19, v10)),
-                              new Vector3D(0.23261530592369570000, 0.01387051019632302300, -0.97246991130673000000), constructionEpsilon));
+                              new Vector3D(0.23261530592369570000, 0.01387051019632302300, -0.97246991130673000000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v15, v10), new HalfEdge3D(v10, v19), new HalfEdge3D(v19, v15)),
-                              new Vector3D(0.23135029069674468000, 0.32502673046230790000, -0.91697037437395650000), constructionEpsilon));
+                              new Vector3D(0.23135029069674468000, 0.32502673046230790000, -0.91697037437395650000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v17, v15), new HalfEdge3D(v15, v19), new HalfEdge3D(v19, v17)),
-                              new Vector3D(0.45145545593760117000, 0.33868767594496600000, -0.82551718908037890000), constructionEpsilon));
+                              new Vector3D(0.45145545593760117000, 0.33868767594496600000, -0.82551718908037890000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v13, v18), new HalfEdge3D(v18, v20), new HalfEdge3D(v20, v13)),
-                              new Vector3D(0.80094365333947190000, 0.02411959518940798300, -0.59825371649753980000), constructionEpsilon));
+                              new Vector3D(0.80094365333947190000, 0.02411959518940798300, -0.59825371649753980000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v19, v14), new HalfEdge3D(v14, v21), new HalfEdge3D(v21, v19)),
-                              new Vector3D(0.39786234824481465000, 0.02411959518940872500, -0.91712801558834780000), constructionEpsilon));
+                              new Vector3D(0.39786234824481465000, 0.02411959518940872500, -0.91712801558834780000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v13, v20), new HalfEdge3D(v20, v22), new HalfEdge3D(v22, v13)),
-                              new Vector3D(0.75297529613603680000, -0.03346203119162343600, -0.65719745577518710000), constructionEpsilon));
+                              new Vector3D(0.75297529613603680000, -0.03346203119162343600, -0.65719745577518710000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v14, v23), new HalfEdge3D(v23, v24), new HalfEdge3D(v24, v14)),
-                              new Vector3D(0.51247869941988910000, -0.13238205284815271000, -0.84843418997857920000), constructionEpsilon));
+                              new Vector3D(0.51247869941988910000, -0.13238205284815271000, -0.84843418997857920000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v21, v14), new HalfEdge3D(v14, v24), new HalfEdge3D(v24, v21)),
-                              new Vector3D(0.46626345935726540000, -0.03346203119162337000, -0.88401282735983330000), constructionEpsilon));
+                              new Vector3D(0.46626345935726540000, -0.03346203119162337000, -0.88401282735983330000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v18, v17), new HalfEdge3D(v17, v25), new HalfEdge3D(v25, v18)),
-                              new Vector3D(0.70901843509578020000, 0.25825185437921705000, -0.65620030356898410000), constructionEpsilon));
+                              new Vector3D(0.70901843509578020000, 0.25825185437921705000, -0.65620030356898410000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v20, v18), new HalfEdge3D(v18, v25), new HalfEdge3D(v25, v20)),
-                              new Vector3D(0.72932258655706560000, 0.18089143438393795000, -0.65982335037813940000), constructionEpsilon));
+                              new Vector3D(0.72932258655706560000, 0.18089143438393795000, -0.65982335037813940000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v19, v21), new HalfEdge3D(v21, v26), new HalfEdge3D(v26, v19)),
-                              new Vector3D(0.47426239076215226000, 0.18089143438393765000, -0.86159936958837710000), constructionEpsilon));
+                              new Vector3D(0.47426239076215226000, 0.18089143438393765000, -0.86159936958837710000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v17, v19), new HalfEdge3D(v19, v26), new HalfEdge3D(v26, v17)),
-                              new Vector3D(0.47540947348052090000, 0.25825185437921727000, -0.84100642817678230000), constructionEpsilon));
+                              new Vector3D(0.47540947348052090000, 0.25825185437921727000, -0.84100642817678230000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v23, v22), new HalfEdge3D(v22, v27), new HalfEdge3D(v27, v23)),
-                              new Vector3D(0.64444609345549310000, -0.03079467299947462700, -0.76402939782760280000), constructionEpsilon));
+                              new Vector3D(0.64444609345549310000, -0.03079467299947462700, -0.76402939782760280000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v24, v23), new HalfEdge3D(v23, v27), new HalfEdge3D(v27, v24)),
-                              new Vector3D(0.59069464800240810000, -0.03673568242502494000, -0.80605851056736510000), constructionEpsilon));
+                              new Vector3D(0.59069464800240810000, -0.03673568242502494000, -0.80605851056736510000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v21, v24), new HalfEdge3D(v24, v28), new HalfEdge3D(v28, v21)),
-                              new Vector3D(0.53897082840409720000, 0.03169185683848829000, -0.84172802753593160000), constructionEpsilon));
+                              new Vector3D(0.53897082840409720000, 0.03169185683848829000, -0.84172802753593160000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v26, v21), new HalfEdge3D(v21, v28), new HalfEdge3D(v28, v26)),
-                              new Vector3D(0.54630260082546940000, 0.09909601034401168000, -0.83170514550844720000), constructionEpsilon));
+                              new Vector3D(0.54630260082546940000, 0.09909601034401168000, -0.83170514550844720000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v20, v25), new HalfEdge3D(v25, v29), new HalfEdge3D(v29, v20)),
-                              new Vector3D(0.68365121587975930000, 0.09909601034401440000, -0.72304978788464180000), constructionEpsilon));
+                              new Vector3D(0.68365121587975930000, 0.09909601034401440000, -0.72304978788464180000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v22, v20), new HalfEdge3D(v20, v29), new HalfEdge3D(v29, v22)),
-                              new Vector3D(0.69509241200865510000, 0.03169185683848524400, -0.71822152918032120000), constructionEpsilon));
+                              new Vector3D(0.69509241200865510000, 0.03169185683848524400, -0.71822152918032120000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v17, v26), new HalfEdge3D(v26, v30), new HalfEdge3D(v30, v17)),
-                              new Vector3D(0.59815244717004650000, 0.16223582843958295000, -0.78478862499083590000), constructionEpsilon));
+                              new Vector3D(0.59815244717004650000, 0.16223582843958295000, -0.78478862499083590000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v25, v17), new HalfEdge3D(v17, v30), new HalfEdge3D(v30, v25)),
-                              new Vector3D(0.62606117175683520000, 0.16223582843958306000, -0.76271026293670700000), constructionEpsilon));
+                              new Vector3D(0.62606117175683520000, 0.16223582843958306000, -0.76271026293670700000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v22, v29), new HalfEdge3D(v29, v31), new HalfEdge3D(v31, v22)),
-                              new Vector3D(0.66817412648012060000, 0.02856279682735566800, -0.74345645692261420000), constructionEpsilon));
+                              new Vector3D(0.66817412648012060000, 0.02856279682735566800, -0.74345645692261420000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v27, v22), new HalfEdge3D(v22, v31), new HalfEdge3D(v31, v27)),
-                              new Vector3D(0.64470151510109850000, -0.01236073078256076800, -0.76433446131969560000), constructionEpsilon));
+                              new Vector3D(0.64470151510109850000, -0.01236073078256076800, -0.76433446131969560000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v24, v27), new HalfEdge3D(v27, v32), new HalfEdge3D(v32, v24)),
-                              new Vector3D(0.59109635998463000000, 0.00022030614862306744, -0.80660092033056940000), constructionEpsilon));
+                              new Vector3D(0.59109635998463000000, 0.00022030614862306744, -0.80660092033056940000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v28, v24), new HalfEdge3D(v24, v32), new HalfEdge3D(v32, v28)),
-                              new Vector3D(0.56966816951662990000, 0.02856852861135592000, -0.82137811987692630000), constructionEpsilon));
+                              new Vector3D(0.56966816951662990000, 0.02856852861135592000, -0.82137811987692630000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v26, v28), new HalfEdge3D(v28, v33), new HalfEdge3D(v33, v26)),
-                              new Vector3D(0.56250064570981680000, 0.09747727538583728000, -0.82103057455821520000), constructionEpsilon));
+                              new Vector3D(0.56250064570981680000, 0.09747727538583728000, -0.82103057455821520000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v30, v26), new HalfEdge3D(v26, v33), new HalfEdge3D(v33, v30)),
-                              new Vector3D(0.59225037826612680000, 0.11882058805681327000, -0.79694488974926150000), constructionEpsilon));
+                              new Vector3D(0.59225037826612680000, 0.11882058805681327000, -0.79694488974926150000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v29, v25), new HalfEdge3D(v25, v34), new HalfEdge3D(v34, v29)),
-                              new Vector3D(0.66953530664389090000, 0.09747727538583957000, -0.73635633625346380000), constructionEpsilon));
+                              new Vector3D(0.66953530664389090000, 0.09747727538583957000, -0.73635633625346380000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v25, v30), new HalfEdge3D(v30, v34), new HalfEdge3D(v34, v25)),
-                              new Vector3D(0.63924944602334990000, 0.11882058805681533000, -0.75976431451646430000), constructionEpsilon));
+                              new Vector3D(0.63924944602334990000, 0.11882058805681533000, -0.75976431451646430000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v27, v31), new HalfEdge3D(v31, v35), new HalfEdge3D(v35, v27)),
-                              new Vector3D(0.63145956250466040000, 0.01006837356838149800, -0.77534343924167590000), constructionEpsilon));
+                              new Vector3D(0.63145956250466040000, 0.01006837356838149800, -0.77534343924167590000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v32, v27), new HalfEdge3D(v27, v35), new HalfEdge3D(v35, v32)),
-                              new Vector3D(0.60693000454211280000, 0.01551796132205475800, -0.79460377702532860000), constructionEpsilon));
+                              new Vector3D(0.60693000454211280000, 0.01551796132205475800, -0.79460377702532860000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v29, v34), new HalfEdge3D(v34, v36), new HalfEdge3D(v36, v29)),
-                              new Vector3D(0.65401484701798810000, 0.07317323334132480000, -0.75293443127699620000), constructionEpsilon));
+                              new Vector3D(0.65401484701798810000, 0.07317323334132480000, -0.75293443127699620000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v31, v29), new HalfEdge3D(v29, v36), new HalfEdge3D(v36, v31)),
-                              new Vector3D(0.65731253388641850000, 0.04151924107504209600, -0.75247351143835530000), constructionEpsilon));
+                              new Vector3D(0.65731253388641850000, 0.04151924107504209600, -0.75247351143835530000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v13, v22), new HalfEdge3D(v22, v37), new HalfEdge3D(v37, v13)),
-                              new Vector3D(0.71196751173775560000, -0.12395812189836788000, -0.69118495805781120000), constructionEpsilon));
+                              new Vector3D(0.71196751173775560000, -0.12395812189836788000, -0.69118495805781120000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v13), new HalfEdge3D(v13, v37), new HalfEdge3D(v37, v4)),
-                              new Vector3D(0.80021949912982260000, -0.39364322375455260000, -0.45243095120088683000), constructionEpsilon));
+                              new Vector3D(0.80021949912982260000, -0.39364322375455260000, -0.45243095120088683000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v9, v4), new HalfEdge3D(v4, v37), new HalfEdge3D(v37, v9)),
-                              new Vector3D(0.76762702646460450000, -0.45645982940395010000, -0.44988128698760815000), constructionEpsilon));
+                              new Vector3D(0.76762702646460450000, -0.45645982940395010000, -0.44988128698760815000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v14, v9), new HalfEdge3D(v9, v37), new HalfEdge3D(v37, v14)),
-                              new Vector3D(0.50329832707123220000, -0.26886500819707580000, -0.82122006876018640000), constructionEpsilon));
+                              new Vector3D(0.50329832707123220000, -0.26886500819707580000, -0.82122006876018640000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v23, v14), new HalfEdge3D(v14, v37), new HalfEdge3D(v37, v23)),
-                              new Vector3D(0.52026253177009970000, -0.23377086174879438000, -0.82138789997990110000), constructionEpsilon));
+                              new Vector3D(0.52026253177009970000, -0.23377086174879438000, -0.82138789997990110000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v22, v23), new HalfEdge3D(v23, v37), new HalfEdge3D(v37, v22)),
-                              new Vector3D(0.70376830665668830000, -0.12542118513427790000, -0.69927083227108110000), constructionEpsilon));
+                              new Vector3D(0.70376830665668830000, -0.12542118513427790000, -0.69927083227108110000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v28, v32), new HalfEdge3D(v32, v38), new HalfEdge3D(v38, v28)),
-                              new Vector3D(0.58308932010150390000, 0.04702093739793623000, -0.81104616158994640000), constructionEpsilon));
+                              new Vector3D(0.58308932010150390000, 0.04702093739793623000, -0.81104616158994640000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v33, v28), new HalfEdge3D(v28, v38), new HalfEdge3D(v38, v33)),
-                              new Vector3D(0.58209133982303130000, 0.07331680947456745000, -0.80981128514703860000), constructionEpsilon));
+                              new Vector3D(0.58209133982303130000, 0.07331680947456745000, -0.80981128514703860000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v30, v33), new HalfEdge3D(v33, v39), new HalfEdge3D(v39, v30)),
-                              new Vector3D(0.60380052696739420000, 0.10469582237939637000, -0.79023016166823120000), constructionEpsilon));
+                              new Vector3D(0.60380052696739420000, 0.10469582237939637000, -0.79023016166823120000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v34, v30), new HalfEdge3D(v30, v39), new HalfEdge3D(v39, v34)),
-                              new Vector3D(0.62854159213256590000, 0.10239851786794785000, -0.77100584336171320000), constructionEpsilon));
+                              new Vector3D(0.62854159213256590000, 0.10239851786794785000, -0.77100584336171320000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v35, v31), new HalfEdge3D(v31, v40), new HalfEdge3D(v40, v35)),
-                              new Vector3D(0.63248791628264700000, 0.02852416248755342000, -0.77404483585307830000), constructionEpsilon));
+                              new Vector3D(0.63248791628264700000, 0.02852416248755342000, -0.77404483585307830000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v31, v36), new HalfEdge3D(v36, v40), new HalfEdge3D(v40, v31)),
-                              new Vector3D(0.64317293425764520000, 0.04156053630654445000, -0.76459224326455430000), constructionEpsilon));
+                              new Vector3D(0.64317293425764520000, 0.04156053630654445000, -0.76459224326455430000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v32, v35), new HalfEdge3D(v35, v41), new HalfEdge3D(v41, v32)),
-                              new Vector3D(0.60765366207917750000, 0.02855134939790428600, -0.79368875978517130000), constructionEpsilon));
+                              new Vector3D(0.60765366207917750000, 0.02855134939790428600, -0.79368875978517130000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v38, v32), new HalfEdge3D(v32, v41), new HalfEdge3D(v41, v38)),
-                              new Vector3D(0.59678186631146750000, 0.04563039110124325000, -0.80110503147199700000), constructionEpsilon));
+                              new Vector3D(0.59678186631146750000, 0.04563039110124325000, -0.80110503147199700000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v34, v39), new HalfEdge3D(v39, v42), new HalfEdge3D(v42, v34)),
-                              new Vector3D(0.62930295083642710000, 0.08969980240314648000, -0.77196615309053680000), constructionEpsilon));
+                              new Vector3D(0.62930295083642710000, 0.08969980240314648000, -0.77196615309053680000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v36, v34), new HalfEdge3D(v34, v42), new HalfEdge3D(v42, v36)),
-                              new Vector3D(0.64425801589717930000, 0.07317757001702384000, -0.76129931840152940000), constructionEpsilon));
+                              new Vector3D(0.64425801589717930000, 0.07317757001702384000, -0.76129931840152940000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v35, v40), new HalfEdge3D(v40, v43), new HalfEdge3D(v43, v35)),
-                              new Vector3D(0.62511669089738820000, 0.03704261067627682000, -0.77965182469855420000), constructionEpsilon));
+                              new Vector3D(0.62511669089738820000, 0.03704261067627682000, -0.77965182469855420000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v41, v35), new HalfEdge3D(v35, v43), new HalfEdge3D(v43, v41)),
-                              new Vector3D(0.61482377708712000000, 0.03705578463116909000, -0.78779349575488100000), constructionEpsilon));
+                              new Vector3D(0.61482377708712000000, 0.03705578463116909000, -0.78779349575488100000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v33, v38), new HalfEdge3D(v38, v44), new HalfEdge3D(v44, v33)),
-                              new Vector3D(0.59572042821351760000, 0.07471259943790275000, -0.79970944654564040000), constructionEpsilon));
+                              new Vector3D(0.59572042821351760000, 0.07471259943790275000, -0.79970944654564040000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v39, v33), new HalfEdge3D(v33, v44), new HalfEdge3D(v44, v39)),
-                              new Vector3D(0.60480291553970440000, 0.08797886742447612000, -0.79150056995644640000), constructionEpsilon));
+                              new Vector3D(0.60480291553970440000, 0.08797886742447612000, -0.79150056995644640000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v36, v42), new HalfEdge3D(v42, v45), new HalfEdge3D(v45, v36)),
-                              new Vector3D(0.63742891075119670000, 0.06466608844584133000, -0.76779077927756940000), constructionEpsilon));
+                              new Vector3D(0.63742891075119670000, 0.06466608844584133000, -0.76779077927756940000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v40, v36), new HalfEdge3D(v36, v45), new HalfEdge3D(v45, v40)),
-                              new Vector3D(0.63699661940586580000, 0.05152464945097609500, -0.76914271586257170000), constructionEpsilon));
+                              new Vector3D(0.63699661940586580000, 0.05152464945097609500, -0.76914271586257170000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v38, v41), new HalfEdge3D(v41, v46), new HalfEdge3D(v46, v38)),
-                              new Vector3D(0.60179210616596160000, 0.05156511108204621000, -0.79698638650571210000), constructionEpsilon));
+                              new Vector3D(0.60179210616596160000, 0.05156511108204621000, -0.79698638650571210000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v44, v38), new HalfEdge3D(v38, v46), new HalfEdge3D(v46, v44)),
-                              new Vector3D(0.60233365024067230000, 0.06625174123861248000, -0.79549033970916270000), constructionEpsilon));
+                              new Vector3D(0.60233365024067230000, 0.06625174123861248000, -0.79549033970916270000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v40, v45), new HalfEdge3D(v45, v47), new HalfEdge3D(v47, v40)),
-                              new Vector3D(0.63044878696050950000, 0.05156728769733743000, -0.77451606946503170000), constructionEpsilon));
+                              new Vector3D(0.63044878696050950000, 0.05156728769733743000, -0.77451606946503170000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v46, v41), new HalfEdge3D(v41, v48), new HalfEdge3D(v48, v46)),
-                              new Vector3D(0.60861747580978950000, 0.05159378638178597300, -0.79178459782046210000), constructionEpsilon));
+                              new Vector3D(0.60861747580978950000, 0.05159378638178597300, -0.79178459782046210000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v39, v44), new HalfEdge3D(v44, v49), new HalfEdge3D(v49, v39)),
-                              new Vector3D(0.61325353571030110000, 0.07998868170372875000, -0.78582562425649760000), constructionEpsilon));
+                              new Vector3D(0.61325353571030110000, 0.07998868170372875000, -0.78582562425649760000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v42, v39), new HalfEdge3D(v39, v49), new HalfEdge3D(v49, v42)),
-                              new Vector3D(0.62658073914064200000, 0.08513540768181682000, -0.77469254526993960000), constructionEpsilon));
+                              new Vector3D(0.62658073914064200000, 0.08513540768181682000, -0.77469254526993960000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v49, v50), new HalfEdge3D(v50, v51), new HalfEdge3D(v51, v49)),
-                              new Vector3D(0.61934069670637610000, 0.06751883799997335000, -0.78221372266049760000), constructionEpsilon));
+                              new Vector3D(0.61934069670637610000, 0.06751883799997335000, -0.78221372266049760000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v42, v49), new HalfEdge3D(v49, v51), new HalfEdge3D(v51, v42)),
-                              new Vector3D(0.62616678688568520000, 0.07372601983969139000, -0.77619561258735190000), constructionEpsilon));
+                              new Vector3D(0.62616678688568520000, 0.07372601983969139000, -0.77619561258735190000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v45, v42), new HalfEdge3D(v42, v51), new HalfEdge3D(v51, v45)),
-                              new Vector3D(0.63087436196130120000, 0.06610555663744055000, -0.77306377149726490000), constructionEpsilon));
+                              new Vector3D(0.63087436196130120000, 0.06610555663744055000, -0.77306377149726490000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v44, v46), new HalfEdge3D(v46, v52), new HalfEdge3D(v52, v44)),
-                              new Vector3D(0.60705770798526970000, 0.06622657232030632000, -0.79189328845140130000), constructionEpsilon));
+                              new Vector3D(0.60705770798526970000, 0.06622657232030632000, -0.79189328845140130000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v49, v44), new HalfEdge3D(v44, v52), new HalfEdge3D(v52, v49)),
-                              new Vector3D(0.61385754189323430000, 0.07431024289803456000, -0.78591151286975770000), constructionEpsilon));
+                              new Vector3D(0.61385754189323430000, 0.07431024289803456000, -0.78591151286975770000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v50, v49), new HalfEdge3D(v49, v52), new HalfEdge3D(v52, v50)),
-                              new Vector3D(0.61873605845292790000, 0.06762791708438201000, -0.78268266545322380000), constructionEpsilon));
+                              new Vector3D(0.61873605845292790000, 0.06762791708438201000, -0.78268266545322380000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v51, v50), new HalfEdge3D(v50, v53), new HalfEdge3D(v53, v51)),
-                              new Vector3D(0.62202619232673900000, 0.06358942918659198000, -0.78041002079369940000), constructionEpsilon));
+                              new Vector3D(0.62202619232673900000, 0.06358942918659198000, -0.78041002079369940000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v45, v51), new HalfEdge3D(v51, v53), new HalfEdge3D(v53, v45)),
-                              new Vector3D(0.62783715913224560000, 0.06253187179595619000, -0.77582876114671420000), constructionEpsilon));
+                              new Vector3D(0.62783715913224560000, 0.06253187179595619000, -0.77582876114671420000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v47, v45), new HalfEdge3D(v45, v53), new HalfEdge3D(v53, v47)),
-                              new Vector3D(0.62753979498019980000, 0.05613779846232104000, -0.77655801669934010000), constructionEpsilon));
+                              new Vector3D(0.62753979498019980000, 0.05613779846232104000, -0.77655801669934010000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v46, v48), new HalfEdge3D(v48, v54), new HalfEdge3D(v54, v46)),
-                              new Vector3D(0.61128556235465760000, 0.05616419903316402000, -0.78941468443633170000), constructionEpsilon));
+                              new Vector3D(0.61128556235465760000, 0.05616419903316402000, -0.78941468443633170000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v52, v46), new HalfEdge3D(v46, v54), new HalfEdge3D(v54, v52)),
-                              new Vector3D(0.61064199426201470000, 0.06228066874139325000, -0.78945390818263380000), constructionEpsilon));
+                              new Vector3D(0.61064199426201470000, 0.06228066874139325000, -0.78945390818263380000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v50, v52), new HalfEdge3D(v52, v54), new HalfEdge3D(v54, v50)),
-                              new Vector3D(0.61631547751363840000, 0.06345390641173182000, -0.78493874534146100000), constructionEpsilon));
+                              new Vector3D(0.61631547751363840000, 0.06345390641173182000, -0.78493874534146100000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v53, v50), new HalfEdge3D(v50, v55), new HalfEdge3D(v55, v53)),
-                              new Vector3D(0.62200596153346280000, 0.06012492435445458000, -0.78070069635437340000), constructionEpsilon));
+                              new Vector3D(0.62200596153346280000, 0.06012492435445458000, -0.78070069635437340000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v47, v53), new HalfEdge3D(v53, v55), new HalfEdge3D(v55, v47)),
-                              new Vector3D(0.62466039416041250000, 0.05622848704293653000, -0.77886953285657580000), constructionEpsilon));
+                              new Vector3D(0.62466039416041250000, 0.05622848704293653000, -0.77886953285657580000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v54, v48), new HalfEdge3D(v48, v56), new HalfEdge3D(v56, v54)),
-                              new Vector3D(0.61435425766350530000, 0.05617294702637999600, -0.78702823717646550000), constructionEpsilon));
+                              new Vector3D(0.61435425766350530000, 0.05617294702637999600, -0.78702823717646550000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v50, v54), new HalfEdge3D(v54, v56), new HalfEdge3D(v56, v50)),
-                              new Vector3D(0.61664690394028640000, 0.06006120307977887000, -0.78494537882929720000), constructionEpsilon));
+                              new Vector3D(0.61664690394028640000, 0.06006120307977887000, -0.78494537882929720000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v50, v56), new HalfEdge3D(v56, v57), new HalfEdge3D(v57, v58), new HalfEdge3D(v58, v50)),
-                              new Vector3D(0.61814798133946160000, 0.05840810932503987000, -0.78388874588874100000), constructionEpsilon));
+                              new Vector3D(0.61814798133946160000, 0.05840810932503987000, -0.78388874588874100000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v55, v50), new HalfEdge3D(v50, v58), new HalfEdge3D(v58, v59), new HalfEdge3D(v59, v55)),
-                              new Vector3D(0.62068023505312020000, 0.05845953921829056000, -0.78188140282832450000), constructionEpsilon));
+                              new Vector3D(0.62068023505312020000, 0.05845953921829056000, -0.78188140282832450000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v43, v40), new HalfEdge3D(v40, v60), new HalfEdge3D(v60, v43)),
-                              new Vector3D(0.62537589315963250000, 0.04311797882929476000, -0.77913146012497040000), constructionEpsilon));
+                              new Vector3D(0.62537589315963250000, 0.04311797882929476000, -0.77913146012497040000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v40, v47), new HalfEdge3D(v47, v60), new HalfEdge3D(v60, v40)),
-                              new Vector3D(0.62660091517196470000, 0.04689607647157660000, -0.77792805009025630000), constructionEpsilon));
+                              new Vector3D(0.62660091517196470000, 0.04689607647157660000, -0.77792805009025630000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v43, v60), new HalfEdge3D(v60, v61), new HalfEdge3D(v61, v43)),
-                              new Vector3D(0.61968141672966840000, 0.04869735565932542500, -0.78334124703841570000), constructionEpsilon));
+                              new Vector3D(0.61968141672966840000, 0.04869735565932542500, -0.78334124703841570000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v41, v43), new HalfEdge3D(v43, v61), new HalfEdge3D(v61, v41)),
-                              new Vector3D(0.61426707595945210000, 0.04312776946694367500, -0.78791874891579460000), constructionEpsilon));
+                              new Vector3D(0.61426707595945210000, 0.04312776946694367500, -0.78791874891579460000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v48, v41), new HalfEdge3D(v41, v61), new HalfEdge3D(v61, v48)),
-                              new Vector3D(0.61281832263446470000, 0.04691227395632742000, -0.78883010971674230000), constructionEpsilon));
+                              new Vector3D(0.61281832263446470000, 0.04691227395632742000, -0.78883010971674230000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v60, v62), new HalfEdge3D(v62, v61), new HalfEdge3D(v61, v60)),
-                              new Vector3D(0.61963697196871950000, 0.05017380203695328000, -0.78328322627169360000), constructionEpsilon));
+                              new Vector3D(0.61963697196871950000, 0.05017380203695328000, -0.78328322627169360000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v62, v60), new HalfEdge3D(v60, v63), new HalfEdge3D(v63, v62)),
-                              new Vector3D(0.62079679165336480000, 0.05137391270943935000, -0.78228643383725620000), constructionEpsilon));
+                              new Vector3D(0.62079679165336480000, 0.05137391270943935000, -0.78228643383725620000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v47, v55), new HalfEdge3D(v55, v63), new HalfEdge3D(v63, v47)),
-                              new Vector3D(0.62354253437993170000, 0.05491260161539652400, -0.77985852178640740000), constructionEpsilon));
+                              new Vector3D(0.62354253437993170000, 0.05491260161539652400, -0.77985852178640740000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v60, v47), new HalfEdge3D(v47, v63), new HalfEdge3D(v63, v60)),
-                              new Vector3D(0.62343582783812320000, 0.05111277107955967000, -0.78020205921310060000), constructionEpsilon));
+                              new Vector3D(0.62343582783812320000, 0.05111277107955967000, -0.78020205921310060000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v48, v61), new HalfEdge3D(v61, v64), new HalfEdge3D(v64, v48)),
-                              new Vector3D(0.61576723260602060000, 0.05112371644902281000, -0.78626781751840960000), constructionEpsilon));
+                              new Vector3D(0.61576723260602060000, 0.05112371644902281000, -0.78626781751840960000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v56, v48), new HalfEdge3D(v48, v64), new HalfEdge3D(v64, v56)),
-                              new Vector3D(0.61540464490699290000, 0.05499431541734822000, -0.78629049866997340000), constructionEpsilon));
+                              new Vector3D(0.61540464490699290000, 0.05499431541734822000, -0.78629049866997340000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v61, v62), new HalfEdge3D(v62, v64), new HalfEdge3D(v64, v61)),
-                              new Vector3D(0.61840175306562480000, 0.05137616324917626000, -0.78418094956148730000), constructionEpsilon));
+                              new Vector3D(0.61840175306562480000, 0.05137616324917626000, -0.78418094956148730000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v56, v64), new HalfEdge3D(v64, v65), new HalfEdge3D(v65, v56)),
-                              new Vector3D(0.61672226836911850000, 0.05489367903020470000, -0.78526449537730780000), constructionEpsilon));
+                              new Vector3D(0.61672226836911850000, 0.05489367903020470000, -0.78526449537730780000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v64, v62), new HalfEdge3D(v62, v65), new HalfEdge3D(v65, v64)),
-                              new Vector3D(0.61822650055506770000, 0.05322648728293316600, -0.78419572497110370000), constructionEpsilon));
+                              new Vector3D(0.61822650055506770000, 0.05322648728293316600, -0.78419572497110370000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v62, v63), new HalfEdge3D(v63, v66), new HalfEdge3D(v66, v67), new HalfEdge3D(v67, v62)),
-                              new Vector3D(0.62083818675211000000, 0.05328912667174397000, -0.78212544700253450000), constructionEpsilon));
+                              new Vector3D(0.62083818675211000000, 0.05328912667174397000, -0.78212544700253450000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v63, v55), new HalfEdge3D(v55, v66), new HalfEdge3D(v66, v63)),
-                              new Vector3D(0.62229024458314360000, 0.05487563500085001400, -0.78086075338686640000), constructionEpsilon));
+                              new Vector3D(0.62229024458314360000, 0.05487563500085001400, -0.78086075338686640000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v65, v62), new HalfEdge3D(v62, v68), new HalfEdge3D(v68, v57), new HalfEdge3D(v57, v65)),
-                              new Vector3D(0.61888428568868410000, 0.05472761383409186000, -0.78357330812862270000), constructionEpsilon));
+                              new Vector3D(0.61888428568868410000, 0.05472761383409186000, -0.78357330812862270000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v56, v65), new HalfEdge3D(v65, v57), new HalfEdge3D(v57, v56)),
-                              new Vector3D(0.61754961517124200000, 0.05577502337217010000, -0.78455185906967600000), constructionEpsilon));
+                              new Vector3D(0.61754961517124200000, 0.05577502337217010000, -0.78455185906967600000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v66, v55), new HalfEdge3D(v55, v59), new HalfEdge3D(v59, v67), new HalfEdge3D(v67, v66)),
-                              new Vector3D(0.62119836586231280000, 0.05557979209546433400, -0.78167990696999320000), constructionEpsilon));
+                              new Vector3D(0.62119836586231280000, 0.05557979209546433400, -0.78167990696999320000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v57, v68), new HalfEdge3D(v68, v69), new HalfEdge3D(v69, v58), new HalfEdge3D(v58, v57)),
-                              new Vector3D(0.61900899274687500000, 0.05582846794347185000, -0.78339712091989720000), constructionEpsilon));
+                              new Vector3D(0.61900899274687500000, 0.05582846794347185000, -0.78339712091989720000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v59, v58), new HalfEdge3D(v58, v69), new HalfEdge3D(v69, v67), new HalfEdge3D(v67, v59)),
-                              new Vector3D(0.62001897411297690000, 0.05580919464084649000, -0.78259939019490150000), constructionEpsilon));
+                              new Vector3D(0.62001897411297690000, 0.05580919464084649000, -0.78259939019490150000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v68, v62), new HalfEdge3D(v62, v67), new HalfEdge3D(v67, v69), new HalfEdge3D(v69, v68)),
-                              new Vector3D(0.61909597982511180000, 0.05465114336548167000, -0.78341139913408860000), constructionEpsilon));
+                              new Vector3D(0.61909597982511180000, 0.05465114336548167000, -0.78341139913408860000),
+                              constructionEpsilon));
          convexPolytope3D = new ConvexPolytope3D(faces, constructionEpsilon);
          troublesomePoint.set(0.60974689213119120000, 0.05344267959413851000, -0.77294417767419080000);
       }
@@ -1827,33 +2036,47 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
          Vertex3D v8 = new Vertex3D(-6.61191506393674700000, 2.05742822043099150000, -8.31943254110272000000);
          List<Face3D> faces = new ArrayList<>();
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v1), new HalfEdge3D(v1, v2), new HalfEdge3D(v2, v0)),
-                              new Vector3D(0.41997048407915440000, -0.88089479019584600000, 0.21828687800263452000), constructionEpsilon));
+                              new Vector3D(0.41997048407915440000, -0.88089479019584600000, 0.21828687800263452000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v2, v1), new HalfEdge3D(v1, v3), new HalfEdge3D(v3, v2)),
-                              new Vector3D(-0.00317582225835749900, -0.98780260613829040000, 0.15567891783855890000), constructionEpsilon));
+                              new Vector3D(-0.00317582225835749900, -0.98780260613829040000, 0.15567891783855890000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v1), new HalfEdge3D(v1, v5), new HalfEdge3D(v5, v4)),
-                              new Vector3D(0.48619644304692167000, 0.75364822195421310000, -0.44229783665961420000), constructionEpsilon));
+                              new Vector3D(0.48619644304692167000, 0.75364822195421310000, -0.44229783665961420000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v2, v4), new HalfEdge3D(v4, v5), new HalfEdge3D(v5, v2)),
-                              new Vector3D(0.57114793308901320000, 0.29068391966684060000, 0.76765415219047040000), constructionEpsilon));
+                              new Vector3D(0.57114793308901320000, 0.29068391966684060000, 0.76765415219047040000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v0, v2), new HalfEdge3D(v2, v5), new HalfEdge3D(v5, v0)),
-                              new Vector3D(0.93615683035871000000, 0.05029805611260561000, 0.34796622612550590000), constructionEpsilon));
+                              new Vector3D(0.93615683035871000000, 0.05029805611260561000, 0.34796622612550590000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v0), new HalfEdge3D(v0, v5), new HalfEdge3D(v5, v1)),
-                              new Vector3D(0.55468760978201250000, 0.72408200090216700000, -0.40991085802138993000), constructionEpsilon));
+                              new Vector3D(0.55468760978201250000, 0.72408200090216700000, -0.40991085802138993000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v2), new HalfEdge3D(v2, v6), new HalfEdge3D(v6, v4)),
-                              new Vector3D(0.40059771236244980000, 0.15152860139140426000, 0.90363740283940050000), constructionEpsilon));
+                              new Vector3D(0.40059771236244980000, 0.15152860139140426000, 0.90363740283940050000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v3, v4), new HalfEdge3D(v4, v6), new HalfEdge3D(v6, v3)),
-                              new Vector3D(-0.53143862005091870000, -0.30464834531285645000, 0.79041911592301060000), constructionEpsilon));
+                              new Vector3D(-0.53143862005091870000, -0.30464834531285645000, 0.79041911592301060000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v2, v3), new HalfEdge3D(v3, v6), new HalfEdge3D(v6, v2)),
-                              new Vector3D(-0.17588176657766583000, -0.81983870485382050000, 0.54491293085146140000), constructionEpsilon));
+                              new Vector3D(-0.17588176657766583000, -0.81983870485382050000, 0.54491293085146140000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v3), new HalfEdge3D(v3, v7), new HalfEdge3D(v7, v4)),
-                              new Vector3D(-0.78848782037193010000, -0.18173130845956473000, 0.58758887723534840000), constructionEpsilon));
+                              new Vector3D(-0.78848782037193010000, -0.18173130845956473000, 0.58758887723534840000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v1, v4), new HalfEdge3D(v4, v8), new HalfEdge3D(v8, v1)),
-                              new Vector3D(0.45822515073207250000, 0.75528742951578280000, -0.46858362119477737000), constructionEpsilon));
+                              new Vector3D(0.45822515073207250000, 0.75528742951578280000, -0.46858362119477737000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v3, v1), new HalfEdge3D(v1, v8), new HalfEdge3D(v8, v3)),
-                              new Vector3D(-0.26959452031091935000, -0.88346371181539640000, -0.38315879805073966000), constructionEpsilon));
+                              new Vector3D(-0.26959452031091935000, -0.88346371181539640000, -0.38315879805073966000),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v7, v3), new HalfEdge3D(v3, v8), new HalfEdge3D(v8, v7)),
-                              new Vector3D(-0.99884472913058240000, -0.04800244743753618500, -0.00222982691247506850), constructionEpsilon));
+                              new Vector3D(-0.99884472913058240000, -0.04800244743753618500, -0.00222982691247506850),
+                              constructionEpsilon));
          faces.add(new Face3D(Arrays.asList(new HalfEdge3D(v4, v7), new HalfEdge3D(v7, v8), new HalfEdge3D(v8, v4)),
-                              new Vector3D(-0.97617447718523620000, 0.21631635762048930000, -0.01704768365307238500), constructionEpsilon));
+                              new Vector3D(-0.97617447718523620000, 0.21631635762048930000, -0.01704768365307238500),
+                              constructionEpsilon));
          convexPolytope3D = new ConvexPolytope3D(faces, constructionEpsilon);
          troublesomePoint.set(-7.02417510790190200000, 3.02121058297256260000, -4.78310392726655000000);
       }

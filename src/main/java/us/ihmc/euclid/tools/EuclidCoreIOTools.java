@@ -68,7 +68,7 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param format the format to use for each number.
+    * @param format             the format to use for each number.
     * @param rigidBodyTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -111,7 +111,7 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param format the format to use for each number.
+    * @param format          the format to use for each number.
     * @param affineTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -167,7 +167,7 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param format the format to use for each number.
+    * @param format                   the format to use for each number.
     * @param quaternionBasedTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -216,7 +216,7 @@ public class EuclidCoreIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param tuple the object to get the {@code String} of. Not modified.
+    * @param tuple  the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getTuple2DString(String format, Tuple2DReadOnly tuple)
@@ -253,7 +253,7 @@ public class EuclidCoreIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param tuple the object to get the {@code String} of. Not modified.
+    * @param tuple  the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getTuple3DString(String format, Tuple3DReadOnly tuple)
@@ -290,7 +290,7 @@ public class EuclidCoreIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param tuple the object to get the {@code String} of. Not modified.
+    * @param tuple  the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getTuple4DString(String format, Tuple4DReadOnly tuple)
@@ -326,7 +326,7 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param format the format to use for each number.
+    * @param format    the format to use for each number.
     * @param axisAngle the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -376,8 +376,16 @@ public class EuclidCoreIOTools
       if (matrix == null)
          return "null";
       else
-         return getMatrixString(format, matrix.getM00(), matrix.getM01(), matrix.getM02(), matrix.getM10(), matrix.getM11(), matrix.getM12(), matrix.getM20(),
-                                matrix.getM21(), matrix.getM22());
+         return getMatrixString(format,
+                                matrix.getM00(),
+                                matrix.getM01(),
+                                matrix.getM02(),
+                                matrix.getM10(),
+                                matrix.getM11(),
+                                matrix.getM12(),
+                                matrix.getM20(),
+                                matrix.getM21(),
+                                matrix.getM22());
    }
 
    /**
@@ -419,15 +427,15 @@ public class EuclidCoreIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param m00 the 1st row 1st column coefficient of the matrix.
-    * @param m01 the 1st row 2nd column coefficient of the matrix.
-    * @param m02 the 1st row 3rd column coefficient of the matrix.
-    * @param m10 the 2nd row 1st column coefficient of the matrix.
-    * @param m11 the 2nd row 2nd column coefficient of the matrix.
-    * @param m12 the 2nd row 3rd column coefficient of the matrix.
-    * @param m20 the 3rd row 1st column coefficient of the matrix.
-    * @param m21 the 3rd row 2nd column coefficient of the matrix.
-    * @param m22 the 3rd row 3rd column coefficient of the matrix.
+    * @param m00    the 1st row 1st column coefficient of the matrix.
+    * @param m01    the 1st row 2nd column coefficient of the matrix.
+    * @param m02    the 1st row 3rd column coefficient of the matrix.
+    * @param m10    the 2nd row 1st column coefficient of the matrix.
+    * @param m11    the 2nd row 2nd column coefficient of the matrix.
+    * @param m12    the 2nd row 3rd column coefficient of the matrix.
+    * @param m20    the 3rd row 1st column coefficient of the matrix.
+    * @param m21    the 3rd row 2nd column coefficient of the matrix.
+    * @param m22    the 3rd row 3rd column coefficient of the matrix.
     * @return the representative {@code String}.
     */
    public static String getMatrixString(String format, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21,
@@ -464,7 +472,7 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param format the format to use for each number.
+    * @param format       the format to use for each number.
     * @param yawPitchRoll the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -485,7 +493,7 @@ public class EuclidCoreIOTools
     * </pre>
     *
     * @param orientation the orientation to get the {@code String} of using a yaw-pitch-roll
-    *           representation. Not modified.
+    *                    representation. Not modified.
     * @return the representative {@code String}.
     */
    public static String getStringAsYawPitchRoll(Orientation3DReadOnly orientation)
@@ -504,9 +512,9 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param format the format to use for each number.
+    * @param format      the format to use for each number.
     * @param orientation the orientation to get the {@code String} of using a yaw-pitch-roll
-    *           representation. Not modified.
+    *                    representation. Not modified.
     * @return the representative {@code String}.
     */
    public static String getStringAsYawPitchRoll(String format, Orientation3DReadOnly orientation)
@@ -524,9 +532,9 @@ public class EuclidCoreIOTools
     * yaw-pitch-roll: ( 0.674,  0.455,  0.582 )
     * </pre>
     *
-    * @param yaw the first angle representing the rotation around the z-axis.
+    * @param yaw   the first angle representing the rotation around the z-axis.
     * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
+    * @param roll  the third angle representing the rotation around the x-axis.
     * @return the representative {@code String}.
     */
    public static String getYawPitchRollString(double yaw, double pitch, double roll)
@@ -545,9 +553,9 @@ public class EuclidCoreIOTools
     * </p>
     *
     * @param format the format to use for each number.
-    * @param yaw the first angle representing the rotation around the z-axis.
-    * @param pitch the second angle representing the rotation around the y-axis.
-    * @param roll the third angle representing the rotation around the x-axis.
+    * @param yaw    the first angle representing the rotation around the z-axis.
+    * @param pitch  the second angle representing the rotation around the y-axis.
+    * @param roll   the third angle representing the rotation around the x-axis.
     * @return the representative {@code String}.
     */
    public static String getYawPitchRollString(String format, double yaw, double pitch, double roll)
@@ -567,10 +575,10 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param prefix the {@code String} to prepend to the result.
-    * @param suffix the {@code String} to append to the result.
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
     * @param separator the {@code String} to insert between two values.
-    * @param values the values to get the {@code String} of.
+    * @param values    the values to get the {@code String} of.
     * @return the representative {@code String}.
     */
    public static String getStringOf(String prefix, String suffix, String separator, double... values)
@@ -590,11 +598,11 @@ public class EuclidCoreIOTools
     * </pre>
     * </p>
     *
-    * @param prefix the {@code String} to prepend to the result.
-    * @param suffix the {@code String} to append to the result.
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
     * @param separator the {@code String} to insert between two values.
-    * @param format the format to use for each number.
-    * @param values the values to get the {@code String} of.
+    * @param format    the format to use for each number.
+    * @param values    the values to get the {@code String} of.
     * @return the representative {@code String}.
     */
    public static String getStringOf(String prefix, String suffix, String separator, String format, double... values)
@@ -626,8 +634,8 @@ public class EuclidCoreIOTools
     * </p>
     *
     * @param separator the {@code String} to insert between two values.
-    * @param format the format to use for each number.
-    * @param values the values to get the {@code String} of.
+    * @param format    the format to use for each number.
+    * @param values    the values to get the {@code String} of.
     * @return the representative {@code String}.
     */
    public static String getStringOf(String separator, String format, double... values)
@@ -652,12 +660,12 @@ public class EuclidCoreIOTools
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
     * 
-    * @param prefix the {@code String} to prepend to the result.
-    * @param suffix the {@code String} to append to the result.
-    * @param separator the {@code String} used to separate elements of the collection.
-    * @param collection the series of elements to get the {@code String} of.
+    * @param prefix                  the {@code String} to prepend to the result.
+    * @param suffix                  the {@code String} to append to the result.
+    * @param separator               the {@code String} used to separate elements of the collection.
+    * @param collection              the series of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative
-    *           {@code String} for each element.
+    *                                {@code String} for each element.
     * @return the representative {@code String}.
     */
    public static <T> String getCollectionString(String prefix, String suffix, String separator, Collection<? extends T> collection,
@@ -686,10 +694,10 @@ public class EuclidCoreIOTools
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
     * 
-    * @param separator the {@code String} used to separate elements of the collection.
-    * @param collection the series of elements to get the {@code String} of.
+    * @param separator               the {@code String} used to separate elements of the collection.
+    * @param collection              the series of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative
-    *           {@code String} for each element.
+    *                                {@code String} for each element.
     * @return the representative {@code String}.
     */
    public static <T> String getCollectionString(String separator, Collection<? extends T> collection, Function<T, String> elementToStringFunction)
@@ -710,7 +718,7 @@ public class EuclidCoreIOTools
     * Gets the {@code String} for formatting decimal numbers.
     *
     * @param numberOfChar the number of character to print.
-    * @param precision the precision of the output.
+    * @param precision    the precision of the output.
     * @return the formatting {@code String}.
     */
    public static String getStringFormat(int numberOfChar, int precision)

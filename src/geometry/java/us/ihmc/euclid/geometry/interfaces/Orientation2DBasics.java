@@ -192,8 +192,8 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
     *
     * @param other the other orientation 2D used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
-    *           {@code other}.
+    *              {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    *              {@code other}.
     */
    default void interpolate(Orientation2DReadOnly other, double alpha)
    {
@@ -209,9 +209,9 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
     *
     * @param orientation1 the first orientation 2D used in the interpolation. Not modified.
     * @param orientation2 the second orientation 2D used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code orientation1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code orientation2}.
+    * @param alpha        the percentage to use for the interpolation. A value of 0 will result in
+    *                     setting {@code this} to {@code orientation1}, while a value of 1 is
+    *                     equivalent to setting {@code this} to {@code orientation2}.
     */
    default void interpolate(Orientation2DReadOnly orientation1, Orientation2DReadOnly orientation2, double alpha)
    {
@@ -228,7 +228,7 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
     *
     * @param transform the geometric transform to apply on this orientation 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY plane.
+    *                               in the XY plane.
     */
    @Override
    void applyTransform(Transform transform);
@@ -242,7 +242,7 @@ public interface Orientation2DBasics extends Orientation2DReadOnly, Clearable, T
     *
     * @param transform the geometric transform to apply on this orientation 2D. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY plane.
+    *                               in the XY plane.
     */
    @Override
    void applyInverseTransform(Transform transform);

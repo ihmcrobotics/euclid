@@ -208,8 +208,11 @@ public class Line3DTest
          Point3D actualClosestPointOnLine = new Point3D();
          Point3D actualClosestPointOnOtherLine = new Point3D();
 
-         double expectedDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(line.getPoint(), line.getDirection(), otherLine.getPoint(),
-                                                                                        otherLine.getDirection(), expectedClosestPointOnLine,
+         double expectedDistance = EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(line.getPoint(),
+                                                                                        line.getDirection(),
+                                                                                        otherLine.getPoint(),
+                                                                                        otherLine.getDirection(),
+                                                                                        expectedClosestPointOnLine,
                                                                                         expectedClosestPointOnOtherLine);
          double actualDistance = line.closestPointsWith(otherLine, actualClosestPointOnLine, actualClosestPointOnOtherLine);
          assertEquals(expectedDistance, actualDistance, EPSILON);

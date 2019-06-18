@@ -53,7 +53,7 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame orientation 2D.
-    * @param yaw the new value for the yaw angle of this orientation 2D.
+    * @param yaw            the new value for the yaw angle of this orientation 2D.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double yaw)
    {
@@ -65,7 +65,7 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
     * Sets this frame orientation 2D to {@code orientation2DReadOnly} and sets its current frame to
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame for this frame orientation 2D.
+    * @param referenceFrame        the new reference frame for this frame orientation 2D.
     * @param orientation2DReadOnly the orientation 2D to copy the values from. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation2DReadOnly)
@@ -78,7 +78,7 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
     * Sets this frame orientation 2D to {@code orientationReadOnly} and sets its current frame to
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame for this frame orientation 2D.
+    * @param referenceFrame      the new reference frame for this frame orientation 2D.
     * @param orientationReadOnly the orientation to get the yaw angle from. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientationReadOnly)
@@ -91,7 +91,7 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
     * Sets this frame orientation 2D to {@code other}.
     *
     * @param other the other frame orientation 2D to copy the values and reference frame from. Not
-    *           modified.
+    *              modified.
     */
    default void setIncludingFrame(FrameOrientation2DReadOnly other)
    {
@@ -101,7 +101,8 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
    /**
     * Sets this frame orientation 2D to {@code frameQuaternionReadOnly}.
     *
-    * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame from. Not modified.
+    * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame
+    *                                from. Not modified.
     */
    default void setIncludingFrame(FrameQuaternionReadOnly frameQuaternionReadOnly)
    {

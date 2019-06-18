@@ -203,7 +203,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * tupleTransformed = tupleTransformed - this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to add the result to. Modified.
     */
    default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -422,7 +422,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other rotation matrix to compare against this. Not modified.
+    * @param other   the other rotation matrix to compare against this. Not modified.
     * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
     * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
     *         otherwise.

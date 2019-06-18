@@ -29,7 +29,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrie
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
-    *            not match.
+    *                                         not match.
     */
    default double distance(FrameQuaternionReadOnly other)
    {
@@ -49,7 +49,7 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrie
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
-    *            not match.
+    *                                         not match.
     */
    default double distancePrecise(FrameQuaternionReadOnly other)
    {
@@ -62,12 +62,12 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrie
     * geometrically similar, i.e. the magnitude of their difference is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the frame quaternion to compare to. Not modified.
+    * @param other   the frame quaternion to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two frame quaternions represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default boolean geometricallyEquals(FrameQuaternionReadOnly other, double epsilon)
    {

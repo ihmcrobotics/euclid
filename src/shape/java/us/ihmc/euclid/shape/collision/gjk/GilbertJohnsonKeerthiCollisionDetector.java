@@ -97,8 +97,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
     * </p>
     * 
-    * @param shapeA the first shape to evaluate. Not modified.
-    * @param shapeB the second shape to evaluate. Not modified.
+    * @param shapeA       the first shape to evaluate. Not modified.
+    * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
@@ -137,8 +137,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
     * </p>
     * 
-    * @param shapeA the first shape to evaluate. Not modified.
-    * @param shapeB the second shape to evaluate. Not modified.
+    * @param shapeA       the first shape to evaluate. Not modified.
+    * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
@@ -262,7 +262,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * </p>
     * 
     * @param initialSupportDirection the first support direction to use for future collision
-    *           evaluations. Not modified.
+    *                                evaluations. Not modified.
     */
    public void setInitialSupportDirection(Vector3DReadOnly initialSupportDirection)
    {
@@ -283,7 +283,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * Sets the tolerance used to trigger the termination condition of this algorithm.
     * 
     * @param epsilon the terminal condition tolerance to use, default value
-    *           {@value #DEFAULT_TERMINAL_CONDITION_EPSILON}.
+    *                {@value #DEFAULT_TERMINAL_CONDITION_EPSILON}.
     */
    public void setTerminalConditionEpsilon(double epsilon)
    {
@@ -301,7 +301,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * </p>
     * 
     * @param epsilon the tolerance used switch method for obtaining the support direction, default
-    *           value {@value #DEFAULT_EPSILON_SUPPORT_DIRECTION_SWITCH}.
+    *                value {@value #DEFAULT_EPSILON_SUPPORT_DIRECTION_SWITCH}.
     */
    public void setEpsilonTriangleNormalSwitch(double epsilon)
    {

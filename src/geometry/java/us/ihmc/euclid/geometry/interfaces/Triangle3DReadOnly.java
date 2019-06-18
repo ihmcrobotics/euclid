@@ -130,7 +130,7 @@ public interface Triangle3DReadOnly
     * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
     * tolerance {@code epsilon}.
     * 
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two triangles are equal, {@code false} otherwise.
     */
@@ -169,7 +169,7 @@ public interface Triangle3DReadOnly
     * ordering and winding, i.e. clockwise or counter-clockwise.
     * </p>
     * 
-    * @param other the triangle to compare to. Not modified.
+    * @param other   the triangle to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
     */
@@ -182,9 +182,9 @@ public interface Triangle3DReadOnly
     * Compares {@code this} to the triangle represented by the given vertices to determine if the two
     * triangle are geometrically similar.
     * 
-    * @param a the first vertex of the query. Not modified.
-    * @param b the second vertex of the query. Not modified.
-    * @param c the third vertex of the query. Not modified.
+    * @param a       the first vertex of the query. Not modified.
+    * @param b       the second vertex of the query. Not modified.
+    * @param c       the third vertex of the query. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
     */

@@ -325,18 +325,24 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     *        \  thirdRow.getX()  thirdRow.getY()  thirdRow.getZ() /
     * </pre>
     *
-    * @param firstRow the tuple holding onto the values of the first row. Not modified.
+    * @param firstRow  the tuple holding onto the values of the first row. Not modified.
     * @param secondRow the tuple holding onto the values of the second row. Not modified.
-    * @param thirdRow the tuple holding onto the values of the third row. Not modified.
+    * @param thirdRow  the tuple holding onto the values of the third row. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
     */
    public void setRows(Tuple3DReadOnly firstRow, Tuple3DReadOnly secondRow, Tuple3DReadOnly thirdRow)
    {
-      set(firstRow.getX(), firstRow.getY(), firstRow.getZ(),
+      set(firstRow.getX(),
+          firstRow.getY(),
+          firstRow.getZ(),
 
-          secondRow.getX(), secondRow.getY(), secondRow.getZ(),
+          secondRow.getX(),
+          secondRow.getY(),
+          secondRow.getZ(),
 
-          thirdRow.getX(), thirdRow.getY(), thirdRow.getZ());
+          thirdRow.getX(),
+          thirdRow.getY(),
+          thirdRow.getZ());
    }
 
    /**
@@ -348,18 +354,24 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     *        \ firstColumn.getZ() secondColumn.getZ() thirdColumn.getZ() /
     * </pre>
     *
-    * @param firstColumn the tuple holding onto the values of the first column. Not modified.
+    * @param firstColumn  the tuple holding onto the values of the first column. Not modified.
     * @param secondColumn the tuple holding onto the values of the second column. Not modified.
-    * @param thirdColumn the tuple holding onto the values of the third column. Not modified.
+    * @param thirdColumn  the tuple holding onto the values of the third column. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
     */
    public void setColumns(Tuple3DReadOnly firstColumn, Tuple3DReadOnly secondColumn, Tuple3DReadOnly thirdColumn)
    {
-      set(firstColumn.getX(), secondColumn.getX(), thirdColumn.getX(),
+      set(firstColumn.getX(),
+          secondColumn.getX(),
+          thirdColumn.getX(),
 
-          firstColumn.getY(), secondColumn.getY(), thirdColumn.getY(),
+          firstColumn.getY(),
+          secondColumn.getY(),
+          thirdColumn.getY(),
 
-          firstColumn.getZ(), secondColumn.getZ(), thirdColumn.getZ());
+          firstColumn.getZ(),
+          secondColumn.getZ(),
+          thirdColumn.getZ());
    }
 
    /**
@@ -903,10 +915,10 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Interpolation</i> performed with quaternions.
     * </p>
     *
-    * @param rf the other rotation matrix used for the interpolation. Not modified.
+    * @param rf    the other rotation matrix used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           this rotation matrix, while a value of 1 is equivalent to setting this rotation matrix
-    *           to {@code rf}.
+    *              this rotation matrix, while a value of 1 is equivalent to setting this rotation
+    *              matrix to {@code rf}.
     */
    public void interpolate(RotationMatrixReadOnly rf, double alpha)
    {
@@ -921,11 +933,11 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Interpolation</i> performed with quaternions.
     * </p>
     *
-    * @param r0 the first rotation matrix used in the interpolation. Not modified.
-    * @param rf the second rotation matrix used in the interpolation. Not modified.
+    * @param r0    the first rotation matrix used in the interpolation. Not modified.
+    * @param rf    the second rotation matrix used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this rotation matrix to {@code r0}, while a value of 1 is equivalent to setting this
-    *           rotation matrix to {@code rf}.
+    *              this rotation matrix to {@code r0}, while a value of 1 is equivalent to setting this
+    *              rotation matrix to {@code rf}.
     */
    public void interpolate(RotationMatrixReadOnly r0, RotationMatrixReadOnly rf, double alpha)
    {
@@ -1050,7 +1062,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
@@ -1071,7 +1083,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other rotation matrix to compare against this. Not modified.
+    * @param other   the other rotation matrix to compare against this. Not modified.
     * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
     * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
     *         otherwise.

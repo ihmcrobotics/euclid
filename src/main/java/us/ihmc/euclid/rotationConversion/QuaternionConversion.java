@@ -34,7 +34,7 @@ public abstract class QuaternionConversion
     * Sets the given quaternion to represent a counter clockwise rotation around the z-axis of an angle
     * {@code yaw}.
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw              the angle to rotate about the z-axis.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static final void computeYawQuaternion(double yaw, QuaternionBasics quaternionToPack)
@@ -47,7 +47,7 @@ public abstract class QuaternionConversion
     * Sets the given quaternion to represent a counter clockwise rotation around the y-axis of an angle
     * {@code pitch}.
     *
-    * @param pitch the angle to rotate about the y-axis.
+    * @param pitch            the angle to rotate about the y-axis.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static final void computePitchQuaternion(double pitch, QuaternionBasics quaternionToPack)
@@ -60,7 +60,7 @@ public abstract class QuaternionConversion
     * Sets the given quaternion to represent a counter clockwise rotation around the x-axis of an angle
     * {@code roll}.
     *
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll             the angle to rotate about the x-axis.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static final void computeRollQuaternion(double roll, QuaternionBasics quaternionToPack)
@@ -84,7 +84,7 @@ public abstract class QuaternionConversion
     * </ul>
     * </p>
     *
-    * @param axisAngle the axis-angle to use for the conversion. Not modified.
+    * @param axisAngle        the axis-angle to use for the conversion. Not modified.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static final void convertAxisAngleToQuaternion(AxisAngleReadOnly axisAngle, QuaternionBasics quaternionToPack)
@@ -107,10 +107,10 @@ public abstract class QuaternionConversion
     * </ul>
     * </p>
     *
-    * @param ux the axis x-component of the axis-angle to use for the conversion.
-    * @param uy the axis y-component of the axis-angle to use for the conversion.
-    * @param uz the axis z-component of the axis-angle to use for the conversion.
-    * @param angle the angle of the axis-angle to use for the conversion.
+    * @param ux               the axis x-component of the axis-angle to use for the conversion.
+    * @param uy               the axis y-component of the axis-angle to use for the conversion.
+    * @param uz               the axis z-component of the axis-angle to use for the conversion.
+    * @param angle            the angle of the axis-angle to use for the conversion.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static final void convertAxisAngleToQuaternion(double ux, double uy, double uz, double angle, QuaternionBasics quaternionToPack)
@@ -150,8 +150,8 @@ public abstract class QuaternionConversion
     * </p>
     *
     * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *           orientation part is used during the conversion. Not modified.
-    * @param quaternionToPack the quaternion in which the result is stored.
+    *                            orientation part is used during the conversion. Not modified.
+    * @param quaternionToPack    the quaternion in which the result is stored.
     */
    public static void convertMatrixToQuaternion(RotationScaleMatrixReadOnly rotationScaleMatrix, QuaternionBasics quaternionToPack)
    {
@@ -171,7 +171,7 @@ public abstract class QuaternionConversion
     * </ul>
     * </p>
     *
-    * @param rotationMatrix a 3-by-3 matrix representing an orientation. Not modified.
+    * @param rotationMatrix   a 3-by-3 matrix representing an orientation. Not modified.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static void convertMatrixToQuaternion(RotationMatrixReadOnly rotationMatrix, QuaternionBasics quaternionToPack)
@@ -202,15 +202,15 @@ public abstract class QuaternionConversion
     * </ul>
     * </p>
     *
-    * @param m00 the 1st row 1st column coefficient of the rotation matrix.
-    * @param m01 the 1st row 2nd column coefficient of the rotation matrix.
-    * @param m02 the 1st row 3rd column coefficient of the rotation matrix.
-    * @param m10 the 2nd row 1st column coefficient of the rotation matrix.
-    * @param m11 the 2nd row 2nd column coefficient of the rotation matrix.
-    * @param m12 the 2nd row 3rd column coefficient of the rotation matrix.
-    * @param m20 the 3rd row 1st column coefficient of the rotation matrix.
-    * @param m21 the 3rd row 2nd column coefficient of the rotation matrix.
-    * @param m22 the 3rd row 3rd column coefficient of the rotation matrix.
+    * @param m00              the 1st row 1st column coefficient of the rotation matrix.
+    * @param m01              the 1st row 2nd column coefficient of the rotation matrix.
+    * @param m02              the 1st row 3rd column coefficient of the rotation matrix.
+    * @param m10              the 2nd row 1st column coefficient of the rotation matrix.
+    * @param m11              the 2nd row 2nd column coefficient of the rotation matrix.
+    * @param m12              the 2nd row 3rd column coefficient of the rotation matrix.
+    * @param m20              the 3rd row 1st column coefficient of the rotation matrix.
+    * @param m21              the 3rd row 2nd column coefficient of the rotation matrix.
+    * @param m22              the 3rd row 3rd column coefficient of the rotation matrix.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static void convertMatrixToQuaternion(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
@@ -300,7 +300,7 @@ public abstract class QuaternionConversion
     * same axis-angle.
     * </p>
     *
-    * @param rotationVector the rotation vector to use in the conversion. Not modified.
+    * @param rotationVector   the rotation vector to use in the conversion. Not modified.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static void convertRotationVectorToQuaternion(Vector3DReadOnly rotationVector, QuaternionBasics quaternionToPack)
@@ -326,9 +326,9 @@ public abstract class QuaternionConversion
     * same axis-angle.
     * </p>
     *
-    * @param rx the x-component of the rotation vector to use in the conversion.
-    * @param ry the y-component of the rotation vector to use in the conversion.
-    * @param rz the z-component of the rotation vector to use in the conversion.
+    * @param rx               the x-component of the rotation vector to use in the conversion.
+    * @param ry               the y-component of the rotation vector to use in the conversion.
+    * @param rz               the z-component of the rotation vector to use in the conversion.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static void convertRotationVectorToQuaternion(double rx, double ry, double rz, QuaternionBasics quaternionToPack)
@@ -376,7 +376,7 @@ public abstract class QuaternionConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
+    * @param yawPitchRoll     the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param quaternionToPack the quaternion in which the result is stored.
     * @deprecated Use {@link #convertYawPitchRollToQuaternion(YawPitchRollReadOnly, QuaternionBasics)}
     *             instead.
@@ -406,7 +406,7 @@ public abstract class QuaternionConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
+    * @param yawPitchRoll     the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static void convertYawPitchRollToQuaternion(YawPitchRollReadOnly yawPitchRoll, QuaternionBasics quaternionToPack)
@@ -434,9 +434,9 @@ public abstract class QuaternionConversion
     * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
     * </p>
     *
-    * @param yaw the yaw angle to use in the conversion.
-    * @param pitch the pitch angle to use in the conversion.
-    * @param roll the roll angle to use in the conversion.
+    * @param yaw              the yaw angle to use in the conversion.
+    * @param pitch            the pitch angle to use in the conversion.
+    * @param roll             the roll angle to use in the conversion.
     * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static void convertYawPitchRollToQuaternion(double yaw, double pitch, double roll, QuaternionBasics quaternionToPack)

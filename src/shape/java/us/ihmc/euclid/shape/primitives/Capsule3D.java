@@ -68,9 +68,9 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
     * Creates a new capsule 3D and initializes its pose and size.
     * 
     * @param position the position of the center. Not modified.
-    * @param axis the axis of revolution. Not modified.
-    * @param length the length of this capsule.
-    * @param radius the radius of this capsule.
+    * @param axis     the axis of revolution. Not modified.
+    * @param length   the length of this capsule.
+    * @param radius   the radius of this capsule.
     * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
     */
    public Capsule3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
@@ -170,7 +170,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other capsule to compare against this. Not modified.
+    * @param other   the other capsule to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
     */
@@ -184,7 +184,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
     * Compares {@code this} and {@code other} to determine if the two capsules are geometrically
     * similar.
     *
-    * @param other the capsule to compare to. Not modified.
+    * @param other   the capsule to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the capsules represent the same geometry, {@code false} otherwise.
     */

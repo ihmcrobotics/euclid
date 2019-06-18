@@ -38,20 +38,20 @@ public class AxisTest
       {
          switch (axis)
          {
-         case X:
-            touchedX = true;
+            case X:
+               touchedX = true;
 
-            break;
+               break;
 
-         case Y:
-            touchedY = true;
+            case Y:
+               touchedY = true;
 
-            break;
+               break;
 
-         case Z:
-            touchedZ = true;
+            case Z:
+               touchedZ = true;
 
-            break;
+               break;
          }
       }
 
@@ -73,20 +73,20 @@ public class AxisTest
       {
          switch (axis)
          {
-         case X:
-            touchedX = true;
+            case X:
+               touchedX = true;
 
-            break;
+               break;
 
-         case Y:
-            touchedY = true;
+            case Y:
+               touchedY = true;
 
-            break;
+               break;
 
-         case Z:
-            touchedZ = true;
+            case Z:
+               touchedZ = true;
 
-            break;
+               break;
          }
       }
 

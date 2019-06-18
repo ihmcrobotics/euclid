@@ -75,9 +75,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    /**
     * Creates a new empty face.
     * 
-    * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
+    * @param initialGuessNormal  initial guess for what this face's normal should be. Not modified.
     * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
-    *           edge-cases.
+    *                            edge-cases.
     */
    public Face3D(Vector3DReadOnly initialGuessNormal, double constructionEpsilon)
    {
@@ -89,10 +89,11 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
    /**
     * Creates a new face given its edges.
     * 
-    * @param faceEdges the edges composing the new face. Not modified, reference to the edges saved.
-    * @param normal the face's normal. Not modified.
+    * @param faceEdges           the edges composing the new face. Not modified, reference to the edges
+    *                            saved.
+    * @param normal              the face's normal. Not modified.
     * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
-    *           edge-cases.
+    *                            edge-cases.
     */
    public Face3D(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal, double constructionEpsilon)
    {
@@ -109,7 +110,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     * </p>
     * 
     * @param faceEdges the edges composing the new face. Not modified, reference to the edges saved.
-    * @param normal the face's normal. Not modified.
+    * @param normal    the face's normal. Not modified.
     */
    public void set(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal)
    {
@@ -151,11 +152,12 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param vertexToAdd the vertex that is to be added to the face. Not modified, reference saved.
-    * @param faceVertexToLock (optional) vertex that already belongs to this face that must be
-    *           preserved when adding the new vertex. Not modified.
+    * @param vertexToAdd       the vertex that is to be added to the face. Not modified, reference
+    *                          saved.
+    * @param faceVertexToLock  (optional) vertex that already belongs to this face that must be
+    *                          preserved when adding the new vertex. Not modified.
     * @param lockEdgesWithTwin enforces edges with a non {@code null} to be preserved when adding the
-    *           new vertex.
+    *                          new vertex.
     * @return {@code true} if the vertex was added to this face, {@code false} if it was rejected.
     */
    public boolean addVertex(Vertex3D vertexToAdd, Vertex3D faceVertexToLock, boolean lockEdgesWithTwin)
@@ -262,7 +264,9 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
       }
 
       // Ensuring clockwise ordering using the initial guess for the normal.
-      Vector3D resultingNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(firstEdge.getOrigin(), firstEdge.getDestination(), firstEdge.getDestination(),
+      Vector3D resultingNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(firstEdge.getOrigin(),
+                                                                                  firstEdge.getDestination(),
+                                                                                  firstEdge.getDestination(),
                                                                                   vertexToAdd);
       if (resultingNormal.dot(normal) > 0.0)
       { // Counter-clockwise, need to reverse the ordering.
@@ -303,7 +307,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          firstVisibleEdge = edgeBeforeLineOfSight;
          lineOfSight.add(0, firstVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), vertexToAdd,
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(),
+                                                               vertexToAdd,
                                                                edgeBeforeLineOfSight.getOrigin()) < constructionEpsilon)
       { // Sometimes edgeBeforeLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
          firstVisibleEdge = edgeBeforeLineOfSight;
@@ -315,7 +320,8 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
          lastVisibleEdge = edgeAfterLineOfSight;
          lineOfSight.add(lastVisibleEdge);
       }
-      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), vertexToAdd,
+      else if (EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(),
+                                                               vertexToAdd,
                                                                edgeAfterLineOfSight.getDestination()) < constructionEpsilon)
       { // Sometimes edgeAfterLineOfSight is really small, in which case the previous test may not pass while the edge should be extended.
          lastVisibleEdge = edgeAfterLineOfSight;

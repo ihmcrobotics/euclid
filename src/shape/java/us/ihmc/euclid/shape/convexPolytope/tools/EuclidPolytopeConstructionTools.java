@@ -58,13 +58,13 @@ public class EuclidPolytopeConstructionTools
     * WARNING: This method generates garbage.
     * </p>
     * 
-    * @param vertex faces are modified and/or created to include this vertex.
+    * @param vertex          faces are modified and/or created to include this vertex.
     * @param silhouetteEdges the contour visible from the vertex. Each edge is expected to be
-    *           associated with either a hidden face or an in-plane face.
-    * @param inPlaneFaces the list of faces for which the vertex is considered to lie in the face's
-    *           support plane. These faces are expanded to include the new vertex.
-    * @param epsilon tolerance used for testing edge-cases such as equivalent vertices, vertex lying on
-    *           a line, etc.
+    *                        associated with either a hidden face or an in-plane face.
+    * @param inPlaneFaces    the list of faces for which the vertex is considered to lie in the face's
+    *                        support plane. These faces are expanded to include the new vertex.
+    * @param epsilon         tolerance used for testing edge-cases such as equivalent vertices, vertex
+    *                        lying on a line, etc.
     * @return the list of new faces that were created in the the process.
     */
    public static List<Face3D> computeVertexNeighborFaces(Vertex3D vertex, List<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
@@ -365,7 +365,8 @@ public class EuclidPolytopeConstructionTools
                HalfEdge3D edgeAfterLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
 
                if (!silhouetteEdges.contains(edgeBeforeLineOfSight) && (edgeBeforeLineOfSight.distanceFromSupportLine(vertex) < epsilon
-                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(), vertex,
+                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(),
+                                                                        vertex,
                                                                         edgeBeforeLineOfSight.getOrigin()) < epsilon))
                {
                   if (!inPlaneFaces.contains(edgeBeforeLineOfSight.getTwin().getFace()))
@@ -376,7 +377,8 @@ public class EuclidPolytopeConstructionTools
                }
 
                if (!silhouetteEdges.contains(edgeAfterLineOfSight) && (edgeAfterLineOfSight.distanceFromSupportLine(vertex) < epsilon
-                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(), vertex,
+                     || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeAfterLineOfSight.getOrigin(),
+                                                                        vertex,
                                                                         edgeAfterLineOfSight.getDestination()) < epsilon))
                {
                   if (!inPlaneFaces.contains(edgeAfterLineOfSight.getTwin().getFace()))
@@ -414,9 +416,9 @@ public class EuclidPolytopeConstructionTools
     * <li>the new face's normal can be computed using the direction of the given twin-edge.
     * </ul>
     * 
-    * @param vertex a vertex of the new face.
+    * @param vertex   a vertex of the new face.
     * @param twinEdge the edge which twin's associated face is the new face.
-    * @param epsilon tolerance used when testing if a vertex should be added or not.
+    * @param epsilon  tolerance used when testing if a vertex should be added or not.
     * @return the new face.
     */
    public static Face3D newFace3DFromVertexAndTwinEdge(Vertex3D vertex, HalfEdge3D twinEdge, double epsilon)
@@ -471,11 +473,11 @@ public class EuclidPolytopeConstructionTools
     * WARNING: This method generates garbage.
     * </p>
     * 
-    * @param vertices the face vertices. Not modified.
-    * @param averageToPack point in which the average from the vertices is stored. Modified. Can be
-    *           {@code null}.
+    * @param vertices       the face vertices. Not modified.
+    * @param averageToPack  point in which the average from the vertices is stored. Modified. Can be
+    *                       {@code null}.
     * @param normalToUpdate the vector used to store the normal. The normal is updated such that
-    *           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
+    *                       {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
    public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
@@ -492,8 +494,8 @@ public class EuclidPolytopeConstructionTools
     * </p>
     * 
     * @param covarianceMatrix the covariance matrix computed from the face vertices. Not modified.
-    * @param normalToUpdate the vector used to store the normal. The normal is updated such that
-    *           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
+    * @param normalToUpdate   the vector used to store the normal. The normal is updated such that
+    *                         {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
    public static boolean updateFace3DNormal(DenseMatrix64F covarianceMatrix, Vector3DBasics normalToUpdate)
@@ -508,9 +510,9 @@ public class EuclidPolytopeConstructionTools
     * </p>
     * 
     * @param eigenDecomposition the solver to use to computing the eigen vectors.
-    * @param covarianceMatrix the covariance matrix computed from the face vertices. Not modified.
-    * @param normalToUpdate the vector used to store the normal. The normal is updated such that
-    *           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
+    * @param covarianceMatrix   the covariance matrix computed from the face vertices. Not modified.
+    * @param normalToUpdate     the vector used to store the normal. The normal is updated such that
+    *                           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
    public static boolean updateFace3DNormal(EigenDecomposition<DenseMatrix64F> eigenDecomposition, DenseMatrix64F covarianceMatrix,
@@ -565,7 +567,8 @@ public class EuclidPolytopeConstructionTools
    /**
     * Computes the covariance matrix from a list of 3D tuples.
     * 
-    * @param input the list of tuples to use for computing the covariance matrix. Not modified.
+    * @param input            the list of tuples to use for computing the covariance matrix. Not
+    *                         modified.
     * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
     */
    public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, DenseMatrix64F covarianceToPack)
@@ -576,9 +579,10 @@ public class EuclidPolytopeConstructionTools
    /**
     * Computes the covariance matrix from a list of 3D tuples.
     * 
-    * @param input the list of tuples to use for computing the covariance matrix. Not modified.
-    * @param averageToPack tuple in which the average from the input is stored. Modified. Can be
-    *           {@code null}.
+    * @param input            the list of tuples to use for computing the covariance matrix. Not
+    *                         modified.
+    * @param averageToPack    tuple in which the average from the input is stored. Modified. Can be
+    *                         {@code null}.
     * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
     */
    public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, DenseMatrix64F covarianceToPack)
@@ -640,12 +644,12 @@ public class EuclidPolytopeConstructionTools
    /**
     * Computes the area and centroid of a 3D convex polygon defined by its vertices and normal.
     * 
-    * @param convexPolygon3D the polygon vertices. Not modified.
-    * @param normal the normal of the plane on which the vertices are lying. Not modified.
+    * @param convexPolygon3D  the polygon vertices. Not modified.
+    * @param normal           the normal of the plane on which the vertices are lying. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
     * @param clockwiseOrdered whether the vertices are clockwise ordered.
-    * @param centroidToPack point used to store the coordinates of the polygon centroid. Modified. Can
-    *           be {@code null}.
+    * @param centroidToPack   point used to store the coordinates of the polygon centroid. Modified.
+    *                         Can be {@code null}.
     * @return the area of the polygon.
     */
    public static double computeConvexPolygon3DArea(List<? extends Point3DReadOnly> convexPolygon3D, Vector3DReadOnly normal, int numberOfVertices,
@@ -759,7 +763,7 @@ public class EuclidPolytopeConstructionTools
     * Computes the volume and centroid of a convex polytope.
     * 
     * @param convexPolytope3D the convex polytope to evaluate. Not modified.
-    * @param centroidToPack the point used to store the coordinates of the centroid. Modified.
+    * @param centroidToPack   the point used to store the coordinates of the centroid. Modified.
     * @return the volume of the convex polytope.
     */
    public static double computeConvexPolytope3DVolume(ConvexPolytope3DReadOnly convexPolytope3D, Point3DBasics centroidToPack)
@@ -774,7 +778,9 @@ public class EuclidPolytopeConstructionTools
          centroidToPack.scale(1.0 / convexPolytope3D.getNumberOfVertices());
 
          if (convexPolytope3D.getNumberOfVertices() == 4)
-            volume = EuclidShapeTools.tetrahedronVolume(convexPolytope3D.getVertex(0), convexPolytope3D.getVertex(1), convexPolytope3D.getVertex(2),
+            volume = EuclidShapeTools.tetrahedronVolume(convexPolytope3D.getVertex(0),
+                                                        convexPolytope3D.getVertex(1),
+                                                        convexPolytope3D.getVertex(2),
                                                         convexPolytope3D.getVertex(3));
          else
             volume = 0.0;

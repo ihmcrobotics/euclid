@@ -38,8 +38,8 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    /**
     * Tests if this line contains {@link Double#NaN}.
     *
-    * @return {@code true} if {@link #getPoint()} and/or {@link #getDirection()} contains {@link Double#NaN},
-    *         {@code false} otherwise.
+    * @return {@code true} if {@link #getPoint()} and/or {@link #getDirection()} contains
+    *         {@link Double#NaN}, {@code false} otherwise.
     */
    @Override
    default boolean containsNaN()
@@ -175,9 +175,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLineX the new x-coordinate of the point on this line.
-    * @param pointOnLineY the new y-coordinate of the point on this line.
-    * @param pointOnLineZ the new z-coordinate of the point on this line.
+    * @param pointOnLineX   the new x-coordinate of the point on this line.
+    * @param pointOnLineY   the new y-coordinate of the point on this line.
+    * @param pointOnLineZ   the new z-coordinate of the point on this line.
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     * @param lineDirectionZ the new z-component of the direction of this line.
@@ -194,7 +194,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws RuntimeException if the two given points are exactly equal.
     */
@@ -216,7 +216,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    /**
     * Redefines this line such that it goes through the two given points.
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws RuntimeException if the two given points are exactly equal.
     */
@@ -239,7 +239,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * After calling this method this line is in the XY-plane.
     * </p>
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     */
    default void set(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
@@ -251,7 +251,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    /**
     * Redefines this line with a new point and a new direction vector.
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     */
    default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)

@@ -230,7 +230,9 @@ public class Box3DTest
             Box3D expected = EuclidShapeRandomTools.nextBox3D(random);
             Box3D actual = EuclidShapeRandomTools.nextBox3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
-            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()), expected.getSizeX(), expected.getSizeY(),
+            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()),
+                       expected.getSizeX(),
+                       expected.getSizeY(),
                        expected.getSizeZ());
             EuclidShapeTestTools.assertBox3DEquals(expected, actual, EPSILON);
          }
@@ -335,37 +337,43 @@ public class Box3DTest
          Point3D pointOutside = new Point3D();
 
          // Beyond the X+ face
-         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX,
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
                           EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
 
          // Beyond the X- face
-         pointOutside.set(-EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+         pointOutside.set(-EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX,
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
                           EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
 
          // Beyond the Y+ face
-         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX),
+                          EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
                           EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
 
          // Beyond the Y- face
-         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), -EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX),
+                          -EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
                           -EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
 
          // Beyond the Z+ face
-         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX),
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
                           EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
 
          // Beyond the Z- face
-         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX),
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
                           -EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
@@ -384,7 +392,8 @@ public class Box3DTest
          // Beyond edge collinear to X-axis
          ySign = random.nextBoolean() ? -1.0 : 1.0;
          zSign = random.nextBoolean() ? -1.0 : 1.0;
-         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+         pointOutside.set(EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeX),
+                          ySign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
                           zSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
@@ -392,7 +401,8 @@ public class Box3DTest
          // Beyond edge collinear to Y-axis
          xSign = random.nextBoolean() ? -1.0 : 1.0;
          zSign = random.nextBoolean() ? -1.0 : 1.0;
-         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
+         pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX,
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeY),
                           zSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeZ);
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
@@ -401,7 +411,8 @@ public class Box3DTest
          xSign = random.nextBoolean() ? -1.0 : 1.0;
          ySign = random.nextBoolean() ? -1.0 : 1.0;
          pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeX,
-                          ySign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY, EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
+                          ySign * EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0) * sizeY,
+                          EuclidCoreRandomTools.nextDouble(random, 0.5 * sizeZ));
          box3D.transformToWorld(pointOutside);
          assertFalse(box3D.isPointInside(pointOutside));
       }
@@ -455,7 +466,8 @@ public class Box3DTest
 
          { // X faces
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
             expectedClosestPoint.set(xSign * halfSizeX, pointOutside.getY(), pointOutside.getZ());
             expectedNormal.set(xSign, 0.0, 0.0);
@@ -469,7 +481,8 @@ public class Box3DTest
 
          { // Y faces
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
                              EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
             expectedClosestPoint.set(pointOutside.getX(), ySign * halfSizeY, pointOutside.getZ());
             expectedNormal.set(0.0, ySign, 0.0);
@@ -483,7 +496,8 @@ public class Box3DTest
 
          { // Z faces
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             expectedClosestPoint.set(pointOutside.getX(), pointOutside.getY(), zSign * halfSizeZ);
             expectedNormal.set(0.0, 0.0, zSign);
@@ -512,7 +526,8 @@ public class Box3DTest
          { // Collinear to X-axis
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             expectedClosestPoint.set(pointOutside.getX(), ySign * halfSizeY, zSign * halfSizeZ);
             expectedNormal.sub(pointOutside, expectedClosestPoint);
@@ -528,7 +543,8 @@ public class Box3DTest
          { // Collinear to Y-axis
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             expectedClosestPoint.set(xSign * halfSizeX, pointOutside.getY(), zSign * halfSizeZ);
             expectedNormal.sub(pointOutside, expectedClosestPoint);
@@ -545,7 +561,8 @@ public class Box3DTest
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
             pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
-                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY, EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
             expectedClosestPoint.set(xSign * halfSizeX, ySign * halfSizeY, pointOutside.getZ());
             expectedNormal.sub(pointOutside, expectedClosestPoint);
             expectedNormal.normalize();
@@ -907,17 +924,17 @@ public class Box3DTest
          int axis = random.nextInt(3);
          switch (axis)
          {
-         case 0:
-            pose.appendRollRotation(Math.PI);
-            break;
-         case 1:
-            pose.appendPitchRotation(Math.PI);
-            break;
-         case 2:
-            pose.appendYawRotation(Math.PI);
-            break;
-         default:
-            throw new RuntimeException("Unexpected axis value: " + axis);
+            case 0:
+               pose.appendRollRotation(Math.PI);
+               break;
+            case 1:
+               pose.appendPitchRotation(Math.PI);
+               break;
+            case 2:
+               pose.appendYawRotation(Math.PI);
+               break;
+            default:
+               throw new RuntimeException("Unexpected axis value: " + axis);
          }
 
          Box3D box2 = new Box3D(pose, lengthX, widthY, heightZ);
@@ -926,17 +943,17 @@ public class Box3DTest
          double angle = EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI / 2.0);
          switch (axis)
          {
-         case 0:
-            pose.appendRollRotation(angle);
-            break;
-         case 1:
-            pose.appendPitchRotation(angle);
-            break;
-         case 2:
-            pose.appendYawRotation(angle);
-            break;
-         default:
-            throw new RuntimeException("Unexpected axis value: " + axis);
+            case 0:
+               pose.appendRollRotation(angle);
+               break;
+            case 1:
+               pose.appendPitchRotation(angle);
+               break;
+            case 2:
+               pose.appendYawRotation(angle);
+               break;
+            default:
+               throw new RuntimeException("Unexpected axis value: " + axis);
          }
 
          box2 = new Box3D(pose, lengthX, widthY, heightZ);
@@ -1079,7 +1096,8 @@ public class Box3DTest
 
          { // X faces
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
 
             double expectedDistance = Math.abs(pointOutside.getX() - xSign * halfSizeX);
@@ -1089,7 +1107,8 @@ public class Box3DTest
 
          { // Y faces
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
                              EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
 
             double expectedDistance = Math.abs(pointOutside.getY() - ySign * halfSizeY);
@@ -1099,7 +1118,8 @@ public class Box3DTest
 
          { // Z faces
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
 
             double expectedDistance = Math.abs(pointOutside.getZ() - zSign * halfSizeZ);
@@ -1121,7 +1141,8 @@ public class Box3DTest
          { // Collinear to X-axis
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             closestPoint.set(pointOutside.getX(), ySign * halfSizeY, zSign * halfSizeZ);
             double expectedDistance = closestPoint.distance(pointOutside);
@@ -1132,7 +1153,8 @@ public class Box3DTest
          { // Collinear to Y-axis
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             closestPoint.set(xSign * halfSizeX, pointOutside.getY(), zSign * halfSizeZ);
             double expectedDistance = closestPoint.distance(pointOutside);
@@ -1144,7 +1166,8 @@ public class Box3DTest
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
             pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
-                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY, EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
             closestPoint.set(xSign * halfSizeX, ySign * halfSizeY, pointOutside.getZ());
             double expectedDistance = closestPoint.distance(pointOutside);
             box3D.transformToWorld(pointOutside);
@@ -1275,7 +1298,8 @@ public class Box3DTest
 
          { // X faces
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
             expectedProjection.set(xSign * halfSizeX, pointOutside.getY(), pointOutside.getZ());
             box3D.transformToWorld(pointOutside);
@@ -1285,7 +1309,8 @@ public class Box3DTest
 
          { // Y faces
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
                              EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
             expectedProjection.set(pointOutside.getX(), ySign * halfSizeY, pointOutside.getZ());
             box3D.transformToWorld(pointOutside);
@@ -1295,7 +1320,8 @@ public class Box3DTest
 
          { // Z faces
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             expectedProjection.set(pointOutside.getX(), pointOutside.getY(), zSign * halfSizeZ);
             box3D.transformToWorld(pointOutside);
@@ -1317,7 +1343,8 @@ public class Box3DTest
          { // Collinear to X-axis
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX), ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+            pointOutside.set(EuclidCoreRandomTools.nextDouble(random, halfSizeX),
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             expectedProjection.set(pointOutside.getX(), ySign * halfSizeY, zSign * halfSizeZ);
             box3D.transformToWorld(pointOutside);
@@ -1328,7 +1355,8 @@ public class Box3DTest
          { // Collinear to Y-axis
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
             double zSign = random.nextBoolean() ? -1.0 : 1.0;
-            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX, EuclidCoreRandomTools.nextDouble(random, halfSizeY),
+            pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeY),
                              zSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeZ);
             expectedProjection.set(xSign * halfSizeX, pointOutside.getY(), zSign * halfSizeZ);
             box3D.transformToWorld(pointOutside);
@@ -1340,7 +1368,8 @@ public class Box3DTest
             double xSign = random.nextBoolean() ? -1.0 : 1.0;
             double ySign = random.nextBoolean() ? -1.0 : 1.0;
             pointOutside.set(xSign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeX,
-                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY, EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
+                             ySign * EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0) * halfSizeY,
+                             EuclidCoreRandomTools.nextDouble(random, halfSizeZ));
             expectedProjection.set(xSign * halfSizeX, ySign * halfSizeY, pointOutside.getZ());
             box3D.transformToWorld(pointOutside);
             box3D.transformToWorld(expectedProjection);
@@ -1518,7 +1547,7 @@ public class Box3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Using getSupportingVertex
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
-         
+
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
          Vector3D supportDirection = new Vector3D(Axis.X);

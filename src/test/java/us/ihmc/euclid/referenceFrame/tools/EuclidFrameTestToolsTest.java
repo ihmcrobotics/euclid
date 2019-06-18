@@ -501,7 +501,12 @@ public class EuclidFrameTestToolsTest
                                                             double epsilon)
          throws Throwable
    {
-      EuclidCoreTestToolsTest.assertAssertionMethodsBehaveProperly(EuclidFrameTestTools.class, failExpected, methodName, argumentsClass, expected, actual,
+      EuclidCoreTestToolsTest.assertAssertionMethodsBehaveProperly(EuclidFrameTestTools.class,
+                                                                   failExpected,
+                                                                   methodName,
+                                                                   argumentsClass,
+                                                                   expected,
+                                                                   actual,
                                                                    epsilon);
    }
 }

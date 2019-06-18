@@ -44,7 +44,7 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
     * Assembles the faces, edges, and vertices linked to the given vertex.
     * 
     * @param startVertex the vertex that belongs to the polytope to be assembled. Not modified,
-    *           reference saved.
+    *                    reference saved.
     */
    public EPAConvexPolytope3D(EPAVertex3D startVertex)
    {
@@ -67,7 +67,7 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
     * Assembles the faces, edges, and vertices linked to the given face.
     * 
     * @param startFace the face that belongs to the polytope to be assembled. Not modified, reference
-    *           saved.
+    *                  saved.
     */
    public EPAConvexPolytope3D(EPAFace3D startFace)
    {
@@ -144,7 +144,7 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
    {
       return halfEdges;
    }
-   
+
    /** {@inheritDoc} */
    @Override
    public List<? extends Face3DReadOnly> getFaces()

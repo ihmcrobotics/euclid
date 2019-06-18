@@ -5,7 +5,6 @@ package us.ihmc.euclid.geometry.exceptions;
  * up-to-date.
  * 
  * @author Sylvain Bertrand
- *
  */
 public class OutdatedPolygonException extends RuntimeException
 {

@@ -103,7 +103,7 @@ public class RigidBodyTransform
     *
     * @param matrix the matrix to get this transform's components from. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public RigidBodyTransform(DenseMatrix64F matrix)
    {
@@ -131,9 +131,9 @@ public class RigidBodyTransform
     * </p>
     *
     * @param transformArray the 1D row-major array to get this transform's components from. Not
-    *           modified.
+    *                       modified.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public RigidBodyTransform(double[] transformArray)
    {
@@ -168,7 +168,7 @@ public class RigidBodyTransform
     * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
     * @param m23 the z-component of the translation part of this transform.
     * @throws NotARotationMatrixException if the components for the rotation part do not represent a
-    *            rotation matrix.
+    *                                     rotation matrix.
     */
    public RigidBodyTransform(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22,
                              double m23)
@@ -213,7 +213,7 @@ public class RigidBodyTransform
     * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
     * @param m23 the z-component of the translation part of this transform.
     * @throws NotARotationMatrixException if the components for the rotation part do not represent a
-    *            rotation matrix.
+    *                                     rotation matrix.
     */
    public void set(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22,
                    double m23)
@@ -283,7 +283,7 @@ public class RigidBodyTransform
     *
     * @param matrix the matrix to get this transform's components from. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public void set(DenseMatrix64F matrix)
    {
@@ -311,11 +311,11 @@ public class RigidBodyTransform
     * </pre>
     * </p>
     *
-    * @param matrix the matrix to get this transform's components from. Not modified.
-    * @param startRow the row index of the first component to read.
+    * @param matrix      the matrix to get this transform's components from. Not modified.
+    * @param startRow    the row index of the first component to read.
     * @param startColumn the column index of the first component to read.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public void set(DenseMatrix64F matrix, int startRow, int startColumn)
    {
@@ -344,9 +344,9 @@ public class RigidBodyTransform
     * </p>
     *
     * @param transformArray the 1D row-major array to get this transform's components from. Not
-    *           modified.
+    *                       modified.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public void set(double[] transformArray)
    {
@@ -388,9 +388,9 @@ public class RigidBodyTransform
     * </p>
     *
     * @param transformArray the 1D column-major array to get this transform's components from. Not
-    *           modified.
+    *                       modified.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public void setAsTranspose(double[] transformArray)
    {
@@ -432,9 +432,9 @@ public class RigidBodyTransform
     * </p>
     *
     * @param transformArray the 1D row-major array to get this transform's components from. Not
-    *           modified.
+    *                       modified.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public void set(float[] transformArray)
    {
@@ -476,9 +476,9 @@ public class RigidBodyTransform
     * </p>
     *
     * @param transformArray the 1D column-major array to get this transform's components from. Not
-    *           modified.
+    *                       modified.
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
-    *            transform is not a rotation matrix.
+    *                                     transform is not a rotation matrix.
     */
    public void setAsTranspose(float[] transformArray)
    {
@@ -503,7 +503,7 @@ public class RigidBodyTransform
     * Sets the rotation and translation parts of this transform separately.
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
     */
    public void set(Matrix3DReadOnly rotationMatrix, Tuple3DReadOnly translation)
@@ -619,8 +619,8 @@ public class RigidBodyTransform
     *
     * @param other the other transform used in the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           {@code this}, while a value of 1 is equivalent to setting {@code this} to
-    *           {@code other}.
+    *              {@code this}, while a value of 1 is equivalent to setting {@code this} to
+    *              {@code other}.
     */
    public void interpolate(RigidBodyTransform other, double alpha)
    {
@@ -640,9 +640,9 @@ public class RigidBodyTransform
     *
     * @param transform1 the first transform used in the interpolation. Not modified.
     * @param transform2 the second transform used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           {@code this} to {@code transform1}, while a value of 1 is equivalent to setting
-    *           {@code this} to {@code transform2}.
+    * @param alpha      the percentage to use for the interpolation. A value of 0 will result in
+    *                   setting {@code this} to {@code transform1}, while a value of 1 is equivalent to
+    *                   setting {@code this} to {@code transform2}.
     */
    public void interpolate(RigidBodyTransform transform1, RigidBodyTransform transform2, double alpha)
    {
@@ -686,8 +686,8 @@ public class RigidBodyTransform
     *
     * where R is the 3-by-3 rotation matrix and (Tx, Ty, Tz) is the translation part of this transform.
     *
-    * @param startRow the first row index to start writing in {@code matrixToPack}.
-    * @param startColumn the first column index to start writing in {@code matrixToPack}.
+    * @param startRow     the first row index to start writing in {@code matrixToPack}.
+    * @param startColumn  the first column index to start writing in {@code matrixToPack}.
     * @param matrixToPack the matrix in which this transform is stored. Modified.
     */
    public void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
@@ -773,7 +773,7 @@ public class RigidBodyTransform
     * Packs the rotation matrix and translation vector of this rigid-body transform.
     *
     * @param rotationMarixToPack the matrix to set to the rotation of this transform. Modified.
-    * @param translationToPack the tuple to set to the translation of this transform. Modified.
+    * @param translationToPack   the tuple to set to the translation of this transform. Modified.
     */
    public void get(CommonMatrix3DBasics rotationMarixToPack, Tuple3DBasics translationToPack)
    {
@@ -803,7 +803,7 @@ public class RigidBodyTransform
     * Packs the rotation part of this rigid-body transform.
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *           Modified.
+    *                             Modified.
     */
    public void getRotation(CommonMatrix3DBasics rotationMatrixToPack)
    {
@@ -814,7 +814,7 @@ public class RigidBodyTransform
     * Packs the rotation part of this rigid-body transform.
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *           Modified.
+    *                             Modified.
     */
    public void getRotation(DenseMatrix64F rotationMatrixToPack)
    {
@@ -825,7 +825,7 @@ public class RigidBodyTransform
     * Packs the rotation part of this rigid-body transform in 1D row-major array.
     *
     * @param rotationMatrixArrayToPack the array in which the rotation part of this transform is
-    *           stored. Modified.
+    *                                  stored. Modified.
     */
    public void getRotation(double[] rotationMatrixArrayToPack)
    {
@@ -853,11 +853,11 @@ public class RigidBodyTransform
    /**
     * Retrieves and returns a coefficient of this transform given its row and column indices.
     *
-    * @param row the row of the coefficient to return.
+    * @param row    the row of the coefficient to return.
     * @param column the column of the coefficient to return.
     * @return the coefficient's value.
     * @throws ArrayIndexOutOfBoundsException if either {@code row} &notin; [0, 3] or {@code column}
-    *            &notin; [0, 3].
+    *                                        &notin; [0, 3].
     */
    public double getElement(int row, int column)
    {
@@ -1122,7 +1122,7 @@ public class RigidBodyTransform
     * Two rigid body transforms are considered geometrically equal if both the rotation matrices and
     * translation vectors are equal.
     *
-    * @param other the other rigid body transform to compare against this. Not modified.
+    * @param other   the other rigid body transform to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
     */

@@ -27,7 +27,7 @@ public interface FrameQuaternionBasics extends FixedFrameQuaternionBasics, Frame
     * Sets this frame tuple to {@code quaternionReadOnly} and sets its current frame to
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame for this frame tuple.
+    * @param referenceFrame     the new reference frame for this frame tuple.
     * @param quaternionReadOnly the quaternion to copy the values from. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)

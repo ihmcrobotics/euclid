@@ -118,9 +118,9 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
     * Sets this capsule properties.
     * 
     * @param position the position of this capsule center. Not modified.
-    * @param axis the axis of revolution of this capsule. Not modified.
-    * @param length the new length.
-    * @param radius the new radius.
+    * @param axis     the axis of revolution of this capsule. Not modified.
+    * @param length   the new length.
+    * @param radius   the new radius.
     * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
     */
    default void set(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)

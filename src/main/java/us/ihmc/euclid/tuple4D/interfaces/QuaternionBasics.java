@@ -654,10 +654,10 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
     * SLERP.
     * </p>
     *
-    * @param qf the other quaternion used for the interpolation. Not modified.
+    * @param qf    the other quaternion used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           this quaternion, while a value of 1 is equivalent to setting this quaternion to
-    *           {@code qf}.
+    *              this quaternion, while a value of 1 is equivalent to setting this quaternion to
+    *              {@code qf}.
     */
    default void interpolate(QuaternionReadOnly qf, double alpha)
    {
@@ -672,11 +672,11 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
     * SLERP.
     * </p>
     *
-    * @param q0 the first quaternion used in the interpolation. Not modified.
-    * @param qf the second quaternion used in the interpolation. Not modified.
+    * @param q0    the first quaternion used in the interpolation. Not modified.
+    * @param qf    the second quaternion used in the interpolation. Not modified.
     * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
-    *           quaternion to {@code qf}.
+    *              this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
+    *              quaternion to {@code qf}.
     */
    default void interpolate(QuaternionReadOnly q0, QuaternionReadOnly qf, double alpha)
    {

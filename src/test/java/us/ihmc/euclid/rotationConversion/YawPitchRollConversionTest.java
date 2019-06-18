@@ -196,7 +196,9 @@ public class YawPitchRollConversionTest
             {
                QuaternionConversion.convertYawPitchRollToQuaternion(yaw, pitch, roll, quaternion);
                double randomScale = EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0);
-               quaternion.setUnsafe(quaternion.getX() * randomScale, quaternion.getY() * randomScale, quaternion.getZ() * randomScale,
+               quaternion.setUnsafe(quaternion.getX() * randomScale,
+                                    quaternion.getY() * randomScale,
+                                    quaternion.getZ() * randomScale,
                                     quaternion.getS() * randomScale);
 
                double actualYaw = YawPitchRollConversion.computeYaw(quaternion);

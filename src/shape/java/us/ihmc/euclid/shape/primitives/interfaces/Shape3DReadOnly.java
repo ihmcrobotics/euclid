@@ -26,11 +26,11 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
    /**
     * Evaluates the collision state between a point {@code pointToCheck} and this shape.
     *
-    * @param pointToCheck the coordinates of the query to be evaluated. Not modified.
+    * @param pointToCheck                the coordinates of the query to be evaluated. Not modified.
     * @param closestPointOnSurfaceToPack the closest point to the query that lies on this shape
-    *           surface. Modified.
-    * @param normalAtClosestPointToPack the surface normal at the closest point to the query. The
-    *           normal points toward outside the shape. Modified.
+    *                                    surface. Modified.
+    * @param normalAtClosestPointToPack  the surface normal at the closest point to the query. The
+    *                                    normal points toward outside the shape. Modified.
     * @return {@code true} if the query is inside this shape or exactly on its surface, {@code false}
     *         otherwise.
     */
@@ -84,7 +84,7 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * </ul>
     * </p>
     *
-    * @param query the coordinates of the query. Not modified.
+    * @param query   the coordinates of the query. Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside this shape, {@code false} otherwise.
     */
@@ -141,9 +141,9 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * </ul>
     * </p>
     *
-    * @param pointToProject the coordinate of the point to compute the projection of. Not modified.
+    * @param pointToProject   the coordinate of the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this shape is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     */
    boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack);

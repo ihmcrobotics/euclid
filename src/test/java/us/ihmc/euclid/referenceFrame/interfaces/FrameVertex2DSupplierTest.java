@@ -147,7 +147,8 @@ public class FrameVertex2DSupplierTest
          while (original.size() < listSize)
             original.add(EuclidFrameRandomTools.nextFramePoint2D(random, worldFrame));
 
-         FrameVertex2DSupplier supplier = FrameVertex2DSupplier.asFrameVertex2DSupplier(original.toArray(new FramePoint2DReadOnly[0]), startIndex,
+         FrameVertex2DSupplier supplier = FrameVertex2DSupplier.asFrameVertex2DSupplier(original.toArray(new FramePoint2DReadOnly[0]),
+                                                                                        startIndex,
                                                                                         numberOfVertices);
 
          assertEquals(numberOfVertices, supplier.getNumberOfVertices());

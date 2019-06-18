@@ -499,7 +499,7 @@ public class EuclidCoreTools
     * </p>
     *
     * @param angleToShift the angle to shift.
-    * @param angleStart the lowest admissible angle value.
+    * @param angleStart   the lowest admissible angle value.
     * @return the result that is in [{@code angleStart}, {@code angleStart} + 2<i>pi</i>[
     */
    public static double shiftAngleInRange(double angleToShift, double angleStart)
@@ -581,8 +581,8 @@ public class EuclidCoreTools
     * </p>
     *
     * @param expectedValue the first value to compare.
-    * @param actualValue the second value to compare.
-    * @param epsilon the tolerance to use for the test.
+    * @param actualValue   the second value to compare.
+    * @param epsilon       the tolerance to use for the test.
     * @return {@code true} if the two values are considered to be equal, {@code false otherwise}.
     */
    public static boolean epsilonEquals(double expectedValue, double actualValue, double epsilon)
@@ -596,7 +596,7 @@ public class EuclidCoreTools
     * This is equivalent to {@code epsilonEquals(value, 0.0, epsilon)}.
     * </p>
     * 
-    * @param value the query.
+    * @param value   the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the value can be considered zero, {@code false} otherwise.
     */
@@ -608,8 +608,8 @@ public class EuclidCoreTools
    /**
     * Tests whether both values are equal to zero to an epsilon.
     * 
-    * @param x the first value.
-    * @param y the second value.
+    * @param x       the first value.
+    * @param y       the second value.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if both values can be considered zero, {@code false} otherwise.
     */
@@ -621,9 +621,9 @@ public class EuclidCoreTools
    /**
     * Tests whether all values are equal to zero to an epsilon.
     * 
-    * @param x the first value.
-    * @param y the second value.
-    * @param z the third value.
+    * @param x       the first value.
+    * @param y       the second value.
+    * @param z       the third value.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if all values can be considered zero, {@code false} otherwise.
     */
@@ -635,10 +635,10 @@ public class EuclidCoreTools
    /**
     * Tests whether all values are equal to zero to an epsilon.
     * 
-    * @param x the first value.
-    * @param y the second value.
-    * @param z the third value.
-    * @param s the fourth value.
+    * @param x       the first value.
+    * @param y       the second value.
+    * @param z       the third value.
+    * @param s       the fourth value.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if all values can be considered zero, {@code false} otherwise.
     */
@@ -655,8 +655,8 @@ public class EuclidCoreTools
     * </p>
     * 
     * @param expectedAngle the first angle in the comparison.
-    * @param actualAngle the second angle in the comparison.
-    * @param epsilon the tolerance to use for the test.
+    * @param actualAngle   the second angle in the comparison.
+    * @param epsilon       the tolerance to use for the test.
     * @return {@code true} if the two angles are considered to be geometrically equal, {@code false}
     *         otherwise.
     */
@@ -671,7 +671,7 @@ public class EuclidCoreTools
     * This is equivalent to {@code angleGeometricallyEquals(angle, 0.0, epsilon)}.
     * </p>
     * 
-    * @param angle the query.
+    * @param angle   the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the angle can be considered zero, {@code false} otherwise.
     */
@@ -686,7 +686,7 @@ public class EuclidCoreTools
    /**
     * Clamps value to the given range, defined by {@code -minMax} and {@code minMax}, inclusive.
     *
-    * @param value value
+    * @param value  value
     * @param minMax inclusive absolute boundary
     * @return
     *         <li>{@code -minMax} if {@code value} is less than {@code -minMax}</li>
@@ -703,8 +703,8 @@ public class EuclidCoreTools
     * Clamps value to the given range, inclusive.
     *
     * @param value value
-    * @param min inclusive boundary start
-    * @param max inclusive boundary end
+    * @param min   inclusive boundary start
+    * @param max   inclusive boundary end
     * @return
     *         <li>{@code min} if {@code value} is less than {@code min}</li>
     *         <li>{@code max} if {@code value} is greater than {@code max}</li>
@@ -727,10 +727,10 @@ public class EuclidCoreTools
     * result = (1.0 - alpha) * a + alpha * b
     * </p>
     *
-    * @param a the first value used in the interpolation.
-    * @param b the second value used in the interpolation.
+    * @param a     the first value used in the interpolation.
+    * @param b     the second value used in the interpolation.
     * @param alpha the percentage to use for the interpolation. A value of 0 will return {@code a},
-    *           while a value of 1 will return {@code b}.
+    *              while a value of 1 will return {@code b}.
     * @return the interpolated value.
     */
    public static double interpolate(double a, double b, double alpha)

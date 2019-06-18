@@ -25,8 +25,8 @@ public class EuclidPolytopeFactories
     * The cone has its base center at the origin and its axis of revolution aligned to the z-axis.
     * </p>
     * 
-    * @param height the height of the cone.
-    * @param radius the radius of the cone base.
+    * @param height            the height of the cone.
+    * @param radius            the radius of the cone base.
     * @param numberOfDivisions the number of divisions for discretizing the cone.
     * @return the cone vertices.
     */
@@ -74,8 +74,8 @@ public class EuclidPolytopeFactories
     * The cylinder is centered at the origin and its axis of revolution is aligned to the z-axis.
     * </p>
     * 
-    * @param length the length of the cylinder.
-    * @param radius the radius of the cylinder.
+    * @param length            the length of the cylinder.
+    * @param radius            the radius of the cylinder.
     * @param numberOfDivisions the number of divisions for discretizing the cylinder.
     * @return the cylinder vertices.
     */
@@ -117,7 +117,7 @@ public class EuclidPolytopeFactories
     * Discretizes a sphere using the {@link IcoSphereFactory} and returns a list of vertices
     * representing it.
     * 
-    * @param radius the sphere radius.
+    * @param radius         the sphere radius.
     * @param recursionLevel the resolution.
     * @return the sphere vertices.
     * @see IcoSphereFactory
@@ -136,9 +136,9 @@ public class EuclidPolytopeFactories
     * The pyramid is axis-aligned and its base is centered at the origin.
     * </p>
     *
-    * @param height the height of the pyramid.
+    * @param height     the height of the pyramid.
     * @param baseLength the length of the pyramid base.
-    * @param baseWidth the width of the pyramid base.
+    * @param baseWidth  the width of the pyramid base.
     * @return the pyramid vertices.
     */
    public static List<Point3D> newPyramidVertices(double height, double baseLength, double baseWidth)
@@ -161,8 +161,8 @@ public class EuclidPolytopeFactories
     * The cone has its base center at the origin and its axis of revolution aligned to the z-axis.
     * </p>
     * 
-    * @param height the height of the cone.
-    * @param radius the radius of the cone base.
+    * @param height            the height of the cone.
+    * @param radius            the radius of the cone base.
     * @param numberOfDivisions the number of divisions for discretizing the cone.
     * @return the convex polytope representing a cone.
     */
@@ -191,8 +191,8 @@ public class EuclidPolytopeFactories
     * The cylinder is centered at the origin and its axis of revolution is aligned to the z-axis.
     * </p>
     * 
-    * @param length the length of the cylinder.
-    * @param radius the radius of the cylinder.
+    * @param length            the length of the cylinder.
+    * @param radius            the radius of the cylinder.
     * @param numberOfDivisions the number of divisions for discretizing the cylinder.
     * @return the convex polytope representing a cylinder.
     */
@@ -218,7 +218,7 @@ public class EuclidPolytopeFactories
    /**
     * Creates a new convex polytope to represent a ico-sphere.
     * 
-    * @param radius the sphere radius.
+    * @param radius         the sphere radius.
     * @param recursionLevel the resolution.
     * @return the convex polytope representing a ico-sphere.
     * @see IcoSphereFactory
@@ -234,9 +234,9 @@ public class EuclidPolytopeFactories
     * The pyramid is axis-aligned and its base is centered at the origin.
     * </p>
     *
-    * @param height the height of the pyramid.
+    * @param height     the height of the pyramid.
     * @param baseLength the length of the pyramid base.
-    * @param baseWidth the width of the pyramid base.
+    * @param baseWidth  the width of the pyramid base.
     * @return the convex polytope representing a pyramid.
     */
    public static ConvexPolytope3D newPyramid(double height, double baseLength, double baseWidth)

@@ -154,11 +154,11 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    /**
     * Sets this ramp properties.
     * 
-    * @param position the position of this ramp. Not modified.
+    * @param position    the position of this ramp. Not modified.
     * @param orientation the orientation of this ramp. Not modified.
-    * @param sizeX the size along the x-axis.
-    * @param sizeY the size along the y-axis.
-    * @param sizeZ the size along the z-axis.
+    * @param sizeX       the size along the x-axis.
+    * @param sizeY       the size along the y-axis.
+    * @param sizeZ       the size along the z-axis.
     * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
@@ -170,7 +170,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    /**
     * Sets this ramp properties.
     * 
-    * @param pose the pose of this ramp. Not modified.
+    * @param pose  the pose of this ramp. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
     * @param sizeZ the size along the z-axis.
@@ -185,7 +185,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    /**
     * Sets this ramp properties.
     * 
-    * @param pose the pose of this ramp. Not modified.
+    * @param pose  the pose of this ramp. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
     * @param sizeZ the size along the z-axis.
@@ -217,7 +217,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
     * @param sizeY the size of this ramp along the y-axis.
     * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
-    *            negative.
+    *                                  negative.
     */
    default void setSize(double sizeX, double sizeY, double sizeZ)
    {

@@ -792,7 +792,12 @@ public class EuclidGeometryTestToolsTest
                                                             double epsilon)
          throws Throwable
    {
-      EuclidCoreTestToolsTest.assertAssertionMethodsBehaveProperly(EuclidGeometryTestTools.class, failExpected, methodName, argumentsClass, expected, actual,
+      EuclidCoreTestToolsTest.assertAssertionMethodsBehaveProperly(EuclidGeometryTestTools.class,
+                                                                   failExpected,
+                                                                   methodName,
+                                                                   argumentsClass,
+                                                                   expected,
+                                                                   actual,
                                                                    epsilon);
    }
 }

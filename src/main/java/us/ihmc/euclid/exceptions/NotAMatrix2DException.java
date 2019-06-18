@@ -48,23 +48,23 @@ public class NotAMatrix2DException extends RuntimeException
     * matrix coefficients.
     *
     * @param m00 the 1st row 1st column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m01 the 1st row 2nd column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m02 the 1st row 3rd column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m10 the 2nd row 1st column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m11 the 2nd row 2nd column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m12 the 2nd row 3rd column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m20 the 3rd row 1st column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m21 the 3rd row 2nd column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     * @param m22 the 3rd row 3rd column coefficient of the matrix to be displayed in the detail
-    *           message.
+    *            message.
     */
    public NotAMatrix2DException(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {

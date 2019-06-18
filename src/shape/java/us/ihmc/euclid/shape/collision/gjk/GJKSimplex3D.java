@@ -72,9 +72,9 @@ public class GJKSimplex3D
     * Creates a new simplex given its vertices and the barycentric coordinates of the closest point to
     * the origin.
     * 
-    * @param vertices the simplex vertices. Not modified, reference saved.
+    * @param vertices               the simplex vertices. Not modified, reference saved.
     * @param barycentricCoordinates the barycentric coordinates of the closest point to the origin on
-    *           this simplex. Not modified, reference saved.
+    *                               this simplex. Not modified, reference saved.
     */
    public GJKSimplex3D(GJKVertex3D[] vertices, double[] barycentricCoordinates)
    {

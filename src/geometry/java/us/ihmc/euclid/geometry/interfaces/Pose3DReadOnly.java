@@ -197,7 +197,7 @@ public interface Pose3DReadOnly
    /**
     * Gets the position and orientation parts of this pose 3D.
     *
-    * @param positionToPack tuple in which the position is stored. Modified.
+    * @param positionToPack    tuple in which the position is stored. Modified.
     * @param orientationToPack orientation in which the orientation is stored. Modified.
     */
    default void get(Tuple3DBasics positionToPack, Orientation3DBasics orientationToPack)
@@ -220,7 +220,7 @@ public interface Pose3DReadOnly
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
@@ -235,7 +235,7 @@ public interface Pose3DReadOnly
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */

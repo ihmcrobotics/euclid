@@ -26,7 +26,7 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * @param other the other frame point used to measure the distance.
     * @return the distance between the two frame points.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double distance(FramePoint3DReadOnly other)
    {
@@ -45,7 +45,7 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * @param other the other frame point used to measure the square of the distance.
     * @return the square of the distance between the two frame points.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double distanceSquared(FramePoint3DReadOnly other)
    {
@@ -63,7 +63,7 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * @param other the other frame point used to measure the distance.
     * @return the distance between the two frame points in the XY-plane.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double distanceXY(FramePoint3DReadOnly other)
    {
@@ -87,7 +87,7 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * @param other the other frame point used to measure the square of the distance.
     * @return the square of the distance between the two frame points in the XY-plane.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double distanceXYSquared(FramePoint3DReadOnly other)
    {
@@ -107,7 +107,7 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * @param framePoint2DReadOnly the other frame point used to measure the distance.
     * @return the distance between the two frame points in the XY-plane.
     * @throws ReferenceFrameMismatchException if {@code framePoint2DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default double distanceXY(FramePoint2DReadOnly framePoint2DReadOnly)
    {
@@ -132,7 +132,7 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * @param framePoint2DReadOnly the other frame point used to measure the square of the distance.
     * @return the square of the distance between the two frame points in the XY-plane.
     * @throws ReferenceFrameMismatchException if {@code framePoint2DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default double distanceXYSquared(FramePoint2DReadOnly framePoint2DReadOnly)
    {
@@ -144,12 +144,12 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * Compares {@code this} to {@code other} to determine if the two frame points are geometrically
     * similar, i.e. the distance between them is less than or equal to {@code epsilon}.
     *
-    * @param other the frame point to compare to. Not modified.
+    * @param other   the frame point to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two frame points represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default boolean geometricallyEquals(FramePoint3DReadOnly other, double epsilon)
    {

@@ -32,10 +32,10 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     * Sets this frame tuple to {@code tuple4DReadOnly} and checks that its current frame equal
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the coordinate system in which the given {@code tuple4DReadOnly} is
-    *           expressed.
+    * @param referenceFrame  the coordinate system in which the given {@code tuple4DReadOnly} is
+    *                        expressed.
     * @param tuple4DReadOnly the geometry object used to update the geometry object in {@code this}.
-    *           Not modified.
+    *                        Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
@@ -49,10 +49,10 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     * that its current frame equal {@code referenceFrame}.
     *
     * @param referenceFrame the coordinate system in which the given components ares expressed.
-    * @param x the new x component.
-    * @param y the new y component.
-    * @param z the new z component.
-    * @param s the new s component.
+    * @param x              the new x component.
+    * @param y              the new y component.
+    * @param z              the new z component.
+    * @param s              the new s component.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, double x, double y, double z, double s)
@@ -66,7 +66,7 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     *
     * @param other the other frame tuple to set this to. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default void set(FrameTuple4DReadOnly other)
    {
@@ -98,7 +98,7 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     *
     * @param other the other frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default void setAndAbsolute(FrameTuple4DReadOnly other)
    {
@@ -111,7 +111,7 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     *
     * @param other the other frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default void setAndNegate(FrameTuple4DReadOnly other)
    {
@@ -124,7 +124,7 @@ public interface FixedFrameTuple4DBasics extends FrameTuple4DReadOnly, Tuple4DBa
     *
     * @param other the other frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void setAndNormalize(FrameTuple4DReadOnly other)
    {

@@ -46,13 +46,14 @@ public class EPATools
    /**
     * Computes the barycentric coordinates of the projection of the origin onto the triangle.
     * 
-    * @param s1 the first vertex of the triangle. Not modified.
-    * @param s2 the second vertex of the triangle. Not modified.
-    * @param s3 the third vertex of the triangle. Not modified.
-    * @param epsilon tolerance used to determine if the triangle is affinely dependent and extend the
-    *           area of the triangle before indicating whether the projection is inside or outside.
+    * @param s1            the first vertex of the triangle. Not modified.
+    * @param s2            the second vertex of the triangle. Not modified.
+    * @param s3            the third vertex of the triangle. Not modified.
+    * @param epsilon       tolerance used to determine if the triangle is affinely dependent and extend
+    *                      the area of the triangle before indicating whether the projection is inside
+    *                      or outside.
     * @param lambdasToPack the array used to store the barycentric coordinates. The array length should
-    *           be equal to 3. Modified.
+    *                      be equal to 3. Modified.
     * @return additional info about the location of the projection and the sanity of the triangle.
     */
    public static BarycentricCoordinatesOutput barycentricCoordinatesFrom2Simplex(Point3DReadOnly s1, Point3DReadOnly s2, Point3DReadOnly s3, double epsilon,
@@ -297,14 +298,14 @@ public class EPATools
     * affinely dependent, this method fails and return {@code null}.
     * </p>
     * 
-    * @param shapeA the shape in the collision evaluation used in case additional vertices need to be
-    *           generated. Not modified.
-    * @param shapeB the shape in the collision evaluation used in case additional vertices need to be
-    *           generated. Not modified.
+    * @param shapeA      the shape in the collision evaluation used in case additional vertices need to
+    *                    be generated. Not modified.
+    * @param shapeB      the shape in the collision evaluation used in case additional vertices need to
+    *                    be generated. Not modified.
     * @param gjkVertices the simplex that is commonly the output of the Gilbert-Johnson-Keerthi
-    *           algorithm. Not modified.
-    * @param epsilon tolerance required when constructing faces and notably used to determine whether a
-    *           triangle is affinely dependent or not.
+    *                    algorithm. Not modified.
+    * @param epsilon     tolerance required when constructing faces and notably used to determine
+    *                    whether a triangle is affinely dependent or not.
     * @return a convex polytope usable to initiate the Expanding Polytope algorithm.
     */
    public static List<EPAFace3D> newEPAPolytopeFromGJKSimplex(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] gjkVertices,
@@ -666,8 +667,8 @@ public class EPATools
     * Recursive flood-fill algorithm for retrieving the silhouette as seen from the given
     * {@code observer}.
     * 
-    * @param edge the starting point for the recursion. Not modified.
-    * @param observer the coordinates of the observer. Not modified.
+    * @param edge             the starting point for the recursion. Not modified.
+    * @param observer         the coordinates of the observer. Not modified.
     * @param silhouetteToPack list used to store the edges composing the silhouette. Modified.
     */
    public static void silhouette(EPAHalfEdge3D edge, Point3DReadOnly observer, List<EPAHalfEdge3D> silhouetteToPack)

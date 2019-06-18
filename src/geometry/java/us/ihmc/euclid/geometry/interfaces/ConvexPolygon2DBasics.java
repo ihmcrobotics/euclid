@@ -122,7 +122,7 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @param index the index of the vertex in the clockwise ordered list.
     * @return the reference to the vertex.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
+    *                                  polygon's vertices were edited.
     */
    Point2DBasics getVertexUnsafe(int index);
 
@@ -213,9 +213,9 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </p>
     *
     * @param indexOfVertexToRemove the index of the vertex to remove.
-    * @throws EmptyPolygonException if this polygon is empty before calling this method.
+    * @throws EmptyPolygonException     if this polygon is empty before calling this method.
     * @throws IndexOutOfBoundsException if the given index is either negative or greater or equal than
-    *            the polygon's number of vertices.
+    *                                   the polygon's number of vertices.
     */
    void removeVertex(int indexOfVertexToRemove);
 
@@ -265,7 +265,7 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * {@link #update()}.
     * </p>
     *
-    * @param firstVertex2DSupplier the first supplier of vertices.
+    * @param firstVertex2DSupplier  the first supplier of vertices.
     * @param secondVertex2DSupplier the second supplier of vertices.
     */
    default void set(Vertex2DSupplier firstVertex2DSupplier, Vertex2DSupplier secondVertex2DSupplier)
@@ -283,10 +283,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </p>
     *
     * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
-    *           nothing.
+    *                    nothing.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
     */
    default void scale(double scaleFactor)
    {
@@ -305,12 +305,11 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * </p>
     *
     * @param pointToScaleAbout the center of the scale transformation. Not modified.
-    *
-    * @param scaleFactor the scale factor to apply to this polygon. A value of {@code 1.0} does
-    *           nothing.
+    * @param scaleFactor       the scale factor to apply to this polygon. A value of {@code 1.0} does
+    *                          nothing.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
     */
    default void scale(Point2DReadOnly pointToScaleAbout, double scaleFactor)
    {
@@ -333,8 +332,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *
     * @param translation the translation to apply to this polygon's vertices. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
     */
    default void translate(Tuple2DReadOnly translation)
    {
@@ -347,8 +346,8 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     * @param x the translation along the x-axis to apply to each of this polygon's vertices.
     * @param y the translation along the y-axis to apply to each of this polygon's vertices.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
     */
    default void translate(double x, double y)
    {
@@ -368,10 +367,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
+    * @throws NotAMatrix2DException    if the rotation part of {@code transform} is not a
+    *                                  transformation in the XY-plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -382,14 +381,16 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    /**
     * Transforms this convex polygon using the given homogeneous transformation matrix.
     *
-    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
+    * @param transform                 the transform to apply on the vertices of this convex polygon.
+    *                                  Not modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    *                                  given transform represents a transformation in the XY plane.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
+    * @throws NotAMatrix2DException    if {@code checkIfTransformInXYPlane == true} and the rotation
+    *                                  part of {@code transform} is not a transformation in the XY
+    *                                  plane.
     */
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {
@@ -408,10 +409,10 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
     *
     * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY-plane.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
+    * @throws NotAMatrix2DException    if the rotation part of {@code transform} is not a
+    *                                  transformation in the XY-plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)
@@ -422,14 +423,16 @@ public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearabl
    /**
     * Transforms this convex polygon using the inverse of the given homogeneous transformation matrix.
     *
-    * @param transform the transform to apply on the vertices of this convex polygon. Not modified.
+    * @param transform                 the transform to apply on the vertices of this convex polygon.
+    *                                  Not modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    *                                  given transform represents a transformation in the XY plane.
     * @throws OutdatedPolygonException if {@link #update()} has not been called since last time this
-    *            polygon's vertices were edited.
-    * @throws EmptyPolygonException if this polygon is empty when calling this method.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    *                                  polygon's vertices were edited.
+    * @throws EmptyPolygonException    if this polygon is empty when calling this method.
+    * @throws NotAMatrix2DException    if {@code checkIfTransformInXYPlane == true} and the rotation
+    *                                  part of {@code transform} is not a transformation in the XY
+    *                                  plane.
     */
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYPlane)
    {

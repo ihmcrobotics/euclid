@@ -194,7 +194,7 @@ public class RotationMatrixToolsTest
          RotationMatrix r1 = new RotationMatrix();
          RotationMatrix r2 = new RotationMatrix();
          RotationMatrix result = EuclidCoreRandomTools.nextRotationMatrix(random);
-         
+
          RotationMatrixTools.interpolate(r1, r2, random.nextDouble(), result);
          EuclidCoreTestTools.assertIdentity(result, EPS);
       }

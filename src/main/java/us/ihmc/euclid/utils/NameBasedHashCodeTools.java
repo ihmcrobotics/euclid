@@ -42,9 +42,9 @@ public class NameBasedHashCodeTools
     * Combines the hash codes from each of the {@code holders} &in; [ {@code firstIndex},
     * {@code secondIndex} ] to calculate a new name based hash code that represents the sub-array.
     *
-    * @param holders the objects which hash codes are to be combined. Not modified.
+    * @param holders    the objects which hash codes are to be combined. Not modified.
     * @param firstIndex index of the first object to use for computing the combined hash code.
-    * @param lastIndex index of the last object to use for computing the combined hash code.
+    * @param lastIndex  index of the last object to use for computing the combined hash code.
     * @return the combined unique hash code.
     */
    public static long computeSubArrayHashCode(NameBasedHashCodeHolder holders[], int firstIndex, int lastIndex)
@@ -82,7 +82,7 @@ public class NameBasedHashCodeTools
     * Combines two hash codes into one.
     *
     * @param hashCodeToUpdate the value of the first hash code to be combined.
-    * @param holder the object which hash code is to be combined. Not modified.
+    * @param holder           the object which hash code is to be combined. Not modified.
     * @return the value of the combined hash code.
     */
    public static long combineHashCodes(long hashCodeToUpdate, NameBasedHashCodeHolder holder)

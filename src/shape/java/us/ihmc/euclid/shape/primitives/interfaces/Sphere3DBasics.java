@@ -70,7 +70,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
     * @param centerX the x-coordinate of the center.
     * @param centerY the y-coordinate of the center.
     * @param centerZ the z-coordinate of the center.
-    * @param radius the radius for this sphere.
+    * @param radius  the radius for this sphere.
     * @throws IllegalArgumentException if {@code radius < 0.0}.
     */
    default void set(double centerX, double centerY, double centerZ, double radius)

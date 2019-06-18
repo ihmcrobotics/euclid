@@ -75,13 +75,13 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minMaxYaw the maximum absolute angle for the generated yaw angle.
+    * @param random      the random generator to use.
+    * @param minMaxYaw   the maximum absolute angle for the generated yaw angle.
     * @param minMaxPitch the maximum absolute angle for the generated pitch angle.
-    * @param minMaxRoll the maximum absolute angle for the generated roll angle.
+    * @param minMaxRoll  the maximum absolute angle for the generated roll angle.
     * @return an array containing the random yaw-pitch-roll angles.
     * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *            {@code minMaxRoll < 0}.
+    *                          {@code minMaxRoll < 0}.
     * @deprecated Use {@link #nextYawPitchRoll(Random, double, double, double)} instead.
     */
    public static double[] nextYawPitchRollArray(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
@@ -121,13 +121,13 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minMaxYaw the maximum absolute angle for the generated yaw angle.
+    * @param random      the random generator to use.
+    * @param minMaxYaw   the maximum absolute angle for the generated yaw angle.
     * @param minMaxPitch the maximum absolute angle for the generated pitch angle.
-    * @param minMaxRoll the maximum absolute angle for the generated roll angle.
+    * @param minMaxRoll  the maximum absolute angle for the generated roll angle.
     * @return the random yaw-pitch-roll orientation.
     * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *            {@code minMaxRoll < 0}.
+    *                          {@code minMaxRoll < 0}.
     */
    public static YawPitchRoll nextYawPitchRoll(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
    {
@@ -144,7 +144,7 @@ public class EuclidCoreRandomTools
     * {@code minMaxAngle}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxAngle the maximum absolute angle described by the generated orientation.
     * @return the random yaw-pitch-roll orientation.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
@@ -174,7 +174,7 @@ public class EuclidCoreRandomTools
     * {@code rotationVector.length()} &in; [-{@code minMaxAngle}; {@code minMaxAngle}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxAngle the maximum length of the generated rotation vector.
     * @return the random rotation vector.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
@@ -219,7 +219,7 @@ public class EuclidCoreRandomTools
     * angle is then generated as a normal bounded random double.
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxAngle the maximum absolute angle value.
     * @return the random axis-angle.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
@@ -263,7 +263,7 @@ public class EuclidCoreRandomTools
     * angle is then generated as a normal bounded random double.
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxAngle the maximum absolute angle value.
     * @return the random axis-angle.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
@@ -303,7 +303,7 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxValue the maximum absolute value for each diagonal element.
     * @return the random diagonal matrix.
     * @throws RuntimeException if {@code minMaxValue < 0}.
@@ -323,7 +323,7 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random   the random generator to use.
     * @param minValue the minimum value of each diagonal element.
     * @param maxValue the maximum value of each diagonal element.
     * @return the random diagonal matrix.
@@ -351,7 +351,7 @@ public class EuclidCoreRandomTools
    /**
     * Generates a random double &in; [-{@code minMax}; {@code minMax}].
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxValue the maximum absolute value of the generated double.
     * @return the random double.
     * @throws RuntimeException if {@code minMaxValue < 0}.
@@ -364,7 +364,7 @@ public class EuclidCoreRandomTools
    /**
     * Generates a random double &in; [{@code minValue}; {@code maxValue}].
     *
-    * @param random the random generator to use.
+    * @param random   the random generator to use.
     * @param minValue the minimum value of the generated double.
     * @param maxValue the maximum value of the generated double.
     * @return the random double.
@@ -398,7 +398,7 @@ public class EuclidCoreRandomTools
     * {@code matrix}<sub>ij</sub> &in; [-{@code minMaxValue}; {@code minMaxValue}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxValue the maximum absolute value for each element.
     * @return the random matrix.
     * @throws RuntimeException if {@code minMaxValue < 0}.
@@ -414,7 +414,7 @@ public class EuclidCoreRandomTools
     * {@code matrix}<sub>ij</sub> &in; [{@code minValue}; {@code maxValue}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random   the random generator to use.
     * @param minValue the minimum value for each element.
     * @param maxValue the maximum value for each element.
     * @return the random matrix.
@@ -454,7 +454,7 @@ public class EuclidCoreRandomTools
     * {@code minMaxAngle}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxAngle the maximum absolute angle described by the generated quaternion.
     * @return the random quaternion.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
@@ -485,7 +485,7 @@ public class EuclidCoreRandomTools
     * {@code minMaxAngle}].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random           the random generator to use.
     * @param minMaxAngleRange the maximum absolute angle described by the generated quaternion.
     * @return the random quaternion.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
@@ -508,14 +508,14 @@ public class EuclidCoreRandomTools
    {
       switch (random.nextInt(4))
       {
-      case 0:
-         return nextAxisAngle(random);
-      case 1:
-         return nextQuaternion(random);
-      case 2:
-         return nextRotationMatrix(random);
-      default:
-         return nextYawPitchRoll(random);
+         case 0:
+            return nextAxisAngle(random);
+         case 1:
+            return nextQuaternion(random);
+         case 2:
+            return nextRotationMatrix(random);
+         default:
+            return nextYawPitchRoll(random);
       }
    }
 
@@ -604,7 +604,7 @@ public class EuclidCoreRandomTools
     * Generates a random rotation matrix uniformly distributed on the unit sphere and describes an
     * rotation angle in [-{@code minMaxAngle}; {@code minMaxAngle}].
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxAngle the maximum absolute angle described by the generated rotation matrix.
     * @return the random rotation matrix.
     */
@@ -624,7 +624,7 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random   the random generator to use.
     * @param maxScale the maximum scale value used for each scale factor.
     * @return the random rotation-scale matrix.
     * @throws RuntimeException if {@code maxScale < 0}.
@@ -644,10 +644,10 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param minMaxAngle the maximum absolute angle value that describes the generated rotation-scale
-    *           matrix.
-    * @param maxScale the maximum scale value used for each scale factor.
+    *                    matrix.
+    * @param maxScale    the maximum scale value used for each scale factor.
     * @return the random rotation-scale matrix.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
     * @throws RuntimeException if {@code maxScale < 0}.
@@ -706,8 +706,8 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param min the minimum value for each coordinate.
-    * @param max the maximum value for each coordinate.
+    * @param min    the minimum value for each coordinate.
+    * @param max    the maximum value for each coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -728,13 +728,13 @@ public class EuclidCoreRandomTools
     * {@code point.z} &in; [-maxAbsoluteZ; maxAbsoluteZ]. <br>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param maxAbsoluteX the maximum absolute value for the x-coordinate.
     * @param maxAbsoluteY the maximum absolute value for the y-coordinate.
     * @param maxAbsoluteZ the maximum absolute value for the z-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code maxAbsoluteX < 0}, {@code maxAbsoluteY < 0},
-    *            {@code maxAbsoluteZ < 0}.
+    *                          {@code maxAbsoluteZ < 0}.
     */
    public static Point3D nextPoint3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
    {
@@ -754,12 +754,12 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param minX the minimum value for the x-coordinate.
-    * @param maxX the maximum value for the x-coordinate.
-    * @param minY the minimum value for the y-coordinate.
-    * @param maxY the maximum value for the y-coordinate.
-    * @param minZ the minimum value for the z-coordinate.
-    * @param maxZ the maximum value for the z-coordinate.
+    * @param minX   the minimum value for the x-coordinate.
+    * @param maxX   the maximum value for the x-coordinate.
+    * @param minY   the minimum value for the y-coordinate.
+    * @param maxY   the maximum value for the y-coordinate.
+    * @param minZ   the minimum value for the z-coordinate.
+    * @param maxZ   the maximum value for the z-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
@@ -796,7 +796,7 @@ public class EuclidCoreRandomTools
     *
     * @param random the random generator to use.
     * @param minMax tuple used to bound the maximum absolute value of each component of the generated
-    *           vector. Not modified.
+    *               vector. Not modified.
     * @return the random vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -814,8 +814,8 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param min tuple used as upper-bound for each component of the generated vector. Not modified.
-    * @param max tuple used as lower-bound for each component of the generated vector. Not modified.
+    * @param min    tuple used as upper-bound for each component of the generated vector. Not modified.
+    * @param max    tuple used as lower-bound for each component of the generated vector. Not modified.
     * @return the random vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
     */
@@ -833,8 +833,8 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param min upper-bound for each component of the generated vector. Not modified.
-    * @param max lower-bound for each component of the generated vector. Not modified.
+    * @param min    upper-bound for each component of the generated vector. Not modified.
+    * @param max    lower-bound for each component of the generated vector. Not modified.
     * @return the random vector.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -854,12 +854,12 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param minX the minimum value for the x-component.
-    * @param maxX the maximum value for the x-component.
-    * @param minY the minimum value for the y-component.
-    * @param maxY the maximum value for the y-component.
-    * @param minZ the minimum value for the z-component.
-    * @param maxZ the maximum value for the z-component.
+    * @param minX   the minimum value for the x-component.
+    * @param maxX   the maximum value for the x-component.
+    * @param minY   the minimum value for the y-component.
+    * @param maxY   the maximum value for the y-component.
+    * @param minZ   the minimum value for the z-component.
+    * @param maxZ   the maximum value for the z-component.
     * @return the random vector.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
@@ -890,9 +890,9 @@ public class EuclidCoreRandomTools
    /**
     * Generates a random vector that is perpendicular to {@code vectorToBeOrthogonalTo}.
     *
-    * @param random the random generator to use.
+    * @param random                 the random generator to use.
     * @param vectorToBeOrthogonalTo the vector to be orthogonal to. Not modified.
-    * @param normalize whether to normalize the generated vector or not.
+    * @param normalize              whether to normalize the generated vector or not.
     * @return the random vector.
     */
    public static Vector3D nextOrthogonalVector3D(Random random, Vector3DReadOnly vectorToBeOrthogonalTo, boolean normalize)
@@ -959,8 +959,8 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param min the minimum value for each coordinate.
-    * @param max the maximum value for each coordinate.
+    * @param min    the minimum value for each coordinate.
+    * @param max    the maximum value for each coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -980,10 +980,10 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param minX the minimum value for the x-coordinate.
-    * @param maxX the maximum value for the x-coordinate.
-    * @param minY the minimum value for the y-coordinate.
-    * @param maxY the maximum value for the y-coordinate.
+    * @param minX   the minimum value for the x-coordinate.
+    * @param maxX   the maximum value for the x-coordinate.
+    * @param minY   the minimum value for the y-coordinate.
+    * @param maxY   the maximum value for the y-coordinate.
     * @return the random point.
     * @throws RuntimeException if {@code minX > maxX} or {@code minY > maxY}.
     */
@@ -1018,8 +1018,8 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param min upper-bound for each component of the generated vector. Not modified.
-    * @param max lower-bound for each component of the generated vector. Not modified.
+    * @param min    upper-bound for each component of the generated vector. Not modified.
+    * @param max    lower-bound for each component of the generated vector. Not modified.
     * @return the random vector.
     * @throws RuntimeException if {@code min > max}.
     */
@@ -1053,7 +1053,7 @@ public class EuclidCoreRandomTools
     *
     * @param random the random generator to use.
     * @param minMax tuple used to bound the maximum absolute value of each component of the generated
-    *           2D vector. Not modified.
+    *               2D vector. Not modified.
     * @return the random 2D vector.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -1071,8 +1071,10 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random the random generator to use.
-    * @param min tuple used as upper-bound for each component of the generated 2D vector. Not modified.
-    * @param max tuple used as lower-bound for each component of the generated 2D vector. Not modified.
+    * @param min    tuple used as upper-bound for each component of the generated 2D vector. Not
+    *               modified.
+    * @param max    tuple used as lower-bound for each component of the generated 2D vector. Not
+    *               modified.
     * @return the random 2D vector.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
     */
@@ -1192,7 +1194,7 @@ public class EuclidCoreRandomTools
     * angle is then generated as a normal bounded random double.
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random               the random generator to use.
     * @param axisAngleToRandomize the axis-angle to randomize. Modified.
     */
    public static void randomizeAxisAngle(Random random, AxisAngleBasics axisAngleToRandomize)
@@ -1211,8 +1213,8 @@ public class EuclidCoreRandomTools
     * angle is then generated as a normal bounded random double.
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minMaxAngle the maximum absolute angle value.
+    * @param random               the random generator to use.
+    * @param minMaxAngle          the maximum absolute angle value.
     * @param axisAngleToRandomize the axis-angle to randomize. Modified.
     * @throws RuntimeException if {@code minMaxAngle < 0}.
     */
@@ -1231,7 +1233,7 @@ public class EuclidCoreRandomTools
     * {@code tuple}<sub>i</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random           the random generator to use.
     * @param tupleToRandomize the tuple to randomize. Modified.
     */
    public static void randomizeTuple3D(Random random, Tuple3DBasics tupleToRandomize)
@@ -1245,9 +1247,9 @@ public class EuclidCoreRandomTools
     * {@code tuple}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
-    *           vector. Not modified.
+    * @param random           the random generator to use.
+    * @param minMax           tuple used to bound the maximum absolute value of each component of the
+    *                         generated vector. Not modified.
     * @param tupleToRandomize the tuple to randomize. Modified.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -1263,9 +1265,11 @@ public class EuclidCoreRandomTools
     * {@code vector}<sub>i</sub> &in; [{@code min}<sub>i</sub>; {@code max}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
-    * @param min tuple used as upper-bound for each component of the generated vector. Not modified.
-    * @param max tuple used as lower-bound for each component of the generated vector. Not modified.
+    * @param random           the random generator to use.
+    * @param min              tuple used as upper-bound for each component of the generated vector. Not
+    *                         modified.
+    * @param max              tuple used as lower-bound for each component of the generated vector. Not
+    *                         modified.
     * @param tupleToRandomize the tuple to randomize. Modified.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
     */
@@ -1281,7 +1285,7 @@ public class EuclidCoreRandomTools
     * {@code tuple}<sub>i</sub> &in; [-1.0; 1.0].
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random           the random generator to use.
     * @param tupleToRandomize the 2D tuple to randomize. Modified.
     */
    public static void randomizeTuple2D(Random random, Tuple2DBasics tupleToRandomize)
@@ -1295,9 +1299,9 @@ public class EuclidCoreRandomTools
     * {@code tuple}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
-    * @param minMax tuple used to bound the maximum absolute value of each component of the generated
-    *           vector. Not modified.
+    * @param random           the random generator to use.
+    * @param minMax           tuple used to bound the maximum absolute value of each component of the
+    *                         generated vector. Not modified.
     * @param tupleToRandomize the 2D tuple to randomize. Modified.
     * @throws RuntimeException if any component of {@code minMax} is negative.
     */
@@ -1313,9 +1317,11 @@ public class EuclidCoreRandomTools
     * {@code vector}<sub>i</sub> &in; [{@code min}<sub>i</sub>; {@code max}<sub>i</sub>].
     * </p>
     *
-    * @param random the random generator to use.
-    * @param min tuple used as upper-bound for each component of the generated vector. Not modified.
-    * @param max tuple used as lower-bound for each component of the generated vector. Not modified.
+    * @param random           the random generator to use.
+    * @param min              tuple used as upper-bound for each component of the generated vector. Not
+    *                         modified.
+    * @param max              tuple used as lower-bound for each component of the generated vector. Not
+    *                         modified.
     * @param tupleToRandomize the 2D tuple to randomize. Modified.
     * @throws RuntimeException if {@code min}<sub>i</sub> > {@code max}<sub>i</sub>.
     */

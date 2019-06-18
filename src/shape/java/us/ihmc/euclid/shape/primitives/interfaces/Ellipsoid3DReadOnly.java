@@ -83,7 +83,9 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
 
-      double distance = EuclidShapeTools.evaluatePoint3DEllipsoid3DCollision(pointToCheckInLocal, getRadii(), closestPointOnSurfaceToPack,
+      double distance = EuclidShapeTools.evaluatePoint3DEllipsoid3DCollision(pointToCheckInLocal,
+                                                                             getRadii(),
+                                                                             closestPointOnSurfaceToPack,
                                                                              normalAtClosestPointToPack);
 
       transformToWorld(closestPointOnSurfaceToPack);
@@ -163,12 +165,12 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     *
-    * @param line the line expressed in world coordinates that may intersect this ellipsoid. Not
-    *           modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
+    * @param line                     the line expressed in world coordinates that may intersect this
+    *                                 ellipsoid. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
+    *                                 {@code null}. Modified.
     * @return the number of intersections between the line and this ellipsoid. It is either equal to 0,
     *         1, or 2.
     */
@@ -185,12 +187,13 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * {@link Double#NaN}.
     * </p>
     *
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
-    * @param lineDirection the direction expressed in world of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
+    * @param pointOnLine              a point expressed in world located on the infinitely long line.
+    *                                 Not modified.
+    * @param lineDirection            the direction expressed in world of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
+    *                                 {@code null}. Modified.
     * @return the number of intersections between the line and this ellipsoid. It is either equal to 0,
     *         1, or 2.
     */
@@ -203,8 +206,12 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
       getPose().inverseTransform(lineDirection, lineDirectionInLocal);
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadiusX(), getRadiusY(), getRadiusZ(), pointOnLineInLocal,
-                                                                                              lineDirectionInLocal, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadiusX(),
+                                                                                              getRadiusY(),
+                                                                                              getRadiusZ(),
+                                                                                              pointOnLineInLocal,
+                                                                                              lineDirectionInLocal,
+                                                                                              firstIntersectionToPack,
                                                                                               secondIntersectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
@@ -276,8 +283,8 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param other the other ellipsoid which pose and radii is to be compared against this ellipsoid
-    *           pose and radii. Not modified.
+    * @param other   the other ellipsoid which pose and radii is to be compared against this ellipsoid
+    *                pose and radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ellipsoids are equal component-wise, {@code false} otherwise.
     */
@@ -291,7 +298,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
     *
-    * @param other the ellipsoid to compare to. Not modified.
+    * @param other   the ellipsoid to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
     */
@@ -396,7 +403,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * shape local coordinates.
     *
     * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
+    *                      Modified.
     */
    default void transformToLocal(Transformable transformable)
    {
@@ -408,7 +415,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * being expressed in world.
     *
     * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
+    *                      Modified.
     */
    default void transformToWorld(Transformable transformable)
    {

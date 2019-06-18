@@ -64,9 +64,9 @@ public interface Line3DReadOnly
     * Gets the point and direction defining this line by storing their components in the given
     * arguments {@code pointToPack} and {@code directionToPack}.
     *
-    * @param pointToPack point in which the coordinates of this line's point are stored. Modified.
+    * @param pointToPack     point in which the coordinates of this line's point are stored. Modified.
     * @param directionToPack vector in which the components of this line's direction are stored.
-    *           Modified.
+    *                        Modified.
     */
    default void get(Point3DBasics pointToPack, Vector3DBasics directionToPack)
    {
@@ -145,9 +145,9 @@ public interface Line3DReadOnly
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the line is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
@@ -184,7 +184,7 @@ public interface Line3DReadOnly
     * {@code epsilon} from it.
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
+    * @param point   the coordinates of the query. Not modified.
     * @param epsilon the tolerance used for this test.
     * @return {@code true} if the point is located on this line, {@code false} otherwise.
     */
@@ -205,13 +205,13 @@ public interface Line3DReadOnly
     * </p>
     *
     * @param pointOnLine the coordinates of the 'p' from which the parameter 't' is to be calculated.
-    *           The point has to be on the line. Not modified.
-    * @param epsilon the maximum distance allowed between the given point and this line. If the given
-    *           point is at a distance less than {@code epsilon} from this line, it is considered as
-    *           being located on this line.
+    *                    The point has to be on the line. Not modified.
+    * @param epsilon     the maximum distance allowed between the given point and this line. If the
+    *                    given point is at a distance less than {@code epsilon} from this line, it is
+    *                    considered as being located on this line.
     * @return the value of the parameter 't' corresponding to the given point.
     * @throws RuntimeException if the given point is located at a distance greater than {@code epsilon}
-    *            from this line.
+    *                          from this line.
     */
    default double parameterGivenPointOnLine(Point3DReadOnly pointOnLine, double epsilon)
    {
@@ -264,7 +264,7 @@ public interface Line3DReadOnly
     * p<sub>0</sub> defining this line.
     * </p>
     *
-    * @param t the parameter used to calculate the point coordinates.
+    * @param t           the parameter used to calculate the point coordinates.
     * @param pointToPack the point in which the coordinates of 'p' are stored. Modified.
     */
    default void pointOnLineGivenParameter(double t, Point3DBasics pointToPack)
@@ -275,7 +275,7 @@ public interface Line3DReadOnly
    /**
     * Gets the coordinates of two distinct points this line goes through.
     *
-    * @param firstPointOnLineToPack the coordinates of a first point located on this line. Modified.
+    * @param firstPointOnLineToPack  the coordinates of a first point located on this line. Modified.
     * @param secondPointOnLineToPack the coordinates of a second point located on this line. Modified.
     */
    default void getTwoPointsOnLine(Point3DBasics firstPointOnLineToPack, Point3DBasics secondPointOnLineToPack)
@@ -287,7 +287,7 @@ public interface Line3DReadOnly
    /**
     * Compares {@code this} with {@code other} to determine if the two lines are collinear.
     *
-    * @param other the line to compare to. Not modified.
+    * @param other   the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
@@ -299,8 +299,8 @@ public interface Line3DReadOnly
    /**
     * Compares {@code this} with {@code other} to determine if the two lines are collinear.
     *
-    * @param other the line to compare to. Not modified.
-    * @param angleEpsilon the tolerance of the comparison for angle.
+    * @param other           the line to compare to. Not modified.
+    * @param angleEpsilon    the tolerance of the comparison for angle.
     * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
     */
@@ -314,17 +314,21 @@ public interface Line3DReadOnly
     * distance || P - Q || is the minimum distance between the two 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
-    * @param otherLine the second line. Not modified.
-    * @param closestPointOnThisLineToPack the 3D coordinates of the point P are packed in this 3D
-    *           point. Modified. Can be {@code null}.
+    * @param otherLine                     the second line. Not modified.
+    * @param closestPointOnThisLineToPack  the 3D coordinates of the point P are packed in this 3D
+    *                                      point. Modified. Can be {@code null}.
     * @param closestPointOnOtherLineToPack the 3D coordinates of the point Q are packed in this 3D
-    *           point. Modified. Can be {@code null}.
+    *                                      point. Modified. Can be {@code null}.
     * @return the minimum distance between the two lines.
     */
    default double closestPointsWith(Line3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack, Point3DBasics closestPointOnOtherLineToPack)
    {
-      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(getPoint(), getDirection(), otherLine.getPoint(), otherLine.getDirection(),
-                                                                  closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
+      return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(getPoint(),
+                                                                  getDirection(),
+                                                                  otherLine.getPoint(),
+                                                                  otherLine.getDirection(),
+                                                                  closestPointOnThisLineToPack,
+                                                                  closestPointOnOtherLineToPack);
    }
 
    /**
@@ -334,7 +338,7 @@ public interface Line3DReadOnly
     * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
     * are physically the same but this method returns {@code false}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
     */
@@ -355,7 +359,7 @@ public interface Line3DReadOnly
     * opposite direction.
     * </p>
     *
-    * @param other the line to compare to. Not modified.
+    * @param other   the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     */

@@ -49,10 +49,10 @@ public class EuclidEllipsoid3DTools
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
     * 
-    * @param radii the ellipsoid's radii. Not modified.
-    * @param query the coordinates of the point. Not modified.
+    * @param radii              the ellipsoid's radii. Not modified.
+    * @param query              the coordinates of the point. Not modified.
     * @param closestPointToPack point in which the coordinates of the closest point to the query are
-    *           stored. Modified.
+    *                           stored. Modified.
     * @return the smallest distance between the point and the ellipsoid's surface.
     */
    public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query, Point3DBasics closestPointToPack)
@@ -66,13 +66,13 @@ public class EuclidEllipsoid3DTools
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
     * 
-    * @param radii the ellipsoid's radii. Not modified.
-    * @param query the coordinates of the point. Not modified.
-    * @param maxIterations the maximum number of iterations for the internal iterative search
-    *           algorithm.
-    * @param epsilon the tolerance used for performing comparisons.
+    * @param radii              the ellipsoid's radii. Not modified.
+    * @param query              the coordinates of the point. Not modified.
+    * @param maxIterations      the maximum number of iterations for the internal iterative search
+    *                           algorithm.
+    * @param epsilon            the tolerance used for performing comparisons.
     * @param closestPointToPack point in which the coordinates of the closest point to the query are
-    *           stored. Modified.
+    *                           stored. Modified.
     * @return the smallest distance between the point and the ellipsoid's surface.
     */
    public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query, int maxIterations, double epsilon,

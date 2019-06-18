@@ -105,7 +105,7 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other point shape to compare against this. Not modified.
+    * @param other   the other point shape to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two point shapes are equal component-wise, {@code false} otherwise.
     */
@@ -119,7 +119,7 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
     * Compares {@code this} and {@code other} to determine if the two point shapes are geometrically
     * similar.
     *
-    * @param other the point shape to compare to. Not modified.
+    * @param other   the point shape to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the point shapes represent the same geometry, {@code false} otherwise.
     */

@@ -86,10 +86,10 @@ public class ReferenceFrameTools
     * new frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName           the name of the new frame.
+    * @param parentFrame         the parent frame of the new reference frame.
     * @param transformFromParent the transform that can be used to transform a geometry object from the
-    *           parent frame to this frame. Not modified.
+    *                            parent frame to this frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
@@ -107,10 +107,10 @@ public class ReferenceFrameTools
     * The new reference frame has the same orientation as its parent frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName                   the name of the new frame.
+    * @param parentFrame                 the parent frame of the new reference frame.
     * @param translationOffsetFromParent describes the position of the new reference frame's origin
-    *           expressed in the parent frame. Not modified.
+    *                                    expressed in the parent frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
@@ -129,10 +129,10 @@ public class ReferenceFrameTools
     * frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName         the name of the new frame.
+    * @param parentFrame       the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
-    *           frame to its parent frame. Not modified.
+    *                          frame to its parent frame. Not modified.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,

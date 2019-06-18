@@ -211,7 +211,7 @@ public abstract class ReferenceFrame
     * with the z-axis of the root frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
+    * @param frameName   the name of the new frame.
     * @param parentFrame the parent frame of the new reference frame.
     */
    public ReferenceFrame(String frameName, ReferenceFrame parentFrame)
@@ -229,14 +229,15 @@ public abstract class ReferenceFrame
     * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName          the name of the new frame.
+    * @param parentFrame        the parent frame of the new reference frame.
     * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the root
-    *           frame or moving. If {@code true}, the {@code parentFrame} has to also be stationary.
-    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame at
-    *           all time or not.
+    *                           frame or moving. If {@code true}, the {@code parentFrame} has to also
+    *                           be stationary.
+    * @param isZupFrame         refers to whether this new frame has its z-axis aligned with the root
+    *                           frame at all time or not.
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
-    *            {@code parentFrame} is not a stationary frame.
+    *                                  {@code parentFrame} is not a stationary frame.
     */
    public ReferenceFrame(String frameName, ReferenceFrame parentFrame, boolean isAStationaryFrame, boolean isZupFrame)
    {
@@ -263,10 +264,10 @@ public abstract class ReferenceFrame
     * with the z-axis of the root frame.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
+    * @param frameName         the name of the new frame.
+    * @param parentFrame       the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
-    *           frame to its parent frame. Not modified.
+    *                          frame to its parent frame. Not modified.
     */
    public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent)
    {
@@ -288,18 +289,20 @@ public abstract class ReferenceFrame
     * transform in the method {@link #updateTransformToParent(RigidBodyTransform)} when overriding it.
     * </p>
     *
-    * @param frameName the name of the new frame.
-    * @param parentFrame the parent frame of the new reference frame.
-    * @param transformToParent the transform that can be used to transform a geometry object the new
-    *           frame to its parent frame. Not modified.
+    * @param frameName          the name of the new frame.
+    * @param parentFrame        the parent frame of the new reference frame.
+    * @param transformToParent  the transform that can be used to transform a geometry object the new
+    *                           frame to its parent frame. Not modified.
     * @param isAStationaryFrame refers to whether this new frame is stationary with respect to the root
-    *           frame or moving. If {@code true}, the {@code parentFrame} has to also be stationary.
-    * @param isZupFrame refers to whether this new frame has its z-axis aligned with the root frame at
-    *           all time or not.
+    *                           frame or moving. If {@code true}, the {@code parentFrame} has to also
+    *                           be stationary.
+    * @param isZupFrame         refers to whether this new frame has its z-axis aligned with the root
+    *                           frame at all time or not.
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
-    *            {@code parentFrame} is not a stationary frame.
+    *                                  {@code parentFrame} is not a stationary frame.
     */
-   public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent, boolean isAStationaryFrame, boolean isZupFrame)
+   public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent, boolean isAStationaryFrame,
+                         boolean isZupFrame)
    {
       if (frameName.contains(SEPARATOR))
       {
@@ -443,7 +446,7 @@ public abstract class ReferenceFrame
     * </p>
     *
     * @param transformToParent the transform to updated according to how this reference frame should
-    *           now positioned with respect to its parent frame. Modified.
+    *                          now positioned with respect to its parent frame. Modified.
     */
    protected abstract void updateTransformToParent(RigidBodyTransform transformToParent);
 
@@ -501,7 +504,7 @@ public abstract class ReferenceFrame
     * </p>
     *
     * @param transformToPack the transform in which this frame's transform to its parent frame is
-    *           stored. Modified.
+    *                        stored. Modified.
     */
    public void getTransformToParent(RigidBodyTransform transformToPack)
    {
@@ -563,8 +566,8 @@ public abstract class ReferenceFrame
     * obtain its equivalent expressed in the {@code desiredFrame} into {@code transformToPack}.
     *
     * @param transformToPack the transform in which this frame's transform to the {@code desiredFrame}
-    *           is stored. Modified.
-    * @param desiredFrame the goal frame.
+    *                        is stored. Modified.
+    * @param desiredFrame    the goal frame.
     */
    public void getTransformToDesiredFrame(RigidBodyTransform transformToPack, ReferenceFrame desiredFrame)
    {
@@ -695,7 +698,7 @@ public abstract class ReferenceFrame
     * perform the transformation efficiently.</b>
     * </p>
     *
-    * @param desiredFrame the target frame for the transformation.
+    * @param desiredFrame      the target frame for the transformation.
     * @param objectToTransform the object to apply the transformation on. Modified.
     */
    public void transformFromThisToDesiredFrame(ReferenceFrame desiredFrame, Transformable objectToTransform)

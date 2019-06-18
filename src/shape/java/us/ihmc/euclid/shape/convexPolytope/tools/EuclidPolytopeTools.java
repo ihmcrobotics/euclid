@@ -51,9 +51,9 @@ public class EuclidPolytopeTools
     * </p>
     *
     * @param lineSegmentStart1 the start position of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the end position of the first line segment. Not modified.
+    * @param lineSegmentEnd1   the end position of the first line segment. Not modified.
     * @param lineSegmentStart2 the start position of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the end position of the second line segment. Not modified.
+    * @param lineSegmentEnd2   the end position of the second line segment. Not modified.
     * @return the result of the cross product.
     */
    public static Vector3D crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
@@ -71,10 +71,10 @@ public class EuclidPolytopeTools
     * (lineSegmentEnd1 - lineSegmentStart1) x (lineSegmentEnd2 - lineSegmentStart2)
     * </pre>
     *
-    * @param lineSegmentStart1 the start position of the first line segment. Not modified.
-    * @param lineSegmentEnd1 the end position of the first line segment. Not modified.
-    * @param lineSegmentStart2 the start position of the second line segment. Not modified.
-    * @param lineSegmentEnd2 the end position of the second line segment. Not modified.
+    * @param lineSegmentStart1  the start position of the first line segment. Not modified.
+    * @param lineSegmentEnd1    the end position of the first line segment. Not modified.
+    * @param lineSegmentStart2  the start position of the second line segment. Not modified.
+    * @param lineSegmentEnd2    the end position of the second line segment. Not modified.
     * @param crossProductToPack the vector used to store the result of the cross product. Modified.
     */
    public static void crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
@@ -103,10 +103,10 @@ public class EuclidPolytopeTools
     * <tt>point=firstPointOnLine</tt>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             the coordinates of the query. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
-    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @param planeNormal       the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the left side of the line.
     */
    public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
@@ -124,10 +124,10 @@ public class EuclidPolytopeTools
     * <tt>point=pointOnLine</tt>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param point         the coordinates of the query. Not modified.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
-    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @param planeNormal   the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the left side of the line.
     */
    public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
@@ -145,10 +145,10 @@ public class EuclidPolytopeTools
     * <tt>point=firstPointOnLine</tt>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             the coordinates of the query. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
-    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @param planeNormal       the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the right side of the line.
     */
    public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
@@ -166,10 +166,10 @@ public class EuclidPolytopeTools
     * <tt>point=pointOnLine</tt>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param point         the coordinates of the query. Not modified.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
-    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
+    * @param planeNormal   the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the right side of the line.
     */
    public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
@@ -187,20 +187,20 @@ public class EuclidPolytopeTools
     * <tt>point=firstPointOnLine</tt>
     * </p>
     *
-    * @param pointX the x-coordinate of the query.
-    * @param pointY the y-coordinate of the query.
-    * @param pointZ the z-coordinate of the query.
-    * @param pointOnLineX the x-coordinate of the a point located on the line.
-    * @param pointOnLineY the y-coordinate of the a point located on the line.
-    * @param pointOnLineZ the z-coordinate of the a point located on the line.
+    * @param pointX         the x-coordinate of the query.
+    * @param pointY         the y-coordinate of the query.
+    * @param pointZ         the z-coordinate of the query.
+    * @param pointOnLineX   the x-coordinate of the a point located on the line.
+    * @param pointOnLineY   the y-coordinate of the a point located on the line.
+    * @param pointOnLineZ   the z-coordinate of the a point located on the line.
     * @param lineDirectionX the x-component of the line direction.
     * @param lineDirectionY the y-component of the line direction.
     * @param lineDirectionZ the z-component of the line direction.
-    * @param planeNormalX the x-component of the plane normal.
-    * @param planeNormalY the y-component of the plane normal.
-    * @param planeNormalZ the z-component of the plane normal.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
-    *           side, {@code false} this will test for the right side.
+    * @param planeNormalX   the x-component of the plane normal.
+    * @param planeNormalY   the y-component of the plane normal.
+    * @param planeNormalZ   the z-component of the plane normal.
+    * @param testLeftSide   the query of the side, when equal to {@code true} this will test for the
+    *                       left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
     */
@@ -233,12 +233,12 @@ public class EuclidPolytopeTools
     * <tt>point=firstPointOnLine</tt>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param firstPointOnLine a first point located on the line. Not modified.
+    * @param point             the coordinates of the query. Not modified.
+    * @param firstPointOnLine  a first point located on the line. Not modified.
     * @param secondPointOnLine a second point located on the line. Not modified.
-    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
-    *           side, {@code false} this will test for the right side.
+    * @param planeNormal       the normal of the plane the line is lying onto. Not modified.
+    * @param testLeftSide      the query of the side, when equal to {@code true} this will test for the
+    *                          left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
     */
@@ -251,8 +251,19 @@ public class EuclidPolytopeTools
       double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
       double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
       double lineDirectionZ = secondPointOnLine.getZ() - firstPointOnLine.getZ();
-      return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLineX, pointOnLineY, pointOnLineZ, lineDirectionX, lineDirectionY,
-                                     lineDirectionZ, planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide);
+      return isPoint3DOnSideOfLine3D(point.getX(),
+                                     point.getY(),
+                                     point.getZ(),
+                                     pointOnLineX,
+                                     pointOnLineY,
+                                     pointOnLineZ,
+                                     lineDirectionX,
+                                     lineDirectionY,
+                                     lineDirectionZ,
+                                     planeNormal.getX(),
+                                     planeNormal.getY(),
+                                     planeNormal.getZ(),
+                                     testLeftSide);
    }
 
    /**
@@ -264,26 +275,37 @@ public class EuclidPolytopeTools
     * <tt>point=firstPointOnLine</tt>
     * </p>
     *
-    * @param point the coordinates of the query. Not modified.
-    * @param pointOnLine a point located on the line. Not modified.
+    * @param point         the coordinates of the query. Not modified.
+    * @param pointOnLine   a point located on the line. Not modified.
     * @param lineDirection the direction of the line. Not modified.
-    * @param planeNormal the normal of the plane the line is lying onto. Not modified.
-    * @param testLeftSide the query of the side, when equal to {@code true} this will test for the left
-    *           side, {@code false} this will test for the right side.
+    * @param planeNormal   the normal of the plane the line is lying onto. Not modified.
+    * @param testLeftSide  the query of the side, when equal to {@code true} this will test for the
+    *                      left side, {@code false} this will test for the right side.
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
     */
    public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
                                                  Vector3DReadOnly planeNormal, boolean testLeftSide)
    {
-      return isPoint3DOnSideOfLine3D(point.getX(), point.getY(), point.getZ(), pointOnLine.getX(), pointOnLine.getY(), pointOnLine.getZ(), lineDirection.getX(),
-                                     lineDirection.getY(), lineDirection.getZ(), planeNormal.getX(), planeNormal.getY(), planeNormal.getZ(), testLeftSide);
+      return isPoint3DOnSideOfLine3D(point.getX(),
+                                     point.getY(),
+                                     point.getZ(),
+                                     pointOnLine.getX(),
+                                     pointOnLine.getY(),
+                                     pointOnLine.getZ(),
+                                     lineDirection.getX(),
+                                     lineDirection.getY(),
+                                     lineDirection.getZ(),
+                                     planeNormal.getX(),
+                                     planeNormal.getY(),
+                                     planeNormal.getZ(),
+                                     testLeftSide);
    }
 
    /**
     * Computes the distance squared to the closest half-edge to the query.
     * 
-    * @param query the coordinates of the query. Not modified.
+    * @param query     the coordinates of the query. Not modified.
     * @param halfEdges the half-edges to search for the closest to the query. Not modified.
     * @return the distance squared between the query and the closest half-edge to it.
     */
@@ -304,7 +326,7 @@ public class EuclidPolytopeTools
    /**
     * Computes the distance to the closest half-edge to the query.
     * 
-    * @param query the coordinates of the query. Not modified.
+    * @param query     the coordinates of the query. Not modified.
     * @param halfEdges the half-edges to search for the closest to the query. Not modified.
     * @return the distance between the query and the closest half-edge to it.
     */
@@ -320,13 +342,13 @@ public class EuclidPolytopeTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param faces the list of faces to search the silhouette from. Not modified.
+    * @param faces    the list of faces to search the silhouette from. Not modified.
     * @param observer the coordinates of the observer. Not modified.
-    * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
-    *           face's support plane, or a face is not visible.
-    * @param <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
-    * @param <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly} and has to
-    *           be common to all the faces' edges.
+    * @param epsilon  the tolerance used to determine whether a face is visible, the observer lies in a
+    *                 face's support plane, or a face is not visible.
+    * @param          <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
+    * @param          <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly}
+    *                 and has to be common to all the faces' edges.
     * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
     *         any face or if the observer is inside one of the faces.
     */
@@ -342,16 +364,19 @@ public class EuclidPolytopeTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    * @param faces the list of faces to search the silhouette from. Not modified.
-    * @param observer the coordinates of the observer. Not modified.
-    * @param epsilon the tolerance used to determine whether a face is visible, the observer lies in a
-    *           face's support plane, or a face is not visible.
+    * @param faces              the list of faces to search the silhouette from. Not modified.
+    * @param observer           the coordinates of the observer. Not modified.
+    * @param epsilon            the tolerance used to determine whether a face is visible, the observer
+    *                           lies in a face's support plane, or a face is not visible.
     * @param visibleFacesToPack the collection used to store the visible faces. It is cleared before
-    *           starting the search. It preferable to provide an implementation that supports fast
-    *           queries for {@link Collection#contains(Object)}. Modified. Can be {@code null}.
-    * @param <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
-    * @param <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly} and has to
-    *           be common to all the faces' edges.
+    *                           starting the search. It preferable to provide an implementation that
+    *                           supports fast queries for {@link Collection#contains(Object)}.
+    *                           Modified. Can be {@code null}.
+    * @param                    <F> the type to use for the faces, it has to implement
+    *                           {@link Face3DReadOnly}.
+    * @param                    <E> the type of edges to return, it has to implement
+    *                           {@link HalfEdge3DReadOnly} and has to be common to all the faces'
+    *                           edges.
     * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
     *         any face or if the observer is inside one of the faces.
     */
@@ -473,10 +498,10 @@ public class EuclidPolytopeTools
     * WARNING: This method generates garbage.
     * </p>
     * 
-    * @param query the coordinates of the query. Not modified.
+    * @param query      the coordinates of the query. Not modified.
     * @param silhouette the list of the half-edges to navigate. Not modified.
-    * @param epsilon the tolerance used for determining whether the query is close to a face support
-    *           plane.
+    * @param epsilon    the tolerance used for determining whether the query is close to a face support
+    *                   plane.
     * @return the list of faces for which the support plane is close to the query.
     */
    @SuppressWarnings("unchecked")
@@ -503,10 +528,10 @@ public class EuclidPolytopeTools
     * Tests whether a point is close enough to a face support plane such that it could be extended to
     * include the query.
     * 
-    * @param query the coordinates of the query. Not modified.
-    * @param face the face to evaluate. Not modified.
+    * @param query   the coordinates of the query. Not modified.
+    * @param face    the face to evaluate. Not modified.
     * @param epsilon the tolerance used for determining whether the query is close to the face support
-    *           plane.
+    *                plane.
     * @return {@code true} if the point is considered to be close enough to the face support plane,
     *         {@code false} otherwise.
     */
@@ -546,10 +571,10 @@ public class EuclidPolytopeTools
     * Tests whether a point is close enough to a half-edge support line such that it could be extended
     * to include the query.
     * 
-    * @param query the coordinates of the query. Not modified.
+    * @param query    the coordinates of the query. Not modified.
     * @param halfEdge the half-edge to evaluate. Not modified.
-    * @param epsilon the tolerance used for determining whether the query is close to the half-edge
-    *           support line.
+    * @param epsilon  the tolerance used for determining whether the query is close to the half-edge
+    *                 support line.
     * @return {@code true} if the point is considered to be close enough to the half-edge support
     *         plane, {@code false} otherwise.
     */

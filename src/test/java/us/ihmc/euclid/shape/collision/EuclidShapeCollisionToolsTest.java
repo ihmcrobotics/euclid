@@ -1188,8 +1188,10 @@ public class EuclidShapeCollisionToolsTest
          Plane3D rightFace = new Plane3D(rightPoint, rightNormal);
          List<Plane3D> faces = Arrays.asList(bottomFace, rearFace, slopeFace, leftFace, rightFace);
 
-         List<Point3D> vertices = Arrays.asList(new Point3D(0.0, -halfWidth, 0.0), new Point3D(0.0, halfWidth, 0.0),
-                                                new Point3D(ramp3D.getSizeX(), -halfWidth, 0.0), new Point3D(ramp3D.getSizeX(), halfWidth, 0.0),
+         List<Point3D> vertices = Arrays.asList(new Point3D(0.0, -halfWidth, 0.0),
+                                                new Point3D(0.0, halfWidth, 0.0),
+                                                new Point3D(ramp3D.getSizeX(), -halfWidth, 0.0),
+                                                new Point3D(ramp3D.getSizeX(), halfWidth, 0.0),
                                                 new Point3D(ramp3D.getSizeX(), -halfWidth, ramp3D.getSizeZ()),
                                                 new Point3D(ramp3D.getSizeX(), halfWidth, ramp3D.getSizeZ()));
          vertices.forEach(ramp3D.getPose()::transform);
@@ -1415,14 +1417,14 @@ public class EuclidShapeCollisionToolsTest
    {
       switch (axis)
       {
-      case X:
-         return shape3DPose.getXAxis();
-      case Y:
-         return shape3DPose.getYAxis();
-      case Z:
-         return shape3DPose.getZAxis();
-      default:
-         throw new RuntimeException("Unknown axis: " + axis);
+         case X:
+            return shape3DPose.getXAxis();
+         case Y:
+            return shape3DPose.getYAxis();
+         case Z:
+            return shape3DPose.getZAxis();
+         default:
+            throw new RuntimeException("Unknown axis: " + axis);
       }
    }
 

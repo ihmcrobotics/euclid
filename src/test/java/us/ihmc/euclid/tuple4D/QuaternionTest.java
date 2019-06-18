@@ -118,18 +118,18 @@ public class QuaternionTest extends QuaternionBasicsTest<Quaternion>
          double qs = q.getS();
          switch (random.nextInt(4))
          {
-         case 0:
-            qx = random.nextDouble();
-            break;
-         case 1:
-            qy = random.nextDouble();
-            break;
-         case 2:
-            qz = random.nextDouble();
-            break;
-         case 3:
-            qs = random.nextDouble();
-            break;
+            case 0:
+               qx = random.nextDouble();
+               break;
+            case 1:
+               qy = random.nextDouble();
+               break;
+            case 2:
+               qz = random.nextDouble();
+               break;
+            case 3:
+               qs = random.nextDouble();
+               break;
          }
          q.setUnsafe(qx, qy, qz, qs);
          newHashCode = q.hashCode();

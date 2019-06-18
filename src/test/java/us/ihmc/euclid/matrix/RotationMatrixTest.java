@@ -1866,7 +1866,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, EPS);
-         
+
          rotationMatrix.setToZero();
          Matrix3DTools.inverseTransform(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(original, actual);

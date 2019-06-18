@@ -49,12 +49,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
-    *           are stored. Modified.
+    * @param firstEndpointToPack  point in which the coordinates of this line segment's first endpoint
+    *                             are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
-    *           are stored. Modified.
+    *                             are stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpointToPack} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void get(FixedFramePoint3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
    {
@@ -66,10 +66,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
-    *           are stored. Modified.
+    * @param firstEndpointToPack  point in which the coordinates of this line segment's first endpoint
+    *                             are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
-    *           are stored. Modified.
+    *                             are stored. Modified.
     */
    default void get(FramePoint3DBasics firstEndpointToPack, Point3DBasics secondEndpointToPack)
    {
@@ -81,12 +81,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
-    *           are stored. Modified.
+    * @param firstEndpointToPack  point in which the coordinates of this line segment's first endpoint
+    *                             are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
-    *           are stored. Modified.
+    *                             are stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpointToPack} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void get(Point3DBasics firstEndpointToPack, FixedFramePoint3DBasics secondEndpointToPack)
    {
@@ -98,10 +98,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
-    *           are stored. Modified.
+    * @param firstEndpointToPack  point in which the coordinates of this line segment's first endpoint
+    *                             are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
-    *           are stored. Modified.
+    *                             are stored. Modified.
     */
    default void get(Point3DBasics firstEndpointToPack, FramePoint3DBasics secondEndpointToPack)
    {
@@ -113,12 +113,13 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
-    *           are stored. Modified.
+    * @param firstEndpointToPack  point in which the coordinates of this line segment's first endpoint
+    *                             are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
-    *           are stored. Modified.
+    *                             are stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code firstEndpointToPack}, and
-    *            {@code secondEndpointToPack} are not expressed in the same reference frame.
+    *                                         {@code secondEndpointToPack} are not expressed in the
+    *                                         same reference frame.
     */
    default void get(FixedFramePoint3DBasics firstEndpointToPack, FixedFramePoint3DBasics secondEndpointToPack)
    {
@@ -131,10 +132,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Gets the endpoints defining this line segment by storing their coordinates in the given
     * arguments.
     *
-    * @param firstEndpointToPack point in which the coordinates of this line segment's first endpoint
-    *           are stored. Modified.
+    * @param firstEndpointToPack  point in which the coordinates of this line segment's first endpoint
+    *                             are stored. Modified.
     * @param secondEndpointToPack point in which the coordinates of this line segment's second endpoint
-    *           are stored. Modified.
+    *                             are stored. Modified.
     */
    default void get(FramePoint3DBasics firstEndpointToPack, FramePoint3DBasics secondEndpointToPack)
    {
@@ -146,7 +147,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    /**
     * Computes the vector going from the first to the second endpoint of this line segment.
     *
-    * @param normalize whether the direction vector is to be normalized.
+    * @param normalize       whether the direction vector is to be normalized.
     * @param directionToPack vector in which the direction is stored. Modified.
     */
    @Override
@@ -158,10 +159,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    /**
     * Computes the vector going from the first to the second endpoint of this line segment.
     *
-    * @param normalize whether the direction vector is to be normalized.
+    * @param normalize       whether the direction vector is to be normalized.
     * @param directionToPack vector in which the direction is stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code directionToPack} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void getDirection(boolean normalize, FixedFrameVector3DBasics directionToPack)
    {
@@ -172,7 +173,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    /**
     * Computes the vector going from the first to the second endpoint of this line segment.
     *
-    * @param normalize whether the direction vector is to be normalized.
+    * @param normalize       whether the direction vector is to be normalized.
     * @param directionToPack vector in which the direction is stored. Modified.
     */
    default void getDirection(boolean normalize, FrameVector3DBasics directionToPack)
@@ -194,7 +195,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param point 3D point to compute the distance from this line segment. Not modified.
     * @return the minimum distance between the 3D point and this 3D line segment.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default double distanceSquared(FramePoint3DReadOnly point)
    {
@@ -215,7 +216,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param point 3D point to compute the distance from this line segment. Not modified.
     * @return the minimum distance between the 3D point and this 3D line segment.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default double distance(FramePoint3DReadOnly point)
    {
@@ -228,10 +229,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
     * @param frameLineSegment3DReadOnly the other line segment to compute the distance from. Not
-    *           modified.
+    *                                   modified.
     * @return the minimum distance between the two line segments.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code frameLineSegment3DReadOnly}
-    *            are not expressed in the same reference frame.
+    *                                         are not expressed in the same reference frame.
     */
    default double distance(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
    {
@@ -287,7 +288,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto the line segment or {@code null} if the method failed.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default FramePoint3DBasics orthogonalProjectionCopy(FramePoint3DReadOnly pointToProject)
    {
@@ -316,7 +317,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param pointToProject the point to project on this line segment. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default boolean orthogonalProjection(FixedFramePoint3DBasics pointToProject)
    {
@@ -337,12 +338,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, Point3DBasics projectionToPack)
    {
@@ -363,12 +364,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, FixedFramePoint3DBasics projectionToPack)
    {
@@ -389,9 +390,9 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     */
    default boolean orthogonalProjection(Point3DReadOnly pointToProject, FramePoint3DBasics projectionToPack)
@@ -413,12 +414,13 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code pointToProject} and
-    *            {@code projectionToPack} are not expressed in the same reference frame.
+    *                                         {@code projectionToPack} are not expressed in the same
+    *                                         reference frame.
     */
    default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, FixedFramePoint3DBasics projectionToPack)
    {
@@ -440,12 +442,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * </ul>
     * </p>
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this line segment is
-    *           stored. Modified.
+    *                         stored. Modified.
     * @return whether the method succeeded or not.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToProject} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, FramePoint3DBasics projectionToPack)
    {
@@ -462,7 +464,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @return {@code true} if the projection of the point is between the endpoints of this line
     *         segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default boolean isBetweenEndpoints(FramePoint3DReadOnly point)
    {
@@ -482,12 +484,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * endpoints.
     * </ul>
     *
-    * @param point the query. Not modified.
+    * @param point   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the projection of the point is between the endpoints of this line
     *         segment, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default boolean isBetweenEndpoints(FramePoint3DReadOnly point, double epsilon)
    {
@@ -522,7 +524,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @return the computed percentage along the line segment representing where the point projection is
     *         located.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code point} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default double percentageAlongLineSegment(FramePoint3DReadOnly point)
    {
@@ -534,11 +536,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Computes the coordinates of the point located at a given percentage on this line segment: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
+    * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
+    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
+    *                                         [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    @Override
    default FramePoint3DBasics pointBetweenEndpointsGivenPercentage(double percentage)
@@ -550,11 +553,12 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Computes the coordinates of the point located at a given percentage on this line segment: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
+    * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
+    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
+    *                                         [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void pointBetweenEndpointsGivenPercentage(double percentage, FixedFramePoint3DBasics pointToPack)
    {
@@ -566,7 +570,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Computes the coordinates of the point located at a given percentage on this line segment: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point. Must be in [0, 1].
+    * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
     * @throws {@link RuntimeException} if {@code percentage} &notin; [0, 1].
     */
@@ -580,7 +584,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Computes the coordinates of the point located on the line this line segment is lying on: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point.
+    * @param percentage  the percentage along this line segment of the point.
     * @param pointToPack where the result is stored. Modified.
     */
    @Override
@@ -593,10 +597,10 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Computes the coordinates of the point located on the line this line segment is lying on: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point.
+    * @param percentage  the percentage along this line segment of the point.
     * @param pointToPack where the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
-    *            in the same reference frame.
+    *                                         in the same reference frame.
     */
    default void pointOnLineGivenPercentage(double percentage, FixedFramePoint3DBasics pointToPack)
    {
@@ -608,7 +612,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * Computes the coordinates of the point located on the line this line segment is lying on: <br>
     * {@code pointToPack.interpolate(firstEndpoint, secondEndpoint, percentage)} </br>
     *
-    * @param percentage the percentage along this line segment of the point.
+    * @param percentage  the percentage along this line segment of the point.
     * @param pointToPack where the result is stored. Modified.
     */
    default void pointOnLineGivenPercentage(double percentage, FramePoint3DBasics pointToPack)
@@ -626,7 +630,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * @param other the other line segment used to compute the dot product. Not modified.
     * @return the value of the dot product.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default double dotProduct(FrameLineSegment3DReadOnly other)
    {
@@ -650,7 +654,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     *
     * @param midpointToPack point in which the mid-point of this line segment is stored. Modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code midpointToPack} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    default void midpoint(FixedFramePoint3DBasics midpointToPack)
    {
@@ -676,7 +680,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * If the two line segments have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
@@ -695,11 +699,11 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     * opposite direction.
     * </p>
     *
-    * @param other the line to compare to. Not modified.
+    * @param other   the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    default boolean geometricallyEquals(FrameLineSegment3DReadOnly other, double epsilon)
    {

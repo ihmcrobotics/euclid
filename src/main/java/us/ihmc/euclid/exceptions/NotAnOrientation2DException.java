@@ -35,8 +35,7 @@ public class NotAnOrientation2DException extends RuntimeException
     * Constructs an {@code NotOrientation2DException} with a default detail message outputting the
     * given matrix coefficients.
     *
-    * @param orientation3DReadOnly the orientation to be displayed in the detail message. Not
-    *           modified.
+    * @param orientation3DReadOnly the orientation to be displayed in the detail message. Not modified.
     */
    public NotAnOrientation2DException(Orientation3DReadOnly orientation3DReadOnly)
    {

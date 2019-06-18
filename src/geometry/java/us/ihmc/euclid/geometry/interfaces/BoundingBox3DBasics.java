@@ -39,7 +39,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     *
     * @param min the minimum coordinate for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMin(Point3DReadOnly min)
    {
@@ -52,7 +52,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     *
     * @param min the minimum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMin(double[] min)
    {
@@ -67,7 +67,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     * @param minY the new minimum y-coordinate for this bounding box.
     * @param minZ the new minimum z-coordinate for this bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMin(double minX, double minY, double minZ)
    {
@@ -80,7 +80,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     *
     * @param max the maximum coordinate for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMax(Point3DReadOnly max)
    {
@@ -93,7 +93,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     *
     * @param max the maximum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMax(double[] max)
    {
@@ -108,7 +108,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     * @param maxY the new maximum y-coordinate for this bounding box.
     * @param maxZ the new maximum z-coordinate for this bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void setMax(double maxX, double maxY, double maxZ)
    {
@@ -126,7 +126,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     * @param maxY the new maximum y-coordinates for this bounding box.
     * @param maxZ the new maximum z-coordinates for this bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void set(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
    {
@@ -141,7 +141,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     * @param min the new minimum coordinates for this bounding box. Not modified.
     * @param max the new maximum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void set(double[] min, double[] max)
    {
@@ -156,7 +156,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     * @param min the new minimum coordinates for this bounding box. Not modified.
     * @param max the new maximum coordinates for this bounding box. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void set(Point3DReadOnly min, Point3DReadOnly max)
    {
@@ -169,7 +169,7 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
     * Redefines this bounding box given its {@code center} location and half its size along each axis
     * {@code halfSize}.
     *
-    * @param center the new center location of this bounding box. Not modified.
+    * @param center   the new center location of this bounding box. Not modified.
     * @param halfSize half the size of this bounding box. Not modified.
     */
    default void set(Point3DReadOnly center, Vector3DReadOnly halfSize)

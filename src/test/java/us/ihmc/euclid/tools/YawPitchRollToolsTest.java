@@ -145,8 +145,13 @@ public class YawPitchRollToolsTest
          Quaternion secondQ = new Quaternion(secondYPR);
 
          assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR, secondYPR), EPSILON);
-         assertEquals(firstQ.distance(secondQ), YawPitchRollTools.distance(firstYPR.getYaw(), firstYPR.getPitch(), firstYPR.getRoll(), secondYPR.getYaw(),
-                                                                           secondYPR.getPitch(), secondYPR.getRoll()),
+         assertEquals(firstQ.distance(secondQ),
+                      YawPitchRollTools.distance(firstYPR.getYaw(),
+                                                 firstYPR.getPitch(),
+                                                 firstYPR.getRoll(),
+                                                 secondYPR.getYaw(),
+                                                 secondYPR.getPitch(),
+                                                 secondYPR.getRoll()),
                       EPSILON);
       }
    }

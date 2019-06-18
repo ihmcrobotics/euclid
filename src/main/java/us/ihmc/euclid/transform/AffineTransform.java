@@ -120,7 +120,7 @@ public class AffineTransform
     * given translation.
     *
     * @param rotationScaleMatrix the rotation-scale matrix to copy. Not modified.
-    * @param translation the translation to copy. Not modified.
+    * @param translation         the translation to copy. Not modified.
     */
    public AffineTransform(RotationScaleMatrixReadOnly rotationScaleMatrix, Tuple3DReadOnly translation)
    {
@@ -251,7 +251,7 @@ public class AffineTransform
     * @param m22 the 3rd row 3rd column component of the rotation-scale part of this transform.
     * @param m23 the z-component of the translation part of this transform.
     * @throws NotARotationScaleMatrixException if the components for the rotation-scale part do not
-    *            represent a rotation-scale matrix.
+    *                                          represent a rotation-scale matrix.
     */
    public void set(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22,
                    double m23)
@@ -309,7 +309,7 @@ public class AffineTransform
     *
     * @param matrix the matrix to get this transform's components from. Not modified.
     * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
-    *            this transform is not a rotation-scale matrix.
+    *                                          this transform is not a rotation-scale matrix.
     */
    public void set(DenseMatrix64F matrix)
    {
@@ -337,11 +337,11 @@ public class AffineTransform
     * </pre>
     * </p>
     *
-    * @param matrix the matrix to get this transform's components from. Not modified.
-    * @param startRow the row index of the first component to read.
+    * @param matrix      the matrix to get this transform's components from. Not modified.
+    * @param startRow    the row index of the first component to read.
     * @param startColumn the column index of the first component to read.
     * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
-    *            this transform is not a rotation-scale matrix.
+    *                                          this transform is not a rotation-scale matrix.
     */
    public void set(DenseMatrix64F matrix, int startRow, int startColumn)
    {
@@ -370,9 +370,9 @@ public class AffineTransform
     * </p>
     *
     * @param transformArray the 1D row-major array to get this transform's components from. Not
-    *           modified.
+    *                       modified.
     * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
-    *            this transform is not a rotation-scale matrix.
+    *                                          this transform is not a rotation-scale matrix.
     */
    public void set(double[] transformArray)
    {
@@ -397,10 +397,11 @@ public class AffineTransform
     * Sets the rotation-scale and translation parts of this transform separately.
     *
     * @param rotationScaleMatrix the matrix used to set the rotation-scale part of this transform. Not
-    *           modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
+    *                            modified.
+    * @param translation         the tuple used to set the translation part of this transform. Not
+    *                            modified.
     * @throws NotARotationScaleMatrixException if the given {@code rotationScaleMatrix} is not a
-    *            rotation-scale matrix.
+    *                                          rotation-scale matrix.
     */
    public void set(Matrix3DReadOnly rotationScaleMatrix, Tuple3DReadOnly translation)
    {
@@ -412,8 +413,9 @@ public class AffineTransform
     * Sets the rotation-scale and translation parts of this transform separately.
     *
     * @param rotationScaleMatrix the matrix used to set the rotation-scale part of this transform. Not
-    *           modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
+    *                            modified.
+    * @param translation         the tuple used to set the translation part of this transform. Not
+    *                            modified.
     */
    public void set(RotationScaleMatrixReadOnly rotationScaleMatrix, Tuple3DReadOnly translation)
    {
@@ -425,9 +427,10 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param scale the scalar used to set the scale part of this transform.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scale          the scalar used to set the scale part of this transform.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public void set(Matrix3DReadOnly rotationMatrix, double scale, Tuple3DReadOnly translation)
@@ -440,11 +443,12 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param scaleX the new x-component of the scale part of this transform.
-    * @param scaleY the new y-component of the scale part of this transform.
-    * @param scaleZ the new z-component of the scale part of this transform.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scaleX         the new x-component of the scale part of this transform.
+    * @param scaleY         the new y-component of the scale part of this transform.
+    * @param scaleZ         the new z-component of the scale part of this transform.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(Matrix3DReadOnly rotationMatrix, double scaleX, double scaleY, double scaleZ, Tuple3DReadOnly translation)
@@ -457,9 +461,10 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param scales the tuple used to set the scale part of this transform. Not modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @param scales         the tuple used to set the scale part of this transform. Not modified.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
+    * @throws NotARotationMatrixException      if the given {@code rotationMatrix} is not a rotation
+    *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(Matrix3DReadOnly rotationMatrix, Tuple3DReadOnly scales, Tuple3DReadOnly translation)
@@ -472,8 +477,8 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param scale the scalar used to set the scale part of this transform.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
+    * @param scale          the scalar used to set the scale part of this transform.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
    public void set(RotationMatrixReadOnly rotationMatrix, double scale, Tuple3DReadOnly translation)
@@ -486,10 +491,10 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param scaleX the new x-component of the scale part of this transform.
-    * @param scaleY the new y-component of the scale part of this transform.
-    * @param scaleZ the new z-component of the scale part of this transform.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
+    * @param scaleX         the new x-component of the scale part of this transform.
+    * @param scaleY         the new y-component of the scale part of this transform.
+    * @param scaleZ         the new z-component of the scale part of this transform.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(RotationMatrixReadOnly rotationMatrix, double scaleX, double scaleY, double scaleZ, Tuple3DReadOnly translation)
@@ -502,8 +507,8 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @param scales the tuple used to set the scale part of this transform. Not modified.
-    * @param translation the tuple used to set the translation part of this transform. Not modified.
+    * @param scales         the tuple used to set the scale part of this transform. Not modified.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
    public void set(RotationMatrixReadOnly rotationMatrix, Tuple3DReadOnly scales, Tuple3DReadOnly translation)
@@ -516,7 +521,7 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param orientation the orientation used to set the rotation part of this transform. Not modified.
-    * @param scale the scalar used to set the scale part of this transform.
+    * @param scale       the scalar used to set the scale part of this transform.
     * @param translation the tuple used to set the translation part of this transform. Not modified.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
@@ -530,9 +535,9 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param orientation the orientation used to set the rotation part of this transform. Not modified.
-    * @param scaleX the new x-component of the scale part of this transform.
-    * @param scaleY the new y-component of the scale part of this transform.
-    * @param scaleZ the new z-component of the scale part of this transform.
+    * @param scaleX      the new x-component of the scale part of this transform.
+    * @param scaleY      the new y-component of the scale part of this transform.
+    * @param scaleZ      the new z-component of the scale part of this transform.
     * @param translation the tuple used to set the translation part of this transform. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
@@ -546,7 +551,7 @@ public class AffineTransform
     * Sets the rotation, scale, and translation parts of this transform separately.
     *
     * @param orientation the orientation used to set the rotation part of this transform. Not modified.
-    * @param scales the tuple used to set the scale part of this transform. Not modified.
+    * @param scales      the tuple used to set the scale part of this transform. Not modified.
     * @param translation the tuple used to set the translation part of this transform. Not modified.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
@@ -581,7 +586,7 @@ public class AffineTransform
     * </p>
     *
     * @param rotationVector the rotation vector used to set the rotation part of this transform. Not
-    *           modified.
+    *                       modified.
     */
    public void setRotation(Vector3DReadOnly rotationVector)
    {
@@ -724,9 +729,9 @@ public class AffineTransform
     * This method does not affect the scale part nor the translation part of this transform.
     * </p>
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll  the angle to rotate about the x-axis.
     * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} instead using
     *             {@link YawPitchRollReadOnly}.
     */
@@ -1505,7 +1510,7 @@ public class AffineTransform
     * Packs the rotation and translation parts of this transform in the given rigid-body transform.
     *
     * @param rigidBodyTransformToPack the transform in which the rotation and translation parts of this
-    *           affine transform are stored. Modified.
+    *                                 affine transform are stored. Modified.
     */
    public void getRigidBodyTransform(RigidBodyTransformBasics rigidBodyTransformToPack)
    {
@@ -1551,8 +1556,8 @@ public class AffineTransform
     * where M is the 3-by-3 rotation-scale matrix and (Tx, Ty, Tz) is the translation part of this
     * transform.
     *
-    * @param startRow the first row index to start writing in {@code matrixToPack}.
-    * @param startColumn the first column index to start writing in {@code matrixToPack}.
+    * @param startRow     the first row index to start writing in {@code matrixToPack}.
+    * @param startColumn  the first column index to start writing in {@code matrixToPack}.
     * @param matrixToPack the matrix in which this transform is stored. Modified.
     */
    public void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
@@ -1605,9 +1610,9 @@ public class AffineTransform
     * Packs the rotation-scale matrix and the translation vector of this affine transform.
     *
     * @param rotationScaleMarixToPack matrix in which the rotation-scale matrix of this affine
-    *           transform is stored. Modified.
-    * @param translationToPack tuple in which the translation vector of this affine transform is
-    *           stored. Modified.
+    *                                 transform is stored. Modified.
+    * @param translationToPack        tuple in which the translation vector of this affine transform is
+    *                                 stored. Modified.
     */
    public void get(CommonMatrix3DBasics rotationScaleMarixToPack, Tuple3DBasics translationToPack)
    {
@@ -1619,9 +1624,9 @@ public class AffineTransform
     * Packs the rotation-scale matrix and the translation vector of this affine transform.
     *
     * @param rotationScaleMarixToPack matrix in which the rotation-scale matrix of this affine
-    *           transform is stored. Modified.
-    * @param translationToPack tuple in which the translation vector of this affine transform is
-    *           stored. Modified.
+    *                                 transform is stored. Modified.
+    * @param translationToPack        tuple in which the translation vector of this affine transform is
+    *                                 stored. Modified.
     */
    public void get(RotationScaleMatrix rotationScaleMarixToPack, Tuple3DBasics translationToPack)
    {
@@ -1643,7 +1648,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform.
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *           Modified.
+    *                             Modified.
     */
    public void getRotation(CommonMatrix3DBasics rotationMatrixToPack)
    {
@@ -1654,7 +1659,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform.
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *           Modified.
+    *                             Modified.
     */
    public void getRotation(RotationMatrix rotationMatrixToPack)
    {
@@ -1665,7 +1670,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform.
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *           Modified.
+    *                             Modified.
     */
    public void getRotation(DenseMatrix64F rotationMatrixToPack)
    {
@@ -1676,7 +1681,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform in 1D row-major array.
     *
     * @param rotationMatrixArrayToPack the array in which the rotation part of this transform is
-    *           stored. Modified.
+    *                                  stored. Modified.
     */
    public void getRotation(double[] rotationMatrixArrayToPack)
    {
@@ -1687,7 +1692,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform.
     *
     * @param orientationToPack the orientation that is set to the rotation part of this transform.
-    *           Modified.
+    *                          Modified.
     */
    public void getRotation(Orientation3DBasics orientationToPack)
    {
@@ -1703,7 +1708,7 @@ public class AffineTransform
     * </p>
     *
     * @param rotationVectorToPack the rotation vector that is set to the rotation part of this
-    *           transform. Modified.
+    *                             transform. Modified.
     */
    public void getRotation(Vector3DBasics rotationVectorToPack)
    {
@@ -1803,7 +1808,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform.
     *
     * @param rotationScaleMatrixToPack the matrix in which the rotation-scale part of this transform is
-    *           stored. Modified.
+    *                                  stored. Modified.
     */
    public void getRotationScale(CommonMatrix3DBasics rotationScaleMatrixToPack)
    {
@@ -1814,7 +1819,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform.
     *
     * @param rotationScaleMatrixToPack the matrix in which the rotation-scale part of this transform is
-    *           stored. Modified.
+    *                                  stored. Modified.
     */
    public void getRotationScale(RotationScaleMatrix rotationScaleMatrixToPack)
    {
@@ -1825,7 +1830,7 @@ public class AffineTransform
     * Packs the rotation part of this affine transform.
     *
     * @param rotationScaleMatrixToPack the matrix in which the rotation-scale part of this transform is
-    *           stored. Modified.
+    *                                  stored. Modified.
     */
    public void getRotationScale(DenseMatrix64F rotationScaleMatrixToPack)
    {
@@ -1846,7 +1851,7 @@ public class AffineTransform
     * Packs the translation part of this affine transform.
     *
     * @param translationToPack the tuple in which the translation part of this transform is stored.
-    *           Modified.
+    *                          Modified.
     */
    public void getTranslation(Tuple3DBasics translationToPack)
    {
@@ -1886,11 +1891,11 @@ public class AffineTransform
    /**
     * Retrieves and returns a coefficient of this transform given its row and column indices.
     *
-    * @param row the row of the coefficient to return.
+    * @param row    the row of the coefficient to return.
     * @param column the column of the coefficient to return.
     * @return the coefficient's value.
     * @throws ArrayIndexOutOfBoundsException if either {@code row} &notin; [0, 3] or {@code column}
-    *            &notin; [0, 3].
+    *                                        &notin; [0, 3].
     */
    public double getElement(int row, int column)
    {
@@ -2155,7 +2160,7 @@ public class AffineTransform
     * Two affine transforms are considered geometrically equal if both the rotation-scale matrices and
     * translation vectors are equal.
     *
-    * @param other the other affine transform to compare against this. Not modified.
+    * @param other   the other affine transform to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
     */

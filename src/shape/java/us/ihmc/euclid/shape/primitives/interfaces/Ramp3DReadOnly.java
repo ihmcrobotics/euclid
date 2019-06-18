@@ -85,7 +85,9 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       Point3DBasics pointToCheckInLocal = getIntermediateVariableSupplier().requestPoint3D();
       getPose().inverseTransform(pointToCheck, pointToCheckInLocal);
 
-      double distance = EuclidShapeTools.evaluatePoint3DRamp3DCollision(pointToCheckInLocal, getSize(), closestPointOnSurfaceToPack,
+      double distance = EuclidShapeTools.evaluatePoint3DRamp3DCollision(pointToCheckInLocal,
+                                                                        getSize(),
+                                                                        closestPointOnSurfaceToPack,
                                                                         normalAtClosestPointToPack);
 
       transformToWorld(closestPointOnSurfaceToPack);
@@ -261,7 +263,8 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @param verticesToPack the array in which the coordinates are stored. Modified.
     * @throws IllegalArgumentException if the length of the given array is different than 6.
-    * @throws NullPointerException if any of the 6 first elements of the given array is {@code null}.
+    * @throws NullPointerException     if any of the 6 first elements of the given array is
+    *                                  {@code null}.
     */
    default void getVertices(Point3DBasics[] verticesToPack)
    {
@@ -292,7 +295,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    /**
     * Packs the world coordinates of one of this ramp vertices.
     *
-    * @param vertexIndex the index in [0, 5] of the vertex to pack.
+    * @param vertexIndex  the index in [0, 5] of the vertex to pack.
     * @param vertexToPack point in which the coordinates of the vertex are stored. Modified.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 5].
     */
@@ -334,8 +337,8 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this ramp and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param other the other ramp which pose and size is to be compared against this ramp pose and
-    *           size. Not modified.
+    * @param other   the other ramp which pose and size is to be compared against this ramp pose and
+    *                size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
     */
@@ -350,7 +353,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
     * are geometrically similar given {@code epsilon}.
     *
-    * @param other the ramp to compare to. Not modified.
+    * @param other   the ramp to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
     */
@@ -381,7 +384,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * shape local coordinates.
     *
     * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
+    *                      Modified.
     */
    default void transformToLocal(Transformable transformable)
    {
@@ -393,7 +396,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * being expressed in world.
     *
     * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
+    *                      Modified.
     */
    default void transformToWorld(Transformable transformable)
    {

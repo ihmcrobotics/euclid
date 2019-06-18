@@ -479,7 +479,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an
     * {@code epsilon}.
     * 
-    * @param other the other convex polytope to compare against this. Not modified.
+    * @param other   the other convex polytope to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
     *         otherwise.
@@ -505,7 +505,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
     * similar.
     * 
-    * @param other the other convex polytope to compare against this. Not modified.
+    * @param other   the other convex polytope to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}
     *         otherwise.

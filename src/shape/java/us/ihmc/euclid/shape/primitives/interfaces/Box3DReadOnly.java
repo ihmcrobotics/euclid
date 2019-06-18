@@ -169,11 +169,12 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     *
-    * @param line the line expressed in world coordinates that may intersect this box. Not modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
+    * @param line                     the line expressed in world coordinates that may intersect this
+    *                                 box. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
+    *                                 {@code null}. Modified.
     * @return the number of intersections between the line and this box. It is either equal to 0, 1, or
     *         2.
     */
@@ -190,12 +191,13 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * {@link Double#NaN}.
     * </p>
     *
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
-    * @param lineDirection the direction expressed in world of the line. Not modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
+    * @param pointOnLine              a point expressed in world located on the infinitely long line.
+    *                                 Not modified.
+    * @param lineDirection            the direction expressed in world of the line. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
+    *                                 {@code null}. Modified.
     * @return the number of intersections between the line and this box. It is either equal to 0, 1, or
     *         2.
     */
@@ -215,8 +217,15 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       getPose().inverseTransform(pointOnLine, pointOnLineInLocal);
       getPose().inverseTransform(lineDirection, lineDirectionInLocal);
 
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(minX, minY, minZ, maxX, maxY, maxZ, pointOnLineInLocal,
-                                                                                                lineDirectionInLocal, firstIntersectionToPack,
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(minX,
+                                                                                                minY,
+                                                                                                minZ,
+                                                                                                maxX,
+                                                                                                maxY,
+                                                                                                maxZ,
+                                                                                                pointOnLineInLocal,
+                                                                                                lineDirectionInLocal,
+                                                                                                firstIntersectionToPack,
                                                                                                 secondIntersectionToPack);
 
       getIntermediateVariableSupplier().releasePoint3D(pointOnLineInLocal);
@@ -303,7 +312,8 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     *
     * @param verticesToPack the array in which the coordinates are stored. Modified.
     * @throws IllegalArgumentException if the length of the given array is different than 8.
-    * @throws NullPointerException if any of the 8 first elements of the given array is {@code null}.
+    * @throws NullPointerException     if any of the 8 first elements of the given array is
+    *                                  {@code null}.
     */
    default void getVertices(Point3DBasics[] verticesToPack)
    {
@@ -334,7 +344,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    /**
     * Packs the world coordinates of one of this box vertices.
     *
-    * @param vertexIndex the index in [0, 7] of the vertex to pack.
+    * @param vertexIndex  the index in [0, 7] of the vertex to pack.
     * @param vertexToPack point in which the coordinates of the vertex are stored. Modified.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 7].
     */
@@ -354,8 +364,8 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the size of this box and
     * {@code other}'s pose and size are equal to an {@code epsilon}.
     *
-    * @param other the other box which pose and size is to be compared against this box pose and size.
-    *           Not modified.
+    * @param other   the other box which pose and size is to be compared against this box pose and
+    *                size. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
     */
@@ -368,7 +378,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
     *
-    * @param other the box to compare to. Not modified.
+    * @param other   the box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */
@@ -408,7 +418,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * shape local coordinates.
     *
     * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
+    *                      Modified.
     */
    default void transformToLocal(Transformable transformable)
    {
@@ -420,7 +430,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * being expressed in world.
     *
     * @param transformable the transformable to change the coordinates in which it is expressed.
-    *           Modified.
+    *                      Modified.
     */
    default void transformToWorld(Transformable transformable)
    {

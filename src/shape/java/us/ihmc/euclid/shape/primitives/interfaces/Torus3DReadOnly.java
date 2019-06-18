@@ -59,7 +59,12 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.evaluatePoint3DTorus3DCollision(pointToCheck, getPosition(), getAxis(), getRadius(), getTubeRadius(), closestPointOnSurfaceToPack,
+      return EuclidShapeTools.evaluatePoint3DTorus3DCollision(pointToCheck,
+                                                              getPosition(),
+                                                              getAxis(),
+                                                              getRadius(),
+                                                              getTubeRadius(),
+                                                              closestPointOnSurfaceToPack,
                                                               normalAtClosestPointToPack) <= 0.0;
    }
 
@@ -109,8 +114,8 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radii of this torus and
     * {@code other}'s pose and radii are equal to an {@code epsilon}.
     *
-    * @param other the other torus which pose and radii is to be compared against this torus pose and
-    *           radii. Not modified.
+    * @param other   the other torus which pose and radii is to be compared against this torus pose and
+    *                radii. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two tori are equal component-wise, {@code false} otherwise.
     */
@@ -124,7 +129,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
     *
-    * @param other the torus to compare to. Not modified.
+    * @param other   the torus to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two tori represent the same geometry, {@code false} otherwise.
     */

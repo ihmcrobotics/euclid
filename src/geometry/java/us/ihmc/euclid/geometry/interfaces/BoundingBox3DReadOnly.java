@@ -92,7 +92,7 @@ public interface BoundingBox3DReadOnly
     * Gets the minimum coordinate of this bounding box and stores it in the given {@code minToPack}.
     *
     * @param minToPack point 3D in which the minimum coordinate of this bounding box is stored.
-    *           Modified.
+    *                  Modified.
     */
    default void getMinPoint(Point3DBasics minToPack)
    {
@@ -103,7 +103,7 @@ public interface BoundingBox3DReadOnly
     * Gets the maximum coordinate of this bounding box and stores it in the given {@code maxToPack}.
     *
     * @param maxToPack point 3D in which the maximum coordinate of this bounding box is stored.
-    *           Modified.
+    *                  Modified.
     */
    default void getMaxPoint(Point3DBasics maxToPack)
    {
@@ -136,7 +136,7 @@ public interface BoundingBox3DReadOnly
     * Asserts that the minimum coordinates are less or equal to the maximum coordinates.
     *
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    default void checkBounds()
    {
@@ -186,9 +186,9 @@ public interface BoundingBox3DReadOnly
     * </ul>
     * </p>
     *
-    * @param xParameter the parameter to use for the interpolation along the x-axis.
-    * @param yParameter the parameter to use for the interpolation along the y-axis.
-    * @param zParameter the parameter to use for the interpolation along the z-axis.
+    * @param xParameter  the parameter to use for the interpolation along the x-axis.
+    * @param yParameter  the parameter to use for the interpolation along the y-axis.
+    * @param zParameter  the parameter to use for the interpolation along the z-axis.
     * @param pointToPack the point 3D in which the result is stored. Modified.
     */
    default void getPointGivenParameters(double xParameter, double yParameter, double zParameter, Point3DBasics pointToPack)
@@ -231,11 +231,11 @@ public interface BoundingBox3DReadOnly
     * </p>
     *
     * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param z the z-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
     *         this bounding box.
     */
@@ -275,11 +275,11 @@ public interface BoundingBox3DReadOnly
     * </p>
     *
     * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param z the z-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @return {@code true} if the query is inside or located on an edge of this bounding box,
     *         {@code false} if outside.
     */
@@ -311,7 +311,7 @@ public interface BoundingBox3DReadOnly
     * </ul>
     * </p>
     *
-    * @param query the query to test if it is located inside this bounding box. Not modified.
+    * @param query   the query to test if it is located inside this bounding box. Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
@@ -335,12 +335,12 @@ public interface BoundingBox3DReadOnly
     * </ul>
     * </p>
     *
-    * @param x the x-coordinate the query to test if it is located inside this bounding box. Not
-    *           modified.
-    * @param y the y-coordinate the query to test if it is located inside this bounding box. Not
-    *           modified.
-    * @param z the z-coordinate the query to test if it is located inside this bounding box. Not
-    *           modified.
+    * @param x       the x-coordinate the query to test if it is located inside this bounding box. Not
+    *                modified.
+    * @param y       the y-coordinate the query to test if it is located inside this bounding box. Not
+    *                modified.
+    * @param z       the z-coordinate the query to test if it is located inside this bounding box. Not
+    *                modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
@@ -383,9 +383,9 @@ public interface BoundingBox3DReadOnly
     * </p>
     *
     * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @return {@code true} if the query is inside, {@code false} if outside or located on an edge of
     *         this bounding box.
     */
@@ -424,9 +424,9 @@ public interface BoundingBox3DReadOnly
     * </p>
     *
     * @param x the x-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @param y the y-coordinate of the query to test if it is located inside this bounding box. Not
-    *           modified.
+    *          modified.
     * @return {@code true} if the query is inside or located on an edge of this bounding box,
     *         {@code false} if outside.
     */
@@ -455,7 +455,7 @@ public interface BoundingBox3DReadOnly
     * </ul>
     * </p>
     *
-    * @param query the query to test if it is located inside this bounding box. Not modified.
+    * @param query   the query to test if it is located inside this bounding box. Not modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
@@ -479,10 +479,10 @@ public interface BoundingBox3DReadOnly
     * </ul>
     * </p>
     *
-    * @param x the x-coordinate the query to test if it is located inside this bounding box. Not
-    *           modified.
-    * @param y the y-coordinate the query to test if it is located inside this bounding box. Not
-    *           modified.
+    * @param x       the x-coordinate the query to test if it is located inside this bounding box. Not
+    *                modified.
+    * @param y       the y-coordinate the query to test if it is located inside this bounding box. Not
+    *                modified.
     * @param epsilon the tolerance to use for this test.
     * @return {@code true} if the query is considered to be inside the bounding box, {@code false}
     *         otherwise.
@@ -501,11 +501,12 @@ public interface BoundingBox3DReadOnly
    /**
     * Tests if this bounding box and {@code other} intersects.
     * <p>
-    * The two bounding boxes are considered to not be intersecting if they share a corner, an edge, or a face.
+    * The two bounding boxes are considered to not be intersecting if they share a corner, an edge, or
+    * a face.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    *              Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
    default boolean intersectsExclusive(BoundingBox3DReadOnly other)
@@ -525,11 +526,12 @@ public interface BoundingBox3DReadOnly
    /**
     * Tests if this bounding box and {@code other} intersects.
     * <p>
-    * The two bounding boxes are considered to be intersecting if they share a corner, an edge, or a face.
+    * The two bounding boxes are considered to be intersecting if they share a corner, an edge, or a
+    * face.
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    *              Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
    default boolean intersectsInclusive(BoundingBox3DReadOnly other)
@@ -559,8 +561,8 @@ public interface BoundingBox3DReadOnly
     * </ul>
     * </p>
     *
-    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    * @param other   the other bounding box to test if it is intersecting with this bounding box. Not
+    *                Modified.
     * @param epsilon the tolerance to use in this test.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
@@ -589,7 +591,7 @@ public interface BoundingBox3DReadOnly
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    *              Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
    default boolean intersectsExclusiveInXYPlane(BoundingBox2DReadOnly other)
@@ -614,7 +616,7 @@ public interface BoundingBox3DReadOnly
     * </p>
     *
     * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    *              Modified.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
    default boolean intersectsInclusiveInXYPlane(BoundingBox2DReadOnly other)
@@ -645,8 +647,8 @@ public interface BoundingBox3DReadOnly
     * test.
     * </p>
     *
-    * @param other the other bounding box to test if it is intersecting with this bounding box. Not
-    *           Modified.
+    * @param other   the other bounding box to test if it is intersecting with this bounding box. Not
+    *                Modified.
     * @param epsilon the tolerance to use in this test.
     * @return {@code true} if the two bounding boxes intersect, {@code false} otherwise.
     */
@@ -675,7 +677,7 @@ public interface BoundingBox3DReadOnly
    /**
     * Tests if this the given line 3D intersects this bounding box.
     *
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
+    * @param pointOnLine   a point located on the infinitely long line. Not modified.
     * @param lineDirection the line direction. Not modified.
     * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
     */
@@ -700,7 +702,7 @@ public interface BoundingBox3DReadOnly
     * Tests if this the given line segment 3D intersects this bounding box.
     *
     * @param lineSegmentStart first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd second endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd   second endpoint of the line segment. Not modified.
     * @return {@code true} if the line segment and this bounding box intersect, {@code false}
     *         otherwise.
     */
@@ -712,7 +714,7 @@ public interface BoundingBox3DReadOnly
    /**
     * Tests if this the given ray 3D intersects this bounding box.
     *
-    * @param rayOrigin the origin of the ray. Not modified.
+    * @param rayOrigin    the origin of the ray. Not modified.
     * @param rayDirection the ray direction. Not modified.
     * @return {@code true} if the ray and this bounding box intersect, {@code false} otherwise.
     */
@@ -728,11 +730,11 @@ public interface BoundingBox3DReadOnly
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     *
-    * @param line3D the query. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param line3D                   the query. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and this bounding box. It is either equal to
     *         0 or 2.
     */
@@ -748,19 +750,23 @@ public interface BoundingBox3DReadOnly
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remains unmodified.
     * </p>
     *
-    * @param pointOnLine a point located on the infinitely long line. Not modified.
-    * @param lineDirection the line direction. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param pointOnLine              a point located on the infinitely long line. Not modified.
+    * @param lineDirection            the line direction. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line and this bounding box. It is either equal to
     *         0 or 2.
     */
    default int intersectionWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
                                       Point3DBasics secondIntersectionToPack)
    {
-      return intersectionBetweenLine3DAndBoundingBox3D(getMinPoint(), getMaxPoint(), pointOnLine, lineDirection, firstIntersectionToPack,
+      return intersectionBetweenLine3DAndBoundingBox3D(getMinPoint(),
+                                                       getMaxPoint(),
+                                                       pointOnLine,
+                                                       lineDirection,
+                                                       firstIntersectionToPack,
                                                        secondIntersectionToPack);
    }
 
@@ -781,17 +787,19 @@ public interface BoundingBox3DReadOnly
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param lineSegment3D the query. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param lineSegment3D            the query. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
     */
    default int intersectionWithLineSegment3D(LineSegment3DReadOnly lineSegment3D, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
-      return intersectionWithLineSegment3D(lineSegment3D.getFirstEndpoint(), lineSegment3D.getSecondEndpoint(), firstIntersectionToPack,
+      return intersectionWithLineSegment3D(lineSegment3D.getFirstEndpoint(),
+                                           lineSegment3D.getSecondEndpoint(),
+                                           firstIntersectionToPack,
                                            secondIntersectionToPack);
    }
 
@@ -812,19 +820,23 @@ public interface BoundingBox3DReadOnly
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param lineSegmentStart the first endpoint of the line segment. Not modified.
-    * @param lineSegmentEnd the second endpoint of the line segment. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param lineSegmentStart         the first endpoint of the line segment. Not modified.
+    * @param lineSegmentEnd           the second endpoint of the line segment. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
     */
    default int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
                                              Point3DBasics secondIntersectionToPack)
    {
-      return intersectionBetweenLineSegment3DAndBoundingBox3D(getMinPoint(), getMaxPoint(), lineSegmentStart, lineSegmentEnd, firstIntersectionToPack,
+      return intersectionBetweenLineSegment3DAndBoundingBox3D(getMinPoint(),
+                                                              getMaxPoint(),
+                                                              lineSegmentStart,
+                                                              lineSegmentEnd,
+                                                              firstIntersectionToPack,
                                                               secondIntersectionToPack);
    }
 
@@ -844,12 +856,12 @@ public interface BoundingBox3DReadOnly
     * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
     * </p>
     *
-    * @param rayOrigin the coordinate of the ray origin. Not modified.
-    * @param rayDirection the direction of the ray. Not modified.
-    * @param firstIntersectionToPack the coordinate of the first intersection. Can be {@code null}.
-    *           Modified.
+    * @param rayOrigin                the coordinate of the ray origin. Not modified.
+    * @param rayDirection             the direction of the ray. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
     * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
-    *           Modified.
+    *                                 Modified.
     * @return the number of intersections between the ray and this bounding box. It is either equal to
     *         0, 1, or 2.
     */
@@ -880,7 +892,7 @@ public interface BoundingBox3DReadOnly
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
@@ -894,7 +906,7 @@ public interface BoundingBox3DReadOnly
     * similar, i.e. the distance between their min and max points is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the bounding box to compare to. Not modified.
+    * @param other   the bounding box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
     *         otherwise.

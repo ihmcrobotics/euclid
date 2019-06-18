@@ -74,24 +74,24 @@ public enum Axis implements Vector3DReadOnly
     * Gets the value of the tuple for the given axis.
     *
     * @param tuple the tuple to get value from. Not modified.
-    * @param axis the {@link Axis} to get value for. Not modified.
+    * @param axis  the {@link Axis} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}.
     */
    public static double get(Tuple3DBasics tuple, Axis axis)
    {
       switch (axis)
       {
-      case X:
-         return tuple.getX();
+         case X:
+            return tuple.getX();
 
-      case Y:
-         return tuple.getY();
+         case Y:
+            return tuple.getY();
 
-      case Z:
-         return tuple.getZ();
+         case Z:
+            return tuple.getZ();
 
-      default:
-         throw new IndexOutOfBoundsException();
+         default:
+            throw new IndexOutOfBoundsException();
       }
    }
 
@@ -99,27 +99,27 @@ public enum Axis implements Vector3DReadOnly
     * Sets the value of the given tuple for the given axis to the given value.
     *
     * @param tupleToModify the tuple to set value of. Modified.
-    * @param axis the {@link Axis} to set value for. Not modified.
-    * @param value the double value to set {@code axis} of {@code tupleToModify} to.
+    * @param axis          the {@link Axis} to set value for. Not modified.
+    * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
     */
    public static void set(Tuple3DBasics tupleToModify, Axis axis, double value)
    {
       switch (axis)
       {
-      case X:
-         tupleToModify.setX(value);
-         break;
+         case X:
+            tupleToModify.setX(value);
+            break;
 
-      case Y:
-         tupleToModify.setY(value);
-         break;
+         case Y:
+            tupleToModify.setY(value);
+            break;
 
-      case Z:
-         tupleToModify.setZ(value);
-         break;
+         case Z:
+            tupleToModify.setZ(value);
+            break;
 
-      default:
-         throw new IndexOutOfBoundsException();
+         default:
+            throw new IndexOutOfBoundsException();
       }
    }
 
@@ -132,12 +132,12 @@ public enum Axis implements Vector3DReadOnly
    {
       switch (this)
       {
-      case X:
-         return Z;
-      case Y:
-         return X;
-      default:
-         return Y;
+         case X:
+            return Z;
+         case Y:
+            return X;
+         default:
+            return Y;
       }
    }
 
@@ -150,12 +150,12 @@ public enum Axis implements Vector3DReadOnly
    {
       switch (this)
       {
-      case X:
-         return Y;
-      case Y:
-         return Z;
-      default:
-         return X;
+         case X:
+            return Y;
+         case Y:
+            return Z;
+         default:
+            return X;
       }
    }
 }

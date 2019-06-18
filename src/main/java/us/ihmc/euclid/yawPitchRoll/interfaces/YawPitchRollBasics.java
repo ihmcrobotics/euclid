@@ -113,9 +113,9 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    /**
     * Sets this yaw-pitch-roll angles.
     * 
-    * @param yaw the new yaw angle.
+    * @param yaw   the new yaw angle.
     * @param pitch the new pitch angle.
-    * @param roll the new roll angle.
+    * @param roll  the new roll angle.
     */
    default void set(double yaw, double pitch, double roll)
    {
@@ -161,7 +161,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * </ul>
     *
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(double[] yawPitchRollArray)
    {
@@ -176,9 +176,9 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * <li>{@code this.setRoll(yawPitchRollArray[startIndex + 2]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex        the first index to start reading from in the array.
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(int startIndex, double[] yawPitchRollArray)
    {
@@ -196,7 +196,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * </ul>
     *
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(float[] yawPitchRollArray)
    {
@@ -211,9 +211,9 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * <li>{@code this.setRoll(yawPitchRollArray[startIndex + 2]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex        the first index to start reading from in the array.
     * @param yawPitchRollArray the array containing the new values for this yaw-pitch-roll. Not
-    *           modified.
+    *                          modified.
     */
    default void set(int startIndex, float[] yawPitchRollArray)
    {
@@ -290,17 +290,17 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    {
       switch (index)
       {
-      case 0:
-         setYaw(value);
-         break;
-      case 1:
-         setPitch(value);
-         break;
-      case 2:
-         setRoll(value);
-         break;
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            setYaw(value);
+            break;
+         case 1:
+            setPitch(value);
+            break;
+         case 2:
+            setRoll(value);
+            break;
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 

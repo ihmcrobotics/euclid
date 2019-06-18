@@ -68,7 +68,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          Arrays.asList(tetrahedronClosest, tetrahedronFarthest0, tetrahedronFarthest1, tetrahedronFarthest2).forEach(p -> p.add(translation));
 
-         ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(tetrahedronClosest, tetrahedronFarthest0, tetrahedronFarthest1,
+         ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(tetrahedronClosest,
+                                                                                                 tetrahedronFarthest0,
+                                                                                                 tetrahedronFarthest1,
                                                                                                  tetrahedronFarthest2));
 
          double distance = Double.POSITIVE_INFINITY;
@@ -95,8 +97,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          assertEquals(translation.getX(), distance, EPSILON);
 
-         performAssertionsTwoCombinations("Iteration: " + i, cube, tetrahedron, false, new Point3D(0.5, tetrahedronClosest.getY(), tetrahedronClosest.getZ()),
-                                          tetrahedronClosest);
+         performAssertionsTwoCombinations("Iteration: "
+               + i, cube, tetrahedron, false, new Point3D(0.5, tetrahedronClosest.getY(), tetrahedronClosest.getZ()), tetrahedronClosest);
       }
    }
 
@@ -121,7 +123,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
          Arrays.asList(tetrahedronClosest, tetrahedronFarthest0, tetrahedronFarthest1, tetrahedronFarthest2).forEach(p -> p.add(translation));
 
-         ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(tetrahedronClosest, tetrahedronFarthest0, tetrahedronFarthest1,
+         ConvexPolytope3D tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(tetrahedronClosest,
+                                                                                                 tetrahedronFarthest0,
+                                                                                                 tetrahedronFarthest1,
                                                                                                  tetrahedronFarthest2));
 
          GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
@@ -150,7 +154,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             {
                Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-               Point3D pointOnConvexPolytope3D = EuclidGeometryRandomTools.nextPoint3DInTriangle(random, face.getCentroid(), edge.getOrigin(),
+               Point3D pointOnConvexPolytope3D = EuclidGeometryRandomTools.nextPoint3DInTriangle(random,
+                                                                                                 face.getCentroid(),
+                                                                                                 edge.getOrigin(),
                                                                                                  edge.getDestination());
                Point3D pointOnTetrahedron = new Point3D(pointOnConvexPolytope3D);
                pointOnTetrahedron.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0), face.getNormal(), pointOnTetrahedron);
@@ -259,8 +265,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                   firstTetraSegment.translate(firstOrthogonalToEdge);
                   LineSegment3D secondTetraSegment = new LineSegment3D();
                   secondTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
-                  secondTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge,
-                                                                  edge.midpoint());
+                  secondTetraSegment.getSecondEndpoint()
+                                    .scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
                   firstOrthogonalToEdge.negate();
                   secondTetraSegment.translate(firstOrthogonalToEdge);
                   tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTetraSegment.getFirstEndpoint(),
@@ -278,8 +284,11 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                {
                   Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                   HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-                  Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(),
-                                                                                        edge.getOrigin(), edge.getDestination());
+                  Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random,
+                                                                                           convexPolytope3D.getCentroid(),
+                                                                                           face.getCentroid(),
+                                                                                           edge.getOrigin(),
+                                                                                           edge.getDestination());
 
                   tetrahedron = newTetrahedron(random, pointInside, face.getNormal(), 1.0);
                }
@@ -316,8 +325,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                   firstTetraSegment.translate(firstOrthogonalToEdge);
                   LineSegment3D secondTetraSegment = new LineSegment3D();
                   secondTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
-                  secondTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge,
-                                                                  edge.midpoint());
+                  secondTetraSegment.getSecondEndpoint()
+                                    .scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
                   firstOrthogonalToEdge.negate();
                   secondTetraSegment.translate(firstOrthogonalToEdge);
                   tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTetraSegment.getFirstEndpoint(),
@@ -382,8 +391,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
                   firstTetraSegment.translate(firstOrthogonalToEdge);
                   LineSegment3D secondTetraSegment = new LineSegment3D();
                   secondTetraSegment.getFirstEndpoint().scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
-                  secondTetraSegment.getSecondEndpoint().scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge,
-                                                                  edge.midpoint());
+                  secondTetraSegment.getSecondEndpoint()
+                                    .scaleAdd(-EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0), secondOrthogonalToEdge, edge.midpoint());
                   firstOrthogonalToEdge.negate();
                   secondTetraSegment.translate(firstOrthogonalToEdge);
                   tetrahedron = new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(firstTetraSegment.getFirstEndpoint(),
@@ -614,12 +623,14 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-13;
       double positionMeanEpsilon = 1.2e-8;
 
-      AnalyticalShapeCollisionDetection<Sphere3D, Sphere3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<Sphere3D, Sphere3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          Sphere3D sphereA = EuclidShapeRandomTools.nextSphere3D(random);
          Sphere3D sphereB = EuclidShapeRandomTools.nextSphere3D(random);
          sphereB.getPosition().add(sphereA.getPosition(),
-                                   EuclidCoreRandomTools.nextVector3DWithFixedLength(random, EuclidCoreRandomTools.nextDouble(random, 1.0, 5.0)
-                                         * (sphereA.getRadius() + sphereB.getRadius())));
+                                   EuclidCoreRandomTools.nextVector3DWithFixedLength(random,
+                                                                                     EuclidCoreRandomTools.nextDouble(random, 1.0, 5.0)
+                                                                                           * (sphereA.getRadius() + sphereB.getRadius())));
          return new Pair<>(sphereA, sphereB);
       }, EuclidShapeCollisionTools::evaluateSphere3DSphere3DCollision);
 
@@ -637,7 +648,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-15;
       double positionMeanEpsilon = 1.0e-16;
 
-      AnalyticalShapeCollisionDetection<PointShape3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<PointShape3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -662,7 +674,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-7;
 
-      AnalyticalShapeCollisionDetection<Sphere3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<Sphere3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
          Box3D shapeB = EuclidShapeRandomTools.nextBox3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -686,7 +699,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 5.0e-8;
 
-      AnalyticalShapeCollisionDetection<PointShape3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<PointShape3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -710,7 +724,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-11;
       double positionMeanEpsilon = 1.0e-7;
 
-      AnalyticalShapeCollisionDetection<Capsule3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<Capsule3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          Capsule3D shapeA = EuclidShapeRandomTools.nextCapsule3D(random);
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          return new Pair<>(shapeA, shapeB);
@@ -730,7 +745,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-7;
 
-      AnalyticalShapeCollisionDetection<Sphere3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<Sphere3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
          Capsule3D shapeB = EuclidShapeRandomTools.nextCapsule3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -754,7 +770,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-7;
 
-      AnalyticalShapeCollisionDetection<PointShape3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<PointShape3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Cylinder3D shapeB = EuclidShapeRandomTools.nextCylinder3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -778,7 +795,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 2.0e-8;
       double positionMeanEpsilon = 2.0e-5;
 
-      AnalyticalShapeCollisionDetection<Sphere3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<Sphere3D, Cylinder3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
          Cylinder3D shapeB = EuclidShapeRandomTools.nextCylinder3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -802,7 +820,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-7;
 
-      AnalyticalShapeCollisionDetection<PointShape3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<PointShape3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Ellipsoid3D shapeB = EuclidShapeRandomTools.nextEllipsoid3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -827,7 +846,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-7;
 
-      AnalyticalShapeCollisionDetection<Sphere3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<Sphere3D, Ellipsoid3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
          Ellipsoid3D shapeB = EuclidShapeRandomTools.nextEllipsoid3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -851,7 +871,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-15;
       double positionMeanEpsilon = 1.0e-16;
 
-      AnalyticalShapeCollisionDetection<PointShape3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<PointShape3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          PointShape3D shapeA = EuclidShapeRandomTools.nextPointShape3D(random);
          Ramp3D shapeB = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -876,7 +897,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMeanEpsilon = 1.0e-10;
       double positionMeanEpsilon = 1.0e-7;
 
-      AnalyticalShapeCollisionDetection<Sphere3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() -> {
+      AnalyticalShapeCollisionDetection<Sphere3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() ->
+      {
          Sphere3D shapeA = EuclidShapeRandomTools.nextSphere3D(random);
          Ramp3D shapeB = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D closestPointOnSurface = new Point3D();
@@ -920,15 +942,17 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          double distanceError = Math.abs(expectedResult.getSignedDistance() - gjkResult.getSignedDistance());
          if (verbose && (i % 5000) == 0)
          {
-            System.out.println(iterationPrefix + ", Number of its: " + gjkDetector.getNumberOfIterations() + " Analytical: " + expectedResult.getSignedDistance()
-                  + ", GJK: " + gjkResult.getSignedDistance() + ", diff: " + distanceError);
+            System.out.println(iterationPrefix + ", Number of its: " + gjkDetector.getNumberOfIterations() + " Analytical: "
+                  + expectedResult.getSignedDistance() + ", GJK: " + gjkResult.getSignedDistance() + ", diff: " + distanceError);
          }
 
          // Asserts the internal sanity of the collision result
          //         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding(), iterationPrefix);
 
-         assertEquals(expectedResult.areShapesColliding(), gjkResult.areShapesColliding(),
-                      iterationPrefix + " Analytical: " + expectedResult.getSignedDistance() + ", GJK: " + gjkResult.getSignedDistance() + ", diff: " + distanceError);
+         assertEquals(expectedResult.areShapesColliding(),
+                      gjkResult.areShapesColliding(),
+                      iterationPrefix + " Analytical: " + expectedResult.getSignedDistance() + ", GJK: " + gjkResult.getSignedDistance() + ", diff: "
+                            + distanceError);
 
          if (gjkResult.areShapesColliding())
          {
@@ -942,7 +966,10 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             double positionErrorOnA = expectedResult.getPointOnA().distance(gjkResult.getPointOnA());
             double positionErrorOnB = expectedResult.getPointOnB().distance(gjkResult.getPointOnB());
 
-            assertEquals(expectedResult.getSignedDistance(), gjkResult.getSignedDistance(), distanceMaxEpsilon, iterationPrefix + ", difference: " + distanceError);
+            assertEquals(expectedResult.getSignedDistance(),
+                         gjkResult.getSignedDistance(),
+                         distanceMaxEpsilon,
+                         iterationPrefix + ", difference: " + distanceError);
             EuclidCoreTestTools.assertPoint3DGeometricallyEquals(iterationPrefix, expectedResult.getPointOnA(), gjkResult.getPointOnA(), positionMaxEpsilon);
             EuclidCoreTestTools.assertPoint3DGeometricallyEquals(iterationPrefix, expectedResult.getPointOnB(), gjkResult.getPointOnB(), positionMaxEpsilon);
 
@@ -992,7 +1019,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
 
       private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> BiFunction<A, B, EuclidShape3DCollisionResult> toBiFunction(TriConsumer<A, B, EuclidShape3DCollisionResult> triConsumer)
       {
-         return (t, u) -> {
+         return (t, u) ->
+         {
             EuclidShape3DCollisionResult result = new EuclidShape3DCollisionResult();
             triConsumer.accept(t, u, result);
             return result;

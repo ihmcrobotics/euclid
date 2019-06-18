@@ -32,8 +32,8 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
    private double s;
 
    /**
-    * Creates a new quaternion and initializes it to the neutral quaternion which represents a
-    * 'zero' rotation.
+    * Creates a new quaternion and initializes it to the neutral quaternion which represents a 'zero'
+    * rotation.
     */
    public Quaternion()
    {
@@ -57,8 +57,8 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
    }
 
    /**
-    * Creates a new quaternion and initializes its component {@code x}, {@code y}, {@code z},
-    * {@code s} in order from the given array.
+    * Creates a new quaternion and initializes its component {@code x}, {@code y}, {@code z}, {@code s}
+    * in order from the given array.
     * <p>
     * The quaternion is immediately normalized.
     * </p>
@@ -71,8 +71,8 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
    }
 
    /**
-    * Creates a new quaternion and initializes its component {@code x}, {@code y}, {@code z},
-    * {@code s} in order from the given matrix.
+    * Creates a new quaternion and initializes its component {@code x}, {@code y}, {@code z}, {@code s}
+    * in order from the given matrix.
     * <p>
     * The quaternion is immediately normalized.
     * </p>
@@ -119,9 +119,9 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
     * Creates a new quaternion and initializes such that it represents the same orientation as the
     * given {@code rotationVector}.
     * <p>
-    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation.
-    * A rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle
-    * of the same axis-angle.
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
     * </p>
     *
     * @param rotationVector the rotation vector to initialize this quaternion. Not modified.
@@ -135,9 +135,9 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
     * Creates and new quaternion and initializes such that it represents the same orientation as the
     * given yaw-pitch-roll {@code yaw}, {@code pitch}, and {@code roll}.
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll  the angle to rotate about the x-axis.
     */
    public Quaternion(double yaw, double pitch, double roll)
    {
@@ -194,8 +194,8 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Tuple4DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Tuple4DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -213,7 +213,7 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
     * Tests on a per component basis if this quaternion is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other quaternion to compare against this. Not modified.
+    * @param other   the other quaternion to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -226,24 +226,22 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
    /**
     * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
     * <p>
-    * Two quaternions are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
+    * Two quaternions are considered geometrically equal if the magnitude of their difference is less
+    * than or equal to {@code epsilon}.
     * </p>
     * <p>
     * Note that two quaternions of opposite sign are considered equal, such that the two quaternions
-    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically
-    * equal.
+    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically equal.
     * </p>
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other quaternion to compare against this. Not modified.
-    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions
-    *           to be considered equal.
-    * @return {@code true} if the two quaternions represent the same geometry, {@code false}
-    *         otherwise.
+    * @param other   the other quaternion to compare against this. Not modified.
+    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
+    *                be considered equal.
+    * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(Quaternion other, double epsilon)

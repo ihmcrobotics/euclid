@@ -167,9 +167,9 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    /**
     * Creates a new frame pose and initializes its current reference frame and pose.
     *
-    * @param referenceFrame the initial reference frame in which the given pose is expressed in.
+    * @param referenceFrame     the initial reference frame in which the given pose is expressed in.
     * @param rigidBodyTransform the rigid body transform used to initialize the this frame pose. Not
-    *           modified.
+    *                           modified.
     */
    public FramePose3D(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly rigidBodyTransform)
    {
@@ -180,8 +180,8 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * Creates a new frame pose and initializes its current reference frame and pose.
     *
     * @param referenceFrame the initial reference frame in which the given pose is expressed in.
-    * @param position the tuple used to initialize the position. Not modified.
-    * @param orientation the initial orientation. Not modified.
+    * @param position       the tuple used to initialize the position. Not modified.
+    * @param orientation    the initial orientation. Not modified.
     */
    public FramePose3D(ReferenceFrame referenceFrame, Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
@@ -191,10 +191,10 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    /**
     * Creates a new pose 3D initialize it from the given position and orientation.
     *
-    * @param position the position used to initialize this frame pose. Not modified.
+    * @param position    the position used to initialize this frame pose. Not modified.
     * @param orientation the orientation used to initialize this frame pose. Not modified.
     * @throws ReferenceFrameMismatchException if {@code position} and {@code orientation} are not
-    *            expressed in the same reference frame.
+    *                                         expressed in the same reference frame.
     */
    public FramePose3D(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
@@ -216,7 +216,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     *
     * @param other the other frame pose 3D. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    @Override
    public void set(FramePose3D other)
@@ -278,7 +278,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * If the two poses have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other pose to compare against this. Not modified.
+    * @param other   the other pose to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
     *         {@code false} otherwise.
@@ -295,11 +295,11 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FramePose3D other, double epsilon)

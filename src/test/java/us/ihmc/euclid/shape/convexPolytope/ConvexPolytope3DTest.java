@@ -411,8 +411,26 @@ public class ConvexPolytope3DTest
          Point3D yMinusSideCenter = new Point3D(0, -0.5, 0.5);
 
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         Arrays.asList(bottomP0, bottomP1, bottomP2, bottomP3, topP0, topP1, topP2, topP3, bottomNormal, topNormal, xPlusSideNormal, xMinusSideNormal,
-                       yPlusSideNormal, yMinusSideNormal, bottomCenter, topCenter, xPlusSideCenter, xMinusSideCenter, yPlusSideCenter, yMinusSideCenter)
+         Arrays.asList(bottomP0,
+                       bottomP1,
+                       bottomP2,
+                       bottomP3,
+                       topP0,
+                       topP1,
+                       topP2,
+                       topP3,
+                       bottomNormal,
+                       topNormal,
+                       xPlusSideNormal,
+                       xMinusSideNormal,
+                       yPlusSideNormal,
+                       yMinusSideNormal,
+                       bottomCenter,
+                       topCenter,
+                       xPlusSideCenter,
+                       xMinusSideCenter,
+                       yPlusSideCenter,
+                       yMinusSideCenter)
                .forEach(o -> o.applyTransform(transform));
 
          ConvexPolytope3D convexPolytope3D = new ConvexPolytope3D();
@@ -857,8 +875,9 @@ public class ConvexPolytope3DTest
             assertEquals(3, topConeFace.getNumberOfEdges());
             List<Vertex3D> vertices = topConeFace.getVertices();
             assertEquals(1, vertices.stream().filter(v -> aboveTop.epsilonEquals(v, EPSILON)).count());
-            assertEquals(2, vertices.stream().filter(v -> EuclidCoreTools.epsilonEquals(0.0, percentageAlongLineSegment3D(v, topCentroid, aboveTop), EPSILON))
-                                    .count());
+            assertEquals(2,
+                         vertices.stream().filter(v -> EuclidCoreTools.epsilonEquals(0.0, percentageAlongLineSegment3D(v, topCentroid, aboveTop), EPSILON))
+                                 .count());
          }
 
          for (Face3D sideFace : sideFaces)
@@ -944,12 +963,16 @@ public class ConvexPolytope3DTest
             { // We generate the query by picking a face at random, then an edge on this face at random, and we get a random point from the polytope and face centroids and the edge end-points.
                Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-               point.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
-                                                                         edge.getDestination()));
+               point.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random,
+                                                                            convexPolytope3D.getCentroid(),
+                                                                            face.getCentroid(),
+                                                                            edge.getOrigin(),
+                                                                            edge.getDestination()));
             }
 
-            Face3D expectedClosestFace = convexPolytope3D.getFaces().stream()
-                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point), f2.signedDistanceFromSupportPlane(point)))
+            Face3D expectedClosestFace = convexPolytope3D.getFaces().stream().sorted((f1,
+                                                                                      f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point),
+                                                                                                             f2.signedDistanceFromSupportPlane(point)))
                                                          .findFirst().get();
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
             assertTrue(expectedClosestFace == actualClosestFace, "Iteration " + i);
@@ -972,8 +995,9 @@ public class ConvexPolytope3DTest
                point.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, a, b, c, d));
             }
 
-            Face3D expectedClosestFace = convexPolytope3D.getFaces().stream()
-                                                         .sorted((f1, f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point), f2.signedDistanceFromSupportPlane(point)))
+            Face3D expectedClosestFace = convexPolytope3D.getFaces().stream().sorted((f1,
+                                                                                      f2) -> -Double.compare(f1.signedDistanceFromSupportPlane(point),
+                                                                                                             f2.signedDistanceFromSupportPlane(point)))
                                                          .findFirst().get();
             Face3D actualClosestFace = convexPolytope3D.getClosestFace(point);
             assertTrue(expectedClosestFace == actualClosestFace, "Iteration " + i);
@@ -1045,8 +1069,11 @@ public class ConvexPolytope3DTest
             { // We generate the query by picking a face at random, then an edge on this face at random, and we get a random point from the polytope and face centroids and the edge end-points.
                Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
                HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-               point.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
-                                                                         edge.getDestination()));
+               point.set(EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random,
+                                                                            convexPolytope3D.getCentroid(),
+                                                                            face.getCentroid(),
+                                                                            edge.getOrigin(),
+                                                                            edge.getDestination()));
             }
 
             double expectedDistance = Double.NEGATIVE_INFINITY;
@@ -1114,7 +1141,9 @@ public class ConvexPolytope3DTest
             }
 
             double actualDistance = convexPolytope3D.signedDistance(point);
-            assertEquals(expectedDistance, actualDistance, EPSILON,
+            assertEquals(expectedDistance,
+                         actualDistance,
+                         EPSILON,
                          "Iteration " + i + ", naive method: " + convexPolytope3D.getClosestFace(point).distance(point));
          }
 
@@ -1163,11 +1192,13 @@ public class ConvexPolytope3DTest
 
          for (int faceIndex = 0; faceIndex < expectedPolytope.getNumberOfFaces(); faceIndex++)
          {
-            EuclidCoreTestTools.assertTuple3DEquals(expectedPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(),
+            EuclidCoreTestTools.assertTuple3DEquals(expectedPolytope.getFace(faceIndex).getCentroid(),
+                                                    actualPolytope.getFace(faceIndex).getCentroid(),
                                                     EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(expectedPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
             EuclidGeometryTestTools.assertBoundingBox3DEquals(expectedPolytope.getFace(faceIndex).getBoundingBox(),
-                                                              actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+                                                              actualPolytope.getFace(faceIndex).getBoundingBox(),
+                                                              EPSILON);
             assertEquals(expectedPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
          }
 
@@ -1179,11 +1210,13 @@ public class ConvexPolytope3DTest
 
          for (int faceIndex = 0; faceIndex < originalPolytope.getNumberOfFaces(); faceIndex++)
          {
-            EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getFace(faceIndex).getCentroid(), actualPolytope.getFace(faceIndex).getCentroid(),
+            EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getFace(faceIndex).getCentroid(),
+                                                    actualPolytope.getFace(faceIndex).getCentroid(),
                                                     EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals(originalPolytope.getFace(faceIndex).getNormal(), actualPolytope.getFace(faceIndex).getNormal(), EPSILON);
             EuclidGeometryTestTools.assertBoundingBox3DEquals(originalPolytope.getFace(faceIndex).getBoundingBox(),
-                                                              actualPolytope.getFace(faceIndex).getBoundingBox(), EPSILON);
+                                                              actualPolytope.getFace(faceIndex).getBoundingBox(),
+                                                              EPSILON);
             assertEquals(originalPolytope.getFace(faceIndex).getArea(), actualPolytope.getFace(faceIndex).getArea(), EPSILON);
          }
       }
@@ -1585,8 +1618,11 @@ public class ConvexPolytope3DTest
 
          Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
          HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-         Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
-                                                                               edge.getDestination());
+         Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random,
+                                                                                  convexPolytope3D.getCentroid(),
+                                                                                  face.getCentroid(),
+                                                                                  edge.getOrigin(),
+                                                                                  edge.getDestination());
 
          Point3DBasics actualProjection = convexPolytope3D.orthogonalProjectionCopy(pointInside);
          assertNull(actualProjection);
@@ -1675,7 +1711,8 @@ public class ConvexPolytope3DTest
          else if (convexPolytope3D.getNumberOfVertices() == 2)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point, convexPolytope3D.getVertex(0),
+            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point,
+                                                                                             convexPolytope3D.getVertex(0),
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
@@ -1721,7 +1758,8 @@ public class ConvexPolytope3DTest
          else if (convexPolytope3D.getNumberOfVertices() == 2)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point, convexPolytope3D.getVertex(0),
+            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point,
+                                                                                             convexPolytope3D.getVertex(0),
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
@@ -1733,8 +1771,11 @@ public class ConvexPolytope3DTest
          {
             Face3D face = convexPolytope3D.getFace(random.nextInt(convexPolytope3D.getNumberOfFaces()));
             HalfEdge3D edge = face.getEdge(random.nextInt(face.getNumberOfEdges()));
-            Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random, convexPolytope3D.getCentroid(), face.getCentroid(), edge.getOrigin(),
-                                                                                  edge.getDestination());
+            Point3D pointInside = EuclidGeometryRandomTools.nextPoint3DInTetrahedron(random,
+                                                                                     convexPolytope3D.getCentroid(),
+                                                                                     face.getCentroid(),
+                                                                                     edge.getOrigin(),
+                                                                                     edge.getDestination());
 
             // It is tricky to generate a point that is closest to a given face.
             // So we use brute force to find the closest face and the normal should be the face's normal and the closest point be the orthogonal projection of pointInside onto the face's support plane.
@@ -1746,7 +1787,7 @@ public class ConvexPolytope3DTest
                assertFalse(convexPolytope3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal), "Iteration: " + i);
             else
                assertTrue(convexPolytope3D.evaluatePoint3DCollision(pointInside, actualClosestPoint, actualNormal), "Iteration: " + i);
-               
+
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedClosestPoint, actualClosestPoint, EPSILON);
             EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedNormal, actualNormal, EPSILON);
          }
@@ -1774,7 +1815,8 @@ public class ConvexPolytope3DTest
          else if (convexPolytope3D.getNumberOfVertices() == 2)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point, convexPolytope3D.getVertex(0),
+            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point,
+                                                                                             convexPolytope3D.getVertex(0),
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();
@@ -1838,7 +1880,8 @@ public class ConvexPolytope3DTest
          else if (convexPolytope3D.getNumberOfVertices() == 2)
          {
             Point3D point = EuclidCoreRandomTools.nextPoint3D(random, 5.0);
-            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point, convexPolytope3D.getVertex(0),
+            expectedClosestPoint.set(EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(point,
+                                                                                             convexPolytope3D.getVertex(0),
                                                                                              convexPolytope3D.getVertex(1)));
             expectedNormal.sub(point, expectedClosestPoint);
             expectedNormal.normalize();

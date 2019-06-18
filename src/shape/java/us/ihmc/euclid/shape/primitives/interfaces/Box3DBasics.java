@@ -104,11 +104,11 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
    /**
     * Sets this box properties.
     * 
-    * @param position the position of this box center. Not modified.
+    * @param position    the position of this box center. Not modified.
     * @param orientation the orientation of this box. Not modified.
-    * @param sizeX the size along the x-axis.
-    * @param sizeY the size along the y-axis.
-    * @param sizeZ the size along the z-axis.
+    * @param sizeX       the size along the x-axis.
+    * @param sizeY       the size along the y-axis.
+    * @param sizeZ       the size along the z-axis.
     * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
@@ -120,7 +120,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
    /**
     * Sets this box properties.
     * 
-    * @param pose the pose of this box. Not modified.
+    * @param pose  the pose of this box. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
     * @param sizeZ the size along the z-axis.
@@ -135,7 +135,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
    /**
     * Sets this box properties.
     * 
-    * @param pose the pose of this box. Not modified.
+    * @param pose  the pose of this box. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
     * @param sizeZ the size along the z-axis.

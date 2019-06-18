@@ -1529,7 +1529,9 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       numberOfVertices = 3 + random.nextInt(10);
 
-      firstPolygon = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5,
+      firstPolygon = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random,
+                                                                                                                                        0,
+                                                                                                                                        0.5,
                                                                                                                                         numberOfVertices)));
       secondPolygon = createConvexPolygon2D(firstPolygon);
 
@@ -1542,7 +1544,9 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       { // Convex polygons are only equal if all points lie within +- epsilon of each other
          numberOfVertices = 3 + random.nextInt(10);
 
-         firstPolygon = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5,
+         firstPolygon = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random,
+                                                                                                                                           0,
+                                                                                                                                           0.5,
                                                                                                                                            numberOfVertices)));
          firstPolygon.scale(10.0);
          secondPolygon = createConvexPolygon2D(firstPolygon);
@@ -1562,7 +1566,9 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       { // Convex polygons are equal if translations are equal within +- epsilon and are otherwise the same
          numberOfVertices = 3 + random.nextInt(10);
 
-         firstPolygon = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 0, 0.5,
+         firstPolygon = createConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random,
+                                                                                                                                           0,
+                                                                                                                                           0.5,
                                                                                                                                            numberOfVertices)));
          firstPolygon.scale(10.0);
 

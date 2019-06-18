@@ -96,7 +96,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * </p>
     *
     * @param matrix the column vector containing the values of the 7 components of this transform. Not
-    *           modified.
+    *               modified.
     */
    public QuaternionBasedTransform(DenseMatrix64F matrix)
    {
@@ -137,9 +137,9 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * translation.
     *
     * @param rotationMatrix the rotation matrix used to initialize the quaternion of this transform.
-    *           Not modified.
-    * @param translation the tuple used to initialize the translation part of this transform. Not
-    *           modified.
+    *                       Not modified.
+    * @param translation    the tuple used to initialize the translation part of this transform. Not
+    *                       modified.
     */
    public QuaternionBasedTransform(RotationMatrixReadOnly rotationMatrix, Tuple3DReadOnly translation)
    {
@@ -151,9 +151,9 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * translation.
     *
     * @param orientation the orientation used to initialize the quaternion of this transform. Not
-    *           modified.
+    *                    modified.
     * @param translation the tuple used to initialize the translation part of this transform. Not
-    *           modified.
+    *                    modified.
     */
    public QuaternionBasedTransform(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
    {
@@ -182,9 +182,9 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * @param qy the y-component of the quaternion's vector part.
     * @param qz the z-component of the quaternion's vector part.
     * @param qs the scalar component of the quaternion.
-    * @param x the x-component of the translation.
-    * @param y the y-component of the translation.
-    * @param z the z-component of the translation.
+    * @param x  the x-component of the translation.
+    * @param y  the y-component of the translation.
+    * @param z  the z-component of the translation.
     */
    public void set(double qx, double qy, double qz, double qs, double x, double y, double z)
    {
@@ -203,9 +203,9 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * @param qy the y-component of the quaternion's vector part.
     * @param qz the z-component of the quaternion's vector part.
     * @param qs the scalar component of the quaternion.
-    * @param x the x-component of the translation.
-    * @param y the y-component of the translation.
-    * @param z the z-component of the translation.
+    * @param x  the x-component of the translation.
+    * @param y  the y-component of the translation.
+    * @param z  the z-component of the translation.
     */
    public void setUnsafe(double qx, double qy, double qz, double qs, double x, double y, double z)
    {
@@ -246,7 +246,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * </p>
     *
     * @param matrix the column vector containing the values of the 7 components of this transform. Not
-    *           modified.
+    *               modified.
     */
    public void set(DenseMatrix64F matrix)
    {
@@ -295,8 +295,8 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     *
     * @param other the other transform used for the interpolation. Not modified.
     * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           this transform, while a value of 1 is equivalent to setting this transform to
-    *           {@code other}.
+    *              this transform, while a value of 1 is equivalent to setting this transform to
+    *              {@code other}.
     */
    public void interpolate(QuaternionBasedTransform other, double alpha)
    {
@@ -313,11 +313,11 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * this = (1.0 - alpha) * firstTransform + alpha * secondTransform
     * </p>
     *
-    * @param firstTransform the first transform used in the interpolation. Not modified.
+    * @param firstTransform  the first transform used in the interpolation. Not modified.
     * @param secondTransform the second transform used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this transform to {@code tuple1}, while a value of 1 is equivalent to setting this
-    *           transform to {@code tuple2}.
+    * @param alpha           the percentage to use for the interpolation. A value of 0 will result in
+    *                        setting this transform to {@code tuple1}, while a value of 1 is equivalent
+    *                        to setting this transform to {@code tuple2}.
     */
    public void interpolate(QuaternionBasedTransform firstTransform, QuaternionBasedTransform secondTransform, double alpha)
    {
@@ -363,8 +363,8 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     *
     * where (qx, qy, qz, qs) is the quaternion and (tx, ty, tz) the translation of this transform.
     *
-    * @param startRow the first row index to start writing in {@code matrixToPack}.
-    * @param column the column index to write in {@code matrixToPack}.
+    * @param startRow     the first row index to start writing in {@code matrixToPack}.
+    * @param column       the column index to write in {@code matrixToPack}.
     * @param matrixToPack the column vector in which this transform is stored. Modified.
     */
    public void get(int startRow, int column, DenseMatrix64F matrixToPack)
@@ -387,7 +387,6 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * </pre>
     *
     * where (qx, qy, qz, qs) is the quaternion and (tx, ty, tz) the translation of this transform.
-    * 
     * 
     * @param transformArrayToPack the array in which this transform is packed. Modified.
     */
@@ -484,7 +483,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * Two quaternion based transforms are considered geometrically equal if both the rotation-scale
     * matrices and translation vectors are equal.
     *
-    * @param other the other quaternion based transform to compare against this. Not modified.
+    * @param other   the other quaternion based transform to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two quaternion based transforms are equal, {@code false} otherwise.
     */

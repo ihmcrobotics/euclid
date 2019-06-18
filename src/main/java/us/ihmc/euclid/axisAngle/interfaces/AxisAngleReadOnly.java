@@ -257,7 +257,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * Packs the components of this axis-angle in an array starting from {@code startIndex}. The
     * components are packed in the following order: x, y, z, and angle.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex           the index in the array where the first component is stored.
     * @param axisAngleArrayToPack the array in which this axis-angle is stored. Modified.
     */
    default void get(int startIndex, double[] axisAngleArrayToPack)
@@ -283,7 +283,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * Packs the components of this axis-angle in an array starting from {@code startIndex}. The
     * components are packed in the following order: x, y, z, and angle.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex           the index in the array where the first component is stored.
     * @param axisAngleArrayToPack the array in which this axis-angle is stored. Modified.
     */
    default void get(int startIndex, float[] axisAngleArrayToPack)
@@ -309,16 +309,16 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX();
-      case 1:
-         return getY();
-      case 2:
-         return getZ();
-      case 3:
-         return getAngle();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX();
+         case 1:
+            return getY();
+         case 2:
+            return getZ();
+         case 3:
+            return getAngle();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -337,16 +337,16 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getX32();
-      case 1:
-         return getY32();
-      case 2:
-         return getZ32();
-      case 3:
-         return getAngle32();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getX32();
+         case 1:
+            return getY32();
+         case 2:
+            return getZ32();
+         case 3:
+            return getAngle32();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -429,7 +429,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two axis-angles represent two
     * different orientations.
     *
-    * @param other the other axis-angle to compare against this. Not modified.
+    * @param other   the other axis-angle to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
     */
@@ -461,7 +461,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other axis-angle to compare against this. Not modified.
+    * @param other   the other axis-angle to compare against this. Not modified.
     * @param epsilon the maximum angle for the two quaternions to be considered equal.
     * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
     */

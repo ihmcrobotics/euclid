@@ -49,7 +49,7 @@ public class EuclidCoreRandomToolsTest
       }
 
       // Now check with the axes X, Y, and Z to highlight edge-cases.
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          Vector3DReadOnly vector = Axis.values[random.nextInt(3)];

@@ -39,9 +39,11 @@ public class EuclidFrameToolsTest
       methodsToIgnore.put("orthogonalProjectionOnLineSegment3D", new Class<?>[] {Point3DReadOnly.class, d, d, d, d, d, d, Point3DBasics.class});
       methodsToIgnore.put("intersectionBetweenLine3DAndBoundingBox3D",
                           new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
-      methodsToIgnore.put("intersectionBetweenLine3DAndCylinder3D", new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
+      methodsToIgnore.put("intersectionBetweenLine3DAndCylinder3D",
+                          new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
       methodsToIgnore.put("intersectionBetweenLine3DAndEllipsoid3D", new Class<?>[] {d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
-      methodsToIgnore.put("closestPoint3DsBetweenTwoLineSegment3Ds", new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
+      methodsToIgnore.put("closestPoint3DsBetweenTwoLineSegment3Ds",
+                          new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
 
       EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodsToIgnore);
    }

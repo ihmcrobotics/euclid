@@ -25,7 +25,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @return the difference between {@code this} and {@code other} contained in [-<i>pi</i>,
     *         <i>pi</pi>].
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double difference(FrameOrientation2DReadOnly other)
    {
@@ -41,7 +41,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * @param other the other orientation 2D. Not modified.
     * @return the distance between {@code this} and {@code other} contained in [0, <i>pi</pi>].
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double distance(FrameOrientation2DReadOnly other)
    {
@@ -60,7 +60,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *
     * @param tupleToTransform the tuple to transform. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void transform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -78,10 +78,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \    0         0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -99,10 +99,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \    0         0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void transform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -120,7 +120,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \    0         0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
@@ -139,10 +139,11 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \    0         0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -161,10 +162,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \    0         0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
@@ -183,7 +184,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *
     * @param tupleToTransform the tuple to transform. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void transform(FixedFrameTuple2DBasics tupleToTransform)
    {
@@ -200,10 +201,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
@@ -220,10 +221,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -240,7 +241,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
@@ -258,10 +259,11 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(yaw)  cos(yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -279,10 +281,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(yaw)  cos(yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
@@ -303,7 +305,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *
     * @param tupleToTransform the tuple to transform. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void inverseTransform(FixedFrameTuple3DBasics tupleToTransform)
    {
@@ -321,10 +323,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \     0          0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
@@ -342,10 +344,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \     0          0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -363,7 +365,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \     0          0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
@@ -382,10 +384,11 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \     0          0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
@@ -404,10 +407,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \     0          0     1 /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
@@ -427,7 +430,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *
     * @param tupleToTransform the tuple to transform. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleToTransform} do not match.
+    *                                         {@code tupleToTransform} do not match.
     */
    default void inverseTransform(FixedFrameTuple2DBasics tupleToTransform)
    {
@@ -444,10 +447,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
@@ -464,10 +467,11 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this},
-    *            {@code tupleOriginal}, and {@code tupleTransformed} do not match.
+    *                                         {@code tupleOriginal}, and {@code tupleTransformed} do
+    *                                         not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -485,10 +489,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleOriginal} do not match.
+    *                                         {@code tupleOriginal} do not match.
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
@@ -506,10 +510,10 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and
-    *            {@code tupleTransformed} do not match.
+    *                                         {@code tupleTransformed} do not match.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
@@ -526,7 +530,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     *                    \ sin(-yaw)  cos(-yaw) /
     * </pre>
     *
-    * @param tupleOriginal the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the tuple to be transformed. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
@@ -546,7 +550,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * If the two orientations have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two orientations are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
@@ -563,12 +567,12 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     * similar, i.e. the difference in yaw of {@code this} and {@code other} is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the orientation to compare to. Not modified.
+    * @param other   the orientation to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default boolean geometricallyEquals(FrameOrientation2DReadOnly other, double epsilon)
    {

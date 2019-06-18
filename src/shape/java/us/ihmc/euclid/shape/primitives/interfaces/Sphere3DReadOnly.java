@@ -45,7 +45,10 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.evaluatePoint3DSphere3DCollision(pointToCheck, getPosition(), getRadius(), closestPointOnSurfaceToPack,
+      return EuclidShapeTools.evaluatePoint3DSphere3DCollision(pointToCheck,
+                                                               getPosition(),
+                                                               getRadius(),
+                                                               closestPointOnSurfaceToPack,
                                                                normalAtClosestPointToPack) <= 0.0;
    }
 
@@ -85,11 +88,12 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} remain unmodified.
     * </p>
     *
-    * @param line the line expressed in world coordinates that may intersect this sphere. Not modified.
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
+    * @param line                     the line expressed in world coordinates that may intersect this
+    *                                 sphere. Not modified.
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
+    *                                 {@code null}. Modified.
     * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
     *         or 2.
     */
@@ -106,12 +110,13 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * {@link Double#NaN}.
     * </p>
     *
-    * @param pointOnLine a point expressed in world located on the infinitely long line. Not modified.
-    * @param lineDirection the direction expressed in world of the line. Not modified.s
-    * @param firstIntersectionToPack the coordinate in world of the first intersection. Can be
-    *           {@code null}. Modified.
+    * @param pointOnLine              a point expressed in world located on the infinitely long line.
+    *                                 Not modified.
+    * @param lineDirection            the direction expressed in world of the line. Not modified.s
+    * @param firstIntersectionToPack  the coordinate in world of the first intersection. Can be
+    *                                 {@code null}. Modified.
     * @param secondIntersectionToPack the coordinate in world of the second intersection. Can be
-    *           {@code null}. Modified.
+    *                                 {@code null}. Modified.
     * @return the number of intersections between the line and this sphere. It is either equal to 0, 1,
     *         or 2.
     */
@@ -125,9 +130,17 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       double lineDirectionX = lineDirection.getX();
       double lineDirectionY = lineDirection.getY();
       double lineDirectionZ = lineDirection.getZ();
-      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(), getRadius(), getRadius(), pointOnLineX, pointOnLineY,
-                                                                                              pointOnLineZ, lineDirectionX, lineDirectionY, lineDirectionZ,
-                                                                                              firstIntersectionToPack, secondIntersectionToPack);
+      int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndEllipsoid3D(getRadius(),
+                                                                                              getRadius(),
+                                                                                              getRadius(),
+                                                                                              pointOnLineX,
+                                                                                              pointOnLineY,
+                                                                                              pointOnLineZ,
+                                                                                              lineDirectionX,
+                                                                                              lineDirectionY,
+                                                                                              lineDirectionZ,
+                                                                                              firstIntersectionToPack,
+                                                                                              secondIntersectionToPack);
 
       if (firstIntersectionToPack != null && numberOfIntersections >= 1)
          firstIntersectionToPack.add(getPosition());
@@ -160,8 +173,8 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * Tests separately and on a per component basis if the pose and the radius of this sphere and
     * {@code other}'s pose and radius are equal to an {@code epsilon}.
     *
-    * @param other the other sphere which pose and radius is to be compared against this radius pose
-    *           and radius. Not modified.
+    * @param other   the other sphere which pose and radius is to be compared against this radius pose
+    *                and radius. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
     */
@@ -174,7 +187,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     * Compares {@code this} to {@code other} to determine if the two spheres are geometrically similar
     * to an {@code epsilon}.
     *
-    * @param other the sphere to compare to. Not modified.
+    * @param other   the sphere to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */

@@ -117,18 +117,18 @@ public class Quaternion32Test extends QuaternionBasicsTest<Quaternion32>
          float qs = q.getS32();
          switch (random.nextInt(4))
          {
-         case 0:
-            qx = random.nextFloat();
-            break;
-         case 1:
-            qy = random.nextFloat();
-            break;
-         case 2:
-            qz = random.nextFloat();
-            break;
-         case 3:
-            qs = random.nextFloat();
-            break;
+            case 0:
+               qx = random.nextFloat();
+               break;
+            case 1:
+               qy = random.nextFloat();
+               break;
+            case 2:
+               qz = random.nextFloat();
+               break;
+            case 3:
+               qs = random.nextFloat();
+               break;
          }
          q.setUnsafe(qx, qy, qz, qs);
          newHashCode = q.hashCode();

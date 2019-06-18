@@ -227,7 +227,9 @@ public class Ramp3DTest
             Ramp3D expected = EuclidShapeRandomTools.nextRamp3D(random);
             Ramp3D actual = EuclidShapeRandomTools.nextRamp3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
-            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()), expected.getSizeX(), expected.getSizeY(),
+            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()),
+                       expected.getSizeX(),
+                       expected.getSizeY(),
                        expected.getSizeZ());
             EuclidShapeTestTools.assertRamp3DEquals(expected, actual, EPSILON);
          }

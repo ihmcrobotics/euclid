@@ -93,7 +93,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * @param sizeY the size of this ramp along the y-axis.
     * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Ramp3D(double sizeX, double sizeY, double sizeZ)
    {
@@ -103,13 +103,13 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
-    * @param position the position of this ramp. Not modified.
+    * @param position    the position of this ramp. Not modified.
     * @param orientation the orientation of this ramp. Not modified.
-    * @param sizeX the size of this ramp along the x-axis.
-    * @param sizeY the size of this ramp along the y-axis.
-    * @param sizeZ the size of this ramp along the z-axis.
+    * @param sizeX       the size of this ramp along the x-axis.
+    * @param sizeY       the size of this ramp along the y-axis.
+    * @param sizeZ       the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Ramp3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
@@ -119,12 +119,12 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
-    * @param pose the position and orientation for this ramp. Not modified.
+    * @param pose  the position and orientation for this ramp. Not modified.
     * @param sizeX the size of this ramp along the x-axis.
     * @param sizeY the size of this ramp along the y-axis.
     * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Ramp3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
@@ -134,12 +134,12 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
-    * @param pose the position and orientation for this ramp. Not modified.
+    * @param pose  the position and orientation for this ramp. Not modified.
     * @param sizeX the size of this ramp along the x-axis.
     * @param sizeY the size of this ramp along the y-axis.
     * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Ramp3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
@@ -233,7 +233,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other ramp to compare against this. Not modified.
+    * @param other   the other ramp to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ramps are equal component-wise, {@code false} otherwise.
     */
@@ -248,7 +248,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
     * are geometrically similar given {@code epsilon}.
     *
-    * @param other the ramp to compare to. Not modified.
+    * @param other   the ramp to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
     */

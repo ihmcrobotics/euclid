@@ -42,7 +42,7 @@ public abstract class RotationMatrixConversion
     *        \    0         0     1 /
     * </pre>
     *
-    * @param yaw the angle to rotate about the z-axis.
+    * @param yaw          the angle to rotate about the z-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void computeYawMatrix(double yaw, RotationMatrix matrixToPack)
@@ -69,7 +69,7 @@ public abstract class RotationMatrixConversion
     *        \ -sin(pitch) 0 cos(pitch) /
     * </pre>
     *
-    * @param pitch the angle to rotate about the y-axis.
+    * @param pitch        the angle to rotate about the y-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void computePitchMatrix(double pitch, RotationMatrix matrixToPack)
@@ -96,7 +96,7 @@ public abstract class RotationMatrixConversion
     *        \ 0 sin(roll)  cos(roll) /
     * </pre>
     *
-    * @param roll the angle to rotate about the x-axis.
+    * @param roll         the angle to rotate about the x-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void computeRollMatrix(double roll, RotationMatrix matrixToPack)
@@ -127,7 +127,7 @@ public abstract class RotationMatrixConversion
     * </ul>
     * </p>
     *
-    * @param axisAngle the axis-angle to use for the conversion. Not modified.
+    * @param axisAngle    the axis-angle to use for the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void convertAxisAngleToMatrix(AxisAngleReadOnly axisAngle, RotationMatrix matrixToPack)
@@ -149,10 +149,10 @@ public abstract class RotationMatrixConversion
     * </ul>
     * </p>
     *
-    * @param ux the axis x-component of the axis-angle to use for the conversion.
-    * @param uy the axis y-component of the axis-angle to use for the conversion.
-    * @param uz the axis z-component of the axis-angle to use for the conversion.
-    * @param angle the angle of the axis-angle to use for the conversion.
+    * @param ux           the axis x-component of the axis-angle to use for the conversion.
+    * @param uy           the axis y-component of the axis-angle to use for the conversion.
+    * @param uz           the axis z-component of the axis-angle to use for the conversion.
+    * @param angle        the angle of the axis-angle to use for the conversion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void convertAxisAngleToMatrix(double ux, double uy, double uz, double angle, RotationMatrix matrixToPack)
@@ -217,7 +217,7 @@ public abstract class RotationMatrixConversion
     * </ul>
     * </p>
     *
-    * @param quaternion the quaternion to use for the conversion. Not modified.
+    * @param quaternion   the quaternion to use for the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void convertQuaternionToMatrix(QuaternionReadOnly quaternion, RotationMatrix matrixToPack)
@@ -244,10 +244,10 @@ public abstract class RotationMatrixConversion
     * </ul>
     * </p>
     *
-    * @param qx the x-component of the quaternion.
-    * @param qy the y-component of the quaternion.
-    * @param qz the z-component of the quaternion.
-    * @param qs the s-component of the quaternion.
+    * @param qx           the x-component of the quaternion.
+    * @param qy           the y-component of the quaternion.
+    * @param qz           the z-component of the quaternion.
+    * @param qs           the s-component of the quaternion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void convertQuaternionToMatrix(double qx, double qy, double qz, double qs, RotationMatrix matrixToPack)
@@ -405,9 +405,9 @@ public abstract class RotationMatrixConversion
     * </pre>
     * </p>
     *
-    * @param yaw the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param yaw          the angle to rotate about the z-axis.
+    * @param pitch        the angle to rotate about the y-axis.
+    * @param roll         the angle to rotate about the x-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void convertYawPitchRollToMatrix(double yaw, double pitch, double roll, RotationMatrix matrixToPack)
@@ -466,7 +466,7 @@ public abstract class RotationMatrixConversion
     * </p>
     *
     * @param rotationVector the rotation vector to use in the conversion. Not modified.
-    * @param matrixToPack the rotation matrix in which the result is stored. Modified.
+    * @param matrixToPack   the rotation matrix in which the result is stored. Modified.
     */
    public static void convertRotationVectorToMatrix(Vector3DReadOnly rotationVector, RotationMatrix matrixToPack)
    {
@@ -492,9 +492,9 @@ public abstract class RotationMatrixConversion
     * same axis-angle.
     * </p>
     *
-    * @param rx the x-component of the rotation vector to use in the conversion.
-    * @param ry the y-component of the rotation vector to use in the conversion.
-    * @param rz the z-component of the rotation vector to use in the conversion.
+    * @param rx           the x-component of the rotation vector to use in the conversion.
+    * @param ry           the y-component of the rotation vector to use in the conversion.
+    * @param rz           the z-component of the rotation vector to use in the conversion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void convertRotationVectorToMatrix(double rx, double ry, double rz, RotationMatrix matrixToPack)

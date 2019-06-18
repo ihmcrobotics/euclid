@@ -88,7 +88,7 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
     */
@@ -104,7 +104,7 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the shape pose to compare to. Not modified.
+    * @param other   the shape pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
     */

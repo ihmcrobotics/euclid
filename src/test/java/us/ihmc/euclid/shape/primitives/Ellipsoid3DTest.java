@@ -217,7 +217,9 @@ public class Ellipsoid3DTest
             Ellipsoid3D expected = EuclidShapeRandomTools.nextEllipsoid3D(random);
             Ellipsoid3D actual = EuclidShapeRandomTools.nextEllipsoid3D(random);
             assertFalse(expected.epsilonEquals(actual, EPSILON));
-            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()), expected.getRadiusX(), expected.getRadiusY(),
+            actual.set(new RigidBodyTransform(expected.getOrientation(), expected.getPosition()),
+                       expected.getRadiusX(),
+                       expected.getRadiusY(),
                        expected.getRadiusZ());
             EuclidShapeTestTools.assertEllipsoid3DEquals(expected, actual, EPSILON);
          }
@@ -323,7 +325,9 @@ public class Ellipsoid3DTest
          assertTrue(ellipsoid3D.evaluatePoint3DCollision(pointInside, actualClosestPointWorld, actualNormal));
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
-         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+         assertEquals(0.0,
+                      EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()),
+                      EPSILON,
                       "Iteration: " + i);
 
          // The normal should be pointing from the query to the closest point (toward the outside).
@@ -356,7 +360,9 @@ public class Ellipsoid3DTest
          assertFalse(ellipsoid3D.evaluatePoint3DCollision(pointOutside, actualClosestPointWorld, actualNormal));
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
-         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+         assertEquals(0.0,
+                      EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()),
+                      EPSILON,
                       "Iteration: " + i);
 
          // The normal should be pointing from the closest point to the query (toward the outside).
@@ -388,7 +394,9 @@ public class Ellipsoid3DTest
          assertTrue(ellipsoid3D.evaluatePoint3DCollision(pointOnSurface, actualClosestPointWorld, actualNormal));
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
-         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+         assertEquals(0.0,
+                      EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()),
+                      EPSILON,
                       "Iteration: " + i);
          EuclidCoreTestTools.assertTuple3DEquals(pointOnSurface, actualClosestPointWorld, EPSILON);
          // The normal should be orthogonal to the ellipsoid surface at the closest point.
@@ -417,7 +425,9 @@ public class Ellipsoid3DTest
          ellipsoid3D.evaluatePoint3DCollision(point, actualClosestPointWorld, actualNormal);
          actualClosestPointLocal.set(actualClosestPointWorld);
          ellipsoid3D.transformToLocal(actualClosestPointLocal);
-         assertEquals(0.0, EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()), EPSILON,
+         assertEquals(0.0,
+                      EuclidShapeTools.signedDistanceBetweenPoint3DAndEllipsoid3D(actualClosestPointLocal, ellipsoid3D.getRadii()),
+                      EPSILON,
                       "Iteration: " + i);
          // The normal should be orthogonal to the ellipsoid surface at the closest point.
          expectedNormal.set(actualClosestPointLocal);
@@ -919,17 +929,17 @@ public class Ellipsoid3DTest
          int axis = random.nextInt(3);
          switch (axis)
          {
-         case 0:
-            ellipsoid2.getPose().appendRollRotation(Math.PI);
-            break;
-         case 1:
-            ellipsoid2.getPose().appendPitchRotation(Math.PI);
-            break;
-         case 2:
-            ellipsoid2.getPose().appendYawRotation(Math.PI);
-            break;
-         default:
-            throw new RuntimeException("Unexpected axis value: " + axis);
+            case 0:
+               ellipsoid2.getPose().appendRollRotation(Math.PI);
+               break;
+            case 1:
+               ellipsoid2.getPose().appendPitchRotation(Math.PI);
+               break;
+            case 2:
+               ellipsoid2.getPose().appendYawRotation(Math.PI);
+               break;
+            default:
+               throw new RuntimeException("Unexpected axis value: " + axis);
          }
 
          assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
@@ -937,17 +947,17 @@ public class Ellipsoid3DTest
          double angle = EuclidCoreRandomTools.nextDouble(random, 0.1, Math.PI / 2.0);
          switch (axis)
          {
-         case 0:
-            ellipsoid2.getPose().appendRollRotation(angle);
-            break;
-         case 1:
-            ellipsoid2.getPose().appendPitchRotation(angle);
-            break;
-         case 2:
-            ellipsoid2.getPose().appendYawRotation(angle);
-            break;
-         default:
-            throw new RuntimeException("Unexpected axis value: " + axis);
+            case 0:
+               ellipsoid2.getPose().appendRollRotation(angle);
+               break;
+            case 1:
+               ellipsoid2.getPose().appendPitchRotation(angle);
+               break;
+            case 2:
+               ellipsoid2.getPose().appendYawRotation(angle);
+               break;
+            default:
+               throw new RuntimeException("Unexpected axis value: " + axis);
          }
 
          assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);

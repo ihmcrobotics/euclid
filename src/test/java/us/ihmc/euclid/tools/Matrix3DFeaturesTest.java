@@ -510,7 +510,14 @@ public class Matrix3DFeaturesTest
          column1[rowSwap2] = temp1;
          column2[rowSwap2] = temp2;
 
-         double detSwapped = Matrix3DFeatures.determinant(column0[0], column1[0], column2[0], column0[1], column1[1], column2[1], column0[2], column1[2],
+         double detSwapped = Matrix3DFeatures.determinant(column0[0],
+                                                          column1[0],
+                                                          column2[0],
+                                                          column0[1],
+                                                          column1[1],
+                                                          column2[1],
+                                                          column0[2],
+                                                          column1[2],
                                                           column2[2]);
          assertEquals(detSwapped, -det, EPS);
       }
@@ -557,7 +564,14 @@ public class Matrix3DFeaturesTest
          column1[rowScale] *= scale;
          column2[rowScale] *= scale;
 
-         double detScaled = Matrix3DFeatures.determinant(column0[0], column1[0], column2[0], column0[1], column1[1], column2[1], column0[2], column1[2],
+         double detScaled = Matrix3DFeatures.determinant(column0[0],
+                                                         column1[0],
+                                                         column2[0],
+                                                         column0[1],
+                                                         column1[1],
+                                                         column2[1],
+                                                         column0[2],
+                                                         column1[2],
                                                          column2[2]);
          assertEquals(detScaled, scale * det, EPS);
       }

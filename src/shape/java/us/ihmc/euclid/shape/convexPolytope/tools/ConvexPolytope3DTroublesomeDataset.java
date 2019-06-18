@@ -49,8 +49,8 @@ public abstract class ConvexPolytope3DTroublesomeDataset
    /**
     * Generates a {@code String} that can be used as dataset for test case.
     * 
-    * @param pointsBeforeIssue the list of points before the issue. Not modified.
-    * @param troublesomePoint the coordinates of the point causing the issue. Not modified.
+    * @param pointsBeforeIssue   the list of points before the issue. Not modified.
+    * @param troublesomePoint    the coordinates of the point causing the issue. Not modified.
     * @param constructionEpsilon the construction epsilon used with the convex polytope.
     * @return the dataset as a {@code String}.
     */
@@ -112,8 +112,14 @@ public abstract class ConvexPolytope3DTroublesomeDataset
 
       Function<HalfEdge3DReadOnly, String> newHalfEdge3DFunction = e -> "new HalfEdge3D(v" + vertices.indexOf(e.getOrigin()) + ", v"
             + vertices.indexOf(e.getDestination()) + ")";
-      Function<Face3DReadOnly, String> newFace3DFunction = f -> EuclidCoreIOTools.getCollectionString("new Face3D(Arrays.asList(", "), new Vector3D"
-            + EuclidCoreIOTools.getTuple3DString(stringFormat, f.getNormal()) + ", constructionEpsilon)", ", ", f.getEdges(), newHalfEdge3DFunction);
+      Function<Face3DReadOnly, String> newFace3DFunction = f -> EuclidCoreIOTools.getCollectionString("new Face3D(Arrays.asList(",
+                                                                                                      "), new Vector3D"
+                                                                                                            + EuclidCoreIOTools.getTuple3DString(stringFormat,
+                                                                                                                                                 f.getNormal())
+                                                                                                            + ", constructionEpsilon)",
+                                                                                                      ", ",
+                                                                                                      f.getEdges(),
+                                                                                                      newHalfEdge3DFunction);
 
       result += "List<Face3D> faces = new ArrayList<>();\n";
       String prefix = "faces.add(";

@@ -30,9 +30,9 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * However, there is no algebra directly accessible for manipulating orientations represented as
  * yaw-pitch-roll making it highly computationally expensive when compared to rotation matrices or
  * quaternions. In addition, yaw-pitch-roll representation is sensitive to gimbal lock which happens
- * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to such
- * configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes lead
- * to unexpected results.
+ * when the pitch angle is in the neighborhood of either <i>pi/2</i> or -<i>pi/2</i>. When close to
+ * such configuration, converting orientation to yaw-pitch-roll becomes inaccurate and can sometimes
+ * lead to unexpected results.
  * </p>
  * <p>
  * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
@@ -230,7 +230,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * Packs the components of this yaw-pitch-roll in an array starting from {@code startIndex}. The
     * components are packed in the following order: yaw, pitch, and roll.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex              the index in the array where the first component is stored.
     * @param yawPitchRollArrayToPack the array in which this yaw-pitch-roll is stored. Modified.
     */
    default void get(int startIndex, double[] yawPitchRollArrayToPack)
@@ -255,7 +255,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * Packs the components of this yaw-pitch-roll in an array starting from {@code startIndex}. The
     * components are packed in the following order: yaw, pitch, and roll.
     *
-    * @param startIndex the index in the array where the first component is stored.
+    * @param startIndex              the index in the array where the first component is stored.
     * @param yawPitchRollArrayToPack the array in which this yaw-pitch-roll is stored. Modified.
     */
    default void get(int startIndex, float[] yawPitchRollArrayToPack)
@@ -280,14 +280,14 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getYaw();
-      case 1:
-         return getPitch();
-      case 2:
-         return getRoll();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getYaw();
+         case 1:
+            return getPitch();
+         case 2:
+            return getRoll();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -306,14 +306,14 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    {
       switch (index)
       {
-      case 0:
-         return getYaw32();
-      case 1:
-         return getPitch32();
-      case 2:
-         return getRoll32();
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            return getYaw32();
+         case 1:
+            return getPitch32();
+         case 2:
+            return getRoll32();
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -397,7 +397,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
     * two different orientations.
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
     *         otherwise.
@@ -427,7 +427,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
     * @param epsilon the maximum angle for the two quaternions to be considered equal.
     * @return {@code true} if the two yaw-pitch-roll represent the same geometry, {@code false}
     *         otherwise.

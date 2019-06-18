@@ -37,8 +37,7 @@ class EuclidPolytopeFactoriesTest
          assertEquals(30, icosahedron.getNumberOfEdges());
 
          icosahedron.getVertices().forEach(vertex -> assertEquals(radius, vertex.distanceFromOrigin(), EPSILON));
-         icosahedron.getHalfEdges()
-                    .forEach(edge -> assertEquals(EuclidShapeTools.icosahedronEdgeLength(radius), edge.getDirection(false).length(), EPSILON));
+         icosahedron.getHalfEdges().forEach(edge -> assertEquals(EuclidShapeTools.icosahedronEdgeLength(radius), edge.getDirection(false).length(), EPSILON));
          assertEquals(EuclidShapeTools.icosahedronVolume(EuclidShapeTools.icosahedronEdgeLength(radius)), icosahedron.getVolume(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(new Point3D(), icosahedron.getCentroid(), EPSILON);
       }
@@ -206,9 +205,9 @@ class EuclidPolytopeFactoriesTest
          assertEquals(1, pyramid.getVertices().stream().filter(vertex -> vertex.epsilonEquals(topVertex, EPSILON)).count());
 
          pyramid.getVertices().stream().filter(vertex -> !vertex.epsilonEquals(topVertex, EPSILON))
-                 .peek(baseVertex -> assertEquals(0.5 * baseLength, Math.abs(baseVertex.getX()), EPSILON))
-                 .peek(baseVertex -> assertEquals(0.5 * baseWidth, Math.abs(baseVertex.getY()), EPSILON))
-                 .forEach(baseVertex -> assertEquals(0.0, baseVertex.getZ(), EPSILON));
+                .peek(baseVertex -> assertEquals(0.5 * baseLength, Math.abs(baseVertex.getX()), EPSILON))
+                .peek(baseVertex -> assertEquals(0.5 * baseWidth, Math.abs(baseVertex.getY()), EPSILON))
+                .forEach(baseVertex -> assertEquals(0.0, baseVertex.getZ(), EPSILON));
 
          assertEquals(EuclidShapeTools.pyramidVolume(height, baseLength, baseWidth), pyramid.getVolume(), EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(new Point3D(0.0, 0.0, 0.25 * height), pyramid.getCentroid(), EPSILON);

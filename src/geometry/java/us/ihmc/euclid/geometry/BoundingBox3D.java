@@ -34,11 +34,11 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     * </ul>
     * </p>
     *
-    * @param center the center coordinate of the new bounding box. Not modified.
+    * @param center         the center coordinate of the new bounding box. Not modified.
     * @param plusMinusTuple tuple representing half of the size of the new bounding box. Not modified.
     * @return the new bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public static BoundingBox3D createUsingCenterAndPlusMinusVector(Point3DReadOnly center, Tuple3DReadOnly plusMinusTuple)
    {
@@ -75,7 +75,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     * @param min the minimum coordinates for this. Not modified.
     * @param max the maximum coordinates for this. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public BoundingBox3D(Point3DReadOnly min, Point3DReadOnly max)
    {
@@ -98,7 +98,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     * @param min the minimum coordinates for this. Not modified.
     * @param max the maximum coordinates for this. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public BoundingBox3D(double[] min, double[] max)
    {
@@ -115,7 +115,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     * @param maxY the maximum y-coordinates for this.
     * @param maxZ the maximum z-coordinates for this.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public BoundingBox3D(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
    {
@@ -152,7 +152,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
@@ -195,7 +195,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     * similar, i.e. the distance between their min and max points is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the bounding box to compare to. Not modified.
+    * @param other   the bounding box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
     *         otherwise.

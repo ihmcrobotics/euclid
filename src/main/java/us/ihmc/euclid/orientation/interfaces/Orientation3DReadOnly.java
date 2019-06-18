@@ -118,7 +118,7 @@ public interface Orientation3DReadOnly
     * </p>
     *
     * @throws NotAnOrientation2DException if this orientation does not represent a rotation strictly
-    *            around the z-axis.
+    *                                     around the z-axis.
     */
    default void checkIfOrientation2D()
    {
@@ -133,7 +133,7 @@ public interface Orientation3DReadOnly
     *
     * @param epsilon the tolerance to use.
     * @throws NotAnOrientation2DException if this orientation does not represent a rotation strictly
-    *            around the z-axis.
+    *                                     around the z-axis.
     */
    default void checkIfOrientation2D(double epsilon)
    {
@@ -145,7 +145,7 @@ public interface Orientation3DReadOnly
     * Converts, if necessary, and packs this orientation into a 3-by-3 rotation matrix.
     *
     * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
-    *           Modified.
+    *                             Modified.
     */
    void get(RotationMatrix rotationMatrixToPack);
 
@@ -167,7 +167,7 @@ public interface Orientation3DReadOnly
     * Converts, if necessary, and packs this orientation in a yaw-pitch-roll.
     *
     * @param yawPitchRollToPack the yaw-pitch-roll into which this orientation is to be stored.
-    *           Modified.
+    *                           Modified.
     */
    void get(YawPitchRollBasics yawPitchRollToPack);
 
@@ -180,7 +180,7 @@ public interface Orientation3DReadOnly
     * </p>
     *
     * @param rotationVectorToPack the rotation vector in which this orientation is to be stored.
-    *           Modified.
+    *                             Modified.
     */
    void getRotationVector(Vector3DBasics rotationVectorToPack);
 
@@ -282,7 +282,7 @@ public interface Orientation3DReadOnly
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     */
    void transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed);
@@ -311,7 +311,7 @@ public interface Orientation3DReadOnly
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     */
    default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -347,7 +347,7 @@ public interface Orientation3DReadOnly
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     */
    default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -385,7 +385,7 @@ public interface Orientation3DReadOnly
     * this orientation is expressed.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     * @throws NotAnOrientation2DException if this orientation is not a 2D orientation.
     */
@@ -403,8 +403,8 @@ public interface Orientation3DReadOnly
     * </p>
     *
     * @param checkIfOrientation2D whether this method should assert that this orientation represents a
-    *           transformation in the XY plane.
-    * @param tupleToTransform the 2D tuple to be transformed. Modified.
+    *                             transformation in the XY plane.
+    * @param tupleToTransform     the 2D tuple to be transformed. Modified.
     * @throws NotAnOrientation2DException if this orientation is not a 2D orientation.
     */
    default void transform(Tuple2DBasics tupleToTransform, boolean checkIfOrientation2D)
@@ -422,9 +422,9 @@ public interface Orientation3DReadOnly
     * </p>
     *
     * @param checkIfOrientation2D whether this method should assert that this orientation represents a
-    *           transformation in the XY plane.
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
-    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    *                             transformation in the XY plane.
+    * @param tupleOriginal        the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed     the result of the original tuple after transformation. Modified.
     * @throws NotAnOrientation2DException if this orientation is not a 2D orientation.
     */
    void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfOrientation2D);
@@ -453,7 +453,7 @@ public interface Orientation3DReadOnly
     * in which this orientation is expressed.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
    void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed);
@@ -486,7 +486,7 @@ public interface Orientation3DReadOnly
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     */
    void transform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed);
@@ -511,7 +511,7 @@ public interface Orientation3DReadOnly
     * the result in {@code matrixTransformed}.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
    default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
@@ -540,7 +540,7 @@ public interface Orientation3DReadOnly
     * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
    default void transform(RotationScaleMatrixReadOnly matrixOriginal, RotationScaleMatrix matrixTransformed)
@@ -571,9 +571,10 @@ public interface Orientation3DReadOnly
     * store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     */
    default void transform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
    {
@@ -606,7 +607,7 @@ public interface Orientation3DReadOnly
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     */
    void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed);
@@ -636,7 +637,7 @@ public interface Orientation3DReadOnly
     * frame described by this orientation.
     * </p>
     *
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
+    * @param tupleOriginal    the original value of the tuple to be transformed. Not modified.
     * @param tupleTransformed the result of the original tuple after transformation. Modified.
     * @throws NotAnOrientation2DException if this orientation is not a 2D orientation.
     */
@@ -654,8 +655,8 @@ public interface Orientation3DReadOnly
     * </p>
     *
     * @param checkIfOrientation2D whether this method should assert that this orientation represents a
-    *           transformation in the XY plane.
-    * @param tupleToTransform the 2D tuple to be transformed. Modified.
+    *                             transformation in the XY plane.
+    * @param tupleToTransform     the 2D tuple to be transformed. Modified.
     * @throws NotAnOrientation2DException if this orientation is not a 2D orientation.
     */
    default void inverseTransform(Tuple2DBasics tupleToTransform, boolean checkIfOrientation2D)
@@ -673,9 +674,9 @@ public interface Orientation3DReadOnly
     * </p>
     *
     * @param checkIfOrientation2D whether this method should assert that this orientation represents a
-    *           transformation in the XY plane.
-    * @param tupleOriginal the original value of the tuple to be transformed. Not modified.
-    * @param tupleTransformed the result of the original tuple after transformation. Modified.
+    *                             transformation in the XY plane.
+    * @param tupleOriginal        the original value of the tuple to be transformed. Not modified.
+    * @param tupleTransformed     the result of the original tuple after transformation. Modified.
     * @throws NotAnOrientation2DException if this orientation is not a 2D orientation.
     */
    void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfOrientation2D);
@@ -704,7 +705,7 @@ public interface Orientation3DReadOnly
     * frame described by this orientation.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
    void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed);
@@ -739,7 +740,7 @@ public interface Orientation3DReadOnly
     * frame in which this orientation is expressed.
     * </p>
     *
-    * @param vectorOriginal the original value of the vector to be transformed. Not modified.
+    * @param vectorOriginal    the original value of the vector to be transformed. Not modified.
     * @param vectorTransformed the result of the original vector after transformation. Modified.
     */
    void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed);
@@ -766,7 +767,7 @@ public interface Orientation3DReadOnly
     * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
    default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
@@ -796,7 +797,7 @@ public interface Orientation3DReadOnly
     * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
     * </p>
     *
-    * @param matrixOriginal the original value of the matrix to be transformed. Not modified.
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
    default void inverseTransform(RotationScaleMatrixReadOnly matrixOriginal, RotationScaleMatrix matrixTransformed)
@@ -826,9 +827,10 @@ public interface Orientation3DReadOnly
     * {@code orientationOriginal} and store the result in {@code orientationTransformed}.
     * </p>
     *
-    * @param orientationOriginal the original value of the orientation to be transformed. Not modified.
+    * @param orientationOriginal    the original value of the orientation to be transformed. Not
+    *                               modified.
     * @param orientationTransformed the result of the original orientation after transformation.
-    *           Modified.
+    *                               Modified.
     */
    default void inverseTransform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
    {

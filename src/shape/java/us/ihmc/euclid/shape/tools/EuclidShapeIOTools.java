@@ -68,7 +68,7 @@ public class EuclidShapeIOTools
     * </p>
     * 
     * @param format the format to use for each number.
-    * @param box3D the object to get the {@code String} of. Not modified.
+    * @param box3D  the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
    public static String getBox3DString(String format, Box3DReadOnly box3D)
@@ -89,10 +89,10 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
-    * @param position the location of the box. Not modified.
+    * @param format      the format to use for each number.
+    * @param position    the location of the box. Not modified.
     * @param orientation the orientation of the box. Not modified.
-    * @param size the box's size. Not modified.
+    * @param size        the box's size. Not modified.
     * @return the representative {@code String}.
     */
    public static String getBox3DString(String format, Tuple3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
@@ -126,7 +126,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format    the format to use for each number.
     * @param capsule3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -145,11 +145,11 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format   the format to use for each number.
     * @param position the location of the capsule. Not modified.
-    * @param axis the capsule's axis. Not modified.
-    * @param length the capsule's length.
-    * @param radius the capsule's radius.
+    * @param axis     the capsule's axis. Not modified.
+    * @param length   the capsule's length.
+    * @param radius   the capsule's radius.
     * @return the representative {@code String}.
     */
    public static String getCapsule3DString(String format, Tuple3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
@@ -183,7 +183,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format     the format to use for each number.
     * @param cylinder3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -202,11 +202,11 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format   the format to use for each number.
     * @param position the location of the cylinder. Not modified.
-    * @param axis the cylinder's axis. Not modified.
-    * @param length the cylinder's length.
-    * @param radius the cylinder's radius.
+    * @param axis     the cylinder's axis. Not modified.
+    * @param length   the cylinder's length.
+    * @param radius   the cylinder's radius.
     * @return the representative {@code String}.
     */
    public static String getCylinder3DString(String format, Tuple3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
@@ -240,7 +240,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format      the format to use for each number.
     * @param ellipsoid3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -262,10 +262,10 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
-    * @param position the location of the ellipsoid. Not modified.
+    * @param format      the format to use for each number.
+    * @param position    the location of the ellipsoid. Not modified.
     * @param orientation the orientation of the ellipsoid. Not modified.
-    * @param radii the ellipsoid's radii. Not modified.
+    * @param radii       the ellipsoid's radii. Not modified.
     * @return the representative {@code String}.
     */
    public static String getEllipsoid3DString(String format, Tuple3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly radii)
@@ -299,7 +299,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format       the format to use for each number.
     * @param pointShape3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -318,7 +318,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format   the format to use for each number.
     * @param position the location of the point shape. Not modified.
     * @return the representative {@code String}.
     */
@@ -374,10 +374,10 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
-    * @param position the location of the ramp. Not modified.
+    * @param format      the format to use for each number.
+    * @param position    the location of the ramp. Not modified.
     * @param orientation the orientation of the ramp. Not modified.
-    * @param size the ramp's size. Not modified.
+    * @param size        the ramp's size. Not modified.
     * @return the representative {@code String}.
     */
    public static String getRamp3DString(String format, Tuple3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
@@ -411,7 +411,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format   the format to use for each number.
     * @param sphere3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -430,9 +430,9 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format   the format to use for each number.
     * @param position the location of the sphere. Not modified.
-    * @param radius the capsule's radius.
+    * @param radius   the capsule's radius.
     * @return the representative {@code String}.
     */
    public static String getSphere3DString(String format, Tuple3DReadOnly position, double radius)
@@ -465,7 +465,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format  the format to use for each number.
     * @param torus3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -484,10 +484,10 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
-    * @param position the location of the torus. Not modified.
-    * @param axis the torus' axis. Not modified.
-    * @param radius the torus' radius.
+    * @param format     the format to use for each number.
+    * @param position   the location of the torus. Not modified.
+    * @param axis       the torus' axis. Not modified.
+    * @param radius     the torus' radius.
     * @param tubeRadius the torus' tube radius.
     * @return the representative {@code String}.
     */
@@ -522,7 +522,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format      the format to use for each number.
     * @param shape3DPose the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -541,9 +541,9 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format      the format to use for each number.
     * @param orientation the orientation part of the {@code shapePose3D}. Not modified.
-    * @param position the position part of the {@code shapePose3D}. Not modified.
+    * @param position    the position part of the {@code shapePose3D}. Not modified.
     * @return the representative {@code String}.
     */
    public static String getShape3DPoseString(String format, RotationMatrixReadOnly orientation, Point3DReadOnly position)
@@ -599,7 +599,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format                       the format to use for each number.
     * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -657,7 +657,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format   the format to use for each number.
     * @param vertex3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -703,7 +703,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format     the format to use for each number.
     * @param halfEdge3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -837,7 +837,7 @@ public class EuclidShapeIOTools
     * </pre>
     * </p>
     * 
-    * @param format the format to use for each number.
+    * @param format           the format to use for each number.
     * @param convexPolytope3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */

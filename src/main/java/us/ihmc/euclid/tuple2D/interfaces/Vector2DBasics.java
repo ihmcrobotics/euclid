@@ -108,7 +108,7 @@ public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
     *
     * @param transform the geometric transform to apply on this vector. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY plane.
+    *                               in the XY plane.
     */
    @Override
    default void applyTransform(Transform transform)
@@ -131,11 +131,11 @@ public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
     * </ul>
     * </p>
     *
-    * @param transform the geometric transform to apply on this vector. Not modified.
+    * @param transform                 the geometric transform to apply on this vector. Not modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    *                                  given transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    *                               of {@code transform} is not a transformation in the XY plane.
     */
    @Override
    default void applyTransform(Transform transform, boolean checkIfTransformInXYPlane)
@@ -156,7 +156,7 @@ public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
     *
     * @param transform the geometric transform to apply on this vector. Not modified.
     * @throws NotAMatrix2DException if the rotation part of {@code transform} is not a transformation
-    *            in the XY plane.
+    *                               in the XY plane.
     */
    @Override
    default void applyInverseTransform(Transform transform)
@@ -179,11 +179,11 @@ public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
     * </ul>
     * </p>
     *
-    * @param transform the geometric transform to apply on this vector. Not modified.
+    * @param transform                 the geometric transform to apply on this vector. Not modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of the
-    *           given transform represents a transformation in the XY plane.
+    *                                  given transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
-    *            of {@code transform} is not a transformation in the XY plane.
+    *                               of {@code transform} is not a transformation in the XY plane.
     */
    @Override
    default void applyInverseTransform(Transform transform, boolean checkIfTransformInXYplane)

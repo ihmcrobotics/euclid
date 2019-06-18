@@ -125,20 +125,20 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
    {
       switch (index)
       {
-      case 0:
-         setX(value);
-         break;
-      case 1:
-         setY(value);
-         break;
-      case 2:
-         setZ(value);
-         break;
-      case 3:
-         setS(value);
-         break;
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            setX(value);
+            break;
+         case 1:
+            setY(value);
+            break;
+         case 2:
+            setZ(value);
+            break;
+         case 3:
+            setS(value);
+            break;
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -183,7 +183,7 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
    /**
     * Sets this vector to {@code tupleReadOnly} and then scales it {@link #scale(double)}.
     *
-    * @param scalar the scale factor to use on this tuple.
+    * @param scalar        the scale factor to use on this tuple.
     * @param tupleReadOnly the tuple to copy the values from. Not modified.
     */
    default void setAndScale(double scalar, Tuple4DReadOnly tupleReadOnly)
@@ -194,7 +194,7 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
    /**
     * Sets this vector to {@code tupleReadOnly} and then calls {@link #clipToMax(double)}.
     *
-    * @param max the maximum value for each component of this tuple.
+    * @param max           the maximum value for each component of this tuple.
     * @param tupleReadOnly the tuple to copy the values from. Not modified.
     */
    default void setAndClipToMax(double max, Tuple4DReadOnly tupleReadOnly)
@@ -205,7 +205,7 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
    /**
     * Sets this vector to {@code tupleReadOnly} and then calls {@link #clipToMin(double)}.
     *
-    * @param min the minimum value for each component of this tuple.
+    * @param min           the minimum value for each component of this tuple.
     * @param tupleReadOnly the tuple to copy the values from. Not modified.
     */
    default void setAndClipToMin(double min, Tuple4DReadOnly tupleReadOnly)
@@ -214,11 +214,10 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
    }
 
    /**
-    * Sets this vector to {@code tupleReadOnly} and then calls
-    * {@link #clipToMinMax(double, double)}.
+    * Sets this vector to {@code tupleReadOnly} and then calls {@link #clipToMinMax(double, double)}.
     *
-    * @param min the minimum value for each component of this tuple.
-    * @param max the maximum value for each component of this tuple.
+    * @param min           the minimum value for each component of this tuple.
+    * @param max           the maximum value for each component of this tuple.
     * @param tupleReadOnly the tuple to copy the values from. Not modified.
     */
    default void setAndClipToMinMax(double min, double max, Tuple4DReadOnly tupleReadOnly)
@@ -432,7 +431,7 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
     * this = scalar * this + tupleReadOnly
     * </p>
     *
-    * @param scalar the scale factor to use.
+    * @param scalar        the scale factor to use.
     * @param tupleReadOnly the tuple to add to this. Not modified.
     */
    default void scaleAdd(double scalar, Tuple4DReadOnly tupleReadOnly)
@@ -466,7 +465,7 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
     * this = scalar * this - tupleReadOnly
     * </p>
     *
-    * @param scalar the scale factor to use.
+    * @param scalar        the scale factor to use.
     * @param tupleReadOnly the tuple to subtract to this. Not modified.
     */
    default void scaleSub(double scalar, Tuple4DReadOnly tupleReadOnly)
@@ -502,9 +501,9 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
     * </p>
     *
     * @param tupleReadOnly the tuple used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying this vector, while a value of 1 is equivalent to setting this vector to
-    *           {@code tupleReadOnly}.
+    * @param alpha         the percentage used for the interpolation. A value of 0 will result in not
+    *                      modifying this vector, while a value of 1 is equivalent to setting this
+    *                      vector to {@code tupleReadOnly}.
     */
    default void interpolate(Tuple4DReadOnly tupleReadOnly, double alpha)
    {
@@ -520,9 +519,9 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
     *
     * @param tuple1 the first tuple used in the interpolation. Not modified.
     * @param tuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this vector to {@code tuple1}, while a value of 1 is equivalent to setting this
-    *           vector to {@code tuple2}.
+    * @param alpha  the percentage to use for the interpolation. A value of 0 will result in setting
+    *               this vector to {@code tuple1}, while a value of 1 is equivalent to setting this
+    *               vector to {@code tuple2}.
     */
    default void interpolate(Tuple4DReadOnly tuple1, Tuple4DReadOnly tuple2, double alpha)
    {
@@ -534,11 +533,11 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
    }
 
    /**
-    * Transforms the vector part (x, y, z) of this vector as a 3D vector and translates it by
-    * {@code s} times the translation part of the transform. The scalar part (s) remains unchanged.
+    * Transforms the vector part (x, y, z) of this vector as a 3D vector and translates it by {@code s}
+    * times the translation part of the transform. The scalar part (s) remains unchanged.
     * <p>
-    * Note that for {@code s = 0}, a 4D vector behaves as a 3D vector, and for {@code s = 1} it
-    * behaves as a 3D point.
+    * Note that for {@code s = 0}, a 4D vector behaves as a 3D vector, and for {@code s = 1} it behaves
+    * as a 3D point.
     * </p>
     * <p>
     * <li>{@link RigidBodyTransform} rotates then translates a vector.
@@ -555,12 +554,12 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
    }
 
    /**
-    * Performs the inverse the transform on the vector part (x, y, z) of this vector as a 3D vector
-    * and translates it by {@code s} times the translation part of the transform. The scalar part
-    * (s) remains unchanged.
+    * Performs the inverse the transform on the vector part (x, y, z) of this vector as a 3D vector and
+    * translates it by {@code s} times the translation part of the transform. The scalar part (s)
+    * remains unchanged.
     * <p>
-    * Note that for {@code s = 0}, a 4D vector behaves as a 3D vector, and for {@code s = 1} it
-    * behaves as a 3D point.
+    * Note that for {@code s = 0}, a 4D vector behaves as a 3D vector, and for {@code s = 1} it behaves
+    * as a 3D point.
     * </p>
     * <p>
     * <li>{@link RigidBodyTransform} rotates then translates a vector.

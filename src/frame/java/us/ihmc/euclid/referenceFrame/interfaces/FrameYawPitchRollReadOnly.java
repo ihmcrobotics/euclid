@@ -40,7 +40,7 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
     * @return the angle representing the distance between the two orientations. It is contained in [0,
     *         2<i>pi</i>]
     * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
-    *            not match.
+    *                                         not match.
     */
    default double distance(FrameYawPitchRollReadOnly other)
    {
@@ -78,7 +78,7 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
     * If the two yaw-pitch-rolls have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other tuple to compare against this. Not modified.
+    * @param other   the other tuple to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
@@ -102,12 +102,12 @@ public interface FrameYawPitchRollReadOnly extends FrameOrientation3DReadOnly, Y
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other yaw-pitch-roll to compare against this. Not modified.
+    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
     * @param epsilon the maximum angle for the two quaternions to be considered equal.
     * @return {@code true} if the two yaw-pitch-roll represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default boolean geometricallyEquals(FrameYawPitchRollReadOnly other, double epsilon)
    {

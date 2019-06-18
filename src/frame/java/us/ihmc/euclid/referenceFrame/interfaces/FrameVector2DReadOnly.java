@@ -30,7 +30,7 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     * @param other the other frame vector used for the dot product. Not modified.
     * @return the value of the dot product.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double dot(FrameVector2DReadOnly other)
    {
@@ -47,7 +47,7 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     * @param other the other frame vector used to compute the angle. Not modified.
     * @return the value of the angle from this frame vector to {@code other}.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *            {@code this}.
+    *                                         {@code this}.
     */
    default double angle(FrameVector2DReadOnly other)
    {
@@ -71,12 +71,12 @@ public interface FrameVector2DReadOnly extends Vector2DReadOnly, FrameTuple2DRea
     * Compares {@code this} to {@code other} to determine if the two frame vectors are geometrically
     * similar, i.e. the length of the distance between them is less than or equal to {@code epsilon}.
     *
-    * @param other the frame vector to compare to. Not modified.
+    * @param other   the frame vector to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two frame vectors represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default boolean geometricallyEquals(FrameVector2DReadOnly other, double epsilon)
    {

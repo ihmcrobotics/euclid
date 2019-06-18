@@ -106,8 +106,8 @@ public class EuclidFrameFactories
     * Creates a new point 2D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
-    * @param xSupplier the x-coordinate supplier.
-    * @param ySupplier the y-coordinate supplier.
+    * @param xSupplier            the x-coordinate supplier.
+    * @param ySupplier            the y-coordinate supplier.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame point 2D.
     */
@@ -121,8 +121,8 @@ public class EuclidFrameFactories
     * Creates a new vector 2D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
-    * @param xSupplier the x-coordinate supplier.
-    * @param ySupplier the y-coordinate supplier.
+    * @param xSupplier            the x-coordinate supplier.
+    * @param ySupplier            the y-coordinate supplier.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame vector 2D.
     */
@@ -136,9 +136,9 @@ public class EuclidFrameFactories
     * Creates a new point 3D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
-    * @param xSupplier the x-coordinate supplier.
-    * @param ySupplier the y-coordinate supplier.
-    * @param zSupplier the z-coordinate supplier.
+    * @param xSupplier            the x-coordinate supplier.
+    * @param ySupplier            the y-coordinate supplier.
+    * @param zSupplier            the z-coordinate supplier.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame point 3D.
     */
@@ -152,9 +152,9 @@ public class EuclidFrameFactories
     * Creates a new vector 3D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
-    * @param xSupplier the x-coordinate supplier.
-    * @param ySupplier the y-coordinate supplier.
-    * @param zSupplier the z-coordinate supplier.
+    * @param xSupplier            the x-coordinate supplier.
+    * @param ySupplier            the y-coordinate supplier.
+    * @param zSupplier            the z-coordinate supplier.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame vector 3D.
     */
@@ -168,7 +168,7 @@ public class EuclidFrameFactories
     * Creates a new point 2D that is a read-only view of the point expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param point the point to link. Not modified.
+    * @param point                the point to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame point 2D.
     */
@@ -224,7 +224,7 @@ public class EuclidFrameFactories
     * Creates a new vector 2D that is a read-only view of the vector expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param vector the vector to link. Not modified.
+    * @param vector               the vector to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame vector 2D.
     */
@@ -280,7 +280,7 @@ public class EuclidFrameFactories
     * Creates a new point 3D that is a read-only view of the point expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param point the point to link. Not modified.
+    * @param point                the point to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame point 3D.
     */
@@ -343,7 +343,7 @@ public class EuclidFrameFactories
     * Creates a new vector 3D that is a read-only view of the vector expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param vector the vector to link. Not modified.
+    * @param vector               the vector to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame vector 3D.
     */

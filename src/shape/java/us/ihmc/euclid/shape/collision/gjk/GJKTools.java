@@ -48,24 +48,24 @@ public class GJKTools
     * The value returned by this calculated is actually two times the triangle area.
     * </p>
     */
-   public static final ProjectedTriangleSignedAreaCalculator yzTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ay, az, by,
-                                                                                                                                                   bz, cy, cz);
+   public static final ProjectedTriangleSignedAreaCalculator yzTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy,
+                                                                                         cz) -> triangleSignedArea(ay, az, by, bz, cy, cz);
    /**
     * Calculator for computing the area of a 3D triangle projected onto the ZX-plane.
     * <p>
     * The value returned by this calculated is actually two times the triangle area.
     * </p>
     */
-   public static final ProjectedTriangleSignedAreaCalculator zxTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(az, ax, bz,
-                                                                                                                                                   bx, cz, cx);
+   public static final ProjectedTriangleSignedAreaCalculator zxTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy,
+                                                                                         cz) -> triangleSignedArea(az, ax, bz, bx, cz, cx);
    /**
     * Calculator for computing the area of a 3D triangle projected onto the XY-plane.
     * <p>
     * The value returned by this calculated is actually two times the triangle area.
     * </p>
     */
-   public static final ProjectedTriangleSignedAreaCalculator xyTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy, cz) -> triangleSignedArea(ax, ay, bx,
-                                                                                                                                                   by, cx, cy);
+   public static final ProjectedTriangleSignedAreaCalculator xyTriangleAreaCalculator = (ax, ay, az, bx, by, bz, cx, cy,
+                                                                                         cz) -> triangleSignedArea(ax, ay, bx, by, cx, cy);
 
    /**
     * Calculates the signed area of a 2D triangle.
@@ -101,8 +101,8 @@ public class GJKTools
     * </p>
     * 
     * @param oldVertices the vertices that may be filtered out. The array should contain at most 3
-    *           vertices. Not modified.
-    * @param newVertex the vertex that should not be filtered out by this method. Not modified.
+    *                    vertices. Not modified.
+    * @param newVertex   the vertex that should not be filtered out by this method. Not modified.
     * @return the smallest simplex that is the closest to the origin.
     */
    public static GJKSimplex3D simplexClosestToOrigin(GJKVertex3D[] oldVertices, GJKVertex3D newVertex)

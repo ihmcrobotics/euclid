@@ -44,7 +44,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    /**
     * Creates a new torus 3D and initializes its radii.
     *
-    * @param radius radius from the torus center to the tube center.
+    * @param radius     radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
     * @throws IllegalArgumentException if {@code radius} or {@code tubeRadius} is negative.
     */
@@ -56,9 +56,9 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    /**
     * Creates a new torus 3D and initializes its pose and radii.
     *
-    * @param position the position of the center. Not modified.
-    * @param axis the axis of revolution. Not modified.
-    * @param radius radius from the torus center to the tube center.
+    * @param position   the position of the center. Not modified.
+    * @param axis       the axis of revolution. Not modified.
+    * @param radius     radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
     * @throws IllegalArgumentException if {@code radius} or {@code tubeRadius} is negative.
     */
@@ -91,7 +91,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    /**
     * Sets the radii of this torus 3D.
     *
-    * @param radius radius from the torus center to the tube center.
+    * @param radius     radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
     * @throws IllegalArgumentException if {@code radius} or {@code tubeRadius} is negative.
     */
@@ -137,7 +137,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other torus to compare against this. Not modified.
+    * @param other   the other torus to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two tori are equal component-wise, {@code false} otherwise.
     */
@@ -150,7 +150,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    /**
     * Compares {@code this} and {@code other} to determine if the two tori are geometrically similar.
     *
-    * @param other the torus to compare to. Not modified.
+    * @param other   the torus to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two tori represent the same geometry, {@code false} otherwise.
     */

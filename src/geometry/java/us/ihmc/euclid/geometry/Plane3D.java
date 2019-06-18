@@ -46,9 +46,9 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @param pointOnPlaneX the new x-coordinate of the point on this plane.
     * @param pointOnPlaneY the new y-coordinate of the point on this plane.
     * @param pointOnPlaneZ the new z-coordinate of the point on this plane.
-    * @param planeNormalX the new x-component of the normal of this plane.
-    * @param planeNormalY the new y-component of the normal of this plane.
-    * @param planeNormalZ the new z-component of the normal of this plane.
+    * @param planeNormalX  the new x-component of the normal of this plane.
+    * @param planeNormalY  the new y-component of the normal of this plane.
+    * @param planeNormalZ  the new z-component of the normal of this plane.
     * @throws RuntimeException if the new normal is unreasonably small.
     */
    public Plane3D(double pointOnPlaneX, double pointOnPlaneY, double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ)
@@ -70,9 +70,9 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Initializes this plane to be passing through the three given points.
     *
-    * @param firstPointOnPlane first point on this plane. Not modified.
+    * @param firstPointOnPlane  first point on this plane. Not modified.
     * @param secondPointOnPlane second point on this plane. Not modified.
-    * @param thirdPointOnPlane second point on this plane. Not modified.
+    * @param thirdPointOnPlane  second point on this plane. Not modified.
     * @throws RuntimeException if at least two of the given points are exactly equal.
     * @throws RuntimeException if the plane normal could not be computed from the three given points.
     */
@@ -85,7 +85,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * Initializes this plane to be passing through the given point, with the vector as the normal.
     *
     * @param pointOnPlane point on this plane. Not modified.
-    * @param planeNormal normal of this plane. Not modified.
+    * @param planeNormal  normal of this plane. Not modified.
     * @throws RuntimeException if the new normal is unreasonably small.
     */
    public Plane3D(Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
@@ -193,7 +193,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * {@code this.point == other.point} and {@code this.normal == - other.normal}, the two planes are
     * physically the same but this method returns {@code false}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two planes are equal, {@code false} otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
@@ -256,7 +256,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * {@code planeNormalToPack}.
     *
     * @param planeNormalToPack vector in which the components of this plane's normal are stored.
-    *           Modified.
+    *                          Modified.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
    public void getNormal(Vector3DBasics planeNormalToPack)
@@ -332,7 +332,8 @@ public class Plane3D implements GeometryObject<Plane3D>
     * Gets the point defining this plane by storing its coordinates in the given argument
     * {@code pointToPack}.
     *
-    * @param pointOnPlaneToPack point in which the coordinates of this plane's point are stored. Modified.
+    * @param pointOnPlaneToPack point in which the coordinates of this plane's point are stored.
+    *                           Modified.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
    public void getPoint(Point3DBasics pointOnPlaneToPack)
@@ -427,7 +428,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </ul>
     * </p>
     *
-    * @param line the line that may intersect this plane. Not modified.
+    * @param line               the line that may intersect this plane. Not modified.
     * @param intersectionToPack point in which the coordinates of the intersection are stored.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
@@ -447,8 +448,8 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </ul>
     * </p>
     *
-    * @param pointOnLine a point located on the line. Not modified.
-    * @param lineDirection the direction of the line. Not modified.
+    * @param pointOnLine        a point located on the line. Not modified.
+    * @param lineDirection      the direction of the line. Not modified.
     * @param intersectionToPack point in which the coordinates of the intersection are stored.
     * @return {@code true} if the method succeeds, {@code false} otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
@@ -475,11 +476,11 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </ul>
     * </p>
     *
-    * @param otherPlane the other plane to do the test with. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians to determine if the plane normals are
-    *           collinear.
+    * @param otherPlane      the other plane to do the test with. Not modified.
+    * @param angleEpsilon    tolerance on the angle in radians to determine if the plane normals are
+    *                        collinear.
     * @param distanceEpsilon tolerance on the distance to determine if {@code otherPlane.point} belongs
-    *           to this plane.
+    *                        to this plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
@@ -523,9 +524,9 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </ol>
     * </p>
     *
-    * @param pointX the x-coordinate of the query.
-    * @param pointY the y-coordinate of the query.
-    * @param pointZ the z-coordinate of the query.
+    * @param pointX  the x-coordinate of the query.
+    * @param pointY  the y-coordinate of the query.
+    * @param pointZ  the z-coordinate of the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the query is considered to be on or above this plane, {@code false}
     *         otherwise.
@@ -574,7 +575,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </p>
     *
     * @param pointToTest the coordinates of the query. Not modified.
-    * @param epsilon the tolerance to use for the test.
+    * @param epsilon     the tolerance to use for the test.
     * @return {@code true} if the query is considered to be on or above this plane, {@code false}
     *         otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
@@ -618,9 +619,9 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </ol>
     * </p>
     *
-    * @param pointX the x-coordinate of the query.
-    * @param pointY the y-coordinate of the query.
-    * @param pointZ the z-coordinate of the query.
+    * @param pointX  the x-coordinate of the query.
+    * @param pointY  the y-coordinate of the query.
+    * @param pointZ  the z-coordinate of the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the query is considered to be on or below this plane, {@code false}
     *         otherwise.
@@ -669,7 +670,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </p>
     *
     * @param pointToTest the coordinates of the query. Not modified.
-    * @param epsilon the tolerance to use for the test.
+    * @param epsilon     the tolerance to use for the test.
     * @return {@code true} if the query is considered to be on or below this plane, {@code false}
     *         otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
@@ -690,7 +691,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * </ul>
     * </p>
     *
-    * @param otherPlane the other plane to do the test with. Not modified.
+    * @param otherPlane   the other plane to do the test with. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two planes are parallel, {@code false} otherwise.
     * @throws RuntimeException if this plane has not been initialized yet.
@@ -717,11 +718,11 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Computes the orthogonal projection of the given 3D point on this 3D plane.
     *
-    * @param pointX the x-coordinate of the point to compute the projection of.
-    * @param pointY the y-coordinate of the point to compute the projection of.
-    * @param pointZ the z-coordinate of the point to compute the projection of.
+    * @param pointX           the x-coordinate of the point to compute the projection of.
+    * @param pointY           the y-coordinate of the point to compute the projection of.
+    * @param pointZ           the z-coordinate of the point to compute the projection of.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
@@ -734,9 +735,9 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Computes the orthogonal projection of the given 3D point on this 3D plane.
     *
-    * @param pointToProject the point to compute the projection of. Not modified.
+    * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *           Modified.
+    *                         Modified.
     * @return whether the method succeeded or not.
     * @throws RuntimeException if this plane has not been initialized yet.
     */
@@ -768,9 +769,9 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @param pointOnPlaneX the new x-coordinate of the point on this plane.
     * @param pointOnPlaneY the new y-coordinate of the point on this plane.
     * @param pointOnPlaneZ the new z-coordinate of the point on this plane.
-    * @param planeNormalX the new x-component of the normal of this plane.
-    * @param planeNormalY the new y-component of the normal of this plane.
-    * @param planeNormalZ the new z-component of the normal of this plane.
+    * @param planeNormalX  the new x-component of the normal of this plane.
+    * @param planeNormalY  the new y-component of the normal of this plane.
+    * @param planeNormalZ  the new z-component of the normal of this plane.
     * @throws RuntimeException if the new normal is unreasonably small.
     */
    public void set(double pointOnPlaneX, double pointOnPlaneY, double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ)
@@ -797,9 +798,9 @@ public class Plane3D implements GeometryObject<Plane3D>
    /**
     * Redefines this plane such that it goes through the three given points.
     *
-    * @param firstPointOnPlane first point on this plane. Not modified.
+    * @param firstPointOnPlane  first point on this plane. Not modified.
     * @param secondPointOnPlane second point on this plane. Not modified.
-    * @param thirdPointOnPlane second point on this plane. Not modified.
+    * @param thirdPointOnPlane  second point on this plane. Not modified.
     * @throws RuntimeException if at least two of the given points are exactly equal.
     * @throws RuntimeException if the plane normal could not be computed from the three given points.
     */
@@ -821,7 +822,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * Redefines this plane with a new point and a new normal.
     *
     * @param pointOnPlane new point on this plane. Not modified.
-    * @param planeNormal new normal of this plane. Not modified.
+    * @param planeNormal  new normal of this plane. Not modified.
     * @throws RuntimeException if the new normal is unreasonably small.
     */
    public void set(Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
@@ -940,7 +941,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * geometrically equal can have normals pointing opposite direction.
     * </p>
     *
-    * @param other the plane to compare to.
+    * @param other   the plane to compare to.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the planes are coincident, {@code false} otherwise.
     */

@@ -64,10 +64,10 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * reference frame.
     *
     * @param referenceFrame the initial frame for this frame quaternion.
-    * @param x the x-component.
-    * @param y the y-component.
-    * @param z the z-component.
-    * @param s the s-component.
+    * @param x              the x-component.
+    * @param y              the y-component.
+    * @param z              the z-component.
+    * @param s              the s-component.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, double x, double y, double z, double s)
    {
@@ -78,7 +78,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Creates a new frame quaternion and initializes its component {@code x}, {@code y}, {@code z},
     * {@code s} in order from the given array and initializes its reference frame.
     *
-    * @param referenceFrame the initial frame for this frame quaternion.
+    * @param referenceFrame  the initial frame for this frame quaternion.
     * @param quaternionArray the array containing this quaternion's components. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, double[] quaternionArray)
@@ -94,7 +94,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * </p>
     *
     * @param referenceFrame the initial frame for this frame quaternion.
-    * @param matrix the dense-matrix containing this quaternion's components. Not modified.
+    * @param matrix         the dense-matrix containing this quaternion's components. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
    {
@@ -105,7 +105,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Creates a new quaternion and initializes it to {@code quaternionReadOnly} and to the given
     * reference frame.
     *
-    * @param referenceFrame the initial frame for this frame quaternion.
+    * @param referenceFrame     the initial frame for this frame quaternion.
     * @param quaternionReadOnly the quaternion to copy the components from. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, QuaternionReadOnly quaternionReadOnly)
@@ -117,7 +117,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Creates a new frame quaternion and initializes it to {@code tuple4DReadOnly} and to the given
     * reference frame.
     *
-    * @param referenceFrame the initial frame for this frame quaternion.
+    * @param referenceFrame  the initial frame for this frame quaternion.
     * @param tuple4DReadOnly the tuple to copy the components from. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
@@ -129,7 +129,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Creates a new frame quaternion and initializes such that it represents the same orientation as
     * the given {@code orientation3DReadOnly} and initializes its reference frame.
     *
-    * @param referenceFrame the initial frame for this frame quaternion.
+    * @param referenceFrame        the initial frame for this frame quaternion.
     * @param orientation3DReadOnly the orientation to initialize this quaternion. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
@@ -159,9 +159,9 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * the given yaw-pitch-roll {@code yaw}, {@code pitch}, and {@code roll}.
     *
     * @param referenceFrame the initial frame for this frame quaternion.
-    * @param yaw the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param yaw            the angle to rotate about the z-axis.
+    * @param pitch          the angle to rotate about the y-axis.
+    * @param roll           the angle to rotate about the x-axis.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, double yaw, double pitch, double roll)
    {
@@ -172,7 +172,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Creates a new frame quaternion and initializes it to {@code frameTuple4DReadOnly}.
     *
     * @param frameTuple4DReadOnly the frame tuple 4D to copy the components and reference frame from.
-    *           Not modified.
+    *                             Not modified.
     */
    public FrameQuaternion(FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -193,7 +193,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * Creates a new frame quaternion and initializes it to {@code orientation}.
     *
     * @param orientation the frame orientation to copy the components and reference frame from. Not
-    *           modified.
+    *                    modified.
     */
    public FrameQuaternion(FrameOrientation3DReadOnly orientation)
    {
@@ -205,7 +205,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     *
     * @param other the other quaternion to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    @Override
    public void set(FrameQuaternion other)
@@ -311,7 +311,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * If the two quaternions have different frames, this method returns {@code false}.
     * </p>
     *
-    * @param other the other quaternion to compare against this. Not modified.
+    * @param other   the other quaternion to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two quaternions are equal and are expressed in the same reference
     *         frame, {@code false} otherwise.
@@ -337,12 +337,12 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other quaternion to compare against this. Not modified.
+    * @param other   the other quaternion to compare against this. Not modified.
     * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
-    *           be considered equal.
+    *                be considered equal.
     * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    @Override
    public boolean geometricallyEquals(FrameQuaternion other, double epsilon)

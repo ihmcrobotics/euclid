@@ -105,11 +105,11 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    /**
     * Sets this ellipsoid properties.
     *
-    * @param position the position of this ellipsoid center. Not modified.
+    * @param position    the position of this ellipsoid center. Not modified.
     * @param orientation the orientation of this ellipsoid. Not modified.
-    * @param radiusX radius of the ellipsoid along the x-axis.
-    * @param radiusY radius of the ellipsoid along the y-axis.
-    * @param radiusZ radius of the ellipsoid along the z-axis.
+    * @param radiusX     radius of the ellipsoid along the x-axis.
+    * @param radiusY     radius of the ellipsoid along the y-axis.
+    * @param radiusZ     radius of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
@@ -121,7 +121,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    /**
     * Sets the pose and radii of this ellipsoid.
     *
-    * @param pose the position and orientation of this ellipsoid. Not modified.
+    * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @param radiusZ radius of the ellipsoid along the z-axis.
@@ -136,7 +136,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    /**
     * Sets the pose and radii of this ellipsoid.
     *
-    * @param pose the position and orientation of this ellipsoid. Not modified.
+    * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @param radiusZ radius of the ellipsoid along the z-axis.
@@ -151,7 +151,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    /**
     * Sets the pose and radii of this ellipsoid.
     *
-    * @param pose the position and orientation of this ellipsoid. Not modified.
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
     * @param radii the radii of this ellipsoid along the x, y, and z axes in order. Not modified.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */

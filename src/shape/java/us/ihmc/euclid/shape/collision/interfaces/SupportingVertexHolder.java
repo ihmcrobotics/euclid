@@ -39,7 +39,7 @@ public interface SupportingVertexHolder
     * </p>
     * 
     * @param supportDirection the direction to search for the farthest point on this shape. Not
-    *           modified.
+    *                         modified.
     * @return the coordinates of the supporting vertex or {@code null} if this shape has currently no
     *         supporting vertex.
     */
@@ -65,13 +65,12 @@ public interface SupportingVertexHolder
     * {@code ConvexPolytope3DReadOnly}.
     * </p>
     * 
-    * @param supportDirection the direction to search for the farthest point on this shape. Not
-    *           modified.
+    * @param supportDirection       the direction to search for the farthest point on this shape. Not
+    *                               modified.
     * @param supportingVertexToPack point used to store the supporting vertex coordinates. Modified.
     * @return {@code true} when the method succeeded and packed the supporting vertex coordinates,
     *         {@code false} when the method failed in which case {@code supportingVertexToPack} remains
     *         unchanged.
-    * 
     */
    boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack);
 }

@@ -43,7 +43,7 @@ public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransfo
    {
       return getShapePosition();
    }
-   
+
    /**
     * Sets this shape pose 3D to the {@code other} pose 3D.
     *

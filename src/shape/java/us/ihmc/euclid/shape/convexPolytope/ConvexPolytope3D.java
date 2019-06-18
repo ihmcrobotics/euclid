@@ -70,7 +70,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
     * Creates a new empty convex polytope.
     *
     * @param constructionEpsilon tolerance used when adding vertices to a convex polytope to trigger a
-    *           series of edge-cases.
+    *                            series of edge-cases.
     */
    public ConvexPolytope3D(double constructionEpsilon)
    {
@@ -91,9 +91,10 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
    /**
     * Creates a new convex polytope and adds vertices provided by the given supplier.
     *
-    * @param vertex3DSupplier the vertex supplier to get the vertices to add to this convex polytope.
+    * @param vertex3DSupplier    the vertex supplier to get the vertices to add to this convex
+    *                            polytope.
     * @param constructionEpsilon tolerance used when adding vertices to a convex polytope to trigger a
-    *           series of edge-cases.
+    *                            series of edge-cases.
     */
    public ConvexPolytope3D(Vertex3DSupplier vertex3DSupplier, double constructionEpsilon)
    {
@@ -118,9 +119,10 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
     * This constructor should only be used with {@link ConvexPolytope3DTroublesomeDataset}.
     * </p>
     *
-    * @param faces the faces composing the new convex polytope. Not modified, faces reference saved.
+    * @param faces               the faces composing the new convex polytope. Not modified, faces
+    *                            reference saved.
     * @param constructionEpsilon tolerance used when adding vertices to a convex polytope to trigger a
-    *           series of edge-cases.
+    *                            series of edge-cases.
     */
    public ConvexPolytope3D(List<Face3D> faces, double constructionEpsilon)
    {
@@ -403,7 +405,9 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
          if (firstFace.canObserverSeeFace(vertexToAdd))
             firstFace.flip();
 
-         List<Face3D> newFaces = EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd, firstFace.getEdges(), Collections.emptyList(),
+         List<Face3D> newFaces = EuclidPolytopeConstructionTools.computeVertexNeighborFaces(vertexToAdd,
+                                                                                            firstFace.getEdges(),
+                                                                                            Collections.emptyList(),
                                                                                             constructionEpsilon);
          if (newFaces != null)
          {
@@ -627,7 +631,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other convex polytope to compare against this. Not modified.
+    * @param other   the other convex polytope to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
     *         otherwise.
@@ -642,7 +646,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
     * Compares {@code this} and {@code other} to determine if the two convex polytopes are
     * geometrically similar.
     *
-    * @param other the convex polytope to compare to. Not modified.
+    * @param other   the convex polytope to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two convex polytope represent the same geometry, {@code false}
     *         otherwise.

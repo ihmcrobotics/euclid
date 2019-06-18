@@ -130,7 +130,7 @@ public class IcoSphereFactory
       /**
        * Gets the i<sup>th</sup> triangle of this mesh.
        * 
-       * @param index the triangle index.
+       * @param index          the triangle index.
        * @param triangleToPack the triangle used to pack mesh triangle. Modified.
        */
       public void getTriangle(int index, Triangle3DBasics triangleToPack)

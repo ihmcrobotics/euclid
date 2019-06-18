@@ -73,7 +73,7 @@ public class EuclidGeometryRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
     * @return the random line 2D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
@@ -109,7 +109,7 @@ public class EuclidGeometryRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param pointMinMax the maximum absolute value for each coordinate of the line's point.
     * @return the random line 3D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
@@ -241,9 +241,9 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a random bounding box from random center location and random size.
     *
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
-    * @param sizeMax the maximum size along each axis for the bounding box.
+    * @param sizeMax      the maximum size along each axis for the bounding box.
     * @return the random bounding box.
     * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
     */
@@ -268,9 +268,9 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a random bounding box from random center location and random size.
     *
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
-    * @param sizeMax the maximum size along each axis for the bounding box.
+    * @param sizeMax      the maximum size along each axis for the bounding box.
     * @return the random bounding box.
     * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
     */
@@ -332,7 +332,7 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a random plane 3D from a random point and a random unit-vector.
     *
-    * @param random the random generator to use.
+    * @param random      the random generator to use.
     * @param pointMinMax the maximum absolute value for each coordinate of the random point.
     * @return the random plane 3D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
@@ -370,8 +370,8 @@ public class EuclidGeometryRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
-    * @param positionMinMax the maximum absolute value for each coordinate of the line's point.
+    * @param random            the random generator to use.
+    * @param positionMinMax    the maximum absolute value for each coordinate of the line's point.
     * @param orientationMinMax the maximum absolute value orientation 2D's angle.
     * @return the random pose 2D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
@@ -409,13 +409,13 @@ public class EuclidGeometryRandomTools
     * </ul>
     * </p>
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param maxAbsoluteX the maximum absolute value for the x-coordinate of the position part of the
-    *           pose 3D.
+    *                     pose 3D.
     * @param maxAbsoluteY the maximum absolute value for the y-coordinate of the position part of the
-    *           pose 3D.
+    *                     pose 3D.
     * @param maxAbsoluteZ the maximum absolute value for the z-coordinate of the position part of the
-    *           pose 3D.
+    *                     pose 3D.
     * @return the random pose 3D.
     */
    public static Pose3D nextPose3D(Random random, double maxAbsoluteX, double maxAbsoluteY, double maxAbsoluteZ)
@@ -432,10 +432,10 @@ public class EuclidGeometryRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
-    * @param positionMinMax the maximum absolute value for each coordinate of the pose's position.
+    * @param random            the random generator to use.
+    * @param positionMinMax    the maximum absolute value for each coordinate of the pose's position.
     * @param orientationMinMax the maximum absolute value of the rotation angle for the pose's
-    *           orientation.
+    *                          orientation.
     * @return the random pose 3D.
     * @throws RuntimeException if {@code positionMinMax < 0} or {@code orientationMinMax < 0}.
     */
@@ -448,11 +448,11 @@ public class EuclidGeometryRandomTools
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     *
-    * @param random the random generator to use.
-    * @param maxAbsoluteXY the maximum absolute value for each coordinate of the vertices.
+    * @param random                 the random generator to use.
+    * @param maxAbsoluteXY          the maximum absolute value for each coordinate of the vertices.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
-    *           the random convex polygon. The size of the resulting convex polygon will be less than
-    *           {@code numberOfPossiblePoints}.
+    *                               the random convex polygon. The size of the resulting convex polygon
+    *                               will be less than {@code numberOfPossiblePoints}.
     * @return the random convex polygon.
     * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
     */
@@ -465,9 +465,9 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a random 2D point cloud given a random average, range, and size.
     *
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the random average.
-    * @param minMax the range of the point cloud in the three directions.
+    * @param random         the random generator to use.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the random average.
+    * @param minMax         the range of the point cloud in the three directions.
     * @param numberOfPoints the size of the point cloud to generate.
     * @return the random 2D point cloud.
     */
@@ -490,9 +490,9 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a random 3D point cloud given a random average, range, and size.
     *
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the random average.
-    * @param minMax the range of the point cloud in the three directions.
+    * @param random         the random generator to use.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the random average.
+    * @param minMax         the range of the point cloud in the three directions.
     * @param numberOfPoints the size of the point cloud to generate.
     * @return the random 3D point cloud.
     */
@@ -516,10 +516,10 @@ public class EuclidGeometryRandomTools
     * Generates a random convex polygon 2D by defining a random circle onto which the vertices are
     * randomly positioned.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
-    * @param maxEdgeLength maximum distance between two successive vertices constraining the size of
-    *           the random circle.
+    * @param random           the random generator to use.
+    * @param centerMinMax     the maximum absolute value for each coordinates of the circle's center.
+    * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
+    *                         the random circle.
     * @param numberOfVertices the size of the convex polygon.
     * @return the random convex polygon 2D.
     */
@@ -659,7 +659,7 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a fixed-size supplier of random vertex 2D.
     * 
-    * @param random the random generator to use.
+    * @param random           the random generator to use.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
     */
@@ -672,7 +672,7 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a fixed-size supplier of random vertex 3D.
     * 
-    * @param random the random generator to use.
+    * @param random           the random generator to use.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
     */
@@ -686,9 +686,9 @@ public class EuclidGeometryRandomTools
     * Generates a random point that is constrained to lie inside a 2D triangle.
     * 
     * @param random the random generator to use.
-    * @param a the first vertex of the bounding triangle. Not modified.
-    * @param b the second vertex of the bounding triangle. Not modified.
-    * @param c the third vertex of the bounding triangle. Not modified.
+    * @param a      the first vertex of the bounding triangle. Not modified.
+    * @param b      the second vertex of the bounding triangle. Not modified.
+    * @param c      the third vertex of the bounding triangle. Not modified.
     * @return the random point 2D.
     */
    public static Point2D nextPoint2DInTriangle(Random random, Point2DReadOnly a, Point2DReadOnly b, Point2DReadOnly c)
@@ -700,9 +700,9 @@ public class EuclidGeometryRandomTools
     * Generates a random point that is constrained to lie inside a 3D triangle.
     * 
     * @param random the random generator to use.
-    * @param a the first vertex of the bounding triangle. Not modified.
-    * @param b the second vertex of the bounding triangle. Not modified.
-    * @param c the third vertex of the bounding triangle. Not modified.
+    * @param a      the first vertex of the bounding triangle. Not modified.
+    * @param b      the second vertex of the bounding triangle. Not modified.
+    * @param c      the third vertex of the bounding triangle. Not modified.
     * @return the random point 3D.
     */
    public static Point3D nextPoint3DInTriangle(Random random, Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c)
@@ -733,10 +733,10 @@ public class EuclidGeometryRandomTools
     * Generates a random point that is constrained to lie inside a 3D tetrahedron.
     * 
     * @param random the random generator to use.
-    * @param a the first vertex of the bounding tetrahedron. Not modified.
-    * @param b the second vertex of the bounding tetrahedron. Not modified.
-    * @param c the third vertex of the bounding tetrahedron. Not modified.
-    * @param d the fourth vertex of the bounding tetrahedron. Not modified.
+    * @param a      the first vertex of the bounding tetrahedron. Not modified.
+    * @param b      the second vertex of the bounding tetrahedron. Not modified.
+    * @param c      the third vertex of the bounding tetrahedron. Not modified.
+    * @param d      the fourth vertex of the bounding tetrahedron. Not modified.
     * @return the random point 3D.
     */
    public static Point3D nextPoint3DInTetrahedron(Random random, Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c, Point3DReadOnly d)

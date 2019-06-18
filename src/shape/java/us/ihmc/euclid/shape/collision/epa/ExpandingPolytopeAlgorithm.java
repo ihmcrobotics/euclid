@@ -84,8 +84,8 @@ public class ExpandingPolytopeAlgorithm
     * This algorithm does not evaluate the surface normals.
     * </p>
     * 
-    * @param shapeA the first shape to evaluate. Not modified.
-    * @param shapeB the second shape to evaluate. Not modified.
+    * @param shapeA       the first shape to evaluate. Not modified.
+    * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
@@ -103,9 +103,9 @@ public class ExpandingPolytopeAlgorithm
     * This algorithm does not evaluate the surface normals.
     * </p>
     * 
-    * @param shapeA the first shape to evaluate. Not modified.
-    * @param shapeB the second shape to evaluate. Not modified.
-    * @param simplex the simplex used to start the expansion from. Not modified.
+    * @param shapeA       the first shape to evaluate. Not modified.
+    * @param shapeB       the second shape to evaluate. Not modified.
+    * @param simplex      the simplex used to start the expansion from. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
@@ -140,8 +140,8 @@ public class ExpandingPolytopeAlgorithm
     * This algorithm does not evaluate the surface normals.
     * </p>
     * 
-    * @param shapeA the first shape to evaluate. Not modified.
-    * @param shapeB the second shape to evaluate. Not modified.
+    * @param shapeA       the first shape to evaluate. Not modified.
+    * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
@@ -159,9 +159,9 @@ public class ExpandingPolytopeAlgorithm
     * This algorithm does not evaluate the surface normals.
     * </p>
     * 
-    * @param shapeA the first shape to evaluate. Not modified.
-    * @param shapeB the second shape to evaluate. Not modified.
-    * @param simplex the simplex used to start the expansion from. Not modified.
+    * @param shapeA       the first shape to evaluate. Not modified.
+    * @param shapeB       the second shape to evaluate. Not modified.
+    * @param simplex      the simplex used to start the expansion from. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
@@ -361,7 +361,7 @@ public class ExpandingPolytopeAlgorithm
     * Sets the tolerance used to trigger the termination condition of this algorithm.
     * 
     * @param epsilon the terminal condition tolerance to use, default value
-    *           {@value #DEFAULT_TERMINAL_CONDITION_EPSILON}.
+    *                {@value #DEFAULT_TERMINAL_CONDITION_EPSILON}.
     */
    public void setTerminalConditionEpsilon(double epsilon)
    {

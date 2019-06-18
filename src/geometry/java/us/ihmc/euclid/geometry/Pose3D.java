@@ -36,15 +36,15 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * sometimes undefined.
     * </p>
     *
-    * @param x the x-coordinate of the position.
-    * @param y the y-coordinate of the position.
-    * @param z the z-coordinate of the position.
-    * @param yaw the first angle from the yaw-pitch-roll representation, represents a rotation about
-    *           the z-axis.
+    * @param x     the x-coordinate of the position.
+    * @param y     the y-coordinate of the position.
+    * @param z     the z-coordinate of the position.
+    * @param yaw   the first angle from the yaw-pitch-roll representation, represents a rotation about
+    *              the z-axis.
     * @param pitch the second angle from the yaw-pitch-roll representation, represents a rotation about
-    *           the y-axis.
-    * @param roll the third angle from the yaw-pitch-roll representation, represents a rotation about
-    *           the x-axis.
+    *              the y-axis.
+    * @param roll  the third angle from the yaw-pitch-roll representation, represents a rotation about
+    *              the x-axis.
     */
    public Pose3D(double x, double y, double z, double yaw, double pitch, double roll)
    {
@@ -85,7 +85,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    /**
     * Creates a new pose 3D and initializes it with the given parameters.
     *
-    * @param position tuple used to initialize the position part of this pose. Not modified.
+    * @param position    tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
    public Pose3D(Point3DReadOnly position, Orientation3DReadOnly orientation)
@@ -143,7 +143,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two poses are equal, {@code false} otherwise.
     */
@@ -159,7 +159,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * Two poses are geometrically equal if both their position and orientation are geometrically equal.
     * </p>
     *
-    * @param other the pose to compare to. Not modified.
+    * @param other   the pose to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
     */

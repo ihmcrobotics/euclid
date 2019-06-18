@@ -28,7 +28,7 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * Sets this frame orientation to the same orientation described by the given
     * {@code orientation3DReadOnly} and sets the frame to the given {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame for this frame orientation.
+    * @param referenceFrame        the new reference frame for this frame orientation.
     * @param orientation3DReadOnly the orientation used to set this orientation. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
@@ -40,7 +40,8 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
    /**
     * Sets this frame orientation to {@code other}.
     *
-    * @param other the other frame orientation to copy the values and reference frame from. Not modified.
+    * @param other the other frame orientation to copy the values and reference frame from. Not
+    *              modified.
     */
    default void setIncludingFrame(FrameOrientation3DReadOnly other)
    {
@@ -122,7 +123,7 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * {@code yawPitchRoll} and sets the frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame in which the Euler angles are expressed.
-    * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
+    * @param yawPitchRoll   the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
     * @deprecated Use {@link #setIncludingFrame(ReferenceFrame, Orientation3DReadOnly)} using
     *             {@link YawPitchRoll} for instance.
     */
@@ -137,9 +138,9 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * {@code pitch}, and {@code roll} and sets the frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame orientation.
-    * @param yaw the angle to rotate about the z-axis.
-    * @param pitch the angle to rotate about the y-axis.
-    * @param roll the angle to rotate about the x-axis.
+    * @param yaw            the angle to rotate about the z-axis.
+    * @param pitch          the angle to rotate about the y-axis.
+    * @param roll           the angle to rotate about the x-axis.
     */
    default void setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double yaw, double pitch, double roll)
    {
@@ -156,7 +157,7 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame orientation.
-    * @param eulerAngles the Euler angles to copy the orientation from. Not modified.
+    * @param eulerAngles    the Euler angles to copy the orientation from. Not modified.
     */
    default void setEulerIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly eulerAngles)
    {
@@ -173,9 +174,9 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * </p>
     *
     * @param referenceFrame the new reference frame for this frame orientation.
-    * @param rotX the angle to rotate about the x-axis.
-    * @param rotY the angle to rotate about the y-axis.
-    * @param rotZ the angle to rotate about the z-axis.
+    * @param rotX           the angle to rotate about the x-axis.
+    * @param rotY           the angle to rotate about the y-axis.
+    * @param rotZ           the angle to rotate about the z-axis.
     */
    default void setEulerIncludingFrame(ReferenceFrame referenceFrame, double rotX, double rotY, double rotZ)
    {

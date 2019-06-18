@@ -63,8 +63,15 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
       for (int i = 0; i < ITERATIONS; i++)
       { // Test Matrix3D(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
          Matrix3D expectedMatrix = EuclidCoreRandomTools.nextMatrix3D(random);
-         matrix = new Matrix3D(expectedMatrix.getM00(), expectedMatrix.getM01(), expectedMatrix.getM02(), expectedMatrix.getM10(), expectedMatrix.getM11(),
-                               expectedMatrix.getM12(), expectedMatrix.getM20(), expectedMatrix.getM21(), expectedMatrix.getM22());
+         matrix = new Matrix3D(expectedMatrix.getM00(),
+                               expectedMatrix.getM01(),
+                               expectedMatrix.getM02(),
+                               expectedMatrix.getM10(),
+                               expectedMatrix.getM11(),
+                               expectedMatrix.getM12(),
+                               expectedMatrix.getM20(),
+                               expectedMatrix.getM21(),
+                               expectedMatrix.getM22());
 
          EuclidCoreTestTools.assertMatrix3DEquals(matrix, expectedMatrix, EPS);
       }
@@ -278,7 +285,14 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
          vector2 = vector2Copy = EuclidCoreRandomTools.nextVector3D(random);
          vector3.cross(vector, vector2);
 
-         tildeMatrix.set(vector.getX(), vector.getY(), vector.getZ(), vector2.getX(), vector2.getY(), vector2.getZ(), vector3.getX(), vector3.getY(),
+         tildeMatrix.set(vector.getX(),
+                         vector.getY(),
+                         vector.getZ(),
+                         vector2.getX(),
+                         vector2.getY(),
+                         vector2.getZ(),
+                         vector3.getX(),
+                         vector3.getY(),
                          vector3.getZ());
          tildeMatrix.setToTildeForm(vector);
 

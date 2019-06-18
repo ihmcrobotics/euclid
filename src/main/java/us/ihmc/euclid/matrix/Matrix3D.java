@@ -253,7 +253,7 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */
@@ -269,7 +269,7 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
     * This method is equivalent to {@link #epsilonEquals(Matrix3D, double)}.
     * </p>
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */

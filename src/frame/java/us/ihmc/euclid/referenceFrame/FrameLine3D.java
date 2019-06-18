@@ -202,8 +202,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /**
     * Creates a new line, initializes it to go through the two given points in the given frame.
     *
-    * @param referenceFrame the initial reference frame for this line.
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param referenceFrame    the initial reference frame for this line.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     */
    public FrameLine3D(ReferenceFrame referenceFrame, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
@@ -215,8 +215,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
     * Creates a new line, initializes it using the given point and direction in the given frame.
     *
     * @param referenceFrame the initial reference frame for this line.
-    * @param pointOnLine new point on this line. Not modified.
-    * @param lineDirection new direction of this line. Not modified.
+    * @param pointOnLine    new point on this line. Not modified.
+    * @param lineDirection  new direction of this line. Not modified.
     */
    public FrameLine3D(ReferenceFrame referenceFrame, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -242,8 +242,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
     * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
     * </p>
     *
-    * @param referenceFrame the reference frame in which the given line segment is expressed. The
-    *           initial frame for this frame line.
+    * @param referenceFrame        the reference frame in which the given line segment is expressed.
+    *                              The initial frame for this frame line.
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
     */
    public FrameLine3D(ReferenceFrame referenceFrame, LineSegment2DReadOnly lineSegment2DReadOnly)
@@ -270,8 +270,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
     * The reference frame is initialized to {@code ReferenceFrame.getWorldFrame()}.
     * </p>
     *
-    * @param referenceFrame the reference frame in which the given line segment is expressed. The
-    *           initial frame for this frame line.
+    * @param referenceFrame        the reference frame in which the given line segment is expressed.
+    *                              The initial frame for this frame line.
     * @param lineSegment3DReadOnly the line segment to copy. Not modified.
     */
    public FrameLine3D(ReferenceFrame referenceFrame, LineSegment3DReadOnly lineSegment3DReadOnly)
@@ -302,7 +302,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /**
     * Creates a new line and initializes it to go through the endpoints of the given line segment.
     *
-    * @param frameLineSegment2DReadOnly the line segment used to initialize this frame line. Not modified.
+    * @param frameLineSegment2DReadOnly the line segment used to initialize this frame line. Not
+    *                                   modified.
     */
    public FrameLine3D(FrameLineSegment2DReadOnly frameLineSegment2DReadOnly)
    {
@@ -312,7 +313,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /**
     * Creates a new line and initializes it to go through the endpoints of the given line segment.
     *
-    * @param frameLineSegment3DReadOnly the line segment used to initialize this frame line. Not modified.
+    * @param frameLineSegment3DReadOnly the line segment used to initialize this frame line. Not
+    *                                   modified.
     */
    public FrameLine3D(FrameLineSegment3DReadOnly frameLineSegment3DReadOnly)
    {
@@ -322,10 +324,10 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /**
     * Creates a new line and initializes it to go through the given points.
     *
-    * @param firstPointOnLine first point on this line. Not modified.
+    * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if the arguments are not expressed in the reference
-    *            frame.
+    *                                         frame.
     */
    public FrameLine3D(FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
    {
@@ -335,10 +337,10 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /**
     * Creates a new line and initializes it to the given point and direction.
     *
-    * @param pointOnLine new point on this line. Not modified.
+    * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if the arguments are not expressed in the reference
-    *            frame.
+    *                                         frame.
     */
    public FrameLine3D(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
@@ -387,7 +389,7 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
     * {@code this.point == other.point} and {@code this.direction == - other.direction}, the two lines
     * are physically the same but this method returns {@code false}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two lines are equal, {@code false} otherwise.
     */
@@ -404,11 +406,11 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
     * opposite direction.
     * </p>
     *
-    * @param other the line to compare to. Not modified.
+    * @param other   the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two lines represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *            the same reference frame.
+    *                                         the same reference frame.
     */
    @Override
    public boolean geometricallyEquals(FrameLine3D other, double epsilon)

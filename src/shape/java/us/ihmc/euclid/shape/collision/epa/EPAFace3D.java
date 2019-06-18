@@ -60,10 +60,10 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
     * edge linked to it as twin is oriented in opposite direction.
     * </p>
     * 
-    * @param vertex one of the new face vertex. Not modified, reference saved.
-    * @param twin the twin of one of the new face's edges. Not modified, reference saved.
+    * @param vertex  one of the new face vertex. Not modified, reference saved.
+    * @param twin    the twin of one of the new face's edges. Not modified, reference saved.
     * @param epsilon tolerance used notably for determining whether the new triangle face is affinely
-    *           dependent or not.
+    *                dependent or not.
     * @return the new face linked to the given {@code twin}.
     */
    public static EPAFace3D fromVertexAndTwinEdge(EPAVertex3D vertex, EPAHalfEdge3D twin, double epsilon)
@@ -82,11 +82,11 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
     * The winding of the new face is based on the ordering of the given vertices.
     * </p>
     * 
-    * @param v0 the first vertex of the new face. Not modified.
-    * @param v1 the second vertex of the new face. Not modified.
-    * @param v2 the third vertex of the new face. Not modified.
+    * @param v0      the first vertex of the new face. Not modified.
+    * @param v1      the second vertex of the new face. Not modified.
+    * @param v2      the third vertex of the new face. Not modified.
     * @param epsilon tolerance used notably for determining whether the new triangle face is affinely
-    *           dependent or not.
+    *                dependent or not.
     */
    public EPAFace3D(EPAVertex3D v0, EPAVertex3D v1, EPAVertex3D v2, double epsilon)
    {

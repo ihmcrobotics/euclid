@@ -81,11 +81,11 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    /**
     * Creates a new ellipsoid 3D and initializes its pose and size.
     *
-    * @param position the position of this ellipsoid. Not modified.
+    * @param position    the position of this ellipsoid. Not modified.
     * @param orientation the orientation of this ellipsoid. Not modified.
-    * @param radiusX the size of the ellipsoid along the x-axis.
-    * @param radiusY the size of the ellipsoid along the y-axis.
-    * @param radiusZ the size of the ellipsoid along the z-axis.
+    * @param radiusX     the size of the ellipsoid along the x-axis.
+    * @param radiusY     the size of the ellipsoid along the y-axis.
+    * @param radiusZ     the size of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
    public Ellipsoid3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
@@ -96,7 +96,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
     *
-    * @param pose the position and orientation of this ellipsoid. Not modified.
+    * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @param radiusZ radius of the ellipsoid along the z-axis.
@@ -110,7 +110,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
     *
-    * @param pose the position and orientation of this ellipsoid. Not modified.
+    * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
     * @param radiusZ radius of the ellipsoid along the z-axis.
@@ -173,7 +173,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other ellipsoid to compare against this. Not modified.
+    * @param other   the other ellipsoid to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two ellipsoids are equal component-wise, {@code false} otherwise.
     */
@@ -187,7 +187,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
     * Compares {@code this} and {@code other} to determine if the two ellipsoids are geometrically
     * similar.
     *
-    * @param other the ellipsoid to compare to. Not modified.
+    * @param other   the ellipsoid to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the ellipsoids represent the same geometry, {@code false} otherwise.
     */

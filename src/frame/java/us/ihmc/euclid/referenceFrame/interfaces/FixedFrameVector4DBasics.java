@@ -31,7 +31,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     *
     * @param frameVector3D the 3D frame vector used to set this 4D frame vector. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameVector3D} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void set(FrameVector3DReadOnly frameVector3D)
    {
@@ -48,7 +48,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     *
     * @param framePoint3D the 3D frame point used to set this 4D frame vector. Not modified.
     * @throws ReferenceFrameMismatchException if {@code framePoint3D} is not expressed in the same
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void set(FramePoint3DReadOnly framePoint3D)
    {
@@ -59,10 +59,10 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
    /**
     * Sets this frame vector to {@code frameTuple4DReadOnly} and then scales it {@link #scale(double)}.
     *
-    * @param scalar the scale factor to use on this tuple.
+    * @param scalar               the scale factor to use on this tuple.
     * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void setAndScale(double scalar, FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -73,10 +73,10 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
    /**
     * Sets this frame vector to {@code frameTuple4DReadOnly} and then calls {@link #clipToMax(double)}.
     *
-    * @param max the maximum value for each component of this tuple.
+    * @param max                  the maximum value for each component of this tuple.
     * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void setAndClipToMax(double max, FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -87,10 +87,10 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
    /**
     * Sets this frame vector to {@code frameTuple4DReadOnly} and then calls {@link #clipToMin(double)}.
     *
-    * @param min the minimum value for each component of this tuple.
+    * @param min                  the minimum value for each component of this tuple.
     * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void setAndClipToMin(double min, FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -102,11 +102,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * Sets this vector to {@code frameTuple4DReadOnly} and then calls
     * {@link #clipToMinMax(double, double)}.
     *
-    * @param min the minimum value for each component of this tuple.
-    * @param max the maximum value for each component of this tuple.
+    * @param min                  the minimum value for each component of this tuple.
+    * @param max                  the maximum value for each component of this tuple.
     * @param frameTuple4DReadOnly the frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void setAndClipToMinMax(double min, double max, FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -122,7 +122,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     *
     * @param frameTuple4DReadOnly the tuple to add to this vector.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void add(FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -137,9 +137,9 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * </p>
     *
     * @param frameTuple1 the first tuple to sum. Not modified.
-    * @param tuple2 the second tuple to sum. Not modified.
+    * @param tuple2      the second tuple to sum. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void add(FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
    {
@@ -153,10 +153,10 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = tuple1 + frameTuple2
     * </p>
     *
-    * @param tuple1 the first tuple to sum. Not modified.
+    * @param tuple1      the first tuple to sum. Not modified.
     * @param frameTuple2 the second tuple to sum. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void add(Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -173,7 +173,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * @param frameTuple1 the first tuple to sum. Not modified.
     * @param frameTuple2 the second tuple to sum. Not modified.
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
-    *            not expressed in the same frame as {@code this}.
+    *                                         not expressed in the same frame as {@code this}.
     */
    default void add(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -190,7 +190,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     *
     * @param frameTuple4DReadOnly the frame tuple to subtract from this frame vector.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void sub(FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -205,9 +205,9 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * </p>
     *
     * @param frameTuple1 the first frame tuple. Not modified.
-    * @param tuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
+    * @param tuple2      the second frame tuple to subtract from {@code tuple1}. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void sub(FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
    {
@@ -221,10 +221,10 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = tuple1 - frameTuple2
     * </p>
     *
-    * @param tuple1 the first tuple. Not modified.
+    * @param tuple1      the first tuple. Not modified.
     * @param frameTuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void sub(Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -241,7 +241,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * @param frameTuple1 the first frame tuple. Not modified.
     * @param frameTuple2 the second frame tuple to subtract from {@code tuple1}. Not modified.
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
-    *            not expressed in the same frame as {@code this}.
+    *                                         not expressed in the same frame as {@code this}.
     */
    default void sub(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -256,10 +256,10 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * this + frameTuple4DReadOnly
     * </p>
     *
-    * @param scalar the scale factor to use.
+    * @param scalar               the scale factor to use.
     * @param frameTuple4DReadOnly the frame tuple to add to this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void scaleAdd(double scalar, FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -273,11 +273,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * frameTuple1 + tuple2
     * </p>
     *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
+    * @param scalar      the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the sum. Not modified.
-    * @param tuple2 the second tuple of the sum. Not modified.
+    * @param tuple2      the second tuple of the sum. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void scaleAdd(double scalar, FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
    {
@@ -291,11 +291,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * tuple1 + frameTuple2
     * </p>
     *
-    * @param scalar the scale factor to use on {@code tuple1}.
-    * @param tuple1 the first tuple of the sum. Not modified.
+    * @param scalar      the scale factor to use on {@code tuple1}.
+    * @param tuple1      the first tuple of the sum. Not modified.
     * @param frameTuple2 the second frame tuple of the sum. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void scaleAdd(double scalar, Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -309,11 +309,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * frameTuple1 + frameTuple2
     * </p>
     *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
+    * @param scalar      the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the sum. Not modified.
     * @param frameTuple2 the second frame tuple of the sum. Not modified.
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
-    *            not expressed in the same frame as {@code this}.
+    *                                         not expressed in the same frame as {@code this}.
     */
    default void scaleAdd(double scalar, FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -328,10 +328,10 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * this - frameTuple4DReadOnly
     * </p>
     *
-    * @param scalar the scale factor to use.
+    * @param scalar               the scale factor to use.
     * @param frameTuple4DReadOnly the frame tuple to subtract to this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void scaleSub(double scalar, FrameTuple4DReadOnly frameTuple4DReadOnly)
    {
@@ -345,11 +345,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * frameTuple1 - tuple2
     * </p>
     *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
+    * @param scalar      the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the difference. Not modified.
-    * @param tuple2 the second tuple of the difference. Not modified.
+    * @param tuple2      the second tuple of the difference. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void scaleSub(double scalar, FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2)
    {
@@ -363,11 +363,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * tuple1 - frameTuple2
     * </p>
     *
-    * @param scalar the scale factor to use on {@code tuple1}.
-    * @param tuple1 the first tuple of the difference. Not modified.
+    * @param scalar      the scale factor to use on {@code tuple1}.
+    * @param tuple1      the first tuple of the difference. Not modified.
     * @param frameTuple2 the second frame tuple of the difference. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void scaleSub(double scalar, Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -381,11 +381,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = scalar * frameTuple1 - frameTuple2
     * </p>
     *
-    * @param scalar the scale factor to use on {@code frameTuple1}.
+    * @param scalar      the scale factor to use on {@code frameTuple1}.
     * @param frameTuple1 the first frame tuple of the difference. Not modified.
     * @param frameTuple2 the second frame tuple of the difference. Not modified.
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
-    *            not expressed in the same frame as {@code this}.
+    *                                         not expressed in the same frame as {@code this}.
     */
    default void scaleSub(double scalar, FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
@@ -402,11 +402,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * </p>
     *
     * @param frameTuple4DReadOnly the frame tuple used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *           this vector, while a value of 1 is equivalent to setting this vector to
-    *           {@code frameTuple4DReadOnly}.
+    * @param alpha                the percentage used for the interpolation. A value of 0 will result
+    *                             in not modifying this vector, while a value of 1 is equivalent to
+    *                             setting this vector to {@code frameTuple4DReadOnly}.
     * @throws ReferenceFrameMismatchException if {@code frameTuple4DReadOnly} is not expressed in the
-    *            same frame as {@code this}.
+    *                                         same frame as {@code this}.
     */
    default void interpolate(FrameTuple4DReadOnly frameTuple4DReadOnly, double alpha)
    {
@@ -422,12 +422,12 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * </p>
     *
     * @param frameTuple1 the first tuple used in the interpolation. Not modified.
-    * @param tuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame vector to {@code frameTuple1}, while a value of 1 is equivalent to setting
-    *           this frame vector to {@code tuple2}.
+    * @param tuple2      the second tuple used in the interpolation. Not modified.
+    * @param alpha       the percentage to use for the interpolation. A value of 0 will result in
+    *                    setting this frame vector to {@code frameTuple1}, while a value of 1 is
+    *                    equivalent to setting this frame vector to {@code tuple2}.
     * @throws ReferenceFrameMismatchException if {@code frameTuple1} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void interpolate(FrameTuple4DReadOnly frameTuple1, Tuple4DReadOnly tuple2, double alpha)
    {
@@ -442,13 +442,13 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     * this = (1.0 - alpha) * tuple1 + alpha * frameTuple2
     * </p>
     *
-    * @param tuple1 the first tuple used in the interpolation. Not modified.
+    * @param tuple1      the first tuple used in the interpolation. Not modified.
     * @param frameTuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame vector to {@code tuple1}, while a value of 1 is equivalent to setting this
-    *           frame vector to {@code frameTuple2}.
+    * @param alpha       the percentage to use for the interpolation. A value of 0 will result in
+    *                    setting this frame vector to {@code tuple1}, while a value of 1 is equivalent
+    *                    to setting this frame vector to {@code frameTuple2}.
     * @throws ReferenceFrameMismatchException if {@code frameTuple2} is not expressed in the same frame
-    *            as {@code this}.
+    *                                         as {@code this}.
     */
    default void interpolate(Tuple4DReadOnly tuple1, FrameTuple4DReadOnly frameTuple2, double alpha)
    {
@@ -465,11 +465,11 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     *
     * @param frameTuple1 the first tuple used in the interpolation. Not modified.
     * @param frameTuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this frame vector to {@code frameTuple1}, while a value of 1 is equivalent to setting
-    *           this frame vector to {@code frameTuple2}.
+    * @param alpha       the percentage to use for the interpolation. A value of 0 will result in
+    *                    setting this frame vector to {@code frameTuple1}, while a value of 1 is
+    *                    equivalent to setting this frame vector to {@code frameTuple2}.
     * @throws ReferenceFrameMismatchException if either {@code frameTuple1} or {@code frameTuple2} is
-    *            not expressed in the same frame as {@code this}.
+    *                                         not expressed in the same frame as {@code this}.
     */
    default void interpolate(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2, double alpha)
    {

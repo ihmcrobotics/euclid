@@ -45,8 +45,8 @@ public class Vector2D32 implements Vector2DBasics, GeometryObject<Vector2D32>
    }
 
    /**
-    * Creates a new vector and initializes its component {@code x}, {@code y} in order from the
-    * given array.
+    * Creates a new vector and initializes its component {@code x}, {@code y} in order from the given
+    * array.
     *
     * @param vectorArray the array containing this vector's components. Not modified.
     */
@@ -163,8 +163,8 @@ public class Vector2D32 implements Vector2DBasics, GeometryObject<Vector2D32>
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method
-    * returns {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Tuple2DReadOnly)}, it returns {@code false} otherwise.
     *
     * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
@@ -182,7 +182,7 @@ public class Vector2D32 implements Vector2DBasics, GeometryObject<Vector2D32>
     * Tests on a per component basis if this vector is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other vector to compare against this. Not modified.
+    * @param other   the other vector to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -195,17 +195,17 @@ public class Vector2D32 implements Vector2DBasics, GeometryObject<Vector2D32>
    /**
     * Tests if {@code this} and {@code other} represent the same vector 2D to an {@code epsilon}.
     * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than
-    * or equal to {@code epsilon}.
+    * Two vectors are considered geometrically equal if the length of their difference is less than or
+    * equal to {@code epsilon}.
     * </p>
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other vector 2D to compare against this. Not modified.
+    * @param other   the other vector 2D to compare against this. Not modified.
     * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *           considered equal.
+    *                considered equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
    @Override

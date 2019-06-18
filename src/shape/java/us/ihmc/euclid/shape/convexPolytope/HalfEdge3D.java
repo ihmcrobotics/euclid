@@ -41,7 +41,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
    /**
     * Creates a new half-edge and initializes its origin and destination.
     *
-    * @param origin the vertex the half-edge starts from. Not modified, reference saved.
+    * @param origin      the vertex the half-edge starts from. Not modified, reference saved.
     * @param destination the vertex the half-edge ends at. Not modified, reference saved.
     */
    public HalfEdge3D(Vertex3D origin, Vertex3D destination)
@@ -105,7 +105,8 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *
     * @param twin the twin half-edge of this half-edge. Not modified, reference saved.
     * @throws IllegalArgumentException if the given half-edge is not {@code null} and that its origin
-    *            and destination do not match this half-edge's destination and origin, respectively.
+    *                                  and destination do not match this half-edge's destination and
+    *                                  origin, respectively.
     */
    public void setTwin(HalfEdge3D twin)
    {
@@ -134,7 +135,8 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *
     * @param next the next half-edge of this half-edge. Not modified, reference saved.
     * @throws IllegalArgumentException if the given half-edge is not {@code null} and that either
-    *            {@code next.getOrigin() != this.destination} or {@code next.getFace() != this.face}.
+    *                                  {@code next.getOrigin() != this.destination} or
+    *                                  {@code next.getFace() != this.face}.
     */
    public void setNext(HalfEdge3D next)
    {
@@ -164,8 +166,8 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *
     * @param previous the previous half-edge of this half-edge. Not modified, reference saved.
     * @throws IllegalArgumentException if the given half-edge is not {@code null} and that either
-    *            {@code previous.getDestination() != this.origin} or
-    *            {@code previous.getFace() != this.face}.
+    *                                  {@code previous.getDestination() != this.origin} or
+    *                                  {@code previous.getFace() != this.face}.
     */
    public void setPrevious(HalfEdge3D previous)
    {

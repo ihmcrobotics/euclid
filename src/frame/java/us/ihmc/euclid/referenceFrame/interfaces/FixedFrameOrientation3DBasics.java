@@ -29,8 +29,8 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * {@code referenceFrame}.
     *
     * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
-    *           expressed.
-    * @param orientation the orientation to copy the values from. Not modified.
+    *                       expressed.
+    * @param orientation    the orientation to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation)
@@ -81,7 +81,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param rotationVector the rotation vector to set this orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code rotationVector} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void setRotationVector(FrameVector3DReadOnly rotationVector)
    {
@@ -100,7 +100,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param eulerAngles the Euler angles to copy the orientation from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code eulerAngles} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void setEuler(FrameVector3DReadOnly eulerAngles)
    {
@@ -114,7 +114,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void set(FrameOrientation3DReadOnly orientation)
    {
@@ -128,7 +128,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void setAndNormalize(FrameOrientation3DReadOnly orientation)
    {
@@ -141,7 +141,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the new orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void setAndInvert(FrameOrientation3DReadOnly orientation)
    {
@@ -169,7 +169,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation to append to this orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void append(FrameOrientation3DReadOnly orientation)
    {
@@ -195,9 +195,9 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void appendInvertOther(FrameOrientation3DReadOnly orientation)
    {
@@ -224,7 +224,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation to append to the inverse of this orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void appendInvertThis(FrameOrientation3DReadOnly orientation)
    {
@@ -250,9 +250,9 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void appendInvertBoth(FrameOrientation3DReadOnly orientation)
    {
@@ -280,7 +280,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation to prepend to this orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void prepend(FrameOrientation3DReadOnly orientation)
    {
@@ -306,9 +306,9 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void prependInvertOther(FrameOrientation3DReadOnly orientation)
    {
@@ -335,7 +335,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     *
     * @param orientation the orientation to append to the inverse of this orientation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void prependInvertThis(FrameOrientation3DReadOnly orientation)
    {
@@ -361,9 +361,9 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * </p>
     *
     * @param orientation the orientation which the inverse is to be appended to this orientation. Not
-    *           modified.
+    *                    modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
-    *            reference frame as {@code this}.
+    *                                         reference frame as {@code this}.
     */
    default void prependInvertBoth(FrameOrientation3DReadOnly orientation)
    {

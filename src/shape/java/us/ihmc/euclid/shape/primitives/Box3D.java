@@ -73,7 +73,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     * @param sizeY the size of this box along the y-axis.
     * @param sizeZ the size of this box along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Box3D(double sizeX, double sizeY, double sizeZ)
    {
@@ -83,13 +83,13 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
-    * @param position the position of this box. Not modified.
+    * @param position    the position of this box. Not modified.
     * @param orientation the orientation of this box. Not modified.
-    * @param sizeX the size of this box along the x-axis.
-    * @param sizeY the size of this box along the y-axis.
-    * @param sizeZ the size of this box along the z-axis.
+    * @param sizeX       the size of this box along the x-axis.
+    * @param sizeY       the size of this box along the y-axis.
+    * @param sizeZ       the size of this box along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
@@ -99,12 +99,12 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
-    * @param pose the position and orientation of this box. Not modified.
+    * @param pose  the position and orientation of this box. Not modified.
     * @param sizeX the size of this box along the x-axis.
     * @param sizeY the size of this box along the y-axis.
     * @param sizeZ the size of this box along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Box3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
@@ -114,12 +114,12 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
-    * @param pose the position and orientation of this box. Not modified.
+    * @param pose  the position and orientation of this box. Not modified.
     * @param sizeX the size of this box along the x-axis.
     * @param sizeY the size of this box along the y-axis.
     * @param sizeZ the size of this box along the z-axis.
     * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
-    *            negative.
+    *                                  negative.
     */
    public Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
@@ -179,7 +179,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other box to compare against this. Not modified.
+    * @param other   the other box to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two boxes are equal component-wise, {@code false} otherwise.
     */
@@ -192,7 +192,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    /**
     * Compares {@code this} to {@code other} to determine if the two boxes are geometrically similar.
     *
-    * @param other the box to compare to. Not modified.
+    * @param other   the box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */

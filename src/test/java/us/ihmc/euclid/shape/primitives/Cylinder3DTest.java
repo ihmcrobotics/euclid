@@ -670,7 +670,8 @@ public class Cylinder3DTest
          double distanceFromInfiniteCylinder = cylinder3D.getRadius() - distanceOffAxis;
          double distanceFromTopCap = alpha * cylinder3D.getLength();
          double distanceFromBottomCap = (1.0 - alpha) * cylinder3D.getLength();
-         assertEquals(-EuclidCoreTools.min(distanceFromInfiniteCylinder, distanceFromTopCap, distanceFromBottomCap), cylinder3D.signedDistance(pointInside),
+         assertEquals(-EuclidCoreTools.min(distanceFromInfiniteCylinder, distanceFromTopCap, distanceFromBottomCap),
+                      cylinder3D.signedDistance(pointInside),
                       EPSILON);
       }
 

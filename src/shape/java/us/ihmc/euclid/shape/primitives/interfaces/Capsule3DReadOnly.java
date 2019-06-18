@@ -101,7 +101,12 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack, Vector3DBasics normalAtClosestPointToPack)
    {
-      return EuclidShapeTools.evaluatePoint3DCapsule3DCollision(pointToCheck, getPosition(), getAxis(), getLength(), getRadius(), closestPointOnSurfaceToPack,
+      return EuclidShapeTools.evaluatePoint3DCapsule3DCollision(pointToCheck,
+                                                                getPosition(),
+                                                                getAxis(),
+                                                                getLength(),
+                                                                getRadius(),
+                                                                closestPointOnSurfaceToPack,
                                                                 normalAtClosestPointToPack) <= 0.0;
    }
 
@@ -144,7 +149,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.
     * 
-    * @param other the other capsule to compare against this. Not modified.
+    * @param other   the other capsule to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
     */
@@ -155,9 +160,10 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Compares {@code this} to {@code other} to determine if the two capsules are geometrically similar.
+    * Compares {@code this} to {@code other} to determine if the two capsules are geometrically
+    * similar.
     * 
-    * @param other the other capsule to compare against this. Not modified.
+    * @param other   the other capsule to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.
     */

@@ -110,7 +110,7 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     *     \ matrixArray[startIndex + 6]  matrixArray[startIndex + 7]  matrixArray[startIndex + 8] /
     * </pre>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex  the first index to start reading from in the array.
     * @param matrixArray the array containing the new values for this matrix. Not modified.
     */
    default void set(int startIndex, double[] matrixArray)
@@ -147,12 +147,12 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    }
 
    /**
-    * Copies the values in the given dense-matrix into this matrix given index offsets for the row
-    * and column.
+    * Copies the values in the given dense-matrix into this matrix given index offsets for the row and
+    * column.
     *
-    * @param startRow the first row index to start reading from in the dense-matrix.
+    * @param startRow    the first row index to start reading from in the dense-matrix.
     * @param startColumn the first column index to start reading from in the dense-matrix.
-    * @param matrix the dense-matrix containing the new values for this matrix. Not modified.
+    * @param matrix      the dense-matrix containing the new values for this matrix. Not modified.
     */
    default void set(int startRow, int startColumn, DenseMatrix64F matrix)
    {

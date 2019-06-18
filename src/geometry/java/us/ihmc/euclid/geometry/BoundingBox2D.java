@@ -33,11 +33,11 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
     * </ul>
     * </p>
     *
-    * @param center the center coordinate of the new bounding box. Not modified.
+    * @param center         the center coordinate of the new bounding box. Not modified.
     * @param plusMinusTuple tuple representing half of the size of the new bounding box. Not modified.
     * @return the new bounding box.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public static BoundingBox2D createUsingCenterAndPlusMinusVector(Point2DReadOnly center, Tuple2DReadOnly plusMinusTuple)
    {
@@ -74,7 +74,7 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
     * @param min the minimum coordinates for this. Not modified.
     * @param max the maximum coordinates for this. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public BoundingBox2D(Point2DReadOnly min, Point2DReadOnly max)
    {
@@ -97,7 +97,7 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
     * @param min the minimum coordinates for this. Not modified.
     * @param max the maximum coordinates for this. Not modified.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public BoundingBox2D(double[] min, double[] max)
    {
@@ -112,7 +112,7 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
     * @param maxX the maximum x-coordinates for this.
     * @param maxY the maximum y-coordinates for this.
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum
-    *            coordinate on the same axis.
+    *                          coordinate on the same axis.
     */
    public BoundingBox2D(double minX, double minY, double maxX, double maxY)
    {
@@ -148,7 +148,7 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
-    * @param other the query. Not modified.
+    * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal, {@code false} otherwise.
     */
@@ -195,7 +195,7 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
     * similar, i.e. the distance between their min and max points is less than or equal to
     * {@code epsilon}.
     *
-    * @param other the bounding box to compare to. Not modified.
+    * @param other   the bounding box to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
     *         otherwise.

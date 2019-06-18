@@ -132,8 +132,8 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    /**
     * Selects a component of this tuple based on {@code index} and sets it to {@code value}.
     * <p>
-    * For an {@code index} of 0, the corresponding component is {@code x}, 1 it is {@code y}, 2 it
-    * is {@code z}.
+    * For an {@code index} of 0, the corresponding component is {@code x}, 1 it is {@code y}, 2 it is
+    * {@code z}.
     * </p>
     *
     * @param index the index of the component to set.
@@ -144,17 +144,17 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    {
       switch (index)
       {
-      case 0:
-         setX(value);
-         break;
-      case 1:
-         setY(value);
-         break;
-      case 2:
-         setZ(value);
-         break;
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            setX(value);
+            break;
+         case 1:
+            setY(value);
+            break;
+         case 2:
+            setZ(value);
+            break;
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 
@@ -192,7 +192,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * {@code tuple2DReadOnly} and the z-component to the given {@code z}.
     *
     * @param tuple2DReadOnly the tuple to copy the values from. Not modified.
-    * @param z the new z-coordinate for this tuple.
+    * @param z               the new z-coordinate for this tuple.
     */
    default void set(Tuple2DReadOnly tuple2DReadOnly, double z)
    {
@@ -215,8 +215,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * Sets this tuple's components {@code x}, {@code y}, {@code z} in order from the given array
     * {@code tupleArray}.
     *
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(double[] tupleArray)
    {
@@ -228,8 +227,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * {@code tupleArray}.
     *
     * @param startIndex the first index to start reading from in the array.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(int startIndex, double[] tupleArray)
    {
@@ -240,8 +238,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * Sets this tuple's components {@code x}, {@code y}, {@code z} in order from the given array
     * {@code tupleArray}.
     *
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(float[] tupleArray)
    {
@@ -253,8 +250,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * {@code tupleArray}.
     *
     * @param startIndex the first index to start reading from in the array.
-    * @param tupleArray the array containing the new values for this tuple's components. Not
-    *           modified.
+    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
     */
    default void set(int startIndex, float[] tupleArray)
    {
@@ -266,7 +262,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * vector starting to read from its first row index.
     *
     * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    *               modified.
     */
    default void set(DenseMatrix64F matrix)
    {
@@ -278,8 +274,8 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * vector starting to read from {@code startRow}.
     *
     * @param startRow the first row index to start reading in the dense-matrix.
-    * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    * @param matrix   the column vector containing the new values for this tuple's components. Not
+    *                 modified.
     */
    default void set(int startRow, DenseMatrix64F matrix)
    {
@@ -291,9 +287,9 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * starting to read from {@code startRow} at the column index {@code column}.
     *
     * @param startRow the first row index to start reading in the dense-matrix.
-    * @param column the column index to read in the dense-matrix.
-    * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    * @param column   the column index to read in the dense-matrix.
+    * @param matrix   the column vector containing the new values for this tuple's components. Not
+    *                 modified.
     */
    default void set(int startRow, int column, DenseMatrix64F matrix)
    {
@@ -324,7 +320,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * Sets this tuple to {@code other} and then calls {@link #scale(double)}.
     *
     * @param scalar the scale factor to use on this tuple.
-    * @param other the other tuple to copy the values from. Not modified.
+    * @param other  the other tuple to copy the values from. Not modified.
     */
    default void setAndScale(double scalar, Tuple3DReadOnly other)
    {
@@ -334,7 +330,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    /**
     * Sets this tuple to {@code other} and then calls {@link #clipToMax(double)}.
     *
-    * @param max the maximum value for each component of this tuple.
+    * @param max   the maximum value for each component of this tuple.
     * @param other the other tuple to copy the values from. Not modified.
     */
    default void setAndClipToMax(double max, Tuple3DReadOnly other)
@@ -345,7 +341,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    /**
     * Sets this tuple to {@code other} and then calls {@link #clipToMin(double)}.
     *
-    * @param min the minimum value for each component of this tuple.
+    * @param min   the minimum value for each component of this tuple.
     * @param other the other tuple to copy the values from. Not modified.
     */
    default void setAndClipToMin(double min, Tuple3DReadOnly other)
@@ -356,8 +352,8 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    /**
     * Sets this tuple to {@code other} and then calls {@link #clipToMinMax(double, double)}.
     *
-    * @param min the minimum value for each component of this tuple.
-    * @param max the maximum value for each component of this tuple.
+    * @param min   the minimum value for each component of this tuple.
+    * @param max   the maximum value for each component of this tuple.
     * @param other the other tuple to copy the values from. Not modified.
     */
    default void setAndClipToMinMax(double min, double max, Tuple3DReadOnly other)
@@ -548,7 +544,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * </p>
     *
     * @param scalar the scale factor to use.
-    * @param other the tuple to add to this. Not modified.
+    * @param other  the tuple to add to this. Not modified.
     */
    default void scaleAdd(double scalar, Tuple3DReadOnly other)
    {
@@ -581,7 +577,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * </p>
     *
     * @param scalar the scale factor to use.
-    * @param other the tuple to subtract to this. Not modified.
+    * @param other  the tuple to subtract to this. Not modified.
     */
    default void scaleSub(double scalar, Tuple3DReadOnly other)
    {
@@ -615,9 +611,8 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * </p>
     *
     * @param other the other tuple used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not
-    *           modifying this tuple, while a value of 1 is equivalent to setting this tuple to
-    *           {@code other}.
+    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
+    *              this tuple, while a value of 1 is equivalent to setting this tuple to {@code other}.
     */
    default void interpolate(Tuple3DReadOnly other, double alpha)
    {
@@ -633,9 +628,9 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     *
     * @param tuple1 the first tuple used in the interpolation. Not modified.
     * @param tuple2 the second tuple used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *           this tuple to {@code tuple1}, while a value of 1 is equivalent to setting this tuple
-    *           to {@code tuple2}.
+    * @param alpha  the percentage to use for the interpolation. A value of 0 will result in setting
+    *               this tuple to {@code tuple1}, while a value of 1 is equivalent to setting this
+    *               tuple to {@code tuple2}.
     */
    default void interpolate(Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2, double alpha)
    {

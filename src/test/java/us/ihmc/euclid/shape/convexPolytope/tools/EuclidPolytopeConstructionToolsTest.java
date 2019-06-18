@@ -138,13 +138,18 @@ public class EuclidPolytopeConstructionToolsTest
          List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
 
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true,
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D,
+                                                                                     circleBasedConvexPolygon2D.size(),
+                                                                                     true,
                                                                                      centroid2D);
          Point3D expectedCentroid3D = new Point3D(centroid2D);
 
          Point3D actualCentroid3D = new Point3D();
-         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, Axis.Z, circleBasedConvexPolygon3D.size(),
-                                                                                        true, actualCentroid3D);
+         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D,
+                                                                                        Axis.Z,
+                                                                                        circleBasedConvexPolygon3D.size(),
+                                                                                        true,
+                                                                                        actualCentroid3D);
 
          assertEquals(expectedArea, actualArea, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);
@@ -154,7 +159,9 @@ public class EuclidPolytopeConstructionToolsTest
       { // Applying a transform when switching to 3D
          List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 20);
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D, circleBasedConvexPolygon2D.size(), true,
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D,
+                                                                                     circleBasedConvexPolygon2D.size(),
+                                                                                     true,
                                                                                      centroid2D);
 
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
@@ -168,8 +175,11 @@ public class EuclidPolytopeConstructionToolsTest
          expectedCentroid3D.applyTransform(transform);
 
          Point3D actualCentroid3D = new Point3D();
-         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D, normal, circleBasedConvexPolygon3D.size(),
-                                                                                        true, actualCentroid3D);
+         double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D,
+                                                                                        normal,
+                                                                                        circleBasedConvexPolygon3D.size(),
+                                                                                        true,
+                                                                                        actualCentroid3D);
 
          assertEquals(expectedArea, actualArea, EPSILON);
          EuclidCoreTestTools.assertTuple3DEquals(expectedCentroid3D, actualCentroid3D, EPSILON);

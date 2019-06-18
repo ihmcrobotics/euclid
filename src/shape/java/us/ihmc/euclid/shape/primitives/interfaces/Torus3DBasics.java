@@ -21,7 +21,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
    /**
     * Sets this torus radii.
     * 
-    * @param radius the radius for the axis to the tube center.
+    * @param radius     the radius for the axis to the tube center.
     * @param tubeRadius the tube radius.
     * @throws IllegalArgumentException if either {@code radius < 0.0} or {@code tubeRadius < 0.0}.
     */
@@ -86,9 +86,9 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
    /**
     * Sets the pose and radii of this torus 3D.
     *
-    * @param position the position of this torus center. Not modified.
-    * @param axis the axis of revolution of this torus. Not modified.
-    * @param radius radius from the torus center to the tube center.
+    * @param position   the position of this torus center. Not modified.
+    * @param axis       the axis of revolution of this torus. Not modified.
+    * @param radius     radius from the torus center to the tube center.
     * @param tubeRadius radius of the torus' tube.
     * @throws IllegalArgumentException if either {@code radius < 0.0} or {@code tubeRadius < 0.0}.
     */

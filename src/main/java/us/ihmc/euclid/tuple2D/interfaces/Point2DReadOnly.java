@@ -43,9 +43,9 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
    /**
     * Calculates and returns the square of the distance between this point and {@code other}.
     * <p>
-    * This method is usually preferred over {@link #distance(Point2DReadOnly)} when calculation
-    * speed matters and knowledge of the actual distance does not, i.e. when comparing distances
-    * between several pairs of points.
+    * This method is usually preferred over {@link #distance(Point2DReadOnly)} when calculation speed
+    * matters and knowledge of the actual distance does not, i.e. when comparing distances between
+    * several pairs of points.
     * </p>
     *
     * @param other the other point used to measure the square of the distance. Not modified.
@@ -76,17 +76,17 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
    }
 
    /**
-    * Calculates and returns the square of the distance between this point and
-    * {@code point3DReadOnly} in the XY-plane.
+    * Calculates and returns the square of the distance between this point and {@code point3DReadOnly}
+    * in the XY-plane.
     * <p>
     * Effectively, this calculates the distance squared as follows:<br>
     * d<sub>xy</sub><sup>2</sup> = (this.x - point3DReadOnly.x)<sup>2</sup> + (this.y -
     * point3DReadOnly.y)<sup>2</sup>
     * </p>
     * <p>
-    * This method is usually preferred over {@link #distanceXY(Point3DReadOnly)} when calculation
-    * speed matters and knowledge of the actual distance does not, i.e. when comparing distances
-    * between several pairs of points.
+    * This method is usually preferred over {@link #distanceXY(Point3DReadOnly)} when calculation speed
+    * matters and knowledge of the actual distance does not, i.e. when comparing distances between
+    * several pairs of points.
     * </p>
     *
     * @param point3DReadOnly the other point used to measure the square of the distance.
@@ -113,8 +113,8 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
     * Calculates and returns the square of the distance between this point and the origin (0, 0).
     * <p>
     * This method is usually preferred over {@link #distanceFromOrigin()} when calculation speed
-    * matters and knowledge of the actual distance does not, i.e. when comparing distances of
-    * several points with respect to the origin.
+    * matters and knowledge of the actual distance does not, i.e. when comparing distances of several
+    * points with respect to the origin.
     * </p>
     *
     * @return the square of the distance between this point and the origin.
@@ -127,17 +127,16 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
    /**
     * Tests if {@code this} and {@code other} represent the same point 2D to an {@code epsilon}.
     * <p>
-    * Two points are considered geometrically equal if they are at a distance of less than or equal
-    * to {@code epsilon}.
+    * Two points are considered geometrically equal if they are at a distance of less than or equal to
+    * {@code epsilon}.
     * </p>
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other the other point 2D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two points can be spaced and still considered
-    *           equal.
+    * @param other   the other point 2D to compare against this. Not modified.
+    * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
     * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
     */
    default boolean geometricallyEquals(Point2DReadOnly other, double epsilon)

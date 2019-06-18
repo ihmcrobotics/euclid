@@ -54,7 +54,7 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
     * @param centerX the x-coordinate of this sphere. Not modified.
     * @param centerY the y-coordinate of this sphere. Not modified.
     * @param centerZ the z-coordinate of this sphere. Not modified.
-    * @param radius the radius for this sphere.
+    * @param radius  the radius for this sphere.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
    public Sphere3D(double centerX, double centerY, double centerZ, double radius)
@@ -117,7 +117,7 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other sphere to compare against this. Not modified.
+    * @param other   the other sphere to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two spheres are equal component-wise, {@code false} otherwise.
     */
@@ -132,7 +132,7 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
     * i.e. the position of each sphere is geometrically similar given {@code epsilon} and the
     * difference between the radius of each sphere is less than or equal to {@code epsilon}.
     *
-    * @param other the sphere to compare to. Not modified.
+    * @param other   the sphere to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
     */

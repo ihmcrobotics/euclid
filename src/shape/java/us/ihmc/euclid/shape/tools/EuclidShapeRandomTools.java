@@ -72,7 +72,7 @@ public class EuclidShapeRandomTools
     * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
     * </ul>
     * 
-    * @param random the random generator to use.
+    * @param random  the random generator to use.
     * @param minSize the minimum value for each component of the box size.
     * @param maxSize the maximum value for each component of the box size.
     * @return the random box 3D.
@@ -80,8 +80,10 @@ public class EuclidShapeRandomTools
     */
    public static Box3D nextBox3D(Random random, double minSize, double maxSize)
    {
-      return new Box3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minSize, maxSize),
-                       EuclidCoreRandomTools.nextDouble(random, minSize, maxSize), EuclidCoreRandomTools.nextDouble(random, minSize, maxSize));
+      return new Box3D(EuclidCoreRandomTools.nextRigidBodyTransform(random),
+                       EuclidCoreRandomTools.nextDouble(random, minSize, maxSize),
+                       EuclidCoreRandomTools.nextDouble(random, minSize, maxSize),
+                       EuclidCoreRandomTools.nextDouble(random, minSize, maxSize));
    }
 
    /**
@@ -112,7 +114,7 @@ public class EuclidShapeRandomTools
     * {@link EuclidCoreRandomTools#nextVector3DWithFixedLength(Random, double)} with a length of 1.0.
     * </ul>
     * 
-    * @param random the random generator to use.
+    * @param random    the random generator to use.
     * @param minLength the minimum value for the length.
     * @param maxLength the maximum value for the length.
     * @param minRadius the minimum value for the radius.
@@ -122,8 +124,10 @@ public class EuclidShapeRandomTools
     */
    public static Capsule3D nextCapsule3D(Random random, double minLength, double maxLength, double minRadius, double maxRadius)
    {
-      return new Capsule3D(EuclidCoreRandomTools.nextPoint3D(random), EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0),
-                           EuclidCoreRandomTools.nextDouble(random, minLength, maxLength), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
+      return new Capsule3D(EuclidCoreRandomTools.nextPoint3D(random),
+                           EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0),
+                           EuclidCoreRandomTools.nextDouble(random, minLength, maxLength),
+                           EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
    }
 
    /**
@@ -154,7 +158,7 @@ public class EuclidShapeRandomTools
     * {@link EuclidCoreRandomTools#nextVector3DWithFixedLength(Random, double)} with a length of 1.0.
     * </ul>
     * 
-    * @param random the random generator to use.
+    * @param random    the random generator to use.
     * @param minLength the minimum value for the length.
     * @param maxLength the maximum value for the length.
     * @param minRadius the minimum value for the radius.
@@ -164,8 +168,10 @@ public class EuclidShapeRandomTools
     */
    public static Cylinder3D nextCylinder3D(Random random, double minLength, double maxLength, double minRadius, double maxRadius)
    {
-      return new Cylinder3D(EuclidCoreRandomTools.nextPoint3D(random), EuclidCoreRandomTools.nextVector3D(random),
-                            EuclidCoreRandomTools.nextDouble(random, minLength, maxLength), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
+      return new Cylinder3D(EuclidCoreRandomTools.nextPoint3D(random),
+                            EuclidCoreRandomTools.nextVector3D(random),
+                            EuclidCoreRandomTools.nextDouble(random, minLength, maxLength),
+                            EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
    }
 
    /**
@@ -192,7 +198,7 @@ public class EuclidShapeRandomTools
     * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
     * </ul>
     * 
-    * @param random the random generator to use.
+    * @param random    the random generator to use.
     * @param minRadius the minimum value for each component of the ellipsoid radius.
     * @param maxRadius the maximum value for each component of the ellipsoid radius.
     * @return the random ellipsoid 3D.
@@ -200,8 +206,10 @@ public class EuclidShapeRandomTools
     */
    public static Ellipsoid3D nextEllipsoid3D(Random random, double minRadius, double maxRadius)
    {
-      return new Ellipsoid3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
-                             EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius), EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
+      return new Ellipsoid3D(EuclidCoreRandomTools.nextRigidBodyTransform(random),
+                             EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
+                             EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
+                             EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius));
    }
 
    /**
@@ -260,7 +268,7 @@ public class EuclidShapeRandomTools
     * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
     * </ul>
     * 
-    * @param random the random generator to use.
+    * @param random  the random generator to use.
     * @param minSize the minimum value for each component of the ramp size.
     * @param maxSize the maximum value for each component of the ramp size.
     * @return the random ramp 3D.
@@ -268,8 +276,10 @@ public class EuclidShapeRandomTools
     */
    public static Ramp3D nextRamp3D(Random random, double minSize, double maxSize)
    {
-      return new Ramp3D(EuclidCoreRandomTools.nextRigidBodyTransform(random), EuclidCoreRandomTools.nextDouble(random, minSize, maxSize),
-                        EuclidCoreRandomTools.nextDouble(random, minSize, maxSize), EuclidCoreRandomTools.nextDouble(random, minSize, maxSize));
+      return new Ramp3D(EuclidCoreRandomTools.nextRigidBodyTransform(random),
+                        EuclidCoreRandomTools.nextDouble(random, minSize, maxSize),
+                        EuclidCoreRandomTools.nextDouble(random, minSize, maxSize),
+                        EuclidCoreRandomTools.nextDouble(random, minSize, maxSize));
    }
 
    /**
@@ -294,7 +304,7 @@ public class EuclidShapeRandomTools
     * <li>{@code position}<sub>i</sub> &in; [-1.0; 1.0].
     * </ul>
     * 
-    * @param random the random generator to use.
+    * @param random    the random generator to use.
     * @param minRadius the minimum value for the radius.
     * @param maxRadius the maximum value for the radius.
     * @return the random sphere 3D.
@@ -333,18 +343,19 @@ public class EuclidShapeRandomTools
     * {@link EuclidCoreRandomTools#nextVector3DWithFixedLength(Random, double)} with a length of 1.0.
     * </ul>
     * 
-    * @param random the random generator to use.
-    * @param minRadius the minimum value for the radius.
-    * @param maxRadius the maximum value for the radius.
+    * @param random        the random generator to use.
+    * @param minRadius     the minimum value for the radius.
+    * @param maxRadius     the maximum value for the radius.
     * @param minTubeRadius the minimum value for the tube radius.
     * @param maxTubeRadius the maximum value for the tube radius.
     * @return the random capsule 3D.
     * @throws RuntimeException if {@code minRadius > maxRadius} or
-    *            {@code minTubeRadius > maxTubeRadius}.
+    *                          {@code minTubeRadius > maxTubeRadius}.
     */
    public static Torus3D nextTorus3D(Random random, double minRadius, double maxRadius, double minTubeRadius, double maxTubeRadius)
    {
-      return new Torus3D(EuclidCoreRandomTools.nextPoint3D(random), EuclidCoreRandomTools.nextVector3D(random),
+      return new Torus3D(EuclidCoreRandomTools.nextPoint3D(random),
+                         EuclidCoreRandomTools.nextVector3D(random),
                          EuclidCoreRandomTools.nextDouble(random, minRadius, maxRadius),
                          EuclidCoreRandomTools.nextDouble(random, minTubeRadius, maxTubeRadius));
    }
@@ -365,7 +376,7 @@ public class EuclidShapeRandomTools
     * Generates a random face 3D by defining a random circle onto which the vertices are randomly
     * positioned.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
     * @return the random face.
     */
@@ -378,10 +389,10 @@ public class EuclidShapeRandomTools
     * Generates a random face 3D by defining a random circle onto which the vertices are randomly
     * positioned.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
-    * @param maxEdgeLength maximum distance between two successive vertices constraining the size of
-    *           the random circle.
+    * @param random           the random generator to use.
+    * @param centerMinMax     the maximum absolute value for each coordinates of the circle's center.
+    * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
+    *                         the random circle.
     * @param numberOfVertices the size of the convex polygon.
     * @return the random face.
     */
@@ -394,12 +405,13 @@ public class EuclidShapeRandomTools
     * Generates a random face 3D by defining a random circle onto which the vertices are randomly
     * positioned.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
-    * @param maxEdgeLength maximum distance between two successive vertices constraining the size of
-    *           the random circle.
+    * @param random           the random generator to use.
+    * @param centerMinMax     the maximum absolute value for each coordinates of the circle's center.
+    * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
+    *                         the random circle.
     * @param numberOfVertices the size of the convex polygon.
-    * @param faceNormal the normal of the face and the axis of revolution of the circle. Not modified.
+    * @param faceNormal       the normal of the face and the axis of revolution of the circle. Not
+    *                         modified.
     * @return the random face.
     */
    public static Face3D nextCircleBasedFace3D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices, Vector3DReadOnly faceNormal)
@@ -414,18 +426,20 @@ public class EuclidShapeRandomTools
     * Generates a random convex polygon 3D by defining a random circle onto which the vertices are
     * randomly positioned.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
-    * @param maxEdgeLength maximum distance between two successive vertices constraining the size of
-    *           the random circle.
+    * @param random           the random generator to use.
+    * @param centerMinMax     the maximum absolute value for each coordinates of the circle's center.
+    * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
+    *                         the random circle.
     * @param numberOfVertices the size of the convex polygon.
-    * @param planeNormal defines the normal of the plane onto which the vertices are positioned.
+    * @param planeNormal      defines the normal of the plane onto which the vertices are positioned.
     * @return the random convex polygon 3D.
     */
    public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices,
                                                               Vector3DReadOnly planeNormal)
    {
-      List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, centerMinMax, maxEdgeLength,
+      List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random,
+                                                                                                          centerMinMax,
+                                                                                                          maxEdgeLength,
                                                                                                           numberOfVertices);
       List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
       RigidBodyTransform transform = new RigidBodyTransform();
@@ -477,22 +491,22 @@ public class EuclidShapeRandomTools
    {
       switch (random.nextInt(7))
       {
-      case 0:
-         return nextConeConvexPolytope3D(random);
-      case 1:
-         return nextCubeConvexPolytope3D(random);
-      case 2:
-         return nextCylinderConvexPolytope3D(random);
-      case 3:
-         return nextIcosahedronBasedConvexPolytope3D(random);
-      case 4:
-         return nextIcoSphereBasedConvexPolytope3D(random);
-      case 5:
-         return nextPointCloudBasedConvexPolytope3D(random);
-      case 6:
-         return nextPyramidConvexPolytope3D(random);
-      default:
-         throw new RuntimeException("Unexpected state.");
+         case 0:
+            return nextConeConvexPolytope3D(random);
+         case 1:
+            return nextCubeConvexPolytope3D(random);
+         case 2:
+            return nextCylinderConvexPolytope3D(random);
+         case 3:
+            return nextIcosahedronBasedConvexPolytope3D(random);
+         case 4:
+            return nextIcoSphereBasedConvexPolytope3D(random);
+         case 5:
+            return nextPointCloudBasedConvexPolytope3D(random);
+         case 6:
+            return nextPyramidConvexPolytope3D(random);
+         default:
+            throw new RuntimeException("Unexpected state.");
       }
    }
 
@@ -513,24 +527,24 @@ public class EuclidShapeRandomTools
    {
       switch (random.nextInt(8))
       {
-      case 0:
-         return nextConeConvexPolytope3D(random);
-      case 1:
-         return nextCubeConvexPolytope3D(random);
-      case 2:
-         return nextCylinderConvexPolytope3D(random);
-      case 3:
-         return nextIcosahedronBasedConvexPolytope3D(random);
-      case 4:
-         return nextIcoSphereBasedConvexPolytope3D(random);
-      case 5:
-         return nextPointCloudBasedConvexPolytope3D(random, 5.0, 5.0, random.nextInt(101));
-      case 6:
-         return nextPyramidConvexPolytope3D(random);
-      case 7:
-         return nextSingleEdgeConvexPolytope3D(random);
-      default:
-         throw new RuntimeException("Unexpected state.");
+         case 0:
+            return nextConeConvexPolytope3D(random);
+         case 1:
+            return nextCubeConvexPolytope3D(random);
+         case 2:
+            return nextCylinderConvexPolytope3D(random);
+         case 3:
+            return nextIcosahedronBasedConvexPolytope3D(random);
+         case 4:
+            return nextIcoSphereBasedConvexPolytope3D(random);
+         case 5:
+            return nextPointCloudBasedConvexPolytope3D(random, 5.0, 5.0, random.nextInt(101));
+         case 6:
+            return nextPyramidConvexPolytope3D(random);
+         case 7:
+            return nextSingleEdgeConvexPolytope3D(random);
+         default:
+            throw new RuntimeException("Unexpected state.");
       }
    }
 
@@ -548,7 +562,7 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope by discretizing a randomly generated cone 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the cone's base center.
     * @return the random convex polytope 3D.
     */
@@ -560,12 +574,12 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope by discretizing a randomly generated cone 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the cone's base center.
-    * @param heightMin the minimum value for the height of the cone.
-    * @param heightMax the maximum value for the height of the cone.
-    * @param radiusMin the minimum value for the radius of the cone base.
-    * @param radiusMax the maximum value for the radius of the cone base.
+    * @param heightMin    the minimum value for the height of the cone.
+    * @param heightMax    the maximum value for the height of the cone.
+    * @param radiusMin    the minimum value for the radius of the cone base.
+    * @param radiusMax    the maximum value for the radius of the cone base.
     * @param divisionsMin the minimum number of divisions for discretizing the cone.
     * @param divisionsMax the maximum number of divisions for discretizing the cone.
     * @return the random convex polytope 3D.
@@ -596,9 +610,9 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cube 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
+    *                     centroid.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextCubeConvexPolytope3D(Random random, double centerMinMax)
@@ -609,9 +623,9 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cube 3D.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
+    * @param random        the random generator to use.
+    * @param centerMinMax  the maximum absolute value for each coordinate for the convex polytope's
+    *                      centroid.
     * @param edgeLengthMin the minimum value for the cube's edge length.
     * @param edgeLengthMax the maximum value for the cube's edge length.
     * @return the random convex polytope 3D.
@@ -639,9 +653,9 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cylinder 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
+    *                     centroid.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextCylinderConvexPolytope3D(Random random, double centerMinMax)
@@ -652,13 +666,13 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cylinder 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
-    * @param lengthMin the minimum value for the length of the cylinder.
-    * @param lengthMax the maximum value for the length of the cylinder.
-    * @param radiusMin the minimum value for the radius of the cylinder.
-    * @param radiusMax the maximum value for the radius of the cylinder.
+    *                     centroid.
+    * @param lengthMin    the minimum value for the length of the cylinder.
+    * @param lengthMax    the maximum value for the length of the cylinder.
+    * @param radiusMin    the minimum value for the radius of the cylinder.
+    * @param radiusMax    the maximum value for the radius of the cylinder.
     * @param divisionsMin the minimum number of divisions for discretizing the cylinder.
     * @param divisionsMax the maximum number of divisions for discretizing the cylinder.
     * @return the random convex polytope 3D.
@@ -689,9 +703,9 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated icosahedron 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
+    *                     centroid.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextIcosahedronBasedConvexPolytope3D(Random random, double centerMinMax)
@@ -702,11 +716,13 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated icosahedron 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
-    * @param radiusMin the minimum value for the radius of the circumscribed sphere of the icosahedron.
-    * @param radiusMax the maximum value for the radius of the circumscribed sphere of the icosahedron.
+    *                     centroid.
+    * @param radiusMin    the minimum value for the radius of the circumscribed sphere of the
+    *                     icosahedron.
+    * @param radiusMax    the maximum value for the radius of the circumscribed sphere of the
+    *                     icosahedron.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextIcosahedronBasedConvexPolytope3D(Random random, double centerMinMax, double radiusMin, double radiusMax)
@@ -729,9 +745,9 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated ico-sphere 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
+    *                     centroid.
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
@@ -743,11 +759,11 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated ico-sphere 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
-    * @param radiusMin the minimum value for the radius of the ico-sphere.
-    * @param radiusMax the maximum value for the radius of the ico-sphere.
+    *                     centroid.
+    * @param radiusMin    the minimum value for the radius of the ico-sphere.
+    * @param radiusMax    the maximum value for the radius of the ico-sphere.
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
@@ -759,12 +775,12 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated ico-sphere 3D.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
+    * @param random         the random generator to use.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
     * @param recursionLevel the recursion level that defines the resolution of the ico-sphere.
-    * @param radiusMin the minimum value for the radius of the ico-sphere.
-    * @param radiusMax the maximum value for the radius of the ico-sphere.
+    * @param radiusMin      the minimum value for the radius of the ico-sphere.
+    * @param radiusMax      the maximum value for the radius of the ico-sphere.
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
@@ -793,9 +809,9 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pointcloud 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
+    *                     centroid.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextPointCloudBasedConvexPolytope3D(Random random, double centerMinMax)
@@ -806,10 +822,10 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pointcloud 3D.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
-    * @param minMax the range of the point cloud in the three directions.
+    *                     centroid.
+    * @param minMax       the range of the point cloud in the three directions.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextPointCloudBasedConvexPolytope3D(Random random, double centerMinMax, double minMax)
@@ -820,18 +836,20 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pointcloud 3D.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *           centroid.
-    * @param minMax the range of the point cloud in the three directions.
+    * @param random                 the random generator to use.
+    * @param centerMinMax           the maximum absolute value for each coordinate for the convex
+    *                               polytope's centroid.
+    * @param minMax                 the range of the point cloud in the three directions.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
-    *           the random convex polytope. The size of the resulting convex polytope will be less than
-    *           {@code numberOfPossiblePoints}.
+    *                               the random convex polytope. The size of the resulting convex
+    *                               polytope will be less than {@code numberOfPossiblePoints}.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextPointCloudBasedConvexPolytope3D(Random random, double centerMinMax, double minMax, int numberOfPossiblePoints)
    {
-      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(EuclidGeometryRandomTools.nextPointCloud3D(random, centerMinMax, minMax,
+      return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(EuclidGeometryRandomTools.nextPointCloud3D(random,
+                                                                                                                 centerMinMax,
+                                                                                                                 minMax,
                                                                                                                  numberOfPossiblePoints)));
    }
 
@@ -849,7 +867,7 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pyramid.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the pyramid's base center.
     * @return the random convex polytope 3D.
     */
@@ -861,14 +879,14 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pyramid.
     * 
-    * @param random the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the pyramid's base center.
-    * @param heightMin the minimum value for the height of the pyramid.
-    * @param heightMax the maximum value for the height of the pyramid.
+    * @param random        the random generator to use.
+    * @param centerMinMax  the maximum absolute value for each coordinate of the pyramid's base center.
+    * @param heightMin     the minimum value for the height of the pyramid.
+    * @param heightMax     the maximum value for the height of the pyramid.
     * @param baseLengthMin the minimum value for the length of the pyramid's base.
     * @param baseLengthMax the maximum value for the length of the pyramid's base.
-    * @param baseWidthMin the minimum value for the width of the pyramid's base.
-    * @param baseWidthMax the maximum value for the width of the pyramid's base.
+    * @param baseWidthMin  the minimum value for the width of the pyramid's base.
+    * @param baseWidthMax  the maximum value for the width of the pyramid's base.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextPyramidConvexPolytope3D(Random random, double centerMinMax, double heightMin, double heightMax, double baseLengthMin,
@@ -897,7 +915,7 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a single randomly generated edge.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the edge's center.
     * @return the random convex polytope 3D.
     */
@@ -909,9 +927,9 @@ public class EuclidShapeRandomTools
    /**
     * Generates a convex polytope from a single randomly generated edge.
     * 
-    * @param random the random generator to use.
+    * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the edge's center.
-    * @param minMax the range of the egde in the three directions.
+    * @param minMax       the range of the egde in the three directions.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextSingleEdgeConvexPolytope3D(Random random, double centerMinMax, double minMax)
@@ -928,7 +946,7 @@ public class EuclidShapeRandomTools
     * Generates a convex polytope from a randomly generated tetrahedron that contains the given point.
     * 
     * @param random the random generator to use.
-    * @param point the point the tetrahedron must contain. Not modified.
+    * @param point  the point the tetrahedron must contain. Not modified.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextTetrahedronContainingPoint3D(Random random, Point3DReadOnly point)
@@ -940,7 +958,7 @@ public class EuclidShapeRandomTools
     * Generates a convex polytope from a randomly generated tetrahedron that contains the given point.
     * 
     * @param random the random generator to use.
-    * @param point the point the tetrahedron must contain. Not modified.
+    * @param point  the point the tetrahedron must contain. Not modified.
     * @param minMax the range of the tetrahedron in the three directions.
     * @return the random convex polytope 3D.
     */

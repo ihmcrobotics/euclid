@@ -88,56 +88,56 @@ public interface Matrix3DReadOnly
    /**
     * Retrieves and returns a coefficient of this matrix given its row and column indices.
     *
-    * @param row the row of the coefficient to return.
+    * @param row    the row of the coefficient to return.
     * @param column the column of the coefficient to return.
     * @return the coefficient's value.
     * @throws ArrayIndexOutOfBoundsException if either {@code row} &notin; [0, 2] or {@code column}
-    *            &notin; [0, 2].
+    *                                        &notin; [0, 2].
     */
    default double getElement(int row, int column)
    {
       switch (row)
       {
-      case 0:
-         switch (column)
-         {
          case 0:
-            return getM00();
+            switch (column)
+            {
+               case 0:
+                  return getM00();
+               case 1:
+                  return getM01();
+               case 2:
+                  return getM02();
+               default:
+                  throw Matrix3DTools.columnOutOfBoundsException(2, column);
+            }
          case 1:
-            return getM01();
-         case 2:
-            return getM02();
-         default:
-            throw Matrix3DTools.columnOutOfBoundsException(2, column);
-         }
-      case 1:
-         switch (column)
-         {
-         case 0:
-            return getM10();
-         case 1:
-            return getM11();
-         case 2:
-            return getM12();
-         default:
-            throw Matrix3DTools.columnOutOfBoundsException(2, column);
-         }
+            switch (column)
+            {
+               case 0:
+                  return getM10();
+               case 1:
+                  return getM11();
+               case 2:
+                  return getM12();
+               default:
+                  throw Matrix3DTools.columnOutOfBoundsException(2, column);
+            }
 
-      case 2:
-         switch (column)
-         {
-         case 0:
-            return getM20();
-         case 1:
-            return getM21();
          case 2:
-            return getM22();
-         default:
-            throw Matrix3DTools.columnOutOfBoundsException(2, column);
-         }
+            switch (column)
+            {
+               case 0:
+                  return getM20();
+               case 1:
+                  return getM21();
+               case 2:
+                  return getM22();
+               default:
+                  throw Matrix3DTools.columnOutOfBoundsException(2, column);
+            }
 
-      default:
-         throw Matrix3DTools.rowOutOfBoundsException(2, row);
+         default:
+            throw Matrix3DTools.rowOutOfBoundsException(2, row);
       }
    }
 
@@ -163,7 +163,7 @@ public interface Matrix3DReadOnly
     * Packs the coefficients of this matrix into a row-major 1D array starting at the given index
     * {@code startIndex}.
     *
-    * @param startIndex index in the array to store the first coefficient of this matrix.
+    * @param startIndex        index in the array to store the first coefficient of this matrix.
     * @param matrixArrayToPack the array in which the coefficients of this matrix are stored. Modified.
     */
    default void get(int startIndex, double[] matrixArrayToPack)
@@ -183,7 +183,7 @@ public interface Matrix3DReadOnly
     * Packs the coefficients of this matrix into a dense-matrix.
     *
     * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
-    *           Modified.
+    *                     Modified.
     */
    default void get(DenseMatrix64F matrixToPack)
    {
@@ -202,10 +202,10 @@ public interface Matrix3DReadOnly
     * Packs the coefficients of this matrix into a dense-matrix given index offsets for the row and the
     * column.
     *
-    * @param startRow the first row index to start writing in the dense-matrix.
-    * @param startColumn the first column index to start writing in the dense-matrix.
+    * @param startRow     the first row index to start writing in the dense-matrix.
+    * @param startColumn  the first column index to start writing in the dense-matrix.
     * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
-    *           Modified.
+    *                     Modified.
     */
    default void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
    {
@@ -227,7 +227,7 @@ public interface Matrix3DReadOnly
    /**
     * Packs a column of this matrix into an array.
     *
-    * @param column the index of the column to pack.
+    * @param column            the index of the column to pack.
     * @param columnArrayToPack the array in which the column of this matrix is stored. Modified.
     * @throws ArrayIndexOutOfBoundsException if {@code column} &notin; [0, 2].
     */
@@ -235,30 +235,30 @@ public interface Matrix3DReadOnly
    {
       switch (column)
       {
-      case 0:
-         columnArrayToPack[0] = getM00();
-         columnArrayToPack[1] = getM10();
-         columnArrayToPack[2] = getM20();
-         return;
-      case 1:
-         columnArrayToPack[0] = getM01();
-         columnArrayToPack[1] = getM11();
-         columnArrayToPack[2] = getM21();
-         return;
-      case 2:
-         columnArrayToPack[0] = getM02();
-         columnArrayToPack[1] = getM12();
-         columnArrayToPack[2] = getM22();
-         return;
-      default:
-         throw Matrix3DTools.columnOutOfBoundsException(2, column);
+         case 0:
+            columnArrayToPack[0] = getM00();
+            columnArrayToPack[1] = getM10();
+            columnArrayToPack[2] = getM20();
+            return;
+         case 1:
+            columnArrayToPack[0] = getM01();
+            columnArrayToPack[1] = getM11();
+            columnArrayToPack[2] = getM21();
+            return;
+         case 2:
+            columnArrayToPack[0] = getM02();
+            columnArrayToPack[1] = getM12();
+            columnArrayToPack[2] = getM22();
+            return;
+         default:
+            throw Matrix3DTools.columnOutOfBoundsException(2, column);
       }
    }
 
    /**
     * Packs a column of this matrix into a 3D tuple.
     *
-    * @param column the index of the column to pack.
+    * @param column       the index of the column to pack.
     * @param columnToPack the tuple in which the column of this matrix is stored. Modified.
     * @throws ArrayIndexOutOfBoundsException if {@code column} &notin; [0, 2].
     */
@@ -266,30 +266,30 @@ public interface Matrix3DReadOnly
    {
       switch (column)
       {
-      case 0:
-         columnToPack.setX(getM00());
-         columnToPack.setY(getM10());
-         columnToPack.setZ(getM20());
-         return;
-      case 1:
-         columnToPack.setX(getM01());
-         columnToPack.setY(getM11());
-         columnToPack.setZ(getM21());
-         return;
-      case 2:
-         columnToPack.setX(getM02());
-         columnToPack.setY(getM12());
-         columnToPack.setZ(getM22());
-         return;
-      default:
-         throw Matrix3DTools.columnOutOfBoundsException(2, column);
+         case 0:
+            columnToPack.setX(getM00());
+            columnToPack.setY(getM10());
+            columnToPack.setZ(getM20());
+            return;
+         case 1:
+            columnToPack.setX(getM01());
+            columnToPack.setY(getM11());
+            columnToPack.setZ(getM21());
+            return;
+         case 2:
+            columnToPack.setX(getM02());
+            columnToPack.setY(getM12());
+            columnToPack.setZ(getM22());
+            return;
+         default:
+            throw Matrix3DTools.columnOutOfBoundsException(2, column);
       }
    }
 
    /**
     * Packs a row of this matrix into an array.
     *
-    * @param row the index of the row to pack.
+    * @param row            the index of the row to pack.
     * @param rowArrayToPack the array in which the row of this matrix is stored. Modified.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
     */
@@ -297,30 +297,30 @@ public interface Matrix3DReadOnly
    {
       switch (row)
       {
-      case 0:
-         rowArrayToPack[0] = getM00();
-         rowArrayToPack[1] = getM01();
-         rowArrayToPack[2] = getM02();
-         return;
-      case 1:
-         rowArrayToPack[0] = getM10();
-         rowArrayToPack[1] = getM11();
-         rowArrayToPack[2] = getM12();
-         return;
-      case 2:
-         rowArrayToPack[0] = getM20();
-         rowArrayToPack[1] = getM21();
-         rowArrayToPack[2] = getM22();
-         return;
-      default:
-         throw Matrix3DTools.rowOutOfBoundsException(2, row);
+         case 0:
+            rowArrayToPack[0] = getM00();
+            rowArrayToPack[1] = getM01();
+            rowArrayToPack[2] = getM02();
+            return;
+         case 1:
+            rowArrayToPack[0] = getM10();
+            rowArrayToPack[1] = getM11();
+            rowArrayToPack[2] = getM12();
+            return;
+         case 2:
+            rowArrayToPack[0] = getM20();
+            rowArrayToPack[1] = getM21();
+            rowArrayToPack[2] = getM22();
+            return;
+         default:
+            throw Matrix3DTools.rowOutOfBoundsException(2, row);
       }
    }
 
    /**
     * Packs a row of this matrix into a 3D tuple.
     *
-    * @param row the index of the row to pack.
+    * @param row       the index of the row to pack.
     * @param rowToPack the array in which the row of this matrix is stored. Modified.
     * @throws ArrayIndexOutOfBoundsException if {@code row} &notin; [0, 2].
     */
@@ -328,23 +328,23 @@ public interface Matrix3DReadOnly
    {
       switch (row)
       {
-      case 0:
-         rowToPack.setX(getM00());
-         rowToPack.setY(getM01());
-         rowToPack.setZ(getM02());
-         return;
-      case 1:
-         rowToPack.setX(getM10());
-         rowToPack.setY(getM11());
-         rowToPack.setZ(getM12());
-         return;
-      case 2:
-         rowToPack.setX(getM20());
-         rowToPack.setY(getM21());
-         rowToPack.setZ(getM22());
-         return;
-      default:
-         throw Matrix3DTools.rowOutOfBoundsException(2, row);
+         case 0:
+            rowToPack.setX(getM00());
+            rowToPack.setY(getM01());
+            rowToPack.setZ(getM02());
+            return;
+         case 1:
+            rowToPack.setX(getM10());
+            rowToPack.setY(getM11());
+            rowToPack.setZ(getM12());
+            return;
+         case 2:
+            rowToPack.setX(getM20());
+            rowToPack.setY(getM21());
+            rowToPack.setZ(getM22());
+            return;
+         default:
+            throw Matrix3DTools.rowOutOfBoundsException(2, row);
       }
    }
 
@@ -590,7 +590,7 @@ public interface Matrix3DReadOnly
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     */
    default void transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -618,7 +618,7 @@ public interface Matrix3DReadOnly
     * tupleTransformed = tupleTransformed + this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to add the result to. Modified.
     */
    default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
@@ -647,7 +647,7 @@ public interface Matrix3DReadOnly
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to store the result. Modified.
     * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY plane.
     */
@@ -662,11 +662,11 @@ public interface Matrix3DReadOnly
     * tupleToTransform = this * tupleToTransform
     * </p>
     *
-    * @param tupleToTransform the tuple to transform. Modified.
+    * @param tupleToTransform          the tuple to transform. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
-    *           transformation in the XY plane.
+    *                                  transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
-    *            not represent a transformation in the XY plane.
+    *                               not represent a transformation in the XY plane.
     */
    default void transform(Tuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
    {
@@ -680,12 +680,12 @@ public interface Matrix3DReadOnly
     * tupleTransformed = this * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple to store the result. Modified.
+    * @param tupleOriginal            the tuple to transform. Not modified.
+    * @param tupleTransformed         the tuple to store the result. Modified.
     * @param checkIfRotationInXYPlane whether this method should assert that this matrix represents a
-    *           transformation in the XY plane.
+    *                                 transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
-    *            not represent a transformation in the XY plane.
+    *                               not represent a transformation in the XY plane.
     */
    default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfRotationInXYPlane)
    {
@@ -713,7 +713,7 @@ public interface Matrix3DReadOnly
     * matrixTransformed = this * matrixOriginal * this<sup>-1</sup>
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
@@ -741,7 +741,7 @@ public interface Matrix3DReadOnly
     * vectorTransformed.xyz = this * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     */
    default void transform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
@@ -770,7 +770,7 @@ public interface Matrix3DReadOnly
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
@@ -783,7 +783,8 @@ public interface Matrix3DReadOnly
     * </p>
     *
     * @param tupleToTransform the tuple to transform. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY plane.
+    * @throws NotAMatrix2DException   if this matrix does not represent a transformation in the XY
+    *                                 plane.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
    default void inverseTransform(Tuple2DBasics tupleToTransform)
@@ -798,9 +799,10 @@ public interface Matrix3DReadOnly
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
+    * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple in which the result is stored. Modified.
-    * @throws NotAMatrix2DException if this matrix does not represent a transformation in the XY plane.
+    * @throws NotAMatrix2DException   if this matrix does not represent a transformation in the XY
+    *                                 plane.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
@@ -814,11 +816,11 @@ public interface Matrix3DReadOnly
     * tupleToTransform = this<sup>-1</sup> * tupleToTransform
     * </p>
     *
-    * @param tupleToTransform the tuple to transform. Modified.
+    * @param tupleToTransform          the tuple to transform. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
-    *           transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
-    *            not represent a transformation in the XY plane.
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException   if {@code checkIfTransformInXYPlane == true} and this matrix does
+    *                                 not represent a transformation in the XY plane.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
    default void inverseTransform(Tuple2DBasics tupleToTransform, boolean checkIfTransformInXYPlane)
@@ -833,12 +835,12 @@ public interface Matrix3DReadOnly
     * tupleTransformed = this<sup>-1</sup> * tupleOriginal
     * </p>
     *
-    * @param tupleOriginal the tuple to transform. Not modified.
-    * @param tupleTransformed the tuple in which the result is stored. Modified.
+    * @param tupleOriginal             the tuple to transform. Not modified.
+    * @param tupleTransformed          the tuple in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that this matrix represents a
-    *           transformation in the XY plane.
-    * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and this matrix does
-    *            not represent a transformation in the XY plane.
+    *                                  transformation in the XY plane.
+    * @throws NotAMatrix2DException   if {@code checkIfTransformInXYPlane == true} and this matrix does
+    *                                 not represent a transformation in the XY plane.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
    void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane);
@@ -865,7 +867,7 @@ public interface Matrix3DReadOnly
     * matrixTransformed = this<sup>-1</sup> * matrixOriginal * this
     * </p>
     *
-    * @param matrixOriginal the matrix to transform. Not modified.
+    * @param matrixOriginal    the matrix to transform. Not modified.
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
@@ -894,7 +896,7 @@ public interface Matrix3DReadOnly
     * vectorTransformed.xyz = this<sup>-1</sup> * vectorOriginal.xyz
     * </p>
     *
-    * @param vectorOriginal the vector to transform. Not modified.
+    * @param vectorOriginal    the vector to transform. Not modified.
     * @param vectorTransformed the vector in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
@@ -919,7 +921,7 @@ public interface Matrix3DReadOnly
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other the other matrix to compare against this. Not modified.
+    * @param other   the other matrix to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two matrices are equal, {@code false} otherwise.
     */

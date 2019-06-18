@@ -26,7 +26,7 @@ public interface FixedFrameVector2DBasics extends FrameVector2DReadOnly, FixedFr
     *
     * @param other the other frame vector to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *            frame as {@code this}.
+    *                                         frame as {@code this}.
     */
    default void setAndNormalize(FrameVector2DReadOnly other)
    {

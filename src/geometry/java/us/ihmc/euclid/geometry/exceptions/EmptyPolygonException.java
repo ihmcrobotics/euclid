@@ -4,7 +4,6 @@ package us.ihmc.euclid.geometry.exceptions;
  * {@link RuntimeException} dedicated to improper use of an empty polygon.
  * 
  * @author Sylvain Bertrand
- *
  */
 public class EmptyPolygonException extends RuntimeException
 {

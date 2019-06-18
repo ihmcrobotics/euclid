@@ -19,8 +19,8 @@ public class TupleTools
    /**
     * Convenience method to calculate the dot product of two tuples.
     * 
-    * @param x the x-component of the first tuple.
-    * @param y the y-component of the first tuple.
+    * @param x     the x-component of the first tuple.
+    * @param y     the y-component of the first tuple.
     * @param tuple the second tuple. Not modified.
     * @return the value of the dot product.
     */
@@ -32,9 +32,9 @@ public class TupleTools
    /**
     * Convenience method to calculate the dot product of two tuples.
     * 
-    * @param x the x-component of the first tuple.
-    * @param y the y-component of the first tuple.
-    * @param z the z-component of the first tuple.
+    * @param x     the x-component of the first tuple.
+    * @param y     the y-component of the first tuple.
+    * @param z     the z-component of the first tuple.
     * @param tuple the second tuple. Not modified.
     * @return the value of the dot product.
     */
@@ -46,10 +46,10 @@ public class TupleTools
    /**
     * Convenience method to calculate the dot product of two tuples.
     * 
-    * @param x the x-component of the first tuple.
-    * @param y the y-component of the first tuple.
-    * @param z the z-component of the first tuple.
-    * @param s the s-component of the first tuple.
+    * @param x     the x-component of the first tuple.
+    * @param y     the y-component of the first tuple.
+    * @param z     the z-component of the first tuple.
+    * @param s     the s-component of the first tuple.
     * @param tuple the second tuple. Not modified.
     * @return the value of the dot product.
     */
@@ -85,8 +85,8 @@ public class TupleTools
    /**
     * Tests on a per component basis if the two given tuples are equal to an {@code epsilon}.
     *
-    * @param tuple1 the first tuple. Not modified.
-    * @param tuple2 the second tuple. Not modified.
+    * @param tuple1  the first tuple. Not modified.
+    * @param tuple2  the second tuple. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -104,8 +104,8 @@ public class TupleTools
    /**
     * Tests on a per component basis if the two given tuples are equal to an {@code epsilon}.
     *
-    * @param tuple1 the first tuple. Not modified.
-    * @param tuple2 the second tuple. Not modified.
+    * @param tuple1  the first tuple. Not modified.
+    * @param tuple2  the second tuple. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -126,8 +126,8 @@ public class TupleTools
    /**
     * Tests on a per component basis if the two given tuples are equal to an {@code epsilon}.
     *
-    * @param tuple1 the first tuple. Not modified.
-    * @param tuple2 the second tuple. Not modified.
+    * @param tuple1  the first tuple. Not modified.
+    * @param tuple2  the second tuple. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
@@ -151,7 +151,7 @@ public class TupleTools
    /**
     * Tests whether all the tuple's components are equal to zero to an {@code epsilon}.
     * 
-    * @param tuple the query. Not modified.
+    * @param tuple   the query. Not modified.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if all the tuple's components are considered to be equal to zero,
     *         {@code false} otherwise.
@@ -164,7 +164,7 @@ public class TupleTools
    /**
     * Tests whether all the tuple's components are equal to zero to an {@code epsilon}.
     * 
-    * @param tuple the query. Not modified.
+    * @param tuple   the query. Not modified.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if all the tuple's components are considered to be equal to zero,
     *         {@code false} otherwise.
@@ -177,7 +177,7 @@ public class TupleTools
    /**
     * Tests whether all the tuple's components are equal to zero to an {@code epsilon}.
     * 
-    * @param tuple the query. Not modified.
+    * @param tuple   the query. Not modified.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if all the tuple's components are considered to be equal to zero,
     *         {@code false} otherwise.

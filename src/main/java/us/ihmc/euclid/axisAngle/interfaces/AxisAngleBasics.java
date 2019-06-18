@@ -145,9 +145,9 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     * Sets this axis-angle to represent a new rotation of axis ({@code x}, {@code y}, {@code z}) and
     * angle of {@code angle}.
     *
-    * @param x x-component of the new axis.
-    * @param y y-component of the new axis.
-    * @param z z-component of the new axis.
+    * @param x     x-component of the new axis.
+    * @param y     y-component of the new axis.
+    * @param z     z-component of the new axis.
     * @param angle the new angle.
     */
    default void set(double x, double y, double z, double angle)
@@ -168,7 +168,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    /**
     * Sets the axis and the angle of this axis-angle.
     *
-    * @param axis the new axis. Not modified.
+    * @param axis  the new axis. Not modified.
     * @param angle the new angle.
     */
    default void set(Vector3DReadOnly axis, double angle)
@@ -222,7 +222,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     * <li>{@code this.setAngle(axisAngleArray[startIndex + 3]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex     the first index to start reading from in the array.
     * @param axisAngleArray the array containing the new values for this axis-angle. Not modified.
     */
    default void set(int startIndex, double[] axisAngleArray)
@@ -258,7 +258,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     * <li>{@code this.setAngle(axisAngleArray[startIndex + 3]);}
     * </ul>
     *
-    * @param startIndex the first index to start reading from in the array.
+    * @param startIndex     the first index to start reading from in the array.
     * @param axisAngleArray the array containing the new values for this axis-angle. Not modified.
     */
    default void set(int startIndex, float[] axisAngleArray)
@@ -337,20 +337,20 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    {
       switch (index)
       {
-      case 0:
-         setX(value);
-         break;
-      case 1:
-         setY(value);
-         break;
-      case 2:
-         setZ(value);
-         break;
-      case 3:
-         setAngle(value);
-         break;
-      default:
-         throw new IndexOutOfBoundsException(Integer.toString(index));
+         case 0:
+            setX(value);
+            break;
+         case 1:
+            setY(value);
+            break;
+         case 2:
+            setZ(value);
+            break;
+         case 3:
+            setAngle(value);
+            break;
+         default:
+            throw new IndexOutOfBoundsException(Integer.toString(index));
       }
    }
 

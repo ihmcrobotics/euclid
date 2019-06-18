@@ -65,10 +65,10 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
     * reference frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this frame tuple.
-    * @param x the new value for the x-component of this tuple.
-    * @param y the new value for the y-component of this tuple.
-    * @param z the new value for the z-component of this tuple.
-    * @param s the new value for the s-component of this tuple.
+    * @param x              the new value for the x-component of this tuple.
+    * @param y              the new value for the y-component of this tuple.
+    * @param z              the new value for the z-component of this tuple.
+    * @param s              the new value for the s-component of this tuple.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double x, double y, double z, double s)
    {
@@ -80,7 +80,7 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
     * Sets this frame tuple to {@code tuple4DReadOnly} and sets its current frame to
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame for this frame tuple.
+    * @param referenceFrame  the new reference frame for this frame tuple.
     * @param tuple4DReadOnly the tuple to copy the values from. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, Tuple4DReadOnly tuple4DReadOnly)
@@ -94,7 +94,8 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
     * array {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
+    * @param tupleArray     the array containing the new values for this tuple's components. Not
+    *                       modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, double[] tupleArray)
    {
@@ -107,8 +108,9 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
     * array {@code tupleArray} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param startIndex the first index to start reading from in the array.
-    * @param tupleArray the array containing the new values for this tuple's components. Not modified.
+    * @param startIndex     the first index to start reading from in the array.
+    * @param tupleArray     the array containing the new values for this tuple's components. Not
+    *                       modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startIndex, double[] tupleArray)
    {
@@ -122,8 +124,8 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    * @param matrix         the column vector containing the new values for this tuple's components.
+    *                       Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
    {
@@ -137,9 +139,9 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param startRow the first row index to start reading in the dense-matrix.
-    * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    * @param startRow       the first row index to start reading in the dense-matrix.
+    * @param matrix         the column vector containing the new values for this tuple's components.
+    *                       Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F matrix)
    {
@@ -153,10 +155,10 @@ public interface FrameTuple4DBasics extends FixedFrameTuple4DBasics
     * tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param startRow the first row index to start reading in the dense-matrix.
-    * @param column the column index to read in the dense-matrix.
-    * @param matrix the column vector containing the new values for this tuple's components. Not
-    *           modified.
+    * @param startRow       the first row index to start reading in the dense-matrix.
+    * @param column         the column index to read in the dense-matrix.
+    * @param matrix         the column vector containing the new values for this tuple's components.
+    *                       Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F matrix)
    {

@@ -573,7 +573,9 @@ public class Torus3DTest
       for (int i = 0; i < ITERATIONS; i++)
       { // Comparing to Cylinder3D, should be the same
          Torus3D torus3D = EuclidShapeRandomTools.nextTorus3D(random);
-         Cylinder3D cylinder3D = new Cylinder3D(torus3D.getPosition(), torus3D.getAxis(), torus3D.getTubeRadius(),
+         Cylinder3D cylinder3D = new Cylinder3D(torus3D.getPosition(),
+                                                torus3D.getAxis(),
+                                                torus3D.getTubeRadius(),
                                                 torus3D.getRadius() + torus3D.getTubeRadius());
 
          BoundingBox3DReadOnly expectedBoundingBox = cylinder3D.getBoundingBox();

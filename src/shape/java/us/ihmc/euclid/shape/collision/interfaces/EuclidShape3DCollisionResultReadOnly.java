@@ -122,7 +122,7 @@ public interface EuclidShape3DCollisionResultReadOnly
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other the other collision result to compare against this. Not modified.
+    * @param other   the other collision result to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two collision results are equal component-wise, {@code false}
     *         otherwise.
@@ -163,7 +163,7 @@ public interface EuclidShape3DCollisionResultReadOnly
    /**
     * Tests each feature of {@code this} against {@code other} for geometric similarity.
     * 
-    * @param other the other collision result to compare against this. Not modified.
+    * @param other   the other collision result to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each feature.
     * @return {@code true} if the two collision results are considered geometrically similar,
     *         {@code false} otherwise.
