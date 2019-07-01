@@ -88,6 +88,14 @@ public class Vector3D implements Vector3DBasics, GeometryObject<Vector3D>
       Vector3DBasics.super.set(other);
    }
 
+   @Override
+   public void set(double x, double y, double z)
+   {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+   }
+
    /**
     * Sets the x-component of this vector.
     *

@@ -125,8 +125,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void clipToMinMax(double min, double max)
    {
-      clipToMax(max);
-      clipToMin(min);
+      set(Math.max(min, Math.min(max, getX())), Math.max(min, Math.min(max, getY())), Math.max(min, Math.min(max, getZ())));
    }
 
    /**
@@ -183,8 +182,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly tuple2DReadOnly)
    {
-      setX(tuple2DReadOnly.getX());
-      setY(tuple2DReadOnly.getY());
+      set(tuple2DReadOnly.getX(), tuple2DReadOnly.getY(), getZ());
    }
 
    /**
@@ -196,9 +194,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly tuple2DReadOnly, double z)
    {
-      setX(tuple2DReadOnly.getX());
-      setY(tuple2DReadOnly.getY());
-      setZ(z);
+      set(tuple2DReadOnly.getX(), tuple2DReadOnly.getY(), z);
    }
 
    /**
@@ -266,7 +262,10 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void set(DenseMatrix64F matrix)
    {
-      set(matrix.get(0, 0), matrix.get(1, 0), matrix.get(2, 0));
+      if (matrix.getNumCols() < 1 || matrix.getNumRows() < 3)
+         throw new IllegalArgumentException("Matrix is too small: nRows = " + matrix.getNumRows() + ", nCols = " + matrix.getNumCols());
+
+      set(matrix.unsafe_get(0, 0), matrix.unsafe_get(1, 0), matrix.unsafe_get(2, 0));
    }
 
    /**
@@ -279,7 +278,10 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void set(int startRow, DenseMatrix64F matrix)
    {
-      set(matrix.get(startRow++, 0), matrix.get(startRow++, 0), matrix.get(startRow, 0));
+      if (matrix.getNumCols() < 1 || matrix.getNumRows() < startRow + 3)
+         throw new IllegalArgumentException("Matrix is too small: nRows = " + matrix.getNumRows() + ", nCols = " + matrix.getNumCols());
+
+      set(matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow, 0));
    }
 
    /**
@@ -293,7 +295,10 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void set(int startRow, int column, DenseMatrix64F matrix)
    {
-      set(matrix.get(startRow++, column), matrix.get(startRow++, column), matrix.get(startRow, column));
+      if (matrix.getNumCols() <= column || matrix.getNumRows() < startRow + 3)
+         throw new IllegalArgumentException("Matrix is too small: nRows = " + matrix.getNumRows() + ", nCols = " + matrix.getNumCols());
+
+      set(matrix.unsafe_get(startRow++, column), matrix.unsafe_get(startRow++, column), matrix.unsafe_get(startRow, column));
    }
 
    /**
@@ -358,8 +363,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void setAndClipToMinMax(double min, double max, Tuple3DReadOnly other)
    {
-      set(other);
-      clipToMinMax(min, max);
+      set(Math.max(min, Math.min(max, other.getX())), Math.max(min, Math.min(max, other.getY())), Math.max(min, Math.min(max, other.getZ())));
    }
 
    /**
@@ -548,8 +552,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void scaleAdd(double scalar, Tuple3DReadOnly other)
    {
-      scale(scalar);
-      add(other);
+      scaleAdd(scalar, this, other);
    }
 
    /**
@@ -581,8 +584,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void scaleSub(double scalar, Tuple3DReadOnly other)
    {
-      scale(scalar);
-      sub(other);
+      scaleSub(scalar, this, other);
    }
 
    /**

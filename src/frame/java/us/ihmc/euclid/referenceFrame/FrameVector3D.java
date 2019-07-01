@@ -6,8 +6,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -32,7 +32,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
    /** The vector holding the current components of this frame vector. */
-   private final Vector3D vector = new Vector3D();
+   private double x, y, z;
 
    /**
     * Creates a new frame vector and initializes it components to zero and its reference frame to
@@ -139,6 +139,14 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
       FrameVector3DBasics.super.set(other);
    }
 
+   @Override
+   public void set(double x, double y, double z)
+   {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+   }
+
    /**
     * Sets the reference frame of this vector without updating or modifying its x, y, and z components.
     *
@@ -158,7 +166,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public void setX(double x)
    {
-      vector.setX(x);
+      this.x = x;
    }
 
    /**
@@ -169,7 +177,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public void setY(double y)
    {
-      vector.setY(y);
+      this.y = y;
    }
 
    /**
@@ -180,7 +188,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public void setZ(double z)
    {
-      vector.setZ(z);
+      this.z = z;
    }
 
    /**
@@ -200,7 +208,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public double getX()
    {
-      return vector.getX();
+      return x;
    }
 
    /**
@@ -211,7 +219,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public double getY()
    {
-      return vector.getY();
+      return y;
    }
 
    /**
@@ -222,7 +230,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public double getZ()
    {
-      return vector.getZ();
+      return z;
    }
 
    /**
@@ -308,6 +316,10 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public int hashCode()
    {
-      return vector.hashCode();
+      long bits = 1L;
+      bits = EuclidHashCodeTools.addToHashCode(bits, x);
+      bits = EuclidHashCodeTools.addToHashCode(bits, y);
+      bits = EuclidHashCodeTools.addToHashCode(bits, z);
+      return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }

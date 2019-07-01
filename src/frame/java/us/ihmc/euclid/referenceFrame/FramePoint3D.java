@@ -6,8 +6,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -32,7 +32,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
    /** The point holding the current coordinates of this frame point. */
-   private final Point3D point = new Point3D();
+   private double x, y, z;
 
    /**
     * Creates a new frame point and initializes it coordinates to zero and its reference frame to
@@ -139,6 +139,14 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
       FramePoint3DBasics.super.set(other);
    }
 
+   @Override
+   public void set(double x, double y, double z)
+   {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+   }
+
    /**
     * Sets the reference frame of this point without updating or modifying its x, y, and z components.
     *
@@ -158,7 +166,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public void setX(double x)
    {
-      point.setX(x);
+      this.x = x;
    }
 
    /**
@@ -169,7 +177,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public void setY(double y)
    {
-      point.setY(y);
+      this.y = y;
    }
 
    /**
@@ -180,7 +188,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public void setZ(double z)
    {
-      point.setZ(z);
+      this.z = z;
    }
 
    /**
@@ -200,7 +208,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public double getX()
    {
-      return point.getX();
+      return x;
    }
 
    /**
@@ -211,7 +219,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public double getY()
    {
-      return point.getY();
+      return y;
    }
 
    /**
@@ -222,7 +230,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public double getZ()
    {
-      return point.getZ();
+      return z;
    }
 
    /**
@@ -305,6 +313,10 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public int hashCode()
    {
-      return point.hashCode();
+      long bits = 1L;
+      bits = EuclidHashCodeTools.addToHashCode(bits, x);
+      bits = EuclidHashCodeTools.addToHashCode(bits, y);
+      bits = EuclidHashCodeTools.addToHashCode(bits, z);
+      return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }
