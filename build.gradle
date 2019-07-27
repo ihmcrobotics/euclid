@@ -14,7 +14,7 @@ ihmc {
 }
 
 mainDependencies {
-    compile group: "org.ejml", name: "dense64", version: "0.30"
+    api("org.ejml:dense64:0.30")
 }
 
 geometryDependencies {
@@ -36,6 +36,6 @@ testDependencies {
     compile ihmc.sourceSetProject("frame")
     compile ihmc.sourceSetProject("shape")
 
-    compile group: "org.pitest", name: "pitest", version: "1.4.3"
-    compile group: "org.pitest", name: "pitest-command-line", version: "1.4.3"
+    api("org.pitest:pitest:1.4.3")
+    api("org.pitest:pitest-command-line:1.4.3")
 }
