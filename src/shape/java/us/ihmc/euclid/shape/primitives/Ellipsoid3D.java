@@ -3,7 +3,6 @@ package us.ihmc.euclid.shape.primitives;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
@@ -24,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  */
 public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3D>
 {
-   /** Pose of this box. */
+   /** Pose of this ellipsoid. */
    private final Shape3DPose pose = new Shape3DPose();
    /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
@@ -207,7 +206,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    @Override
    public boolean equals(Object object)
    {
-      if (object instanceof Box3DReadOnly)
+      if (object instanceof Ellipsoid3DReadOnly)
          return Ellipsoid3DBasics.super.equals((Ellipsoid3DReadOnly) object);
       else
          return false;
@@ -226,11 +225,11 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    }
 
    /**
-    * Provides a {@code String} representation of this box 3D as follows:<br>
+    * Provides a {@code String} representation of this ellipsoid 3D as follows:<br>
     * Ellipsoid 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136),
     * radii: ( 0.191, 0.719, 0.479 )]
     * 
-    * @return the {@code String} representing this box 3D.
+    * @return the {@code String} representing this ellipsoid 3D.
     */
    @Override
    public String toString()

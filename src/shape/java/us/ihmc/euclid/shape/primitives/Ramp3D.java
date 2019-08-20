@@ -3,7 +3,6 @@ package us.ihmc.euclid.shape.primitives;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
@@ -33,7 +32,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  */
 public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 {
-   /** Pose of this box. */
+   /** Pose of this ramp. */
    private final Shape3DPose pose = new Shape3DPose();
    /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
@@ -268,7 +267,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    @Override
    public boolean equals(Object object)
    {
-      if (object instanceof Box3DReadOnly)
+      if (object instanceof Ramp3DReadOnly)
          return Ramp3DBasics.super.equals((Ramp3DReadOnly) object);
       else
          return false;
@@ -287,11 +286,11 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    }
 
    /**
-    * Provides a {@code String} representation of this box 3D as follows:<br>
+    * Provides a {@code String} representation of this ramp 3D as follows:<br>
     * Ramp 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: (
     * 0.191, 0.719, 0.479 )]
     * 
-    * @return the {@code String} representing this box 3D.
+    * @return the {@code String} representing this ramp 3D.
     */
    @Override
    public String toString()
