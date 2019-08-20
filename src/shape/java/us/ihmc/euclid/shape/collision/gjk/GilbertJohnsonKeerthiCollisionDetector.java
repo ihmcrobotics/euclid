@@ -102,7 +102,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
-   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
+   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
       boolean areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
       resultToPack.setShapeA(shapeA);
