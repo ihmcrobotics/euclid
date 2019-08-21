@@ -45,6 +45,23 @@ public interface EuclidShape3DCollisionResultBasics extends EuclidShape3DCollisi
    Vector3DBasics getNormalOnB();
 
    /**
+    * Copies the values from {@code other} into {@code this}.
+    * 
+    * @param other the other object to copy the values from. Not modified.
+    */
+   default void set(EuclidShape3DCollisionResultReadOnly other)
+   {
+      setShapeA(other.getShapeA());
+      setShapeB(other.getShapeB());
+      setShapesAreColliding(other.areShapesColliding());
+      setSignedDistance(other.getSignedDistance());
+      getPointOnA().set(other.getPointOnA());
+      getNormalOnA().set(other.getNormalOnA());
+      getPointOnB().set(other.getPointOnB());
+      getNormalOnB().set(other.getNormalOnB());
+   }
+
+   /**
     * Sets the collision state between the two shapes.
     * 
     * @param shapesAreColliding whether the shapes are colliding or not.

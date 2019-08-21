@@ -905,8 +905,6 @@ public class EuclidShapeTools
       maxZ += cylinder3DPosition.getZ();
 
       boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
-
-      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
    }
 
    /**

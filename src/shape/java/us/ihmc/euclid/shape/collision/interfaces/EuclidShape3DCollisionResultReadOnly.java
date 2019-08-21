@@ -138,24 +138,16 @@ public interface EuclidShape3DCollisionResultReadOnly
       if (!EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
          return false;
 
-      if (getPointOnA().containsNaN() != other.getPointOnA().containsNaN())
-         return false;
-      else if (!getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
+      if (getPointOnA().containsNaN() ? !other.getPointOnA().containsNaN() : !getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
          return false;
 
-      if (getPointOnB().containsNaN() != other.getPointOnB().containsNaN())
-         return false;
-      else if (!getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
+      if (getPointOnB().containsNaN() ? !other.getPointOnB().containsNaN() : !getPointOnB().epsilonEquals(other.getPointOnB(), epsilon))
          return false;
 
-      if (getNormalOnA().containsNaN() != other.getNormalOnA().containsNaN())
-         return false;
-      else if (!getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
+      if (getNormalOnA().containsNaN() ? !other.getNormalOnA().containsNaN() : !getNormalOnA().epsilonEquals(other.getNormalOnA(), epsilon))
          return false;
 
-      if (getNormalOnB().containsNaN() != other.getNormalOnB().containsNaN())
-         return false;
-      else if (!getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
+      if (getNormalOnB().containsNaN() ? !other.getNormalOnB().containsNaN() : !getNormalOnB().epsilonEquals(other.getNormalOnB(), epsilon))
          return false;
       return true;
    }
@@ -191,24 +183,16 @@ public interface EuclidShape3DCollisionResultReadOnly
          if (getShapeB() != otherShapeB)
             return false;
 
-         if (getPointOnA().containsNaN() != otherPointOnA.containsNaN())
-            return false;
-         else if (!getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
+         if (getPointOnA().containsNaN() ? !otherPointOnA.containsNaN() : !getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
             return false;
 
-         if (getPointOnB().containsNaN() != otherPointOnB.containsNaN())
-            return false;
-         else if (!getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
+         if (getPointOnB().containsNaN() ? !otherPointOnB.containsNaN() : !getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
             return false;
 
-         if (getNormalOnA().containsNaN() != otherNormalOnA.containsNaN())
-            return false;
-         else if (!getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
+         if (getNormalOnA().containsNaN() ? !otherNormalOnA.containsNaN() : !getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
             return false;
 
-         if (getNormalOnB().containsNaN() != otherNormalOnB.containsNaN())
-            return false;
-         else if (!getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
+         if (getNormalOnB().containsNaN() ? !otherNormalOnB.containsNaN() : !getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
             return false;
 
          return true;
@@ -221,24 +205,16 @@ public interface EuclidShape3DCollisionResultReadOnly
          Vector3DReadOnly otherNormalOnA = swap ? other.getNormalOnB() : other.getNormalOnA();
          Vector3DReadOnly otherNormalOnB = swap ? other.getNormalOnA() : other.getNormalOnB();
 
-         if (getPointOnA().containsNaN() != otherPointOnA.containsNaN())
-            return false;
-         else if (!getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
+         if (getPointOnA().containsNaN() ? !otherPointOnA.containsNaN() : !getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
             return false;
 
-         if (getPointOnB().containsNaN() != otherPointOnB.containsNaN())
-            return false;
-         else if (!getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
+         if (getPointOnB().containsNaN() ? !otherPointOnB.containsNaN() : !getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
             return false;
 
-         if (getNormalOnA().containsNaN() != otherNormalOnA.containsNaN())
-            return false;
-         else if (!getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
+         if (getNormalOnA().containsNaN() ? !otherNormalOnA.containsNaN() : !getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
             return false;
 
-         if (getNormalOnB().containsNaN() != otherNormalOnB.containsNaN())
-            return false;
-         else if (!getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
+         if (getNormalOnB().containsNaN() ? !otherNormalOnB.containsNaN() : !getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
             return false;
 
          return true;

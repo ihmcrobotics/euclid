@@ -89,7 +89,7 @@ public class ExpandingPolytopeAlgorithm
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
-   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResult resultToPack)
+   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
       boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
       if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
@@ -109,7 +109,7 @@ public class ExpandingPolytopeAlgorithm
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
-   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, GJKVertex3D[] simplex, EuclidShape3DCollisionResult resultToPack)
+   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, GJKVertex3D[] simplex, EuclidShape3DCollisionResultBasics resultToPack)
    {
       boolean areShapesColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, simplex, resultToPack);
       resultToPack.setShapeA(shapeA);

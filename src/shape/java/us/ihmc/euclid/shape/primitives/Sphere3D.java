@@ -4,6 +4,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -134,7 +135,7 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
     *
     * @param other   the sphere to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two boxes represent the same geometry, {@code false} otherwise.
+    * @return {@code true} if the two spheres represent the same geometry, {@code false} otherwise.
     */
    @Override
    public boolean geometricallyEquals(Sphere3D other, double epsilon)
@@ -142,6 +143,40 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
       return Sphere3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Sphere3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof Sphere3DReadOnly)
+         return Sphere3DBasics.super.equals((Sphere3DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the value of each component of this sphere 3D.
+    *
+    * @return the hash code value for this sphere 3D.
+    */
+   @Override
+   public int hashCode()
+   {
+      long hash = EuclidHashCodeTools.addToHashCode(position.hashCode(), radius);
+      return EuclidHashCodeTools.toIntHashCode(hash);
+   }
+
+   /**
+    * Provides a {@code String} representation of this sphere 3D as follows:<br>
+    * Sphere 3D: [position: (-0.362, -0.617, 0.066 ), radius: 0.906]
+    * 
+    * @return the {@code String} representing this sphere 3D.
+    */
    @Override
    public String toString()
    {

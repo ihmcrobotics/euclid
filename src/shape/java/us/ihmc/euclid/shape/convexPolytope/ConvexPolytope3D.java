@@ -170,7 +170,7 @@ public class ConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
    @Override
    public void setToNaN()
    {
-      setToNaN();
+      clear();
    }
 
    /**
