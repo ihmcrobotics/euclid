@@ -228,12 +228,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          }
       }
 
-      if (areColliding)
-      {
-         resultToPack.setToNaN();
-         resultToPack.setShapesAreColliding(areColliding);
-      }
-      else if (simplex == null)
+      if (areColliding || simplex == null)
       {
          resultToPack.setToNaN();
       }
@@ -247,6 +242,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
          resultToPack.getNormalOnA().setToNaN();
          resultToPack.getNormalOnB().setToNaN();
       }
+
+      resultToPack.setShapesAreColliding(areColliding);
 
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
