@@ -106,7 +106,7 @@ At a minimum, you will need to have the following repository declared in your bu
 ```gradle
 repositories {
    maven {
-      url  "http://dl.bintray.com/ihmcrobotics/maven-release" // IHMC Code releases
+      url  "https://dl.bintray.com/ihmcrobotics/maven-release" // IHMC Code releases
    }
 
    /* You will also need to add either jcenter() or mavenCentral() or both, depending on your preference */
