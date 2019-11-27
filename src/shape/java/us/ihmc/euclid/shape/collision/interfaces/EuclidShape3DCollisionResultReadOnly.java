@@ -168,57 +168,38 @@ public interface EuclidShape3DCollisionResultReadOnly
       if (!EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
          return false;
 
+      boolean swap;
+
       if (getShapeA() != null || getShapeB() != null || other.getShapeA() != null || other.getShapeB() != null)
-      {
-         boolean swap = getShapeA() != other.getShapeA();
-         Shape3DReadOnly otherShapeA = swap ? other.getShapeB() : other.getShapeA();
-         Shape3DReadOnly otherShapeB = swap ? other.getShapeA() : other.getShapeB();
-         Point3DReadOnly otherPointOnA = swap ? other.getPointOnB() : other.getPointOnA();
-         Point3DReadOnly otherPointOnB = swap ? other.getPointOnA() : other.getPointOnB();
-         Vector3DReadOnly otherNormalOnA = swap ? other.getNormalOnB() : other.getNormalOnA();
-         Vector3DReadOnly otherNormalOnB = swap ? other.getNormalOnA() : other.getNormalOnB();
-
-         if (getShapeA() != otherShapeA)
-            return false;
-         if (getShapeB() != otherShapeB)
-            return false;
-
-         if (getPointOnA().containsNaN() ? !otherPointOnA.containsNaN() : !getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
-            return false;
-
-         if (getPointOnB().containsNaN() ? !otherPointOnB.containsNaN() : !getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
-            return false;
-
-         if (getNormalOnA().containsNaN() ? !otherNormalOnA.containsNaN() : !getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
-            return false;
-
-         if (getNormalOnB().containsNaN() ? !otherNormalOnB.containsNaN() : !getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
-            return false;
-
-         return true;
-      }
+         swap = getShapeA() != other.getShapeA();
       else
-      {
-         boolean swap = !getPointOnA().geometricallyEquals(other.getPointOnA(), epsilon);
-         Point3DReadOnly otherPointOnA = swap ? other.getPointOnB() : other.getPointOnA();
-         Point3DReadOnly otherPointOnB = swap ? other.getPointOnA() : other.getPointOnB();
-         Vector3DReadOnly otherNormalOnA = swap ? other.getNormalOnB() : other.getNormalOnA();
-         Vector3DReadOnly otherNormalOnB = swap ? other.getNormalOnA() : other.getNormalOnB();
+         swap = !getPointOnA().geometricallyEquals(other.getPointOnA(), epsilon);
 
-         if (getPointOnA().containsNaN() ? !otherPointOnA.containsNaN() : !getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
-            return false;
+      Shape3DReadOnly otherShapeA = swap ? other.getShapeB() : other.getShapeA();
+      Shape3DReadOnly otherShapeB = swap ? other.getShapeA() : other.getShapeB();
+      Point3DReadOnly otherPointOnA = swap ? other.getPointOnB() : other.getPointOnA();
+      Point3DReadOnly otherPointOnB = swap ? other.getPointOnA() : other.getPointOnB();
+      Vector3DReadOnly otherNormalOnA = swap ? other.getNormalOnB() : other.getNormalOnA();
+      Vector3DReadOnly otherNormalOnB = swap ? other.getNormalOnA() : other.getNormalOnB();
 
-         if (getPointOnB().containsNaN() ? !otherPointOnB.containsNaN() : !getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
-            return false;
+      if (getShapeA() != otherShapeA)
+         return false;
+      if (getShapeB() != otherShapeB)
+         return false;
 
-         if (getNormalOnA().containsNaN() ? !otherNormalOnA.containsNaN() : !getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
-            return false;
+      if (getPointOnA().containsNaN() ? !otherPointOnA.containsNaN() : !getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
+         return false;
 
-         if (getNormalOnB().containsNaN() ? !otherNormalOnB.containsNaN() : !getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
-            return false;
+      if (getPointOnB().containsNaN() ? !otherPointOnB.containsNaN() : !getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
+         return false;
 
-         return true;
-      }
+      if (getNormalOnA().containsNaN() ? !otherNormalOnA.containsNaN() : !getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
+         return false;
+
+      if (getNormalOnB().containsNaN() ? !otherNormalOnB.containsNaN() : !getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
+         return false;
+
+      return true;
    }
 
    /**
