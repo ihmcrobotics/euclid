@@ -93,7 +93,7 @@ public class ExpandingPolytopeAlgorithm
    {
       boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
       if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
-         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
+         areShapesColliding = evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
       return areShapesColliding;
    }
 
@@ -149,7 +149,7 @@ public class ExpandingPolytopeAlgorithm
    {
       boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
       if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
-         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
+         areShapesColliding = evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
       return areShapesColliding;
    }
 
@@ -318,7 +318,10 @@ public class ExpandingPolytopeAlgorithm
 
       if (initialPolytope == null)
       {
-         resultToPack.setToNaN();
+         resultToPack.setShapesAreColliding(false);
+         resultToPack.setSignedDistance(0.0);
+         resultToPack.getNormalOnA().setToNaN();
+         resultToPack.getNormalOnB().setToNaN();
       }
       else
       {
@@ -333,7 +336,7 @@ public class ExpandingPolytopeAlgorithm
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
 
-      return true;
+      return resultToPack.areShapesColliding();
    }
 
    /**
