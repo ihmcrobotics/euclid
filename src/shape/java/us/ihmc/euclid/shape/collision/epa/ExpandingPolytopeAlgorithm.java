@@ -232,7 +232,12 @@ public class ExpandingPolytopeAlgorithm
                break;
             }
 
-            mu = Math.min(mu, EuclidCoreTools.square(TupleTools.dot(newVertex, supportDirection)) / currentNormSquared);
+            /*
+             * When entry.getClosestPointToOrigin() is too small, we switch to using the normal as the support
+             * direction for stability purpose. However, the computation of the upper-bound mu should always use
+             * entry.getClosestPointToOrigin().
+             */
+            mu = Math.min(mu, EuclidCoreTools.square(TupleTools.dot(newVertex, entry.getClosestPointToOrigin())) / currentNormSquared);
 
             if (mu <= EuclidCoreTools.square(1.0 + epsilon) * currentNormSquared)
             {
