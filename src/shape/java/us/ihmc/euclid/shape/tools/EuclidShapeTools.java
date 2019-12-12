@@ -888,10 +888,10 @@ public class EuclidShapeTools
       // From https://iquilezles.org/www/articles/diskbbox/diskbbox.htm
       double cylinder3DHalfLength = 0.5 * cylinder3DLength;
 
-      double normSquared = cylinder3DAxis.lengthSquared();
-      double capMinMaxX = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getX() * cylinder3DAxis.getX() / normSquared));
-      double capMinMaxY = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getY() * cylinder3DAxis.getY() / normSquared));
-      double capMinMaxZ = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getZ() * cylinder3DAxis.getZ() / normSquared));
+      double invNormSquared = 1.0 / cylinder3DAxis.lengthSquared();
+      double capMinMaxX = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getX() * cylinder3DAxis.getX() * invNormSquared));
+      double capMinMaxY = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getY() * cylinder3DAxis.getY() * invNormSquared));
+      double capMinMaxZ = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getZ() * cylinder3DAxis.getZ() * invNormSquared));
 
       double maxX = Math.abs(cylinder3DHalfLength * cylinder3DAxis.getX()) + capMinMaxX;
       double maxY = Math.abs(cylinder3DHalfLength * cylinder3DAxis.getY()) + capMinMaxY;
