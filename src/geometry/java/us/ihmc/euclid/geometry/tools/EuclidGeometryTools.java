@@ -734,30 +734,48 @@ public class EuclidGeometryTools
    public static void orientation3DFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX,
                                                              double secondVectorY, double secondVectorZ, Orientation3DBasics rotationToPack)
    {
-      double rotationAxisX = firstVectorY * secondVectorZ - firstVectorZ * secondVectorY;
-      double rotationAxisY = firstVectorZ * secondVectorX - firstVectorX * secondVectorZ;
-      double rotationAxisZ = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
-      double rotationAxisLength = Math.sqrt(normSquared(rotationAxisX, rotationAxisY, rotationAxisZ));
+      double firstVectorNormSquared = normSquared(firstVectorX, firstVectorY, firstVectorZ);
 
-      boolean normalsAreParallel = rotationAxisLength < ONE_TEN_MILLIONTH;
+      if (!EuclidCoreTools.epsilonEquals(firstVectorNormSquared, 1.0, ONE_MILLIONTH))
+      {
+         double firstVectorInvLength = 1.0 / Math.sqrt(firstVectorNormSquared);
+         firstVectorX *= firstVectorInvLength;
+         firstVectorY *= firstVectorInvLength;
+         firstVectorZ *= firstVectorInvLength;
+      }
 
-      if (normalsAreParallel)
+      double secondVectorNormSquared = normSquared(secondVectorX, secondVectorY, secondVectorZ);
+
+      if (!EuclidCoreTools.epsilonEquals(secondVectorNormSquared, 1.0, ONE_MILLIONTH))
+      {
+         double secondVectorInvLength = 1.0 / Math.sqrt(secondVectorNormSquared);
+         secondVectorX *= secondVectorInvLength;
+         secondVectorY *= secondVectorInvLength;
+         secondVectorZ *= secondVectorInvLength;
+      }
+
+      double axisX = firstVectorY * secondVectorZ - firstVectorZ * secondVectorY;
+      double axisY = firstVectorZ * secondVectorX - firstVectorX * secondVectorZ;
+      double axisZ = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
+      double crossNormSquared = normSquared(axisX, axisY, axisZ);
+
+      boolean vectorsAreParallel = crossNormSquared < ONE_TEN_MILLIONTH * ONE_TEN_MILLIONTH;
+
+      if (vectorsAreParallel)
       {
          double dot;
          dot = secondVectorX * firstVectorX;
          dot += secondVectorY * firstVectorY;
          dot += secondVectorZ * firstVectorZ;
-         double rotationAngle = dot > 0.0 ? 0.0 : Math.PI;
-         rotationToPack.setAxisAngle(1.0, 0.0, 0.0, rotationAngle);
+         if (dot > 0.0)
+            rotationToPack.setToZero();
+         else
+            rotationToPack.setQuaternion(1.0, 0.0, 0.0, 0.0);
          return;
       }
 
-      double rotationAngle = angleFromFirstToSecondVector3D(firstVectorX, firstVectorY, firstVectorZ, secondVectorX, secondVectorY, secondVectorZ);
-
-      rotationAxisX /= rotationAxisLength;
-      rotationAxisY /= rotationAxisLength;
-      rotationAxisZ /= rotationAxisLength;
-      rotationToPack.setAxisAngle(rotationAxisX, rotationAxisY, rotationAxisZ, rotationAngle);
+      double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
+      rotationToPack.setQuaternion(axisX, axisY, axisZ, 1.0 + dotProduct);
    }
 
    /**
