@@ -1,5 +1,6 @@
 package us.ihmc.robotics;
 
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.ONE_MILLIONTH;
 import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import us.ihmc.commons.MathTools;
@@ -271,6 +272,10 @@ public class EuclidCoreMissingTools
       else
          rotationToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
+<<<<<<< HEAD
+=======
+}
+>>>>>>> 970295ac (bumped the location of the distance between line segemnts methods)
 
    /**
     * Given two 2D line segments with finite length, this methods computes two points P &in;
