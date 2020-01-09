@@ -267,7 +267,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          }
          else
          {
-            if (EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointA.getX() - pointB.getX(), pointA.getY() - pointB.getY())) <= getEpsilon())
+            if (EuclidCoreTools.norm(pointA.getX() - pointB.getX(), pointA.getY() - pointB.getY()) <= getEpsilon())
             {
                assertTrue(pointA.geometricallyEquals(pointB, getEpsilon()));
             }

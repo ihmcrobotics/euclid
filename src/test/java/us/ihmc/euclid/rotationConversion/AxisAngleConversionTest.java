@@ -37,7 +37,7 @@ public class AxisAngleConversionTest
          double uy = EuclidCoreRandomTools.nextDouble(random);
          double uz = EuclidCoreRandomTools.nextDouble(random);
 
-         double norm = EuclidCoreTools.squareRoot(ux * ux + uy * uy + uz * uz);
+         double norm = EuclidCoreTools.norm(ux, uy, uz);
          ux /= norm;
          uy /= norm;
          uz /= norm;
@@ -83,7 +83,7 @@ public class AxisAngleConversionTest
       double uy = EuclidCoreRandomTools.nextDouble(random);
       double uz = EuclidCoreRandomTools.nextDouble(random);
 
-      double norm = EuclidCoreTools.squareRoot(ux * ux + uy * uy + uz * uz);
+      double norm = EuclidCoreTools.norm(ux, uy, uz);
       ux /= norm;
       uy /= norm;
       uz /= norm;

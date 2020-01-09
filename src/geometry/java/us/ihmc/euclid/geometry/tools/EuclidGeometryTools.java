@@ -114,8 +114,8 @@ public class EuclidGeometryTools
    public static double angleFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX,
                                                        double secondVectorY, double secondVectorZ)
    {
-      double firstVectorLength = EuclidCoreTools.squareRoot(normSquared(firstVectorX, firstVectorY, firstVectorZ));
-      double secondVectorLength = EuclidCoreTools.squareRoot(normSquared(secondVectorX, secondVectorY, secondVectorZ));
+      double firstVectorLength = EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
+      double secondVectorLength = EuclidCoreTools.norm(secondVectorX, secondVectorY, secondVectorZ);
 
       double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
       dotProduct /= firstVectorLength * secondVectorLength;
@@ -482,10 +482,10 @@ public class EuclidGeometryTools
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
          throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
-      double firstVectorLength = EuclidCoreTools.squareRoot(normSquared(firstVectorX, firstVectorY));
+      double firstVectorLength = EuclidCoreTools.norm(firstVectorX, firstVectorY);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
-      double secondVectorLength = EuclidCoreTools.squareRoot(normSquared(secondVectorX, secondVectorY));
+      double secondVectorLength = EuclidCoreTools.norm(secondVectorX, secondVectorY);
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
@@ -541,10 +541,10 @@ public class EuclidGeometryTools
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
          throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
-      double firstVectorLength = EuclidCoreTools.squareRoot(normSquared(firstVectorX, firstVectorY, firstVectorZ));
+      double firstVectorLength = EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
-      double secondVectorLength = EuclidCoreTools.squareRoot(normSquared(secondVectorX, secondVectorY, secondVectorZ));
+      double secondVectorLength = EuclidCoreTools.norm(secondVectorX, secondVectorY, secondVectorZ);
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
@@ -1269,7 +1269,7 @@ public class EuclidGeometryTools
       double dx = PscX - QtcX;
       double dy = PscY - QtcY;
       double dz = PscZ - QtcZ;
-      return EuclidCoreTools.squareRoot(normSquared(dx, dy, dz));
+      return EuclidCoreTools.norm(dx, dy, dz);
    }
 
    /**
@@ -1813,7 +1813,7 @@ public class EuclidGeometryTools
    public static double distanceFromPoint3DToLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
                                                     double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
-      double directionMagnitude = EuclidCoreTools.squareRoot(normSquared(lineDirectionX, lineDirectionY, lineDirectionZ));
+      double directionMagnitude = EuclidCoreTools.fastNorm(lineDirectionX, lineDirectionY, lineDirectionZ);
 
       double dx = pointOnLineX - pointX;
       double dy = pointOnLineY - pointY;
@@ -1821,14 +1821,14 @@ public class EuclidGeometryTools
 
       if (directionMagnitude < ONE_TRILLIONTH)
       {
-         return EuclidCoreTools.squareRoot(normSquared(dx, dy, dz));
+         return EuclidCoreTools.norm(dx, dy, dz);
       }
       else
       {
          double crossX = lineDirectionY * dz - lineDirectionZ * dy;
          double crossY = lineDirectionZ * dx - lineDirectionX * dz;
          double crossZ = lineDirectionX * dy - lineDirectionY * dx;
-         double distance = EuclidCoreTools.squareRoot(normSquared(crossX, crossY, crossZ));
+         double distance = EuclidCoreTools.norm(crossX, crossY, crossZ);
          distance /= directionMagnitude;
 
          return distance;
@@ -2033,7 +2033,7 @@ public class EuclidGeometryTools
       double normalMagnitude = EuclidCoreTools.normSquared(planeNormalX, planeNormalY, planeNormalZ);
 
       if (normalMagnitude < ONE_TRILLIONTH)
-         return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy, dz));
+         return EuclidCoreTools.norm(dx, dy, dz);
       else
          return (dx * planeNormalX + dy * planeNormalY + dz * planeNormalZ) / EuclidCoreTools.squareRoot(normalMagnitude);
    }
@@ -3970,7 +3970,7 @@ public class EuclidGeometryTools
       if (cylinderLength == 0.0 || cylinderRadius == 0.0)
          return 0;
 
-      double axisNormInv = 1.0 / EuclidCoreTools.squareRoot(normSquared(cylinderAxisX, cylinderAxisY, cylinderAxisZ));
+      double axisNormInv = 1.0 / EuclidCoreTools.fastNorm(cylinderAxisX, cylinderAxisY, cylinderAxisZ);
       double axisX = cylinderAxisX * axisNormInv;
       double axisY = cylinderAxisY * axisNormInv;
       double axisZ = cylinderAxisZ * axisNormInv;
@@ -7956,7 +7956,7 @@ public class EuclidGeometryTools
       // direction will be on left side of line
       double bisectorDirectionX = -(lineSegmentEnd.getY() - lineSegmentStart.getY());
       double bisectorDirectionY = lineSegmentEnd.getX() - lineSegmentStart.getX();
-      double directionInverseMagnitude = 1.0 / EuclidCoreTools.squareRoot(normSquared(bisectorDirectionX, bisectorDirectionY));
+      double directionInverseMagnitude = 1.0 / EuclidCoreTools.norm(bisectorDirectionX, bisectorDirectionY);
       bisectorDirectionX *= directionInverseMagnitude;
       bisectorDirectionY *= directionInverseMagnitude;
 
@@ -8075,7 +8075,7 @@ public class EuclidGeometryTools
       double lineDirectionX = secondPointOnLine.getX() - firstPointOnLine.getX();
       double lineDirectionY = secondPointOnLine.getY() - firstPointOnLine.getY();
       double lineDirectionZ = secondPointOnLine.getZ() - firstPointOnLine.getZ();
-      double lineLength = EuclidCoreTools.squareRoot(normSquared(lineDirectionX, lineDirectionY, lineDirectionZ));
+      double lineLength = EuclidCoreTools.fastNorm(lineDirectionX, lineDirectionY, lineDirectionZ);
 
       if (lineLength < ONE_TRILLIONTH)
          return false;
@@ -8312,11 +8312,11 @@ public class EuclidGeometryTools
    {
       double dx = pointX - pointOnLineX;
       double dy = pointY - pointOnLineY;
-      double directionMagnitude = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(lineDirectionX, lineDirectionY));
+      double directionMagnitude = EuclidCoreTools.fastNorm(lineDirectionX, lineDirectionY);
 
       if (directionMagnitude < ONE_TRILLIONTH)
       {
-         return EuclidCoreTools.squareRoot(dx * dx + dy * dy);
+         return EuclidCoreTools.norm(dx, dy);
       }
       else
       {
@@ -8344,7 +8344,7 @@ public class EuclidGeometryTools
       double baseEdgeACx = baseVertexC.getX() - baseVertexA.getX();
       double baseEdgeACy = baseVertexC.getY() - baseVertexA.getY();
       double baseEdgeACz = baseVertexC.getZ() - baseVertexA.getZ();
-      double baseEdgeACLength = EuclidCoreTools.squareRoot(normSquared(baseEdgeACx, baseEdgeACy, baseEdgeACz));
+      double baseEdgeACLength = EuclidCoreTools.norm(baseEdgeACx, baseEdgeACy, baseEdgeACz);
 
       double legLengthABorCB = radiusOfArc(baseEdgeACLength, ccwAngleAboutNormalAtTopVertex);
       double lengthOfBisectorOfBase = pythagorasGetCathetus(legLengthABorCB, 0.5 * baseEdgeACLength);
@@ -8353,7 +8353,7 @@ public class EuclidGeometryTools
       double perpendicularBisectorY = trianglePlaneNormal.getZ() * baseEdgeACx - trianglePlaneNormal.getX() * baseEdgeACz;
       double perpendicularBisectorZ = trianglePlaneNormal.getX() * baseEdgeACy - trianglePlaneNormal.getY() * baseEdgeACx;
       double scale = lengthOfBisectorOfBase;
-      scale /= EuclidCoreTools.squareRoot(normSquared(perpendicularBisectorX, perpendicularBisectorY, perpendicularBisectorZ));
+      scale /= EuclidCoreTools.norm(perpendicularBisectorX, perpendicularBisectorY, perpendicularBisectorZ);
       perpendicularBisectorX *= scale;
       perpendicularBisectorY *= scale;
       perpendicularBisectorZ *= scale;
@@ -8435,7 +8435,7 @@ public class EuclidGeometryTools
       // use AX distance to find X along AC
       double vectorAXx = C.getX() - A.getX();
       double vectorAXy = C.getY() - A.getY();
-      double inverseMagnitude = 1.0 / EuclidCoreTools.squareRoot(normSquared(vectorAXx, vectorAXy));
+      double inverseMagnitude = 1.0 / EuclidCoreTools.norm(vectorAXx, vectorAXy);
       vectorAXx *= AX * inverseMagnitude;
       vectorAXy *= AX * inverseMagnitude;
 

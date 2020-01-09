@@ -157,7 +157,7 @@ public class YawPitchRollTools
       double z = q1s * q2z - q1x * q2y + q1y * q2x - q1z * q2s;
       double s = q1s * q2s + q1x * q2x + q1y * q2y + q1z * q2z;
 
-      double sinHalfTheta = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(x, y, z));
+      double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
       return 2.0 * Math.atan2(sinHalfTheta, s);
    }
 

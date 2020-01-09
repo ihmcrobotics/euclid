@@ -143,6 +143,6 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
    {
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
-      return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy)) <= epsilon;
+      return EuclidCoreTools.norm(dx, dy) <= epsilon;
    }
 }

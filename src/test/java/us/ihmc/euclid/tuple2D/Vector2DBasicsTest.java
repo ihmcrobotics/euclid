@@ -362,7 +362,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          }
          else
          {
-            if (EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(vectorA.getX() - vectorB.getX(), vectorA.getY() - vectorB.getY())) <= getEpsilon())
+            if (EuclidCoreTools.norm(vectorA.getX() - vectorB.getX(), vectorA.getY() - vectorB.getY()) <= getEpsilon())
             {
                assertTrue(vectorA.geometricallyEquals(vectorB, getEpsilon()));
             }

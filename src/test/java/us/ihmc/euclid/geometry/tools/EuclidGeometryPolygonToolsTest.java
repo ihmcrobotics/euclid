@@ -998,7 +998,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(2.5, 1.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(EuclidCoreTools.squareRoot(2.5 * 2.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+         assertEquals(EuclidCoreTools.norm(2.5, 1.0), distance, SMALLEST_EPSILON);
       }
 
       { // Test examples single line polygon
@@ -1010,7 +1010,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(2.5, 1.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(EuclidCoreTools.squareRoot(1.5 * 1.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+         assertEquals(EuclidCoreTools.norm(1.5, 1.0), distance, SMALLEST_EPSILON);
 
          query.set(0.5, 1.0);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
@@ -1047,7 +1047,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(15.0, -0.15);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(EuclidCoreTools.squareRoot(5.0 * 5.0 + 0.15 * 0.15), distance, SMALLEST_EPSILON);
+         assertEquals(EuclidCoreTools.norm(5.0, 0.15), distance, SMALLEST_EPSILON);
       }
 
       {// Trivial case: Square
@@ -3829,7 +3829,7 @@ public class EuclidGeometryPolygonToolsTest
          int numberOfPoints = 100;
          List<Integer> points = new ArrayList<>();
          for (int j = 0; j < numberOfPoints; j++)
-            points.add(new Integer(j));
+            points.add(Integer.valueOf(j));
 
          List<Integer> pointsCopy = new ArrayList<>(points);
          int listSize = random.nextInt(numberOfPoints) + 1;

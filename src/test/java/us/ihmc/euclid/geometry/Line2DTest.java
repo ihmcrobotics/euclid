@@ -788,7 +788,7 @@ public class Line2DTest
          Point2DBasics orthogonalProjection = orthogonalLine.orthogonalProjectionCopy(distantPoint);
          double xdiff = orthogonalProjection.getX() - firstPointOnLine.getX();
          double ydiff = orthogonalProjection.getY() - firstPointOnLine.getY();
-         double distance = EuclidCoreTools.squareRoot(xdiff * xdiff + ydiff * ydiff);
+         double distance = EuclidCoreTools.norm(xdiff, ydiff);
 
          assertEquals(distance, calculatedDistance, delta);
       }

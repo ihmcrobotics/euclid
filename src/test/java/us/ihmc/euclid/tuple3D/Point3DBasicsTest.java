@@ -271,8 +271,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          }
          else
          {
-            if (EuclidCoreTools.squareRoot((pointA.getX() - pointB.getX()) * (pointA.getX() - pointB.getX()) + (pointA.getY() - pointB.getY()) * (pointA.getY() - pointB.getY())
-                  + (pointA.getZ() - pointB.getZ()) * (pointA.getZ() - pointB.getZ())) <= getEpsilon())
+            if (EuclidCoreTools.norm(pointA.getX() - pointB.getX(), pointA.getY() - pointB.getY(), pointA.getZ() - pointB.getZ()) <= getEpsilon())
             {
                assertTrue(pointA.geometricallyEquals(pointB, getEpsilon()));
             }

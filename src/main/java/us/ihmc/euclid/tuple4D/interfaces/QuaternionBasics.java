@@ -178,7 +178,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
       if (containsNaN())
          return;
 
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(getX(), getY(), getZ()));
+      double uNorm = EuclidCoreTools.norm(getX(), getY(), getZ());
 
       if (uNorm > EPS_POW)
       {

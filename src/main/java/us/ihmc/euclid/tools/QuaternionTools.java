@@ -1429,7 +1429,7 @@ public class QuaternionTools
       double z = q1.getS() * q2.getZ() - q1.getX() * q2.getY() + q1.getY() * q2.getX() - q1.getZ() * q2.getS();
       double s = q1.getS() * q2.getS() + q1.getX() * q2.getX() + q1.getY() * q2.getY() + q1.getZ() * q2.getZ();
 
-      double sinHalfTheta = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(x, y, z));
+      double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
       return 2.0 * Math.atan2(sinHalfTheta, s);
    }
 }

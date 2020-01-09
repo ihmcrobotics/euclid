@@ -117,6 +117,6 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
       double dz = getZ() - other.getZ();
-      return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy, dz)) <= epsilon;
+      return EuclidCoreTools.norm(dx, dy, dz) <= epsilon;
    }
 }

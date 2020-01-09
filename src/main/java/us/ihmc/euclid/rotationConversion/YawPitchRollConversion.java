@@ -1234,7 +1234,7 @@ public abstract class YawPitchRollConversion
       double uy = rotationVector.getY();
       double uz = rotationVector.getZ();
       double angle = 0.0;
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(ux, uy, uz));
+      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
 
       if (uNorm < EPS)
          return 0.0;
@@ -1270,7 +1270,7 @@ public abstract class YawPitchRollConversion
       double uy = rotationVector.getY();
       double uz = rotationVector.getZ();
       double angle = 0.0;
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(ux, uy, uz));
+      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
       angle = uNorm;
 
       if (uNorm < EPS)
@@ -1305,7 +1305,7 @@ public abstract class YawPitchRollConversion
       double uy = rotationVector.getY();
       double uz = rotationVector.getZ();
       double angle = 0.0;
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(ux, uy, uz));
+      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
 
       if (uNorm < EPS)
          return 0.0;
@@ -1368,7 +1368,7 @@ public abstract class YawPitchRollConversion
          return;
       }
 
-      double angle = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(rx, ry, rz));
+      double angle = EuclidCoreTools.norm(rx, ry, rz);
 
       if (angle < EPS)
       {
@@ -1432,7 +1432,7 @@ public abstract class YawPitchRollConversion
       double uy = rotationVector.getY();
       double uz = rotationVector.getZ();
       double angle = 0.0;
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(ux, uy, uz));
+      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
 
       if (uNorm < EPS)
       {
@@ -1481,7 +1481,7 @@ public abstract class YawPitchRollConversion
       double uy = rotationVector.getY();
       double uz = rotationVector.getZ();
       double angle = 0.0;
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(ux, uy, uz));
+      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
 
       if (uNorm < EPS)
       {

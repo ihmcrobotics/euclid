@@ -256,7 +256,7 @@ public class EuclidEllipsoid3DTools
             double xde0 = numer0 / denom0;
             x0 = e0 * xde0;
             x1 = e1 * EuclidCoreTools.squareRoot(1.0 - square(xde0));
-            distance = EuclidCoreTools.squareRoot(square(x0 - y0) + square(x1));
+            distance = EuclidCoreTools.norm(x0 - y0, x1);
          }
          else
          {
@@ -275,7 +275,7 @@ public class EuclidEllipsoid3DTools
       double n0 = r0 * z0;
       double n1 = r1 * z1;
       double s0 = z2 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(n0, n1, z2)) - 1.0);
+      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.norm(n0, n1, z2) - 1.0);
       double s = 0.0;
 
       for (int i = 0; i < maxIterations; i++)
@@ -302,7 +302,7 @@ public class EuclidEllipsoid3DTools
    {
       double n0 = r0 * z0;
       double s0 = z1 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(n0, z1)) - 1.0);
+      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.norm(n0, z1) - 1.0);
       double s = 0.0;
 
       for (int i = 0; i < maxIterations; i++)

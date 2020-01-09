@@ -132,7 +132,7 @@ public abstract class RotationVectorConversion
       double qz = quaternion.getZ();
       double qs = quaternion.getS();
 
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(qx, qy, qz));
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
 
       if (uNorm > EPS)
       {
@@ -261,7 +261,7 @@ public abstract class RotationVectorConversion
       y = m02 - m20;
       z = m10 - m01;
 
-      double s = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(x, y, z));
+      double s = EuclidCoreTools.norm(x, y, z);
 
       if (s > EPS)
       {
@@ -425,7 +425,7 @@ public abstract class RotationVectorConversion
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
 
-      double uNorm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(qx, qy, qz));
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
 
       if (uNorm > EPS)
       {

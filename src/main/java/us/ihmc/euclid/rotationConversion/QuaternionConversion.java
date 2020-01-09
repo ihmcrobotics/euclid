@@ -339,7 +339,7 @@ public abstract class QuaternionConversion
          return;
       }
 
-      double norm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(rx, ry, rz));
+      double norm = EuclidCoreTools.norm(rx, ry, rz);
 
       if (norm < EPS)
       {

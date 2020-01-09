@@ -505,7 +505,7 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      double norm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(rx, ry, rz));
+      double norm = EuclidCoreTools.norm(rx, ry, rz);
 
       if (EuclidCoreTools.isAngleZero(norm, EPS))
       {

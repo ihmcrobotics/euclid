@@ -976,7 +976,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point = new Point2D(2.5, 1.0);
       double distance = polygon.signedDistance(point);
-      assertDistanceCorrect(EuclidCoreTools.squareRoot(2.5 * 2.5 + 1.0 * 1.0), distance);
+      assertDistanceCorrect(EuclidCoreTools.norm(2.5, 1.0), distance);
    }
 
    @Test
@@ -990,7 +990,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point1 = new Point2D(2.5, 1.0);
       double distance1 = polygon.signedDistance(point1);
-      assertDistanceCorrect(EuclidCoreTools.squareRoot(1.5 * 1.5 + 1.0 * 1.0), distance1);
+      assertDistanceCorrect(EuclidCoreTools.norm(1.5, 1.0), distance1);
 
       Point2D point2 = new Point2D(0.5, 1.0);
       double distance2 = polygon.signedDistance(point2);
@@ -1029,7 +1029,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point6 = new Point2D(15.0, -0.15);
       double distance6 = polygon.signedDistance(point6);
-      assertDistanceCorrect(EuclidCoreTools.squareRoot(5.0 * 5.0 + 0.15 * 0.15), distance6);
+      assertDistanceCorrect(EuclidCoreTools.norm(5.0, 0.15), distance6);
    }
 
    private static void assertDistanceCorrect(double expected, double actual)
