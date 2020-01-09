@@ -232,7 +232,7 @@ public class EuclidCoreTools
     */
    public static double squareRoot(double value)
    {
-      return Math.sqrt(value);
+      return StrictMath.sqrt(value);
    }
 
    /**
@@ -807,7 +807,7 @@ public class EuclidCoreTools
     */
    public static double tan(double a)
    {
-      return Math.tan(a);
+      return StrictMath.tan(a);
    }
 
    /**
@@ -820,7 +820,7 @@ public class EuclidCoreTools
     */
    public static double atan(double a)
    {
-      return Math.atan(a);
+      return StrictMath.atan(a);
    }
 
    /**
@@ -836,7 +836,7 @@ public class EuclidCoreTools
     */
    public static double atan2(double y, double x)
    {
-      return Math.atan2(y, x);
+      return StrictMath.atan2(y, x);
    }
 
    /**
@@ -848,7 +848,7 @@ public class EuclidCoreTools
     */
    public static double cos(double a)
    {
-      return Math.cos(a);
+      return StrictMath.cos(a);
    }
 
    /**
@@ -860,7 +860,7 @@ public class EuclidCoreTools
     */
    public static double sin(double a)
    {
-      return Math.sin(a);
+      return StrictMath.sin(a);
    }
 
    /**
@@ -872,7 +872,7 @@ public class EuclidCoreTools
     */
    public static double acos(double a)
    {
-      return Math.acos(a);
+      return StrictMath.acos(a);
    }
 
    /**
@@ -885,6 +885,6 @@ public class EuclidCoreTools
     */
    public static double asin(double a)
    {
-      return Math.asin(a);
+      return StrictMath.asin(a);
    }
 }
