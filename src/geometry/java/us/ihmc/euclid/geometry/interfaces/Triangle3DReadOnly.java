@@ -6,35 +6,35 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
  * Read-only interface for a 3D triangle defined by its three vertices A, B, and C.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Triangle3DReadOnly
 {
    /**
     * Gets the read-only reference to the first vertex of this triangle.
-    * 
+    *
     * @return the reference to the first vertex of this triangle.
     */
    Point3DReadOnly getA();
 
    /**
     * Gets the read-only reference to the second vertex of this triangle.
-    * 
+    *
     * @return the reference to the second vertex of this triangle.
     */
    Point3DReadOnly getB();
 
    /**
     * Gets the read-only reference to the third vertex of this triangle.
-    * 
+    *
     * @return the reference to the second third of this triangle.
     */
    Point3DReadOnly getC();
 
    /**
     * Tests whether any of this triangle vertices contains {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if at least one vertex contains {@link Double#NaN}.
     */
    default boolean containsNaN()
@@ -44,7 +44,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Calculates the length of the first edge.
-    * 
+    *
     * @return the AB edge's length.
     */
    default double getAB()
@@ -54,7 +54,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Calculates the length of the second edge.
-    * 
+    *
     * @return the BC edge's length.
     */
    default double getBC()
@@ -64,7 +64,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Calculates the length of the third edge.
-    * 
+    *
     * @return the CA edge's length.
     */
    default double getCA()
@@ -74,7 +74,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Calculates the length squared of the first edge.
-    * 
+    *
     * @return the AB edge's length squared.
     */
    default double getABSquared()
@@ -84,7 +84,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Calculates the length squared of the second edge.
-    * 
+    *
     * @return the BC edge's length squared.
     */
    default double getBCSquared()
@@ -94,7 +94,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Calculates the length squared of the third edge.
-    * 
+    *
     * @return the CA edge's length squared.
     */
    default double getCASquared()
@@ -104,7 +104,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Calculates this triangle's area.
-    * 
+    *
     * @return this triangle's area.
     */
    default double getArea()
@@ -114,7 +114,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Tests whether this triangle is equilateral, i.e. <tt>AB==BC==CA</tt>.
-    * 
+    *
     * @param epsilon the tolerance to use when comparing edges' lengths.
     * @return {@code true} if this triangle is equilateral, {@code false} otherwise.
     */
@@ -129,7 +129,7 @@ public interface Triangle3DReadOnly
    /**
     * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
     * tolerance {@code epsilon}.
-    * 
+    *
     * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two triangles are equal, {@code false} otherwise.
@@ -147,7 +147,7 @@ public interface Triangle3DReadOnly
 
    /**
     * Tests on a per component basis if this triangle is exactly equal to {@code other}.
-    * 
+    *
     * @param other the other triangle to compare against this. Not modified.
     * @return {@code true} if the triangle are exactly equal component-wise, {@code false} otherwise.
     */
@@ -168,7 +168,7 @@ public interface Triangle3DReadOnly
     * Two triangles are geometrically similar 3 pairs geometrically equal vertices and the same
     * ordering and winding, i.e. clockwise or counter-clockwise.
     * </p>
-    * 
+    *
     * @param other   the triangle to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
@@ -181,7 +181,7 @@ public interface Triangle3DReadOnly
    /**
     * Compares {@code this} to the triangle represented by the given vertices to determine if the two
     * triangle are geometrically similar.
-    * 
+    *
     * @param a       the first vertex of the query. Not modified.
     * @param b       the second vertex of the query. Not modified.
     * @param c       the third vertex of the query. Not modified.

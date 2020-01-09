@@ -326,7 +326,7 @@ class Capsule3DTest
       Vector3D expectedNormal = new Vector3D();
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Edge-case: Query is on the axis 
+      { // Edge-case: Query is on the axis
          Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
          Point3D pointOnAxis = new Point3D();
          pointOnAxis.interpolate(capsule3D.getTopCenter(), capsule3D.getBottomCenter(), random.nextDouble());
@@ -341,7 +341,7 @@ class Capsule3DTest
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Edge-case: Query is at the top center 
+      { // Edge-case: Query is at the top center
          Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
 
          assertTrue(capsule3D.evaluatePoint3DCollision(capsule3D.getTopCenter(), actualClosestPoint, actualNormal));
@@ -354,7 +354,7 @@ class Capsule3DTest
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Edge-case: Query is at the bottom center 
+      { // Edge-case: Query is at the bottom center
          Capsule3D capsule3D = EuclidShapeRandomTools.nextCapsule3D(random);
 
          assertTrue(capsule3D.evaluatePoint3DCollision(capsule3D.getBottomCenter(), actualClosestPoint, actualNormal));

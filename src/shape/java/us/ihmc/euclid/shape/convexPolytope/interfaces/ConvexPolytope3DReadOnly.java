@@ -19,7 +19,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This is part of a Doubly Connected Edge List data structure
  * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
@@ -55,7 +55,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * <p>
     * Note: the number of half-edges is twice the number of edges.
     * </p>
-    * 
+    *
     * @return the number of half-edges in this polytope.
     */
    default int getNumberOfHalfEdges()
@@ -150,7 +150,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets this polytope volume.
-    * 
+    *
     * @return this polytope volume.
     */
    double getVolume();
@@ -478,7 +478,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an
     * {@code epsilon}.
-    * 
+    *
     * @param other   the other convex polytope to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
@@ -504,7 +504,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} to {@code other} to determine if the two convex polytopes are geometrically
     * similar.
-    * 
+    *
     * @param other   the other convex polytope to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two convex polytopes represent the same geometry, {@code false}

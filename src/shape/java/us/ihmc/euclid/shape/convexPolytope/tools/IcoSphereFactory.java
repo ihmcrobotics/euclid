@@ -36,16 +36,16 @@ public class IcoSphereFactory
 
       /**
        * Creates a new triangle index map.
-       * 
+       *
        * @param v1 the index to the first triangle vertex.
        * @param v2 the index to the second triangle vertex.
        * @param v3 the index to the third triangle vertex.
        */
       public TriangleIndices(int v1, int v2, int v3)
       {
-         this.indexA = v1;
-         this.indexB = v2;
-         this.indexC = v3;
+         indexA = v1;
+         indexB = v2;
+         indexC = v3;
       }
    }
 
@@ -61,7 +61,7 @@ public class IcoSphereFactory
 
       /**
        * Adds a vertex to this mesh.
-       * 
+       *
        * @param vertex the new vertex.
        */
       public void addVertex(Point3D vertex)
@@ -71,7 +71,7 @@ public class IcoSphereFactory
 
       /**
        * Gets the i<sup>th</sup> vertex of this mesh.
-       * 
+       *
        * @param index the vertex index.
        * @return the vertex.
        */
@@ -82,7 +82,7 @@ public class IcoSphereFactory
 
       /**
        * Gets the unordered list of vertices for this mesh.
-       * 
+       *
        * @return the unordered vertices.
        */
       public List<Point3D> getVertices()
@@ -92,7 +92,7 @@ public class IcoSphereFactory
 
       /**
        * Gets the number of vertices this mesh is composed of.
-       * 
+       *
        * @return the number of vertices.
        */
       public int getNumberOfVertices()
@@ -102,7 +102,7 @@ public class IcoSphereFactory
 
       /**
        * Gets the number of triangles this mesh is composed of.
-       * 
+       *
        * @return the number of triangles.
        */
       public int getNumberOfTriangles()
@@ -115,7 +115,7 @@ public class IcoSphereFactory
        * <p>
        * WARNING: This method generates garbage.
        * </p>
-       * 
+       *
        * @param index the triangle index.
        * @return the triangle.
        */
@@ -130,7 +130,7 @@ public class IcoSphereFactory
 
       /**
        * Gets the i<sup>th</sup> triangle of this mesh.
-       * 
+       *
        * @param index          the triangle index.
        * @param triangleToPack the triangle used to pack mesh triangle. Modified.
        */
@@ -145,7 +145,7 @@ public class IcoSphereFactory
 
       /**
        * Gets the of all the triangles composing this triangle mesh.
-       * 
+       *
        * @return the list of this mesh triangles.
        */
       public List<Triangle3D> getAllTriangles()
@@ -189,7 +189,7 @@ public class IcoSphereFactory
     * recursion level, the number of triangles is multiplied by 4. Such that for a recursion level of 5
     * the number of triangles is 5120.
     * </p>
-    * 
+    *
     * @param recursionLevel the resolution of the generated mesh, preferably below 5.
     * @return the triangle mesh of the ico-sphere.
     */

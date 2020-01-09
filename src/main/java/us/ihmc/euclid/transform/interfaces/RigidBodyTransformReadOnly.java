@@ -28,7 +28,7 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  * The data structure used to represents this transform is not enforced here, such that the rotation
  * part can be any implementation of orientation 3D.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface RigidBodyTransformReadOnly extends Transform
@@ -54,7 +54,7 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /**
     * Requests whether this transform has a non-zero rotation or not.
-    * 
+    *
     * @return {@code true} if the rotation part is not zero, {@code false} if the rotation part is zero
     *         and can be ignore when transforming an object.
     */
@@ -65,7 +65,7 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /**
     * Requests whether this transform has a non-zero translation or not.
-    * 
+    *
     * @return {@code true} if the translation part is not zero, {@code false} if the translation part
     *         is zero and can be ignore when transforming an object.
     */

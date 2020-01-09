@@ -30,7 +30,7 @@ public class QuaternionTools
    /**
     * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
     * basis.
-    * 
+    *
     * @param quaternion the query. Not modified.
     * @param epsilon    the tolerance used for the comparison.
     * @return {@code true} if the quaternion equal to the neutral quaternion, {@code false} otherwise.
@@ -42,7 +42,7 @@ public class QuaternionTools
 
    /**
     * Tests that the given quaternion is equal to the neutral quaternion on a per-component basis.
-    * 
+    *
     * @param qx      the x-component of the quaternion. Not modified.
     * @param qy      the y-component of the quaternion. Not modified.
     * @param qz      the z-component of the quaternion. Not modified.
@@ -141,7 +141,7 @@ public class QuaternionTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1     the first orientation in the multiplication. Not modified.
     * @param inverse1         whether the first orientation should be inverted in the multiplication.
     * @param orientation2     the second orientation in the multiplication. Not modified.
@@ -194,7 +194,7 @@ public class QuaternionTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1     the first orientation in the multiplication. Not modified.
     * @param inverse1         whether the first orientation should be inverted in the multiplication.
     * @param orientation2     the second orientation in the multiplication. Not modified.
@@ -234,7 +234,7 @@ public class QuaternionTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1     the first orientation in the multiplication. Not modified.
     * @param inverse1         whether the first orientation should be inverted in the multiplication.
     * @param orientation2     the second orientation in the multiplication. Not modified.

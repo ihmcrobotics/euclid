@@ -9,7 +9,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 
 /**
  * This class provides a set of factories to create primitive shapes as convex polytopes.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidPolytopeFactories
@@ -24,7 +24,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The cone has its base center at the origin and its axis of revolution aligned to the z-axis.
     * </p>
-    * 
+    *
     * @param height            the height of the cone.
     * @param radius            the radius of the cone base.
     * @param numberOfDivisions the number of divisions for discretizing the cone.
@@ -49,7 +49,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The cube is axis-aligned and is centered at the origin.
     * </p>
-    * 
+    *
     * @param edgeLength the cube edge length.
     * @return the cube vertices.
     */
@@ -73,7 +73,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The cylinder is centered at the origin and its axis of revolution is aligned to the z-axis.
     * </p>
-    * 
+    *
     * @param length            the length of the cylinder.
     * @param radius            the radius of the cylinder.
     * @param numberOfDivisions the number of divisions for discretizing the cylinder.
@@ -104,7 +104,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The icosahedron is centered at the origin.
     * </p>
-    * 
+    *
     * @param radius the radius of the circumscribed sphere of the icosahedron.
     * @return the icosahedron vertices.
     */
@@ -116,7 +116,7 @@ public class EuclidPolytopeFactories
    /**
     * Discretizes a sphere using the {@link IcoSphereFactory} and returns a list of vertices
     * representing it.
-    * 
+    *
     * @param radius         the sphere radius.
     * @param recursionLevel the resolution.
     * @return the sphere vertices.
@@ -160,7 +160,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The cone has its base center at the origin and its axis of revolution aligned to the z-axis.
     * </p>
-    * 
+    *
     * @param height            the height of the cone.
     * @param radius            the radius of the cone base.
     * @param numberOfDivisions the number of divisions for discretizing the cone.
@@ -176,7 +176,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The cube is axis-aligned and is centered at the origin.
     * </p>
-    * 
+    *
     * @param edgeLength the cube edge length.
     * @return the convex polytope representing a cube.
     */
@@ -190,7 +190,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The cylinder is centered at the origin and its axis of revolution is aligned to the z-axis.
     * </p>
-    * 
+    *
     * @param length            the length of the cylinder.
     * @param radius            the radius of the cylinder.
     * @param numberOfDivisions the number of divisions for discretizing the cylinder.
@@ -206,7 +206,7 @@ public class EuclidPolytopeFactories
     * <p>
     * The icosahedron is centered at the origin.
     * </p>
-    * 
+    *
     * @param radius the radius of the circumscribed sphere of the icosahedron.
     * @return the convex polytope representing a icosahedron.
     */
@@ -217,7 +217,7 @@ public class EuclidPolytopeFactories
 
    /**
     * Creates a new convex polytope to represent a ico-sphere.
-    * 
+    *
     * @param radius         the sphere radius.
     * @param recursionLevel the resolution.
     * @return the convex polytope representing a ico-sphere.

@@ -13,7 +13,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * A cylinder 3D is represented by its length, its radius, the position of its center, and its axis
  * of revolution.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
@@ -47,7 +47,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
     * <p>
     * Note, the axis should remain a unit-length vector.
     * </p>
-    * 
+    *
     * @return the axis of this cylinder.
     */
    @Override
@@ -55,7 +55,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
 
    /**
     * Sets the size of this cylinder.
-    * 
+    *
     * @param length the new length.
     * @param radius the new radius.
     */
@@ -67,7 +67,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
 
    /**
     * Sets this cylinder axis of revolution.
-    * 
+    *
     * @param axis the new axis. Not modified.
     */
    default void setAxis(Vector3DReadOnly axis)
@@ -116,7 +116,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
 
    /**
     * Sets this cylinder properties.
-    * 
+    *
     * @param position the position of this cylinder center. Not modified.
     * @param axis     the axis of revolution of this cylinder. Not modified.
     * @param length   the new length.

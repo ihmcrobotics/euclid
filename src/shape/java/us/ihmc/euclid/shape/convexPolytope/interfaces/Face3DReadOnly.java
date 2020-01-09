@@ -20,7 +20,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This is part of a Doubly Connected Edge List data structure
  * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Face3DReadOnly extends SupportingVertexHolder
@@ -44,7 +44,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    /**
     * Gets this face area.
-    * 
+    *
     * @return this face area.
     */
    double getArea();
@@ -85,7 +85,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * <p>
     * The vertices are clockwise ordered.
     * </p>
-    * 
+    *
     * @return this face's vertices.
     */
    default List<? extends Vertex3DReadOnly> getVertices()
@@ -116,7 +116,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    /**
     * Tests whether this face has at least one edge or not.
-    * 
+    *
     * @return {@code true} if this face has no edge, {@code false} otherwise.
     */
    default boolean isEmpty()
@@ -154,7 +154,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * In case the observer located directly above, below, or on the face, this method returns
     * {@code null}.
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @return the edges in order that are in the line-of-sight.
     */
@@ -193,7 +193,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * In case the observer located directly above, below, or on the face, this method returns
     * {@code null}.
     * </p>
-    * 
+    *
     * @param observer the coordinates of the observer. Not modified.
     * @param epsilon  tolerance to determine whether to extend the line-of-sight.
     * @return the edges in order that are in the line-of-sight.
@@ -435,7 +435,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Tests whether the query is located directly above or below this face, such its projection would
     * be located inside this face.
-    * 
+    *
     * @param query the coordinates of the query. Not modified.
     * @return {@code true} if the query is located either directly above or below this face,
     *         {@code false} otherwise.
@@ -477,7 +477,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    /**
     * Finds, if it exists, the common edge between {@code this} and the given {@code neighbor}.
-    * 
+    *
     * @param neighbor the face to find to common edge to. Not modified.
     * @return the edge common to both faces.
     */
@@ -523,7 +523,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * <p>
     * If the query is located directly above, below, or on the face, this method returns {@code null}.
     * </p>
-    * 
+    *
     * @param query the coordinates of the query. Not modified.
     * @return the closest visible edge to the query, or {@code null} if there is no visible edge from
     *         the query.
@@ -612,7 +612,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
     * The returned value is signed as follows: positive if the query is located above the face's
     * support plane, negative if it is located below.
     * </p>
-    * 
+    *
     * @param query the coordinates of the query. Not modified.
     * @return the signed minimum distance between the point and this face's support plane.
     */
@@ -640,7 +640,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    /**
     * Computes the minimum distance between a given point and the infinitely large plane supporting
     * this face.
-    * 
+    *
     * @param query the coordinates of the query. Not modified.
     * @return the minimum distance between the point and this face's support plane.
     */
@@ -664,7 +664,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    /**
     * Computes the orthogonal projection of a point on this face.
-    * 
+    *
     * @param pointToProject   the point to compute the projection of. Not modified.
     * @param projectionToPack point in which the projection of the point onto this face is stored.
     *                         Modified.
@@ -721,7 +721,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    /**
     * Tests on a per component basis if this face and {@code other} are equal to an {@code epsilon}.
-    * 
+    *
     * @param other   the other face to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two faces are equal component-wise, {@code false} otherwise.
@@ -741,7 +741,7 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    /**
     * Compares {@code this} to {@code other} to determine if the two faces are geometrically similar.
-    * 
+    *
     * @param other   the other face to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two faces represent the same geometry, {@code false} otherwise.

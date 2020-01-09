@@ -743,6 +743,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
     * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} with {@link YawPitchRoll}.
     */
+   @Deprecated
    public void setRotationYawPitchRoll(double[] yawPitchRoll)
    {
       setRotationYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
@@ -921,6 +922,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
     * @deprecated Use {@link #set(Orientation3DReadOnly, double)} with {@link YawPitchRoll}.
     */
+   @Deprecated
    public void setYawPitchRoll(double[] yawPitchRoll)
    {
       setYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
@@ -993,7 +995,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
 
    /**
     * Appends the given orientation to the rotation part of {@code this}.
-    * 
+    *
     * @param orientation the orientation to append to {@code this}. Not modified.
     */
    public void append(Orientation3DReadOnly orientation)
@@ -1003,7 +1005,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
 
    /**
     * Inverts the rotation part of {@code this} and appends the given orientation.
-    * 
+    *
     * @param orientation the orientation to append to {@code this}. Not modified.
     */
    public void appendInvertThis(Orientation3DReadOnly orientation)
@@ -1013,7 +1015,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
 
    /**
     * Appends the inverse of the given orientation to the rotation part of {@code this}.
-    * 
+    *
     * @param orientation the orientation to append to {@code this}. Not modified.
     */
    public void appendInvertOther(Orientation3DReadOnly orientation)
@@ -1080,7 +1082,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
 
    /**
     * Prepends the given orientation to the rotation part of {@code this}.
-    * 
+    *
     * @param orientation the orientation to prepend to {@code this}. Not modified.
     */
    public void prepend(Orientation3DReadOnly orientation)
@@ -1090,7 +1092,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
 
    /**
     * Inverts the rotation part of {@code this} and prepends the given orientation.
-    * 
+    *
     * @param orientation the orientation to prepend to {@code this}. Not modified.
     */
    public void prependInvertThis(Orientation3DReadOnly orientation)
@@ -1100,7 +1102,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
 
    /**
     * Prepends the inverse of the given orientation to the rotation part of {@code this}.
-    * 
+    *
     * @param orientation the orientation to prepend to {@code this}. Not modified.
     */
    public void prependInvertOther(Orientation3DReadOnly orientation)

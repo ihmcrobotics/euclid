@@ -27,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * This class provides a large variety of basics geometry operations.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidGeometryTools
@@ -689,6 +689,7 @@ public class EuclidGeometryTools
     *             {@link #orientation3DFromFirstToSecondVector3D(double,double,double,double,double,double,Orientation3DBasics)}
     *             instead
     */
+   @Deprecated
    public static void axisAngleFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX,
                                                          double secondVectorY, double secondVectorZ, AxisAngleBasics rotationToPack)
    {
@@ -811,6 +812,7 @@ public class EuclidGeometryTools
     *             {@link #orientation3DFromFirstToSecondVector3D(Vector3DReadOnly,Vector3DReadOnly,Orientation3DBasics)}
     *             instead
     */
+   @Deprecated
    public static void axisAngleFromFirstToSecondVector3D(Vector3DReadOnly firstVector, Vector3DReadOnly secondVector, AxisAngleBasics rotationToPack)
    {
       orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
@@ -961,6 +963,7 @@ public class EuclidGeometryTools
     * @deprecated Use {@link #orientation3DFromZUpToVector3D(Vector3DReadOnly,Orientation3DBasics)}
     *             instead
     */
+   @Deprecated
    public static void axisAngleFromZUpToVector3D(Vector3DReadOnly vector, AxisAngleBasics rotationToPack)
    {
       orientation3DFromZUpToVector3D(vector, rotationToPack);
@@ -1305,18 +1308,18 @@ public class EuclidGeometryTools
 
    /**
     * Computes the area of a triangle defined by the length of each of its side using Heron's formula:
-    * 
+    *
     * <pre>
     * s = 0.5(a + b + c)
     * A = &radic;{s(s - a)(s - b)(s - c)}
     * </pre>
-    * 
+    *
     * No specific ordering of the arguments is required.
     * <p>
     * Note that the method {@link #triangleArea(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)} is
     * computationally cheaper.
     * </p>
-    * 
+    *
     * @param lengthA the length of the first side.
     * @param lengthB the length of the second side.
     * @param lengthC the length of the third side.
@@ -1331,17 +1334,17 @@ public class EuclidGeometryTools
    /**
     * Computes the area of a triangle defined by the length <b>squared</b> of each of its side using a
     * derivation from Heron's formula:
-    * 
+    *
     * <pre>
     * A = 0.25 * &radic;{4(a<sup>2</sup>b<sup>2</sup> + a<sup>2</sup>c<sup>2</sup> + b<sup>2</sup>c<sup>2</sup>) - (a<sup>2</sup> + b<sup>2</sup> + c<sup>2</sup>)<sup>2</sup>}
     * </pre>
-    * 
+    *
     * No specific ordering of the arguments is required.
     * <p>
     * Note that the method {@link #triangleArea(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly)} is
     * computationally cheaper.
     * </p>
-    * 
+    *
     * @param lengthSquaredA the square of the length of the first side.
     * @param lengthSquaredB the square of the length of the second side.
     * @param lengthSquaredC the square of the length of the third side.
@@ -1651,7 +1654,12 @@ public class EuclidGeometryTools
    public static double distanceFromPoint2DToLineSegment2D(double pointX, double pointY, double lineSegmentStartX, double lineSegmentStartY,
                                                            double lineSegmentEndX, double lineSegmentEndY)
    {
-      return EuclidCoreTools.squareRoot(distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, lineSegmentStartX, lineSegmentStartY, lineSegmentEndX, lineSegmentEndY));
+      return EuclidCoreTools.squareRoot(distanceSquaredFromPoint2DToLineSegment2D(pointX,
+                                                                                  pointY,
+                                                                                  lineSegmentStartX,
+                                                                                  lineSegmentStartY,
+                                                                                  lineSegmentEndX,
+                                                                                  lineSegmentEndY));
    }
 
    /**
@@ -1926,14 +1934,14 @@ public class EuclidGeometryTools
                                                            double lineSegmentStartZ, double lineSegmentEndX, double lineSegmentEndY, double lineSegmentEndZ)
    {
       return EuclidCoreTools.squareRoot(distanceSquaredFromPoint3DToLineSegment3D(pointX,
-                                                                 pointY,
-                                                                 pointZ,
-                                                                 lineSegmentStartX,
-                                                                 lineSegmentStartY,
-                                                                 lineSegmentStartZ,
-                                                                 lineSegmentEndX,
-                                                                 lineSegmentEndY,
-                                                                 lineSegmentEndZ));
+                                                                                  pointY,
+                                                                                  pointZ,
+                                                                                  lineSegmentStartX,
+                                                                                  lineSegmentStartY,
+                                                                                  lineSegmentStartZ,
+                                                                                  lineSegmentEndX,
+                                                                                  lineSegmentEndY,
+                                                                                  lineSegmentEndZ));
    }
 
    /**
@@ -6263,7 +6271,7 @@ public class EuclidGeometryTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param pointX              the x-coordinate of the query point.
     * @param pointY              the y-coordinate of the query point.
     * @param pointZ              the z-coordinate of the query point.
@@ -6314,7 +6322,7 @@ public class EuclidGeometryTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param pointX             the x-coordinate of the query point.
     * @param pointY             the y-coordinate of the query point.
     * @param pointZ             the z-coordinate of the query point.
@@ -6359,7 +6367,7 @@ public class EuclidGeometryTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param point              the coordinates of the query point. Not modified.
     * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
     *                           modified.
@@ -6390,7 +6398,7 @@ public class EuclidGeometryTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param pointX             the x-coordinate of the query point.
     * @param pointY             the y-coordinate of the query point.
     * @param pointZ             the z-coordinate of the query point.
@@ -6421,7 +6429,7 @@ public class EuclidGeometryTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param point              the coordinates of the query point.
     * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
     *                           modified.
@@ -6450,7 +6458,7 @@ public class EuclidGeometryTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param pointX             the x-coordinate of the query point.
     * @param pointY             the y-coordinate of the query point.
     * @param pointZ             the z-coordinate of the query point.
@@ -6481,7 +6489,7 @@ public class EuclidGeometryTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param point              the coordinates of the query point.
     * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
     *                           modified.

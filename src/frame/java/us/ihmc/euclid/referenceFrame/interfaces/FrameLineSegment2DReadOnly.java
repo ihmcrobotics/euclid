@@ -1019,8 +1019,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
-    *                                         [0, 1].
+    * @throws {@link                          RuntimeException} if {@code percentage} &notin; [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
     *                                         in the same reference frame.
     */
@@ -1065,7 +1064,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
     * convex polygon 2D.
-    * 
+    *
     * @param convexPolygon the polygon this line segment may intersect. Not modified.
     * @return the intersections between the line segment and the polygon.
     * @throws ReferenceFrameMismatchException if {@code convexPolygon} and {@code this} are not

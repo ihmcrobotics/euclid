@@ -12,11 +12,11 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 
 /**
  * Class for holding the result of a collision query between two shapes.
- * 
+ *
  * @author Sylvain Bertrand
  */
-public class EuclidShape3DCollisionResult
-      implements EuclidShape3DCollisionResultBasics, EpsilonComparable<EuclidShape3DCollisionResult>, GeometricallyComparable<EuclidShape3DCollisionResult>, Settable<EuclidShape3DCollisionResult>
+public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResultBasics, EpsilonComparable<EuclidShape3DCollisionResult>,
+      GeometricallyComparable<EuclidShape3DCollisionResult>, Settable<EuclidShape3DCollisionResult>
 {
    /** Whether the shapes are colliding. */
    private boolean shapesAreColliding;
@@ -47,7 +47,7 @@ public class EuclidShape3DCollisionResult
 
    /**
     * Clone constructor.
-    * 
+    *
     * @param other the other object to clone. Not modified.
     */
    public EuclidShape3DCollisionResult(EuclidShape3DCollisionResultReadOnly other)
@@ -73,7 +73,7 @@ public class EuclidShape3DCollisionResult
    @Override
    public void setSignedDistance(double distance)
    {
-      this.signedDistance = distance;
+      signedDistance = distance;
    }
 
    /** {@inheritDoc} */
@@ -162,7 +162,7 @@ public class EuclidShape3DCollisionResult
 
    /**
     * Tests each feature of {@code this} against {@code other} for geometric similarity.
-    * 
+    *
     * @param other   the other collision result to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each feature.
     * @return {@code true} if the two collision results are considered geometrically similar,
@@ -193,21 +193,21 @@ public class EuclidShape3DCollisionResult
    /**
     * Provides a {@code String} representation of this collision result as follows:<br>
     * When shapes are colliding:
-    * 
+    *
     * <pre>
     * Collision test result: colliding, depth: 0.539
     * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * </pre>
-    * 
+    *
     * When shapes are not colliding:
-    * 
+    *
     * <pre>
     * Collision test result: non-colliding, separating distance: 0.539
     * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this collisiont result.
     */
    @Override

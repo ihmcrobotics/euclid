@@ -37,7 +37,7 @@ public interface FixedFrameYawPitchRollBasics extends FrameYawPitchRollReadOnly,
 {
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    * 
+    *
     * @param referenceFrame the coordinate system in which the given orientation is expressed.
     * @param yaw            the new yaw angle.
     * @param pitch          the new pitch angle.
@@ -53,7 +53,7 @@ public interface FixedFrameYawPitchRollBasics extends FrameYawPitchRollReadOnly,
 
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    * 
+    *
     * @param referenceFrame       the coordinate system in which the given {@code yawPitchRollReadOnly}
     *                             is expressed.
     * @param yawPitchRollReadOnly the other yaw-pitch-roll. Not modified.
@@ -68,7 +68,7 @@ public interface FixedFrameYawPitchRollBasics extends FrameYawPitchRollReadOnly,
 
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    * 
+    *
     * @param other the other yaw-pitch-roll. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
@@ -80,7 +80,7 @@ public interface FixedFrameYawPitchRollBasics extends FrameYawPitchRollReadOnly,
 
    /**
     * Sets this yaw-pitch-roll to {@code other} and calls {@link #negate()}.
-    * 
+    *
     * @param other the other yaw-pitch-roll to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.

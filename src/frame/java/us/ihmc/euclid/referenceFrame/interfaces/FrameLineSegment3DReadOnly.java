@@ -538,8 +538,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     *
     * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
-    *                                         [0, 1].
+    * @throws {@link                          RuntimeException} if {@code percentage} &notin; [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
     *                                         in the same reference frame.
     */
@@ -555,8 +554,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     *
     * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
-    *                                         [0, 1].
+    * @throws {@link                          RuntimeException} if {@code percentage} &notin; [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
     *                                         in the same reference frame.
     */

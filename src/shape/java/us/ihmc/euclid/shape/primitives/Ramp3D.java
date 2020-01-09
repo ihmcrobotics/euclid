@@ -27,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * <li>The right face is vertical (XZ-plane) at {@code y=size.getY()/2.0}.
  * </ul>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
@@ -197,7 +197,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    @Override
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
-      this.supplier = newSupplier;
+      supplier = newSupplier;
    }
 
    /**
@@ -289,7 +289,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * Provides a {@code String} representation of this ramp 3D as follows:<br>
     * Ramp 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: (
     * 0.191, 0.719, 0.479 )]
-    * 
+    *
     * @return the {@code String} representing this ramp 3D.
     */
    @Override

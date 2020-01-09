@@ -16,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * This class provides a tool for exporting datasets that can then be used to generate a test case.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public abstract class ConvexPolytope3DTroublesomeDataset
@@ -28,7 +28,7 @@ public abstract class ConvexPolytope3DTroublesomeDataset
 
    /**
     * Gets the reference to the convex polytope before the issue.
-    * 
+    *
     * @return the convex polytope.
     */
    public ConvexPolytope3D getConvexPolytope3D()
@@ -38,7 +38,7 @@ public abstract class ConvexPolytope3DTroublesomeDataset
 
    /**
     * Gets the reference to the troublesome point.
-    * 
+    *
     * @return the troublesome point.
     */
    public Point3D getTroublesomePoint()
@@ -48,7 +48,7 @@ public abstract class ConvexPolytope3DTroublesomeDataset
 
    /**
     * Generates a {@code String} that can be used as dataset for test case.
-    * 
+    *
     * @param pointsBeforeIssue   the list of points before the issue. Not modified.
     * @param troublesomePoint    the coordinates of the point causing the issue. Not modified.
     * @param constructionEpsilon the construction epsilon used with the convex polytope.
@@ -77,7 +77,7 @@ public abstract class ConvexPolytope3DTroublesomeDataset
 
    /**
     * Generates a {@code String} that can be used as dataset for test case.
-    * 
+    *
     * @param convexPolytope3D the convex polytope to get a dataset from.
     * @return the dataset as a {@code String}.
     */
@@ -88,7 +88,7 @@ public abstract class ConvexPolytope3DTroublesomeDataset
 
    /**
     * Generates a {@code String} that can be used as dataset for test case.
-    * 
+    *
     * @param convexPolytope3D the convex polytope before the issue. Not modified.
     * @param troublesomePoint the coordinates of the point causing the issue. Not modified.
     * @return the dataset as a {@code String}.

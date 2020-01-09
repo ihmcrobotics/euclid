@@ -1548,7 +1548,7 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
     * solution to properly handle that scenario. The main problem here was about to isolate this type
     * of situation. It seems that if an {@code inPlaneFace} has an edge that is part of the silhouette
     * but is not visible by the new vertex, then we should abort and throw away the new vertex.
-    * 
+    *
     * @author Sylvain Bertrand
     */
    public static class ConvexPolytope3DTroublesomeDataset_20190327_213133 extends ConvexPolytope3DTroublesomeDataset

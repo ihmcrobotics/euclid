@@ -60,7 +60,7 @@ public interface FrameYawPitchRollBasics extends FixedFrameYawPitchRollBasics, F
 
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    * 
+    *
     * @param referenceFrame the new reference frame for this frame yaw-pitch-roll.
     * @param yaw            the new yaw angle.
     * @param pitch          the new pitch angle.
@@ -74,7 +74,7 @@ public interface FrameYawPitchRollBasics extends FixedFrameYawPitchRollBasics, F
 
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    * 
+    *
     * @param referenceFrame       the new reference frame for this frame yaw-pitch-roll.
     * @param yawPitchRollReadOnly the other yaw-pitch-roll. Not modified.
     */
@@ -87,7 +87,7 @@ public interface FrameYawPitchRollBasics extends FixedFrameYawPitchRollBasics, F
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other} and updates the reference
     * frame.
-    * 
+    *
     * @param other the other yaw-pitch-roll. Not modified.
     */
    default void setIncludingFrame(FrameYawPitchRollReadOnly other)

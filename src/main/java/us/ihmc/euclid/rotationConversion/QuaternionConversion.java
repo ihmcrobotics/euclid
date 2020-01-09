@@ -381,6 +381,7 @@ public abstract class QuaternionConversion
     * @deprecated Use {@link #convertYawPitchRollToQuaternion(YawPitchRollReadOnly, QuaternionBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertYawPitchRollToQuaternion(double[] yawPitchRoll, QuaternionBasics quaternionToPack)
    {
       convertYawPitchRollToQuaternion(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], quaternionToPack);

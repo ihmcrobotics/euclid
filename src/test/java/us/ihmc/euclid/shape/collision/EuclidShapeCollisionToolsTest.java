@@ -83,7 +83,7 @@ public class EuclidShapeCollisionToolsTest
          List<Point3D> faceVerticesAndFarthestIn = new ArrayList<>(Arrays.asList(getBox3DFaceVertices(axis, bound, box3D)));
 
          // Finding how far the point can be inside of the box while the selected face is still the closest.
-         // TODO This is a conservative approach and does not consider the entire region of points that are closer the given face. 
+         // TODO This is a conservative approach and does not consider the entire region of points that are closer the given face.
          double minHalfSize = 0.5 * EuclidCoreTools.min(box3D.getSizeX(), box3D.getSizeY(), box3D.getSizeZ());
          Point3D farthestInside = new Point3D();
          farthestInside.scaleAdd(-minHalfSize, closestFacePlane.getNormal(), closestFacePlane.getPoint());
@@ -529,7 +529,7 @@ public class EuclidShapeCollisionToolsTest
             regionToExplore.add(farthestPointInside);
          }
          else
-         { // The region that is the farthest from the end form a circle, beyond it the points are closer to the opposite end. 
+         { // The region that is the farthest from the end form a circle, beyond it the points are closer to the opposite end.
             Point3D farthestInsideCenter = new Point3D();
             double maxDistanceIn = 0.5 * cylinder3D.getLength();
             farthestInsideCenter.scaleAdd(-endSign * maxDistanceIn, cylinderAxis, endCenter);

@@ -130,7 +130,7 @@ public interface BoundingBox2DReadOnly
    /**
     * Tests if the min and max points defining this bounding box contain at least one
     * {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if this bounding box contains at least one {@link Double#NaN}, {@code false}
     *         otherwise.
     */

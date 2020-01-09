@@ -24,35 +24,35 @@ import us.ihmc.euclid.tools.YawPitchRollTools;
  * </p>
  * <p>
  * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
- * 
+ *
  * <pre>
  *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
  * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
  *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
  * </pre>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DBasics
 {
    /**
     * Sets the yaw angle.
-    * 
+    *
     * @param yaw the new yaw angle.
     */
    void setYaw(double yaw);
 
    /**
     * Sets the pitch angle.
-    * 
+    *
     * @param pitch the new pitch angle.
     */
    void setPitch(double pitch);
 
    /**
     * Sets the roll angle.
-    * 
+    *
     * @param roll the new roll angle.
     */
    void setRoll(double roll);
@@ -112,7 +112,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
 
    /**
     * Sets this yaw-pitch-roll angles.
-    * 
+    *
     * @param yaw   the new yaw angle.
     * @param pitch the new pitch angle.
     * @param roll  the new roll angle.
@@ -133,7 +133,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
 
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    * 
+    *
     * @param other the other yaw-pitch-roll. Not modified.
     */
    default void set(YawPitchRollReadOnly other)
@@ -143,7 +143,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
 
    /**
     * Sets this yaw-pitch-roll to {@code other} and calls {@link #negate()}.
-    * 
+    *
     * @param other the other yaw-pitch-roll to copy the values from. Not modified.
     */
    default void setAndNegate(YawPitchRollReadOnly other)

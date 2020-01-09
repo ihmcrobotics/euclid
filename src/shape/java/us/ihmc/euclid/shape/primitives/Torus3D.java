@@ -95,6 +95,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
     * @param tubeRadius radius of the torus' tube.
     * @throws IllegalArgumentException if {@code radius} or {@code tubeRadius} is negative.
     */
+   @Override
    public void setRadii(double radius, double tubeRadius)
    {
       if (radius < 0.0)
@@ -196,7 +197,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
     * Provides a {@code String} representation of this torus 3D as follows:<br>
     * Torus 3D: [position: (-0.362, -0.617, 0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius: 0.170,
     * tube radius: 0.906]
-    * 
+    *
     * @return the {@code String} representing this torus 3D.
     */
    @Override

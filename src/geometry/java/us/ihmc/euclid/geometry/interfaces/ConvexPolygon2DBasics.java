@@ -16,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * <p>
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface ConvexPolygon2DBasics extends ConvexPolygon2DReadOnly, Clearable, Transformable

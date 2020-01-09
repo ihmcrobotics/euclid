@@ -340,6 +340,7 @@ public abstract class RotationVectorConversion
     *             {@link #convertYawPitchRollToRotationVector(YawPitchRollReadOnly, Vector3DBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertYawPitchRollToRotationVector(double[] yawPitchRoll, Vector3DBasics rotationVectorToPack)
    {
       convertYawPitchRollToRotationVector(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], rotationVectorToPack);

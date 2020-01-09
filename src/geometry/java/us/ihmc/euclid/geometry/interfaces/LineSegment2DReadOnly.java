@@ -324,7 +324,7 @@ public interface LineSegment2DReadOnly
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return copy of this line segment flipped.
     */
    default LineSegment2D flipDirectionCopy()

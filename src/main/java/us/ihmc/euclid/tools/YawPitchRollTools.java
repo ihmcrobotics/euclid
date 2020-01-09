@@ -28,7 +28,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  * instead of using tools classes. The API of these tools classes is more likely to change over
  * time.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class YawPitchRollTools
@@ -43,7 +43,7 @@ public class YawPitchRollTools
 
    /**
     * Tests whether the three given angles yaw, pitch, and roll are equal to zero.
-    * 
+    *
     * @param yaw     the first angle representing the rotation around the z-axis.
     * @param pitch   the second angle representing the rotation around the y-axis.
     * @param roll    the third angle representing the rotation around the x-axis.
@@ -58,7 +58,7 @@ public class YawPitchRollTools
    /**
     * Tests whether the orientation represented by the given three angles yaw, pitch, and roll
     * represent an orientation 2D, i.e. only the yaw angle is non-zero.
-    * 
+    *
     * @param yaw     the first angle representing the rotation around the z-axis.
     * @param pitch   the second angle representing the rotation around the y-axis.
     * @param roll    the third angle representing the rotation around the x-axis.
@@ -164,7 +164,7 @@ public class YawPitchRollTools
    /**
     * Calculates the inverse of the orientation represented by the given {@code yaw}, {@code pitch},
     * and {@code roll}.
-    * 
+    *
     * @param yaw               the first angle representing the rotation around the z-axis.
     * @param pitch             the second angle representing the rotation around the y-axis.
     * @param roll              the third angle representing the rotation around the x-axis.
@@ -990,7 +990,7 @@ public class YawPitchRollTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1       the first orientation in the multiplication. Not modified.
     * @param inverse1           whether the first orientation should be inverted in the multiplication.
     * @param orientation2       the second orientation in the multiplication. Not modified.

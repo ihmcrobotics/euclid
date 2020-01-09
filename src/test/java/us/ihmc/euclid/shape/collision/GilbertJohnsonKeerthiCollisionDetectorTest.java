@@ -135,7 +135,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
-         { // Create the tetrahedron to have its top vertex closest to a face. 
+         { // Create the tetrahedron to have its top vertex closest to a face.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsTwoCombinations("Iteration: " + i, convexPolytope3D, EuclidShapeRandomTools.nextConvexPolytope3D(random), false, null, null);
@@ -156,7 +156,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             }
          }
 
-         { // Create the tetrahedron to have its top vertex closest to an edge. 
+         { // Create the tetrahedron to have its top vertex closest to an edge.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsTwoCombinations("Iteration: " + i, convexPolytope3D, EuclidShapeRandomTools.nextConvexPolytope3D(random), false, null, null);
@@ -227,7 +227,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-         { // Create the tetrahedron from its top vertex lying inside the polytope 
+         { // Create the tetrahedron from its top vertex lying inside the polytope
             ConvexPolytope3D tetrahedron;
 
             if (convexPolytope3D.isEmpty())

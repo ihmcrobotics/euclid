@@ -371,7 +371,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          }
          else
          {
-            if (EuclidCoreTools.norm((vectorA.getX() - vectorB.getX()), (vectorA.getY() - vectorB.getY()), (vectorA.getZ() - vectorB.getZ())) <= getEpsilon())
+            if (EuclidCoreTools.norm(vectorA.getX() - vectorB.getX(), vectorA.getY() - vectorB.getY(), vectorA.getZ() - vectorB.getZ()) <= getEpsilon())
             {
                assertTrue(vectorA.geometricallyEquals(vectorB, getEpsilon()));
             }

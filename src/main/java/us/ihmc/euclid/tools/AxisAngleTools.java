@@ -25,7 +25,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * in classes such as {@link AxisAngle} and the user should always using this classes instead of
  * using tools classes. The API of these tools classes is more likely to change over time.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class AxisAngleTools
@@ -565,7 +565,7 @@ public class AxisAngleTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1    the first orientation in the multiplication. Not modified.
     * @param inverse1        whether the first orientation should be inverted in the multiplication.
     * @param orientation2    the second orientation in the multiplication. Not modified.
@@ -618,7 +618,7 @@ public class AxisAngleTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1    the first orientation in the multiplication. Not modified.
     * @param inverse1        whether the first orientation should be inverted in the multiplication.
     * @param orientation2    the second orientation in the multiplication. Not modified.
@@ -658,7 +658,7 @@ public class AxisAngleTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1    the first orientation in the multiplication. Not modified.
     * @param inverse1        whether the first orientation should be inverted in the multiplication.
     * @param orientation2    the second orientation in the multiplication. Not modified.

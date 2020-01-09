@@ -310,6 +310,7 @@ public abstract class YawPitchRollConversion
     *             {@link #convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly, YawPitchRollBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly rotationScaleMatrix, double[] yawPitchRollToPack)
    {
       convertMatrixToYawPitchRoll(rotationScaleMatrix.getRotationMatrix(), yawPitchRollToPack);
@@ -401,6 +402,7 @@ public abstract class YawPitchRollConversion
     * @deprecated Use {@link #convertMatrixToYawPitchRoll(RotationMatrixReadOnly, YawPitchRollBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertMatrixToYawPitchRoll(RotationMatrixReadOnly rotationMatrix, double[] yawPitchRollToPack)
    {
       yawPitchRollToPack[0] = computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10());
@@ -713,6 +715,7 @@ public abstract class YawPitchRollConversion
     * @deprecated Use {@link #convertQuaternionToYawPitchRoll(QuaternionReadOnly, YawPitchRollBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertQuaternionToYawPitchRoll(QuaternionReadOnly quaternion, double[] yawPitchRollToPack)
    {
       if (quaternion.containsNaN())
@@ -1069,6 +1072,7 @@ public abstract class YawPitchRollConversion
     * @deprecated Use {@link #convertAxisAngleToYawPitchRoll(AxisAngleReadOnly, YawPitchRollBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertAxisAngleToYawPitchRoll(AxisAngleReadOnly axisAngle, double[] yawPitchRollToPack)
    {
       if (axisAngle.containsNaN())
@@ -1163,6 +1167,7 @@ public abstract class YawPitchRollConversion
     *             {@link #convertAxisAngleToYawPitchRollImpl(double, double, double, double, double[])}
     *             instead.
     */
+   @Deprecated
    static void convertAxisAngleToYawPitchRollImpl(double ux, double uy, double uz, double angle, double[] yawPitchRollToPack)
    {
       double sinTheta = Math.sin(angle);
@@ -1418,6 +1423,7 @@ public abstract class YawPitchRollConversion
     *             {@link #convertRotationVectorToYawPitchRoll(Vector3DReadOnly, YawPitchRollBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertRotationVectorToYawPitchRoll(Vector3DReadOnly rotationVector, double[] yawPitchRollToPack)
    {
       if (rotationVector.containsNaN())

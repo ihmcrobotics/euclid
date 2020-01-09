@@ -68,7 +68,7 @@ class EuclidShapeRandomToolsTest
             averageDistanceToC += a.distance(nextPoint) / numberOfPoints;
          }
 
-         // Somehow the expected distance are exactly 2 times bigger... 
+         // Somehow the expected distance are exactly 2 times bigger...
          double sqrt3 = EuclidCoreTools.squareRoot(3.0);
          double expectedDistanceToCentroid = (8.0 * sqrt3 + 3.0 * asinh(sqrt3) + Math.log(2.0 + sqrt3)) / 72.0;
          assertEquals(0.5 * expectedDistanceToCentroid, averageDistanceToCentroid, 1.0e-4);

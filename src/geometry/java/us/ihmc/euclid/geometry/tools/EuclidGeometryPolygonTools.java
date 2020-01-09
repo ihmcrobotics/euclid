@@ -56,7 +56,7 @@ public class EuclidGeometryPolygonTools
       };
 
       abstract boolean isFirstBetter(double first, double second);
-   };
+   }
 
    private EuclidGeometryPolygonTools()
    {
@@ -2442,7 +2442,7 @@ public class EuclidGeometryPolygonTools
 
    /**
     * Finds the index of a vertex in the specified supplier given search criteria.
-    * 
+    *
     * @param vertex2DSupplier the vertex supplier containing vertices to search through.
     * @param isXPriority      whether the search should focus first on finding the vertex with the
     *                         "best" x or y coordinate.

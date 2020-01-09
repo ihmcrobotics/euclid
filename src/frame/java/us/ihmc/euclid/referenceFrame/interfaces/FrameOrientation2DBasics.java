@@ -9,7 +9,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
  * <p>
  * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics, FrameChangeable

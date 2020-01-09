@@ -43,7 +43,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the read-only reference of this torus axis of revolution.
-    * 
+    *
     * @return the axis of this torus.
     */
    Vector3DReadOnly getAxis();

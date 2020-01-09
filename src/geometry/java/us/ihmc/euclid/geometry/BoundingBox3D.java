@@ -133,6 +133,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     *
     * @return the read-only reference to the minimum coordinate.
     */
+   @Override
    public Point3DBasics getMinPoint()
    {
       return minPoint;
@@ -143,6 +144,7 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
     *
     * @return the read-only reference to the maximum coordinate.
     */
+   @Override
    public Point3DBasics getMaxPoint()
    {
       return maxPoint;

@@ -669,7 +669,6 @@ public class Torus3DTest
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
          secondTorus.getAxis().negate();
-         ;
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }

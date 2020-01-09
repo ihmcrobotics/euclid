@@ -19,7 +19,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * tools for a general matrix 3D. A matrix 3D implementing this interface cannot guarantee any
  * properties, e.g. each individual element is accessible and modifiable by user.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
@@ -281,13 +281,13 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
 
    /**
     * Sets this matrix to be a diagonal matrix as follows:
-    * 
+    *
     * <pre>
     *        / m00  0   0  \
     * this = |  0  m11  0  |
     *        \  0   0  m22 /
     * </pre>
-    * 
+    *
     * @param m00 the first diagonal element.
     * @param m11 the second diagonal element.
     * @param m22 the third diagonal element.
@@ -299,15 +299,15 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
 
    /**
     * Sets this matrix to be a diagonal matrix as follows:
-    * 
+    *
     * <pre>
     *        / x 0 0 \
     * this = | 0 y 0 |
     *        \ 0 0 z /
     * </pre>
-    * 
+    *
     * where x, y, and z are the components of the given tuple.
-    * 
+    *
     * @param tuple the tuple used to set this matrix diagonal elements. Not modified.
     */
    default void setToDiagonal(Tuple3DReadOnly tuple)
@@ -320,7 +320,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * <p>
     * this = other * other<sup>T<sup>
     * </p>
-    * 
+    *
     * @param other the other matrix used for this operation. Not modified.
     */
    default void setAndMultiplyOuter(Matrix3DReadOnly other)

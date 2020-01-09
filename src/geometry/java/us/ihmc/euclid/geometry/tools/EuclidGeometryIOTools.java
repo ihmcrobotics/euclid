@@ -742,11 +742,11 @@ public class EuclidGeometryIOTools
 
    /**
     * Gets a representative {@code String} of a triangle as follows:
-    * 
+    *
     * <pre>
     * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
     * </pre>
-    * 
+    *
     * @param triangle3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -759,12 +759,12 @@ public class EuclidGeometryIOTools
     * Gets a representative {@code String} of a triangle as follows:
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format     the format to use for each number.
     * @param triangle3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -781,12 +781,12 @@ public class EuclidGeometryIOTools
     * Gets a representative {@code String} of a triangle as follows:
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Triangle 3D: [( 0.174, -0.452, -0.222 ), (-0.052, -0.173, -0.371 ), (-0.558, -0.380,  0.130 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format the format to use for each number.
     * @param a      the first vertex of the triangle to get the {@code String} of. Not modified.
     * @param b      the second vertex of the triangle to get the {@code String} of. Not modified.

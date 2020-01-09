@@ -23,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Triangle face 3D that belongs to a polytope used in the Expanding Polytope algorithm.
- * 
+ *
  * @author Sylvain Bertrand
  * @see ExpandingPolytopeAlgorithm
  */
@@ -60,7 +60,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
     * This face winding is determined to be consistent with the given {@code twin}, i.e. the new face
     * edge linked to it as twin is oriented in opposite direction.
     * </p>
-    * 
+    *
     * @param vertex  one of the new face vertex. Not modified, reference saved.
     * @param twin    the twin of one of the new face's edges. Not modified, reference saved.
     * @param epsilon tolerance used notably for determining whether the new triangle face is affinely
@@ -82,7 +82,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
     * <p>
     * The winding of the new face is based on the ordering of the given vertices.
     * </p>
-    * 
+    *
     * @param v0      the first vertex of the new face. Not modified.
     * @param v1      the second vertex of the new face. Not modified.
     * @param v2      the third vertex of the new face. Not modified.
@@ -140,7 +140,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Tests whether the query equals one of this face vertices.
-    * 
+    *
     * @param query the vertex to evaluate. Not modified.
     * @return {@code true} if this face has a vertex that is equal to the query, {@code false}
     *         otherwise.
@@ -155,7 +155,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
    public boolean canObserverSeeFace(Point3DReadOnly observer)
    {
       // The following test was suggested in the original algorithm.
-      // However, it appears to not be robust to edge-cases where the new vertex would not be above 
+      // However, it appears to not be robust to edge-cases where the new vertex would not be above
       // the current entry.
       // if (TupleTools.dot(closestPoint, observer) >= normSquared)
       //    return true;
@@ -164,7 +164,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Gets the coordinates of the point on this simplex that is the closest to the origin.
-    * 
+    *
     * @return the reference to the closest point to the origin.
     */
    public Point3DReadOnly getClosestPointToOrigin()
@@ -184,7 +184,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Computes if needed and returns the distance between this simplex and the origin.
-    * 
+    *
     * @return the distance to the origin.
     */
    public double getDistanceToOrigin()
@@ -196,7 +196,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Gets the square of the distance between this simplex and the origin.
-    * 
+    *
     * @return the distance squared to the origin.
     */
    public double getDistanceSquaredToOrigin()
@@ -206,7 +206,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Whether this triangle face is affinely dependent.
-    * 
+    *
     * @return {@code true} if this face is affinely dependent, {@code false} if it is sane.
     */
    public boolean isTriangleAffinelyDependent()
@@ -241,7 +241,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Computes the point on the shape A that corresponds to this simplex closest point to the origin.
-    * 
+    *
     * @param pointOnAToPack the point used to store the result. Modified.
     */
    public void computePointOnA(Point3DBasics pointOnAToPack)
@@ -253,7 +253,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Computes the point on the shape B that corresponds to this simplex closest point to the origin.
-    * 
+    *
     * @param pointOnBToPack the point used to store the result. Modified.
     */
    public void computePointOnB(Point3DBasics pointOnBToPack)
@@ -278,7 +278,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Gets the first edge of this face.
-    * 
+    *
     * @return this face's first edge.
     */
    public EPAHalfEdge3D getEdge0()
@@ -288,7 +288,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Gets the second edge of this face.
-    * 
+    *
     * @return this face's second edge.
     */
    public EPAHalfEdge3D getEdge1()
@@ -298,7 +298,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
 
    /**
     * Gets the third edge of this face.
-    * 
+    *
     * @return this face's third edge.
     */
    public EPAHalfEdge3D getEdge2()
@@ -386,7 +386,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
     *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
     *    [( 2.651, -0.950, -1.549 ); ( 2.590, -0.496, -1.161 )]
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this face 3D.
     */
    @Override

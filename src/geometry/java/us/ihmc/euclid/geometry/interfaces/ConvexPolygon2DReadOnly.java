@@ -103,6 +103,7 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     *
     * @return {@code true} if this polygon is empty, {@code false} otherwise.
     */
+   @Override
    default boolean isEmpty()
    {
       return getNumberOfVertices() == 0;

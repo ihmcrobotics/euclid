@@ -9,14 +9,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 /**
  * Write and read interface for representing the pose of a shape 3D.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransformBasics, Transformable
 {
    /**
     * Gets the reference to the orientation part of this pose.
-    * 
+    *
     * @return the orientation part.
     */
    @Override
@@ -24,7 +24,7 @@ public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransfo
 
    /**
     * Gets the reference to the position part of this pose.
-    * 
+    *
     * @return the position part.
     */
    @Override

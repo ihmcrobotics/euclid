@@ -11,7 +11,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
  * <p>
  * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnly, Orientation2DBasics
@@ -46,7 +46,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
    /**
     * Sets this frame orientation to the yaw angle of the given {@code orientationReadOnly} and checks
     * that its current frame equals {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame        the coordinate system in which the given
     *                              {@code orientation3DReadOnly} is expressed.
     * @param orientation3DReadOnly the orientation to get the yaw angle from. Not modified.
@@ -92,7 +92,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
 
    /**
     * Sets this orientation 2D to the yaw angle of the given {@code frameOrientation3DReadOnly}.
-    * 
+    *
     * @param frameOrientation3DReadOnly the orientation to get the yaw angle from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameOrientation3DReadOnly} is not expressed in
     *                                         the same frame as {@code this}.

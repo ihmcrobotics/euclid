@@ -228,6 +228,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
     * @deprecated Use {@link YawPitchRoll} with {@link #getRotationMatrix()}.
     */
+   @Deprecated
    default void getRotationYawPitchRoll(double[] yawPitchRollToPack)
    {
       getRotationMatrix().getYawPitchRoll(yawPitchRollToPack);

@@ -659,7 +659,7 @@ public class EuclidCoreIOTools
     * the resulting {@code String} is composed of one element per line as opposed to
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
-    * 
+    *
     * @param prefix                  the {@code String} to prepend to the result.
     * @param suffix                  the {@code String} to append to the result.
     * @param separator               the {@code String} used to separate elements of the collection.
@@ -693,7 +693,7 @@ public class EuclidCoreIOTools
     * the resulting {@code String} is composed of one element per line as opposed to
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
-    * 
+    *
     * @param separator               the {@code String} used to separate elements of the collection.
     * @param collection              the series of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative

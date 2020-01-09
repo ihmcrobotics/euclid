@@ -114,6 +114,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @return {@code true} if this axis-angle contains a {@link Double#NaN}, {@code false} otherwise.
     */
+   @Override
    default boolean containsNaN()
    {
       return EuclidCoreTools.containsNaN(getX(), getY(), getZ(), getAngle());

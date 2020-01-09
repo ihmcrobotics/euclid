@@ -9,7 +9,7 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**
  * This class provides the tools to perform a variety of assertions on geometry types.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidGeometryTestTools

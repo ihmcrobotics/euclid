@@ -112,6 +112,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     *                                         frame as {@code this}.
     * @deprecated Use {@link #setAndInvert(FrameOrientation3DReadOnly)} instead
     */
+   @Deprecated
    default void setAndInverse(FrameQuaternionReadOnly other)
    {
       setAndInvert(other);

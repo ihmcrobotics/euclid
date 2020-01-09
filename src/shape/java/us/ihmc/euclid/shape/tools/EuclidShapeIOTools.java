@@ -38,11 +38,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets the representative {@code String} of {@code box3D} as follows:
-    * 
+    *
     * <pre>
     * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
     * </pre>
-    * 
+    *
     * @param box3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -55,12 +55,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code box3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format the format to use for each number.
     * @param box3D  the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -77,12 +77,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code box3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format      the format to use for each number.
     * @param position    the location of the box. Not modified.
     * @param orientation the orientation of the box. Not modified.
@@ -97,11 +97,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets a representative {@code String} of {@code capsule3D} as follows:
-    * 
+    *
     * <pre>
     * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
     * </pre>
-    * 
+    *
     * @param capsule3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -114,12 +114,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code capsule3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format    the format to use for each number.
     * @param capsule3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -133,12 +133,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code capsule3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format   the format to use for each number.
     * @param position the location of the capsule. Not modified.
     * @param axis     the capsule's axis. Not modified.
@@ -154,11 +154,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets a representative {@code String} of {@code cylinder3D} as follows:
-    * 
+    *
     * <pre>
     * Cylinder 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
     * </pre>
-    * 
+    *
     * @param cylinder3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -171,12 +171,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code cylinder3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Cylinder 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format     the format to use for each number.
     * @param cylinder3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -190,12 +190,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code cylinder3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Cylinder 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format   the format to use for each number.
     * @param position the location of the cylinder. Not modified.
     * @param axis     the cylinder's axis. Not modified.
@@ -211,11 +211,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets the representative {@code String} of {@code ellipsoid3D} as follows:
-    * 
+    *
     * <pre>
     * Ellipsoid 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), radii: ( 0.191,  0.719,  0.479 )]
     * </pre>
-    * 
+    *
     * @param ellipsoid3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -228,12 +228,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code ellipsoid3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Ellipsoid 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), radii: ( 0.191,  0.719,  0.479 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format      the format to use for each number.
     * @param ellipsoid3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -250,12 +250,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code ellipsoid3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Ellipsoid 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), radii: ( 0.191,  0.719,  0.479 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format      the format to use for each number.
     * @param position    the location of the ellipsoid. Not modified.
     * @param orientation the orientation of the ellipsoid. Not modified.
@@ -270,11 +270,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets a representative {@code String} of {@code pointShape3D} as follows:
-    * 
+    *
     * <pre>
     * Point shape 3D: (-0.362, -0.617,  0.066 )
     * </pre>
-    * 
+    *
     * @param pointShape3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -287,12 +287,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code pointShape3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Point shape 3D: (-0.362, -0.617,  0.066 )
     * </pre>
     * </p>
-    * 
+    *
     * @param format       the format to use for each number.
     * @param pointShape3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -306,12 +306,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code pointShape3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Point shape 3D: (-0.362, -0.617,  0.066 )
     * </pre>
     * </p>
-    * 
+    *
     * @param format   the format to use for each number.
     * @param position the location of the point shape. Not modified.
     * @return the representative {@code String}.
@@ -323,11 +323,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets the representative {@code String} of {@code ramp3D} as follows:
-    * 
+    *
     * <pre>
     * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
     * </pre>
-    * 
+    *
     * @param ramp3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -340,12 +340,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code ramp3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format the format to use for each number.
     * @param ramp3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -362,12 +362,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code ramp3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format      the format to use for each number.
     * @param position    the location of the ramp. Not modified.
     * @param orientation the orientation of the ramp. Not modified.
@@ -382,11 +382,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets a representative {@code String} of {@code sphere3D} as follows:
-    * 
+    *
     * <pre>
     * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906]
     * </pre>
-    * 
+    *
     * @param sphere3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -399,12 +399,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code sphere3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format   the format to use for each number.
     * @param sphere3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -418,12 +418,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code sphere3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format   the format to use for each number.
     * @param position the location of the sphere. Not modified.
     * @param radius   the capsule's radius.
@@ -436,11 +436,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets a representative {@code String} of {@code torus3D} as follows:
-    * 
+    *
     * <pre>
     * Torus 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius:  0.170, tube radius:  0.906]
     * </pre>
-    * 
+    *
     * @param torus3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -453,12 +453,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code torus3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Torus 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius:  0.170, tube radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format  the format to use for each number.
     * @param torus3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -472,12 +472,12 @@ public class EuclidShapeIOTools
     * Gets a representative {@code String} of {@code capsule3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Torus 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), radius:  0.170, tube radius:  0.906]
     * </pre>
     * </p>
-    * 
+    *
     * @param format     the format to use for each number.
     * @param position   the location of the torus. Not modified.
     * @param axis       the torus' axis. Not modified.
@@ -493,11 +493,11 @@ public class EuclidShapeIOTools
 
    /**
     * Gets the representative {@code String} of {@code shape3DPose} as follows:
-    * 
+    *
     * <pre>
     * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
     * </pre>
-    * 
+    *
     * @param shape3DPose the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -510,12 +510,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code shape3DPose} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
     * </pre>
     * </p>
-    * 
+    *
     * @param format      the format to use for each number.
     * @param shape3DPose the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -529,12 +529,12 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code shape3DPose} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
     * </pre>
     * </p>
-    * 
+    *
     * @param format      the format to use for each number.
     * @param orientation the orientation part of the {@code shapePose3D}. Not modified.
     * @param position    the position part of the {@code shapePose3D}. Not modified.
@@ -548,21 +548,21 @@ public class EuclidShapeIOTools
    /**
     * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} as follows:<br>
     * When shapes are colliding:
-    * 
+    *
     * <pre>
     * Collision test result: colliding, depth: 0.539
     * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * </pre>
-    * 
+    *
     * When shapes are not colliding:
-    * 
+    *
     * <pre>
     * Collision test result: non-colliding, separating distance: 0.539
     * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * </pre>
-    * 
+    *
     * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -577,22 +577,22 @@ public class EuclidShapeIOTools
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
     * When shapes are colliding:
-    * 
+    *
     * <pre>
     * Collision test result: colliding, depth: 0.539
     * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * </pre>
-    * 
+    *
     * When shapes are not colliding:
-    * 
+    *
     * <pre>
     * Collision test result: non-colliding, separating distance: 0.539
     * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
     * </pre>
     * </p>
-    * 
+    *
     * @param format                       the format to use for each number.
     * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -622,14 +622,14 @@ public class EuclidShapeIOTools
 
    /**
     * Gets the representative {@code String} of {@code vertex3D} as follows:
-    * 
+    *
     * <pre>
     * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
     *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
     *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
     *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
     * </pre>
-    * 
+    *
     * @param vertex3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -642,7 +642,7 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code vertex3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
     *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
@@ -650,7 +650,7 @@ public class EuclidShapeIOTools
     *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format   the format to use for each number.
     * @param vertex3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -666,7 +666,7 @@ public class EuclidShapeIOTools
 
    /**
     * Gets the representative {@code String} of {@code halfEdge3D} as follows:
-    * 
+    *
     * <pre>
     * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
     *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
@@ -674,7 +674,7 @@ public class EuclidShapeIOTools
     *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
     *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
     * </pre>
-    * 
+    *
     * @param halfEdge3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -687,7 +687,7 @@ public class EuclidShapeIOTools
     * Gets the representative {@code String} of {@code halfEdge3D} given a specific format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
-    * 
+    *
     * <pre>
     * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
     *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
@@ -696,7 +696,7 @@ public class EuclidShapeIOTools
     *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
     * </pre>
     * </p>
-    * 
+    *
     * @param format     the format to use for each number.
     * @param halfEdge3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -723,7 +723,7 @@ public class EuclidShapeIOTools
     *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
     *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
     * </pre>
-    * 
+    *
     * @param face3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -745,7 +745,7 @@ public class EuclidShapeIOTools
     *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
     * </pre>
     * </p>
-    * 
+    *
     * @param format the format to use for each number.
     * @param face3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
@@ -764,12 +764,12 @@ public class EuclidShapeIOTools
     *
     * <pre>
     * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
-    * Face list: 
+    * Face list:
     *    centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
     *    centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
     *    centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
     *    centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
-    * Edge list: 
+    * Edge list:
     *    [( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
     *    [( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
     *    [( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
@@ -782,13 +782,13 @@ public class EuclidShapeIOTools
     *    [( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
     *    [( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
     *    [(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
-    * Vertex list: 
+    * Vertex list:
     *    ( 0.674,  0.482,  0.712 )
     *    ( 0.870,  0.251,  0.229 )
     *    ( 0.204, -0.803, -0.461 )
     *    (-0.283, -0.207, -0.595 )
     * </pre>
-    * 
+    *
     * @param convexPolytope3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
@@ -805,12 +805,12 @@ public class EuclidShapeIOTools
     *
     * <pre>
     * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
-    * Face list: 
+    * Face list:
     * 	centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
     * 	centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
     * 	centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
     * 	centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
-    * Edge list: 
+    * Edge list:
     * 	[( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
     * 	[( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
     * 	[( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
@@ -823,14 +823,14 @@ public class EuclidShapeIOTools
     * 	[( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
     * 	[( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
     * 	[(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
-    * Vertex list: 
+    * Vertex list:
     * 	( 0.674,  0.482,  0.712 )
     * 	( 0.870,  0.251,  0.229 )
     * 	( 0.204, -0.803, -0.461 )
     * 	(-0.283, -0.207, -0.595 )
     * </pre>
     * </p>
-    * 
+    *
     * @param format           the format to use for each number.
     * @param convexPolytope3D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.

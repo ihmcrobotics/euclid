@@ -84,6 +84,7 @@ public class EuclidCoreRandomTools
     *                          {@code minMaxRoll < 0}.
     * @deprecated Use {@link #nextYawPitchRoll(Random, double, double, double)} instead.
     */
+   @Deprecated
    public static double[] nextYawPitchRollArray(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
    {
       double yaw = nextDouble(random, minMaxYaw);
@@ -500,7 +501,7 @@ public class EuclidCoreRandomTools
     * <p>
     * The type can be either: axis-angle, quaternion, rotation matrix, or yaw-pitch-roll.
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random orientation 3D.
     */

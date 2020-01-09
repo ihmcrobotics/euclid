@@ -702,6 +702,7 @@ public class AffineTransform
     * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} instead using
     *             {@link YawPitchRollReadOnly}.
     */
+   @Deprecated
    public void setRotationYawPitchRoll(double[] yawPitchRoll)
    {
       rotationScaleMatrix.setRotationYawPitchRoll(yawPitchRoll);
@@ -726,6 +727,7 @@ public class AffineTransform
     * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} instead using
     *             {@link YawPitchRollReadOnly}.
     */
+   @Deprecated
    public void setRotationYawPitchRoll(double yaw, double pitch, double roll)
    {
       rotationScaleMatrix.setRotationYawPitchRoll(yaw, pitch, roll);
@@ -1730,6 +1732,7 @@ public class AffineTransform
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
     * @deprecated Use {@link YawPitchRoll} with {@link #getRotation(Orientation3DBasics)}.
     */
+   @Deprecated
    public void getRotationYawPitchRoll(double[] yawPitchRollToPack)
    {
       rotationScaleMatrix.getRotationYawPitchRoll(yawPitchRollToPack);

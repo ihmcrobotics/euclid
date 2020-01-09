@@ -23,14 +23,14 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  * </p>
  * <p>
  * Equivalent representation of yaw-pitch-roll as 3-by-3 rotation matrix:
- * 
+ *
  * <pre>
  *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
  * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
  *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
  * </pre>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitchRoll>
@@ -53,7 +53,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
 
    /**
     * Creates a yaw-pitch-roll that represents the same orientation as the given one.
-    * 
+    *
     * @param orientation the orientation used to initialized this. Not modified.
     */
    public YawPitchRoll(Orientation3DReadOnly orientation)
@@ -68,7 +68,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
     * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
     * same axis-angle.
     * </p>
-    * 
+    *
     * @param rotationVector the rotation vector used to initialized this. Not modified.
     */
    public YawPitchRoll(Vector3DReadOnly rotationVector)
@@ -78,7 +78,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
 
    /**
     * Creates a yaw-pitch-roll with the given angles.
-    * 
+    *
     * @param yaw   the angle representing the first rotation around the z-axis.
     * @param pitch the angle representing the second rotation around the y-axis.
     * @param roll  the angle representing the third rotation around the x-axis.
@@ -105,7 +105,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
 
    /**
     * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    * 
+    *
     * @param other the other yaw-pitch-roll. Not modified.
     */
    @Override

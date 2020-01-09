@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * Tools for performing operations on 3D matrices.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class Matrix3DTools

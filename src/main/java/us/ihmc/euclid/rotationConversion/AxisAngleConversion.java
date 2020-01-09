@@ -99,7 +99,7 @@ public class AxisAngleConversion
     * {@link Double#NaN}.
     * </ul>
     * </p>
-    * 
+    *
     * @param m00             the 1st row 1st column coefficient of the rotation matrix.
     * @param m01             the 1st row 2nd column coefficient of the rotation matrix.
     * @param m02             the 1st row 3rd column coefficient of the rotation matrix.
@@ -346,6 +346,7 @@ public class AxisAngleConversion
     * @deprecated Use {@link #convertYawPitchRollToAxisAngle(YawPitchRollReadOnly, AxisAngleBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertYawPitchRollToAxisAngle(double[] yawPitchRoll, AxisAngleBasics axisAngleToPack)
    {
       convertYawPitchRollToAxisAngle(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], axisAngleToPack);

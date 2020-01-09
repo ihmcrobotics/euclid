@@ -195,14 +195,14 @@ public class Vertex3D implements Vertex3DReadOnly, Point3DBasics
 
    /**
     * Provides a {@code String} representation of this vertex 3D as follows:
-    * 
+    *
     * <pre>
     * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
     *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
     *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
     *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this vertex 3D.
     */
    @Override

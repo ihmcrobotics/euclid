@@ -35,7 +35,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * This class provides the tools to perform a variety of assertions on Euclid Core's types.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidCoreTestTools
@@ -111,6 +111,7 @@ public class EuclidCoreTestTools
     *             {@link #assertYawPitchRollEquals(YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
     *             instead.
     */
+   @Deprecated
    public static void assertYawPitchRollEquals(double[] expected, double[] actual, double epsilon)
    {
       assertYawPitchRollEquals(null, expected, actual, epsilon);
@@ -138,6 +139,7 @@ public class EuclidCoreTestTools
     *             {@link #assertYawPitchRollEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
     *             instead.
     */
+   @Deprecated
    public static void assertYawPitchRollEquals(String messagePrefix, double[] expected, double[] actual, double epsilon)
    {
       assertYawPitchRollEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -167,6 +169,7 @@ public class EuclidCoreTestTools
     *             {@link #assertYawPitchRollEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double, String)}
     *             instead.
     */
+   @Deprecated
    public static void assertYawPitchRollEquals(String messagePrefix, double[] expected, double[] actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -289,6 +292,7 @@ public class EuclidCoreTestTools
     *             {@link #assertYawPitchRollGeometricallyEquals(YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
     *             instead.
     */
+   @Deprecated
    public static void assertYawPitchRollGeometricallyEquals(double[] expected, double[] actual, double epsilon)
    {
       assertYawPitchRollGeometricallyEquals(null, expected, actual, epsilon);
@@ -312,6 +316,7 @@ public class EuclidCoreTestTools
     *             {@link #assertYawPitchRollGeometricallyEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
     *             instead.
     */
+   @Deprecated
    public static void assertYawPitchRollGeometricallyEquals(String messagePrefix, double[] expected, double[] actual, double epsilon)
    {
       assertYawPitchRollGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -337,6 +342,7 @@ public class EuclidCoreTestTools
     *             {@link #assertYawPitchRollGeometricallyEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double, String)}
     *             instead.
     */
+   @Deprecated
    public static void assertYawPitchRollGeometricallyEquals(String messagePrefix, double[] expected, double[] actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
@@ -2504,7 +2510,7 @@ public class EuclidCoreTestTools
 
    /**
     * Asserts that when executing the given runnable, an specific exception is thrown.
-    * 
+    *
     * @param runnable                 the code to be executed and to be throwing an exception.
     * @param acceptableExceptionTypes the different types of acceptable exception to the runnable to
     *                                 throw.
@@ -2520,7 +2526,7 @@ public class EuclidCoreTestTools
 
    /**
     * Asserts that when executing the given runnable, an specific exception is thrown.
-    * 
+    *
     * @param messagePrefix            prefix to add to the error message.
     * @param runnable                 the code to be executed and to be throwing an exception.
     * @param acceptableExceptionTypes the different types of acceptable exception to the runnable to
@@ -2537,7 +2543,7 @@ public class EuclidCoreTestTools
 
    /**
     * Asserts that when executing the given runnable, an specific exception is thrown.
-    * 
+    *
     * @param runnable                 the code to be executed and to be throwing an exception.
     * @param expectedMessageContent   the detail message the thrown should be carrying. The detail
     *                                 message is not tested when the argument is {@code null}.
@@ -2555,7 +2561,7 @@ public class EuclidCoreTestTools
 
    /**
     * Asserts that when executing the given runnable, an specific exception is thrown.
-    * 
+    *
     * @param messagePrefix            prefix to add to the error message.
     * @param runnable                 the code to be executed and to be throwing an exception.
     * @param expectedMessageContent   the detail message the thrown should be carrying. The detail
@@ -2732,14 +2738,14 @@ public class EuclidCoreTestTools
 
    /**
     * Throws a new {@code AssertionError} as follows:
-    * 
+    *
     * <pre>
     * messagePrefix expected:
     * expectedAsString
     * but was:
     * actualAsString
     * </pre>
-    * 
+    *
     * @param messagePrefix    prefix to add to the error message.
     * @param expectedAsString the result that was expected in a {@code String} form.
     * @param actualAsString   the result that was obtained in a {@code String} form.
@@ -2751,7 +2757,7 @@ public class EuclidCoreTestTools
 
    /**
     * Throws a new {@code AssertionError} as follows:
-    * 
+    *
     * <pre>
     * messagePrefix expected:
     * expectedAsString
@@ -2759,7 +2765,7 @@ public class EuclidCoreTestTools
     * actualAsString
     * Difference of: differenceAsString
     * </pre>
-    * 
+    *
     * @param messagePrefix      prefix to add to the error message.
     * @param expectedAsString   the result that was expected in a {@code String} form.
     * @param differenceAsString a short comprehensible summary of the difference between the expected
@@ -2777,11 +2783,11 @@ public class EuclidCoreTestTools
 
    /**
     * Throws a new {@code AssertionError} as follows:
-    * 
+    *
     * <pre>
     * messagePrefix errorMessage
     * </pre>
-    * 
+    *
     * @param messagePrefix prefix to add to the error message.
     * @param errorMessage  the detail message of why the assertion is failing.
     */
@@ -2796,7 +2802,7 @@ public class EuclidCoreTestTools
     * In the case the given {@code prefix} is {@code null} or empty, the original {@code message} is
     * returned.
     * </p>
-    * 
+    *
     * @param prefix  the {@code String} to prepend to the message.
     * @param message the original message.
     * @return the message with the prefix.

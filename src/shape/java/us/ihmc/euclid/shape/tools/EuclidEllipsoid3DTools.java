@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.*;
  * The algorithm is from <a href=
  * "https://www.geometrictools.com/Documentation/DistancePointEllipseEllipsoid.pdf">DistancePointEllipseEllipsoid</a>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidEllipsoid3DTools
@@ -29,7 +29,7 @@ public class EuclidEllipsoid3DTools
     * <p>
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
-    * 
+    *
     * @param radii the ellipsoid's radii. Not modified.
     * @param query the coordinates of the point. Not modified.
     * @return the smallest distance between the point and the ellipsoid's surface.
@@ -44,7 +44,7 @@ public class EuclidEllipsoid3DTools
     * <p>
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
-    * 
+    *
     * @param radii              the ellipsoid's radii. Not modified.
     * @param query              the coordinates of the point. Not modified.
     * @param closestPointToPack point in which the coordinates of the closest point to the query are
@@ -61,7 +61,7 @@ public class EuclidEllipsoid3DTools
     * <p>
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
-    * 
+    *
     * @param radii              the ellipsoid's radii. Not modified.
     * @param query              the coordinates of the point. Not modified.
     * @param maxIterations      the maximum number of iterations for the internal iterative search
@@ -401,7 +401,7 @@ public class EuclidEllipsoid3DTools
             }
          }
       }
-   };
+   }
 
    private interface Tuple3DUpdater
    {

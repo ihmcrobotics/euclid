@@ -1474,7 +1474,7 @@ public class EuclidShapeTestTools
     * <li>each face's normal points outside.
     * </ul>
     * </p>
-    * 
+    *
     * @param convexPolytope3D the convex polytope to run assertions on. Not modified.
     * @throws AssertionError if the convex polytope is corrupted.
     */
@@ -1494,7 +1494,7 @@ public class EuclidShapeTestTools
     * <li>each face's normal points outside.
     * </ul>
     * </p>
-    * 
+    *
     * @param messagePrefix    prefix to add to the automated message.
     * @param convexPolytope3D the convex polytope to run assertions on. Not modified.
     * @throws AssertionError if the convex polytope is corrupted.
@@ -1558,7 +1558,7 @@ public class EuclidShapeTestTools
                if (!edges.contains(edge.getPrevious()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
-               if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+               if (edges.indexOf(edge.getNext()) != (edgeIndex + 1) % edges.size())
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
             }

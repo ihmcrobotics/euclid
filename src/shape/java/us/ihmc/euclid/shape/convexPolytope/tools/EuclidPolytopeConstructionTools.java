@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.*;
 
 /**
  * This class a set of tools for building a {@link ConvexPolytope3D}.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidPolytopeConstructionTools
@@ -49,7 +49,7 @@ public class EuclidPolytopeConstructionTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param vertex          faces are modified and/or created to include this vertex.
     * @param silhouetteEdges the contour visible from the vertex. Each edge is expected to be
     *                        associated with either a hidden face or an in-plane face.
@@ -407,7 +407,7 @@ public class EuclidPolytopeConstructionTools
     * <li>the new face has an edge that is the twin of the given {@code twinEdge};
     * <li>the new face's normal can be computed using the direction of the given twin-edge.
     * </ul>
-    * 
+    *
     * @param vertex   a vertex of the new face.
     * @param twinEdge the edge which twin's associated face is the new face.
     * @param epsilon  tolerance used when testing if a vertex should be added or not.
@@ -464,7 +464,7 @@ public class EuclidPolytopeConstructionTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param vertices       the face vertices. Not modified.
     * @param averageToPack  point in which the average from the vertices is stored. Modified. Can be
     *                       {@code null}.
@@ -484,7 +484,7 @@ public class EuclidPolytopeConstructionTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param covarianceMatrix the covariance matrix computed from the face vertices. Not modified.
     * @param normalToUpdate   the vector used to store the normal. The normal is updated such that
     *                         {@code oldNormal.dot(newNormal) > 0.0}. Modified.
@@ -500,7 +500,7 @@ public class EuclidPolytopeConstructionTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param eigenDecomposition the solver to use to computing the eigen vectors.
     * @param covarianceMatrix   the covariance matrix computed from the face vertices. Not modified.
     * @param normalToUpdate     the vector used to store the normal. The normal is updated such that
@@ -558,7 +558,7 @@ public class EuclidPolytopeConstructionTools
 
    /**
     * Computes the covariance matrix from a list of 3D tuples.
-    * 
+    *
     * @param input            the list of tuples to use for computing the covariance matrix. Not
     *                         modified.
     * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
@@ -570,7 +570,7 @@ public class EuclidPolytopeConstructionTools
 
    /**
     * Computes the covariance matrix from a list of 3D tuples.
-    * 
+    *
     * @param input            the list of tuples to use for computing the covariance matrix. Not
     *                         modified.
     * @param averageToPack    tuple in which the average from the input is stored. Modified. Can be
@@ -635,7 +635,7 @@ public class EuclidPolytopeConstructionTools
 
    /**
     * Computes the area and centroid of a 3D convex polygon defined by its vertices and normal.
-    * 
+    *
     * @param convexPolygon3D  the polygon vertices. Not modified.
     * @param normal           the normal of the plane on which the vertices are lying. Not modified.
     * @param numberOfVertices the number of vertices that belong to the convex polygon.
@@ -753,7 +753,7 @@ public class EuclidPolytopeConstructionTools
 
    /**
     * Computes the volume and centroid of a convex polytope.
-    * 
+    *
     * @param convexPolytope3D the convex polytope to evaluate. Not modified.
     * @param centroidToPack   the point used to store the coordinates of the centroid. Modified.
     * @return the volume of the convex polytope.

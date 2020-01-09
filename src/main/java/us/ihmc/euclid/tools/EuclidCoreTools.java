@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This class provides a variety of generic tools such as fast square-root algorithm
  * {@link #fastSquareRoot(double)}, or also an linear interpolation algorithm
  * {@link #interpolate(double, double, double)}.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidCoreTools
@@ -334,7 +334,7 @@ public class EuclidCoreTools
 
    /**
     * Calculates and returns {@code value}<sup>2</sup>
-    * 
+    *
     * @param value the value to compute the square of.
     * @return {@code value * value}.
     */
@@ -648,7 +648,7 @@ public class EuclidCoreTools
     * <p>
     * This is equivalent to {@code epsilonEquals(value, 0.0, epsilon)}.
     * </p>
-    * 
+    *
     * @param value   the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the value can be considered zero, {@code false} otherwise.
@@ -660,7 +660,7 @@ public class EuclidCoreTools
 
    /**
     * Tests whether both values are equal to zero to an epsilon.
-    * 
+    *
     * @param x       the first value.
     * @param y       the second value.
     * @param epsilon the tolerance to use for the test.
@@ -673,7 +673,7 @@ public class EuclidCoreTools
 
    /**
     * Tests whether all values are equal to zero to an epsilon.
-    * 
+    *
     * @param x       the first value.
     * @param y       the second value.
     * @param z       the third value.
@@ -687,7 +687,7 @@ public class EuclidCoreTools
 
    /**
     * Tests whether all values are equal to zero to an epsilon.
-    * 
+    *
     * @param x       the first value.
     * @param y       the second value.
     * @param z       the third value.
@@ -706,7 +706,7 @@ public class EuclidCoreTools
     * If any of the two angles is equal to {@link Double#NaN}, this method fails and returns
     * {@code false}.
     * </p>
-    * 
+    *
     * @param expectedAngle the first angle in the comparison.
     * @param actualAngle   the second angle in the comparison.
     * @param epsilon       the tolerance to use for the test.
@@ -723,7 +723,7 @@ public class EuclidCoreTools
     * <p>
     * This is equivalent to {@code angleGeometricallyEquals(angle, 0.0, epsilon)}.
     * </p>
-    * 
+    *
     * @param angle   the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the angle can be considered zero, {@code false} otherwise.

@@ -14,7 +14,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * Tools for performing operations on rotation matrices.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class RotationMatrixTools
@@ -98,7 +98,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation in the multiplication. Not modified.
     * @param inverse1     whether the first orientation should be inverted in the multiplication.
     * @param orientation2 the second orientation in the multiplication. Not modified.
@@ -187,7 +187,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation in the multiplication. Not modified.
     * @param inverse1     whether the first orientation should be inverted in the multiplication.
     * @param orientation2 the second orientation in the multiplication. Not modified.
@@ -258,7 +258,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation in the multiplication. Not modified.
     * @param inverse1     whether the first orientation should be inverted in the multiplication.
     * @param orientation2 the second orientation in the multiplication. Not modified.
@@ -325,7 +325,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param a            the first rotation matrix in the multiplication. Not modified.
     * @param transposeA   whether the first matrix should be transposed in the multiplication.
     * @param b            the second rotation matrix in the multiplication. Not modified.

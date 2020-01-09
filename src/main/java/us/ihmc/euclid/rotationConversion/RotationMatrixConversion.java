@@ -334,6 +334,7 @@ public abstract class RotationMatrixConversion
     * @deprecated Use {@link #convertYawPitchRollToMatrix(YawPitchRollReadOnly, RotationMatrix)}
     *             instead.
     */
+   @Deprecated
    public static void convertYawPitchRollToMatrix(double[] yawPitchRoll, RotationMatrix matrixToPack)
    {
       convertYawPitchRollToMatrix(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], matrixToPack);

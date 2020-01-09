@@ -218,7 +218,7 @@ class ExpandingPolytopeAlgorithmTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-         { // Create the tetrahedron to have its top vertex closest to a face. 
+         { // Create the tetrahedron to have its top vertex closest to a face.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
@@ -241,7 +241,7 @@ class ExpandingPolytopeAlgorithmTest
             }
          }
 
-         { // Create the tetrahedron to have its top vertex closest to an edge. 
+         { // Create the tetrahedron to have its top vertex closest to an edge.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
@@ -315,7 +315,7 @@ class ExpandingPolytopeAlgorithmTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-         { // Create the tetrahedron from its top vertex lying inside the polytope 
+         { // Create the tetrahedron from its top vertex lying inside the polytope
             ConvexPolytope3D tetrahedron;
 
             if (convexPolytope3D.isEmpty())
@@ -931,7 +931,7 @@ class ExpandingPolytopeAlgorithmTest
          epaDetector.evaluateCollision(shapeA, shapeB, epaResult);
 
          double distanceError = Math.abs(expectedResult.getSignedDistance() - epaResult.getSignedDistance());
-         if (verbose && (i % 5000) == 0)
+         if (verbose && i % 5000 == 0)
          {
             System.out.println(iterationPrefix + " Analytical: " + expectedResult.getSignedDistance() + ", EPA: " + epaResult.getSignedDistance() + ", diff: "
                   + distanceError);

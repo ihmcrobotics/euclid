@@ -9661,7 +9661,7 @@ public class EuclidGeometryToolsTest
    private enum Plane3DSide
    {
       EXACTLY_ON, ABOVE, BELOW
-   };
+   }
 
    private static void performAssertionsForPoint3DOnSideOfPlane3D(Random random, Point3DReadOnly query, Point3DReadOnly pointOnPlane,
                                                                   Vector3DReadOnly planeNormal, Plane3DSide expected)

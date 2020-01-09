@@ -12,7 +12,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 /**
  * A {@code FrameOrientation2D} represents an orientation in the XY-plane expressed in a given
  * reference frame.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObject<FrameOrientation2D>
@@ -33,7 +33,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
 
    /**
     * Create a new orientation 2D initialized with its yaw angle to zero in a given reference frame.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this orientation 2D.
     */
    public FrameOrientation2D(ReferenceFrame referenceFrame)
@@ -44,7 +44,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    /**
     * Creates a new orientation 2D and initializes its yaw angle to the given one, and its reference
     * frame to {@link ReferenceFrame#getWorldFrame()}.
-    * 
+    *
     * @param yaw the initial yaw angle for this orientation 2D.
     */
    public FrameOrientation2D(double yaw)
@@ -54,7 +54,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
 
    /**
     * Creates a new orientation 2D and initializes its yaw angle and reference frame.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this orientation 2D.
     * @param yaw            the initial yaw angle for this orientation 2D.
     */
@@ -98,7 +98,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
 
    /**
     * Creates a new frame orientation 2D and initializes it using a frame quaternion.
-    * 
+    *
     * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame
     *                                from. Not modified.
     */

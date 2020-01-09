@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
  * <li>a tetrahedron, a.k.a 3-simplex.
  * </ul>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  * @see GilbertJohnsonKeerthiCollisionDetector
  */
@@ -56,7 +56,7 @@ public class GJKSimplex3D
 
    /**
     * Creates a new 0-simplex.
-    * 
+    *
     * @param vertex the vertex defining this simplex. Not modified, reference saved.
     */
    public GJKSimplex3D(GJKVertex3D vertex)
@@ -72,7 +72,7 @@ public class GJKSimplex3D
    /**
     * Creates a new simplex given its vertices and the barycentric coordinates of the closest point to
     * the origin.
-    * 
+    *
     * @param vertices               the simplex vertices. Not modified, reference saved.
     * @param barycentricCoordinates the barycentric coordinates of the closest point to the origin on
     *                               this simplex. Not modified, reference saved.
@@ -90,7 +90,7 @@ public class GJKSimplex3D
 
    /**
     * Tests whether the query equals one of this simplex vertices.
-    * 
+    *
     * @param query the vertex to evaluate. Not modified.
     * @return {@code true} if this simplex has a vertex that is equal to the query, {@code false}
     *         otherwise.
@@ -107,7 +107,7 @@ public class GJKSimplex3D
 
    /**
     * Gets the coordinates of the point on this simplex that is the closest to the origin.
-    * 
+    *
     * @return the reference to the closest point to the origin.
     */
    public Point3D getClosestPointToOrigin()
@@ -117,7 +117,7 @@ public class GJKSimplex3D
 
    /**
     * Computes if needed and returns the distance between this simplex and the origin.
-    * 
+    *
     * @return the distance to the origin.
     */
    public double getDistanceToOrigin()
@@ -129,7 +129,7 @@ public class GJKSimplex3D
 
    /**
     * Gets the square of the distance between this simplex and the origin.
-    * 
+    *
     * @return the distance squared to the origin.
     */
    public double getDistanceSquaredToOrigin()
@@ -139,7 +139,7 @@ public class GJKSimplex3D
 
    /**
     * Gets the square of the norm of the vertex of this simplex that is the farthest from origin.
-    * 
+    *
     * @return the max distance squared to the origin.
     */
    public double getMaxDistanceSquaredToOrigin()
@@ -158,7 +158,7 @@ public class GJKSimplex3D
    /**
     * When this simplex is a triangle, its computes and returns its normal vector, returns {@code null}
     * if this simplex is not triangle.
-    * 
+    *
     * @return the triangle normal if this is a 2-simplex, {@code null} otherwise.
     */
    public Vector3D getTriangleNormal()
@@ -176,7 +176,7 @@ public class GJKSimplex3D
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the point on the shape A.
     */
    public Point3D computePointOnA()
@@ -190,7 +190,7 @@ public class GJKSimplex3D
 
    /**
     * Computes the point on the shape A that corresponds to this simplex closest point to the origin.
-    * 
+    *
     * @param pointOnAToPack the point used to store the result. Modified.
     * @return whether this method succeeded or not.
     */
@@ -219,7 +219,7 @@ public class GJKSimplex3D
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @return the point on the shape B.
     */
    public Point3D computePointOnB()
@@ -233,7 +233,7 @@ public class GJKSimplex3D
 
    /**
     * Computes the point on the shape B that corresponds to this simplex closest point to the origin.
-    * 
+    *
     * @param pointOnBToPack the point used to store the result. Modified.
     * @return whether this method succeeded or not.
     */
@@ -259,7 +259,7 @@ public class GJKSimplex3D
 
    /**
     * Gets the number of vertices composing this simplex.
-    * 
+    *
     * @return the number of vertices.
     */
    public int getNumberOfVertices()
@@ -269,7 +269,7 @@ public class GJKSimplex3D
 
    /**
     * Gets this simplex vertices.
-    * 
+    *
     * @return the vertices composing this simplex.
     */
    public GJKVertex3D[] getVertices()

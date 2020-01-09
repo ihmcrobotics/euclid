@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * <p>
  * A point shape 3D is represented by its position.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class PointShape3D implements PointShape3DBasics, GeometryObject<PointShape3D>
@@ -29,7 +29,7 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
 
    /**
     * Creates a new point shape and initializes its position.
-    * 
+    *
     * @param tuple3DReadOnly the position of the point shape. Not modified.
     */
    public PointShape3D(Tuple3DReadOnly tuple3DReadOnly)
@@ -147,7 +147,7 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    /**
     * Provides a {@code String} representation of this point shape 3D as follows:<br>
     * Point shape 3D: (-0.362, -0.617, 0.066 )
-    * 
+    *
     * @return the {@code String} representing this point shape 3D.
     */
    @Override
