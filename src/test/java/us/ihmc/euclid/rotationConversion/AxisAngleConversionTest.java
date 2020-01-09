@@ -1,8 +1,10 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static java.lang.Math.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -14,6 +16,7 @@ import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
@@ -34,7 +37,7 @@ public class AxisAngleConversionTest
          double uy = EuclidCoreRandomTools.nextDouble(random);
          double uz = EuclidCoreRandomTools.nextDouble(random);
 
-         double norm = Math.sqrt(ux * ux + uy * uy + uz * uz);
+         double norm = EuclidCoreTools.squareRoot(ux * ux + uy * uy + uz * uz);
          ux /= norm;
          uy /= norm;
          uz /= norm;
@@ -80,7 +83,7 @@ public class AxisAngleConversionTest
       double uy = EuclidCoreRandomTools.nextDouble(random);
       double uz = EuclidCoreRandomTools.nextDouble(random);
 
-      double norm = Math.sqrt(ux * ux + uy * uy + uz * uz);
+      double norm = EuclidCoreTools.squareRoot(ux * ux + uy * uy + uz * uz);
       ux /= norm;
       uy /= norm;
       uz /= norm;
@@ -360,7 +363,7 @@ public class AxisAngleConversionTest
       assertEquals(Math.PI, actualAxisAngle.getAngle(), EPSILON);
 
       // Pi around xy (as axis-angle: (x = sqrt(2)/2, y = sqrt(2)/2, z = 0, angle = Pi)
-      double sqrt2Over2 = Math.sqrt(2.0) / 2.0;
+      double sqrt2Over2 = EuclidCoreTools.squareRoot(2.0) / 2.0;
       m00 = 0.0;
       m01 = 1.0;
       m02 = 0.0;

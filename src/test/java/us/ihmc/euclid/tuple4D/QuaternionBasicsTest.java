@@ -1,7 +1,7 @@
 package us.ihmc.euclid.tuple4D;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -59,7 +59,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          q1 = createTuple(q2.getX(), q2.getY(), q2.getZ(), q2.getS());
          assertTrue(q1.isUnitary(getEpsilon()));
 
-         double delta = 6.0 * Math.sqrt(getEpsilon());
+         double delta = 6.0 * EuclidCoreTools.squareRoot(getEpsilon());
 
          q1 = createTuple(delta + q2.getX(), q2.getY(), q2.getZ(), q2.getS());
          assertFalse(q1.isUnitary(getEpsilon()));

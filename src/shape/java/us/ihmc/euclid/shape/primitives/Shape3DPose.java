@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static us.ihmc.euclid.tools.EuclidCoreFactories.*;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedVector3DReadOnly;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;

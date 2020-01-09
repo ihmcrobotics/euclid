@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.collision.gjk;
 
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -122,7 +123,7 @@ public class GJKSimplex3D
    public double getDistanceToOrigin()
    {
       if (Double.isNaN(distanceFromOrigin))
-         distanceFromOrigin = Math.sqrt(getDistanceSquaredToOrigin());
+         distanceFromOrigin = EuclidCoreTools.squareRoot(getDistanceSquaredToOrigin());
       return distanceFromOrigin;
    }
 

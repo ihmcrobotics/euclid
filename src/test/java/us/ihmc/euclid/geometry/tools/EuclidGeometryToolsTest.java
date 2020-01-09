@@ -1,8 +1,10 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -4538,7 +4540,7 @@ public class EuclidGeometryToolsTest
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
 
          Point3D pointOnEllipsoid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX,
+         double sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX,
                                                                          pointOnEllipsoid.getY() / radiusY,
                                                                          pointOnEllipsoid.getZ() / radiusZ));
          pointOnEllipsoid.scale(1.0 / sqrtSumOfSquares);
@@ -4605,13 +4607,13 @@ public class EuclidGeometryToolsTest
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
 
          Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
-         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX,
+         double sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX,
                                                                          pointOnEllipsoid1.getY() / radiusY,
                                                                          pointOnEllipsoid1.getZ() / radiusZ));
          pointOnEllipsoid1.scale(1.0 / sqrtSumOfSquares);
 
          Point3D pointOnEllipsoid2 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
-         sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX,
+         sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX,
                                                                   pointOnEllipsoid2.getY() / radiusY,
                                                                   pointOnEllipsoid2.getZ() / radiusZ));
          pointOnEllipsoid2.scale(1.0 / sqrtSumOfSquares);
@@ -6390,7 +6392,7 @@ public class EuclidGeometryToolsTest
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
 
          Point3D pointOnEllipsoid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX,
+         double sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX,
                                                                          pointOnEllipsoid.getY() / radiusY,
                                                                          pointOnEllipsoid.getZ() / radiusZ));
          pointOnEllipsoid.scale(1.0 / sqrtSumOfSquares);
@@ -6437,13 +6439,13 @@ public class EuclidGeometryToolsTest
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
 
          Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
-         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX,
+         double sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX,
                                                                          pointOnEllipsoid1.getY() / radiusY,
                                                                          pointOnEllipsoid1.getZ() / radiusZ));
          pointOnEllipsoid1.scale(1.0 / sqrtSumOfSquares);
 
          Point3D pointOnEllipsoid2 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
-         sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX,
+         sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX,
                                                                   pointOnEllipsoid2.getY() / radiusY,
                                                                   pointOnEllipsoid2.getZ() / radiusZ));
          pointOnEllipsoid2.scale(1.0 / sqrtSumOfSquares);
@@ -8645,7 +8647,7 @@ public class EuclidGeometryToolsTest
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
 
          Point3D pointOnEllipsoid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
-         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX,
+         double sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid.getX() / radiusX,
                                                                          pointOnEllipsoid.getY() / radiusY,
                                                                          pointOnEllipsoid.getZ() / radiusZ));
          pointOnEllipsoid.scale(1.0 / sqrtSumOfSquares);
@@ -8684,13 +8686,13 @@ public class EuclidGeometryToolsTest
          double radiusZ = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
 
          Point3D pointOnEllipsoid1 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
-         double sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX,
+         double sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid1.getX() / radiusX,
                                                                          pointOnEllipsoid1.getY() / radiusY,
                                                                          pointOnEllipsoid1.getZ() / radiusZ));
          pointOnEllipsoid1.scale(1.0 / sqrtSumOfSquares);
 
          Point3D pointOnEllipsoid2 = EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0);
-         sqrtSumOfSquares = Math.sqrt(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX,
+         sqrtSumOfSquares = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(pointOnEllipsoid2.getX() / radiusX,
                                                                   pointOnEllipsoid2.getY() / radiusY,
                                                                   pointOnEllipsoid2.getZ() / radiusZ));
          pointOnEllipsoid2.scale(1.0 / sqrtSumOfSquares);

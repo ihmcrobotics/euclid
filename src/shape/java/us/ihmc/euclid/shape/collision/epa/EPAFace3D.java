@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.collision.epa;
 
-import static us.ihmc.euclid.shape.collision.epa.EPATools.*;
+import static us.ihmc.euclid.shape.collision.epa.EPATools.barycentricCoordinatesFrom2Simplex;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +13,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -189,7 +190,7 @@ public class EPAFace3D implements Comparable<EPAFace3D>, Face3DReadOnly
    public double getDistanceToOrigin()
    {
       if (Double.isNaN(distanceFromOrigin))
-         distanceFromOrigin = Math.sqrt(getDistanceSquaredToOrigin());
+         distanceFromOrigin = EuclidCoreTools.squareRoot(getDistanceSquaredToOrigin());
       return distanceFromOrigin;
    }
 

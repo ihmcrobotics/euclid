@@ -1223,7 +1223,7 @@ public class EuclidCoreRandomTools
       // Generate uniformly random point on unit sphere (based on http://mathworld.wolfram.com/SpherePointPicking.html )
       double height = 2.0 * random.nextDouble() - 1.0;
       double angle = nextDouble(random, minMaxAngle);
-      double radius = Math.sqrt(1.0 - height * height);
+      double radius = EuclidCoreTools.squareRoot(1.0 - height * height);
       axisAngleToRandomize.set(radius * Math.cos(angle), radius * Math.sin(angle), height, angle);
    }
 

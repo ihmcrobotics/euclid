@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -332,7 +333,7 @@ public class EuclidPolytopeTools
     */
    public static double distanceToClosestHalfEdge3D(Point3DReadOnly query, List<? extends HalfEdge3DReadOnly> halfEdges)
    {
-      return Math.sqrt(distanceSquaredToClosestHalfEdge3D(query, halfEdges));
+      return EuclidCoreTools.squareRoot(distanceSquaredToClosestHalfEdge3D(query, halfEdges));
    }
 
    /**

@@ -1,20 +1,17 @@
 package us.ihmc.euclid.geometry.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextPointCloud2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +19,7 @@ import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -1000,7 +998,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(2.5, 1.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(Math.sqrt(2.5 * 2.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+         assertEquals(EuclidCoreTools.squareRoot(2.5 * 2.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
       }
 
       { // Test examples single line polygon
@@ -1012,7 +1010,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(2.5, 1.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(Math.sqrt(1.5 * 1.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
+         assertEquals(EuclidCoreTools.squareRoot(1.5 * 1.5 + 1.0 * 1.0), distance, SMALLEST_EPSILON);
 
          query.set(0.5, 1.0);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
@@ -1029,7 +1027,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(10.0, 10.0);
          double distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(5.0 * Math.sqrt(2.0), distance, SMALLEST_EPSILON);
+         assertEquals(5.0 * EuclidCoreTools.squareRoot(2.0), distance, SMALLEST_EPSILON);
 
          query.set(1.2, 1.1);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
@@ -1041,7 +1039,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(9.8, 0.15);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(-0.5 * Math.sqrt(0.05 * 0.05 * 2.0), distance, SMALLEST_EPSILON);
+         assertEquals(-0.5 * EuclidCoreTools.squareRoot(0.05 * 0.05 * 2.0), distance, SMALLEST_EPSILON);
 
          query.set(5.0, -0.15);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
@@ -1049,7 +1047,7 @@ public class EuclidGeometryPolygonToolsTest
 
          query.set(15.0, -0.15);
          distance = signedDistanceFromPoint2DToConvexPolygon2D(query, convexPolygon2D, hullSize, true);
-         assertEquals(Math.sqrt(5.0 * 5.0 + 0.15 * 0.15), distance, SMALLEST_EPSILON);
+         assertEquals(EuclidCoreTools.squareRoot(5.0 * 5.0 + 0.15 * 0.15), distance, SMALLEST_EPSILON);
       }
 
       {// Trivial case: Square

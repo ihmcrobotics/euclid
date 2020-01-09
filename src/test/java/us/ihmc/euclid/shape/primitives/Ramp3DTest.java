@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -1662,9 +1662,9 @@ public class Ramp3DTest
       Ramp3D ramp = new Ramp3D(1.0, 1.0, 1.0);
       Vector3D surfaceNormal = new Vector3D();
       ramp.getRampSurfaceNormal(surfaceNormal);
-      assertEquals(surfaceNormal.getX(), -1.0 / Math.sqrt(2.0), 1e-14, "not equal");
+      assertEquals(surfaceNormal.getX(), -1.0 / EuclidCoreTools.squareRoot(2.0), 1e-14, "not equal");
       assertEquals(surfaceNormal.getY(), 0.0, 1e-14, "not equal");
-      assertEquals(surfaceNormal.getZ(), 1.0 / Math.sqrt(2.0), 1e-14, "not equal");
+      assertEquals(surfaceNormal.getZ(), 1.0 / EuclidCoreTools.squareRoot(2.0), 1e-14, "not equal");
    }
 
    @Test

@@ -13,6 +13,7 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -393,9 +394,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
       if (Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22) <= 0.0)
          throw new NotARotationScaleMatrixException(m00, m01, m02, m10, m11, m12, m20, m21, m22);
 
-      scale.setX(Math.sqrt(m00 * m00 + m10 * m10 + m20 * m20));
-      scale.setY(Math.sqrt(m01 * m01 + m11 * m11 + m21 * m21));
-      scale.setZ(Math.sqrt(m02 * m02 + m12 * m12 + m22 * m22));
+      scale.setX(EuclidCoreTools.squareRoot(m00 * m00 + m10 * m10 + m20 * m20));
+      scale.setY(EuclidCoreTools.squareRoot(m01 * m01 + m11 * m11 + m21 * m21));
+      scale.setZ(EuclidCoreTools.squareRoot(m02 * m02 + m12 * m12 + m22 * m22));
 
       if (scale.getX() == 0.0 || scale.getY() == 0.0 || scale.getZ() == 0.0)
          throw new NotARotationScaleMatrixException(m00, m01, m02, m10, m11, m12, m20, m21, m22);

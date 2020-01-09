@@ -39,7 +39,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     */
    default double length()
    {
-      return Math.sqrt(lengthSquared());
+      return EuclidCoreTools.squareRoot(lengthSquared());
    }
 
    /**
@@ -117,6 +117,6 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
       double dz = getZ() - other.getZ();
-      return Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz)) <= epsilon;
+      return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy, dz)) <= epsilon;
    }
 }

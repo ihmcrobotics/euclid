@@ -47,6 +47,6 @@ public interface Vector4DReadOnly extends Tuple4DReadOnly
       double dy = getY() - other.getY();
       double dz = getZ() - other.getZ();
       double ds = getS() - other.getS();
-      return Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz, ds)) <= epsilon;
+      return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy, dz, ds)) <= epsilon;
    }
 }

@@ -223,6 +223,11 @@ public class EuclidCoreTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   public static double squareRoot(double value)
+   {
+      return Math.sqrt(value);
+   }
+
    /**
     * Calculates and returns the square root of the given value.
     * <p>
@@ -237,7 +242,7 @@ public class EuclidCoreTools
       if (Math.abs(1.0 - squaredValueClosedToOne) < EPS_NORM_FAST_SQRT)
          squaredValueClosedToOne = 0.5 * (1.0 + squaredValueClosedToOne);
       else
-         squaredValueClosedToOne = Math.sqrt(squaredValueClosedToOne);
+         squaredValueClosedToOne = EuclidCoreTools.squareRoot(squaredValueClosedToOne);
 
       return squaredValueClosedToOne;
    }

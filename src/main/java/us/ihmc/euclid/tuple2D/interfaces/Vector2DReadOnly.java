@@ -40,7 +40,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     */
    default double length()
    {
-      return Math.sqrt(lengthSquared());
+      return EuclidCoreTools.squareRoot(lengthSquared());
    }
 
    /**
@@ -143,6 +143,6 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
    {
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
-      return Math.sqrt(EuclidCoreTools.normSquared(dx, dy)) <= epsilon;
+      return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy)) <= epsilon;
    }
 }

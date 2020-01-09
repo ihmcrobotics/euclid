@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -17,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class Plane3D implements GeometryObject<Plane3D>
 {
-   private final static double minAllowableVectorPart = Math.sqrt(Double.MIN_NORMAL);
+   private final static double minAllowableVectorPart = EuclidCoreTools.squareRoot(Double.MIN_NORMAL);
 
    /** Coordinates of a point located on this plane. */
    private final Point3D point = new Point3D();

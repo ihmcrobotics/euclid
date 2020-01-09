@@ -1,8 +1,10 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
-import static us.ihmc.euclid.tools.EuclidCoreTools.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+import static us.ihmc.euclid.tools.EuclidCoreTools.EPS_NORM_FAST_SQRT;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -22,7 +24,7 @@ public class EuclidCoreToolsTest
          squaredValue = Math.min(squaredValue, 1.0 - EPS_NORM_FAST_SQRT);
 
          double actualValue = EuclidCoreTools.fastSquareRoot(squaredValue);
-         double expectedValue = Math.sqrt(squaredValue);
+         double expectedValue = EuclidCoreTools.squareRoot(squaredValue);
          assertEquals(expectedValue, actualValue, Double.MIN_VALUE);
       }
 
@@ -32,7 +34,7 @@ public class EuclidCoreToolsTest
          squaredValue = Math.max(squaredValue, 1.0 + EPS_NORM_FAST_SQRT);
 
          double actualValue = EuclidCoreTools.fastSquareRoot(squaredValue);
-         double expectedValue = Math.sqrt(squaredValue);
+         double expectedValue = EuclidCoreTools.squareRoot(squaredValue);
          assertEquals(expectedValue, actualValue, Double.MIN_VALUE);
       }
 
@@ -42,7 +44,7 @@ public class EuclidCoreToolsTest
          squaredValue = Math.max(squaredValue, 1.0 + EPS_NORM_FAST_SQRT);
 
          double actualValue = EuclidCoreTools.fastSquareRoot(squaredValue);
-         double expectedValue = Math.sqrt(squaredValue);
+         double expectedValue = EuclidCoreTools.squareRoot(squaredValue);
          assertEquals(expectedValue, actualValue, Double.MIN_VALUE);
       }
    }

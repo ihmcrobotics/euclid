@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,14 +14,7 @@ import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.primitives.Box3D;
-import us.ihmc.euclid.shape.primitives.Capsule3D;
-import us.ihmc.euclid.shape.primitives.Cylinder3D;
-import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
-import us.ihmc.euclid.shape.primitives.PointShape3D;
-import us.ihmc.euclid.shape.primitives.Ramp3D;
-import us.ihmc.euclid.shape.primitives.Sphere3D;
-import us.ihmc.euclid.shape.primitives.Torus3D;
+import us.ihmc.euclid.shape.primitives.*;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;

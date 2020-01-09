@@ -11,11 +11,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.*;
 
 /**
  * This gathers common mathematical operations involving quaternions.
@@ -1433,7 +1429,7 @@ public class QuaternionTools
       double z = q1.getS() * q2.getZ() - q1.getX() * q2.getY() + q1.getY() * q2.getX() - q1.getZ() * q2.getS();
       double s = q1.getS() * q2.getS() + q1.getX() * q2.getX() + q1.getY() * q2.getY() + q1.getZ() * q2.getZ();
 
-      double sinHalfTheta = Math.sqrt(EuclidCoreTools.normSquared(x, y, z));
+      double sinHalfTheta = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(x, y, z));
       return 2.0 * Math.atan2(sinHalfTheta, s);
    }
 }

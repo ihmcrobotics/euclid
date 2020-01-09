@@ -1,8 +1,10 @@
 package us.ihmc.euclid.yawPitchRoll;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertExceptionIsThrown;
 
 import java.util.Random;
 

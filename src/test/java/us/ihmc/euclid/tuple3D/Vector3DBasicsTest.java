@@ -1,7 +1,9 @@
 package us.ihmc.euclid.tuple3D;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -12,6 +14,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -52,7 +55,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          vector2.setAndScale(scalar, vector1);
          double expectedLength2 = scalar * length1;
          double actualLength2 = vector2.lengthSquared();
-         assertEquals(expectedLength2, Math.sqrt(actualLength2), 5.0 * getEpsilon());
+         assertEquals(expectedLength2, EuclidCoreTools.squareRoot(actualLength2), 5.0 * getEpsilon());
       }
    }
 
@@ -364,11 +367,11 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
 
          if (vectorA.epsilonEquals(vectorB, getEpsilon()))
          {
-            assertTrue(vectorA.geometricallyEquals(vectorB, Math.sqrt(3) * getEpsilon()));
+            assertTrue(vectorA.geometricallyEquals(vectorB, EuclidCoreTools.squareRoot(3) * getEpsilon()));
          }
          else
          {
-            if (Math.sqrt((vectorA.getX() - vectorB.getX()) * (vectorA.getX() - vectorB.getX())
+            if (EuclidCoreTools.squareRoot((vectorA.getX() - vectorB.getX()) * (vectorA.getX() - vectorB.getX())
                   + (vectorA.getY() - vectorB.getY()) * (vectorA.getY() - vectorB.getY())
                   + (vectorA.getZ() - vectorB.getZ()) * (vectorA.getZ() - vectorB.getZ())) <= getEpsilon())
             {

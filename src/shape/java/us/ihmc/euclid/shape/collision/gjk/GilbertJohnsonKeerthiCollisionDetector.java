@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.collision.gjk;
 
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.*;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.simplexClosestToOrigin;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -67,7 +69,7 @@ class EuclidShapeRandomToolsTest
          }
 
          // Somehow the expected distance are exactly 2 times bigger... 
-         double sqrt3 = Math.sqrt(3.0);
+         double sqrt3 = EuclidCoreTools.squareRoot(3.0);
          double expectedDistanceToCentroid = (8.0 * sqrt3 + 3.0 * asinh(sqrt3) + Math.log(2.0 + sqrt3)) / 72.0;
          assertEquals(0.5 * expectedDistanceToCentroid, averageDistanceToCentroid, 1.0e-4);
 
@@ -80,6 +82,6 @@ class EuclidShapeRandomToolsTest
 
    private static double asinh(double x)
    { // From: http://wwwf.imperial.ac.uk/metric/metric_public/functions_and_graphs/hyperbolic_functions/inverses.html
-      return Math.log(x + Math.sqrt(x * x + 1.0));
+      return Math.log(x + EuclidCoreTools.squareRoot(x * x + 1.0));
    }
 }

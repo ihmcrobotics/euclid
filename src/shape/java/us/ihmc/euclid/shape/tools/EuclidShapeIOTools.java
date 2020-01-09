@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringAsYawPitchRoll;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
 
 import java.util.Collection;
 
@@ -11,15 +13,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;

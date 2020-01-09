@@ -1,6 +1,9 @@
 package us.ihmc.euclid.shape.collision.epa;
 
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.*;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.compareSigns;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.xyTriangleAreaCalculator;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.yzTriangleAreaCalculator;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.zxTriangleAreaCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +12,8 @@ import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.shape.collision.gjk.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.gjk.GJKTools.ProjectedTriangleSignedAreaCalculator;
+import us.ihmc.euclid.shape.collision.gjk.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;

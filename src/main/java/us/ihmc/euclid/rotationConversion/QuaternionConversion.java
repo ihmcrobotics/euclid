@@ -235,7 +235,7 @@ public abstract class QuaternionConversion
       if (s > -0.19)
       {
          // compute q0 and deduce q1, q2 and q3
-         qs = 0.5 * Math.sqrt(s + 1.0);
+         qs = 0.5 * EuclidCoreTools.squareRoot(s + 1.0);
          double inv = 0.25 / qs;
          qx = inv * (m21 - m12);
          qy = inv * (m02 - m20);
@@ -248,7 +248,7 @@ public abstract class QuaternionConversion
          if (s > -0.19)
          {
             // compute q1 and deduce q0, q2 and q3
-            qx = 0.5 * Math.sqrt(s + 1.0);
+            qx = 0.5 * EuclidCoreTools.squareRoot(s + 1.0);
             double inv = 0.25 / qx;
             qs = inv * (m21 - m12);
             qy = inv * (m10 + m01);
@@ -261,7 +261,7 @@ public abstract class QuaternionConversion
             if (s > -0.19)
             {
                // compute q2 and deduce q0, q1 and q3
-               qy = 0.5 * Math.sqrt(s + 1.0);
+               qy = 0.5 * EuclidCoreTools.squareRoot(s + 1.0);
                double inv = 0.25 / qy;
                qs = inv * (m02 - m20);
                qx = inv * (m10 + m01);
@@ -271,7 +271,7 @@ public abstract class QuaternionConversion
             {
                // compute q3 and deduce q0, q1 and q2
                s = m22 - m00 - m11;
-               qz = 0.5 * Math.sqrt(s + 1.0);
+               qz = 0.5 * EuclidCoreTools.squareRoot(s + 1.0);
                double inv = 0.25 / qz;
                qs = inv * (m10 - m01);
                qx = inv * (m20 + m02);
@@ -339,7 +339,7 @@ public abstract class QuaternionConversion
          return;
       }
 
-      double norm = Math.sqrt(EuclidCoreTools.normSquared(rx, ry, rz));
+      double norm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(rx, ry, rz));
 
       if (norm < EPS)
       {

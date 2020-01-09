@@ -1,7 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -12,6 +12,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -706,7 +707,7 @@ public class LineSegment2DTest
       shiftedLineSegment.set(lineSegment);
       shiftedLineSegment.shiftToRight(distanceToShift);
 
-      double distanceAtFortyFiveDegrees = distanceToShift * Math.sqrt(2.0) / 2.0;
+      double distanceAtFortyFiveDegrees = distanceToShift * EuclidCoreTools.squareRoot(2.0) / 2.0;
 
       firstShiftedEndpoint = new Point2D(shiftedLineSegment.getFirstEndpoint());
       secondShiftedEndpoint = new Point2D(shiftedLineSegment.getSecondEndpoint());

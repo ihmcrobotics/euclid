@@ -2,27 +2,11 @@ package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.ihmc.euclid.geometry.BoundingBox2D;
-import us.ihmc.euclid.geometry.BoundingBox3D;
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
-import us.ihmc.euclid.geometry.Line2D;
-import us.ihmc.euclid.geometry.Line3D;
-import us.ihmc.euclid.geometry.LineSegment1D;
-import us.ihmc.euclid.geometry.LineSegment2D;
-import us.ihmc.euclid.geometry.LineSegment3D;
-import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.Plane3D;
-import us.ihmc.euclid.geometry.Pose2D;
-import us.ihmc.euclid.geometry.Pose3D;
-import us.ihmc.euclid.geometry.Triangle3D;
+import us.ihmc.euclid.geometry.*;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.tuple2D.Point2D;

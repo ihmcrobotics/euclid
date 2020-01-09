@@ -845,7 +845,7 @@ public class RotationMatrixTools
       y = m02 - m20;
       z = m10 - m01;
 
-      double s = Math.sqrt(EuclidCoreTools.normSquared(x, y, z));
+      double s = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(x, y, z));
 
       if (s > AxisAngleConversion.EPS)
       {
@@ -869,19 +869,19 @@ public class RotationMatrixTools
 
          if (xx > yy && xx > zz)
          { // m00 is the largest diagonal term
-            x = Math.sqrt(xx);
+            x = EuclidCoreTools.squareRoot(xx);
             y = xy / x;
             z = xz / x;
          }
          else if (yy > zz)
          { // m11 is the largest diagonal term
-            y = Math.sqrt(yy);
+            y = EuclidCoreTools.squareRoot(yy);
             x = xy / y;
             z = yz / y;
          }
          else
          { // m22 is the largest diagonal term so base result on this
-            z = Math.sqrt(zz);
+            z = EuclidCoreTools.squareRoot(zz);
             x = xz / z;
             y = yz / z;
          }

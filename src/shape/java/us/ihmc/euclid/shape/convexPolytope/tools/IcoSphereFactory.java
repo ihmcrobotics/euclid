@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.geometry.interfaces.Triangle3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 
@@ -198,7 +199,7 @@ public class IcoSphereFactory
       Map<Long, Integer> midVertexIndexCache = new HashMap<>();
 
       // create 12 vertices of a icosahedron
-      double t = (1.0 + Math.sqrt(5.0)) / 2.0;
+      double t = (1.0 + EuclidCoreTools.squareRoot(5.0)) / 2.0;
 
       geometry.addVertex(new Point3D(-1, t, 0));
       geometry.addVertex(new Point3D(1, t, 0));

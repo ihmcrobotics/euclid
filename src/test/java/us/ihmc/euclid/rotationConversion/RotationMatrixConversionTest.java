@@ -1,8 +1,10 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static java.lang.Math.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 

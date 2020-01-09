@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreTools.normSquared;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
@@ -107,7 +107,7 @@ public class EuclidShapeTools
          double dy = query.getY() - EuclidCoreTools.clamp(query.getY(), halfSizeY);
          double dz = query.getZ() - EuclidCoreTools.clamp(query.getZ(), halfSizeZ);
 
-         return Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+         return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy, dz));
       }
    }
 
@@ -288,7 +288,7 @@ public class EuclidShapeTools
          dy = yLocal - yLocalClamped;
          dz = zLocal - zLocalClamped;
 
-         double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+         double distance = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy, dz));
 
          closestPointOnSurfaceToPack.set(xLocalClamped, yLocalClamped, zLocalClamped);
          normalToPack.set(dx, dy, dz);
@@ -416,7 +416,7 @@ public class EuclidShapeTools
             return false;
 
          projectionToPack.sub(pointToProject, capsule3DPosition);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromCenter));
+         projectionToPack.scale(capsule3DRadius / EuclidCoreTools.squareRoot(distanceSquaredFromCenter));
          projectionToPack.add(capsule3DPosition);
          return true;
       }
@@ -440,7 +440,7 @@ public class EuclidShapeTools
 
          projectionToPack.set(pointToProject);
          projectionToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromAxis));
+         projectionToPack.scale(capsule3DRadius / EuclidCoreTools.squareRoot(distanceSquaredFromAxis));
          projectionToPack.add(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
          return true;
       }
@@ -456,7 +456,7 @@ public class EuclidShapeTools
 
          projectionToPack.set(pointToProject);
          projectionToPack.sub(topCenterX, topCenterY, topCenterZ);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromTopCenter));
+         projectionToPack.scale(capsule3DRadius / EuclidCoreTools.squareRoot(distanceSquaredFromTopCenter));
          projectionToPack.add(topCenterX, topCenterY, topCenterZ);
          return true;
       }
@@ -475,7 +475,7 @@ public class EuclidShapeTools
 
          projectionToPack.set(pointToProject);
          projectionToPack.sub(bottomCenterX, bottomCenterY, bottomCenterZ);
-         projectionToPack.scale(capsule3DRadius / Math.sqrt(distanceSquaredFromBottomCenter));
+         projectionToPack.scale(capsule3DRadius / EuclidCoreTools.squareRoot(distanceSquaredFromBottomCenter));
          projectionToPack.add(bottomCenterX, bottomCenterY, bottomCenterZ);
          return true;
       }
@@ -605,7 +605,7 @@ public class EuclidShapeTools
       }
       else
       {
-         double distanceFromAxisClosest = Math.sqrt(distanceSquaredFromAxisClosest);
+         double distanceFromAxisClosest = EuclidCoreTools.squareRoot(distanceSquaredFromAxisClosest);
 
          normalToPack.set(query);
          normalToPack.sub(projectionOnAxisX, projectionOnAxisY, projectionOnAxisZ);
@@ -698,7 +698,7 @@ public class EuclidShapeTools
          }
 
          // The query is inside the cylinder
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
          double dh = halfLength - Math.abs(positionOnAxis);
          double dr = cylinder3DRadius - distanceFromAxis;
 
@@ -720,7 +720,7 @@ public class EuclidShapeTools
       }
       else
       { // The query is outside and closest to the cylinder's side.
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
 
          double positionOnAxisClamped = positionOnAxis;
          if (positionOnAxisClamped < -halfLength)
@@ -804,7 +804,7 @@ public class EuclidShapeTools
       }
       else
       { // The query is outside and closest to the cylinder's side.
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
 
          double positionOnAxisClamped = positionOnAxis;
          if (positionOnAxisClamped < -halfLength)
@@ -863,7 +863,7 @@ public class EuclidShapeTools
       }
       else
       {
-         supportingVertexToPack.scale(cylinder3DRadius / Math.sqrt(distanceSquaredFromAxis));
+         supportingVertexToPack.scale(cylinder3DRadius / EuclidCoreTools.squareRoot(distanceSquaredFromAxis));
          supportingVertexToPack.add(cylinder3DPosition);
       }
 
@@ -889,9 +889,9 @@ public class EuclidShapeTools
       double cylinder3DHalfLength = 0.5 * cylinder3DLength;
 
       double invNormSquared = 1.0 / cylinder3DAxis.lengthSquared();
-      double capMinMaxX = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getX() * cylinder3DAxis.getX() * invNormSquared));
-      double capMinMaxY = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getY() * cylinder3DAxis.getY() * invNormSquared));
-      double capMinMaxZ = Math.max(0.0, cylinder3DRadius * Math.sqrt(1.0 - cylinder3DAxis.getZ() * cylinder3DAxis.getZ() * invNormSquared));
+      double capMinMaxX = Math.max(0.0, cylinder3DRadius * EuclidCoreTools.squareRoot(1.0 - cylinder3DAxis.getX() * cylinder3DAxis.getX() * invNormSquared));
+      double capMinMaxY = Math.max(0.0, cylinder3DRadius * EuclidCoreTools.squareRoot(1.0 - cylinder3DAxis.getY() * cylinder3DAxis.getY() * invNormSquared));
+      double capMinMaxZ = Math.max(0.0, cylinder3DRadius * EuclidCoreTools.squareRoot(1.0 - cylinder3DAxis.getZ() * cylinder3DAxis.getZ() * invNormSquared));
 
       double maxX = Math.abs(cylinder3DHalfLength * cylinder3DAxis.getX()) + capMinMaxX;
       double maxY = Math.abs(cylinder3DHalfLength * cylinder3DAxis.getY()) + capMinMaxY;
@@ -962,7 +962,7 @@ public class EuclidShapeTools
          }
 
          // The query is inside the cylinder
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
          double dh = halfLength - Math.abs(positionOnAxis);
          double dr = cylinder3DRadius - distanceFromAxis;
 
@@ -1009,7 +1009,7 @@ public class EuclidShapeTools
       }
       else
       { // The query is outside and closest to the cylinder's side.
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
 
          double positionOnAxisClamped = positionOnAxis;
          if (positionOnAxisClamped < -halfLength)
@@ -1031,7 +1031,7 @@ public class EuclidShapeTools
             double dX = query.getX() - closestX;
             double dY = query.getY() - closestY;
             double dZ = query.getZ() - closestZ;
-            double distance = Math.sqrt(EuclidCoreTools.normSquared(dX, dY, dZ));
+            double distance = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dX, dY, dZ));
 
             closestPointOnSurfaceToPack.set(closestX, closestY, closestZ);
 
@@ -1106,7 +1106,7 @@ public class EuclidShapeTools
       double yRadius = ellipsoid3DRadii.getY();
       double zRadius = ellipsoid3DRadii.getZ();
 
-      double scaleFactor = 1.0 / Math.sqrt(EuclidCoreTools.normSquared(query.getX() / xRadius, query.getY() / yRadius, query.getZ() / zRadius));
+      double scaleFactor = 1.0 / EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(query.getX() / xRadius, query.getY() / yRadius, query.getZ() / zRadius));
 
       return query.distanceFromOrigin() * (1.0 - scaleFactor);
    }
@@ -1147,14 +1147,14 @@ public class EuclidShapeTools
       double nx = supportDirection.getX();
       double ny = supportDirection.getY();
       double nz = supportDirection.getZ();
-      double nLength = Math.sqrt(EuclidCoreTools.normSquared(nx, ny, nz));
+      double nLength = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(nx, ny, nz));
       nx *= ellipsoid3DRadii.getX() / nLength;
       ny *= ellipsoid3DRadii.getY() / nLength;
       nz *= ellipsoid3DRadii.getZ() / nLength;
 
       supportingVertexToPack.set(nx, ny, nz);
       supportingVertexToPack.scale(ellipsoid3DRadii.getX(), ellipsoid3DRadii.getY(), ellipsoid3DRadii.getZ());
-      supportingVertexToPack.scale(1.0 / Math.sqrt(EuclidCoreTools.normSquared(nx, ny, nz)));
+      supportingVertexToPack.scale(1.0 / EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(nx, ny, nz)));
    }
 
    /**
@@ -1192,9 +1192,9 @@ public class EuclidShapeTools
          double ry = ellipsoid3DRadii.getY() * ellipsoid3DRadii.getY();
          double rz = ellipsoid3DRadii.getZ() * ellipsoid3DRadii.getZ();
 
-         xRange = Math.sqrt(m00 * rx + m01 * ry + m02 * rz);
-         yRange = Math.sqrt(m10 * rx + m11 * ry + m12 * rz);
-         zRange = Math.sqrt(m20 * rx + m21 * ry + m22 * rz);
+         xRange = EuclidCoreTools.squareRoot(m00 * rx + m01 * ry + m02 * rz);
+         yRange = EuclidCoreTools.squareRoot(m10 * rx + m11 * ry + m12 * rz);
+         zRange = EuclidCoreTools.squareRoot(m20 * rx + m21 * ry + m22 * rz);
       }
 
       double maxX = ellipsoid3DPosition.getX() + xRange;
@@ -1260,7 +1260,7 @@ public class EuclidShapeTools
     */
    public static double computeRamp3DLength(double ramp3DSizeX, double ramp3DSizeZ)
    {
-      return Math.sqrt(EuclidCoreTools.normSquared(ramp3DSizeX, ramp3DSizeZ));
+      return EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(ramp3DSizeX, ramp3DSizeZ));
    }
 
    /**
@@ -1716,7 +1716,7 @@ public class EuclidShapeTools
       double dy = yLocalQuery - yLocalClosest;
       double dz = zLocalQuery - zLocalClosest;
 
-      double distance = Math.sqrt(EuclidCoreTools.normSquared(dx, dy, dz));
+      double distance = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(dx, dy, dz));
 
       normalToPack.set(dx, dy, dz);
       normalToPack.scale(1.0 / distance);
@@ -1825,7 +1825,7 @@ public class EuclidShapeTools
          return false;
 
       projectionToPack.sub(pointToProject, sphere3DPosition);
-      projectionToPack.scale(sphere3DRadius / Math.sqrt(distanceSquared));
+      projectionToPack.scale(sphere3DRadius / EuclidCoreTools.squareRoot(distanceSquared));
       projectionToPack.add(sphere3DPosition);
       return true;
    }
@@ -1913,7 +1913,7 @@ public class EuclidShapeTools
       if (distanceSquaredFromAxis > outerRadius * outerRadius || distanceSquaredFromAxis < innerRadius * innerRadius)
          return false;
 
-      double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+      double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
       return EuclidCoreTools.normSquared(distanceFromAxis - torus3DRadius, positionOnAxis) <= tubeRadiusWithEpsilon * tubeRadiusWithEpsilon;
    }
 
@@ -1946,12 +1946,12 @@ public class EuclidShapeTools
 
       if (distanceSquaredFromAxis < 1.0e-12)
       {
-         return Math.sqrt(normSquared(torus3DRadius, positionOnAxis)) - torus3DTubeRadius;
+         return EuclidCoreTools.squareRoot(normSquared(torus3DRadius, positionOnAxis)) - torus3DTubeRadius;
       }
       else
       {
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
-         return Math.sqrt(normSquared(distanceFromAxis - torus3DRadius, positionOnAxis)) - torus3DTubeRadius;
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
+         return EuclidCoreTools.squareRoot(normSquared(distanceFromAxis - torus3DRadius, positionOnAxis)) - torus3DTubeRadius;
       }
    }
 
@@ -2005,9 +2005,9 @@ public class EuclidShapeTools
          double xOrthogonalToAxis = yNonCollinearToAxis * torus3DAxis.getZ() - zNonCollinearToAxis * torus3DAxis.getY();
          double yOrthogonalToAxis = zNonCollinearToAxis * torus3DAxis.getX() - xNonCollinearToAxis * torus3DAxis.getZ();
          double zOrthogonalToAxis = xNonCollinearToAxis * torus3DAxis.getY() - yNonCollinearToAxis * torus3DAxis.getX();
-         double norm = Math.sqrt(EuclidCoreTools.normSquared(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis));
+         double norm = EuclidCoreTools.squareRoot(EuclidCoreTools.normSquared(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis));
 
-         double distanceFromTubeCenter = Math.sqrt(normSquared(percentageOnAxis, torus3DRadius));
+         double distanceFromTubeCenter = EuclidCoreTools.squareRoot(normSquared(percentageOnAxis, torus3DRadius));
 
          double scale = torus3DTubeRadius / distanceFromTubeCenter;
          double resultDistanceFromAxis = torus3DRadius - torus3DRadius * scale;
@@ -2022,7 +2022,7 @@ public class EuclidShapeTools
       }
       else
       {
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
 
          if (EuclidCoreTools.normSquared(distanceFromAxis - torus3DRadius, percentageOnAxis) <= torus3DTubeRadius * torus3DTubeRadius)
             return false;
@@ -2084,7 +2084,7 @@ public class EuclidShapeTools
          normalToPack.cross(torus3DAxis);
          normalToPack.normalize();
 
-         double distanceFromTubeCenter = Math.sqrt(normSquared(percentageOnAxis, torus3DRadius));
+         double distanceFromTubeCenter = EuclidCoreTools.squareRoot(normSquared(percentageOnAxis, torus3DRadius));
 
          double scale = torus3DTubeRadius / distanceFromTubeCenter;
          double resultDistanceFromAxis = torus3DRadius - torus3DRadius * scale;
@@ -2103,7 +2103,7 @@ public class EuclidShapeTools
       }
       else
       {
-         double distanceFromAxis = Math.sqrt(distanceSquaredFromAxis);
+         double distanceFromAxis = EuclidCoreTools.squareRoot(distanceSquaredFromAxis);
 
          double scale = torus3DRadius / distanceFromAxis;
 
@@ -2123,7 +2123,7 @@ public class EuclidShapeTools
          }
          else
          {
-            double distanceFromTubeCenter = Math.sqrt(distanceSquaredFromTubeCenter);
+            double distanceFromTubeCenter = EuclidCoreTools.squareRoot(distanceSquaredFromTubeCenter);
             normalToPack.set(query);
             normalToPack.sub(xTubeCenter, yTubeCenter, zTubeCenter);
             normalToPack.scale(1.0 / distanceFromTubeCenter);
@@ -2168,7 +2168,7 @@ public class EuclidShapeTools
     */
    public static double icosahedronVolume(double edgeLength)
    {
-      return edgeLength * edgeLength * edgeLength * (5.0 * (3.0 + Math.sqrt(5.0))) / 12.0;
+      return edgeLength * edgeLength * edgeLength * (5.0 * (3.0 + EuclidCoreTools.squareRoot(5.0))) / 12.0;
    }
 
    /**

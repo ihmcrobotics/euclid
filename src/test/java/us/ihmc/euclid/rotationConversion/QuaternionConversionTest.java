@@ -1,7 +1,8 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -163,7 +165,7 @@ public class QuaternionConversionTest
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
 
-      double sqrt2Over2 = Math.sqrt(2.0) / 2.0;
+      double sqrt2Over2 = EuclidCoreTools.squareRoot(2.0) / 2.0;
       // Test edge cases
       // Zero rotation
       m00 = m11 = m22 = 1.0;

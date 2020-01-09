@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -91,7 +92,7 @@ public interface Vector2DBasics extends Tuple2DBasics, Vector2DReadOnly
       if (lengthSquared < maxLength * maxLength)
          return false;
 
-      scale(maxLength / Math.sqrt(lengthSquared));
+      scale(maxLength / EuclidCoreTools.squareRoot(lengthSquared));
       return true;
    }
 
