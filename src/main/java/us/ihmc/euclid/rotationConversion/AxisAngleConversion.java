@@ -132,7 +132,7 @@ public class AxisAngleConversion
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
          x /= s;
          y /= s;
          z /= s;
@@ -236,7 +236,7 @@ public class AxisAngleConversion
 
       if (uNorm > EPS)
       {
-         axisAngleToPack.setAngle(2.0 * Math.atan2(uNorm, qs));
+         axisAngleToPack.setAngle(2.0 * EuclidCoreTools.atan2(uNorm, qs));
          uNorm = 1.0 / uNorm;
          axisAngleToPack.setX(qx * uNorm);
          axisAngleToPack.setY(qy * uNorm);
@@ -434,7 +434,7 @@ public class AxisAngleConversion
 
       if (uNorm > EPS)
       {
-         axisAngleToPack.setAngle(2.0 * Math.atan2(uNorm, qs));
+         axisAngleToPack.setAngle(2.0 * EuclidCoreTools.atan2(uNorm, qs));
          uNorm = 1.0 / uNorm;
          axisAngleToPack.setX(qx * uNorm);
          axisAngleToPack.setY(qy * uNorm);

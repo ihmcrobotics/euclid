@@ -225,7 +225,7 @@ public class EuclidCoreTools
 
    /**
     * Calculates and returns the square root of the given value.
-    * 
+    *
     * @param value the value to calculate the square root of.
     * @return the value of the square root.
     * @see Math#sqrt(double)
@@ -796,5 +796,21 @@ public class EuclidCoreTools
    public static double interpolate(double a, double b, double alpha)
    {
       return (1.0 - alpha) * a + alpha * b;
+   }
+
+   /**
+    * Returns the angle <i>theta</i> from the conversion of rectangular coordinates
+    * ({@code x},&nbsp;{@code y}) to polar coordinates (r,&nbsp;<i>theta</i>).
+    *
+    * @param y the ordinate coordinate
+    * @param x the abscissa coordinate
+    * @return the <i>theta</i> component of the point (<i>r</i>,&nbsp;<i>theta</i>) in polar
+    *         coordinates that corresponds to the point (<i>x</i>,&nbsp;<i>y</i>) in Cartesian
+    *         coordinates.
+    * @see Math#atan2(double, double)
+    */
+   public static double atan2(double y, double x)
+   {
+      return Math.atan2(y, x);
    }
 }

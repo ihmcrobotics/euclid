@@ -136,7 +136,7 @@ public abstract class RotationVectorConversion
 
       if (uNorm > EPS)
       {
-         double angle = 2.0 * Math.atan2(uNorm, qs) / uNorm;
+         double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
          rotationVectorToPack.setX(qx * angle);
          rotationVectorToPack.setY(qy * angle);
          rotationVectorToPack.setZ(qz * angle);
@@ -267,7 +267,7 @@ public abstract class RotationVectorConversion
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
          x /= s;
          y /= s;
          z /= s;
@@ -430,7 +430,7 @@ public abstract class RotationVectorConversion
 
       if (uNorm > EPS)
       {
-         double angle = 2.0 * Math.atan2(uNorm, qs) / uNorm;
+         double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
          rotationVectorToPack.setX(qx * angle);
          rotationVectorToPack.setY(qy * angle);
          rotationVectorToPack.setZ(qz * angle);

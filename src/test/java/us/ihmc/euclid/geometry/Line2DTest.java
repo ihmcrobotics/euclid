@@ -412,7 +412,7 @@ public class Line2DTest
          Point2D firstPointOnLine = new Point2D(0.0, 0.0);
          Point2D secondPointOnLine = randomPoint(random);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         double angle = Math.atan2(line2d.getDirection().getY(), line2d.getDirection().getX());
+         double angle = EuclidCoreTools.atan2(line2d.getDirection().getY(), line2d.getDirection().getX());
          double rotation = randomDouble(random, 2.0 * Math.PI);
          double newAngle = angle + rotation;
          line2d.rotate(rotation);

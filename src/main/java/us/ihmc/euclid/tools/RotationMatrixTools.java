@@ -851,7 +851,7 @@ public class RotationMatrixTools
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
          x /= s;
          y /= s;
          z /= s;
@@ -952,7 +952,7 @@ public class RotationMatrixTools
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
       }
       else if (m00 + m11 + m22 > 3.0 - 1.0e-7)
       { // At this point, the matrix has to be identity.

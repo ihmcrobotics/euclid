@@ -95,7 +95,7 @@ public abstract class YawPitchRollConversion
       if (EuclidCoreTools.containsNaN(m00, m10))
          return Double.NaN;
 
-      return Math.atan2(m10, m00);
+      return EuclidCoreTools.atan2(m10, m00);
    }
 
    /**
@@ -151,7 +151,7 @@ public abstract class YawPitchRollConversion
       if (EuclidCoreTools.containsNaN(m21, m22))
          return Double.NaN;
 
-      return Math.atan2(m21, m22);
+      return EuclidCoreTools.atan2(m21, m22);
    }
 
    /**
@@ -473,7 +473,7 @@ public abstract class YawPitchRollConversion
     */
    static double computeYawFromQuaternionImpl(double qx, double qy, double qz, double qs)
    {
-      return Math.atan2(2.0 * (qx * qy + qz * qs), 1.0 - 2.0 * (qy * qy + qz * qz));
+      return EuclidCoreTools.atan2(2.0 * (qx * qy + qz * qs), 1.0 - 2.0 * (qy * qy + qz * qz));
    }
 
    /**
@@ -514,7 +514,7 @@ public abstract class YawPitchRollConversion
     */
    static double computeRollFromQuaternionImpl(double qx, double qy, double qz, double qs)
    {
-      return Math.atan2(2.0 * (qy * qz + qx * qs), 1.0 - 2.0 * (qx * qx + qy * qy));
+      return EuclidCoreTools.atan2(2.0 * (qy * qz + qx * qs), 1.0 - 2.0 * (qx * qx + qy * qy));
    }
 
    /**

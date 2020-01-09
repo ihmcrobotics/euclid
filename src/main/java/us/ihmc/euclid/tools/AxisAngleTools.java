@@ -832,7 +832,7 @@ public class AxisAngleTools
       {
          double sinHalfGamma = EuclidCoreTools.squareRoot(sinHalfGammaSquared);
 
-         double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+         double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
          double sinHalfGammaInv = 1.0 / sinHalfGamma;
          double ux = sinHalfGammaUx * sinHalfGammaInv;
          double uy = sinHalfGammaUy * sinHalfGammaInv;
@@ -890,7 +890,7 @@ public class AxisAngleTools
 
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -944,7 +944,7 @@ public class AxisAngleTools
 
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -998,7 +998,7 @@ public class AxisAngleTools
 
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1052,7 +1052,7 @@ public class AxisAngleTools
 
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1106,7 +1106,7 @@ public class AxisAngleTools
 
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1160,7 +1160,7 @@ public class AxisAngleTools
 
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1221,7 +1221,7 @@ public class AxisAngleTools
 
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       return Math.abs(gamma);
    }
 }

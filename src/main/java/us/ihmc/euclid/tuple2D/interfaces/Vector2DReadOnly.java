@@ -97,7 +97,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       // the magnitude of the angle comes from the dot product
       double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
 
-      return Math.atan2(crossProduct, dotProduct);
+      return EuclidCoreTools.atan2(crossProduct, dotProduct);
    }
 
    /**

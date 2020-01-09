@@ -182,7 +182,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
 
       if (uNorm > EPS_POW)
       {
-         double angle = alpha * Math.atan2(uNorm, getS());
+         double angle = alpha * EuclidCoreTools.atan2(uNorm, getS());
          uNorm = Math.sin(angle) / uNorm;
          double qx = getX() * uNorm;
          double qy = getY() * uNorm;

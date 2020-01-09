@@ -500,7 +500,7 @@ public class EuclidGeometryPolygonToolsTest
 
          List<Double> angles = new ArrayList<>();
          // x and y are flipped on purpose as the comparison is based on the angle with respect to the y-axis.
-         points.forEach(v -> angles.add(Math.atan2(v.getX(), v.getY())));
+         points.forEach(v -> angles.add(EuclidCoreTools.atan2(v.getX(), v.getY())));
 
          for (int index = 1; index < numberOfPoints - 1; index++)
             assertTrue(angles.get(index) < angles.get(index + 1));
