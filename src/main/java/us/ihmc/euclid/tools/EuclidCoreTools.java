@@ -223,6 +223,13 @@ public class EuclidCoreTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   /**
+    * Calculates and returns the square root of the given value.
+    * 
+    * @param value the value to calculate the square root of.
+    * @return the value of the square root.
+    * @see Math#sqrt(double)
+    */
    public static double squareRoot(double value)
    {
       return Math.sqrt(value);
@@ -234,7 +241,7 @@ public class EuclidCoreTools
     * This method is optimized when {@code squaredValueClosedToOne} is equal to
     * 1+/-{@value #EPS_NORM_FAST_SQRT} by using an approximation of the square root.
     *
-    * @param squaredValueClosedToOne the value to calculates the square root of.
+    * @param squaredValueClosedToOne the value to calculate the square root of.
     * @return the value of the square root.
     */
    public static double fastSquareRoot(double squaredValueClosedToOne)
