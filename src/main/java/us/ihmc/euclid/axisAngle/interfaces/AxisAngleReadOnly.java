@@ -129,7 +129,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     */
    default double axisNorm()
    {
-      return EuclidCoreTools.norm(getX(), getY(), getZ());
+      return EuclidCoreTools.fastNorm(getX(), getY(), getZ());
    }
 
    /**

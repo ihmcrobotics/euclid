@@ -176,15 +176,22 @@ public class EuclidCoreToolsTest
       assertTrue(EuclidCoreTools.norm(1.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 1.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0) == 0.0);
-
       assertTrue(EuclidCoreTools.norm(-1.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, -1.0) == 1.0);
-
       assertTrue(EuclidCoreTools.norm(2.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 2.0) == 2.0);
-
       assertTrue(EuclidCoreTools.norm(-2.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, -2.0) == 2.0);
+
+      assertTrue(EuclidCoreTools.fastNorm(1.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 1.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0) == 0.0);
+      assertTrue(EuclidCoreTools.fastNorm(-1.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, -1.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(2.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 2.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(-2.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, -2.0) == 2.0);
    }
 
    @Test
@@ -194,18 +201,29 @@ public class EuclidCoreToolsTest
       assertTrue(EuclidCoreTools.norm(0.0, 1.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 1.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 0.0) == 0.0);
-
       assertTrue(EuclidCoreTools.norm(-1.0, 0.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, -1.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, -1.0) == 1.0);
-
       assertTrue(EuclidCoreTools.norm(2.0, 0.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 2.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 2.0) == 2.0);
-
       assertTrue(EuclidCoreTools.norm(-2.0, 0.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, -2.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, -2.0) == 2.0);
+
+      assertTrue(EuclidCoreTools.fastNorm(1.0, 0.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 1.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 1.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 0.0) == 0.0);
+      assertTrue(EuclidCoreTools.fastNorm(-1.0, 0.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, -1.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, -1.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(2.0, 0.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 2.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 2.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(-2.0, 0.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, -2.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, -2.0) == 2.0);
    }
 
    @Test
@@ -216,21 +234,36 @@ public class EuclidCoreToolsTest
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 1.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 0.0, 1.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 0.0, 0.0) == 0.0);
-
       assertTrue(EuclidCoreTools.norm(-1.0, 0.0, 0.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, -1.0, 0.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, -1.0, 0.0) == 1.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 0.0, -1.0) == 1.0);
-
       assertTrue(EuclidCoreTools.norm(2.0, 0.0, 0.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 2.0, 0.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 2.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 0.0, 2.0) == 2.0);
-
       assertTrue(EuclidCoreTools.norm(-2.0, 0.0, 0.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, -2.0, 0.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, -2.0, 0.0) == 2.0);
       assertTrue(EuclidCoreTools.norm(0.0, 0.0, 0.0, -2.0) == 2.0);
+
+      assertTrue(EuclidCoreTools.fastNorm(1.0, 0.0, 0.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 1.0, 0.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 1.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 0.0, 1.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 0.0, 0.0) == 0.0);
+      assertTrue(EuclidCoreTools.fastNorm(-1.0, 0.0, 0.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, -1.0, 0.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, -1.0, 0.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 0.0, -1.0) == 1.0);
+      assertTrue(EuclidCoreTools.fastNorm(2.0, 0.0, 0.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 2.0, 0.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 2.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 0.0, 2.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(-2.0, 0.0, 0.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, -2.0, 0.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, -2.0, 0.0) == 2.0);
+      assertTrue(EuclidCoreTools.fastNorm(0.0, 0.0, 0.0, -2.0) == 2.0);
    }
 
    @Test

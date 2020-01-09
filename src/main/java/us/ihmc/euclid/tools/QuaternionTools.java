@@ -1079,7 +1079,7 @@ public class QuaternionTools
    static void transformImpl(double qx, double qy, double qz, double qs, boolean conjugateQuaternion, Matrix3DReadOnly matrixOriginal,
                              Matrix3DBasics matrixTransformed)
    {
-      double norm = EuclidCoreTools.norm(qx, qy, qz, qs);
+      double norm = EuclidCoreTools.fastNorm(qx, qy, qz, qs);
 
       if (norm < EPS)
       {

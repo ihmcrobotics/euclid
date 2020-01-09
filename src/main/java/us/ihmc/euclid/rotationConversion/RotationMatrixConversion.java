@@ -169,7 +169,7 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
       if (uNorm < EPS)
       {
@@ -264,7 +264,7 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      double norm = EuclidCoreTools.norm(qx, qy, qz, qs);
+      double norm = EuclidCoreTools.fastNorm(qx, qy, qz, qs);
 
       if (norm < EPS)
       {

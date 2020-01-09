@@ -777,11 +777,11 @@ public class AxisAngleTools
    private static void multiplyImpl(double alpha, double u1x, double u1y, double u1z, boolean inverse1, double beta, double u2x, double u2y, double u2z,
                                     boolean inverse2, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm1 = EuclidCoreTools.norm(u1x, u1y, u1z);
+      double axisNorm1 = EuclidCoreTools.fastNorm(u1x, u1y, u1z);
       if (axisNorm1 < EPS)
          return;
 
-      double axisNorm2 = EuclidCoreTools.norm(u2x, u2y, u2z);
+      double axisNorm2 = EuclidCoreTools.fastNorm(u2x, u2y, u2z);
       if (axisNorm2 < EPS)
          return;
 

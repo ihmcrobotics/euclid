@@ -673,7 +673,7 @@ public abstract class YawPitchRollConversion
          return;
       }
 
-      double norm = EuclidCoreTools.norm(qx, qy, qz, qs);
+      double norm = EuclidCoreTools.fastNorm(qx, qy, qz, qs);
 
       if (norm < EPS)
       {
@@ -1023,7 +1023,7 @@ public abstract class YawPitchRollConversion
          return;
       }
 
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)
       {
          yawPitchRollToPack.setToZero();
@@ -1083,7 +1083,7 @@ public abstract class YawPitchRollConversion
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double angle = axisAngle.getAngle();
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)
       {
          yawPitchRollToPack[0] = 0.0;
@@ -1129,7 +1129,7 @@ public abstract class YawPitchRollConversion
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double angle = axisAngle.getAngle();
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)
       {
          eulerAnglesToPack.setToZero();

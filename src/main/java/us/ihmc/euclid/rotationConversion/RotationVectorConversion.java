@@ -87,7 +87,7 @@ public abstract class RotationVectorConversion
          return;
       }
 
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
       if (uNorm > EPS)
       {
