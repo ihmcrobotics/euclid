@@ -531,9 +531,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       Point3D baseCentroid = new Point3D();
       baseCentroid.add(topVertex, topToBaseCentroid);
 
-      Point3D base0 = new Point3D(baseSize * Math.cos(0.0 * Math.PI / 3.0), baseSize * Math.sin(0.0 * Math.PI / 3.0), 0);
-      Point3D base1 = new Point3D(baseSize * Math.cos(1.0 * Math.PI / 3.0), baseSize * Math.sin(1.0 * Math.PI / 3.0), 0);
-      Point3D base2 = new Point3D(baseSize * Math.cos(2.0 * Math.PI / 3.0), baseSize * Math.sin(2.0 * Math.PI / 3.0), 0);
+      Point3D base0 = new Point3D(baseSize * EuclidCoreTools.cos(0.0 * Math.PI / 3.0), baseSize * EuclidCoreTools.sin(0.0 * Math.PI / 3.0), 0);
+      Point3D base1 = new Point3D(baseSize * EuclidCoreTools.cos(1.0 * Math.PI / 3.0), baseSize * EuclidCoreTools.sin(1.0 * Math.PI / 3.0), 0);
+      Point3D base2 = new Point3D(baseSize * EuclidCoreTools.cos(2.0 * Math.PI / 3.0), baseSize * EuclidCoreTools.sin(2.0 * Math.PI / 3.0), 0);
 
       AxisAngle rotation = EuclidGeometryTools.axisAngleFromZUpToVector3D(topToBaseCentroid);
       rotation.transform(base0);

@@ -14,10 +14,7 @@ import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.tools.EuclidCoreTestTools;
-import us.ihmc.euclid.tools.Matrix3DFeatures;
-import us.ihmc.euclid.tools.Matrix3DTools;
+import us.ihmc.euclid.tools.*;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Vector4D;
@@ -434,8 +431,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 
@@ -456,8 +453,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 
@@ -477,8 +474,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 
@@ -505,8 +502,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 
@@ -633,8 +630,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 
@@ -660,8 +657,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 
@@ -686,8 +683,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 
@@ -719,8 +716,8 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Vector2D expected = new Vector2D();
 
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double cYaw = Math.cos(yaw);
-         double sYaw = Math.sin(yaw);
+         double cYaw = EuclidCoreTools.cos(yaw);
+         double sYaw = EuclidCoreTools.sin(yaw);
 
          T matrix = createMatrix(cYaw, -sYaw, 0.0, sYaw, cYaw, 0.0, 0.0, 0.0, 1.0);
 

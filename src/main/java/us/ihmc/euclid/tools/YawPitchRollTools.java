@@ -114,16 +114,16 @@ public class YawPitchRollTools
 
       {
          double halfYaw = 0.5 * yaw1;
-         double cYaw = Math.cos(halfYaw);
-         double sYaw = Math.sin(halfYaw);
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
 
          double halfPitch = 0.5 * pitch1;
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double halfRoll = 0.5 * roll1;
-         double cRoll = Math.cos(halfRoll);
-         double sRoll = Math.sin(halfRoll);
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
 
          q1s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
          q1x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -135,16 +135,16 @@ public class YawPitchRollTools
 
       {
          double halfYaw = 0.5 * yaw2;
-         double cYaw = Math.cos(halfYaw);
-         double sYaw = Math.sin(halfYaw);
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
 
          double halfPitch = 0.5 * pitch2;
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double halfRoll = 0.5 * roll2;
-         double cRoll = Math.cos(halfRoll);
-         double sRoll = Math.sin(halfRoll);
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
 
          q2s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
          q2x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -173,16 +173,16 @@ public class YawPitchRollTools
    public static void invert(double yaw, double pitch, double roll, Orientation3DBasics orientationToPack)
    {
       double halfYaw = 0.5 * yaw;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double halfPitch = 0.5 * pitch;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double halfRoll = 0.5 * roll;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
       double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -285,14 +285,14 @@ public class YawPitchRollTools
          return;
       }
 
-      double cosc = Math.cos(yaw);
-      double sinc = Math.sin(yaw);
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
 
-      double cosb = Math.cos(pitch);
-      double sinb = Math.sin(pitch);
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
 
-      double cosa = Math.cos(roll);
-      double sina = Math.sin(roll);
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
 
       // Introduction to Robotics, 2.64
       double m00 = cosc * cosb;
@@ -475,14 +475,14 @@ public class YawPitchRollTools
       if (checkIfTransformInXYPlane && !isOrientation2D(yaw, pitch, roll, ZERO_EPS))
          throw new NotAnOrientation2DException("The orientation is not in XY plane: \n" + EuclidCoreIOTools.getYawPitchRollString(yaw, pitch, roll));
 
-      double cosc = Math.cos(yaw);
-      double sinc = Math.sin(yaw);
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
 
-      double cosb = Math.cos(pitch);
-      double sinb = Math.sin(pitch);
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
 
-      double cosa = Math.cos(roll);
-      double sina = Math.sin(roll);
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
 
       // Introduction to Robotics, 2.64
       double m00 = cosc * cosb;
@@ -613,14 +613,14 @@ public class YawPitchRollTools
          return;
       }
 
-      double cosc = Math.cos(yaw);
-      double sinc = Math.sin(yaw);
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
 
-      double cosb = Math.cos(pitch);
-      double sinb = Math.sin(pitch);
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
 
-      double cosa = Math.cos(roll);
-      double sina = Math.sin(roll);
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
 
       double ypr00, ypr01, ypr02, ypr10, ypr11, ypr12, ypr20, ypr21, ypr22;
       // Introduction to Robotics, 2.64
@@ -801,14 +801,14 @@ public class YawPitchRollTools
          return;
       }
 
-      double cosc = Math.cos(yaw);
-      double sinc = Math.sin(yaw);
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
 
-      double cosb = Math.cos(pitch);
-      double sinb = Math.sin(pitch);
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
 
-      double cosa = Math.cos(roll);
-      double sina = Math.sin(roll);
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
 
       double ypr00, ypr01, ypr02, ypr10, ypr11, ypr12, ypr20, ypr21, ypr22;
       // Introduction to Robotics, 2.64
@@ -943,14 +943,14 @@ public class YawPitchRollTools
          return;
       }
 
-      double cosc = Math.cos(yaw);
-      double sinc = Math.sin(yaw);
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
 
-      double cosb = Math.cos(pitch);
-      double sinb = Math.sin(pitch);
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
 
-      double cosa = Math.cos(roll);
-      double sina = Math.sin(roll);
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
 
       // Introduction to Robotics, 2.64
       double m00 = cosc * cosb;
@@ -1015,25 +1015,25 @@ public class YawPitchRollTools
       {
          AxisAngleReadOnly axisAngle1 = (AxisAngleReadOnly) orientation1;
          double halfTheta = 0.5 * axisAngle1.getAngle();
-         double sinHalfTheta = Math.sin(halfTheta) / axisAngle1.axisNorm();
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / axisAngle1.axisNorm();
          q1x = axisAngle1.getX() * sinHalfTheta;
          q1y = axisAngle1.getY() * sinHalfTheta;
          q1z = axisAngle1.getZ() * sinHalfTheta;
-         q1s = Math.cos(halfTheta);
+         q1s = EuclidCoreTools.cos(halfTheta);
       }
       else
       {
          double halfYaw = 0.5 * orientation1.getYaw();
-         double cYaw = Math.cos(halfYaw);
-         double sYaw = Math.sin(halfYaw);
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
 
          double halfPitch = 0.5 * orientation1.getPitch();
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double halfRoll = 0.5 * orientation1.getRoll();
-         double cRoll = Math.cos(halfRoll);
-         double sRoll = Math.sin(halfRoll);
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
 
          q1s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
          q1x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -1055,25 +1055,25 @@ public class YawPitchRollTools
       {
          AxisAngleReadOnly axisAngle2 = (AxisAngleReadOnly) orientation2;
          double halfTheta = 0.5 * axisAngle2.getAngle();
-         double sinHalfTheta = Math.sin(halfTheta) / axisAngle2.axisNorm();
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / axisAngle2.axisNorm();
          q2x = axisAngle2.getX() * sinHalfTheta;
          q2y = axisAngle2.getY() * sinHalfTheta;
          q2z = axisAngle2.getZ() * sinHalfTheta;
-         q2s = Math.cos(halfTheta);
+         q2s = EuclidCoreTools.cos(halfTheta);
       }
       else
       {
          double halfYaw = 0.5 * orientation2.getYaw();
-         double cYaw = Math.cos(halfYaw);
-         double sYaw = Math.sin(halfYaw);
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
 
          double halfPitch = 0.5 * orientation2.getPitch();
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double halfRoll = 0.5 * orientation2.getRoll();
-         double cRoll = Math.cos(halfRoll);
-         double sRoll = Math.sin(halfRoll);
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
 
          q2s = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
          q2x = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -1122,16 +1122,16 @@ public class YawPitchRollTools
 
       {
          double halfYaw = 0.5 * yawPitchRollOriginal.getYaw();
-         double cYaw = Math.cos(halfYaw);
-         double sYaw = Math.sin(halfYaw);
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
 
          double halfPitch = 0.5 * yawPitchRollOriginal.getPitch();
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double halfRoll = 0.5 * yawPitchRollOriginal.getRoll();
-         double cRoll = Math.cos(halfRoll);
-         double sRoll = Math.sin(halfRoll);
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
 
          qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
          qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -1140,8 +1140,8 @@ public class YawPitchRollTools
       }
 
       double halfYaw = 0.5 * yaw;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double x = qx * cYaw + qy * sYaw;
       double y = -qx * sYaw + qy * cYaw;
@@ -1177,16 +1177,16 @@ public class YawPitchRollTools
 
          {
             double halfYaw = 0.5 * yawPitchRollOriginal.getYaw();
-            double cYaw = Math.cos(halfYaw);
-            double sYaw = Math.sin(halfYaw);
+            double cYaw = EuclidCoreTools.cos(halfYaw);
+            double sYaw = EuclidCoreTools.sin(halfYaw);
 
             double halfPitch = 0.5 * yawPitchRollOriginal.getPitch();
-            double cPitch = Math.cos(halfPitch);
-            double sPitch = Math.sin(halfPitch);
+            double cPitch = EuclidCoreTools.cos(halfPitch);
+            double sPitch = EuclidCoreTools.sin(halfPitch);
 
             double halfRoll = 0.5 * yawPitchRollOriginal.getRoll();
-            double cRoll = Math.cos(halfRoll);
-            double sRoll = Math.sin(halfRoll);
+            double cRoll = EuclidCoreTools.cos(halfRoll);
+            double sRoll = EuclidCoreTools.sin(halfRoll);
 
             qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
             qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -1195,8 +1195,8 @@ public class YawPitchRollTools
          }
 
          double halfPitch = 0.5 * pitch;
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double x = cPitch * qx + sPitch * qz;
          double y = cPitch * qy + sPitch * qs;
@@ -1233,16 +1233,16 @@ public class YawPitchRollTools
 
          {
             double halfYaw = 0.5 * yawPitchRollOriginal.getYaw();
-            double cYaw = Math.cos(halfYaw);
-            double sYaw = Math.sin(halfYaw);
+            double cYaw = EuclidCoreTools.cos(halfYaw);
+            double sYaw = EuclidCoreTools.sin(halfYaw);
 
             double halfPitch = 0.5 * yawPitchRollOriginal.getPitch();
-            double cPitch = Math.cos(halfPitch);
-            double sPitch = Math.sin(halfPitch);
+            double cPitch = EuclidCoreTools.cos(halfPitch);
+            double sPitch = EuclidCoreTools.sin(halfPitch);
 
             double halfRoll = 0.5 * yawPitchRollOriginal.getRoll();
-            double cRoll = Math.cos(halfRoll);
-            double sRoll = Math.sin(halfRoll);
+            double cRoll = EuclidCoreTools.cos(halfRoll);
+            double sRoll = EuclidCoreTools.sin(halfRoll);
 
             qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
             qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -1251,8 +1251,8 @@ public class YawPitchRollTools
          }
 
          double halfPitch = 0.5 * pitch;
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double x = qx * cPitch - qz * sPitch;
          double y = qs * sPitch + qy * cPitch;
@@ -1280,16 +1280,16 @@ public class YawPitchRollTools
 
       {
          double halfYaw = 0.5 * yawPitchRollOriginal.getYaw();
-         double cYaw = Math.cos(halfYaw);
-         double sYaw = Math.sin(halfYaw);
+         double cYaw = EuclidCoreTools.cos(halfYaw);
+         double sYaw = EuclidCoreTools.sin(halfYaw);
 
          double halfPitch = 0.5 * yawPitchRollOriginal.getPitch();
-         double cPitch = Math.cos(halfPitch);
-         double sPitch = Math.sin(halfPitch);
+         double cPitch = EuclidCoreTools.cos(halfPitch);
+         double sPitch = EuclidCoreTools.sin(halfPitch);
 
          double halfRoll = 0.5 * yawPitchRollOriginal.getRoll();
-         double cRoll = Math.cos(halfRoll);
-         double sRoll = Math.sin(halfRoll);
+         double cRoll = EuclidCoreTools.cos(halfRoll);
+         double sRoll = EuclidCoreTools.sin(halfRoll);
 
          qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
          qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
@@ -1298,8 +1298,8 @@ public class YawPitchRollTools
       }
 
       double halfRoll = 0.5 * roll;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double x = cRoll * qx + sRoll * qs;
       double y = cRoll * qy - sRoll * qz;

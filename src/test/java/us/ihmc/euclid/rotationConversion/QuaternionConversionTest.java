@@ -38,10 +38,10 @@ public class QuaternionConversionTest
          double uy = axisAngle.getY();
          double uz = axisAngle.getZ();
          // As the axis-angle is sane, there is no edge case making the conversion straightforward.
-         double qs = Math.cos(angle / 2.0);
-         double qx = ux * Math.sin(angle / 2.0);
-         double qy = uy * Math.sin(angle / 2.0);
-         double qz = uz * Math.sin(angle / 2.0);
+         double qs = EuclidCoreTools.cos(angle / 2.0);
+         double qx = ux * EuclidCoreTools.sin(angle / 2.0);
+         double qy = uy * EuclidCoreTools.sin(angle / 2.0);
+         double qz = uz * EuclidCoreTools.sin(angle / 2.0);
          expectedQuaternion.setUnsafe(qx, qy, qz, qs);
 
          QuaternionConversion.convertAxisAngleToQuaternion(ux, uy, uz, angle, actualQuaternion);
@@ -386,12 +386,12 @@ public class QuaternionConversionTest
          {
             for (double roll = -Math.PI; roll <= Math.PI; roll += deltaAngle)
             {
-               double cYaw = Math.cos(yaw);
-               double sYaw = Math.sin(yaw);
-               double cPitch = Math.cos(pitch);
-               double sPitch = Math.sin(pitch);
-               double cRoll = Math.cos(roll);
-               double sRoll = Math.sin(roll);
+               double cYaw = EuclidCoreTools.cos(yaw);
+               double sYaw = EuclidCoreTools.sin(yaw);
+               double cPitch = EuclidCoreTools.cos(pitch);
+               double sPitch = EuclidCoreTools.sin(pitch);
+               double cRoll = EuclidCoreTools.cos(roll);
+               double sRoll = EuclidCoreTools.sin(roll);
 
                m00 = cYaw * cPitch;
                m01 = cYaw * sPitch * sRoll - sYaw * cRoll;

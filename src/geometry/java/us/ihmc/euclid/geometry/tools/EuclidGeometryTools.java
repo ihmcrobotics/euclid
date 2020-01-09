@@ -125,7 +125,7 @@ public class EuclidGeometryTools
       else if (dotProduct < -1.0)
          dotProduct = -1.0;
 
-      return Math.acos(dotProduct);
+      return EuclidCoreTools.acos(dotProduct);
    }
 
    /**
@@ -489,7 +489,7 @@ public class EuclidGeometryTools
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
-      return Math.abs(dot / (firstVectorLength * secondVectorLength)) > Math.cos(angleEpsilon);
+      return Math.abs(dot / (firstVectorLength * secondVectorLength)) > EuclidCoreTools.cos(angleEpsilon);
    }
 
    /**
@@ -548,7 +548,7 @@ public class EuclidGeometryTools
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
-      return Math.abs(dot / (firstVectorLength * secondVectorLength)) > Math.cos(angleEpsilon);
+      return Math.abs(dot / (firstVectorLength * secondVectorLength)) > EuclidCoreTools.cos(angleEpsilon);
    }
 
    /**
@@ -5599,7 +5599,7 @@ public class EuclidGeometryTools
          return false;
 
       // Check if planes are parallel.
-      if (Math.abs(planeNormal1.dot(planeNormal2) / (normalMagnitude1 * normalMagnitude2)) > Math.cos(Math.abs(angleThreshold)))
+      if (Math.abs(planeNormal1.dot(planeNormal2) / (normalMagnitude1 * normalMagnitude2)) > EuclidCoreTools.cos(Math.abs(angleThreshold)))
          return false;
 
       intersectionDirectionToPack.cross(planeNormal1, planeNormal2);
@@ -8183,7 +8183,7 @@ public class EuclidGeometryTools
       if (chordAngle % Math.PI == 0.0)
          return Double.NaN;
       else
-         return chordLength / (2.0 * Math.sin(0.5 * chordAngle));
+         return chordLength / (2.0 * EuclidCoreTools.sin(0.5 * chordAngle));
    }
 
    /**
@@ -8475,7 +8475,7 @@ public class EuclidGeometryTools
 
       double numerator = lengthNeighbourSideA * lengthNeighbourSideA + lengthNeighbourSideB * lengthNeighbourSideB - lengthOppositeSideC * lengthOppositeSideC;
       double denominator = 2.0 * lengthNeighbourSideA * lengthNeighbourSideB;
-      return Math.acos(numerator / denominator);
+      return EuclidCoreTools.acos(numerator / denominator);
    }
 
    /**
@@ -8505,6 +8505,6 @@ public class EuclidGeometryTools
       if (Math.abs(angleBetweenAAndB) > Math.PI)
          throw new RuntimeException("angleBetweenAAndB " + angleBetweenAAndB + " does not define a triangle.");
 
-      return EuclidCoreTools.squareRoot(lengthSideA * lengthSideA + lengthSideB * lengthSideB - 2.0 * lengthSideA * lengthSideB * Math.cos(angleBetweenAAndB));
+      return EuclidCoreTools.squareRoot(lengthSideA * lengthSideA + lengthSideB * lengthSideB - 2.0 * lengthSideA * lengthSideB * EuclidCoreTools.cos(angleBetweenAAndB));
    }
 }

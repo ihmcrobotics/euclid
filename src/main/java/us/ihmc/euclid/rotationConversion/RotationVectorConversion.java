@@ -410,16 +410,16 @@ public abstract class RotationVectorConversion
       }
 
       double halfYaw = yaw / 2.0;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double halfPitch = pitch / 2.0;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double halfRoll = roll / 2.0;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
       double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;

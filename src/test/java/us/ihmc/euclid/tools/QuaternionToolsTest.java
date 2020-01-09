@@ -807,10 +807,10 @@ public class QuaternionToolsTest
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
          quaternion.setToZero();
          double corrupt = random.nextDouble() + 0.5;
-         quaternion.setUnsafe(0.0, 0.0, Math.sin(yaw / 2.0) * corrupt, Math.cos(yaw / 2.0) * corrupt);
+         quaternion.setUnsafe(0.0, 0.0, EuclidCoreTools.sin(yaw / 2.0) * corrupt, EuclidCoreTools.cos(yaw / 2.0) * corrupt);
 
-         tupleExpected.setX(Math.cos(yaw) * tupleOriginal.getX() - Math.sin(yaw) * tupleOriginal.getY());
-         tupleExpected.setY(Math.sin(yaw) * tupleOriginal.getX() + Math.cos(yaw) * tupleOriginal.getY());
+         tupleExpected.setX(EuclidCoreTools.cos(yaw) * tupleOriginal.getX() - EuclidCoreTools.sin(yaw) * tupleOriginal.getY());
+         tupleExpected.setY(EuclidCoreTools.sin(yaw) * tupleOriginal.getX() + EuclidCoreTools.cos(yaw) * tupleOriginal.getY());
 
          tupleActual.set(tupleOriginal);
          QuaternionTools.transform(quaternion, tupleActual, tupleActual, true);
@@ -903,7 +903,7 @@ public class QuaternionToolsTest
          tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
          double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
          quaternion.setToZero();
-         quaternion.set(0.0, 0.0, Math.sin(yaw / 2.0), Math.cos(yaw / 2.0));
+         quaternion.set(0.0, 0.0, EuclidCoreTools.sin(yaw / 2.0), EuclidCoreTools.cos(yaw / 2.0));
 
          tupleExpected.set(tupleOriginal);
          tupleActual.set(tupleOriginal);

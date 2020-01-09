@@ -416,7 +416,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the dot product of this line segment with the other line segment such that:<br>
     * {@code this }&middot;
-    * {@code other = Math.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
+    * {@code other = EuclidCoreTools.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
     * where &alpha; is the angle from this to the other line segment.
     *
     * @param other the other line segment used to compute the dot product. Not modified.

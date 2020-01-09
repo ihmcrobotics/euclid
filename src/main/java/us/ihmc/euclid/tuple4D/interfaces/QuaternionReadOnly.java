@@ -137,7 +137,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
          dot = 1.0;
       else if (dot < -1.0)
          dot = -1.0;
-      return 2.0 * Math.acos(dot);
+      return 2.0 * EuclidCoreTools.acos(dot);
    }
 
    /**

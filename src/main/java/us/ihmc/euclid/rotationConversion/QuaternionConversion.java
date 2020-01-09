@@ -40,7 +40,7 @@ public abstract class QuaternionConversion
    public static final void computeYawQuaternion(double yaw, QuaternionBasics quaternionToPack)
    {
       double halfYaw = 0.5 * yaw;
-      quaternionToPack.setUnsafe(0.0, 0.0, Math.sin(halfYaw), Math.cos(halfYaw));
+      quaternionToPack.setUnsafe(0.0, 0.0, EuclidCoreTools.sin(halfYaw), EuclidCoreTools.cos(halfYaw));
    }
 
    /**
@@ -53,7 +53,7 @@ public abstract class QuaternionConversion
    public static final void computePitchQuaternion(double pitch, QuaternionBasics quaternionToPack)
    {
       double halfPitch = 0.5 * pitch;
-      quaternionToPack.setUnsafe(0.0, Math.sin(halfPitch), 0.0, Math.cos(halfPitch));
+      quaternionToPack.setUnsafe(0.0, EuclidCoreTools.sin(halfPitch), 0.0, EuclidCoreTools.cos(halfPitch));
    }
 
    /**
@@ -66,7 +66,7 @@ public abstract class QuaternionConversion
    public static final void computeRollQuaternion(double roll, QuaternionBasics quaternionToPack)
    {
       double halfRoll = 0.5 * roll;
-      quaternionToPack.setUnsafe(Math.sin(halfRoll), 0.0, 0.0, Math.cos(halfRoll));
+      quaternionToPack.setUnsafe(EuclidCoreTools.sin(halfRoll), 0.0, 0.0, EuclidCoreTools.cos(halfRoll));
    }
 
    /**
@@ -129,8 +129,8 @@ public abstract class QuaternionConversion
       else
       {
          double halfTheta = 0.5 * angle;
-         double cosHalfTheta = Math.cos(halfTheta);
-         double sinHalfTheta = Math.sin(halfTheta) / uNorm;
+         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
          quaternionToPack.setUnsafe(ux * sinHalfTheta, uy * sinHalfTheta, uz * sinHalfTheta, cosHalfTheta);
       }
    }
@@ -350,8 +350,8 @@ public abstract class QuaternionConversion
       else
       {
          double halfTheta = 0.5 * norm;
-         double cosHalfTheta = Math.cos(halfTheta);
-         double sinHalfTheta = Math.sin(halfTheta) / norm;
+         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / norm;
          quaternionToPack.setUnsafe(rx * sinHalfTheta, ry * sinHalfTheta, rz * sinHalfTheta, cosHalfTheta);
       }
    }
@@ -443,16 +443,16 @@ public abstract class QuaternionConversion
    public static void convertYawPitchRollToQuaternion(double yaw, double pitch, double roll, QuaternionBasics quaternionToPack)
    {
       double halfYaw = 0.5 * yaw;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double halfPitch = 0.5 * pitch;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double halfRoll = 0.5 * roll;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
       double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;

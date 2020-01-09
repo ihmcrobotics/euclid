@@ -162,7 +162,7 @@ class EuclidPolytopeFactoriesTest
          for (Face3D face : cylinder.getFaces())
          {
             // The expected distance of the face's centroid from the cylinder's axis is less than the radius because of the discretization.
-            if (EuclidCoreTools.epsilonEquals(radius * Math.cos(Math.PI / numberOfDivisions), face.getCentroid().distanceXY(new Point2D()), EPSILON))
+            if (EuclidCoreTools.epsilonEquals(radius * EuclidCoreTools.cos(Math.PI / numberOfDivisions), face.getCentroid().distanceXY(new Point2D()), EPSILON))
             {
                assertEquals(0.0, face.getNormal().getZ(), EPSILON);
                Vector3D expectedNormal = new Vector3D(face.getCentroid());

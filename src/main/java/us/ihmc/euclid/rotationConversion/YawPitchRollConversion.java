@@ -125,7 +125,7 @@ public abstract class YawPitchRollConversion
       else if (m20 < -1.0)
          m20 = -1.0;
 
-      return Math.asin(-m20);
+      return EuclidCoreTools.asin(-m20);
    }
 
    /**
@@ -497,7 +497,7 @@ public abstract class YawPitchRollConversion
       else if (pitchArgument < -1.0)
          pitchArgument = -1.0;
 
-      return Math.asin(pitchArgument);
+      return EuclidCoreTools.asin(pitchArgument);
    }
 
    /**
@@ -814,8 +814,8 @@ public abstract class YawPitchRollConversion
     */
    static double computeYawFromAxisAngleImpl(double ux, double uy, double uz, double angle)
    {
-      double sinTheta = Math.sin(angle);
-      double cosTheta = Math.cos(angle);
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
       double t = 1.0 - cosTheta;
       double m10 = t * ux * uy + sinTheta * uz;
       double m00 = t * ux * ux + cosTheta;
@@ -836,7 +836,7 @@ public abstract class YawPitchRollConversion
     */
    static double computePitchFromAxisAngleImpl(double ux, double uy, double uz, double angle)
    {
-      double m20 = (1.0 - Math.cos(angle)) * ux * uz - Math.sin(angle) * uy;
+      double m20 = (1.0 - EuclidCoreTools.cos(angle)) * ux * uz - EuclidCoreTools.sin(angle) * uy;
       return computePitchImpl(m20);
    }
 
@@ -854,8 +854,8 @@ public abstract class YawPitchRollConversion
     */
    static double computeRollFromAxisAngleImpl(double ux, double uy, double uz, double angle)
    {
-      double sinTheta = Math.sin(angle);
-      double cosTheta = Math.cos(angle);
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
       double t = 1.0 - cosTheta;
       double m21 = t * uy * uz + sinTheta * ux;
       double m22 = t * uz * uz + cosTheta;
@@ -1037,8 +1037,8 @@ public abstract class YawPitchRollConversion
       ux *= uNorm;
       uy *= uNorm;
       uz *= uNorm;
-      double sinTheta = Math.sin(angle);
-      double cosTheta = Math.cos(angle);
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
       double t = 1.0 - cosTheta;
       double m20 = t * ux * uz - sinTheta * uy;
       double m10 = t * ux * uy + sinTheta * uz;
@@ -1170,8 +1170,8 @@ public abstract class YawPitchRollConversion
    @Deprecated
    static void convertAxisAngleToYawPitchRollImpl(double ux, double uy, double uz, double angle, double[] yawPitchRollToPack)
    {
-      double sinTheta = Math.sin(angle);
-      double cosTheta = Math.cos(angle);
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
       double t = 1.0 - cosTheta;
       double m20 = t * ux * uz - sinTheta * uy;
       double m10 = t * ux * uy + sinTheta * uz;
@@ -1203,8 +1203,8 @@ public abstract class YawPitchRollConversion
     */
    static void convertAxisAngleToYawPitchRollImpl(double ux, double uy, double uz, double angle, Tuple3DBasics eulerAnglesToPack)
    {
-      double sinTheta = Math.sin(angle);
-      double cosTheta = Math.cos(angle);
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
       double t = 1.0 - cosTheta;
       double m20 = t * ux * uz - sinTheta * uy;
       double m10 = t * ux * uy + sinTheta * uz;
@@ -1386,8 +1386,8 @@ public abstract class YawPitchRollConversion
       double uy = ry * uNorm;
       double uz = rz * uNorm;
 
-      double sinTheta = Math.sin(angle);
-      double cosTheta = Math.cos(angle);
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
       double t = 1.0 - cosTheta;
       double m20 = t * ux * uz - sinTheta * uy;
       double m10 = t * ux * uy + sinTheta * uz;

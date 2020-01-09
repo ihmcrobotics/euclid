@@ -505,9 +505,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle));
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle));
          expectedClosestPoint.set(pointOutside);
 
          expectedNormal.set(ramp3D.getRampSurfaceNormal());
@@ -529,9 +529,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(0.5 * ramp3D.getSizeY() + random.nextDouble());
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle) * random.nextDouble());
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          expectedClosestPoint.set(pointOutside.getX(), 0.5 * ramp3D.getSizeY(), pointOutside.getZ());
          expectedNormal.set(Axis.Y);
@@ -552,9 +552,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(-0.5 * ramp3D.getSizeY() - random.nextDouble());
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle) * random.nextDouble());
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          expectedClosestPoint.set(pointOutside.getX(), -0.5 * ramp3D.getSizeY(), pointOutside.getZ());
          expectedNormal.setAndNegate(Axis.Y);
@@ -754,7 +754,7 @@ public class Ramp3DTest
 
          double angle = ramp3D.getRampIncline();
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
-         Point3D pointOnEdge = new Point3D(distanceOnRamp * Math.cos(angle), 0.5 * ramp3D.getSizeY(), distanceOnRamp * Math.sin(angle));
+         Point3D pointOnEdge = new Point3D(distanceOnRamp * EuclidCoreTools.cos(angle), 0.5 * ramp3D.getSizeY(), distanceOnRamp * EuclidCoreTools.sin(angle));
          ramp3D.transformToWorld(pointOnEdge);
 
          Vector3D leftFaceNormal = new Vector3D(ramp3D.getPose().getYAxis());
@@ -781,7 +781,7 @@ public class Ramp3DTest
 
          double angle = ramp3D.getRampIncline();
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
-         Point3D pointOnEdge = new Point3D(distanceOnRamp * Math.cos(angle), -0.5 * ramp3D.getSizeY(), distanceOnRamp * Math.sin(angle));
+         Point3D pointOnEdge = new Point3D(distanceOnRamp * EuclidCoreTools.cos(angle), -0.5 * ramp3D.getSizeY(), distanceOnRamp * EuclidCoreTools.sin(angle));
          ramp3D.transformToWorld(pointOnEdge);
 
          Vector3D rightFaceNormal = new Vector3D();
@@ -1037,9 +1037,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle));
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle));
 
          ramp3D.transformToWorld(pointOutside);
          double expectedDistance = random.nextDouble();
@@ -1056,9 +1056,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(0.5 * ramp3D.getSizeY() + random.nextDouble());
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle) * random.nextDouble());
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          double expectedDistance = pointOutside.getY() - 0.5 * ramp3D.getSizeY();
          ramp3D.transformToWorld(pointOutside);
@@ -1073,9 +1073,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(-0.5 * ramp3D.getSizeY() - random.nextDouble());
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle) * random.nextDouble());
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          double expectedDistance = -pointOutside.getY() - 0.5 * ramp3D.getSizeY();
          ramp3D.transformToWorld(pointOutside);
@@ -1234,7 +1234,7 @@ public class Ramp3DTest
 
          double angle = ramp3D.getRampIncline();
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
-         Point3D pointOnEdge = new Point3D(distanceOnRamp * Math.cos(angle), 0.5 * ramp3D.getSizeY(), distanceOnRamp * Math.sin(angle));
+         Point3D pointOnEdge = new Point3D(distanceOnRamp * EuclidCoreTools.cos(angle), 0.5 * ramp3D.getSizeY(), distanceOnRamp * EuclidCoreTools.sin(angle));
          ramp3D.transformToWorld(pointOnEdge);
 
          Vector3D leftFaceNormal = new Vector3D(ramp3D.getPose().getYAxis());
@@ -1256,7 +1256,7 @@ public class Ramp3DTest
 
          double angle = ramp3D.getRampIncline();
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
-         Point3D pointOnEdge = new Point3D(distanceOnRamp * Math.cos(angle), -0.5 * ramp3D.getSizeY(), distanceOnRamp * Math.sin(angle));
+         Point3D pointOnEdge = new Point3D(distanceOnRamp * EuclidCoreTools.cos(angle), -0.5 * ramp3D.getSizeY(), distanceOnRamp * EuclidCoreTools.sin(angle));
          ramp3D.transformToWorld(pointOnEdge);
 
          Vector3D rightFaceNormal = new Vector3D();
@@ -1324,9 +1324,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle));
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle));
 
          ramp3D.transformToWorld(pointOutside);
          double expectedDistance = random.nextDouble();
@@ -1343,9 +1343,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(0.5 * ramp3D.getSizeY() + random.nextDouble());
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle) * random.nextDouble());
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          double expectedDistance = pointOutside.getY() - 0.5 * ramp3D.getSizeY();
          ramp3D.transformToWorld(pointOutside);
@@ -1360,9 +1360,9 @@ public class Ramp3DTest
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
 
          Point3D pointOutside = new Point3D();
-         pointOutside.setX(distanceOnRamp * Math.cos(angle));
+         pointOutside.setX(distanceOnRamp * EuclidCoreTools.cos(angle));
          pointOutside.setY(-0.5 * ramp3D.getSizeY() - random.nextDouble());
-         pointOutside.setZ(distanceOnRamp * Math.sin(angle) * random.nextDouble());
+         pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          double expectedDistance = -pointOutside.getY() - 0.5 * ramp3D.getSizeY();
          ramp3D.transformToWorld(pointOutside);
@@ -1521,7 +1521,7 @@ public class Ramp3DTest
 
          double angle = ramp3D.getRampIncline();
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
-         Point3D pointOnEdge = new Point3D(distanceOnRamp * Math.cos(angle), 0.5 * ramp3D.getSizeY(), distanceOnRamp * Math.sin(angle));
+         Point3D pointOnEdge = new Point3D(distanceOnRamp * EuclidCoreTools.cos(angle), 0.5 * ramp3D.getSizeY(), distanceOnRamp * EuclidCoreTools.sin(angle));
          ramp3D.transformToWorld(pointOnEdge);
 
          Vector3D leftFaceNormal = new Vector3D(ramp3D.getPose().getYAxis());
@@ -1543,7 +1543,7 @@ public class Ramp3DTest
 
          double angle = ramp3D.getRampIncline();
          double distanceOnRamp = random.nextDouble() * ramp3D.getRampLength();
-         Point3D pointOnEdge = new Point3D(distanceOnRamp * Math.cos(angle), -0.5 * ramp3D.getSizeY(), distanceOnRamp * Math.sin(angle));
+         Point3D pointOnEdge = new Point3D(distanceOnRamp * EuclidCoreTools.cos(angle), -0.5 * ramp3D.getSizeY(), distanceOnRamp * EuclidCoreTools.sin(angle));
          ramp3D.transformToWorld(pointOnEdge);
 
          Vector3D rightFaceNormal = new Vector3D();

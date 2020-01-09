@@ -1224,8 +1224,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfYaw = 0.5 * yaw;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double x = cYaw * qx - sYaw * qy;
       double y = cYaw * qy + sYaw * qx;
@@ -1260,8 +1260,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfYaw = 0.5 * yaw;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double x = qx * cYaw + qy * sYaw;
       double y = -qx * sYaw + qy * cYaw;
@@ -1296,8 +1296,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfPitch = 0.5 * pitch;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double x = cPitch * qx + sPitch * qz;
       double y = cPitch * qy + sPitch * qs;
@@ -1332,8 +1332,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfPitch = 0.5 * pitch;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double x = qx * cPitch - qz * sPitch;
       double y = qs * sPitch + qy * cPitch;
@@ -1368,8 +1368,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfRoll = 0.5 * roll;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double x = cRoll * qx + sRoll * qs;
       double y = cRoll * qy - sRoll * qz;
@@ -1404,8 +1404,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfRoll = 0.5 * roll;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double x = qs * sRoll + qx * cRoll;
       double y = qy * cRoll + qz * sRoll;

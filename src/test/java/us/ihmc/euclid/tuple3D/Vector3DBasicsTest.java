@@ -78,7 +78,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          rotationMatrix.transform(vector1, vector2);
          vector2.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0));
 
-         double expectedDot = vector1.length() * vector2.length() * Math.cos(angle);
+         double expectedDot = vector1.length() * vector2.length() * EuclidCoreTools.cos(angle);
          double actualDot = vector1.dot(vector2);
          assertEquals(expectedDot, actualDot, 10.0 * getEpsilon());
       }
@@ -129,7 +129,7 @@ public abstract class Vector3DBasicsTest<T extends Vector3DBasics> extends Tuple
          T vector3 = createEmptyTuple();
          vector3.cross(vector1, vector2);
 
-         double expectedCrossMagnitude = vector1.length() * vector2.length() * Math.sin(angle);
+         double expectedCrossMagnitude = vector1.length() * vector2.length() * EuclidCoreTools.sin(angle);
          double actualCrossMagnitude = vector3.length();
          assertEquals(expectedCrossMagnitude, actualCrossMagnitude, 10.0 * getEpsilon());
 

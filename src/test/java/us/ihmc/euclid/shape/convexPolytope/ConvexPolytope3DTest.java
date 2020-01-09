@@ -595,7 +595,7 @@ public class ConvexPolytope3DTest
 
          for (double theta = 0.0; theta < 2.0 * Math.PI; theta += deltaTheta)
          {
-            bottom.add(new Point3D(Math.cos(theta), Math.sin(theta), 0.0));
+            bottom.add(new Point3D(EuclidCoreTools.cos(theta), EuclidCoreTools.sin(theta), 0.0));
          }
 
          assertEquals(bottomSize, bottom.size());
@@ -653,8 +653,8 @@ public class ConvexPolytope3DTest
 
          for (double theta = 0.0; theta < 2.0 * Math.PI; theta += deltaTheta)
          {
-            bottom.add(new Point3D(bottomRadius * Math.cos(theta), bottomRadius * Math.sin(theta), 0.0));
-            intermediate.add(new Point3D(intermediateRadius * Math.cos(theta), intermediateRadius * Math.sin(theta), intermediateZ));
+            bottom.add(new Point3D(bottomRadius * EuclidCoreTools.cos(theta), bottomRadius * EuclidCoreTools.sin(theta), 0.0));
+            intermediate.add(new Point3D(intermediateRadius * EuclidCoreTools.cos(theta), intermediateRadius * EuclidCoreTools.sin(theta), intermediateZ));
          }
 
          assertEquals(bottomSize, bottom.size());
@@ -728,7 +728,7 @@ public class ConvexPolytope3DTest
 
          for (double theta = 0.0; theta < 2.0 * Math.PI; theta += deltaTheta)
          {
-            bottom.add(new Point3D(Math.cos(theta), Math.sin(theta), 0.0));
+            bottom.add(new Point3D(EuclidCoreTools.cos(theta), EuclidCoreTools.sin(theta), 0.0));
          }
 
          assertEquals(bottomSize, bottom.size());

@@ -5,6 +5,7 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 
 /**
@@ -37,8 +38,8 @@ public class EuclidPolytopeFactories
       for (int i = 0; i < numberOfDivisions; i++)
       {
          double theta = i * 2.0 * Math.PI / numberOfDivisions;
-         double x = radius * Math.cos(theta);
-         double y = radius * Math.sin(theta);
+         double x = radius * EuclidCoreTools.cos(theta);
+         double y = radius * EuclidCoreTools.sin(theta);
          vertices.add(new Point3D(x, y, 0.0));
       }
       return vertices;
@@ -88,8 +89,8 @@ public class EuclidPolytopeFactories
       {
          double theta = i * 2.0 * Math.PI / numberOfDivisions;
 
-         double x = radius * Math.cos(theta);
-         double y = radius * Math.sin(theta);
+         double x = radius * EuclidCoreTools.cos(theta);
+         double y = radius * EuclidCoreTools.sin(theta);
          Point3D top = new Point3D(x, y, halfL);
          Point3D bottom = new Point3D(x, y, -halfL);
 

@@ -93,7 +93,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       else if (normalizedDot > 1.0)
          normalizedDot = 1.0;
 
-      return Math.acos(normalizedDot);
+      return EuclidCoreTools.acos(normalizedDot);
    }
 
    /**

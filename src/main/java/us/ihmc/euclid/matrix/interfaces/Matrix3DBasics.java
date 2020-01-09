@@ -3,6 +3,7 @@ package us.ihmc.euclid.matrix.interfaces;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -394,8 +395,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToYawMatrix(double yaw)
    {
-      double sinYaw = Math.sin(yaw);
-      double cosYaw = Math.cos(yaw);
+      double sinYaw = EuclidCoreTools.sin(yaw);
+      double cosYaw = EuclidCoreTools.cos(yaw);
 
       setM00(cosYaw);
       setM01(-sinYaw);
@@ -424,8 +425,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToPitchMatrix(double pitch)
    {
-      double sinPitch = Math.sin(pitch);
-      double cosPitch = Math.cos(pitch);
+      double sinPitch = EuclidCoreTools.sin(pitch);
+      double cosPitch = EuclidCoreTools.cos(pitch);
 
       setM00(cosPitch);
       setM01(0.0);
@@ -454,8 +455,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToRollMatrix(double roll)
    {
-      double sinRoll = Math.sin(roll);
-      double cosRoll = Math.cos(roll);
+      double sinRoll = EuclidCoreTools.sin(roll);
+      double cosRoll = EuclidCoreTools.cos(roll);
       setM00(1.0);
       setM01(0.0);
       setM02(0.0);

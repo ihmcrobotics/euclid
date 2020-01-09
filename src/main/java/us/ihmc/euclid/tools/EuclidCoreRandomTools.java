@@ -1225,7 +1225,7 @@ public class EuclidCoreRandomTools
       double height = 2.0 * random.nextDouble() - 1.0;
       double angle = nextDouble(random, minMaxAngle);
       double radius = EuclidCoreTools.squareRoot(1.0 - height * height);
-      axisAngleToRandomize.set(radius * Math.cos(angle), radius * Math.sin(angle), height, angle);
+      axisAngleToRandomize.set(radius * EuclidCoreTools.cos(angle), radius * EuclidCoreTools.sin(angle), height, angle);
    }
 
    /**

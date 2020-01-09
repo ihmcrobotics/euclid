@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import us.ihmc.euclid.geometry.*;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -550,13 +551,13 @@ public class EuclidGeometryRandomTools
       double theta = 0.0;
       // Add a random yaw angle on all the vertices
       double yaw = nextDouble(random, Math.PI);
-      clockwiseVertices.add(new Point2D(Math.cos(yaw), Math.sin(yaw)));
+      clockwiseVertices.add(new Point2D(EuclidCoreTools.cos(yaw), EuclidCoreTools.sin(yaw)));
 
       for (int i = 1; i < numberOfVertices; i++)
       {
          theta -= dTheta[i];
-         double x = Math.cos(theta + yaw);
-         double y = Math.sin(theta + yaw);
+         double x = EuclidCoreTools.cos(theta + yaw);
+         double y = EuclidCoreTools.sin(theta + yaw);
          clockwiseVertices.add(new Point2D(x, y));
       }
 

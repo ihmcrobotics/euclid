@@ -1,10 +1,10 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+import static us.ihmc.euclid.tools.EuclidCoreTools.cos;
+import static us.ihmc.euclid.tools.EuclidCoreTools.sin;
 
 import java.util.Random;
 
@@ -43,10 +43,10 @@ public class AxisAngleConversionTest
          uz /= norm;
          double angle = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
 
-         double qs = Math.cos(angle / 2.0);
-         double qx = ux * Math.sin(angle / 2.0);
-         double qy = uy * Math.sin(angle / 2.0);
-         double qz = uz * Math.sin(angle / 2.0);
+         double qs = EuclidCoreTools.cos(angle / 2.0);
+         double qx = ux * EuclidCoreTools.sin(angle / 2.0);
+         double qy = uy * EuclidCoreTools.sin(angle / 2.0);
+         double qz = uz * EuclidCoreTools.sin(angle / 2.0);
          quaternion.setUnsafe(qx, qy, qz, qs);
          AxisAngleConversion.convertQuaternionToAxisAngle(quaternion, axisAngle);
 
@@ -67,10 +67,10 @@ public class AxisAngleConversionTest
          AxisAngle originalAxisAngle = new AxisAngle();
          EuclidCoreRandomTools.randomizeAxisAngle(random, 2.0 * Math.PI, originalAxisAngle);
 
-         double qs = Math.cos(originalAxisAngle.getAngle() / 2.0);
-         double qx = originalAxisAngle.getX() * Math.sin(originalAxisAngle.getAngle() / 2.0);
-         double qy = originalAxisAngle.getY() * Math.sin(originalAxisAngle.getAngle() / 2.0);
-         double qz = originalAxisAngle.getZ() * Math.sin(originalAxisAngle.getAngle() / 2.0);
+         double qs = EuclidCoreTools.cos(originalAxisAngle.getAngle() / 2.0);
+         double qx = originalAxisAngle.getX() * EuclidCoreTools.sin(originalAxisAngle.getAngle() / 2.0);
+         double qy = originalAxisAngle.getY() * EuclidCoreTools.sin(originalAxisAngle.getAngle() / 2.0);
+         double qz = originalAxisAngle.getZ() * EuclidCoreTools.sin(originalAxisAngle.getAngle() / 2.0);
          quaternion.setUnsafe(qx, qy, qz, qs);
          AxisAngleConversion.convertQuaternionToAxisAngle(quaternion, axisAngle);
 
@@ -90,10 +90,10 @@ public class AxisAngleConversionTest
       double angle = EuclidCoreRandomTools.nextDouble(random, 2.0 * Math.PI);
       double scale = random.nextDouble();
 
-      double qs = scale * Math.cos(angle / 2.0);
-      double qx = scale * ux * Math.sin(angle / 2.0);
-      double qy = scale * uy * Math.sin(angle / 2.0);
-      double qz = scale * uz * Math.sin(angle / 2.0);
+      double qs = scale * EuclidCoreTools.cos(angle / 2.0);
+      double qx = scale * ux * EuclidCoreTools.sin(angle / 2.0);
+      double qy = scale * uy * EuclidCoreTools.sin(angle / 2.0);
+      double qz = scale * uz * EuclidCoreTools.sin(angle / 2.0);
       quaternion.setUnsafe(qx, qy, qz, qs);
       AxisAngleConversion.convertQuaternionToAxisAngle(quaternion, axisAngle);
 
@@ -481,12 +481,12 @@ public class AxisAngleConversionTest
          {
             for (double roll = -Math.PI; roll <= Math.PI; roll += deltaAngle)
             {
-               double cYaw = Math.cos(yaw);
-               double sYaw = Math.sin(yaw);
-               double cPitch = Math.cos(pitch);
-               double sPitch = Math.sin(pitch);
-               double cRoll = Math.cos(roll);
-               double sRoll = Math.sin(roll);
+               double cYaw = EuclidCoreTools.cos(yaw);
+               double sYaw = EuclidCoreTools.sin(yaw);
+               double cPitch = EuclidCoreTools.cos(pitch);
+               double sPitch = EuclidCoreTools.sin(pitch);
+               double cRoll = EuclidCoreTools.cos(roll);
+               double sRoll = EuclidCoreTools.sin(roll);
 
                m00 = cYaw * cPitch;
                m01 = cYaw * sPitch * sRoll - sYaw * cRoll;

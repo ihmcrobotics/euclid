@@ -1281,7 +1281,7 @@ public class EuclidShapeTools
     */
    public static double computeRanp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
    {
-      return Math.atan(ramp3DSizeZ / ramp3DSizeX);
+      return EuclidCoreTools.atan(ramp3DSizeZ / ramp3DSizeX);
    }
 
    /**
@@ -2213,7 +2213,7 @@ public class EuclidShapeTools
     */
    public static double icosahedronEdgeLength(double radius)
    {
-      return radius / Math.sin(0.4 * Math.PI);
+      return radius / EuclidCoreTools.sin(0.4 * Math.PI);
    }
 
    /**
@@ -2224,6 +2224,6 @@ public class EuclidShapeTools
     */
    public static double icosahedronRadius(double edgeLength)
    {
-      return edgeLength * Math.sin(0.4 * Math.PI);
+      return edgeLength * EuclidCoreTools.sin(0.4 * Math.PI);
    }
 }

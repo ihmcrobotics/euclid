@@ -240,8 +240,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
    {
       Random random = new Random(65445L);
       double expectedAngle = 2.0 * Math.PI * random.nextDouble(); // Sign issue when theta < 0.0
-      double c = Math.cos(expectedAngle / 2.0);
-      double s = Math.sin(expectedAngle / 2.0);
+      double c = EuclidCoreTools.cos(expectedAngle / 2.0);
+      double s = EuclidCoreTools.sin(expectedAngle / 2.0);
       Vector3D axis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
       Quaternion q = new Quaternion();
       double qx = s * axis.getX();
@@ -381,8 +381,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          Tuple2DBasics actualTuple = new Vector2D(tuple);
          Tuple2DBasics expectedTuple = EuclidCoreRandomTools.nextVector2D(random);
          double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         float qz = (float) Math.sin(0.5 * theta);
-         float qs = (float) Math.cos(0.5 * theta);
+         float qz = (float) EuclidCoreTools.sin(0.5 * theta);
+         float qs = (float) EuclidCoreTools.cos(0.5 * theta);
          quaternion = createTuple(0.0f, 0.0f, qz, qs);
 
          QuaternionTools.transform(quaternion, tuple, expectedTuple, false);
@@ -402,8 +402,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          Tuple2DBasics actualTuple = new Vector2D(tuple);
          Tuple2DBasics expectedTuple = EuclidCoreRandomTools.nextVector2D(random);
          double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         float qz = (float) Math.sin(0.5 * theta);
-         float qs = (float) Math.cos(0.5 * theta);
+         float qz = (float) EuclidCoreTools.sin(0.5 * theta);
+         float qs = (float) EuclidCoreTools.cos(0.5 * theta);
          quaternion = createTuple(0.0f, 0.0f, qz, qs);
 
          QuaternionTools.transform(quaternion, tuple, expectedTuple, false);
@@ -586,8 +586,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          Tuple2DBasics actualTuple = new Vector2D(tuple);
          Tuple2DBasics expectedTuple = EuclidCoreRandomTools.nextVector2D(random);
          double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         float qz = (float) Math.sin(0.5 * theta);
-         float qs = (float) Math.cos(0.5 * theta);
+         float qz = (float) EuclidCoreTools.sin(0.5 * theta);
+         float qs = (float) EuclidCoreTools.cos(0.5 * theta);
          quaternion = createTuple(0.0f, 0.0f, qz, qs);
 
          QuaternionTools.inverseTransform(quaternion, tuple, expectedTuple, false);
@@ -607,8 +607,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          Tuple2DBasics actualTuple = new Vector2D(tuple);
          Tuple2DBasics expectedTuple = EuclidCoreRandomTools.nextVector2D(random);
          double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         float qz = (float) Math.sin(0.5 * theta);
-         float qs = (float) Math.cos(0.5 * theta);
+         float qz = (float) EuclidCoreTools.sin(0.5 * theta);
+         float qs = (float) EuclidCoreTools.cos(0.5 * theta);
          quaternion = createTuple(0.0f, 0.0f, qz, qs);
 
          QuaternionTools.inverseTransform(quaternion, tuple, expectedTuple, false);
@@ -901,8 +901,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Vector3D axis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
       double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-      double sinHalfTheta = Math.sin(theta / 2.0);
-      double cosHalfTheta = Math.cos(theta / 2.0);
+      double sinHalfTheta = EuclidCoreTools.sin(theta / 2.0);
+      double cosHalfTheta = EuclidCoreTools.cos(theta / 2.0);
 
       double qx = axis.getX() * sinHalfTheta;
       double qy = axis.getY() * sinHalfTheta;
@@ -927,8 +927,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
       // Test that the quaternion is not kept within [-Pi, Pi]
       theta = EuclidCoreRandomTools.nextDouble(random, Math.PI, 2.0 * Math.PI);
-      sinHalfTheta = Math.sin(theta / 2.0);
-      cosHalfTheta = Math.cos(theta / 2.0);
+      sinHalfTheta = EuclidCoreTools.sin(theta / 2.0);
+      cosHalfTheta = EuclidCoreTools.cos(theta / 2.0);
 
       qx = axis.getX() * sinHalfTheta;
       qy = axis.getY() * sinHalfTheta;
@@ -956,8 +956,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       Vector3D axis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
       double theta = EuclidCoreRandomTools.nextDouble(random, Math.PI);
 
-      double sinHalfTheta = Math.sin(theta / 2.0);
-      double cosHalfTheta = Math.cos(theta / 2.0);
+      double sinHalfTheta = EuclidCoreTools.sin(theta / 2.0);
+      double cosHalfTheta = EuclidCoreTools.cos(theta / 2.0);
 
       double qx = axis.getX() * sinHalfTheta;
       double qy = axis.getY() * sinHalfTheta;
@@ -985,8 +985,8 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       for (int i = 0; i < ITERATIONS; i++)
       {
          theta = EuclidCoreRandomTools.nextDouble(random, Math.PI, 2.0 * Math.PI);
-         sinHalfTheta = Math.sin(theta / 2.0);
-         cosHalfTheta = Math.cos(theta / 2.0);
+         sinHalfTheta = EuclidCoreTools.sin(theta / 2.0);
+         cosHalfTheta = EuclidCoreTools.cos(theta / 2.0);
 
          qx = axis.getX() * sinHalfTheta;
          qy = axis.getY() * sinHalfTheta;

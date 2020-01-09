@@ -417,8 +417,8 @@ public class Line2DTest
          double newAngle = angle + rotation;
          line2d.rotate(rotation);
 
-         assertEquals(Math.cos(newAngle), line2d.getDirection().getX(), delta);
-         assertEquals(Math.sin(newAngle), line2d.getDirection().getY(), delta);
+         assertEquals(EuclidCoreTools.cos(newAngle), line2d.getDirection().getX(), delta);
+         assertEquals(EuclidCoreTools.sin(newAngle), line2d.getDirection().getY(), delta);
       }
    }
 
@@ -1206,8 +1206,8 @@ public class Line2DTest
       line.applyTransform(transform);
 
       double alpha = eulerAngles.getZ();
-      double sina = Math.sin(alpha);
-      double cosa = Math.cos(alpha);
+      double sina = EuclidCoreTools.sin(alpha);
+      double cosa = EuclidCoreTools.cos(alpha);
 
       assertEquals(point.getX() * cosa - point.getY() * sina, line.getPointX(), delta, "pure rotation failed");
       assertEquals(point.getX() * sina + point.getY() * cosa, line.getPointY(), delta, "pure rotation failed");
@@ -1285,8 +1285,8 @@ public class Line2DTest
       line.applyTransform(transform);
 
       double alpha = eulerAngles.getZ();
-      double sina = Math.sin(alpha);
-      double cosa = Math.cos(alpha);
+      double sina = EuclidCoreTools.sin(alpha);
+      double cosa = EuclidCoreTools.cos(alpha);
 
       assertEquals(point.getX() * cosa - point.getY() * sina + translation.getX(), line.getPointX(), delta, "pure rotation failed");
       assertEquals(point.getX() * sina + point.getY() * cosa + translation.getY(), line.getPointY(), delta, "pure rotation failed");

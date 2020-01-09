@@ -808,9 +808,9 @@ public class EuclidShapeCollisionToolsTest
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D pointOnSurface = new Point3D();
          double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
-         pointOnSurface.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnSurface.setX(distanceOnSlope * EuclidCoreTools.cos(ramp3D.getRampIncline()));
          pointOnSurface.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
-         pointOnSurface.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         pointOnSurface.setZ(distanceOnSlope * EuclidCoreTools.sin(ramp3D.getRampIncline()));
          ramp3D.getPose().transform(pointOnSurface);
 
          Vector3D normal = new Vector3D();
@@ -966,9 +966,9 @@ public class EuclidShapeCollisionToolsTest
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D pointOnLeftEdge = new Point3D();
          double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
-         pointOnLeftEdge.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setX(distanceOnSlope * EuclidCoreTools.cos(ramp3D.getRampIncline()));
          pointOnLeftEdge.setY(0.5 * ramp3D.getSizeY());
-         pointOnLeftEdge.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setZ(distanceOnSlope * EuclidCoreTools.sin(ramp3D.getRampIncline()));
          ramp3D.getPose().transform(pointOnLeftEdge);
 
          Vector3D leftNormal = new Vector3D();
@@ -988,9 +988,9 @@ public class EuclidShapeCollisionToolsTest
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D pointOnLeftEdge = new Point3D();
          double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
-         pointOnLeftEdge.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setX(distanceOnSlope * EuclidCoreTools.cos(ramp3D.getRampIncline()));
          pointOnLeftEdge.setY(-0.5 * ramp3D.getSizeY());
-         pointOnLeftEdge.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setZ(distanceOnSlope * EuclidCoreTools.sin(ramp3D.getRampIncline()));
          ramp3D.getPose().transform(pointOnLeftEdge);
 
          Vector3D rightNormal = new Vector3D();
@@ -1330,7 +1330,7 @@ public class EuclidShapeCollisionToolsTest
          if (normal.dot(orthogonalToAxis) < 0.0)
          { // The point-on-surface is in the inner part of the tube, need to be careful when placing the point outside.
             double angle = orthogonalToAxis.angle(normal);
-            double maxDistance = torus3D.getRadius() / Math.cos(angle) - torus3D.getTubeRadius();
+            double maxDistance = torus3D.getRadius() / EuclidCoreTools.cos(angle) - torus3D.getTubeRadius();
             if (maxDistance < 0.0)
             { // The torus is likely to have no inner empty space, resetting this iteration
                i--;

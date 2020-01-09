@@ -10768,7 +10768,7 @@ public class EuclidGeometryToolsTest
       {
          double expectedArcRadius = EuclidCoreRandomTools.nextDouble(random, 0.1, 100.0);
          double chordAngle = EuclidCoreRandomTools.nextDouble(random, -3.0 * Math.PI, 3.0 * Math.PI);
-         double chordLength = 2.0 * expectedArcRadius * Math.sin(0.5 * chordAngle);
+         double chordLength = 2.0 * expectedArcRadius * EuclidCoreTools.sin(0.5 * chordAngle);
          double actualArcRadius = EuclidGeometryTools.radiusOfArc(chordLength, chordAngle);
          assertEquals(expectedArcRadius, actualArcRadius, EPSILON);
       }

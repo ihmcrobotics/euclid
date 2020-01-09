@@ -799,6 +799,31 @@ public class EuclidCoreTools
    }
 
    /**
+    * Returns the trigonometric tangent of an angle.
+    *
+    * @param a an angle, in radians.
+    * @return the tangent of the argument.
+    * @see Math#tan(double)
+    */
+   public static double tan(double a)
+   {
+      return Math.tan(a);
+   }
+
+   /**
+    * Returns the arc tangent of a value; the returned angle is in the range -<i>pi</i>/2 through
+    * <i>pi</i>/2.
+    *
+    * @param a the value whose arc tangent is to be returned.
+    * @return the arc tangent of the argument.
+    * @see Math#atan(double)
+    */
+   public static double atan(double a)
+   {
+      return Math.atan(a);
+   }
+
+   /**
     * Returns the angle <i>theta</i> from the conversion of rectangular coordinates
     * ({@code x},&nbsp;{@code y}) to polar coordinates (r,&nbsp;<i>theta</i>).
     *
@@ -812,5 +837,54 @@ public class EuclidCoreTools
    public static double atan2(double y, double x)
    {
       return Math.atan2(y, x);
+   }
+
+   /**
+    * Returns the trigonometric cosine of an angle.
+    *
+    * @param a an angle, in radians.
+    * @return the cosine of the argument.
+    * @see Math#cos(double)
+    */
+   public static double cos(double a)
+   {
+      return Math.cos(a);
+   }
+
+   /**
+    * Returns the trigonometric sine of an angle.
+    *
+    * @param a an angle, in radians.
+    * @return the sine of the argument.
+    * @see Math#sin(double)
+    */
+   public static double sin(double a)
+   {
+      return Math.sin(a);
+   }
+
+   /**
+    * Returns the arc cosine of a value; the returned angle is in the range 0.0 through <i>pi</i>.
+    *
+    * @param a the value whose arc cosine is to be returned.
+    * @return the arc cosine of the argument.
+    * @see Math#acos(double)
+    */
+   public static double acos(double a)
+   {
+      return Math.acos(a);
+   }
+
+   /**
+    * Returns the arc sine of a value; the returned angle is in the range -<i>pi</i>/2 through
+    * <i>pi</i>/2.
+    *
+    * @param a the value whose arc sine is to be returned.
+    * @return the arc sine of the argument.
+    * @see Math#asin(double)
+    */
+   public static double asin(double a)
+   {
+      return Math.asin(a);
    }
 }
