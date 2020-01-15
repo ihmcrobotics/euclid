@@ -232,7 +232,7 @@ public class EuclidCoreTools
     */
    public static double squareRoot(double value)
    {
-      return StrictMath.sqrt(value);
+      return Math.sqrt(value);
    }
 
    /**
