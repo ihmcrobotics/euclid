@@ -53,7 +53,7 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
 
    /**
     * Sets this triangle to be the same as the given triangle.
-    * 
+    *
     * @param other the other triangle to copy. Not modified.
     */
    @Override
@@ -86,7 +86,7 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
    /**
     * Tests on a per component basis on each vertex if this triangle is equal to {@code other} with the
     * tolerance {@code epsilon}.
-    * 
+    *
     * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two triangles are equal, {@code false} otherwise.
@@ -104,7 +104,7 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
     * Two triangles are geometrically similar 3 pairs geometrically equal vertices and the same
     * ordering and winding, i.e. clockwise or counter-clockwise.
     * </p>
-    * 
+    *
     * @param other   the triangle to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two triangles represent the same geometry, {@code false} otherwise.
@@ -127,7 +127,7 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
    /**
     * Calculates and returns a hash code value from the value of each vertex coordinate of this
     * triangle.
-    * 
+    *
     * @return the hash code value for this triangle 3D.
     */
    @Override
@@ -141,7 +141,7 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
    /**
     * Provides a {@code String} representation of this triangle 3D as follows:<br>
     * Triangle 3D: [(Ax, Ay, Az), (Bx, By, Bz), (Cx, Cy, Cz)]
-    * 
+    *
     * @return the {@code String} representing this triangle 3D.
     */
    @Override

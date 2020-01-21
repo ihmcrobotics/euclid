@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.collision;
 
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,14 +14,7 @@ import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.primitives.Box3D;
-import us.ihmc.euclid.shape.primitives.Capsule3D;
-import us.ihmc.euclid.shape.primitives.Cylinder3D;
-import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
-import us.ihmc.euclid.shape.primitives.PointShape3D;
-import us.ihmc.euclid.shape.primitives.Ramp3D;
-import us.ihmc.euclid.shape.primitives.Sphere3D;
-import us.ihmc.euclid.shape.primitives.Torus3D;
+import us.ihmc.euclid.shape.primitives.*;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
@@ -90,7 +83,7 @@ public class EuclidShapeCollisionToolsTest
          List<Point3D> faceVerticesAndFarthestIn = new ArrayList<>(Arrays.asList(getBox3DFaceVertices(axis, bound, box3D)));
 
          // Finding how far the point can be inside of the box while the selected face is still the closest.
-         // TODO This is a conservative approach and does not consider the entire region of points that are closer the given face. 
+         // TODO This is a conservative approach and does not consider the entire region of points that are closer the given face.
          double minHalfSize = 0.5 * EuclidCoreTools.min(box3D.getSizeX(), box3D.getSizeY(), box3D.getSizeZ());
          Point3D farthestInside = new Point3D();
          farthestInside.scaleAdd(-minHalfSize, closestFacePlane.getNormal(), closestFacePlane.getPoint());
@@ -536,7 +529,7 @@ public class EuclidShapeCollisionToolsTest
             regionToExplore.add(farthestPointInside);
          }
          else
-         { // The region that is the farthest from the end form a circle, beyond it the points are closer to the opposite end. 
+         { // The region that is the farthest from the end form a circle, beyond it the points are closer to the opposite end.
             Point3D farthestInsideCenter = new Point3D();
             double maxDistanceIn = 0.5 * cylinder3D.getLength();
             farthestInsideCenter.scaleAdd(-endSign * maxDistanceIn, cylinderAxis, endCenter);
@@ -815,9 +808,9 @@ public class EuclidShapeCollisionToolsTest
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D pointOnSurface = new Point3D();
          double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
-         pointOnSurface.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnSurface.setX(distanceOnSlope * EuclidCoreTools.cos(ramp3D.getRampIncline()));
          pointOnSurface.setY(EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()));
-         pointOnSurface.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         pointOnSurface.setZ(distanceOnSlope * EuclidCoreTools.sin(ramp3D.getRampIncline()));
          ramp3D.getPose().transform(pointOnSurface);
 
          Vector3D normal = new Vector3D();
@@ -973,9 +966,9 @@ public class EuclidShapeCollisionToolsTest
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D pointOnLeftEdge = new Point3D();
          double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
-         pointOnLeftEdge.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setX(distanceOnSlope * EuclidCoreTools.cos(ramp3D.getRampIncline()));
          pointOnLeftEdge.setY(0.5 * ramp3D.getSizeY());
-         pointOnLeftEdge.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setZ(distanceOnSlope * EuclidCoreTools.sin(ramp3D.getRampIncline()));
          ramp3D.getPose().transform(pointOnLeftEdge);
 
          Vector3D leftNormal = new Vector3D();
@@ -995,9 +988,9 @@ public class EuclidShapeCollisionToolsTest
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
          Point3D pointOnLeftEdge = new Point3D();
          double distanceOnSlope = EuclidCoreRandomTools.nextDouble(random, 0.0, ramp3D.getRampLength());
-         pointOnLeftEdge.setX(distanceOnSlope * Math.cos(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setX(distanceOnSlope * EuclidCoreTools.cos(ramp3D.getRampIncline()));
          pointOnLeftEdge.setY(-0.5 * ramp3D.getSizeY());
-         pointOnLeftEdge.setZ(distanceOnSlope * Math.sin(ramp3D.getRampIncline()));
+         pointOnLeftEdge.setZ(distanceOnSlope * EuclidCoreTools.sin(ramp3D.getRampIncline()));
          ramp3D.getPose().transform(pointOnLeftEdge);
 
          Vector3D rightNormal = new Vector3D();
@@ -1337,7 +1330,7 @@ public class EuclidShapeCollisionToolsTest
          if (normal.dot(orthogonalToAxis) < 0.0)
          { // The point-on-surface is in the inner part of the tube, need to be careful when placing the point outside.
             double angle = orthogonalToAxis.angle(normal);
-            double maxDistance = torus3D.getRadius() / Math.cos(angle) - torus3D.getTubeRadius();
+            double maxDistance = torus3D.getRadius() / EuclidCoreTools.cos(angle) - torus3D.getTubeRadius();
             if (maxDistance < 0.0)
             { // The torus is likely to have no inner empty space, resetting this iteration
                i--;

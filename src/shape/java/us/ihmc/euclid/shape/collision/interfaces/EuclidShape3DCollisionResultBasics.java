@@ -9,21 +9,21 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * Write and read interface for holding the result of a collision query between two shapes.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface EuclidShape3DCollisionResultBasics extends EuclidShape3DCollisionResultReadOnly, Clearable, Transformable
 {
    /**
     * Sets the reference to the first shape.
-    * 
+    *
     * @param shapeA the new first shape in the collision result. Not modified, reference saved.
     */
    void setShapeA(Shape3DReadOnly shapeA);
 
    /**
     * Sets the reference to the second shape.
-    * 
+    *
     * @param shapeB the new second shape in the collision result. Not modified, reference saved.
     */
    void setShapeB(Shape3DReadOnly shapeB);
@@ -46,7 +46,7 @@ public interface EuclidShape3DCollisionResultBasics extends EuclidShape3DCollisi
 
    /**
     * Copies the values from {@code other} into {@code this}.
-    * 
+    *
     * @param other the other object to copy the values from. Not modified.
     */
    default void set(EuclidShape3DCollisionResultReadOnly other)
@@ -63,7 +63,7 @@ public interface EuclidShape3DCollisionResultBasics extends EuclidShape3DCollisi
 
    /**
     * Sets the collision state between the two shapes.
-    * 
+    *
     * @param shapesAreColliding whether the shapes are colliding or not.
     */
    void setShapesAreColliding(boolean shapesAreColliding);
@@ -79,7 +79,7 @@ public interface EuclidShape3DCollisionResultBasics extends EuclidShape3DCollisi
     * penetration.
     * </ul>
     * </p>
-    * 
+    *
     * @param distance the value of the distance.
     */
    void setSignedDistance(double distance);

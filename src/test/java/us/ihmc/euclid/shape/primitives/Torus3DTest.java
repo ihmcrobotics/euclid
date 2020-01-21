@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -669,7 +669,6 @@ public class Torus3DTest
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
 
          secondTorus.getAxis().negate();
-         ;
 
          assertTrue(firstTorus.geometricallyEquals(secondTorus, epsilon));
       }

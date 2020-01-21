@@ -2,29 +2,14 @@ package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.ihmc.euclid.geometry.BoundingBox2D;
-import us.ihmc.euclid.geometry.BoundingBox3D;
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
-import us.ihmc.euclid.geometry.Line2D;
-import us.ihmc.euclid.geometry.Line3D;
-import us.ihmc.euclid.geometry.LineSegment1D;
-import us.ihmc.euclid.geometry.LineSegment2D;
-import us.ihmc.euclid.geometry.LineSegment3D;
-import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.Plane3D;
-import us.ihmc.euclid.geometry.Pose2D;
-import us.ihmc.euclid.geometry.Pose3D;
-import us.ihmc.euclid.geometry.Triangle3D;
+import us.ihmc.euclid.geometry.*;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -408,7 +393,7 @@ public class EuclidGeometryRandomTools
     * <li>{@code orientation.getAngle()} &in; [-<i>pi</i>; <i>pi</i>].
     * </ul>
     * </p>
-    * 
+    *
     * @param random       the random generator to use.
     * @param maxAbsoluteX the maximum absolute value for the x-coordinate of the position part of the
     *                     pose 3D.
@@ -515,7 +500,7 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a random convex polygon 2D by defining a random circle onto which the vertices are
     * randomly positioned.
-    * 
+    *
     * @param random           the random generator to use.
     * @param centerMinMax     the maximum absolute value for each coordinates of the circle's center.
     * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
@@ -566,13 +551,13 @@ public class EuclidGeometryRandomTools
       double theta = 0.0;
       // Add a random yaw angle on all the vertices
       double yaw = nextDouble(random, Math.PI);
-      clockwiseVertices.add(new Point2D(Math.cos(yaw), Math.sin(yaw)));
+      clockwiseVertices.add(new Point2D(EuclidCoreTools.cos(yaw), EuclidCoreTools.sin(yaw)));
 
       for (int i = 1; i < numberOfVertices; i++)
       {
          theta -= dTheta[i];
-         double x = Math.cos(theta + yaw);
-         double y = Math.sin(theta + yaw);
+         double x = EuclidCoreTools.cos(theta + yaw);
+         double y = EuclidCoreTools.sin(theta + yaw);
          clockwiseVertices.add(new Point2D(x, y));
       }
 
@@ -630,7 +615,7 @@ public class EuclidGeometryRandomTools
     * <p>
     * Each coordinate of each vertex is generated randomly within the range [-1, 1].
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random triangle.
     */
@@ -645,7 +630,7 @@ public class EuclidGeometryRandomTools
     * Each coordinate of each vertex is generated randomly within the range [-{@code minMax},
     * {@code minMax}].
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @param minMax the maximum absolute value for each coordinate.
     * @return the random triangle.
@@ -658,7 +643,7 @@ public class EuclidGeometryRandomTools
 
    /**
     * Generates a fixed-size supplier of random vertex 2D.
-    * 
+    *
     * @param random           the random generator to use.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
@@ -671,7 +656,7 @@ public class EuclidGeometryRandomTools
 
    /**
     * Generates a fixed-size supplier of random vertex 3D.
-    * 
+    *
     * @param random           the random generator to use.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
@@ -684,7 +669,7 @@ public class EuclidGeometryRandomTools
 
    /**
     * Generates a random point that is constrained to lie inside a 2D triangle.
-    * 
+    *
     * @param random the random generator to use.
     * @param a      the first vertex of the bounding triangle. Not modified.
     * @param b      the second vertex of the bounding triangle. Not modified.
@@ -698,7 +683,7 @@ public class EuclidGeometryRandomTools
 
    /**
     * Generates a random point that is constrained to lie inside a 3D triangle.
-    * 
+    *
     * @param random the random generator to use.
     * @param a      the first vertex of the bounding triangle. Not modified.
     * @param b      the second vertex of the bounding triangle. Not modified.
@@ -731,7 +716,7 @@ public class EuclidGeometryRandomTools
 
    /**
     * Generates a random point that is constrained to lie inside a 3D tetrahedron.
-    * 
+    *
     * @param random the random generator to use.
     * @param a      the first vertex of the bounding tetrahedron. Not modified.
     * @param b      the second vertex of the bounding tetrahedron. Not modified.
@@ -790,7 +775,7 @@ public class EuclidGeometryRandomTools
     * by the given points. Instead, the resulting distribution is centered and concentrated about the
     * average of the points.
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @param points the points to generate the random point from. Not modified.
     * @return the random point 3D.
@@ -807,7 +792,7 @@ public class EuclidGeometryRandomTools
     * by the given points. Instead, the resulting distribution is centered and concentrated about the
     * average of the points.
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @param points the points to generate the random point from. Not modified.
     * @return the random point 3D.

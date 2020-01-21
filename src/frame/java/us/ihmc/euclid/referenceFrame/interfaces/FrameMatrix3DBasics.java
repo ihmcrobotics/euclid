@@ -20,7 +20,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
  * operation occur in the proper coordinate system. Use this feature carefully and always prefer
  * using methods requiring {@code FrameMatrix3DBasics}.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChangeable
@@ -36,7 +36,7 @@ public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChan
    /**
     * Sets all the coefficients of this matrix to zero and sets the current reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this matrix.
     */
    default void setToZero(ReferenceFrame referenceFrame)
@@ -48,7 +48,7 @@ public interface FrameMatrix3DBasics extends FixedFrameMatrix3DBasics, FrameChan
    /**
     * Sets all the coefficients of this matrix to {@link Double#NaN} and sets the current reference
     * frame to {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the new reference frame to be associated with this matrix.
     */
    default void setToNaN(ReferenceFrame referenceFrame)

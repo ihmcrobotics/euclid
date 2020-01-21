@@ -1,7 +1,8 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -36,10 +38,10 @@ public class QuaternionConversionTest
          double uy = axisAngle.getY();
          double uz = axisAngle.getZ();
          // As the axis-angle is sane, there is no edge case making the conversion straightforward.
-         double qs = Math.cos(angle / 2.0);
-         double qx = ux * Math.sin(angle / 2.0);
-         double qy = uy * Math.sin(angle / 2.0);
-         double qz = uz * Math.sin(angle / 2.0);
+         double qs = EuclidCoreTools.cos(angle / 2.0);
+         double qx = ux * EuclidCoreTools.sin(angle / 2.0);
+         double qy = uy * EuclidCoreTools.sin(angle / 2.0);
+         double qz = uz * EuclidCoreTools.sin(angle / 2.0);
          expectedQuaternion.setUnsafe(qx, qy, qz, qs);
 
          QuaternionConversion.convertAxisAngleToQuaternion(ux, uy, uz, angle, actualQuaternion);
@@ -163,7 +165,7 @@ public class QuaternionConversionTest
          EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
       }
 
-      double sqrt2Over2 = Math.sqrt(2.0) / 2.0;
+      double sqrt2Over2 = EuclidCoreTools.squareRoot(2.0) / 2.0;
       // Test edge cases
       // Zero rotation
       m00 = m11 = m22 = 1.0;
@@ -384,12 +386,12 @@ public class QuaternionConversionTest
          {
             for (double roll = -Math.PI; roll <= Math.PI; roll += deltaAngle)
             {
-               double cYaw = Math.cos(yaw);
-               double sYaw = Math.sin(yaw);
-               double cPitch = Math.cos(pitch);
-               double sPitch = Math.sin(pitch);
-               double cRoll = Math.cos(roll);
-               double sRoll = Math.sin(roll);
+               double cYaw = EuclidCoreTools.cos(yaw);
+               double sYaw = EuclidCoreTools.sin(yaw);
+               double cPitch = EuclidCoreTools.cos(pitch);
+               double sPitch = EuclidCoreTools.sin(pitch);
+               double cRoll = EuclidCoreTools.cos(roll);
+               double sRoll = EuclidCoreTools.sin(roll);
 
                m00 = cYaw * cPitch;
                m01 = cYaw * sPitch * sRoll - sYaw * cRoll;

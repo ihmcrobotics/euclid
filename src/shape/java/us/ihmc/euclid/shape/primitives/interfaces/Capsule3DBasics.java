@@ -13,14 +13,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * A capsule 3D is represented by its length, i.e. the distance separating the center of the two
  * half-spheres, its radius, the position of its center, and its axis of revolution.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
 {
    /**
     * Sets the length for this capsule.
-    * 
+    *
     * @param length the new length.
     * @throws IllegalArgumentException if {@code length} is negative.
     */
@@ -28,7 +28,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
 
    /**
     * Sets the radius for this capsule.
-    * 
+    *
     * @param radius the new radius.
     * @throws IllegalArgumentException if {@code radius} is negative.
     */
@@ -47,7 +47,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
     * <p>
     * Note, the axis should remain a unit-length vector.
     * </p>
-    * 
+    *
     * @return the axis of this capsule.
     */
    @Override
@@ -55,7 +55,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
 
    /**
     * Sets the size of this capsule.
-    * 
+    *
     * @param length the new length.
     * @param radius the new radius.
     * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
@@ -68,7 +68,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
 
    /**
     * Sets this capsule axis of revolution.
-    * 
+    *
     * @param axis the new axis. Not modified.
     */
    default void setAxis(Vector3DReadOnly axis)
@@ -116,7 +116,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
 
    /**
     * Sets this capsule properties.
-    * 
+    *
     * @param position the position of this capsule center. Not modified.
     * @param axis     the axis of revolution of this capsule. Not modified.
     * @param length   the new length.

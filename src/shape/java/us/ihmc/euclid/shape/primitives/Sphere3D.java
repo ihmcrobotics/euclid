@@ -174,7 +174,7 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    /**
     * Provides a {@code String} representation of this sphere 3D as follows:<br>
     * Sphere 3D: [position: (-0.362, -0.617, 0.066 ), radius: 0.906]
-    * 
+    *
     * @return the {@code String} representing this sphere 3D.
     */
    @Override

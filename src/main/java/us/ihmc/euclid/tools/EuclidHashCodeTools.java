@@ -5,7 +5,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 /**
  * Generic operations on hash-code used throughout this library for computing hash-codes of object
  * as {@link Point3D}.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidHashCodeTools

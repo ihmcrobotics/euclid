@@ -17,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * A cylinder 3D is represented by its length, its radius, the position of its center, and its axis
  * of revolution.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Cylinder3DReadOnly extends Shape3DReadOnly
@@ -31,7 +31,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the half-length of this cylinder.
-    * 
+    *
     * @return the half-length.
     */
    default double getHalfLength()
@@ -55,7 +55,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the read-only reference of this cylinder axis of revolution.
-    * 
+    *
     * @return the axis of this cylinder.
     */
    Vector3DReadOnly getAxis();
@@ -65,7 +65,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * <p>
     * WARNING: The default implementation of this method generates garbage.
     * </p>
-    * 
+    *
     * @return the top center.
     */
    default Point3DReadOnly getTopCenter()
@@ -80,7 +80,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
     * <p>
     * WARNING: The default implementation of this method generates garbage.
     * </p>
-    * 
+    *
     * @return the bottom center.
     */
    default Point3DReadOnly getBottomCenter()
@@ -207,7 +207,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    /**
     * Tests on a per component basis if this cylinder and {@code other} are equal to an
     * {@code epsilon}.
-    * 
+    *
     * @param other   the other cylinder to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two cylinders are equal component-wise, {@code false} otherwise.

@@ -416,7 +416,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the dot product of this line segment with the other line segment such that:<br>
     * {@code this }&middot;
-    * {@code other = Math.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
+    * {@code other = EuclidCoreTools.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
     * where &alpha; is the angle from this to the other line segment.
     *
     * @param other the other line segment used to compute the dot product. Not modified.
@@ -1019,8 +1019,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *
     * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
-    *                                         [0, 1].
+    * @throws {@link                          RuntimeException} if {@code percentage} &notin; [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
     *                                         in the same reference frame.
     */
@@ -1065,7 +1064,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    /**
     * Computes the coordinates of the possible intersection(s) between a given line segment 2D and this
     * convex polygon 2D.
-    * 
+    *
     * @param convexPolygon the polygon this line segment may intersect. Not modified.
     * @return the intersections between the line segment and the polygon.
     * @throws ReferenceFrameMismatchException if {@code convexPolygon} and {@code this} are not

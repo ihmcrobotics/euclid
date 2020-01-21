@@ -34,7 +34,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
  * </pre>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObject<FrameYawPitchRoll>
@@ -136,7 +136,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    @Override
    public void set(FrameYawPitchRoll other)
    {
-      FrameYawPitchRollBasics.super.set((FrameYawPitchRollReadOnly) other);
+      FrameYawPitchRollBasics.super.set(other);
    }
 
    @Override

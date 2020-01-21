@@ -22,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * The main use-case is to create a visualizable convex polytope given a {@code EPAVertex3D} or
  * {@code EPAFace3D} which can help debugging the {@code ExpandingPolytopeAlgorithm}.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  * @see ExpandingPolytopeAlgorithm
  */
@@ -42,7 +42,7 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
 
    /**
     * Assembles the faces, edges, and vertices linked to the given vertex.
-    * 
+    *
     * @param startVertex the vertex that belongs to the polytope to be assembled. Not modified,
     *                    reference saved.
     */
@@ -65,7 +65,7 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
 
    /**
     * Assembles the faces, edges, and vertices linked to the given face.
-    * 
+    *
     * @param startFace the face that belongs to the polytope to be assembled. Not modified, reference
     *                  saved.
     */
@@ -122,7 +122,7 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
 
    /**
     * This implementation of {@code ConvexPolytope3DReadOnly} does not use a construction epsilon.
-    * 
+    *
     * @return 0
     */
    @Override
@@ -186,12 +186,12 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
     *
     * <pre>
     * EPA Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
-    * Face list: 
+    * Face list:
     *    centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
     *    centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
     *    centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
     *    centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
-    * Edge list: 
+    * Edge list:
     *    [( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
     *    [( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
     *    [( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
@@ -204,13 +204,13 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
     *    [( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
     *    [( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
     *    [(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
-    * Vertex list: 
+    * Vertex list:
     *    ( 0.674,  0.482,  0.712 )
     *    ( 0.870,  0.251,  0.229 )
     *    ( 0.204, -0.803, -0.461 )
     *    (-0.283, -0.207, -0.595 )
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this convex polytope 3D.
     */
    @Override

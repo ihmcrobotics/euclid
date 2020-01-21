@@ -1,7 +1,8 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 

@@ -126,6 +126,7 @@ public interface Pose3DReadOnly
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
     * @deprecated Use a {@link YawPitchRoll} that can be set to {@link #getOrientation()}.
     */
+   @Deprecated
    default void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
    {
       getOrientation().getYawPitchRoll(yawPitchRollToPack);

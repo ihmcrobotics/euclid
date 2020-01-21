@@ -178,16 +178,16 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
       if (containsNaN())
          return;
 
-      double uNorm = Math.sqrt(EuclidCoreTools.normSquared(getX(), getY(), getZ()));
+      double uNorm = EuclidCoreTools.norm(getX(), getY(), getZ());
 
       if (uNorm > EPS_POW)
       {
-         double angle = alpha * Math.atan2(uNorm, getS());
-         uNorm = Math.sin(angle) / uNorm;
+         double angle = alpha * EuclidCoreTools.atan2(uNorm, getS());
+         uNorm = EuclidCoreTools.sin(angle) / uNorm;
          double qx = getX() * uNorm;
          double qy = getY() * uNorm;
          double qz = getZ() * uNorm;
-         set(qx, qy, qz, Math.cos(angle));
+         set(qx, qy, qz, EuclidCoreTools.cos(angle));
       }
       else
       {
@@ -694,10 +694,10 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
 
       if (1.0 - cosHalfTheta > 1.0e-12)
       {
-         double halfTheta = Math.acos(cosHalfTheta);
-         double sinHalfTheta = Math.sin(halfTheta);
-         alpha0 = Math.sin(alpha0 * halfTheta) / sinHalfTheta;
-         alphaf = Math.sin(alphaf * halfTheta) / sinHalfTheta;
+         double halfTheta = EuclidCoreTools.acos(cosHalfTheta);
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta);
+         alpha0 = EuclidCoreTools.sin(alpha0 * halfTheta) / sinHalfTheta;
+         alphaf = EuclidCoreTools.sin(alphaf * halfTheta) / sinHalfTheta;
       }
 
       double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();

@@ -1,6 +1,9 @@
 package us.ihmc.euclid.shape.collision.epa;
 
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.*;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.compareSigns;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.xyTriangleAreaCalculator;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.yzTriangleAreaCalculator;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.zxTriangleAreaCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +12,8 @@ import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.shape.collision.gjk.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.gjk.GJKTools.ProjectedTriangleSignedAreaCalculator;
+import us.ihmc.euclid.shape.collision.gjk.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -22,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * This class provides the tools needed for the Expanding Polytope algorithm used for collision
  * detection.
- * 
+ *
  * @author Sylvain Bertrand
  * @see ExpandingPolytopeAlgorithm
  */
@@ -30,7 +33,7 @@ public class EPATools
 {
    /**
     * Enum used to provide additional information when calculation the barycentric coordinates.
-    * 
+    *
     * @author Sylvain Bertrand
     */
    public enum BarycentricCoordinatesOutput
@@ -41,11 +44,11 @@ public class EPATools
       OUTSIDE,
       /** The triangle is affinely dependent, the barycentric coordinates can not be evaluated. */
       AFFINELY_DEPENDENT
-   };
+   }
 
    /**
     * Computes the barycentric coordinates of the projection of the origin onto the triangle.
-    * 
+    *
     * @param s1            the first vertex of the triangle. Not modified.
     * @param s2            the second vertex of the triangle. Not modified.
     * @param s3            the third vertex of the triangle. Not modified.
@@ -206,7 +209,7 @@ public class EPATools
 
    /**
     * Computes the barycentric coordinates of the projection of the origin onto the line segment.
-    * 
+    *
     * @param s1 the first vertex of the line segment. Not modified.
     * @param s2 the second vertex of the line segment. Not modified.
     * @return the barycentric coordinates.
@@ -297,7 +300,7 @@ public class EPATools
     * In case the simplex provided is a point, or that the generated polytope has a triangle that is
     * affinely dependent, this method fails and return {@code null}.
     * </p>
-    * 
+    *
     * @param shapeA      the shape in the collision evaluation used in case additional vertices need to
     *                    be generated. Not modified.
     * @param shapeB      the shape in the collision evaluation used in case additional vertices need to
@@ -666,7 +669,7 @@ public class EPATools
    /**
     * Recursive flood-fill algorithm for retrieving the silhouette as seen from the given
     * {@code observer}.
-    * 
+    *
     * @param edge             the starting point for the recursion. Not modified.
     * @param observer         the coordinates of the observer. Not modified.
     * @param silhouetteToPack list used to store the edges composing the silhouette. Modified.

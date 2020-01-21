@@ -3,7 +3,7 @@ package us.ihmc.euclid.geometry.exceptions;
 /**
  * {@link RuntimeException} dedicated to improper use of a polygon with vertices that are not
  * up-to-date.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class OutdatedPolygonException extends RuntimeException
@@ -12,7 +12,7 @@ public class OutdatedPolygonException extends RuntimeException
 
    /**
     * Creates a new exception.
-    * 
+    *
     * @param message the detail message.
     */
    public OutdatedPolygonException(String message)

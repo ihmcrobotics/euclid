@@ -1,29 +1,13 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.ONE_TEN_MILLIONTH;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.ONE_TRILLIONTH;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.areVector2DsParallel;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceBetweenPoint2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredBetweenPoint2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceSquaredFromPoint2DToLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.doLine2DAndLineSegment2DIntersect;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DInFrontOfRay2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnSideOfLine2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.orthogonalProjectionOnLineSegment2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.percentageOfIntersectionBetweenTwoLine2Ds;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.perpendicularVector2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -72,7 +56,7 @@ public class EuclidGeometryPolygonTools
       };
 
       abstract boolean isFirstBetter(double first, double second);
-   };
+   }
 
    private EuclidGeometryPolygonTools()
    {
@@ -1233,7 +1217,7 @@ public class EuclidGeometryPolygonTools
          minDistance = Math.min(minDistance, distanceSquaredFromPoint2DToLineSegment2D(pointX, pointY, edgeStart, edgeEnd));
       }
 
-      minDistance = Math.sqrt(minDistance);
+      minDistance = EuclidCoreTools.squareRoot(minDistance);
 
       if (!isQueryOutsidePolygon)
          minDistance = -minDistance;
@@ -2458,7 +2442,7 @@ public class EuclidGeometryPolygonTools
 
    /**
     * Finds the index of a vertex in the specified supplier given search criteria.
-    * 
+    *
     * @param vertex2DSupplier the vertex supplier containing vertices to search through.
     * @param isXPriority      whether the search should focus first on finding the vertex with the
     *                         "best" x or y coordinate.

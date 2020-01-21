@@ -19,7 +19,7 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  * that the operation occur in the proper coordinate system. Use this feature carefully and always
  * prefer using methods requiring {@code FrameOrientation3DBasics}.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics, FrameChangeable
@@ -61,6 +61,7 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * @param rotationVector vector the rotation vector used to set this orientation. Not modified.
     * @deprecated Use {@link #setRotationVectorIncludingFrame(ReferenceFrame,Vector3DReadOnly)} instead
     */
+   @Deprecated
    default void setIncludingFrame(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
    {
       setRotationVectorIncludingFrame(referenceFrame, rotationVector);
@@ -96,6 +97,7 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * @param rotationVector vector the rotation vector used to set this orientation. Not modified.
     * @deprecated Use {@link #setRotationVectorIncludingFrame(FrameVector3DReadOnly)} instead
     */
+   @Deprecated
    default void setIncludingFrame(FrameVector3DReadOnly rotationVector)
    {
       setRotationVectorIncludingFrame(rotationVector);
@@ -127,6 +129,7 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
     * @deprecated Use {@link #setIncludingFrame(ReferenceFrame, Orientation3DReadOnly)} using
     *             {@link YawPitchRoll} for instance.
     */
+   @Deprecated
    default void setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double[] yawPitchRoll)
    {
       setReferenceFrame(referenceFrame);

@@ -1,8 +1,10 @@
 package us.ihmc.euclid.rotationConversion;
 
-import static java.lang.Math.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+import static us.ihmc.euclid.tools.EuclidCoreTools.cos;
+import static us.ihmc.euclid.tools.EuclidCoreTools.sin;
 
 import java.util.Random;
 
@@ -13,6 +15,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
@@ -104,10 +107,10 @@ public class RotationVectorConversionTest
          expectedRotationVector.setY(uy * angle);
          expectedRotationVector.setZ(uz * angle);
 
-         double qs = Math.cos(angle / 2.0);
-         double qx = ux * Math.sin(angle / 2.0);
-         double qy = uy * Math.sin(angle / 2.0);
-         double qz = uz * Math.sin(angle / 2.0);
+         double qs = EuclidCoreTools.cos(angle / 2.0);
+         double qx = ux * EuclidCoreTools.sin(angle / 2.0);
+         double qy = uy * EuclidCoreTools.sin(angle / 2.0);
+         double qz = uz * EuclidCoreTools.sin(angle / 2.0);
 
          quaternion.setUnsafe(qx, qy, qz, qs);
          RotationVectorConversion.convertQuaternionToRotationVector(quaternion, actualRotationVector);
@@ -127,10 +130,10 @@ public class RotationVectorConversionTest
          expectedRotationVector.setY(uy * angle);
          expectedRotationVector.setZ(uz * angle);
 
-         double qs = Math.cos(angle / 2.0);
-         double qx = ux * Math.sin(angle / 2.0);
-         double qy = uy * Math.sin(angle / 2.0);
-         double qz = uz * Math.sin(angle / 2.0);
+         double qs = EuclidCoreTools.cos(angle / 2.0);
+         double qx = ux * EuclidCoreTools.sin(angle / 2.0);
+         double qy = uy * EuclidCoreTools.sin(angle / 2.0);
+         double qz = uz * EuclidCoreTools.sin(angle / 2.0);
 
          quaternion.setUnsafe(qx, qy, qz, qs);
          RotationVectorConversion.convertQuaternionToRotationVector(quaternion, actualRotationVector);
@@ -337,7 +340,7 @@ public class RotationVectorConversionTest
       assertEquals(Math.PI, actualRotationVector.getZ(), EPSILON);
 
       // Pi around xy (as axis-angle: (x = sqrt(2)/2, y = sqrt(2)/2, z = 0, angle = Pi)
-      double sqrt2Over2 = Math.sqrt(2.0) / 2.0;
+      double sqrt2Over2 = EuclidCoreTools.squareRoot(2.0) / 2.0;
       m00 = 0.0;
       m01 = 1.0;
       m02 = 0.0;

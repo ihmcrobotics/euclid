@@ -7,7 +7,7 @@ import us.ihmc.euclid.tools.TupleTools;
 /**
  * This class provides the tools needed for the Gilbert-Johnson-Keerthi algorithm used for collision
  * detection.
- * 
+ *
  * @author Sylvain Bertrand
  * @see GilbertJohnsonKeerthiCollisionDetector
  */
@@ -16,7 +16,7 @@ public class GJKTools
    /**
     * Functional interface for computing the signed area of a 3D triangle represented by the vertices
     * {@code a}, {@code b}, and {@code c}.
-    * 
+    *
     * @author Sylvain Bertrand
     */
    public static interface ProjectedTriangleSignedAreaCalculator
@@ -27,7 +27,7 @@ public class GJKTools
        * The sign of the area depends on the winding of the vertices: positive for a counter-clockwise
        * ordering, negative otherwise.
        * </p>
-       * 
+       *
        * @param ax the x-coordinate of the first triangle vertex.
        * @param ay the y-coordinate of the first triangle vertex.
        * @param az the z-coordinate of the first triangle vertex.
@@ -73,7 +73,7 @@ public class GJKTools
     * The sign of the area depends on the winding of the vertices: positive for a counter-clockwise
     * ordering, negative otherwise.
     * </p>
-    * 
+    *
     * @param ax the x-coordinate of the first triangle vertex.
     * @param ay the y-coordinate of the first triangle vertex.
     * @param bx the x-coordinate of the second triangle vertex.
@@ -99,7 +99,7 @@ public class GJKTools
     * in: <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster
     * and more reliable distance queries between convex objects</a>
     * </p>
-    * 
+    *
     * @param oldVertices the vertices that may be filtered out. The array should contain at most 3
     *                    vertices. Not modified.
     * @param newVertex   the vertex that should not be filtered out by this method. Not modified.
@@ -129,7 +129,7 @@ public class GJKTools
     * <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster and
     * more reliable distance queries between convex objects</a>
     * </p>
-    * 
+    *
     * @param s1 the first vertex of the tetrahedron. <b>This method assumes that this vertex should not
     *           be filtered out</b>. Not modified.
     * @param s2 the second vertex of the tetrahedron. Not modified.
@@ -219,7 +219,7 @@ public class GJKTools
     * <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster and
     * more reliable distance queries between convex objects</a>
     * </p>
-    * 
+    *
     * @param s1 the first vertex of the triangle. <b>This method assumes that this vertex should not be
     *           filtered out</b>. Not modified.
     * @param s2 the second vertex of the triangle. Not modified.
@@ -340,7 +340,7 @@ public class GJKTools
     * <a href="https://dl.acm.org/citation.cfm?id=3083724">Improving the GJK algorithm for faster and
     * more reliable distance queries between convex objects</a>
     * </p>
-    * 
+    *
     * @param s1 the first vertex of the line segment. <b>This method assumes that this vertex should
     *           not be filtered out</b>. Not modified.
     * @param s2 the second vertex of the line segment. Not modified.
@@ -427,7 +427,7 @@ public class GJKTools
     * This sign comparison is adapted to handle {@link Double#NaN} and edge-cases of the GJK algorithm
     * and should not be used outside this context.
     * </p>
-    * 
+    *
     * @param a the first value.
     * @param b the second value.
     * @return {@code true} if the two values share the same sign, {@code false} otherwise.

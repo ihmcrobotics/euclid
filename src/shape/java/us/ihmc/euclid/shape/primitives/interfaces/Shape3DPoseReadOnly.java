@@ -7,21 +7,21 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Read-only interface for representing the pose of a shape 3D.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
 {
    /**
     * Gets the read-only reference to the orientation part of this pose.
-    * 
+    *
     * @return the orientation part.
     */
    RotationMatrixReadOnly getShapeOrientation();
 
    /**
     * Gets the read-only reference to the position part of this pose.
-    * 
+    *
     * @return the position part.
     */
    Point3DReadOnly getShapePosition();
@@ -47,7 +47,7 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    /**
     * Gets the read-only reference to the unit-vector representing the local x-axis expressed in world
     * coordinates.
-    * 
+    *
     * @return the x-axis unit-vector.
     */
    Vector3DReadOnly getXAxis();
@@ -55,7 +55,7 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    /**
     * Gets the read-only reference to the unit-vector representing the local y-axis expressed in world
     * coordinates.
-    * 
+    *
     * @return the y-axis unit-vector.
     */
    Vector3DReadOnly getYAxis();
@@ -63,7 +63,7 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    /**
     * Gets the read-only reference to the unit-vector representing the local z-axis expressed in world
     * coordinates.
-    * 
+    *
     * @return the z-axis unit-vector.
     */
    Vector3DReadOnly getZAxis();

@@ -40,7 +40,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     */
    default double length()
    {
-      return Math.sqrt(lengthSquared());
+      return EuclidCoreTools.squareRoot(lengthSquared());
    }
 
    /**
@@ -97,7 +97,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
       // the magnitude of the angle comes from the dot product
       double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
 
-      return Math.atan2(crossProduct, dotProduct);
+      return EuclidCoreTools.atan2(crossProduct, dotProduct);
    }
 
    /**
@@ -143,6 +143,6 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
    {
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
-      return Math.sqrt(EuclidCoreTools.normSquared(dx, dy)) <= epsilon;
+      return EuclidCoreTools.norm(dx, dy) <= epsilon;
    }
 }

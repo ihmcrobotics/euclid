@@ -1,7 +1,10 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -45,7 +48,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
-         translation.scale(Math.sqrt(expectedDistanceSquared));
+         translation.scale(EuclidCoreTools.squareRoot(expectedDistanceSquared));
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistanceSquared = p1.distanceSquared(p2);
@@ -79,7 +82,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
-         translation.scale(Math.sqrt(expectedDistanceSquared));
+         translation.scale(EuclidCoreTools.squareRoot(expectedDistanceSquared));
          T p1 = createRandomTuple(random);
          Point3D p2 = new Point3D(p1.getX() + translation.getX(), p1.getY() + translation.getY(), random.nextDouble());
          double actualDistance = p1.distanceXYSquared(p2);
@@ -112,7 +115,7 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
       {
          Vector2D translation = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
-         translation.scale(Math.sqrt(expectedDistanceSquared));
+         translation.scale(EuclidCoreTools.squareRoot(expectedDistanceSquared));
          T p = createTuple(translation.getX(), translation.getY());
          double actualDistance = p.distanceFromOriginSquared();
          assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
@@ -260,11 +263,11 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
 
          if (pointA.epsilonEquals(pointB, getEpsilon()))
          {
-            assertTrue(pointA.geometricallyEquals(pointB, Math.sqrt(3) * getEpsilon()));
+            assertTrue(pointA.geometricallyEquals(pointB, EuclidCoreTools.squareRoot(3) * getEpsilon()));
          }
          else
          {
-            if (Math.sqrt(EuclidCoreTools.normSquared(pointA.getX() - pointB.getX(), pointA.getY() - pointB.getY())) <= getEpsilon())
+            if (EuclidCoreTools.norm(pointA.getX() - pointB.getX(), pointA.getY() - pointB.getY()) <= getEpsilon())
             {
                assertTrue(pointA.geometricallyEquals(pointB, getEpsilon()));
             }

@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -123,7 +124,7 @@ public interface Vector3DBasics extends Tuple3DBasics, Vector3DReadOnly, Transfo
       if (lengthSquared < maxLength * maxLength)
          return false;
 
-      scale(maxLength / Math.sqrt(lengthSquared));
+      scale(maxLength / EuclidCoreTools.squareRoot(lengthSquared));
       return true;
    }
 

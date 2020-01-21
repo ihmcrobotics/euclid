@@ -1,7 +1,10 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -162,7 +165,7 @@ public class EuclidCoreRandomToolsTest
       {
          EuclidCoreRandomTools.randomizeAxisAngle(random, minMax, axisAngle);
          assertTrue(Math.abs(axisAngle.getAngle()) < minMax);
-         double uNorm = Math.sqrt(axisAngle.getX() * axisAngle.getX() + axisAngle.getY() * axisAngle.getY() + axisAngle.getZ() * axisAngle.getZ());
+         double uNorm = EuclidCoreTools.norm(axisAngle.getX(), axisAngle.getY(), axisAngle.getZ());
          assertTrue(Math.abs(uNorm - 1.0) < EPSILON);
          boolean hasChanged = axisAngle.getX() != axisAnglePrevious.getX();
          hasChanged &= axisAngle.getY() != axisAnglePrevious.getY();
@@ -188,7 +191,7 @@ public class EuclidCoreRandomToolsTest
       {
          EuclidCoreRandomTools.randomizeAxisAngle(random, axisAngle);
          assertTrue(Math.abs(axisAngle.getAngle()) < Math.PI);
-         double uNorm = Math.sqrt(axisAngle.getX() * axisAngle.getX() + axisAngle.getY() * axisAngle.getY() + axisAngle.getZ() * axisAngle.getZ());
+         double uNorm = EuclidCoreTools.norm(axisAngle.getX(), axisAngle.getY(), axisAngle.getZ());
          assertTrue(Math.abs(uNorm - 1.0) < EPSILON);
          boolean hasChanged = axisAngle.getX() != axisAnglePrevious.getX();
          hasChanged &= axisAngle.getY() != axisAnglePrevious.getY();

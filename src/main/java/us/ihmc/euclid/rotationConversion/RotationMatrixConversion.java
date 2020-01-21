@@ -53,8 +53,8 @@ public abstract class RotationMatrixConversion
       }
       else
       {
-         double sinYaw = Math.sin(yaw);
-         double cosYaw = Math.cos(yaw);
+         double sinYaw = EuclidCoreTools.sin(yaw);
+         double cosYaw = EuclidCoreTools.cos(yaw);
          matrixToPack.setUnsafe(cosYaw, -sinYaw, 0.0, sinYaw, cosYaw, 0.0, 0.0, 0.0, 1.0);
       }
    }
@@ -80,8 +80,8 @@ public abstract class RotationMatrixConversion
       }
       else
       {
-         double sinPitch = Math.sin(pitch);
-         double cosPitch = Math.cos(pitch);
+         double sinPitch = EuclidCoreTools.sin(pitch);
+         double cosPitch = EuclidCoreTools.cos(pitch);
          matrixToPack.setUnsafe(cosPitch, 0.0, sinPitch, 0.0, 1.0, 0.0, -sinPitch, 0.0, cosPitch);
       }
    }
@@ -107,8 +107,8 @@ public abstract class RotationMatrixConversion
       }
       else
       {
-         double sinRoll = Math.sin(roll);
-         double cosRoll = Math.cos(roll);
+         double sinRoll = EuclidCoreTools.sin(roll);
+         double cosRoll = EuclidCoreTools.cos(roll);
          matrixToPack.setUnsafe(1.0, 0.0, 0.0, 0.0, cosRoll, -sinRoll, 0.0, sinRoll, cosRoll);
       }
    }
@@ -169,7 +169,7 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
       if (uNorm < EPS)
       {
@@ -182,8 +182,8 @@ public abstract class RotationMatrixConversion
          double ay = uy * uNorm;
          double az = uz * uNorm;
 
-         double sinTheta = Math.sin(angle);
-         double cosTheta = Math.cos(angle);
+         double sinTheta = EuclidCoreTools.sin(angle);
+         double cosTheta = EuclidCoreTools.cos(angle);
          double t = 1.0 - cosTheta;
 
          double xz = ax * az;
@@ -264,7 +264,7 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      double norm = EuclidCoreTools.norm(qx, qy, qz, qs);
+      double norm = EuclidCoreTools.fastNorm(qx, qy, qz, qs);
 
       if (norm < EPS)
       {
@@ -334,6 +334,7 @@ public abstract class RotationMatrixConversion
     * @deprecated Use {@link #convertYawPitchRollToMatrix(YawPitchRollReadOnly, RotationMatrix)}
     *             instead.
     */
+   @Deprecated
    public static void convertYawPitchRollToMatrix(double[] yawPitchRoll, RotationMatrix matrixToPack)
    {
       convertYawPitchRollToMatrix(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], matrixToPack);
@@ -424,14 +425,14 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      double cosc = Math.cos(yaw);
-      double sinc = Math.sin(yaw);
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
 
-      double cosb = Math.cos(pitch);
-      double sinb = Math.sin(pitch);
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
 
-      double cosa = Math.cos(roll);
-      double sina = Math.sin(roll);
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
 
       // Introduction to Robotics, 2.64
       double m00 = cosc * cosb;
@@ -505,7 +506,7 @@ public abstract class RotationMatrixConversion
          return;
       }
 
-      double norm = Math.sqrt(EuclidCoreTools.normSquared(rx, ry, rz));
+      double norm = EuclidCoreTools.norm(rx, ry, rz);
 
       if (EuclidCoreTools.isAngleZero(norm, EPS))
       {
@@ -513,8 +514,8 @@ public abstract class RotationMatrixConversion
       }
       else
       {
-         double sinTheta = Math.sin(norm);
-         double cosTheta = Math.cos(norm);
+         double sinTheta = EuclidCoreTools.sin(norm);
+         double cosTheta = EuclidCoreTools.cos(norm);
          double t = 1.0 - cosTheta;
 
          norm = 1.0 / norm;

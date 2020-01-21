@@ -1,7 +1,9 @@
 package us.ihmc.euclid.tuple3D;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -45,7 +48,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
       {
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
-         translation.scale(Math.sqrt(expectedDistanceSquared));
+         translation.scale(EuclidCoreTools.squareRoot(expectedDistanceSquared));
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY(), p1.getZ() + translation.getZ());
          double actualDistanceSquared = p1.distanceSquared(p2);
@@ -96,7 +99,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          translation.setZ(0.0);
          translation.normalize();
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
-         translation.scale(Math.sqrt(expectedDistanceSquared));
+         translation.scale(EuclidCoreTools.squareRoot(expectedDistanceSquared));
          T p1 = createRandomTuple(random);
          T p2 = createTuple(p1.getX() + translation.getX(), p1.getY() + translation.getY(), p1.getZ() + random.nextDouble());
          double actualDistance = p1.distanceXYSquared(p2);
@@ -109,7 +112,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
          translation.setZ(0.0);
          translation.normalize();
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 1.0, 10.0);
-         translation.scale(Math.sqrt(expectedDistanceSquared));
+         translation.scale(EuclidCoreTools.squareRoot(expectedDistanceSquared));
          T p1 = createRandomTuple(random);
          Point2D p2 = new Point2D(p1.getX() + translation.getX(), p1.getY() + translation.getY());
          double actualDistance = p1.distanceXYSquared(p2);
@@ -142,7 +145,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
       {
          Vector3D translation = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
          double expectedDistanceSquared = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
-         translation.scale(Math.sqrt(expectedDistanceSquared));
+         translation.scale(EuclidCoreTools.squareRoot(expectedDistanceSquared));
          T p = createTuple(translation.getX(), translation.getY(), translation.getZ());
          double actualDistance = p.distanceFromOriginSquared();
          assertEquals(expectedDistanceSquared, actualDistance, getEpsilon());
@@ -264,12 +267,11 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
 
          if (pointA.epsilonEquals(pointB, getEpsilon()))
          {
-            assertTrue(pointA.geometricallyEquals(pointB, Math.sqrt(3) * getEpsilon()));
+            assertTrue(pointA.geometricallyEquals(pointB, EuclidCoreTools.squareRoot(3) * getEpsilon()));
          }
          else
          {
-            if (Math.sqrt((pointA.getX() - pointB.getX()) * (pointA.getX() - pointB.getX()) + (pointA.getY() - pointB.getY()) * (pointA.getY() - pointB.getY())
-                  + (pointA.getZ() - pointB.getZ()) * (pointA.getZ() - pointB.getZ())) <= getEpsilon())
+            if (EuclidCoreTools.norm(pointA.getX() - pointB.getX(), pointA.getY() - pointB.getY(), pointA.getZ() - pointB.getZ()) <= getEpsilon())
             {
                assertTrue(pointA.geometricallyEquals(pointB, getEpsilon()));
             }

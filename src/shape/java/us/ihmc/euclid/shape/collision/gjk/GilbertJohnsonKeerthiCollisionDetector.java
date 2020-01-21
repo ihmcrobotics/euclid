@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.collision.gjk;
 
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.*;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.simplexClosestToOrigin;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;
@@ -28,7 +28,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * is occurring, the {@link ExpandingPolytopeAlgorithm} can then be used to compute the depth of the
  * collision and the collision vector.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class GilbertJohnsonKeerthiCollisionDetector
@@ -77,7 +77,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * algorithm does not provide any further information. To obtain additional information such as the
     * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
     * </p>
-    * 
+    *
     * @param shapeA the first shape to evaluate. Not modified.
     * @param shapeB the second shape to evaluate. Not modified.
     * @return the collision result.
@@ -96,7 +96,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * algorithm does not provide any further information. To obtain additional information such as the
     * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
     * </p>
-    * 
+    *
     * @param shapeA       the first shape to evaluate. Not modified.
     * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
@@ -117,7 +117,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * algorithm does not provide any further information. To obtain additional information such as the
     * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
     * </p>
-    * 
+    *
     * @param shapeA the first shape to evaluate. Not modified.
     * @param shapeB the second shape to evaluate. Not modified.
     * @return the collision result.
@@ -136,7 +136,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * algorithm does not provide any further information. To obtain additional information such as the
     * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
     * </p>
-    * 
+    *
     * @param shapeA       the first shape to evaluate. Not modified.
     * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
@@ -257,7 +257,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * An appropriate initial support direction can help reducing the number of iterations needed for an
     * evaluation.
     * </p>
-    * 
+    *
     * @param initialSupportDirection the first support direction to use for future collision
     *                                evaluations. Not modified.
     */
@@ -268,7 +268,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    /**
     * Sets the limit to the number of iterations in case the algorithm does not succeed to converge.
-    * 
+    *
     * @param maxIterations the maximum of iterations allowed before terminating.
     */
    public void setMaxIterations(int maxIterations)
@@ -278,7 +278,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    /**
     * Sets the tolerance used to trigger the termination condition of this algorithm.
-    * 
+    *
     * @param epsilon the terminal condition tolerance to use, default value
     *                {@value #DEFAULT_TERMINAL_CONDITION_EPSILON}.
     */
@@ -296,19 +296,19 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * case the simplex is a triangle face. This tolerance represents the square of the distance from
     * the origin to the face.
     * </p>
-    * 
+    *
     * @param epsilon the tolerance used switch method for obtaining the support direction, default
     *                value {@value #DEFAULT_EPSILON_SUPPORT_DIRECTION_SWITCH}.
     */
    public void setEpsilonTriangleNormalSwitch(double epsilon)
    {
-      this.epsilonTriangleNormalSwitch = epsilon;
+      epsilonTriangleNormalSwitch = epsilon;
    }
 
    /**
     * Gets the current value of the tolerance used to trigger the termination condition of this
     * algorithm.
-    * 
+    *
     * @return the current terminal condition tolerance.
     */
    public double getTerminalConditionEpsilon()
@@ -319,7 +319,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
    /**
     * Gets the current value of the tolerance used to switch method for obtaining the support
     * direction.
-    * 
+    *
     * @return the current tolerance used switch method for obtaining the support direction
     */
    public double getEpsilonTriangleNormalSwitch()
@@ -329,7 +329,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    /**
     * Gets the number of iterations needed for the last evaluation.
-    * 
+    *
     * @return the number of iterations from the last evaluation.
     */
    public int getNumberOfIterations()
@@ -340,7 +340,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
    /**
     * Gets the simplex that is the closest to the origin or at the origin resulting from the last
     * collision evaluation.
-    * 
+    *
     * @return the last evaluation resulting simplex.
     */
    public GJKSimplex3D getSimplex()
@@ -350,7 +350,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
    /**
     * Gets the read-only reference to the last support direction used in the last evaluation.
-    * 
+    *
     * @return the last support direction.
     */
    public Vector3DReadOnly getSupportDirection()

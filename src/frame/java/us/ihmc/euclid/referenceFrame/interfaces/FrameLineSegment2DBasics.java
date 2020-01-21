@@ -76,7 +76,7 @@ public interface FrameLineSegment2DBasics extends FixedFrameLineSegment2DBasics,
    /**
     * Sets this line segment to be the same as the given line segment including the given reference
     * frame.
-    * 
+    *
     * @param referenceFrame        the reference frame in which the given line segment is expressed.
     * @param lineSegment2DReadOnly the line segment to copy. Not modified.
     */

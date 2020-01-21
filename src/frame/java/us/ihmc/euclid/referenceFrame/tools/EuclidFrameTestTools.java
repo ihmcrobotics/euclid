@@ -1,28 +1,21 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getConvexPolygon2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools.assertConvexPolygon2DEquals;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools.assertConvexPolygon2DGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**
  * This class provides the tools to perform a variety of assertions on frame geometry types.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidFrameTestTools

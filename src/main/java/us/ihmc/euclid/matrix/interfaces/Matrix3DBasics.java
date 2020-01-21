@@ -3,6 +3,7 @@ package us.ihmc.euclid.matrix.interfaces;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -19,7 +20,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * tools for a general matrix 3D. A matrix 3D implementing this interface cannot guarantee any
  * properties, e.g. each individual element is accessible and modifiable by user.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
@@ -281,13 +282,13 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
 
    /**
     * Sets this matrix to be a diagonal matrix as follows:
-    * 
+    *
     * <pre>
     *        / m00  0   0  \
     * this = |  0  m11  0  |
     *        \  0   0  m22 /
     * </pre>
-    * 
+    *
     * @param m00 the first diagonal element.
     * @param m11 the second diagonal element.
     * @param m22 the third diagonal element.
@@ -299,15 +300,15 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
 
    /**
     * Sets this matrix to be a diagonal matrix as follows:
-    * 
+    *
     * <pre>
     *        / x 0 0 \
     * this = | 0 y 0 |
     *        \ 0 0 z /
     * </pre>
-    * 
+    *
     * where x, y, and z are the components of the given tuple.
-    * 
+    *
     * @param tuple the tuple used to set this matrix diagonal elements. Not modified.
     */
    default void setToDiagonal(Tuple3DReadOnly tuple)
@@ -320,7 +321,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * <p>
     * this = other * other<sup>T<sup>
     * </p>
-    * 
+    *
     * @param other the other matrix used for this operation. Not modified.
     */
    default void setAndMultiplyOuter(Matrix3DReadOnly other)
@@ -394,8 +395,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToYawMatrix(double yaw)
    {
-      double sinYaw = Math.sin(yaw);
-      double cosYaw = Math.cos(yaw);
+      double sinYaw = EuclidCoreTools.sin(yaw);
+      double cosYaw = EuclidCoreTools.cos(yaw);
 
       setM00(cosYaw);
       setM01(-sinYaw);
@@ -424,8 +425,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToPitchMatrix(double pitch)
    {
-      double sinPitch = Math.sin(pitch);
-      double cosPitch = Math.cos(pitch);
+      double sinPitch = EuclidCoreTools.sin(pitch);
+      double cosPitch = EuclidCoreTools.cos(pitch);
 
       setM00(cosPitch);
       setM01(0.0);
@@ -454,8 +455,8 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToRollMatrix(double roll)
    {
-      double sinRoll = Math.sin(roll);
-      double cosRoll = Math.cos(roll);
+      double sinRoll = EuclidCoreTools.sin(roll);
+      double cosRoll = EuclidCoreTools.cos(roll);
       setM00(1.0);
       setM01(0.0);
       setM02(0.0);

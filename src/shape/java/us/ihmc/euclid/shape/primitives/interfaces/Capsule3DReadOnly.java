@@ -16,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * A capsule 3D is represented by its length, i.e. the distance separating the center of the two
  * half-spheres, its radius, the position of its center, and its axis of revolution.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Capsule3DReadOnly extends Shape3DReadOnly
@@ -24,14 +24,14 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the length of this capsule.
-    * 
+    *
     * @return the length.
     */
    double getLength();
 
    /**
     * Gets the half-length of this capsule.
-    * 
+    *
     * @return the half-length.
     */
    default double getHalfLength()
@@ -41,7 +41,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the radius of this capsule.
-    * 
+    *
     * @return the radius.
     */
    double getRadius();
@@ -55,7 +55,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    /**
     * Gets the read-only reference of this capsule axis of revolution.
-    * 
+    *
     * @return the axis of this capsule.
     */
    Vector3DReadOnly getAxis();
@@ -65,7 +65,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
     * <p>
     * WARNING: The default implementation of this method generates garbage.
     * </p>
-    * 
+    *
     * @return the top center.
     */
    default Point3DReadOnly getTopCenter()
@@ -80,7 +80,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
     * <p>
     * WARNING: The default implementation of this method generates garbage.
     * </p>
-    * 
+    *
     * @return the bottom center.
     */
    default Point3DReadOnly getBottomCenter()
@@ -148,7 +148,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
 
    /**
     * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.
-    * 
+    *
     * @param other   the other capsule to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
@@ -162,7 +162,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    /**
     * Compares {@code this} to {@code other} to determine if the two capsules are geometrically
     * similar.
-    * 
+    *
     * @param other   the other capsule to compare against this. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two capsules represent the same geometry, {@code false} otherwise.

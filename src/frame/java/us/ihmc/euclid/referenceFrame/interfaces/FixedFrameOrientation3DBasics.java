@@ -19,7 +19,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
  * assert that the operation occur in the proper coordinate system. Use this feature carefully and
  * always prefer using methods requiring {@code FixedFrameOrientation3DBasics}.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnly, Orientation3DBasics

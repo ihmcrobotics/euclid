@@ -387,7 +387,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * </pre>
     *
     * where (qx, qy, qz, qs) is the quaternion and (tx, ty, tz) the translation of this transform.
-    * 
+    *
     * @param transformArrayToPack the array in which this transform is packed. Modified.
     */
    public void get(double[] transformArrayToPack)
@@ -402,6 +402,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * @return the quaternion of this transform.
     * @deprecated Use {@link #getRotation()} instead.
     */
+   @Deprecated
    public QuaternionReadOnly getQuaternion()
    {
       return getRotation();
@@ -419,6 +420,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * @return the translation part of this transform.
     * @deprecated Use {@link #getTranslation()} instead.
     */
+   @Deprecated
    public Vector3DReadOnly getTranslationVector()
    {
       return getTranslation();

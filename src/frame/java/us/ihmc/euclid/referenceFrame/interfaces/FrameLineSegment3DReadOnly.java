@@ -538,8 +538,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     *
     * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
-    *                                         [0, 1].
+    * @throws {@link                          RuntimeException} if {@code percentage} &notin; [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
     *                                         in the same reference frame.
     */
@@ -555,8 +554,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     *
     * @param percentage  the percentage along this line segment of the point. Must be in [0, 1].
     * @param pointToPack where the result is stored. Modified.
-    * @throws                                 {@link RuntimeException} if {@code percentage} &notin;
-    *                                         [0, 1].
+    * @throws {@link                          RuntimeException} if {@code percentage} &notin; [0, 1].
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointToPack} are not expressed
     *                                         in the same reference frame.
     */
@@ -624,7 +622,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
    /**
     * Computes the dot product of this line segment with the other line segment such that:<br>
     * {@code this }&middot;
-    * {@code other = Math.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
+    * {@code other = EuclidCoreTools.cos(}&alpha;{@code ) * this.length() * other.length()}<br>
     * where &alpha; is the angle from this to the other line segment.
     *
     * @param other the other line segment used to compute the dot product. Not modified.

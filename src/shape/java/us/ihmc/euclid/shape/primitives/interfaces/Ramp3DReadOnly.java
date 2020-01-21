@@ -24,7 +24,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * <li>The right face is vertical (XZ-plane) at {@code y=size.getY()/2.0}.
  * </ul>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Ramp3DReadOnly extends Shape3DReadOnly
@@ -221,7 +221,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     * <p>
     * WARNING: The default implementation of this method generates garbage.
     * </p>
-    * 
+    *
     * @return the surface normal of the slope.
     */
    default Vector3D getRampSurfaceNormal()

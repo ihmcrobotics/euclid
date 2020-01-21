@@ -1,8 +1,10 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -202,6 +202,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
     * @deprecated Use {@link #setOrientation(Orientation3DReadOnly)} with {@link YawPitchRoll} instead.
     */
+   @Deprecated
    default void setOrientationYawPitchRoll(double[] yawPitchRoll)
    {
       getOrientation().setYawPitchRoll(yawPitchRoll);

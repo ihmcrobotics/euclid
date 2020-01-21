@@ -2,11 +2,7 @@ package us.ihmc.euclid.tools;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
-import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
+import us.ihmc.euclid.matrix.interfaces.*;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -16,7 +12,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * Tools for performing operations on 3D matrices.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class Matrix3DTools
@@ -403,9 +399,9 @@ public class Matrix3DTools
       m22 -= tmp * m20 + tmp1 * m21;
 
       // Compute orthogonalized vector magnitudes and normalize
-      double invMagX = 1.0 / EuclidCoreTools.norm(m00, m10, m20);
-      double invMagY = 1.0 / EuclidCoreTools.norm(m01, m11, m21);
-      double invMagZ = 1.0 / EuclidCoreTools.norm(m02, m12, m22);
+      double invMagX = 1.0 / EuclidCoreTools.fastNorm(m00, m10, m20);
+      double invMagY = 1.0 / EuclidCoreTools.fastNorm(m01, m11, m21);
+      double invMagZ = 1.0 / EuclidCoreTools.fastNorm(m02, m12, m22);
 
       m00 *= invMagX;
       m01 *= invMagY;

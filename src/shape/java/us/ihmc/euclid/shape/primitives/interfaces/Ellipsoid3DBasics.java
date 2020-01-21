@@ -63,7 +63,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
 
    /**
     * Changes the variable supplier to use with this shape.
-    * 
+    *
     * @param newSupplier the new variable supplier.
     */
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);

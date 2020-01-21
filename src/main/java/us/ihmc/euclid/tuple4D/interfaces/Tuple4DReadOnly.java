@@ -270,7 +270,7 @@ public interface Tuple4DReadOnly
     */
    default double norm()
    {
-      return Math.sqrt(normSquared());
+      return EuclidCoreTools.squareRoot(normSquared());
    }
 
    /**

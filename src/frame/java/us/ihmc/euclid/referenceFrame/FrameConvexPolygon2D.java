@@ -11,12 +11,7 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -153,7 +148,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
 
    /**
     * Creates an empty convex polygon in the given reference frame.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this polygon.
     */
    public FrameConvexPolygon2D(ReferenceFrame referenceFrame)
@@ -247,7 +242,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
 
    /**
     * {@inheritDoc}
-    * 
+    *
     * @see FrameConvexPolygon2D#set(FrameVertex2DSupplier)
     */
    @Override

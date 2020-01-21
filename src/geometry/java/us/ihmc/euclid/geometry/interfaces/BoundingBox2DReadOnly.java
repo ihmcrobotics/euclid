@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -128,7 +130,7 @@ public interface BoundingBox2DReadOnly
    /**
     * Tests if the min and max points defining this bounding box contain at least one
     * {@link Double#NaN}.
-    * 
+    *
     * @return {@code true} if this bounding box contains at least one {@link Double#NaN}, {@code false}
     *         otherwise.
     */

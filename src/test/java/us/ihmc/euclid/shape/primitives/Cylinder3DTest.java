@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -327,7 +327,7 @@ public class Cylinder3DTest
       Vector3D expectedNormal = new Vector3D();
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Edge-case: Query is on the axis 
+      { // Edge-case: Query is on the axis
          Cylinder3D cylinder3D = EuclidShapeRandomTools.nextCylinder3D(random);
          Point3D pointOnAxis = new Point3D();
          pointOnAxis.interpolate(cylinder3D.getTopCenter(), cylinder3D.getBottomCenter(), random.nextDouble());
@@ -630,7 +630,7 @@ public class Cylinder3DTest
          double distanceOffTopPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(distanceOffTopPlane, cylinder3D.getAxis(), pointOnTopPlane);
-         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffTopPlane));
+         double expectedDistance = EuclidCoreTools.norm(distanceOrthogonalToAxis - cylinder3D.getRadius(), distanceOffTopPlane);
          assertEquals(expectedDistance, cylinder3D.distance(pointOutside), EPSILON);
       }
 
@@ -646,7 +646,7 @@ public class Cylinder3DTest
          double distanceOffBottomPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(-distanceOffBottomPlane, cylinder3D.getAxis(), pointOnBottomPlane);
-         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffBottomPlane));
+         double expectedDistance = EuclidCoreTools.norm(distanceOrthogonalToAxis - cylinder3D.getRadius(), distanceOffBottomPlane);
          assertEquals(expectedDistance, cylinder3D.distance(pointOutside), EPSILON);
       }
    }
@@ -728,7 +728,7 @@ public class Cylinder3DTest
          double distanceOffTopPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(distanceOffTopPlane, cylinder3D.getAxis(), pointOnTopPlane);
-         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffTopPlane));
+         double expectedDistance = EuclidCoreTools.norm(distanceOrthogonalToAxis - cylinder3D.getRadius(), distanceOffTopPlane);
          assertEquals(expectedDistance, cylinder3D.signedDistance(pointOutside), EPSILON);
       }
 
@@ -744,7 +744,7 @@ public class Cylinder3DTest
          double distanceOffBottomPlane = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);
          Point3D pointOutside = new Point3D();
          pointOutside.scaleAdd(-distanceOffBottomPlane, cylinder3D.getAxis(), pointOnBottomPlane);
-         double expectedDistance = Math.sqrt(EuclidCoreTools.normSquared((distanceOrthogonalToAxis - cylinder3D.getRadius()), distanceOffBottomPlane));
+         double expectedDistance = EuclidCoreTools.norm(distanceOrthogonalToAxis - cylinder3D.getRadius(), distanceOffBottomPlane);
          assertEquals(expectedDistance, cylinder3D.signedDistance(pointOutside), EPSILON);
       }
    }

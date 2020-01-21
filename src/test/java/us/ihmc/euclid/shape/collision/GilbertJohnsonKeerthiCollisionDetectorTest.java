@@ -2,11 +2,7 @@ package us.ihmc.euclid.shape.collision;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -24,13 +20,7 @@ import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.primitives.Box3D;
-import us.ihmc.euclid.shape.primitives.Capsule3D;
-import us.ihmc.euclid.shape.primitives.Cylinder3D;
-import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
-import us.ihmc.euclid.shape.primitives.PointShape3D;
-import us.ihmc.euclid.shape.primitives.Ramp3D;
-import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.*;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -145,7 +135,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
 
-         { // Create the tetrahedron to have its top vertex closest to a face. 
+         { // Create the tetrahedron to have its top vertex closest to a face.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsTwoCombinations("Iteration: " + i, convexPolytope3D, EuclidShapeRandomTools.nextConvexPolytope3D(random), false, null, null);
@@ -166,7 +156,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             }
          }
 
-         { // Create the tetrahedron to have its top vertex closest to an edge. 
+         { // Create the tetrahedron to have its top vertex closest to an edge.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsTwoCombinations("Iteration: " + i, convexPolytope3D, EuclidShapeRandomTools.nextConvexPolytope3D(random), false, null, null);
@@ -237,7 +227,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-         { // Create the tetrahedron from its top vertex lying inside the polytope 
+         { // Create the tetrahedron from its top vertex lying inside the polytope
             ConvexPolytope3D tetrahedron;
 
             if (convexPolytope3D.isEmpty())
@@ -541,9 +531,9 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       Point3D baseCentroid = new Point3D();
       baseCentroid.add(topVertex, topToBaseCentroid);
 
-      Point3D base0 = new Point3D(baseSize * Math.cos(0.0 * Math.PI / 3.0), baseSize * Math.sin(0.0 * Math.PI / 3.0), 0);
-      Point3D base1 = new Point3D(baseSize * Math.cos(1.0 * Math.PI / 3.0), baseSize * Math.sin(1.0 * Math.PI / 3.0), 0);
-      Point3D base2 = new Point3D(baseSize * Math.cos(2.0 * Math.PI / 3.0), baseSize * Math.sin(2.0 * Math.PI / 3.0), 0);
+      Point3D base0 = new Point3D(baseSize * EuclidCoreTools.cos(0.0 * Math.PI / 3.0), baseSize * EuclidCoreTools.sin(0.0 * Math.PI / 3.0), 0);
+      Point3D base1 = new Point3D(baseSize * EuclidCoreTools.cos(1.0 * Math.PI / 3.0), baseSize * EuclidCoreTools.sin(1.0 * Math.PI / 3.0), 0);
+      Point3D base2 = new Point3D(baseSize * EuclidCoreTools.cos(2.0 * Math.PI / 3.0), baseSize * EuclidCoreTools.sin(2.0 * Math.PI / 3.0), 0);
 
       AxisAngle rotation = EuclidGeometryTools.axisAngleFromZUpToVector3D(topToBaseCentroid);
       rotation.transform(base0);

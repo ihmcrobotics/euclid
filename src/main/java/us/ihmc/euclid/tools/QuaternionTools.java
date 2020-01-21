@@ -11,11 +11,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.*;
 
 /**
  * This gathers common mathematical operations involving quaternions.
@@ -34,7 +30,7 @@ public class QuaternionTools
    /**
     * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
     * basis.
-    * 
+    *
     * @param quaternion the query. Not modified.
     * @param epsilon    the tolerance used for the comparison.
     * @return {@code true} if the quaternion equal to the neutral quaternion, {@code false} otherwise.
@@ -46,7 +42,7 @@ public class QuaternionTools
 
    /**
     * Tests that the given quaternion is equal to the neutral quaternion on a per-component basis.
-    * 
+    *
     * @param qx      the x-component of the quaternion. Not modified.
     * @param qy      the y-component of the quaternion. Not modified.
     * @param qz      the z-component of the quaternion. Not modified.
@@ -145,7 +141,7 @@ public class QuaternionTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1     the first orientation in the multiplication. Not modified.
     * @param inverse1         whether the first orientation should be inverted in the multiplication.
     * @param orientation2     the second orientation in the multiplication. Not modified.
@@ -198,7 +194,7 @@ public class QuaternionTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1     the first orientation in the multiplication. Not modified.
     * @param inverse1         whether the first orientation should be inverted in the multiplication.
     * @param orientation2     the second orientation in the multiplication. Not modified.
@@ -238,7 +234,7 @@ public class QuaternionTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1     the first orientation in the multiplication. Not modified.
     * @param inverse1         whether the first orientation should be inverted in the multiplication.
     * @param orientation2     the second orientation in the multiplication. Not modified.
@@ -1083,7 +1079,7 @@ public class QuaternionTools
    static void transformImpl(double qx, double qy, double qz, double qs, boolean conjugateQuaternion, Matrix3DReadOnly matrixOriginal,
                              Matrix3DBasics matrixTransformed)
    {
-      double norm = EuclidCoreTools.norm(qx, qy, qz, qs);
+      double norm = EuclidCoreTools.fastNorm(qx, qy, qz, qs);
 
       if (norm < EPS)
       {
@@ -1228,8 +1224,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfYaw = 0.5 * yaw;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double x = cYaw * qx - sYaw * qy;
       double y = cYaw * qy + sYaw * qx;
@@ -1264,8 +1260,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfYaw = 0.5 * yaw;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double x = qx * cYaw + qy * sYaw;
       double y = -qx * sYaw + qy * cYaw;
@@ -1300,8 +1296,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfPitch = 0.5 * pitch;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double x = cPitch * qx + sPitch * qz;
       double y = cPitch * qy + sPitch * qs;
@@ -1336,8 +1332,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfPitch = 0.5 * pitch;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double x = qx * cPitch - qz * sPitch;
       double y = qs * sPitch + qy * cPitch;
@@ -1372,8 +1368,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfRoll = 0.5 * roll;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double x = cRoll * qx + sRoll * qs;
       double y = cRoll * qy - sRoll * qz;
@@ -1408,8 +1404,8 @@ public class QuaternionTools
       double qs = quaternionOriginal.getS();
 
       double halfRoll = 0.5 * roll;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double x = qs * sRoll + qx * cRoll;
       double y = qy * cRoll + qz * sRoll;
@@ -1433,7 +1429,7 @@ public class QuaternionTools
       double z = q1.getS() * q2.getZ() - q1.getX() * q2.getY() + q1.getY() * q2.getX() - q1.getZ() * q2.getS();
       double s = q1.getS() * q2.getS() + q1.getX() * q2.getX() + q1.getY() * q2.getY() + q1.getZ() * q2.getZ();
 
-      double sinHalfTheta = Math.sqrt(EuclidCoreTools.normSquared(x, y, z));
-      return 2.0 * Math.atan2(sinHalfTheta, s);
+      double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
+      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
    }
 }
