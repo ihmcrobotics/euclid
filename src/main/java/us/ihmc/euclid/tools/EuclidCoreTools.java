@@ -399,14 +399,14 @@ public class EuclidCoreTools
    }
 
    /**
-    * Calculates and returns the norm squared of the given two elements.
+    * Calculates and returns the norm of the given two elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup>)
     * </p>
     *
     * @param x the first element.
     * @param y the second element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double norm(double x, double y)
    {
@@ -414,7 +414,7 @@ public class EuclidCoreTools
    }
 
    /**
-    * Calculates and returns the norm squared of the given three elements.
+    * Calculates and returns the norm of the given three elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup>)
     * </p>
@@ -422,7 +422,7 @@ public class EuclidCoreTools
     * @param x the first element.
     * @param y the second element.
     * @param z the third element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double norm(double x, double y, double z)
    {
@@ -430,7 +430,7 @@ public class EuclidCoreTools
    }
 
    /**
-    * Calculates and returns the norm squared of the given four elements.
+    * Calculates and returns the norm of the given four elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> + s<sup>2</sup>)
     * </p>
@@ -439,7 +439,7 @@ public class EuclidCoreTools
     * @param y the second element.
     * @param z the third element.
     * @param s the fourth element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double norm(double x, double y, double z, double s)
    {
@@ -447,7 +447,7 @@ public class EuclidCoreTools
    }
 
    /**
-    * Calculates and returns the norm squared of the given two elements.
+    * Calculates and returns the norm of the given two elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup>)
     * </p>
@@ -459,7 +459,7 @@ public class EuclidCoreTools
     *
     * @param x the first element.
     * @param y the second element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double fastNorm(double x, double y)
    {
@@ -467,7 +467,7 @@ public class EuclidCoreTools
    }
 
    /**
-    * Calculates and returns the norm squared of the given three elements.
+    * Calculates and returns the norm of the given three elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup>)
     * </p>
@@ -480,7 +480,7 @@ public class EuclidCoreTools
     * @param x the first element.
     * @param y the second element.
     * @param z the third element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double fastNorm(double x, double y, double z)
    {
@@ -488,7 +488,7 @@ public class EuclidCoreTools
    }
 
    /**
-    * Calculates and returns the norm squared of the given four elements.
+    * Calculates and returns the norm of the given four elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> + s<sup>2</sup>)
     * </p>
@@ -502,7 +502,7 @@ public class EuclidCoreTools
     * @param y the second element.
     * @param z the third element.
     * @param s the fourth element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double fastNorm(double x, double y, double z, double s)
    {
