@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * <p>
  * A sphere 3D is represented by its position and radius.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Sphere3DReadOnly extends Shape3DReadOnly

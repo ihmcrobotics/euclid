@@ -1,10 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.shape.convexPolytope.tools.ConvexPolytope3DTroublesomeDataset;
@@ -1552,7 +1548,7 @@ public class ConvexPolytope3DTroublesomeDatasetLibrary
     * solution to properly handle that scenario. The main problem here was about to isolate this type
     * of situation. It seems that if an {@code inPlaneFace} has an edge that is part of the silhouette
     * but is not visible by the new vertex, then we should abort and throw away the new vertex.
-    * 
+    *
     * @author Sylvain Bertrand
     */
    public static class ConvexPolytope3DTroublesomeDataset_20190327_213133 extends ConvexPolytope3DTroublesomeDataset

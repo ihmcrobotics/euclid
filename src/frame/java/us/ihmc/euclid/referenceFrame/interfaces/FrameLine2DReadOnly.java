@@ -639,7 +639,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    /**
     * Computes the coordinates of the possible intersection(s) between this line and the given convex
     * polygon 2D.
-    * 
+    *
     * @param convexPolygon the convex polygon this line may intersect. Not modified.
     * @return the intersections between between the line and the polygon or {@code null} if the method
     *         failed or if there is no intersections.

@@ -6,7 +6,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 
 /**
  * Edge 3D that belongs to a polytope used in the Expanding Polytope algorithm.
- * 
+ *
  * @author Sylvain Bertrand
  * @see ExpandingPolytopeAlgorithm
  */
@@ -36,7 +36,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
 
    /**
     * Creates a new edge and initializes its endpoints and the face it belongs to.
-    * 
+    *
     * @param v0   the vertex the half-edge starts from. Not modified, reference saved.
     * @param v1   the vertex the half-edge ends at. Not modified, reference saved.
     * @param face the face the half-edge belongs to. Not modified, reference saved.
@@ -74,7 +74,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
     * The twin half-edge shares the same vertices with {@code this} and its direction is flipped. The
     * faces associated to {@code this} and the twin are neighbors.
     * </p>
-    * 
+    *
     * @return this twin half-edge.
     */
    @Override
@@ -98,7 +98,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
     * <p>
     * The next half-edge starts from {@code this.getDestination()} and shares the same associated face.
     * </p>
-    * 
+    *
     * @return this next half-edge.
     */
    @Override
@@ -122,7 +122,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
     * <p>
     * The previous half-edge ends to {@code this.getOrigin()} and shares the same associated face.
     * </p>
-    * 
+    *
     * @return this previous half-edge.
     */
    @Override
@@ -152,7 +152,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
 
    /**
     * Gets the reference to the vertex this half-edge starts from.
-    * 
+    *
     * @return the origin vertex for the half-edge.
     */
    @Override
@@ -163,7 +163,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
 
    /**
     * Gets the read-only reference to the vertex this half-edge ends to.
-    * 
+    *
     * @return the destination vertex for the half-edge.
     */
    @Override
@@ -177,7 +177,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
     * <p>
     * This half-edge belongs to its associated face.
     * </p>
-    * 
+    *
     * @return this associated face.
     */
    @Override
@@ -225,7 +225,7 @@ public class EPAHalfEdge3D implements HalfEdge3DReadOnly
     *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
     *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this half-edge 3D.
     */
    @Override

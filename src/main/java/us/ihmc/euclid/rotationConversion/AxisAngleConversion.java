@@ -99,7 +99,7 @@ public class AxisAngleConversion
     * {@link Double#NaN}.
     * </ul>
     * </p>
-    * 
+    *
     * @param m00             the 1st row 1st column coefficient of the rotation matrix.
     * @param m01             the 1st row 2nd column coefficient of the rotation matrix.
     * @param m02             the 1st row 3rd column coefficient of the rotation matrix.
@@ -126,13 +126,13 @@ public class AxisAngleConversion
       y = m02 - m20;
       z = m10 - m01;
 
-      double s = Math.sqrt(EuclidCoreTools.normSquared(x, y, z));
+      double s = EuclidCoreTools.norm(x, y, z);
 
       if (s > EPS)
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
          x /= s;
          y /= s;
          z /= s;
@@ -155,19 +155,19 @@ public class AxisAngleConversion
 
          if (xx > yy && xx > zz)
          { // m00 is the largest diagonal term
-            x = Math.sqrt(xx);
+            x = EuclidCoreTools.squareRoot(xx);
             y = xy / x;
             z = xz / x;
          }
          else if (yy > zz)
          { // m11 is the largest diagonal term
-            y = Math.sqrt(yy);
+            y = EuclidCoreTools.squareRoot(yy);
             x = xy / y;
             z = yz / y;
          }
          else
          { // m22 is the largest diagonal term so base result on this
-            z = Math.sqrt(zz);
+            z = EuclidCoreTools.squareRoot(zz);
             x = xz / z;
             y = yz / z;
          }
@@ -232,11 +232,11 @@ public class AxisAngleConversion
          return;
       }
 
-      double uNorm = Math.sqrt(EuclidCoreTools.normSquared(qx, qy, qz));
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
 
       if (uNorm > EPS)
       {
-         axisAngleToPack.setAngle(2.0 * Math.atan2(uNorm, qs));
+         axisAngleToPack.setAngle(2.0 * EuclidCoreTools.atan2(uNorm, qs));
          uNorm = 1.0 / uNorm;
          axisAngleToPack.setX(qx * uNorm);
          axisAngleToPack.setY(qy * uNorm);
@@ -305,7 +305,7 @@ public class AxisAngleConversion
          return;
       }
 
-      double norm = Math.sqrt(EuclidCoreTools.normSquared(rx, ry, rz));
+      double norm = EuclidCoreTools.norm(rx, ry, rz);
 
       if (norm > EPS)
       {
@@ -346,6 +346,7 @@ public class AxisAngleConversion
     * @deprecated Use {@link #convertYawPitchRollToAxisAngle(YawPitchRollReadOnly, AxisAngleBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertYawPitchRollToAxisAngle(double[] yawPitchRoll, AxisAngleBasics axisAngleToPack)
    {
       convertYawPitchRollToAxisAngle(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], axisAngleToPack);
@@ -413,27 +414,27 @@ public class AxisAngleConversion
       }
 
       double halfYaw = yaw / 2.0;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double halfPitch = pitch / 2.0;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double halfRoll = roll / 2.0;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
       double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
 
-      double uNorm = Math.sqrt(EuclidCoreTools.normSquared(qx, qy, qz));
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
 
       if (uNorm > EPS)
       {
-         axisAngleToPack.setAngle(2.0 * Math.atan2(uNorm, qs));
+         axisAngleToPack.setAngle(2.0 * EuclidCoreTools.atan2(uNorm, qs));
          uNorm = 1.0 / uNorm;
          axisAngleToPack.setX(qx * uNorm);
          axisAngleToPack.setY(qy * uNorm);

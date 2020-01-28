@@ -46,7 +46,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    /**
     * Creates a new frame matrix and initializes its coefficients to zero and its reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial reference frame for this frame matrix.
     */
    public FrameMatrix3D(ReferenceFrame referenceFrame)
@@ -56,7 +56,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
 
    /**
     * Creates a new frame matrix that is the same as {@code other}.
-    * 
+    *
     * @param other the other matrix to copy the values and reference frame from. Not modified.
     */
    public FrameMatrix3D(FrameMatrix3DReadOnly other)
@@ -67,7 +67,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    /**
     * Creates a new frame matrix and initializes it to the given matrix and sets its reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame   the initial reference frame for this frame matrix.
     * @param matrix3DReadOnly the matrix to copy the coefficients from. Not modified.
     */

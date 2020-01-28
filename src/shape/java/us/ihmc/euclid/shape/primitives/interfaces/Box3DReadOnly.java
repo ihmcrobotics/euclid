@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
-import static us.ihmc.euclid.tools.TupleTools.*;
+import static us.ihmc.euclid.tools.TupleTools.dot;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;

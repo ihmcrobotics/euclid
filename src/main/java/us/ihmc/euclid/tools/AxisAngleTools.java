@@ -25,7 +25,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * in classes such as {@link AxisAngle} and the user should always using this classes instead of
  * using tools classes. The API of these tools classes is more likely to change over time.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class AxisAngleTools
@@ -109,9 +109,9 @@ public class AxisAngleTools
       if (negateAngle)
          angle = -angle;
 
-      double cos = Math.cos(angle);
+      double cos = EuclidCoreTools.cos(angle);
       double oneMinusCos = 1.0 - cos;
-      double sin = Math.sin(angle);
+      double sin = EuclidCoreTools.sin(angle);
 
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
@@ -239,9 +239,9 @@ public class AxisAngleTools
       if (negateAngle)
          angle = -angle;
 
-      double cos = Math.cos(angle);
+      double cos = EuclidCoreTools.cos(angle);
       double oneMinusCos = 1.0 - cos;
-      double sin = Math.sin(angle);
+      double sin = EuclidCoreTools.sin(angle);
 
       double uz = axisAngle.getZ();
 
@@ -334,8 +334,8 @@ public class AxisAngleTools
          return;
       }
 
-      double cos = Math.cos(0.5 * axisAngle.getAngle());
-      double sin = Math.sin(0.5 * axisAngle.getAngle()) / axisNorm;
+      double cos = EuclidCoreTools.cos(0.5 * axisAngle.getAngle());
+      double sin = EuclidCoreTools.sin(0.5 * axisAngle.getAngle()) / axisNorm;
 
       double qx = axisAngle.getX() * sin;
       double qy = axisAngle.getY() * sin;
@@ -457,9 +457,9 @@ public class AxisAngleTools
       if (negateAngle)
          angle = -angle;
 
-      double cos = Math.cos(angle);
+      double cos = EuclidCoreTools.cos(angle);
       double oneMinusCos = 1.0 - cos;
-      double sin = Math.sin(angle);
+      double sin = EuclidCoreTools.sin(angle);
 
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
@@ -565,7 +565,7 @@ public class AxisAngleTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1    the first orientation in the multiplication. Not modified.
     * @param inverse1        whether the first orientation should be inverted in the multiplication.
     * @param orientation2    the second orientation in the multiplication. Not modified.
@@ -618,7 +618,7 @@ public class AxisAngleTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1    the first orientation in the multiplication. Not modified.
     * @param inverse1        whether the first orientation should be inverted in the multiplication.
     * @param orientation2    the second orientation in the multiplication. Not modified.
@@ -658,7 +658,7 @@ public class AxisAngleTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1    the first orientation in the multiplication. Not modified.
     * @param inverse1        whether the first orientation should be inverted in the multiplication.
     * @param orientation2    the second orientation in the multiplication. Not modified.
@@ -777,11 +777,11 @@ public class AxisAngleTools
    private static void multiplyImpl(double alpha, double u1x, double u1y, double u1z, boolean inverse1, double beta, double u2x, double u2y, double u2z,
                                     boolean inverse2, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm1 = EuclidCoreTools.norm(u1x, u1y, u1z);
+      double axisNorm1 = EuclidCoreTools.fastNorm(u1x, u1y, u1z);
       if (axisNorm1 < EPS)
          return;
 
-      double axisNorm2 = EuclidCoreTools.norm(u2x, u2y, u2z);
+      double axisNorm2 = EuclidCoreTools.fastNorm(u2x, u2y, u2z);
       if (axisNorm2 < EPS)
          return;
 
@@ -801,10 +801,10 @@ public class AxisAngleTools
       u2y *= axisNorm2;
       u2z *= axisNorm2;
 
-      double cosHalfAlpha = Math.cos(0.5 * alpha);
-      double sinHalfAlpha = Math.sin(0.5 * alpha);
-      double cosHalfBeta = Math.cos(0.5 * beta);
-      double sinHalfBeta = Math.sin(0.5 * beta);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * beta);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * beta);
 
       double dot = u1x * u2x + u1y * u2y + u1z * u2z;
       double crossX = u1y * u2z - u1z * u2y;
@@ -830,9 +830,9 @@ public class AxisAngleTools
       }
       else
       {
-         double sinHalfGamma = Math.sqrt(sinHalfGammaSquared);
+         double sinHalfGamma = EuclidCoreTools.squareRoot(sinHalfGammaSquared);
 
-         double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+         double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
          double sinHalfGammaInv = 1.0 / sinHalfGamma;
          double ux = sinHalfGammaUx * sinHalfGammaInv;
          double uy = sinHalfGammaUy * sinHalfGammaInv;
@@ -872,10 +872,10 @@ public class AxisAngleTools
       double uy = axisAngleOriginal.getY() * axisNorm;
       double uz = axisAngleOriginal.getZ() * axisNorm;
 
-      double cosHalfAlpha = Math.cos(0.5 * yaw);
-      double sinHalfAlpha = Math.sin(0.5 * yaw);
-      double cosHalfBeta = Math.cos(0.5 * beta);
-      double sinHalfBeta = Math.sin(0.5 * beta);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * yaw);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * yaw);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * beta);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * beta);
 
       double sinCos = sinHalfAlpha * cosHalfBeta;
       double cosSin = cosHalfAlpha * sinHalfBeta;
@@ -888,9 +888,9 @@ public class AxisAngleTools
       double sinHalfGammaUy = cosSin * uy + sinSin * ux;
       double sinHalfGammaUz = sinCos + cosSin * uz;
 
-      double sinHalfGamma = Math.sqrt(EuclidCoreTools.normSquared(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz));
+      double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -926,10 +926,10 @@ public class AxisAngleTools
       double uy = axisAngleOriginal.getY() * axisNorm;
       double uz = axisAngleOriginal.getZ() * axisNorm;
 
-      double cosHalfAlpha = Math.cos(0.5 * alpha);
-      double sinHalfAlpha = Math.sin(0.5 * alpha);
-      double cosHalfBeta = Math.cos(0.5 * yaw);
-      double sinHalfBeta = Math.sin(0.5 * yaw);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * yaw);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * yaw);
 
       double sinCos = sinHalfAlpha * cosHalfBeta;
       double cosSin = cosHalfAlpha * sinHalfBeta;
@@ -942,9 +942,9 @@ public class AxisAngleTools
       double sinHalfGammaUy = sinCos * uy - sinSin * ux;
       double sinHalfGammaUz = sinCos * uz + cosSin;
 
-      double sinHalfGamma = Math.sqrt(EuclidCoreTools.normSquared(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz));
+      double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -980,10 +980,10 @@ public class AxisAngleTools
       double uy = axisAngleOriginal.getY() * axisNorm;
       double uz = axisAngleOriginal.getZ() * axisNorm;
 
-      double cosHalfAlpha = Math.cos(0.5 * pitch);
-      double sinHalfAlpha = Math.sin(0.5 * pitch);
-      double cosHalfBeta = Math.cos(0.5 * beta);
-      double sinHalfBeta = Math.sin(0.5 * beta);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * pitch);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * pitch);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * beta);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * beta);
 
       double sinCos = sinHalfAlpha * cosHalfBeta;
       double cosSin = cosHalfAlpha * sinHalfBeta;
@@ -996,9 +996,9 @@ public class AxisAngleTools
       double sinHalfGammaUy = sinCos + cosSin * uy;
       double sinHalfGammaUz = cosSin * uz - sinSin * ux;
 
-      double sinHalfGamma = Math.sqrt(EuclidCoreTools.normSquared(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz));
+      double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1034,10 +1034,10 @@ public class AxisAngleTools
       double uy = axisAngleOriginal.getY() * axisNorm;
       double uz = axisAngleOriginal.getZ() * axisNorm;
 
-      double cosHalfAlpha = Math.cos(0.5 * alpha);
-      double sinHalfAlpha = Math.sin(0.5 * alpha);
-      double cosHalfBeta = Math.cos(0.5 * pitch);
-      double sinHalfBeta = Math.sin(0.5 * pitch);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * pitch);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * pitch);
 
       double sinCos = sinHalfAlpha * cosHalfBeta;
       double cosSin = cosHalfAlpha * sinHalfBeta;
@@ -1050,9 +1050,9 @@ public class AxisAngleTools
       double sinHalfGammaUy = sinCos * uy + cosSin;
       double sinHalfGammaUz = sinCos * uz + sinSin * ux;
 
-      double sinHalfGamma = Math.sqrt(EuclidCoreTools.normSquared(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz));
+      double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1088,10 +1088,10 @@ public class AxisAngleTools
       double uy = axisAngleOriginal.getY() * axisNorm2;
       double uz = axisAngleOriginal.getZ() * axisNorm2;
 
-      double cosHalfAlpha = Math.cos(0.5 * roll);
-      double sinHalfAlpha = Math.sin(0.5 * roll);
-      double cosHalfBeta = Math.cos(0.5 * beta);
-      double sinHalfBeta = Math.sin(0.5 * beta);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * roll);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * roll);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * beta);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * beta);
 
       double sinCos = sinHalfAlpha * cosHalfBeta;
       double cosSin = cosHalfAlpha * sinHalfBeta;
@@ -1104,9 +1104,9 @@ public class AxisAngleTools
       double sinHalfGammaUy = cosSin * uy - sinSin * uz;
       double sinHalfGammaUz = cosSin * uz + sinSin * uy;
 
-      double sinHalfGamma = Math.sqrt(EuclidCoreTools.normSquared(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz));
+      double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1142,10 +1142,10 @@ public class AxisAngleTools
       double uy = axisAngleOriginal.getY() * axisNorm1;
       double uz = axisAngleOriginal.getZ() * axisNorm1;
 
-      double cosHalfAlpha = Math.cos(0.5 * alpha);
-      double sinHalfAlpha = Math.sin(0.5 * alpha);
-      double cosHalfBeta = Math.cos(0.5 * roll);
-      double sinHalfBeta = Math.sin(0.5 * roll);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * roll);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * roll);
 
       double sinCos = sinHalfAlpha * cosHalfBeta;
       double cosSin = cosHalfAlpha * sinHalfBeta;
@@ -1158,9 +1158,9 @@ public class AxisAngleTools
       double sinHalfGammaUy = sinCos * uy + sinSin * uz;
       double sinHalfGammaUz = sinCos * uz + -sinSin * uy;
 
-      double sinHalfGamma = Math.sqrt(EuclidCoreTools.normSquared(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz));
+      double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
@@ -1198,10 +1198,10 @@ public class AxisAngleTools
       double u2y = aa2.getY() * axisNorm2;
       double u2z = aa2.getZ() * axisNorm2;
 
-      double cosHalfAlpha = Math.cos(0.5 * alpha);
-      double sinHalfAlpha = Math.sin(0.5 * alpha);
-      double cosHalfBeta = Math.cos(0.5 * beta);
-      double sinHalfBeta = Math.sin(0.5 * beta);
+      double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
+      double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
+      double cosHalfBeta = EuclidCoreTools.cos(0.5 * beta);
+      double sinHalfBeta = EuclidCoreTools.sin(0.5 * beta);
 
       double dot = u1x * u2x + u1y * u2y + u1z * u2z;
       double crossX = u1y * u2z - u1z * u2y;
@@ -1219,9 +1219,9 @@ public class AxisAngleTools
       double sinHalfGammaUy = sinCos * u1y + cosSin * u2y + sinSin * crossY;
       double sinHalfGammaUz = sinCos * u1z + cosSin * u2z + sinSin * crossZ;
 
-      double sinHalfGamma = Math.sqrt(EuclidCoreTools.normSquared(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz));
+      double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
-      double gamma = 2.0 * Math.atan2(sinHalfGamma, cosHalfGamma);
+      double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       return Math.abs(gamma);
    }
 }

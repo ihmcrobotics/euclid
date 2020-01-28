@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * A capsule 3D is represented by its length, i.e. the distance separating the center of the two
  * half-spheres, its radius, the position of its center, and its axis of revolution.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
@@ -54,7 +54,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    /**
     * Creates a new capsule which axis is along the z-axis and initializes its size.
-    * 
+    *
     * @param length the length of this capsule.
     * @param radius the radius of this capsule.
     * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
@@ -66,7 +66,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    /**
     * Creates a new capsule 3D and initializes its pose and size.
-    * 
+    *
     * @param position the position of the center. Not modified.
     * @param axis     the axis of revolution. Not modified.
     * @param length   the length of this capsule.
@@ -80,7 +80,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    /**
     * Creates a new capsule 3D identical to {@code other}.
-    * 
+    *
     * @param other the other capsule to copy. Not modified.
     */
    public Capsule3D(Capsule3DReadOnly other)
@@ -230,7 +230,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
     * Provides a {@code String} representation of this capsule 3D as follows:<br>
     * Capsule 3D: [position: (-0.362, -0.617, 0.066 ), axis: ( 0.634, -0.551, -0.543 ), length: 0.170,
     * radius: 0.906]
-    * 
+    *
     * @return the {@code String} representing this capsule 3D.
     */
    @Override

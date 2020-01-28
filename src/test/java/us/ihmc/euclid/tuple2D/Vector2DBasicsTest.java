@@ -1,7 +1,10 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -53,7 +56,7 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
          vector2.setAndScale(scalar, vector1);
          double expectedLength2 = scalar * length1;
          double actualLength2 = vector2.lengthSquared();
-         assertEquals(expectedLength2, Math.sqrt(actualLength2), 2.0 * getEpsilon());
+         assertEquals(expectedLength2, EuclidCoreTools.squareRoot(actualLength2), 2.0 * getEpsilon());
       }
    }
 
@@ -66,12 +69,12 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
       {
          T vector1 = createRandomTuple(random);
          double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double x = Math.cos(angle) * vector1.getX() - Math.sin(angle) * vector1.getY();
-         double y = Math.sin(angle) * vector1.getX() + Math.cos(angle) * vector1.getY();
+         double x = EuclidCoreTools.cos(angle) * vector1.getX() - EuclidCoreTools.sin(angle) * vector1.getY();
+         double y = EuclidCoreTools.sin(angle) * vector1.getX() + EuclidCoreTools.cos(angle) * vector1.getY();
          T vector2 = createTuple(x, y);
          vector2.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0));
 
-         double expectedDot = vector1.length() * vector2.length() * Math.cos(angle);
+         double expectedDot = vector1.length() * vector2.length() * EuclidCoreTools.cos(angle);
          double actualDot = vector1.dot(vector2);
          assertEquals(expectedDot, actualDot, getEpsilon());
       }
@@ -86,8 +89,8 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
       {
          T vector1 = createRandomTuple(random);
          double expectedAngle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double x = Math.cos(expectedAngle) * vector1.getX() - Math.sin(expectedAngle) * vector1.getY();
-         double y = Math.sin(expectedAngle) * vector1.getX() + Math.cos(expectedAngle) * vector1.getY();
+         double x = EuclidCoreTools.cos(expectedAngle) * vector1.getX() - EuclidCoreTools.sin(expectedAngle) * vector1.getY();
+         double y = EuclidCoreTools.sin(expectedAngle) * vector1.getX() + EuclidCoreTools.cos(expectedAngle) * vector1.getY();
          T vector2 = createTuple(x, y);
          vector2.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0));
 
@@ -106,11 +109,11 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
       { // cross(Vector2DReadOnly other)
          T vector1 = createRandomTuple(random);
          double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double x = Math.cos(angle) * vector1.getX() - Math.sin(angle) * vector1.getY();
-         double y = Math.sin(angle) * vector1.getX() + Math.cos(angle) * vector1.getY();
+         double x = EuclidCoreTools.cos(angle) * vector1.getX() - EuclidCoreTools.sin(angle) * vector1.getY();
+         double y = EuclidCoreTools.sin(angle) * vector1.getX() + EuclidCoreTools.cos(angle) * vector1.getY();
          T vector2 = createTuple(x, y);
 
-         double expectedDot = vector1.length() * vector2.length() * Math.sin(angle);
+         double expectedDot = vector1.length() * vector2.length() * EuclidCoreTools.sin(angle);
          double actualDot = vector1.cross(vector2);
          assertEquals(expectedDot, actualDot, getEpsilon());
       }
@@ -119,12 +122,12 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
       { // cross(Vector2DReadOnly v1, Vector2DReadOnly v2)
          T vector1 = createRandomTuple(random);
          double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         double x = Math.cos(angle) * vector1.getX() - Math.sin(angle) * vector1.getY();
-         double y = Math.sin(angle) * vector1.getX() + Math.cos(angle) * vector1.getY();
+         double x = EuclidCoreTools.cos(angle) * vector1.getX() - EuclidCoreTools.sin(angle) * vector1.getY();
+         double y = EuclidCoreTools.sin(angle) * vector1.getX() + EuclidCoreTools.cos(angle) * vector1.getY();
          T vector2 = createTuple(x, y);
          vector2.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0));
 
-         double expectedCross = vector1.length() * vector2.length() * Math.sin(angle);
+         double expectedCross = vector1.length() * vector2.length() * EuclidCoreTools.sin(angle);
          double actualCross = Vector2DReadOnly.cross(vector1, vector2);
          assertEquals(expectedCross, actualCross, getEpsilon());
       }
@@ -355,11 +358,11 @@ public abstract class Vector2DBasicsTest<T extends Vector2DBasics> extends Tuple
 
          if (vectorA.epsilonEquals(vectorB, getEpsilon()))
          {
-            assertTrue(vectorA.geometricallyEquals(vectorB, Math.sqrt(3) * getEpsilon()));
+            assertTrue(vectorA.geometricallyEquals(vectorB, EuclidCoreTools.squareRoot(3) * getEpsilon()));
          }
          else
          {
-            if (Math.sqrt(EuclidCoreTools.normSquared(vectorA.getX() - vectorB.getX(), vectorA.getY() - vectorB.getY())) <= getEpsilon())
+            if (EuclidCoreTools.norm(vectorA.getX() - vectorB.getX(), vectorA.getY() - vectorB.getY()) <= getEpsilon())
             {
                assertTrue(vectorA.geometricallyEquals(vectorB, getEpsilon()));
             }

@@ -5,7 +5,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 
 /**
  * Interface used for any transformable object that this associated with a reference frame.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameChangeable extends ReferenceFrameHolder, Transformable

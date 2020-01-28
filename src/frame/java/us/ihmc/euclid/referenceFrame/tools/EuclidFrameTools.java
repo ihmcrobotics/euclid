@@ -14,20 +14,7 @@ import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -36,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Extension of the tools provided in {@link EuclidGeometryTools} for frame geometries.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidFrameTools
@@ -417,6 +404,7 @@ public class EuclidFrameTools
     *             {@link #orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly,FrameVector3DReadOnly,Orientation3DBasics)}
     *             instead
     */
+   @Deprecated
    public static void axisAngleFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, AxisAngleBasics rotationToPack)
    {
       orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
@@ -4940,7 +4928,7 @@ public class EuclidFrameTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param pointX             the x-coordinate of the query point.
     * @param pointY             the y-coordinate of the query point.
     * @param pointZ             the z-coordinate of the query point.
@@ -4977,7 +4965,7 @@ public class EuclidFrameTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param point              the coordinates of the query point. Not modified.
     * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
     *                           modified.
@@ -5013,7 +5001,7 @@ public class EuclidFrameTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param pointX             the x-coordinate of the query point.
     * @param pointY             the y-coordinate of the query point.
     * @param pointZ             the z-coordinate of the query point.
@@ -5046,7 +5034,7 @@ public class EuclidFrameTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param point              the coordinates of the query point.
     * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
     *                           modified.
@@ -5077,7 +5065,7 @@ public class EuclidFrameTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param pointX             the x-coordinate of the query point.
     * @param pointY             the y-coordinate of the query point.
     * @param pointZ             the z-coordinate of the query point.
@@ -5110,7 +5098,7 @@ public class EuclidFrameTools
     * <p>
     * This method will fail if the two given tangents are parallel.
     * </p>
-    * 
+    *
     * @param point              the coordinates of the query point.
     * @param pointOnPlane       the coordinates of a point positioned on the infinite plane. Not
     *                           modified.

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static us.ihmc.euclid.tools.EuclidCoreFactories.*;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedVector3DReadOnly;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a shape pose 3D.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPose>
@@ -42,7 +42,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
 
    /**
     * Creates a new shape pose and initializes it to the given transform.
-    * 
+    *
     * @param rigidBodyTransform the transform to initialize this shape pose. Not modified.
     */
    public Shape3DPose(RigidBodyTransformReadOnly rigidBodyTransform)
@@ -52,7 +52,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
 
    /**
     * Creates a new shape pose and initializes it to the given pose.
-    * 
+    *
     * @param pose the pose to initialize this shape pose. Not modified.
     */
    public Shape3DPose(Pose3DReadOnly pose)

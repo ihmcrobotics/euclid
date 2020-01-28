@@ -31,7 +31,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This is part of a Doubly Connected Edge List data structure
  * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
  * </p>
- * 
+ *
  * @author Apoorv Shrivastava
  * @author Sylvain Bertrand
  */
@@ -64,7 +64,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
    /**
     * Creates a new empty face.
-    * 
+    *
     * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
     */
    public Face3D(Vector3DReadOnly initialGuessNormal)
@@ -74,7 +74,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
    /**
     * Creates a new empty face.
-    * 
+    *
     * @param initialGuessNormal  initial guess for what this face's normal should be. Not modified.
     * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
     *                            edge-cases.
@@ -88,7 +88,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
 
    /**
     * Creates a new face given its edges.
-    * 
+    *
     * @param faceEdges           the edges composing the new face. Not modified, reference to the edges
     *                            saved.
     * @param normal              the face's normal. Not modified.
@@ -108,7 +108,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param faceEdges the edges composing the new face. Not modified, reference to the edges saved.
     * @param normal    the face's normal. Not modified.
     */
@@ -689,7 +689,7 @@ public class Face3D implements Face3DReadOnly, Clearable, Transformable
     *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
     *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this face 3D.
     */
    @Override

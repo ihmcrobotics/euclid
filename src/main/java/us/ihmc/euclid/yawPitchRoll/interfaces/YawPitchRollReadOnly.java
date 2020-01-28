@@ -108,6 +108,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * @return {@code true} if this yaw-pitch-roll contains a {@link Double#NaN}, {@code false}
     *         otherwise.
     */
+   @Override
    default boolean containsNaN()
    {
       return EuclidCoreTools.containsNaN(getYaw(), getPitch(), getRoll());
@@ -198,7 +199,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
 
    /**
     * {@inheritDoc}
-    * 
+    *
     * @deprecated Use {@link #get(double[])} instead.
     */
    @Deprecated

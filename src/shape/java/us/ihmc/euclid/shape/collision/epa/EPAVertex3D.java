@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * <p>
  * A {@code EPAVertex3D} represents the difference of two supporting vertices of two shapes.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  * @see ExpandingPolytopeAlgorithm
  */
@@ -33,7 +33,7 @@ public class EPAVertex3D implements Vertex3DReadOnly
    /**
     * Creates a new vertex from a {@code GJKVertex3D} copying its coordinates the supporting vertex
     * from both shapes.
-    * 
+    *
     * @param gjkVertex3D the GJK vertex to copy. Not modified.
     */
    public EPAVertex3D(GJKVertex3D gjkVertex3D)
@@ -48,7 +48,7 @@ public class EPAVertex3D implements Vertex3DReadOnly
    /**
     * Creates a new vertex and initializes its coordinates as follows:<br>
     * {@code this = vertexOnShapeA - vertexOnShapeB}.
-    * 
+    *
     * @param vertexOnShapeA the supporting vertex from the first shape. Not modified, reference saved.
     * @param vertexOnShapeB the supporting vertex from the second shape. Not modified, reference saved.
     */
@@ -153,7 +153,7 @@ public class EPAVertex3D implements Vertex3DReadOnly
 
    /**
     * Gets the supporting vertex from the first shape this vertex was constructed with.
-    * 
+    *
     * @return the supporting vertex on the first shape.
     */
    public Point3DReadOnly getVertexOnShapeA()
@@ -163,7 +163,7 @@ public class EPAVertex3D implements Vertex3DReadOnly
 
    /**
     * Gets the supporting vertex from the second shape this vertex was constructed with.
-    * 
+    *
     * @return the supporting vertex on the second shape.
     */
    public Point3DReadOnly getVertexOnShapeB()
@@ -225,14 +225,14 @@ public class EPAVertex3D implements Vertex3DReadOnly
 
    /**
     * Provides a {@code String} representation of this vertex 3D as follows:
-    * 
+    *
     * <pre>
     * EPA Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
     *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
     *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
     *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this vertex 3D.
     */
    @Override

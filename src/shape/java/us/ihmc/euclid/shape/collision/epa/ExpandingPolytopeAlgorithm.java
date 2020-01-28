@@ -29,7 +29,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * the endpoints of the collision and the distance separating them is the penetration depth between
  * the two shapes.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class ExpandingPolytopeAlgorithm
@@ -66,7 +66,7 @@ public class ExpandingPolytopeAlgorithm
     * <p>
     * This algorithm does not evaluate the surface normals.
     * </p>
-    * 
+    *
     * @param shapeA the first shape to evaluate. Not modified.
     * @param shapeB the second shape to evaluate. Not modified.
     * @return the collision result.
@@ -83,7 +83,7 @@ public class ExpandingPolytopeAlgorithm
     * <p>
     * This algorithm does not evaluate the surface normals.
     * </p>
-    * 
+    *
     * @param shapeA       the first shape to evaluate. Not modified.
     * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
@@ -93,7 +93,7 @@ public class ExpandingPolytopeAlgorithm
    {
       boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
       if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
-         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
+         areShapesColliding = evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
       return areShapesColliding;
    }
 
@@ -102,7 +102,7 @@ public class ExpandingPolytopeAlgorithm
     * <p>
     * This algorithm does not evaluate the surface normals.
     * </p>
-    * 
+    *
     * @param shapeA       the first shape to evaluate. Not modified.
     * @param shapeB       the second shape to evaluate. Not modified.
     * @param simplex      the simplex used to start the expansion from. Not modified.
@@ -122,7 +122,7 @@ public class ExpandingPolytopeAlgorithm
     * <p>
     * This algorithm does not evaluate the surface normals.
     * </p>
-    * 
+    *
     * @param shapeA the first shape to evaluate. Not modified.
     * @param shapeB the second shape to evaluate. Not modified.
     * @return the collision result.
@@ -139,7 +139,7 @@ public class ExpandingPolytopeAlgorithm
     * <p>
     * This algorithm does not evaluate the surface normals.
     * </p>
-    * 
+    *
     * @param shapeA       the first shape to evaluate. Not modified.
     * @param shapeB       the second shape to evaluate. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
@@ -149,7 +149,7 @@ public class ExpandingPolytopeAlgorithm
    {
       boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
       if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
-         evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
+         areShapesColliding = evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
       return areShapesColliding;
    }
 
@@ -158,7 +158,7 @@ public class ExpandingPolytopeAlgorithm
     * <p>
     * This algorithm does not evaluate the surface normals.
     * </p>
-    * 
+    *
     * @param shapeA       the first shape to evaluate. Not modified.
     * @param shapeB       the second shape to evaluate. Not modified.
     * @param simplex      the simplex used to start the expansion from. Not modified.
@@ -232,7 +232,12 @@ public class ExpandingPolytopeAlgorithm
                break;
             }
 
-            mu = Math.min(mu, EuclidCoreTools.square(TupleTools.dot(newVertex, supportDirection)) / currentNormSquared);
+            /*
+             * When entry.getClosestPointToOrigin() is too small, we switch to using the normal as the support
+             * direction for stability purpose. However, the computation of the upper-bound mu should always use
+             * entry.getClosestPointToOrigin().
+             */
+            mu = Math.min(mu, EuclidCoreTools.square(TupleTools.dot(newVertex, entry.getClosestPointToOrigin())) / currentNormSquared);
 
             if (mu <= EuclidCoreTools.square(1.0 + epsilon) * currentNormSquared)
             {
@@ -318,7 +323,10 @@ public class ExpandingPolytopeAlgorithm
 
       if (initialPolytope == null)
       {
-         resultToPack.setToNaN();
+         resultToPack.setShapesAreColliding(false);
+         resultToPack.setSignedDistance(0.0);
+         resultToPack.getNormalOnA().setToNaN();
+         resultToPack.getNormalOnB().setToNaN();
       }
       else
       {
@@ -333,13 +341,13 @@ public class ExpandingPolytopeAlgorithm
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
 
-      return true;
+      return resultToPack.areShapesColliding();
    }
 
    /**
     * Gets the internal GJK collision detector that is used when the initial simplex is not provided
     * for an evaluation.
-    * 
+    *
     * @return the internal GJK collision detector.
     */
    public GilbertJohnsonKeerthiCollisionDetector getGJKCollisionDetector()
@@ -349,7 +357,7 @@ public class ExpandingPolytopeAlgorithm
 
    /**
     * Sets the limit to the number of iterations in case the algorithm does not succeed to converge.
-    * 
+    *
     * @param maxIterations the maximum of iterations allowed before terminating.
     */
    public void setMaxIterations(int maxIterations)
@@ -359,7 +367,7 @@ public class ExpandingPolytopeAlgorithm
 
    /**
     * Sets the tolerance used to trigger the termination condition of this algorithm.
-    * 
+    *
     * @param epsilon the terminal condition tolerance to use, default value
     *                {@value #DEFAULT_TERMINAL_CONDITION_EPSILON}.
     */
@@ -371,7 +379,7 @@ public class ExpandingPolytopeAlgorithm
    /**
     * Gets the current value of the tolerance used to trigger the termination condition of this
     * algorithm.
-    * 
+    *
     * @return the current terminal condition tolerance.
     */
    public double getTerminalConditionEpsilon()
@@ -381,7 +389,7 @@ public class ExpandingPolytopeAlgorithm
 
    /**
     * Gets the number of iterations needed for the last evaluation.
-    * 
+    *
     * @return the number of iterations from the last evaluation.
     */
    public int getNumberOfIterations()
@@ -392,7 +400,7 @@ public class ExpandingPolytopeAlgorithm
    /**
     * Gets the face that is the closest to the origin or at the origin resulting from the last
     * collision evaluation.
-    * 
+    *
     * @return the last evaluation resulting face.
     */
    public EPAFace3D getClosestFace()

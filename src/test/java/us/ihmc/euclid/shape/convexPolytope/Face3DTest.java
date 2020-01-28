@@ -1,12 +1,11 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -23,6 +22,7 @@ import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -90,8 +90,8 @@ public class Face3DTest
       for (int i = 0; i < numberOfPoints; i++)
       {
          double theta = i * 2.0 * Math.PI / numberOfPoints;
-         double x = -radius * Math.cos(theta); // Negating the sign here to make the points be clockwise ordered.
-         double y = radius * Math.sin(theta);
+         double x = -radius * EuclidCoreTools.cos(theta); // Negating the sign here to make the points be clockwise ordered.
+         double y = radius * EuclidCoreTools.sin(theta);
          points.add(new Point3D(x, y, 0));
       }
 

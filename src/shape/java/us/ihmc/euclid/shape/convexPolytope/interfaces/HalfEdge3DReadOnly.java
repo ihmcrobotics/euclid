@@ -10,21 +10,21 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * This is part of a Doubly Connected Edge List data structure
  * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
 {
    /**
     * Gets the read-only reference to the vertex this half-edge starts from.
-    * 
+    *
     * @return the origin vertex for the half-edge.
     */
    Vertex3DReadOnly getOrigin();
 
    /**
     * Gets the read-only reference to the vertex this half-edge ends to.
-    * 
+    *
     * @return the destination vertex for the half-edge.
     */
    Vertex3DReadOnly getDestination();
@@ -53,7 +53,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
     * The twin half-edge shares the same vertices with {@code this} and its direction is flipped. The
     * faces associated to {@code this} and the twin are neighbors.
     * </p>
-    * 
+    *
     * @return this twin half-edge.
     */
    HalfEdge3DReadOnly getTwin();
@@ -63,7 +63,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
     * <p>
     * The next half-edge starts from {@code this.getDestination()} and shares the same associated face.
     * </p>
-    * 
+    *
     * @return this next half-edge.
     */
    HalfEdge3DReadOnly getNext();
@@ -73,7 +73,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
     * <p>
     * The previous half-edge ends to {@code this.getOrigin()} and shares the same associated face.
     * </p>
-    * 
+    *
     * @return this previous half-edge.
     */
    HalfEdge3DReadOnly getPrevious();
@@ -83,7 +83,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
     * <p>
     * This half-edge belongs to its associated face.
     * </p>
-    * 
+    *
     * @return this associated face.
     */
    Face3DReadOnly getFace();
@@ -91,7 +91,7 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
    /**
     * Computes the minimum distance between a given point and the infinitely long line supporting this
     * half-edge.
-    * 
+    *
     * @param point the location of the query. Not modified.
     * @return the distance from the query to the support line.
     */

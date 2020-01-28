@@ -12,7 +12,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
  * This is part of a Doubly Connected Edge List data structure
  * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
  * </p>
- * 
+ *
  * @author Apoorv Shrivastava
  * @author Sylvain Bertrand
  */
@@ -70,7 +70,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
 
    /**
     * Gets the reference to the vertex this half-edge starts from.
-    * 
+    *
     * @return the origin vertex for the half-edge.
     */
    @Override
@@ -91,7 +91,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
 
    /**
     * Gets the read-only reference to the vertex this half-edge ends to.
-    * 
+    *
     * @return the destination vertex for the half-edge.
     */
    @Override
@@ -121,7 +121,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * The twin half-edge shares the same vertices with {@code this} and its direction is flipped. The
     * faces associated to {@code this} and the twin are neighbors.
     * </p>
-    * 
+    *
     * @return this twin half-edge.
     */
    @Override
@@ -152,7 +152,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * <p>
     * The next half-edge starts from {@code this.getDestination()} and shares the same associated face.
     * </p>
-    * 
+    *
     * @return this next half-edge.
     */
    @Override
@@ -183,7 +183,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * <p>
     * The previous half-edge ends to {@code this.getOrigin()} and shares the same associated face.
     * </p>
-    * 
+    *
     * @return this previous half-edge.
     */
    @Override
@@ -207,7 +207,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     * <p>
     * This half-edge belongs to its associated face.
     * </p>
-    * 
+    *
     * @return this associated face.
     */
    @Override
@@ -267,8 +267,8 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
       setOrigin(destination);
       setDestination(newDestination);
       HalfEdge3D newNext = previous;
-      this.previous = next;
-      this.next = newNext;
+      previous = next;
+      next = newNext;
    }
 
    /**
@@ -310,7 +310,7 @@ public class HalfEdge3D implements HalfEdge3DReadOnly, LineSegment3DBasics
     *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
     *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
     * </pre>
-    * 
+    *
     * @return the {@code String} representing this half-edge 3D.
     */
    @Override

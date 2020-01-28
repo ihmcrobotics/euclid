@@ -2,11 +2,7 @@ package us.ihmc.euclid.shape.tools;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.*;
 
 /**
  * Implementation of an algorithm for finding the smallest distance between a point and an
@@ -15,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * The algorithm is from <a href=
  * "https://www.geometrictools.com/Documentation/DistancePointEllipseEllipsoid.pdf">DistancePointEllipseEllipsoid</a>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidEllipsoid3DTools
@@ -33,7 +29,7 @@ public class EuclidEllipsoid3DTools
     * <p>
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
-    * 
+    *
     * @param radii the ellipsoid's radii. Not modified.
     * @param query the coordinates of the point. Not modified.
     * @return the smallest distance between the point and the ellipsoid's surface.
@@ -48,7 +44,7 @@ public class EuclidEllipsoid3DTools
     * <p>
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
-    * 
+    *
     * @param radii              the ellipsoid's radii. Not modified.
     * @param query              the coordinates of the point. Not modified.
     * @param closestPointToPack point in which the coordinates of the closest point to the query are
@@ -65,7 +61,7 @@ public class EuclidEllipsoid3DTools
     * <p>
     * The ellipsoid is assumed to be centered at the origin and its radii axis-aligned.
     * </p>
-    * 
+    *
     * @param radii              the ellipsoid's radii. Not modified.
     * @param query              the coordinates of the point. Not modified.
     * @param maxIterations      the maximum number of iterations for the internal iterative search
@@ -182,7 +178,7 @@ public class EuclidEllipsoid3DTools
             {
                x0 = e0 * xde0;
                x1 = e1 * xde1;
-               x2 = e2 * Math.sqrt(discr);
+               x2 = e2 * EuclidCoreTools.squareRoot(discr);
                distance = -EuclidGeometryTools.distanceBetweenPoint3Ds(x0, x1, x2, y0, y1, 0.0);
                computed = true;
             }
@@ -259,8 +255,8 @@ public class EuclidEllipsoid3DTools
          {
             double xde0 = numer0 / denom0;
             x0 = e0 * xde0;
-            x1 = e1 * Math.sqrt(1.0 - square(xde0));
-            distance = Math.sqrt(square(x0 - y0) + square(x1));
+            x1 = e1 * EuclidCoreTools.squareRoot(1.0 - square(xde0));
+            distance = EuclidCoreTools.norm(x0 - y0, x1);
          }
          else
          {
@@ -279,7 +275,7 @@ public class EuclidEllipsoid3DTools
       double n0 = r0 * z0;
       double n1 = r1 * z1;
       double s0 = z2 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (Math.sqrt(EuclidCoreTools.normSquared(n0, n1, z2)) - 1.0);
+      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.norm(n0, n1, z2) - 1.0);
       double s = 0.0;
 
       for (int i = 0; i < maxIterations; i++)
@@ -306,7 +302,7 @@ public class EuclidEllipsoid3DTools
    {
       double n0 = r0 * z0;
       double s0 = z1 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (Math.sqrt(EuclidCoreTools.normSquared(n0, z1)) - 1.0);
+      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.norm(n0, z1) - 1.0);
       double s = 0.0;
 
       for (int i = 0; i < maxIterations; i++)
@@ -405,7 +401,7 @@ public class EuclidEllipsoid3DTools
             }
          }
       }
-   };
+   }
 
    private interface Tuple3DUpdater
    {

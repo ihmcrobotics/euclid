@@ -14,7 +14,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * Tools for performing operations on rotation matrices.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class RotationMatrixTools
@@ -98,7 +98,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation in the multiplication. Not modified.
     * @param inverse1     whether the first orientation should be inverted in the multiplication.
     * @param orientation2 the second orientation in the multiplication. Not modified.
@@ -187,7 +187,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation in the multiplication. Not modified.
     * @param inverse1     whether the first orientation should be inverted in the multiplication.
     * @param orientation2 the second orientation in the multiplication. Not modified.
@@ -258,7 +258,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param orientation1 the first orientation in the multiplication. Not modified.
     * @param inverse1     whether the first orientation should be inverted in the multiplication.
     * @param orientation2 the second orientation in the multiplication. Not modified.
@@ -325,7 +325,7 @@ public class RotationMatrixTools
     * <p>
     * All three arguments can be the same object for in place operations.
     * </p>
-    * 
+    *
     * @param a            the first rotation matrix in the multiplication. Not modified.
     * @param transposeA   whether the first matrix should be transposed in the multiplication.
     * @param b            the second rotation matrix in the multiplication. Not modified.
@@ -467,8 +467,8 @@ public class RotationMatrixTools
          return;
       }
 
-      double cYaw = Math.cos(yaw);
-      double sYaw = Math.sin(yaw);
+      double cYaw = EuclidCoreTools.cos(yaw);
+      double sYaw = EuclidCoreTools.sin(yaw);
 
       double m00 = cYaw * matrixOriginal.getM00() - sYaw * matrixOriginal.getM10();
       double m01 = cYaw * matrixOriginal.getM01() - sYaw * matrixOriginal.getM11();
@@ -507,8 +507,8 @@ public class RotationMatrixTools
          return;
       }
 
-      double cYaw = Math.cos(yaw);
-      double sYaw = Math.sin(yaw);
+      double cYaw = EuclidCoreTools.cos(yaw);
+      double sYaw = EuclidCoreTools.sin(yaw);
 
       double m00 = cYaw * matrixOriginal.getM00() + sYaw * matrixOriginal.getM01();
       double m01 = -sYaw * matrixOriginal.getM00() + cYaw * matrixOriginal.getM01();
@@ -547,8 +547,8 @@ public class RotationMatrixTools
          return;
       }
 
-      double cPitch = Math.cos(pitch);
-      double sPitch = Math.sin(pitch);
+      double cPitch = EuclidCoreTools.cos(pitch);
+      double sPitch = EuclidCoreTools.sin(pitch);
 
       double m00 = cPitch * matrixOriginal.getM00() + sPitch * matrixOriginal.getM20();
       double m01 = cPitch * matrixOriginal.getM01() + sPitch * matrixOriginal.getM21();
@@ -587,8 +587,8 @@ public class RotationMatrixTools
          return;
       }
 
-      double cPitch = Math.cos(pitch);
-      double sPitch = Math.sin(pitch);
+      double cPitch = EuclidCoreTools.cos(pitch);
+      double sPitch = EuclidCoreTools.sin(pitch);
 
       double m00 = cPitch * matrixOriginal.getM00() - sPitch * matrixOriginal.getM02();
       double m01 = matrixOriginal.getM01();
@@ -627,8 +627,8 @@ public class RotationMatrixTools
          return;
       }
 
-      double cRoll = Math.cos(roll);
-      double sRoll = Math.sin(roll);
+      double cRoll = EuclidCoreTools.cos(roll);
+      double sRoll = EuclidCoreTools.sin(roll);
 
       double m00 = matrixOriginal.getM00();
       double m01 = matrixOriginal.getM01();
@@ -667,8 +667,8 @@ public class RotationMatrixTools
          return;
       }
 
-      double cRoll = Math.cos(roll);
-      double sRoll = Math.sin(roll);
+      double cRoll = EuclidCoreTools.cos(roll);
+      double sRoll = EuclidCoreTools.sin(roll);
 
       double m00 = matrixOriginal.getM00();
       double m01 = cRoll * matrixOriginal.getM01() + sRoll * matrixOriginal.getM02();
@@ -701,8 +701,8 @@ public class RotationMatrixTools
     */
    public static void applyYawRotation(double yaw, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      double cYaw = Math.cos(yaw);
-      double sYaw = Math.sin(yaw);
+      double cYaw = EuclidCoreTools.cos(yaw);
+      double sYaw = EuclidCoreTools.sin(yaw);
 
       double x = tupleOriginal.getX() * cYaw - tupleOriginal.getY() * sYaw;
       double y = tupleOriginal.getX() * sYaw + tupleOriginal.getY() * cYaw;
@@ -728,8 +728,8 @@ public class RotationMatrixTools
     */
    public static void applyYawRotation(double yaw, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
-      double cYaw = Math.cos(yaw);
-      double sYaw = Math.sin(yaw);
+      double cYaw = EuclidCoreTools.cos(yaw);
+      double sYaw = EuclidCoreTools.sin(yaw);
 
       double x = tupleOriginal.getX() * cYaw - tupleOriginal.getY() * sYaw;
       double y = tupleOriginal.getX() * sYaw + tupleOriginal.getY() * cYaw;
@@ -755,8 +755,8 @@ public class RotationMatrixTools
     */
    public static void applyPitchRotation(double pitch, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      double cPitch = Math.cos(pitch);
-      double sPitch = Math.sin(pitch);
+      double cPitch = EuclidCoreTools.cos(pitch);
+      double sPitch = EuclidCoreTools.sin(pitch);
 
       double x = tupleOriginal.getX() * cPitch + tupleOriginal.getZ() * sPitch;
       double y = tupleOriginal.getY();
@@ -783,8 +783,8 @@ public class RotationMatrixTools
     */
    public static void applyRollRotation(double roll, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      double cRoll = Math.cos(roll);
-      double sRoll = Math.sin(roll);
+      double cRoll = EuclidCoreTools.cos(roll);
+      double sRoll = EuclidCoreTools.sin(roll);
 
       double x = tupleOriginal.getX();
       double y = tupleOriginal.getY() * cRoll - tupleOriginal.getZ() * sRoll;
@@ -845,13 +845,13 @@ public class RotationMatrixTools
       y = m02 - m20;
       z = m10 - m01;
 
-      double s = Math.sqrt(EuclidCoreTools.normSquared(x, y, z));
+      double s = EuclidCoreTools.norm(x, y, z);
 
       if (s > AxisAngleConversion.EPS)
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
          x /= s;
          y /= s;
          z /= s;
@@ -869,19 +869,19 @@ public class RotationMatrixTools
 
          if (xx > yy && xx > zz)
          { // m00 is the largest diagonal term
-            x = Math.sqrt(xx);
+            x = EuclidCoreTools.squareRoot(xx);
             y = xy / x;
             z = xz / x;
          }
          else if (yy > zz)
          { // m11 is the largest diagonal term
-            y = Math.sqrt(yy);
+            y = EuclidCoreTools.squareRoot(yy);
             x = xy / y;
             z = yz / y;
          }
          else
          { // m22 is the largest diagonal term so base result on this
-            z = Math.sqrt(zz);
+            z = EuclidCoreTools.squareRoot(zz);
             x = xz / z;
             y = yz / z;
          }
@@ -889,8 +889,8 @@ public class RotationMatrixTools
 
       angle *= alpha;
 
-      double sinTheta = Math.sin(angle);
-      double cosTheta = Math.cos(angle);
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
       double t = 1.0 - cosTheta;
 
       double xz = x * z;
@@ -946,13 +946,13 @@ public class RotationMatrixTools
       y = m02 - m20;
       z = m10 - m01;
 
-      double s = EuclidCoreTools.norm(x, y, z);
+      double s = EuclidCoreTools.fastNorm(x, y, z);
 
       if (s > AxisAngleConversion.EPS)
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
       }
       else if (m00 + m11 + m22 > 3.0 - 1.0e-7)
       { // At this point, the matrix has to be identity.

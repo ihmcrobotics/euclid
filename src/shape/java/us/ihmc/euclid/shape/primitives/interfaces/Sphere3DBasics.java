@@ -9,14 +9,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * <p>
  * A sphere 3D is represented by its position and radius.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
 {
    /**
     * Sets this sphere radius.
-    * 
+    *
     * @param radius the new radius for this sphere.
     * @throws IllegalArgumentException if {@code radius < 0.0}.
     */
@@ -66,7 +66,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
 
    /**
     * Sets this sphere properties.
-    * 
+    *
     * @param centerX the x-coordinate of the center.
     * @param centerY the y-coordinate of the center.
     * @param centerZ the z-coordinate of the center.
@@ -81,7 +81,7 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
 
    /**
     * Sets this sphere properties.
-    * 
+    *
     * @param center the position of this sphere center. Not modified.
     * @param radius the radius for this sphere.
     * @throws IllegalArgumentException if {@code radius < 0.0}.

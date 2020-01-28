@@ -19,7 +19,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * Even if this interface can be implemented by concave geometries, only convex ones can be used by
  * the collision detectors.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface SupportingVertexHolder
@@ -37,7 +37,7 @@ public interface SupportingVertexHolder
     * <p>
     * WARNING: The default implementation of this method generates garbage.
     * </p>
-    * 
+    *
     * @param supportDirection the direction to search for the farthest point on this shape. Not
     *                         modified.
     * @return the coordinates of the supporting vertex or {@code null} if this shape has currently no
@@ -64,7 +64,7 @@ public interface SupportingVertexHolder
     * {@code supportingVertexToPack} remains unchanged. It is usually the case for an empty
     * {@code ConvexPolytope3DReadOnly}.
     * </p>
-    * 
+    *
     * @param supportDirection       the direction to search for the farthest point on this shape. Not
     *                               modified.
     * @param supportingVertexToPack point used to store the supporting vertex coordinates. Modified.

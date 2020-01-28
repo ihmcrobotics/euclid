@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This class provides a variety of generic tools such as fast square-root algorithm
  * {@link #fastSquareRoot(double)}, or also an linear interpolation algorithm
  * {@link #interpolate(double, double, double)}.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidCoreTools
@@ -225,11 +225,23 @@ public class EuclidCoreTools
 
    /**
     * Calculates and returns the square root of the given value.
+    *
+    * @param value the value to calculate the square root of.
+    * @return the value of the square root.
+    * @see Math#sqrt(double)
+    */
+   public static double squareRoot(double value)
+   {
+      return Math.sqrt(value);
+   }
+
+   /**
+    * Calculates and returns the square root of the given value.
     * <p>
     * This method is optimized when {@code squaredValueClosedToOne} is equal to
     * 1+/-{@value #EPS_NORM_FAST_SQRT} by using an approximation of the square root.
     *
-    * @param squaredValueClosedToOne the value to calculates the square root of.
+    * @param squaredValueClosedToOne the value to calculate the square root of.
     * @return the value of the square root.
     */
    public static double fastSquareRoot(double squaredValueClosedToOne)
@@ -237,7 +249,7 @@ public class EuclidCoreTools
       if (Math.abs(1.0 - squaredValueClosedToOne) < EPS_NORM_FAST_SQRT)
          squaredValueClosedToOne = 0.5 * (1.0 + squaredValueClosedToOne);
       else
-         squaredValueClosedToOne = Math.sqrt(squaredValueClosedToOne);
+         squaredValueClosedToOne = EuclidCoreTools.squareRoot(squaredValueClosedToOne);
 
       return squaredValueClosedToOne;
    }
@@ -329,7 +341,7 @@ public class EuclidCoreTools
 
    /**
     * Calculates and returns {@code value}<sup>2</sup>
-    * 
+    *
     * @param value the value to compute the square of.
     * @return {@code value * value}.
     */
@@ -387,64 +399,112 @@ public class EuclidCoreTools
    }
 
    /**
-    * Calculates and returns the norm squared of the given two elements.
+    * Calculates and returns the norm of the given two elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup>)
-    * </p>
-    * <p>
-    * This method is optimized for calculating norms closed to 1 by using
-    * {@link #fastSquareRoot(double)}. For computing norms that are not closed to 1, prefer using the
-    * usual {@link Math#sqrt(double)} on the norm squared.
     * </p>
     *
     * @param x the first element.
     * @param y the second element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double norm(double x, double y)
    {
-      return fastSquareRoot(normSquared(x, y));
+      return squareRoot(normSquared(x, y));
    }
 
    /**
-    * Calculates and returns the norm squared of the given three elements.
+    * Calculates and returns the norm of the given three elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup>)
-    * </p>
-    * <p>
-    * This method is optimized for calculating norms closed to 1 by using
-    * {@link #fastSquareRoot(double)}. For computing norms that are not closed to 1, prefer using the
-    * usual {@link Math#sqrt(double)} on the norm squared.
     * </p>
     *
     * @param x the first element.
     * @param y the second element.
     * @param z the third element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double norm(double x, double y, double z)
    {
-      return fastSquareRoot(normSquared(x, y, z));
+      return squareRoot(normSquared(x, y, z));
    }
 
    /**
-    * Calculates and returns the norm squared of the given four elements.
+    * Calculates and returns the norm of the given four elements.
     * <p>
     * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> + s<sup>2</sup>)
-    * </p>
-    * <p>
-    * This method is optimized for calculating norms closed to 1 by using
-    * {@link #fastSquareRoot(double)}. For computing norms that are not closed to 1, prefer using the
-    * usual {@link Math#sqrt(double)} on the norm squared.
     * </p>
     *
     * @param x the first element.
     * @param y the second element.
     * @param z the third element.
     * @param s the fourth element.
-    * @return the value of the square of the norm.
+    * @return the value of the norm.
     */
    public static double norm(double x, double y, double z, double s)
+   {
+      return squareRoot(normSquared(x, y, z, s));
+   }
+
+   /**
+    * Calculates and returns the norm of the given two elements.
+    * <p>
+    * norm = &radic;(x<sup>2</sup> + y<sup>2</sup>)
+    * </p>
+    * <p>
+    * This method is optimized for calculating norms closed to 1 by using
+    * {@link #fastSquareRoot(double)}. For computing norms that are not closed to 1, prefer using
+    * {@link #norm(double, double)}.
+    * </p>
+    *
+    * @param x the first element.
+    * @param y the second element.
+    * @return the value of the norm.
+    */
+   public static double fastNorm(double x, double y)
+   {
+      return fastSquareRoot(normSquared(x, y));
+   }
+
+   /**
+    * Calculates and returns the norm of the given three elements.
+    * <p>
+    * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup>)
+    * </p>
+    * <p>
+    * This method is optimized for calculating norms closed to 1 by using
+    * {@link #fastSquareRoot(double)}. For computing norms that are not closed to 1, prefer using
+    * {@link #norm(double, double, double)}.
+    * </p>
+    *
+    * @param x the first element.
+    * @param y the second element.
+    * @param z the third element.
+    * @return the value of the norm.
+    */
+   public static double fastNorm(double x, double y, double z)
+   {
+      return fastSquareRoot(normSquared(x, y, z));
+   }
+
+   /**
+    * Calculates and returns the norm of the given four elements.
+    * <p>
+    * norm = &radic;(x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> + s<sup>2</sup>)
+    * </p>
+    * <p>
+    * This method is optimized for calculating norms closed to 1 by using
+    * {@link #fastSquareRoot(double)}. For computing norms that are not closed to 1, prefer using
+    * {@link #norm(double, double, double, double)}.
+    * </p>
+    *
+    * @param x the first element.
+    * @param y the second element.
+    * @param z the third element.
+    * @param s the fourth element.
+    * @return the value of the norm.
+    */
+   public static double fastNorm(double x, double y, double z, double s)
    {
       return fastSquareRoot(normSquared(x, y, z, s));
    }
@@ -595,7 +655,7 @@ public class EuclidCoreTools
     * <p>
     * This is equivalent to {@code epsilonEquals(value, 0.0, epsilon)}.
     * </p>
-    * 
+    *
     * @param value   the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the value can be considered zero, {@code false} otherwise.
@@ -607,7 +667,7 @@ public class EuclidCoreTools
 
    /**
     * Tests whether both values are equal to zero to an epsilon.
-    * 
+    *
     * @param x       the first value.
     * @param y       the second value.
     * @param epsilon the tolerance to use for the test.
@@ -620,7 +680,7 @@ public class EuclidCoreTools
 
    /**
     * Tests whether all values are equal to zero to an epsilon.
-    * 
+    *
     * @param x       the first value.
     * @param y       the second value.
     * @param z       the third value.
@@ -634,7 +694,7 @@ public class EuclidCoreTools
 
    /**
     * Tests whether all values are equal to zero to an epsilon.
-    * 
+    *
     * @param x       the first value.
     * @param y       the second value.
     * @param z       the third value.
@@ -653,7 +713,7 @@ public class EuclidCoreTools
     * If any of the two angles is equal to {@link Double#NaN}, this method fails and returns
     * {@code false}.
     * </p>
-    * 
+    *
     * @param expectedAngle the first angle in the comparison.
     * @param actualAngle   the second angle in the comparison.
     * @param epsilon       the tolerance to use for the test.
@@ -670,7 +730,7 @@ public class EuclidCoreTools
     * <p>
     * This is equivalent to {@code angleGeometricallyEquals(angle, 0.0, epsilon)}.
     * </p>
-    * 
+    *
     * @param angle   the query.
     * @param epsilon the tolerance to use for the test.
     * @return {@code true} if the angle can be considered zero, {@code false} otherwise.
@@ -736,5 +796,95 @@ public class EuclidCoreTools
    public static double interpolate(double a, double b, double alpha)
    {
       return (1.0 - alpha) * a + alpha * b;
+   }
+
+   /**
+    * Returns the trigonometric tangent of an angle.
+    *
+    * @param a an angle, in radians.
+    * @return the tangent of the argument.
+    * @see Math#tan(double)
+    */
+   public static double tan(double a)
+   {
+      return StrictMath.tan(a);
+   }
+
+   /**
+    * Returns the arc tangent of a value; the returned angle is in the range -<i>pi</i>/2 through
+    * <i>pi</i>/2.
+    *
+    * @param a the value whose arc tangent is to be returned.
+    * @return the arc tangent of the argument.
+    * @see Math#atan(double)
+    */
+   public static double atan(double a)
+   {
+      return StrictMath.atan(a);
+   }
+
+   /**
+    * Returns the angle <i>theta</i> from the conversion of rectangular coordinates
+    * ({@code x},&nbsp;{@code y}) to polar coordinates (r,&nbsp;<i>theta</i>).
+    *
+    * @param y the ordinate coordinate
+    * @param x the abscissa coordinate
+    * @return the <i>theta</i> component of the point (<i>r</i>,&nbsp;<i>theta</i>) in polar
+    *         coordinates that corresponds to the point (<i>x</i>,&nbsp;<i>y</i>) in Cartesian
+    *         coordinates.
+    * @see Math#atan2(double, double)
+    */
+   public static double atan2(double y, double x)
+   {
+      return StrictMath.atan2(y, x);
+   }
+
+   /**
+    * Returns the trigonometric cosine of an angle.
+    *
+    * @param a an angle, in radians.
+    * @return the cosine of the argument.
+    * @see Math#cos(double)
+    */
+   public static double cos(double a)
+   {
+      return StrictMath.cos(a);
+   }
+
+   /**
+    * Returns the trigonometric sine of an angle.
+    *
+    * @param a an angle, in radians.
+    * @return the sine of the argument.
+    * @see Math#sin(double)
+    */
+   public static double sin(double a)
+   {
+      return StrictMath.sin(a);
+   }
+
+   /**
+    * Returns the arc cosine of a value; the returned angle is in the range 0.0 through <i>pi</i>.
+    *
+    * @param a the value whose arc cosine is to be returned.
+    * @return the arc cosine of the argument.
+    * @see Math#acos(double)
+    */
+   public static double acos(double a)
+   {
+      return StrictMath.acos(a);
+   }
+
+   /**
+    * Returns the arc sine of a value; the returned angle is in the range -<i>pi</i>/2 through
+    * <i>pi</i>/2.
+    *
+    * @param a the value whose arc sine is to be returned.
+    * @return the arc sine of the argument.
+    * @see Math#asin(double)
+    */
+   public static double asin(double a)
+   {
+      return StrictMath.asin(a);
    }
 }

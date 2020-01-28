@@ -24,7 +24,7 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  * The data structure used to represents this transform is not enforced here, such that the rotation
  * part can be any implementation of orientation 3D.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Clearable

@@ -179,6 +179,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /** {@inheritDoc} */
+   @Override
    public void clear()
    {
       numberOfVertices = 0;
@@ -189,6 +190,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /** {@inheritDoc} */
+   @Override
    public void clearAndUpdate()
    {
       clear();
@@ -196,6 +198,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /** {@inheritDoc} */
+   @Override
    public void addVertex(double x, double y)
    {
       isUpToDate = false;
@@ -204,6 +207,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /** {@inheritDoc} */
+   @Override
    public void removeVertex(int indexOfVertexToRemove)
    {
       checkNonEmpty();
@@ -238,6 +242,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    }
 
    /** {@inheritDoc} */
+   @Override
    public void update()
    {
       if (isUpToDate)
@@ -272,6 +277,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
     * Compute centroid and area of this polygon. Formula taken from <a href=
     * "https://www.seas.upenn.edu/~sys502/extra_materials/Polygon%20Area%20and%20Centroid.pdf">here</a>.
     */
+   @Override
    public void updateCentroidAndArea()
    {
       area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);

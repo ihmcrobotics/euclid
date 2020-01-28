@@ -87,7 +87,7 @@ public abstract class RotationVectorConversion
          return;
       }
 
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
       if (uNorm > EPS)
       {
@@ -132,11 +132,11 @@ public abstract class RotationVectorConversion
       double qz = quaternion.getZ();
       double qs = quaternion.getS();
 
-      double uNorm = Math.sqrt(EuclidCoreTools.normSquared(qx, qy, qz));
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
 
       if (uNorm > EPS)
       {
-         double angle = 2.0 * Math.atan2(uNorm, qs) / uNorm;
+         double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
          rotationVectorToPack.setX(qx * angle);
          rotationVectorToPack.setY(qy * angle);
          rotationVectorToPack.setZ(qz * angle);
@@ -261,13 +261,13 @@ public abstract class RotationVectorConversion
       y = m02 - m20;
       z = m10 - m01;
 
-      double s = Math.sqrt(EuclidCoreTools.normSquared(x, y, z));
+      double s = EuclidCoreTools.norm(x, y, z);
 
       if (s > EPS)
       {
          double sin = 0.5 * s;
          double cos = 0.5 * (m00 + m11 + m22 - 1.0);
-         angle = Math.atan2(sin, cos);
+         angle = EuclidCoreTools.atan2(sin, cos);
          x /= s;
          y /= s;
          z /= s;
@@ -290,19 +290,19 @@ public abstract class RotationVectorConversion
 
          if (xx > yy && xx > zz)
          { // m00 is the largest diagonal term
-            x = Math.sqrt(xx);
+            x = EuclidCoreTools.squareRoot(xx);
             y = xy / x;
             z = xz / x;
          }
          else if (yy > zz)
          { // m11 is the largest diagonal term
-            y = Math.sqrt(yy);
+            y = EuclidCoreTools.squareRoot(yy);
             x = xy / y;
             z = yz / y;
          }
          else
          { // m22 is the largest diagonal term so base result on this
-            z = Math.sqrt(zz);
+            z = EuclidCoreTools.squareRoot(zz);
             x = xz / z;
             y = yz / z;
          }
@@ -340,6 +340,7 @@ public abstract class RotationVectorConversion
     *             {@link #convertYawPitchRollToRotationVector(YawPitchRollReadOnly, Vector3DBasics)}
     *             instead.
     */
+   @Deprecated
    public static void convertYawPitchRollToRotationVector(double[] yawPitchRoll, Vector3DBasics rotationVectorToPack)
    {
       convertYawPitchRollToRotationVector(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], rotationVectorToPack);
@@ -409,27 +410,27 @@ public abstract class RotationVectorConversion
       }
 
       double halfYaw = yaw / 2.0;
-      double cYaw = Math.cos(halfYaw);
-      double sYaw = Math.sin(halfYaw);
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
 
       double halfPitch = pitch / 2.0;
-      double cPitch = Math.cos(halfPitch);
-      double sPitch = Math.sin(halfPitch);
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
 
       double halfRoll = roll / 2.0;
-      double cRoll = Math.cos(halfRoll);
-      double sRoll = Math.sin(halfRoll);
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
 
       double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
       double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
 
-      double uNorm = Math.sqrt(EuclidCoreTools.normSquared(qx, qy, qz));
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
 
       if (uNorm > EPS)
       {
-         double angle = 2.0 * Math.atan2(uNorm, qs) / uNorm;
+         double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
          rotationVectorToPack.setX(qx * angle);
          rotationVectorToPack.setY(qy * angle);
          rotationVectorToPack.setZ(qz * angle);

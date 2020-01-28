@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -304,7 +305,7 @@ public class EuclidPolytopeTools
 
    /**
     * Computes the distance squared to the closest half-edge to the query.
-    * 
+    *
     * @param query     the coordinates of the query. Not modified.
     * @param halfEdges the half-edges to search for the closest to the query. Not modified.
     * @return the distance squared between the query and the closest half-edge to it.
@@ -325,14 +326,14 @@ public class EuclidPolytopeTools
 
    /**
     * Computes the distance to the closest half-edge to the query.
-    * 
+    *
     * @param query     the coordinates of the query. Not modified.
     * @param halfEdges the half-edges to search for the closest to the query. Not modified.
     * @return the distance between the query and the closest half-edge to it.
     */
    public static double distanceToClosestHalfEdge3D(Point3DReadOnly query, List<? extends HalfEdge3DReadOnly> halfEdges)
    {
-      return Math.sqrt(distanceSquaredToClosestHalfEdge3D(query, halfEdges));
+      return EuclidCoreTools.squareRoot(distanceSquaredToClosestHalfEdge3D(query, halfEdges));
    }
 
    /**
@@ -346,9 +347,9 @@ public class EuclidPolytopeTools
     * @param observer the coordinates of the observer. Not modified.
     * @param epsilon  the tolerance used to determine whether a face is visible, the observer lies in a
     *                 face's support plane, or a face is not visible.
-    * @param          <F> the type to use for the faces, it has to implement {@link Face3DReadOnly}.
-    * @param          <E> the type of edges to return, it has to implement {@link HalfEdge3DReadOnly}
-    *                 and has to be common to all the faces' edges.
+    * @param <F>      the type to use for the faces, it has to implement {@link Face3DReadOnly}.
+    * @param <E>      the type of edges to return, it has to implement {@link HalfEdge3DReadOnly} and
+    *                 has to be common to all the faces' edges.
     * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
     *         any face or if the observer is inside one of the faces.
     */
@@ -372,9 +373,9 @@ public class EuclidPolytopeTools
     *                           starting the search. It preferable to provide an implementation that
     *                           supports fast queries for {@link Collection#contains(Object)}.
     *                           Modified. Can be {@code null}.
-    * @param                    <F> the type to use for the faces, it has to implement
+    * @param <F>                the type to use for the faces, it has to implement
     *                           {@link Face3DReadOnly}.
-    * @param                    <E> the type of edges to return, it has to implement
+    * @param <E>                the type of edges to return, it has to implement
     *                           {@link HalfEdge3DReadOnly} and has to be common to all the faces'
     *                           edges.
     * @return the list of edges representing the silhouette, or {@code null} if the observer cannot see
@@ -497,7 +498,7 @@ public class EuclidPolytopeTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param query      the coordinates of the query. Not modified.
     * @param silhouette the list of the half-edges to navigate. Not modified.
     * @param epsilon    the tolerance used for determining whether the query is close to a face support
@@ -527,7 +528,7 @@ public class EuclidPolytopeTools
    /**
     * Tests whether a point is close enough to a face support plane such that it could be extended to
     * include the query.
-    * 
+    *
     * @param query   the coordinates of the query. Not modified.
     * @param face    the face to evaluate. Not modified.
     * @param epsilon the tolerance used for determining whether the query is close to the face support
@@ -570,7 +571,7 @@ public class EuclidPolytopeTools
    /**
     * Tests whether a point is close enough to a half-edge support line such that it could be extended
     * to include the query.
-    * 
+    *
     * @param query    the coordinates of the query. Not modified.
     * @param halfEdge the half-edge to evaluate. Not modified.
     * @param epsilon  the tolerance used for determining whether the query is close to the half-edge
@@ -603,7 +604,7 @@ public class EuclidPolytopeTools
 
    /**
     * Tests whether the tetrahedron defined by the given vertices contains the origin.
-    * 
+    *
     * @param p0 the first vertex of the tetrahedron. Not modified.
     * @param p1 the second vertex of the tetrahedron. Not modified.
     * @param p2 the third vertex of the tetrahedron. Not modified.

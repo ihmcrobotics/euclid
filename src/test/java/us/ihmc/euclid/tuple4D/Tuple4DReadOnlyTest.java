@@ -1,7 +1,10 @@
 package us.ihmc.euclid.tuple4D;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
@@ -9,6 +12,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
@@ -268,7 +272,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
          T tuple2 = createTuple(scalar * tuple1.getX(), scalar * tuple1.getY(), scalar * tuple1.getZ(), scalar * tuple1.getS());
          double expectedLength2 = scalar * length1;
          double actualLength2 = tuple2.normSquared();
-         assertEquals(expectedLength2, Math.sqrt(actualLength2), 5.0 * getEpsilon());
+         assertEquals(expectedLength2, EuclidCoreTools.squareRoot(actualLength2), 5.0 * getEpsilon());
       }
    }
 

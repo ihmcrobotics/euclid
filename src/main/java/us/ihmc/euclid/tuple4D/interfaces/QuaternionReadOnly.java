@@ -137,7 +137,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
          dot = 1.0;
       else if (dot < -1.0)
          dot = -1.0;
-      return 2.0 * Math.acos(dot);
+      return 2.0 * EuclidCoreTools.acos(dot);
    }
 
    /**
@@ -164,8 +164,8 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
     */
    default double getAngle()
    {
-      double sinHalfTheta = Math.sqrt(EuclidCoreTools.normSquared(getX(), getY(), getZ()));
-      return 2.0 * Math.atan2(sinHalfTheta, getS());
+      double sinHalfTheta = EuclidCoreTools.norm(getX(), getY(), getZ());
+      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, getS());
    }
 
    /** {@inheritDoc} */

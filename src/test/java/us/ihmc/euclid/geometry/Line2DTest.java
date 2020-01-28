@@ -1,7 +1,7 @@
 package us.ihmc.euclid.geometry;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -214,7 +214,7 @@ public class Line2DTest
       Point2D secondPointOnLine = new Point2D(1.0, 1.0);
       Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
 
-      Vector2D normalizedVector = new Vector2D(Math.sqrt(2.0) / 2.0, Math.sqrt(2.0) / 2.0);
+      Vector2D normalizedVector = new Vector2D(EuclidCoreTools.squareRoot(2.0) / 2.0, EuclidCoreTools.squareRoot(2.0) / 2.0);
       assertEquals(normalizedVector.getX(), line2d.getDirection().getX(), delta);
       assertEquals(normalizedVector.getY(), line2d.getDirection().getY(), delta);
       Vector2D normalizedVector2 = new Vector2D(line2d.getDirection());
@@ -412,13 +412,13 @@ public class Line2DTest
          Point2D firstPointOnLine = new Point2D(0.0, 0.0);
          Point2D secondPointOnLine = randomPoint(random);
          Line2D line2d = new Line2D(firstPointOnLine, secondPointOnLine);
-         double angle = Math.atan2(line2d.getDirection().getY(), line2d.getDirection().getX());
+         double angle = EuclidCoreTools.atan2(line2d.getDirection().getY(), line2d.getDirection().getX());
          double rotation = randomDouble(random, 2.0 * Math.PI);
          double newAngle = angle + rotation;
          line2d.rotate(rotation);
 
-         assertEquals(Math.cos(newAngle), line2d.getDirection().getX(), delta);
-         assertEquals(Math.sin(newAngle), line2d.getDirection().getY(), delta);
+         assertEquals(EuclidCoreTools.cos(newAngle), line2d.getDirection().getX(), delta);
+         assertEquals(EuclidCoreTools.sin(newAngle), line2d.getDirection().getY(), delta);
       }
    }
 
@@ -485,7 +485,7 @@ public class Line2DTest
       shiftedLine.set(line);
       shiftedLine.shiftToRight(distanceToShift);
 
-      double distanceAtFortyFiveDegrees = distanceToShift * Math.sqrt(2.0) / 2.0;
+      double distanceAtFortyFiveDegrees = distanceToShift * EuclidCoreTools.squareRoot(2.0) / 2.0;
 
       shiftedLineOrigin = shiftedLine.getPoint();
       lineVector = line.getDirection();
@@ -788,7 +788,7 @@ public class Line2DTest
          Point2DBasics orthogonalProjection = orthogonalLine.orthogonalProjectionCopy(distantPoint);
          double xdiff = orthogonalProjection.getX() - firstPointOnLine.getX();
          double ydiff = orthogonalProjection.getY() - firstPointOnLine.getY();
-         double distance = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
+         double distance = EuclidCoreTools.norm(xdiff, ydiff);
 
          assertEquals(distance, calculatedDistance, delta);
       }
@@ -1206,8 +1206,8 @@ public class Line2DTest
       line.applyTransform(transform);
 
       double alpha = eulerAngles.getZ();
-      double sina = Math.sin(alpha);
-      double cosa = Math.cos(alpha);
+      double sina = EuclidCoreTools.sin(alpha);
+      double cosa = EuclidCoreTools.cos(alpha);
 
       assertEquals(point.getX() * cosa - point.getY() * sina, line.getPointX(), delta, "pure rotation failed");
       assertEquals(point.getX() * sina + point.getY() * cosa, line.getPointY(), delta, "pure rotation failed");
@@ -1285,8 +1285,8 @@ public class Line2DTest
       line.applyTransform(transform);
 
       double alpha = eulerAngles.getZ();
-      double sina = Math.sin(alpha);
-      double cosa = Math.cos(alpha);
+      double sina = EuclidCoreTools.sin(alpha);
+      double cosa = EuclidCoreTools.cos(alpha);
 
       assertEquals(point.getX() * cosa - point.getY() * sina + translation.getX(), line.getPointX(), delta, "pure rotation failed");
       assertEquals(point.getX() * sina + point.getY() * cosa + translation.getY(), line.getPointY(), delta, "pure rotation failed");

@@ -23,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  * <li>The right face is vertical (XZ-plane) at {@code y=size.getY()/2.0}.
  * </ul>
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
@@ -68,7 +68,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
 
    /**
     * Changes the variable supplier to use with this shape.
-    * 
+    *
     * @param newSupplier the new variable supplier.
     */
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
@@ -153,7 +153,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
 
    /**
     * Sets this ramp properties.
-    * 
+    *
     * @param position    the position of this ramp. Not modified.
     * @param orientation the orientation of this ramp. Not modified.
     * @param sizeX       the size along the x-axis.
@@ -169,7 +169,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
 
    /**
     * Sets this ramp properties.
-    * 
+    *
     * @param pose  the pose of this ramp. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
@@ -184,7 +184,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
 
    /**
     * Sets this ramp properties.
-    * 
+    *
     * @param pose  the pose of this ramp. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
@@ -199,7 +199,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
 
    /**
     * Sets this ramp properties.
-    * 
+    *
     * @param pose the pose of this ramp. Not modified.
     * @param size the size of this ramp along the x, y, and axes in order. Not modified.
     * @throws IllegalArgumentException if any of the three size arguments is negative.

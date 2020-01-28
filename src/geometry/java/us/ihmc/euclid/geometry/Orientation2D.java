@@ -90,7 +90,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    {
       xVector.set(1.0, 0.0);
       transform.transform(xVector);
-      double deltaYaw = Math.atan2(xVector.getY(), xVector.getX());
+      double deltaYaw = EuclidCoreTools.atan2(xVector.getY(), xVector.getX());
 
       if (Double.isNaN(deltaYaw) || Double.isInfinite(deltaYaw))
          deltaYaw = 0.0;
@@ -104,7 +104,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    {
       xVector.set(1.0, 0.0);
       transform.inverseTransform(xVector);
-      double deltaYaw = Math.atan2(xVector.getY(), xVector.getX());
+      double deltaYaw = EuclidCoreTools.atan2(xVector.getY(), xVector.getX());
 
       if (Double.isNaN(deltaYaw) || Double.isInfinite(deltaYaw))
          deltaYaw = 0.0;

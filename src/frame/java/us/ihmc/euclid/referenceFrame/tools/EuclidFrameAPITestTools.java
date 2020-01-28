@@ -4,17 +4,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,24 +17,7 @@ import org.ejml.ops.RandomMatrices;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
-import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
-import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
-import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
-import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
-import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
-import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
-import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
-import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
-import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.geometry.interfaces.*;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -59,91 +33,14 @@ import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameConvexPolygon2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameMatrix3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameTuple4DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector4DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameYawPitchRollBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple4D.interfaces.*;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
@@ -154,7 +51,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  * These tools are still experimental and are improved through heavy internal usage for building
  * Euclid's test suite. The objective it to make this class usable for third party classes.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidFrameAPITestTools
@@ -1262,7 +1159,7 @@ public class EuclidFrameAPITestTools
     * for the equivalent method in type built by the {@code framelessTypeBuilder} and the methods from
     * both classes are invoked to compare the output.
     * </p>
-    * 
+    *
     * @param frameTypeBuilder     the builder for creating instances of the frame object to test.
     * @param framelessTypeBuilber the builder for creating instances of the corresponding frameless
     *                             objects.
@@ -2218,7 +2115,7 @@ public class EuclidFrameAPITestTools
     * The frame objects created using this builder should contain random values changing from one
     * object to the next.
     * </p>
-    * 
+    *
     * @author Sylvain Bertrand
     * @param <T> the type this builder can instantiate.
     */
@@ -2230,7 +2127,7 @@ public class EuclidFrameAPITestTools
        * The frame objects created using this builder should contain random values changing from one
        * object to the next.
        * </p>
-       * 
+       *
        * @param referenceFrame the reference frame in which the returned frame object should be expressed
        *                       in.
        * @return the next random frame object.
@@ -2244,7 +2141,7 @@ public class EuclidFrameAPITestTools
     * The frame objects created using this builder should be initialized using the given reference
     * frame and frameless object.
     * </p>
-    * 
+    *
     * @author Sylvain Bertrand
     * @param <T> the type this builder can instantiate.
     */
@@ -2256,7 +2153,7 @@ public class EuclidFrameAPITestTools
        * The frame objects created using this builder should be initialized using the given reference
        * frame and frameless object.
        * </p>
-       * 
+       *
        * @param referenceFrame  the reference frame in which the returned frame object should be expressed
        *                        in.
        * @param framelessObject the frameless object to use for initializing the values of the new frame
@@ -2272,14 +2169,14 @@ public class EuclidFrameAPITestTools
     * The objects created using this builder should contain random values changing from one object to
     * the next.
     * </p>
-    * 
+    *
     * @author Sylvain Bertrand
     */
    public static interface GenericTypeBuilder
    {
       /**
        * Creates a new instance of the same object initialized with random values.
-       * 
+       *
        * @return the next object.
        */
       Object newInstance();

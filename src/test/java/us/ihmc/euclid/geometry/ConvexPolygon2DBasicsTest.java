@@ -1,7 +1,10 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +13,12 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
-import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
-import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
-import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
-import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.*;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -976,7 +976,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point = new Point2D(2.5, 1.0);
       double distance = polygon.signedDistance(point);
-      assertDistanceCorrect(Math.sqrt(2.5 * 2.5 + 1.0 * 1.0), distance);
+      assertDistanceCorrect(EuclidCoreTools.norm(2.5, 1.0), distance);
    }
 
    @Test
@@ -990,7 +990,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point1 = new Point2D(2.5, 1.0);
       double distance1 = polygon.signedDistance(point1);
-      assertDistanceCorrect(Math.sqrt(1.5 * 1.5 + 1.0 * 1.0), distance1);
+      assertDistanceCorrect(EuclidCoreTools.norm(1.5, 1.0), distance1);
 
       Point2D point2 = new Point2D(0.5, 1.0);
       double distance2 = polygon.signedDistance(point2);
@@ -1009,7 +1009,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point1 = new Point2D(10.0, 10.0);
       double distance1 = polygon.signedDistance(point1);
-      assertDistanceCorrect(5.0 * Math.sqrt(2.0), distance1);
+      assertDistanceCorrect(5.0 * EuclidCoreTools.squareRoot(2.0), distance1);
 
       Point2D point2 = new Point2D(1.2, 1.1);
       double distance2 = polygon.signedDistance(point2);
@@ -1021,7 +1021,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point4 = new Point2D(9.8, 0.15);
       double distance4 = polygon.signedDistance(point4);
-      assertDistanceCorrect(-0.5 * Math.sqrt(0.05 * 0.05 * 2.0), distance4);
+      assertDistanceCorrect(-0.5 * EuclidCoreTools.squareRoot(0.05 * 0.05 * 2.0), distance4);
 
       Point2D point5 = new Point2D(5.0, -0.15);
       double distance5 = polygon.signedDistance(point5);
@@ -1029,7 +1029,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
 
       Point2D point6 = new Point2D(15.0, -0.15);
       double distance6 = polygon.signedDistance(point6);
-      assertDistanceCorrect(Math.sqrt(5.0 * 5.0 + 0.15 * 0.15), distance6);
+      assertDistanceCorrect(EuclidCoreTools.norm(5.0, 0.15), distance6);
    }
 
    private static void assertDistanceCorrect(double expected, double actual)

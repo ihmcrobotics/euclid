@@ -8,7 +8,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 /**
  * Tools for extracting or testing features for a matrix 3D, see {@link Matrix3DTools} for
  * operations on a matrix 3D.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class Matrix3DFeatures

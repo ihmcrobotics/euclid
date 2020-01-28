@@ -21,7 +21,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
  * operation occur in the proper coordinate system. Use this feature carefully and always prefer
  * using methods requiring {@code FixedFrameMatrix3DBasics}.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3DBasics, Transformable
@@ -64,7 +64,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
 
    /**
     * Sets this matrix to {@code other}.
-    * 
+    *
     * @param other the other frame matrix to copy the values of. Not modified.
     * @throws ReferenceFrameMismatchException if the matrix is not expressed in the same reference
     *                                         frame as {@code this}.
@@ -84,7 +84,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
     * {@code other} once transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
-    * 
+    *
     * @param other the other frame matrix to set this to. Not modified.
     */
    default void setMatchingFrame(FrameMatrix3DReadOnly other)
@@ -114,15 +114,15 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
 
    /**
     * Sets this matrix to be a diagonal matrix as follows:
-    * 
+    *
     * <pre>
     *        / x 0 0 \
     * this = | 0 y 0 |
     *        \ 0 0 z /
     * </pre>
-    * 
+    *
     * where x, y, and z are the components of the given tuple.
-    * 
+    *
     * @param frameTuple3DReadOnly the tuple used to set this matrix diagonal elements. Not modified.
     * @throws ReferenceFrameMismatchException if {@code frameTuple3DReadOnly} is not expressed in the
     *                                         same reference frame as {@code this}.
@@ -138,7 +138,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     * <p>
     * this = other * other<sup>T<sup>
     * </p>
-    * 
+    *
     * @param other the other matrix used for this operation. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.

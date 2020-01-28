@@ -383,7 +383,7 @@ public abstract class ReferenceFrame
 
    /**
     * Tests if this reference frame is the root, i.e. no parent frame, of its reference frame tree.
-    * 
+    *
     * @return {@code true} if this is a root frame, {@code false} otherwise.
     */
    public boolean isRootFrame()
@@ -975,7 +975,7 @@ public abstract class ReferenceFrame
     * different names to have the same hash code or to enforce a common frame to have a specific hash
     * code that can be known without holding on its actual instance.
     * </p>
-    * 
+    *
     * @return the name based hash code for this reference frame.
     */
    public long getAdditionalNameBasedHashCode()
@@ -1076,7 +1076,7 @@ public abstract class ReferenceFrame
 
    /**
     * Gets the number of children attached to this frame.
-    * 
+    *
     * @return the number of children.
     */
    public int getNumberOfChildren()
@@ -1091,7 +1091,7 @@ public abstract class ReferenceFrame
     * <p>
     * Although very unlikely, note that it is possible that the return frame is {@code null}.
     * </p>
-    * 
+    *
     * @param index the index of the frame to retrieve.
     * @return the child frame attached to {@code this}.
     * @see #getNumberOfChildren()

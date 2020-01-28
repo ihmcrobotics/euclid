@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.collision;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -20,13 +22,7 @@ import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.primitives.Box3D;
-import us.ihmc.euclid.shape.primitives.Capsule3D;
-import us.ihmc.euclid.shape.primitives.Cylinder3D;
-import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
-import us.ihmc.euclid.shape.primitives.PointShape3D;
-import us.ihmc.euclid.shape.primitives.Ramp3D;
-import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.*;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -222,7 +218,7 @@ class ExpandingPolytopeAlgorithmTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-         { // Create the tetrahedron to have its top vertex closest to a face. 
+         { // Create the tetrahedron to have its top vertex closest to a face.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
@@ -245,7 +241,7 @@ class ExpandingPolytopeAlgorithmTest
             }
          }
 
-         { // Create the tetrahedron to have its top vertex closest to an edge. 
+         { // Create the tetrahedron to have its top vertex closest to an edge.
             if (convexPolytope3D.isEmpty())
             {
                performAssertionsOnEPA(random, convexPolytope3D, EuclidShapeRandomTools.nextConeConvexPolytope3D(random), null, null);
@@ -319,7 +315,7 @@ class ExpandingPolytopeAlgorithmTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          ConvexPolytope3D convexPolytope3D = EuclidShapeRandomTools.nextConvexPolytope3DWithEdgeCases(random);
-         { // Create the tetrahedron from its top vertex lying inside the polytope 
+         { // Create the tetrahedron from its top vertex lying inside the polytope
             ConvexPolytope3D tetrahedron;
 
             if (convexPolytope3D.isEmpty())
@@ -935,7 +931,7 @@ class ExpandingPolytopeAlgorithmTest
          epaDetector.evaluateCollision(shapeA, shapeB, epaResult);
 
          double distanceError = Math.abs(expectedResult.getSignedDistance() - epaResult.getSignedDistance());
-         if (verbose && (i % 5000) == 0)
+         if (verbose && i % 5000 == 0)
          {
             System.out.println(iterationPrefix + " Analytical: " + expectedResult.getSignedDistance() + ", EPA: " + epaResult.getSignedDistance() + ", diff: "
                   + distanceError);

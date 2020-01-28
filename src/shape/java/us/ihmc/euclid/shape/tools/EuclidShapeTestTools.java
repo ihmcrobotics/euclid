@@ -14,14 +14,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -1481,7 +1474,7 @@ public class EuclidShapeTestTools
     * <li>each face's normal points outside.
     * </ul>
     * </p>
-    * 
+    *
     * @param convexPolytope3D the convex polytope to run assertions on. Not modified.
     * @throws AssertionError if the convex polytope is corrupted.
     */
@@ -1501,7 +1494,7 @@ public class EuclidShapeTestTools
     * <li>each face's normal points outside.
     * </ul>
     * </p>
-    * 
+    *
     * @param messagePrefix    prefix to add to the automated message.
     * @param convexPolytope3D the convex polytope to run assertions on. Not modified.
     * @throws AssertionError if the convex polytope is corrupted.
@@ -1565,7 +1558,7 @@ public class EuclidShapeTestTools
                if (!edges.contains(edge.getPrevious()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
-               if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+               if (edges.indexOf(edge.getNext()) != (edgeIndex + 1) % edges.size())
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
             }

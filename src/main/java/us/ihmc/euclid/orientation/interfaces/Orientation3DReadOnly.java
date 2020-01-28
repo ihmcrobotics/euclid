@@ -45,7 +45,7 @@ public interface Orientation3DReadOnly
 
    /**
     * Tests if at least one of this orientation's component contains {@link Double#NaN}.
-    * 
+    *
     * @return if this orientation has at least one component being {@link Double#NaN}.
     */
    boolean containsNaN();
@@ -58,7 +58,7 @@ public interface Orientation3DReadOnly
     * <p>
     * Equivalent to calling {@link #isZeroOrientation(double)} with {@link #ZERO_EPSILON}.
     * </p>
-    * 
+    *
     * @param epsilon the tolerance used for the test.
     * @return {@code true} if this is equal to a zero orientation, {@code false} otherwise.
     */
@@ -72,7 +72,7 @@ public interface Orientation3DReadOnly
     * <p>
     * A zero orientation when used as a transform, leaves a the transformed geometry unchanged.
     * </p>
-    * 
+    *
     * @param epsilon the tolerance used for the test.
     * @return {@code true} if this is equal to a zero orientation, {@code false} otherwise.
     */
@@ -212,6 +212,7 @@ public interface Orientation3DReadOnly
     * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
     * @deprecated Use {@link #get(YawPitchRollBasics)} instead.
     */
+   @Deprecated
    void getYawPitchRoll(double[] yawPitchRollToPack);
 
    /**

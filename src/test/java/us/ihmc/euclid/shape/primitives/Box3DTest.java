@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.primitives;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.EuclidTestConstants.*;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -311,7 +311,7 @@ public class Box3DTest
       Random random = new Random(435635675);
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test with point inside using the weighted random generator 
+      { // Test with point inside using the weighted random generator
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
 
          Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, box3D.getVertices());

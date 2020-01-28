@@ -1,6 +1,9 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +29,7 @@ import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.TriangleMesh3D
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -205,7 +209,7 @@ public class EuclidPolytopeToolsTest
             });
          // @formatter:on
 
-         double volume1 = Math.sqrt(CommonOps.det(matrix) / 288.0);
+         double volume1 = EuclidCoreTools.squareRoot(CommonOps.det(matrix) / 288.0);
          Plane3D basePlane = new Plane3D(b, c, d);
          double height = basePlane.distance(a);
          double baseArea = EuclidGeometryTools.triangleArea(b, c, d);

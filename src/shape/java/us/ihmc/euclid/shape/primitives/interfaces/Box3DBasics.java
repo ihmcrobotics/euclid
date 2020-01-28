@@ -62,7 +62,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 
    /**
     * Changes the variable supplier to use with this shape.
-    * 
+    *
     * @param newSupplier the new variable supplier.
     */
    void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier);
@@ -103,7 +103,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 
    /**
     * Sets this box properties.
-    * 
+    *
     * @param position    the position of this box center. Not modified.
     * @param orientation the orientation of this box. Not modified.
     * @param sizeX       the size along the x-axis.
@@ -119,7 +119,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 
    /**
     * Sets this box properties.
-    * 
+    *
     * @param pose  the pose of this box. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
@@ -134,7 +134,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 
    /**
     * Sets this box properties.
-    * 
+    *
     * @param pose  the pose of this box. Not modified.
     * @param sizeX the size along the x-axis.
     * @param sizeY the size along the y-axis.
@@ -149,7 +149,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
 
    /**
     * Sets this box properties.
-    * 
+    *
     * @param pose the pose of this box. Not modified.
     * @param size the size of this box along the x, y, and axes in order. Not modified.
     * @throws IllegalArgumentException if any of the three size arguments is negative.

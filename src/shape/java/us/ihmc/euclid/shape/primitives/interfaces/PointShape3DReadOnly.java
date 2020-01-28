@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * <p>
  * A point shape 3D is represented by its position.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly

@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * <p>
  * A {@code GJKVertex3D} represents the difference of two supporting vertices of two shapes.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  * @see GilbertJohnsonKeerthiCollisionDetector
  */
@@ -27,7 +27,7 @@ public class GJKVertex3D implements Point3DReadOnly
    /**
     * Creates a new vertex and initializes its coordinates as follows:<br>
     * {@code this = vertexOnShapeA - vertexOnShapeB}.
-    * 
+    *
     * @param vertexOnShapeA the supporting vertex from the first shape. Not modified, reference saved.
     * @param vertexOnShapeB the supporting vertex from the second shape. Not modified, reference saved.
     */
@@ -42,7 +42,7 @@ public class GJKVertex3D implements Point3DReadOnly
 
    /**
     * Gets the supporting vertex from the first shape this vertex was constructed with.
-    * 
+    *
     * @return the supporting vertex on the first shape.
     */
    public Point3DReadOnly getVertexOnShapeA()
@@ -52,7 +52,7 @@ public class GJKVertex3D implements Point3DReadOnly
 
    /**
     * Gets the supporting vertex from the second shape this vertex was constructed with.
-    * 
+    *
     * @return the supporting vertex on the second shape.
     */
    public Point3DReadOnly getVertexOnShapeB()
@@ -62,7 +62,7 @@ public class GJKVertex3D implements Point3DReadOnly
 
    /**
     * Calculates the dot product of {@code this} and the given {@code tuple3D}.
-    * 
+    *
     * @param tuple3D the second term in the dot product. Not modified.
     * @return the dot product value.
     */

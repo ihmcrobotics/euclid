@@ -72,7 +72,7 @@ public interface Triangle3DBasics extends Triangle3DReadOnly, Transformable, Cle
 
    /**
     * Sets this triangle to be the same as the given triangle.
-    * 
+    *
     * @param other the other triangle to copy. Not modified.
     */
    default void set(Triangle3DReadOnly other)
@@ -82,7 +82,7 @@ public interface Triangle3DBasics extends Triangle3DReadOnly, Transformable, Cle
 
    /**
     * Redefines this triangle's vertices.
-    * 
+    *
     * @param a the first vertex coordinates. Not modified.
     * @param b the second vertex coordinates. Not modified.
     * @param c the third vertex coordinates. Not modified.
@@ -96,7 +96,7 @@ public interface Triangle3DBasics extends Triangle3DReadOnly, Transformable, Cle
 
    /**
     * Transforms this triangle's vertices using the given homogeneous transformation matrix.
-    * 
+    *
     * @param transform the transform to apply on the vertices of this triangle. Not modified.
     */
    @Override
@@ -110,7 +110,7 @@ public interface Triangle3DBasics extends Triangle3DReadOnly, Transformable, Cle
    /**
     * Transforms this triangle's vertices using the inverse of the given homogeneous transformation
     * matrix.
-    * 
+    *
     * @param transform the transform to apply on the vertices of this triangle. Not modified.
     */
    @Override

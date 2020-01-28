@@ -155,7 +155,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    @Override
    public void setIntermediateVariableSupplier(IntermediateVariableSupplier newSupplier)
    {
-      this.supplier = newSupplier;
+      supplier = newSupplier;
    }
 
    /**
@@ -228,7 +228,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
     * Provides a {@code String} representation of this ellipsoid 3D as follows:<br>
     * Ellipsoid 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136),
     * radii: ( 0.191, 0.719, 0.479 )]
-    * 
+    *
     * @return the {@code String} representing this ellipsoid 3D.
     */
    @Override

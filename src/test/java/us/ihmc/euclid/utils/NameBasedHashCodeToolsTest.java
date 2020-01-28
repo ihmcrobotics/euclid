@@ -1,7 +1,9 @@
 package us.ihmc.euclid.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static us.ihmc.euclid.utils.NameBasedHashCodeTools.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static us.ihmc.euclid.utils.NameBasedHashCodeTools.DEFAULT_HASHCODE;
+import static us.ihmc.euclid.utils.NameBasedHashCodeTools.NULL_HASHCODE;
+import static us.ihmc.euclid.utils.NameBasedHashCodeTools.PRIME;
 
 import org.junit.jupiter.api.Test;
 

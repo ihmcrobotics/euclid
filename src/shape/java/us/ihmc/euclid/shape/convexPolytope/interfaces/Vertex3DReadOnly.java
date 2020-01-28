@@ -12,21 +12,21 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This is part of a Doubly Connected Edge List data structure
  * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Vertex3DReadOnly extends Point3DReadOnly
 {
    /**
     * Get the collection of edges that originate at this vertex.
-    * 
+    *
     * @return collection of read only references to the edges that originate at this edge.
     */
    Collection<? extends HalfEdge3DReadOnly> getAssociatedEdges();
 
    /**
     * Gets the i<sup>th</sup> edge that originates at this vertex.
-    * 
+    *
     * @param index the edge index &in; [0; {@link #getNumberOfAssociatedEdges()}[.
     * @return the read only reference to the edge.
     */
@@ -34,7 +34,7 @@ public interface Vertex3DReadOnly extends Point3DReadOnly
 
    /**
     * Tests whether the given edge is already associated to this vertex.
-    * 
+    *
     * @param edgeToCheck the half edge that is to be tested for association. Not modified.
     * @return {@code true} if the given edge is already associated to this vertex, {@code false}
     *         otherwise.
@@ -51,7 +51,7 @@ public interface Vertex3DReadOnly extends Point3DReadOnly
 
    /**
     * Returns the number of edges already associated to this vertex.
-    * 
+    *
     * @return the number of edges that originate at this vertex.
     */
    int getNumberOfAssociatedEdges();
@@ -59,7 +59,7 @@ public interface Vertex3DReadOnly extends Point3DReadOnly
    /**
     * Retrieves the half-edge that originates from this vertex and ends at the given
     * {@code destination}.
-    * 
+    *
     * @param destination the vertex to which the desired half-edge ends at.
     * @return the half-edge starting from {@code this} and ending at {@code destination}, or
     *         {@code null} if no such half-edge exists.
@@ -79,7 +79,7 @@ public interface Vertex3DReadOnly extends Point3DReadOnly
 
    /**
     * Calculates the dot product of {@code this} and the given {@code vector}.
-    * 
+    *
     * @param vector the second term in the dot product. Not modified.
     * @return the dot product value.
     */

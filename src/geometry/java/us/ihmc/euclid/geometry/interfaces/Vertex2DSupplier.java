@@ -10,7 +10,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 /**
  * Implement this interface to create a custom supplier of 2D vertices or use the static methods to
  * create default suppliers.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface Vertex2DSupplier
@@ -35,7 +35,7 @@ public interface Vertex2DSupplier
 
    /**
     * Gets the vertex corresponding to the given index.
-    * 
+    *
     * @param index the index of the vertex, {@code index} &in; [0, {@code getNumberOfVertices()}[.
     * @return the vertex.
     */
@@ -43,14 +43,14 @@ public interface Vertex2DSupplier
 
    /**
     * Gets the number of vertices that this supplier holds.
-    * 
+    *
     * @return the number of vertices.
     */
    public int getNumberOfVertices();
 
    /**
     * Tests whether this supplier is empty or not.
-    * 
+    *
     * @return {@code true} if this supplier has no vertices, {@code false} if it has at one vertex.
     */
    default boolean isEmpty()
@@ -60,7 +60,7 @@ public interface Vertex2DSupplier
 
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal.
-    * 
+    *
     * @param other the other supplier to compare against this.
     * @return {@code true} if the two suppliers are equal.
     */
@@ -82,7 +82,7 @@ public interface Vertex2DSupplier
 
    /**
     * Tests on a per-vertex basis if this supplier and {@code other} are equal to an {@code epsilon}.
-    * 
+    *
     * @param other   the other supplier to compare against this.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two suppliers are equal.
@@ -101,7 +101,7 @@ public interface Vertex2DSupplier
 
    /**
     * Gets an empty supplier.
-    * 
+    *
     * @return the supplier.
     */
    public static Vertex2DSupplier emptyVertex2DSupplier()
@@ -111,7 +111,7 @@ public interface Vertex2DSupplier
 
    /**
     * Returns a fixed-size supplier backed by the given array.
-    * 
+    *
     * @param vertices the array by which the supplier will be backed.
     * @return the supplier.
     */
@@ -123,7 +123,7 @@ public interface Vertex2DSupplier
    /**
     * Returns a fixed-size supplier backed by a portion of the given array starting with the first
     * element and specified by its length {@code numberOfVertices}.
-    * 
+    *
     * @param vertices         the array by which the supplier will be backed.
     * @param numberOfVertices the portion's length.
     * @return the supplier.
@@ -136,7 +136,7 @@ public interface Vertex2DSupplier
    /**
     * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
     * {@code startIndex} and the portion length {@code numberOfVertices}.
-    * 
+    *
     * @param vertices         the array by which the supplier will be backed.
     * @param startIndex       the first vertex index.
     * @param numberOfVertices the portion's length.
@@ -155,7 +155,7 @@ public interface Vertex2DSupplier
 
    /**
     * Returns a fixed-size supplier backed by the given list.
-    * 
+    *
     * @param vertices the list by which the supplier will be backed.
     * @return the supplier.
     */
@@ -167,7 +167,7 @@ public interface Vertex2DSupplier
    /**
     * Returns a fixed-size supplier backed by a portion of the given list starting with the first
     * element and specified by its length {@code numberOfVertices}.
-    * 
+    *
     * @param vertices         the list by which the supplier will be backed.
     * @param numberOfVertices the portion's length.
     * @return the supplier.
@@ -180,7 +180,7 @@ public interface Vertex2DSupplier
    /**
     * Returns a fixed-size supplier backed by a portion of the given list specified by the first index
     * {@code startIndex} and the portion length {@code numberOfVertices}.
-    * 
+    *
     * @param vertices         the list by which the supplier will be backed.
     * @param startIndex       the first vertex index.
     * @param numberOfVertices the portion's length.
@@ -218,7 +218,7 @@ public interface Vertex2DSupplier
 
    /**
     * Returns a fixed-size supplier backed by a the given array.
-    * 
+    *
     * @param vertices the array containing the vertices. Each row contains one point whereas the (at
     *                 least) two columns contains in order the coordinates x and y. Not modified.
     * @return the supplier.
@@ -231,7 +231,7 @@ public interface Vertex2DSupplier
    /**
     * Returns a fixed-size supplier backed by a portion of the given array starting with the first row
     * and specified by its length {@code numberOfVertices}.
-    * 
+    *
     * @param vertices         the array containing the vertices. Each row contains one point whereas
     *                         the (at least) two columns contains in order the coordinates x and y. Not
     *                         modified.
@@ -246,7 +246,7 @@ public interface Vertex2DSupplier
    /**
     * Returns a fixed-size supplier backed by a portion of the given array specified by the first index
     * {@code startIndex} and the portion length {@code numberOfVertices}.
-    * 
+    *
     * @param vertices         the array containing the vertices. Each row contains one point whereas
     *                         the (at least) two columns contains in order the coordinates x and y. Not
     *                         modified.

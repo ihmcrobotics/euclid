@@ -20,7 +20,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
 {
    /**
     * Sets this torus radii.
-    * 
+    *
     * @param radius     the radius for the axis to the tube center.
     * @param tubeRadius the tube radius.
     * @throws IllegalArgumentException if either {@code radius < 0.0} or {@code tubeRadius < 0.0}.
@@ -40,7 +40,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
     * <p>
     * Note, the axis should remain a unit-length vector.
     * </p>
-    * 
+    *
     * @return the axis of this torus.
     */
    @Override

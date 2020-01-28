@@ -132,6 +132,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    }
 
    /** {@inheritDoc} */
+   @Override
    default void getEuler(Tuple3DBasics eulerAnglesToPack)
    {
       YawPitchRollConversion.convertMatrixToYawPitchRoll(this, eulerAnglesToPack);
@@ -191,6 +192,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     *
     * @param tupleToTransform the tuple to transform. Modified.
     */
+   @Override
    default void subTransform(Tuple3DBasics tupleToTransform)
    {
       subTransform(tupleToTransform, tupleToTransform);
@@ -206,6 +208,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * @param tupleOriginal    the tuple to transform. Not modified.
     * @param tupleTransformed the tuple to add the result to. Modified.
     */
+   @Override
    default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       if (isIdentity())

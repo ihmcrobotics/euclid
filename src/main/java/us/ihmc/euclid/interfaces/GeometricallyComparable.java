@@ -8,7 +8,7 @@ package us.ihmc.euclid.interfaces;
  * implementations of which provide a component-based comparison mostly useful to assert that for
  * instance components properly send over a network.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  * @param <T> the final type of the geometry implementing this interface.
  */
