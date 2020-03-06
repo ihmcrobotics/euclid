@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.CommonOps;
-import org.ejml.ops.EjmlUnitTests;
+import org.ejml.EjmlUnitTests;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -54,13 +54,13 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 1.0, 10.0);
          RotationScaleMatrix rotationScaleMatrix = new RotationScaleMatrix(rotationMatrix, scale);
 
-         DenseMatrix64F rotationDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj rotationDenseMatrix = new DMatrixRMaj(3, 3);
          rotationMatrix.get(rotationDenseMatrix);
-         DenseMatrix64F scaleDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj scaleDenseMatrix = new DMatrixRMaj(3, 3);
          for (int index = 0; index < 3; index++)
             scaleDenseMatrix.set(index, index, scale.getElement(index));
-         DenseMatrix64F rotationScaleDenseMatrix = new DenseMatrix64F(3, 3);
-         CommonOps.mult(rotationDenseMatrix, scaleDenseMatrix, rotationScaleDenseMatrix);
+         DMatrixRMaj rotationScaleDenseMatrix = new DMatrixRMaj(3, 3);
+         CommonOps_DDRM.mult(rotationDenseMatrix, scaleDenseMatrix, rotationScaleDenseMatrix);
          Matrix3D expectedRotationScaleMatrix = new Matrix3D();
          expectedRotationScaleMatrix.set(rotationScaleDenseMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationScaleMatrix, rotationScaleMatrix, EPS);
@@ -103,10 +103,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test RotationScaleMatrix(DenseMatrix64F rotationScaleMatrix)
+      { // Test RotationScaleMatrix(DMatrixRMaj rotationScaleMatrix)
          RotationScaleMatrix matrixExpected = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -141,7 +141,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          RotationMatrix rotationMatrix = new RotationMatrix(axisAngle);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -161,7 +161,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(axisAngle);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -181,7 +181,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(axisAngle);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -196,10 +196,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test RotationScaleMatrix(DenseMatrix64F matrix, double scale)
+      { // Test RotationScaleMatrix(DMatrixRMaj matrix, double scale)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F rotationDenseMatrix = new DenseMatrix64F(3, 3);
-         DenseMatrix64F expectedDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj rotationDenseMatrix = new DMatrixRMaj(3, 3);
+         DMatrixRMaj expectedDenseMatrix = new DMatrixRMaj(3, 3);
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          rotationMatrix.get(rotationDenseMatrix);
 
@@ -216,10 +216,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test RotationScaleMatrix(DenseMatrix64F matrix, double scalex, double scaley, double scalez)
+      { // Test RotationScaleMatrix(DMatrixRMaj matrix, double scalex, double scaley, double scalez)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F rotationDenseMatrix = new DenseMatrix64F(3, 3);
-         DenseMatrix64F expectedDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj rotationDenseMatrix = new DMatrixRMaj(3, 3);
+         DMatrixRMaj expectedDenseMatrix = new DMatrixRMaj(3, 3);
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          rotationMatrix.get(rotationDenseMatrix);
@@ -237,10 +237,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test RotationScaleMatrix(DenseMatrix64F matrix, TupleReadOnly scales)
+      { // Test RotationScaleMatrix(DMatrixRMaj matrix, TupleReadOnly scales)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F rotationDenseMatrix = new DenseMatrix64F(3, 3);
-         DenseMatrix64F expectedDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj rotationDenseMatrix = new DMatrixRMaj(3, 3);
+         DMatrixRMaj expectedDenseMatrix = new DMatrixRMaj(3, 3);
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          rotationMatrix.get(rotationDenseMatrix);
@@ -262,7 +262,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -282,7 +282,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -302,7 +302,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -320,7 +320,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       { // Test RotationScaleMatrix(RotationMatrixReadOnly rotationMatrix, double scale)
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -339,7 +339,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -358,7 +358,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -654,10 +654,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test set(DenseMatrix64F rotationScaleMatrix)
+      { // Test set(DMatrixRMaj rotationScaleMatrix)
          RotationScaleMatrix matrixExpected = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
 
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -672,11 +672,11 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test set(DenseMatrix64F rotationScaleMatrix, int startRow, int startColumn)
+      { // Test set(DMatrixRMaj rotationScaleMatrix, int startRow, int startColumn)
          RotationScaleMatrix matrixExpected = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3 + startRow, 3 + startColumn);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3 + startRow, 3 + startColumn);
 
          for (int row = 0; row < 3; row++)
          {
@@ -777,7 +777,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          RotationMatrix rotationMatrix = new RotationMatrix(axisAngle);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -798,7 +798,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(axisAngle);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -819,7 +819,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(axisAngle);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -835,10 +835,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test set(DenseMatrix64F matrix, double scale)
+      { // Test set(DMatrixRMaj matrix, double scale)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F rotationDenseMatrix = new DenseMatrix64F(3, 3);
-         DenseMatrix64F expectedDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj rotationDenseMatrix = new DMatrixRMaj(3, 3);
+         DMatrixRMaj expectedDenseMatrix = new DMatrixRMaj(3, 3);
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          rotationMatrix.get(rotationDenseMatrix);
 
@@ -856,10 +856,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test set(DenseMatrix64F matrix, double scalex, double scaley, double scalez)
+      { // Test set(DMatrixRMaj matrix, double scalex, double scaley, double scalez)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F rotationDenseMatrix = new DenseMatrix64F(3, 3);
-         DenseMatrix64F expectedDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj rotationDenseMatrix = new DMatrixRMaj(3, 3);
+         DMatrixRMaj expectedDenseMatrix = new DMatrixRMaj(3, 3);
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          rotationMatrix.get(rotationDenseMatrix);
@@ -878,10 +878,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      { // Test set(DenseMatrix64F matrix, TupleReadOnly scales)
+      { // Test set(DMatrixRMaj matrix, TupleReadOnly scales)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F rotationDenseMatrix = new DenseMatrix64F(3, 3);
-         DenseMatrix64F expectedDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj rotationDenseMatrix = new DMatrixRMaj(3, 3);
+         DMatrixRMaj expectedDenseMatrix = new DMatrixRMaj(3, 3);
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          rotationMatrix.get(rotationDenseMatrix);
@@ -904,7 +904,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -925,7 +925,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -946,7 +946,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -965,7 +965,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       { // Test set(Matrix3DReadOnly rotationMatrix, double scale)
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -985,7 +985,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -1005,7 +1005,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -1024,7 +1024,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       { // Test set(RotationMatrixReadOnly rotationMatrix, double scale)
          double scale = EuclidCoreRandomTools.nextDouble(random, 0.1, 2.0);
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -1044,7 +1044,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -1064,7 +1064,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          Vector3D scale = EuclidCoreRandomTools.nextRotationVector(random, 2.0);
          scale.absolute();
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
          for (int row = 0; row < 3; row++)
          {
@@ -1086,9 +1086,9 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
    {
       Random random = new Random(4356L);
 
-      { // Test setRotation(DenseMatrix64F rotationMatrix)
+      { // Test setRotation(DMatrixRMaj rotationMatrix)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          rotationMatrix.get(denseMatrix);
          Vector3D scale = EuclidCoreRandomTools.nextVector3D(random);
          scale.absolute();
@@ -2161,10 +2161,10 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          assertEquals(rotationScaleMatrix.getRotationMatrix(), matrixActual);
       }
 
-      { // Test getRotation(DenseMatrix64F rotationMatrixToPack)
+      { // Test getRotation(DMatrixRMaj rotationMatrixToPack)
          RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         DenseMatrix64F denseMatrixActual = new DenseMatrix64F(3, 3);
-         DenseMatrix64F denseMatrixExpected = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrixActual = new DMatrixRMaj(3, 3);
+         DMatrixRMaj denseMatrixExpected = new DMatrixRMaj(3, 3);
          rotationScaleMatrix.getRotation(denseMatrixActual);
 
          for (int row = 0; row < 3; row++)
@@ -2269,9 +2269,9 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          }
       }
 
-      { // Test get(DenseMatrix64F rotationScaleMatrixToPack)
+      { // Test get(DMatrixRMaj rotationScaleMatrixToPack)
          RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          rotationScaleMatrix.get(denseMatrix);
 
          for (int row = 0; row < 3; row++)
@@ -2283,11 +2283,11 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
          }
       }
 
-      { // Test get(DenseMatrix64F rotationScaleMatrixToPack, int startRow, int startColumn)
+      { // Test get(DMatrixRMaj rotationScaleMatrixToPack, int startRow, int startColumn)
          RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3 + startRow, 3 + startColumn);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3 + startRow, 3 + startColumn);
          rotationScaleMatrix.get(startRow, startColumn, denseMatrix);
 
          for (int row = 0; row < 3; row++)

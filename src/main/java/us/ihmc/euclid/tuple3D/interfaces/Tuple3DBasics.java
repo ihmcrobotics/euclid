@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.Clearable;
@@ -272,7 +272,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *               modified.
     */
-   default void set(DenseMatrix64F matrix)
+   default void set(DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(3, 1, matrix);
       set(matrix.unsafe_get(0, 0), matrix.unsafe_get(1, 0), matrix.unsafe_get(2, 0));
@@ -286,7 +286,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * @param matrix   the column vector containing the new values for this tuple's components. Not
     *                 modified.
     */
-   default void set(int startRow, DenseMatrix64F matrix)
+   default void set(int startRow, DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, 1, matrix);
       set(matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow, 0));
@@ -301,7 +301,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     * @param matrix   the column vector containing the new values for this tuple's components. Not
     *                 modified.
     */
-   default void set(int startRow, int column, DenseMatrix64F matrix)
+   default void set(int startRow, int column, DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, column + 1, matrix);
       set(matrix.unsafe_get(startRow++, column), matrix.unsafe_get(startRow++, column), matrix.unsafe_get(startRow, column));

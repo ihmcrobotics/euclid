@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
@@ -245,7 +245,7 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     * @param matrix the column vector containing the new values for this tuple's components. Not
     *               modified.
     */
-   default void set(DenseMatrix64F matrix)
+   default void set(DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(2, 1, matrix);
       set(matrix.unsafe_get(0, 0), matrix.unsafe_get(1, 0));
@@ -259,7 +259,7 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     * @param matrix   the column vector containing the new values for this tuple's components. Not
     *                 modified.
     */
-   default void set(int startRow, DenseMatrix64F matrix)
+   default void set(int startRow, DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 2, 1, matrix);
       set(matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow, 0));
@@ -274,7 +274,7 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     * @param matrix   the column vector containing the new values for this tuple's components. Not
     *                 modified.
     */
-   default void set(int startRow, int column, DenseMatrix64F matrix)
+   default void set(int startRow, int column, DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 2, column + 1, matrix);
       set(matrix.unsafe_get(startRow++, column), matrix.unsafe_get(startRow, column));

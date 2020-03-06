@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
@@ -137,7 +137,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, DMatrixRMaj matrix)
    {
       setReferenceFrame(referenceFrame);
       set(matrix);
@@ -152,7 +152,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DMatrixRMaj matrix)
    {
       setReferenceFrame(referenceFrame);
       set(startRow, matrix);
@@ -169,7 +169,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DMatrixRMaj matrix)
    {
       setReferenceFrame(referenceFrame);
       set(startRow, column, matrix);

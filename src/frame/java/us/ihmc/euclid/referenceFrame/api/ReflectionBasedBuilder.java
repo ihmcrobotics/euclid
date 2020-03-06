@@ -12,8 +12,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.RandomMatrices;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.RandomMatrices_DDRM;
 
 import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -63,7 +63,7 @@ public class ReflectionBasedBuilder
       framelessTypeBuilders.put(char[].class, random -> nextCharArray(random));
       framelessTypeBuilders.put(long[].class, random -> random.longs(20, -100, 100).toArray());
 
-      framelessTypeBuilders.put(DenseMatrix64F.class, random -> RandomMatrices.createRandom(20, 20, random));
+      framelessTypeBuilders.put(DMatrixRMaj.class, random -> RandomMatrices_DDRM.rectangle(20, 20, random));
    }
 
    /**
@@ -227,9 +227,9 @@ public class ReflectionBasedBuilder
          {
             clone[i] = parametersToClone[i];
          }
-         else if (DenseMatrix64F.class.equals(parameterType))
+         else if (DMatrixRMaj.class.equals(parameterType))
          {
-            clone[i] = new DenseMatrix64F((DenseMatrix64F) parametersToClone[i]);
+            clone[i] = new DMatrixRMaj((DMatrixRMaj) parametersToClone[i]);
          }
          else if (float[].class.equals(parameterType))
          {

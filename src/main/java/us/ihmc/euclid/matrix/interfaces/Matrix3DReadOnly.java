@@ -1,6 +1,6 @@
 package us.ihmc.euclid.matrix.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
@@ -185,7 +185,7 @@ public interface Matrix3DReadOnly
     * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
     *                     Modified.
     */
-   default void get(DenseMatrix64F matrixToPack)
+   default void get(DMatrixRMaj matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(3, 3, matrixToPack);
 
@@ -209,7 +209,7 @@ public interface Matrix3DReadOnly
     * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
     *                     Modified.
     */
-   default void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
+   default void get(int startRow, int startColumn, DMatrixRMaj matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, startColumn + 3, matrixToPack);
 

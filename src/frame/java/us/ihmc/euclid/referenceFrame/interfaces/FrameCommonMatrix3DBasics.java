@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -113,7 +113,7 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
     * @param referenceFrame the new reference frame to be associated with this matrix.
     * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, DMatrixRMaj matrix)
    {
       setReferenceFrame(referenceFrame);
       set(matrix);
@@ -128,7 +128,7 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
     * @param startColumn    the first column index to start reading from in the dense-matrix.
     * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int startColumn, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int startColumn, DMatrixRMaj matrix)
    {
       setReferenceFrame(referenceFrame);
       set(startRow, startColumn, matrix);

@@ -8,7 +8,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis2D;
@@ -126,9 +126,9 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test Tuple2DReadOnly.get(DenseMatrix64F tupleMatrixToPack)
+      { // Test Tuple2DReadOnly.get(DMatrixRMaj tupleMatrixToPack)
          T tuple = createRandomTuple(random);
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
 
@@ -138,9 +138,9 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test Tuple2DReadOnly.get(int startRow, DenseMatrix64F tupleMatrixToPack)
+      { // Test Tuple2DReadOnly.get(int startRow, DMatrixRMaj tupleMatrixToPack)
          T tuple = createRandomTuple(random);
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
 
@@ -150,9 +150,9 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test Tuple2DReadOnly.get(int startRow, int startColumn, DenseMatrix64F tupleMatrixToPack)
+      { // Test Tuple2DReadOnly.get(int startRow, int startColumn, DMatrixRMaj tupleMatrixToPack)
          T tuple = createRandomTuple(random);
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
 

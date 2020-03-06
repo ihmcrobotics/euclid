@@ -10,9 +10,9 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.CommonOps;
-import org.ejml.ops.RandomMatrices;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -77,9 +77,9 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          }
       }
 
-      { // Test RigidBodyTransform(DenseMatrix64F matrix)
+      { // Test RigidBodyTransform(DMatrixRMaj matrix)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(4, 4);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 4);
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
@@ -95,7 +95,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test RigidBodyTransform(Matrix3DReadOnly rotationMatrix, TupleReadOnly translation)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(4, 4);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 4);
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
@@ -116,7 +116,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test RigidBodyTransform(QuaternionReadOnly quaternion, TupleReadOnly translation)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(4, 4);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 4);
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
@@ -137,7 +137,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       { // Test RigidBodyTransform(AxisAngleReadOnly axisAngle, TupleReadOnly translation)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
 
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(4, 4);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 4);
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
@@ -531,10 +531,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertTrue(actual.hasTranslation());
       }
 
-      { // Test set(DenseMatrix64F matrix)
+      { // Test set(DMatrixRMaj matrix)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(4, 4);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 4);
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
@@ -568,12 +568,12 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertTrue(actual.hasTranslation());
       }
 
-      { // Test set(DenseMatrix64F matrix, int startRow, int startColumn)
+      { // Test set(DMatrixRMaj matrix, int startRow, int startColumn)
          RigidBodyTransform expected = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RigidBodyTransform actual = new RigidBodyTransform();
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(4 + startRow, 4 + startColumn);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(4 + startRow, 4 + startColumn);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
                denseMatrix.set(row + startRow, column + startColumn, expected.getElement(row, column));
@@ -1129,16 +1129,16 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actual.hasRotation());
       }
 
-      { // Test setRotation(DenseMatrix64F matrix)
+      { // Test setRotation(DMatrixRMaj matrix)
          RotationMatrix expectedRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
          RigidBodyTransform actual = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          expectedRotation.get(denseMatrix);
          actual.setRotation(denseMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
          assertTrue(actual.hasRotation());
 
-         CommonOps.setIdentity(denseMatrix);
+         CommonOps_DDRM.setIdentity(denseMatrix);
          expectedRotation.set(denseMatrix);
          actual.setRotation(denseMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actual.getRotation(), 0.0);
@@ -1767,9 +1767,9 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertFalse(actualTransform.hasRotation());
       }
 
-      { // Test setRotationAndZeroTranslation(DenseMatrix64F matrix)
+      { // Test setRotationAndZeroTranslation(DMatrixRMaj matrix)
          RigidBodyTransform actualTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          expectedRotation.get(denseMatrix);
          actualTransform.setRotationAndZeroTranslation(denseMatrix);
          assertTrue(actualTransform.hasRotation());
@@ -1777,7 +1777,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotation, actualTransform.getRotation(), 0.0);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(actualTransform.getTranslation());
 
-         actualTransform.setRotationAndZeroTranslation(CommonOps.identity(3));
+         actualTransform.setRotationAndZeroTranslation(CommonOps_DDRM.identity(3));
          assertFalse(actualTransform.hasRotation());
       }
 
@@ -1977,9 +1977,9 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
                assertTrue(rotationScaleMatrix.getElement(row, column) == transform.getElement(row, column));
       }
 
-      { // Test getRotation(DenseMatrix64F matrixToPack)
+      { // Test getRotation(DMatrixRMaj matrixToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          transform.getRotation(denseMatrix);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
@@ -2057,20 +2057,20 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    {
       Random random = new Random(2342L);
 
-      { // Test get(DenseMatrix64F matrixToPack)
+      { // Test get(DMatrixRMaj matrixToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         DenseMatrix64F denseMatrix = RandomMatrices.createRandom(4, 4, random);
+         DMatrixRMaj denseMatrix = RandomMatrices_DDRM.rectangle(4, 4, random);
          transform.get(denseMatrix);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
                assertTrue(denseMatrix.get(row, column) == transform.getElement(row, column));
       }
 
-      { // Test get(DenseMatrix64F matrixToPack, int startRow, int startColumn)
+      { // Test get(DMatrixRMaj matrixToPack, int startRow, int startColumn)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DenseMatrix64F denseMatrix = RandomMatrices.createRandom(4 + startRow, 4 + startColumn, random);
+         DMatrixRMaj denseMatrix = RandomMatrices_DDRM.rectangle(4 + startRow, 4 + startColumn, random);
          transform.get(startRow, startColumn, denseMatrix);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
@@ -2182,9 +2182,9 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       for (int i = 0; i < ITERATIONS; i++)
       {
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(4, 4);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 4);
          transform.get(denseMatrix);
-         CommonOps.invert(denseMatrix);
+         CommonOps_DDRM.invert(denseMatrix);
          transform.invert();
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
@@ -2336,12 +2336,12 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       RigidBodyTransform t3 = new RigidBodyTransform(t1);
       t3.multiply(t2);
 
-      DenseMatrix64F m1 = new DenseMatrix64F(4, 4);
-      DenseMatrix64F m2 = new DenseMatrix64F(4, 4);
-      DenseMatrix64F m3 = new DenseMatrix64F(4, 4);
+      DMatrixRMaj m1 = new DMatrixRMaj(4, 4);
+      DMatrixRMaj m2 = new DMatrixRMaj(4, 4);
+      DMatrixRMaj m3 = new DMatrixRMaj(4, 4);
       t1.get(m1);
       t2.get(m2);
-      CommonOps.mult(m1, m2, m3);
+      CommonOps_DDRM.mult(m1, m2, m3);
 
       for (int row = 0; row < 4; row++)
          for (int column = 0; column < 4; column++)
@@ -2883,12 +2883,12 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform t3 = new RigidBodyTransform(t2);
          t3.preMultiply(t1);
 
-         DenseMatrix64F m1 = new DenseMatrix64F(4, 4);
-         DenseMatrix64F m2 = new DenseMatrix64F(4, 4);
-         DenseMatrix64F m3 = new DenseMatrix64F(4, 4);
+         DMatrixRMaj m1 = new DMatrixRMaj(4, 4);
+         DMatrixRMaj m2 = new DMatrixRMaj(4, 4);
+         DMatrixRMaj m3 = new DMatrixRMaj(4, 4);
          t1.get(m1);
          t2.get(m2);
-         CommonOps.mult(m1, m2, m3);
+         CommonOps_DDRM.mult(m1, m2, m3);
 
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
@@ -3523,27 +3523,27 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    {
       Random random = new Random(432L);
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      DenseMatrix64F matrix = new DenseMatrix64F(4, 4);
+      DMatrixRMaj matrix = new DMatrixRMaj(4, 4);
       transform.get(matrix);
 
       { // Test transform(PointBasics pointToTransform)
-         DenseMatrix64F ejmlPoint = new DenseMatrix64F(4, 1);
-         DenseMatrix64F ejmlTransformedPoint = new DenseMatrix64F(4, 1);
+         DMatrixRMaj ejmlPoint = new DMatrixRMaj(4, 1);
+         DMatrixRMaj ejmlTransformedPoint = new DMatrixRMaj(4, 1);
 
          Point3D point = EuclidCoreRandomTools.nextPoint3D(random);
          point.get(ejmlPoint);
          ejmlPoint.set(3, 0, 1.0);
 
          transform.transform(point);
-         CommonOps.mult(matrix, ejmlPoint, ejmlTransformedPoint);
+         CommonOps_DDRM.mult(matrix, ejmlPoint, ejmlTransformedPoint);
 
          for (int i = 0; i < 3; i++)
             assertEquals(ejmlTransformedPoint.get(i, 0), point.getElement(i), EPS);
       }
 
       { // Test transform(PointReadOnly pointOriginal, PointBasics pointTransformed)
-         DenseMatrix64F ejmlPoint = new DenseMatrix64F(4, 1);
-         DenseMatrix64F ejmlTransformedPoint = new DenseMatrix64F(4, 1);
+         DMatrixRMaj ejmlPoint = new DMatrixRMaj(4, 1);
+         DMatrixRMaj ejmlTransformedPoint = new DMatrixRMaj(4, 1);
 
          Point3D point = EuclidCoreRandomTools.nextPoint3D(random);
          Point3D pointTransformed = new Point3D();
@@ -3551,36 +3551,36 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          ejmlPoint.set(3, 0, 1.0);
 
          transform.transform(point, pointTransformed);
-         CommonOps.mult(matrix, ejmlPoint, ejmlTransformedPoint);
+         CommonOps_DDRM.mult(matrix, ejmlPoint, ejmlTransformedPoint);
 
          for (int i = 0; i < 3; i++)
             assertEquals(ejmlTransformedPoint.get(i, 0), pointTransformed.getElement(i), EPS);
       }
 
       { // Test transform(VectorBasics vectorToTransform)
-         DenseMatrix64F ejmlVector = new DenseMatrix64F(4, 1);
-         DenseMatrix64F ejmlTransformedVector = new DenseMatrix64F(4, 1);
+         DMatrixRMaj ejmlVector = new DMatrixRMaj(4, 1);
+         DMatrixRMaj ejmlTransformedVector = new DMatrixRMaj(4, 1);
 
          Vector3D vector = EuclidCoreRandomTools.nextVector3D(random);
          vector.get(ejmlVector);
 
          transform.transform(vector);
-         CommonOps.mult(matrix, ejmlVector, ejmlTransformedVector);
+         CommonOps_DDRM.mult(matrix, ejmlVector, ejmlTransformedVector);
 
          for (int i = 0; i < 3; i++)
             assertEquals(ejmlTransformedVector.get(i, 0), vector.getElement(i), EPS);
       }
 
       { // Test transform(VectorReadOnly vectorOriginal, VectorBasics vectorTransformed)
-         DenseMatrix64F ejmlVector = new DenseMatrix64F(4, 1);
-         DenseMatrix64F ejmlTransformedVector = new DenseMatrix64F(4, 1);
+         DMatrixRMaj ejmlVector = new DMatrixRMaj(4, 1);
+         DMatrixRMaj ejmlTransformedVector = new DMatrixRMaj(4, 1);
 
          Vector3D vector = EuclidCoreRandomTools.nextVector3D(random);
          Vector3D vectorTransformed = new Vector3D();
          vector.get(ejmlVector);
 
          transform.transform(vector, vectorTransformed);
-         CommonOps.mult(matrix, ejmlVector, ejmlTransformedVector);
+         CommonOps_DDRM.mult(matrix, ejmlVector, ejmlTransformedVector);
 
          for (int i = 0; i < 3; i++)
             assertEquals(ejmlTransformedVector.get(i, 0), vectorTransformed.getElement(i), EPS);
@@ -3632,12 +3632,12 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
 
       // Try with dense-matrix
-      DenseMatrix64F transformDenseMatrix = new DenseMatrix64F(4, 4);
+      DMatrixRMaj transformDenseMatrix = new DMatrixRMaj(4, 4);
       transform.get(transformDenseMatrix);
-      DenseMatrix64F vectorOriginalDenseMatrix = new DenseMatrix64F(4, 1);
+      DMatrixRMaj vectorOriginalDenseMatrix = new DMatrixRMaj(4, 1);
       vectorOriginal.get(vectorOriginalDenseMatrix);
-      DenseMatrix64F vectorTransformedDenseMatrix = new DenseMatrix64F(4, 1);
-      CommonOps.mult(transformDenseMatrix, vectorOriginalDenseMatrix, vectorTransformedDenseMatrix);
+      DMatrixRMaj vectorTransformedDenseMatrix = new DMatrixRMaj(4, 1);
+      CommonOps_DDRM.mult(transformDenseMatrix, vectorOriginalDenseMatrix, vectorTransformedDenseMatrix);
       vectorExpected.set(vectorTransformedDenseMatrix);
 
       EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);

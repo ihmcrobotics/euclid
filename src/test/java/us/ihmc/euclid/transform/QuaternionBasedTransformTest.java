@@ -8,7 +8,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -54,10 +54,10 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
       }
 
-      { // Test QuaternionBasedTransform(DenseMatrix64F matrix)
+      { // Test QuaternionBasedTransform(DMatrixRMaj matrix)
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Vector3D translation = EuclidCoreRandomTools.nextVector3D(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(7, 1);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(7, 1);
          quaternion.get(denseMatrix);
          translation.get(4, denseMatrix);
          QuaternionBasedTransform transform = new QuaternionBasedTransform(denseMatrix);
@@ -269,10 +269,10 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expectedTransform, actualTransform, EPS);
       }
 
-      { // Test set(DenseMatrix64F matrix)
+      { // Test set(DMatrixRMaj matrix)
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Vector3D translation = EuclidCoreRandomTools.nextVector3D(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(7, 1);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(7, 1);
          quaternion.get(denseMatrix);
          translation.get(4, denseMatrix);
          actualTransform.set(denseMatrix);
@@ -472,10 +472,10 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       QuaternionReadOnly expectedQuaternion = transform.getRotation();
       Vector3DReadOnly expectedTranslation = transform.getTranslation();
 
-      { // Test get(DenseMatrix64F matrixToPack)
+      { // Test get(DMatrixRMaj matrixToPack)
          Quaternion actualQuaternion = new Quaternion();
          Vector3D actualTranslation = new Vector3D();
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(7, 1);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(7, 1);
          transform.get(denseMatrix);
          actualQuaternion.set(denseMatrix);
          actualTranslation.set(4, denseMatrix);
@@ -483,12 +483,12 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTranslation, EPS);
       }
 
-      { // Test get(DenseMatrix64F matrixToPack, int startRow, int column)
+      { // Test get(DMatrixRMaj matrixToPack, int startRow, int column)
          Quaternion actualQuaternion = new Quaternion();
          Vector3D actualTranslation = new Vector3D();
          int startRow = random.nextInt(10);
          int column = random.nextInt(10);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(7 + startRow, 1 + column);
+         DMatrixRMaj denseMatrix = new DMatrixRMaj(7 + startRow, 1 + column);
          transform.get(startRow, column, denseMatrix);
          actualQuaternion.set(startRow, column, denseMatrix);
          actualTranslation.set(4 + startRow, column, denseMatrix);

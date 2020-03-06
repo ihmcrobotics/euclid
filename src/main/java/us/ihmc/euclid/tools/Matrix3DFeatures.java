@@ -1,7 +1,7 @@
 package us.ihmc.euclid.tools;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.MatrixDimensionException;
+import org.ejml.MatrixDimensionException;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -73,7 +73,7 @@ public class Matrix3DFeatures
     * @param matrix the matrix to verify. Not modified.
     * @throws NotARotationMatrixException if the matrix is not a rotation matrix.
     */
-   public static void checkIfRotationMatrix(DenseMatrix64F matrix)
+   public static void checkIfRotationMatrix(DMatrixRMaj matrix)
    {
       Matrix3DFeatures.checkMatrixSize(matrix);
       double m00 = matrix.unsafe_get(0, 0);
@@ -153,7 +153,7 @@ public class Matrix3DFeatures
     * @param matrix the matrix to verify. Not modified.
     * @throws RuntimeException if the matrix is not a 3-by-3 matrix.
     */
-   public static void checkMatrixSize(DenseMatrix64F matrix)
+   public static void checkMatrixSize(DMatrixRMaj matrix)
    {
       if (matrix.getNumRows() != 3 || matrix.getNumCols() != 3)
          throw new MatrixDimensionException("Unexpected matrix size: " + matrix.getNumRows() + "-by-" + matrix.getNumCols() + ". Must be 3-by-3.");
@@ -229,7 +229,7 @@ public class Matrix3DFeatures
     * @param matrix the matrix to verify, not null, not modified.
     * @return {@code true} if the given matrix is a rotation matrix, {@code false} otherwise.
     */
-   public static boolean isRotationMatrix(DenseMatrix64F matrix)
+   public static boolean isRotationMatrix(DMatrixRMaj matrix)
    {
       checkMatrixSize(matrix);
       return isRotationMatrix(matrix.unsafe_get(0, 0),

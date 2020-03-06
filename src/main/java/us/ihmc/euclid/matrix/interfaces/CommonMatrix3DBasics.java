@@ -1,6 +1,7 @@
 package us.ihmc.euclid.matrix.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -150,7 +151,7 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     *
     * @param matrix the dense-matrix containing the new values for this matrix. Not modified.
     */
-   default void set(DenseMatrix64F matrix)
+   default void set(DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(3, 3, matrix);
 
@@ -174,7 +175,7 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     * @param startColumn the first column index to start reading from in the dense-matrix.
     * @param matrix      the dense-matrix containing the new values for this matrix. Not modified.
     */
-   default void set(int startRow, int startColumn, DenseMatrix64F matrix)
+   default void set(int startRow, int startColumn, DMatrixRMaj matrix)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, startColumn + 3, matrix);
 

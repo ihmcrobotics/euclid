@@ -9,8 +9,8 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.RandomMatrices;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.SingularMatrixException;
@@ -190,7 +190,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         DenseMatrix64F denseMatrix = RandomMatrices.createRandom(3, 3, random);
+         DMatrixRMaj denseMatrix = RandomMatrices_DDRM.rectangle(3, 3, random);
          actualMatrix.set(denseMatrix);
 
          for (int row = 0; row < 3; row++)
@@ -206,7 +206,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
       {
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DenseMatrix64F denseMatrix = RandomMatrices.createRandom(3 + startRow, 3 + startColumn, random);
+         DMatrixRMaj denseMatrix = RandomMatrices_DDRM.rectangle(3 + startRow, 3 + startColumn, random);
          actualMatrix.set(startRow, startColumn, denseMatrix);
 
          for (int row = 0; row < 3; row++)

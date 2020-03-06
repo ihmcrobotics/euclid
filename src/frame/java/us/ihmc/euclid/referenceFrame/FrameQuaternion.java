@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -97,7 +97,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * @param referenceFrame the initial frame for this frame quaternion.
     * @param matrix         the dense-matrix containing this quaternion's components. Not modified.
     */
-   public FrameQuaternion(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
+   public FrameQuaternion(ReferenceFrame referenceFrame, DMatrixRMaj matrix)
    {
       setIncludingFrame(referenceFrame, matrix);
    }

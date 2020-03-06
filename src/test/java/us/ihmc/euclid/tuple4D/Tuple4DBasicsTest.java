@@ -6,7 +6,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -233,8 +233,8 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DenseMatrix64F matrix);
-         DenseMatrix64F matrix = new DenseMatrix64F(5, 4);
+      { // Test set(DMatrixRMaj matrix);
+         DMatrixRMaj matrix = new DMatrixRMaj(5, 4);
          tuple2 = createRandomTuple(random);
          tuple2.get(matrix);
          tuple1.set(matrix);
@@ -242,8 +242,8 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DenseMatrix64F matrix, int startRow);
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 4);
+      { // Test set(DMatrixRMaj matrix, int startRow);
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          tuple2 = createRandomTuple(random);
          tuple2.get(5, matrix);
          tuple1.set(5, matrix);
@@ -251,8 +251,8 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DenseMatrix64F matrix, int startRow, int column);
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 4);
+      { // Test set(DMatrixRMaj matrix, int startRow, int column);
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          tuple2 = createRandomTuple(random);
          tuple2.get(5, 2, matrix);
          tuple1.set(5, 2, matrix);

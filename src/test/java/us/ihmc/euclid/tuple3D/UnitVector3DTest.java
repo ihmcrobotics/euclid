@@ -9,7 +9,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -276,8 +276,8 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DenseMatrix64F matrix);
-         DenseMatrix64F matrix = new DenseMatrix64F(5, 4);
+      { // Test set(DMatrixRMaj matrix);
+         DMatrixRMaj matrix = new DMatrixRMaj(5, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
@@ -291,8 +291,8 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DenseMatrix64F matrix, int startRow);
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 4);
+      { // Test set(DMatrixRMaj matrix, int startRow);
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
@@ -306,8 +306,8 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DenseMatrix64F matrix, int startRow, int column);
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 4);
+      { // Test set(DMatrixRMaj matrix, int startRow, int column);
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
@@ -529,8 +529,8 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(DenseMatrix64F tupleMatrixToPack)
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
+      { // Test get(DMatrixRMaj tupleMatrixToPack)
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
 
@@ -541,8 +541,8 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(int startRow, DenseMatrix64F tupleMatrixToPack)
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
+      { // Test get(int startRow, DMatrixRMaj tupleMatrixToPack)
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
 
@@ -553,8 +553,8 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(int startRow, int startColumn, DenseMatrix64F tupleMatrixToPack)
-         DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
+      { // Test get(int startRow, int startColumn, DMatrixRMaj tupleMatrixToPack)
+         DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
 

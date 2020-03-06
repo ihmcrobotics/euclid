@@ -14,7 +14,8 @@ ihmc {
 }
 
 mainDependencies {
-   api("org.ejml:dense64:0.30")
+    api("org.ejml:ejml-core:0.39")
+    api("org.ejml:ejml-ddense:0.39")
 }
 
 geometryDependencies {

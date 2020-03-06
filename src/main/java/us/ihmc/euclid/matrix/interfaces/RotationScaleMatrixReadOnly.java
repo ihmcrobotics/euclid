@@ -1,6 +1,6 @@
 package us.ihmc.euclid.matrix.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -182,7 +182,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     *
     * @param rotationMatrixToPack the rotation matrix in which the rotation part is stored. Modified.
     */
-   default void getRotation(DenseMatrix64F rotationMatrixToPack)
+   default void getRotation(DMatrixRMaj rotationMatrixToPack)
    {
       getRotationMatrix().get(rotationMatrixToPack);
    }
