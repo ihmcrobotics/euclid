@@ -225,10 +225,6 @@ public class Vector3D implements Vector3DBasics, GeometryObject<Vector3D>
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = EuclidHashCodeTools.addToHashCode(bits, x);
-      bits = EuclidHashCodeTools.addToHashCode(bits, y);
-      bits = EuclidHashCodeTools.addToHashCode(bits, z);
-      return EuclidHashCodeTools.toIntHashCode(bits);
+      return EuclidHashCodeTools.toIntHashCode(x, y, z);
    }
 }

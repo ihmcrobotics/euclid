@@ -13,6 +13,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -479,6 +480,14 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    public boolean geometricallyEquals(FrameConvexPolygon2D other, double epsilon)
    {
       return FrameConvexPolygon2DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   @Override
+   public int hashCode()
+   {
+      long bits = EuclidHashCodeTools.combineHashCode(Boolean.hashCode(clockwiseOrdered), vertexBufferView);
+      bits = EuclidHashCodeTools.combineHashCode(bits, referenceFrame);
+      return EuclidHashCodeTools.toIntHashCode(bits);
    }
 
    /** {@inheritDoc} */

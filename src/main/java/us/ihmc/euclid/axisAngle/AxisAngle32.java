@@ -8,6 +8,7 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -299,11 +300,6 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = 31L * bits + Float.floatToIntBits(x);
-      bits = 31L * bits + Float.floatToIntBits(y);
-      bits = 31L * bits + Float.floatToIntBits(z);
-      bits = 31L * bits + Float.floatToIntBits(angle);
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(x, y, z, angle);
    }
 }

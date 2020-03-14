@@ -1116,16 +1116,6 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = EuclidHashCodeTools.addToHashCode(bits, m00);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m01);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m02);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m10);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m11);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m12);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m20);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m21);
-      bits = EuclidHashCodeTools.addToHashCode(bits, m22);
-      return EuclidHashCodeTools.toIntHashCode(bits);
+      return EuclidHashCodeTools.toIntHashCode(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 }
