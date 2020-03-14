@@ -177,8 +177,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     */
    default void add(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Vector4DBasics.super.add(frameTuple1, frameTuple2);
    }
 
@@ -245,8 +244,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     */
    default void sub(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Vector4DBasics.super.sub(frameTuple1, frameTuple2);
    }
 
@@ -317,8 +315,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     */
    default void scaleAdd(double scalar, FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Vector4DBasics.super.scaleAdd(scalar, frameTuple1, frameTuple2);
    }
 
@@ -389,8 +386,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     */
    default void scaleSub(double scalar, FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Vector4DBasics.super.scaleSub(scalar, frameTuple1, frameTuple2);
    }
 
@@ -473,8 +469,7 @@ public interface FixedFrameVector4DBasics extends FrameVector4DReadOnly, FixedFr
     */
    default void interpolate(FrameTuple4DReadOnly frameTuple1, FrameTuple4DReadOnly frameTuple2, double alpha)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Vector4DBasics.super.interpolate(frameTuple1, frameTuple2, alpha);
    }
 }

@@ -229,8 +229,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     */
    default void set(FrameTuple3DReadOnly position, FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(position);
-      checkReferenceFrameMatch(orientation);
+      checkReferenceFrameMatch(position, orientation);
       Pose3DBasics.super.set(position, orientation);
    }
 
@@ -386,8 +385,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     */
    default void interpolate(FramePose3DReadOnly pose1, FramePose3DReadOnly pose2, double alpha)
    {
-      checkReferenceFrameMatch(pose1);
-      checkReferenceFrameMatch(pose2);
+      checkReferenceFrameMatch(pose1, pose2);
       Pose3DBasics.super.interpolate(pose1, pose2, alpha);
    }
 }

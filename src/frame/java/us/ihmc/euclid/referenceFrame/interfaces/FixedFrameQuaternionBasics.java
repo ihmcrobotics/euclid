@@ -214,8 +214,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     */
    default void interpolate(FrameQuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
    {
-      checkReferenceFrameMatch(q0);
-      checkReferenceFrameMatch(qf);
+      checkReferenceFrameMatch(q0, qf);
       QuaternionBasics.super.interpolate(q0, qf, alpha);
    }
 
@@ -282,8 +281,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     */
    default void multiply(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      checkReferenceFrameMatch(q1);
-      checkReferenceFrameMatch(q2);
+      checkReferenceFrameMatch(q1, q2);
       QuaternionBasics.super.multiply(q1, q2);
    }
 
@@ -334,8 +332,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     */
    default void difference(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      checkReferenceFrameMatch(q1);
-      checkReferenceFrameMatch(q2);
+      checkReferenceFrameMatch(q1, q2);
       QuaternionBasics.super.difference(q1, q2);
    }
 

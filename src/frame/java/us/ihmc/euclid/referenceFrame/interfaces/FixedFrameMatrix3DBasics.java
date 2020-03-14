@@ -303,8 +303,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     */
    default void add(FrameMatrix3DReadOnly matrix1, FrameMatrix3DReadOnly matrix2)
    {
-      checkReferenceFrameMatch(matrix1);
-      checkReferenceFrameMatch(matrix2);
+      checkReferenceFrameMatch(matrix1, matrix2);
       Matrix3DBasics.super.add(matrix1, matrix2);
    }
 
@@ -371,8 +370,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     */
    default void sub(FrameMatrix3DReadOnly matrix1, FrameMatrix3DReadOnly matrix2)
    {
-      checkReferenceFrameMatch(matrix1);
-      checkReferenceFrameMatch(matrix2);
+      checkReferenceFrameMatch(matrix1, matrix2);
       Matrix3DBasics.super.sub(matrix1, matrix2);
    }
 

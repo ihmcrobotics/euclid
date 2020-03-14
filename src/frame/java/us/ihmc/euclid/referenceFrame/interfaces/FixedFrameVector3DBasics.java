@@ -97,8 +97,7 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     */
    default void cross(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Vector3DBasics.super.cross(frameTuple1, frameTuple2);
    }
 

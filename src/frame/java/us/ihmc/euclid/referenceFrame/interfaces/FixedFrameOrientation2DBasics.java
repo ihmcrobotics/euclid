@@ -171,8 +171,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     */
    default void add(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
-      checkReferenceFrameMatch(orientation1);
-      checkReferenceFrameMatch(orientation2);
+      checkReferenceFrameMatch(orientation1, orientation2);
       Orientation2DBasics.super.add(orientation1, orientation2);
    }
 
@@ -244,8 +243,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     */
    default void sub(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2)
    {
-      checkReferenceFrameMatch(orientation1);
-      checkReferenceFrameMatch(orientation2);
+      checkReferenceFrameMatch(orientation1, orientation2);
       Orientation2DBasics.super.sub(orientation1, orientation2);
    }
 
@@ -329,8 +327,7 @@ public interface FixedFrameOrientation2DBasics extends FrameOrientation2DReadOnl
     */
    default void interpolate(FrameOrientation2DReadOnly orientation1, FrameOrientation2DReadOnly orientation2, double alpha)
    {
-      checkReferenceFrameMatch(orientation1);
-      checkReferenceFrameMatch(orientation2);
+      checkReferenceFrameMatch(orientation1, orientation2);
       Orientation2DBasics.super.interpolate(orientation1, orientation2, alpha);
    }
 }

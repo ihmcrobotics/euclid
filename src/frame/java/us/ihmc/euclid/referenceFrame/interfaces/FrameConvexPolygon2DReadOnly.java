@@ -215,8 +215,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean getClosestPointWithRay(FrameLine2DReadOnly ray, FixedFramePoint2DBasics closestPointToPack)
    {
-      checkReferenceFrameMatch(ray);
-      checkReferenceFrameMatch(closestPointToPack);
+      checkReferenceFrameMatch(ray, closestPointToPack);
       return ConvexPolygon2DReadOnly.super.getClosestPointWithRay(ray, closestPointToPack);
    }
 
@@ -386,8 +385,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
    {
-      checkReferenceFrameMatch(pointToProject);
-      checkReferenceFrameMatch(projectionToPack);
+      checkReferenceFrameMatch(pointToProject, projectionToPack);
       return ConvexPolygon2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -560,8 +558,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean lineOfSightStartVertex(FramePoint2DReadOnly observer, FixedFramePoint2DBasics startVertexToPack)
    {
-      checkReferenceFrameMatch(observer);
-      checkReferenceFrameMatch(startVertexToPack);
+      checkReferenceFrameMatch(observer, startVertexToPack);
       return ConvexPolygon2DReadOnly.super.lineOfSightStartVertex(observer, startVertexToPack);
    }
 
@@ -656,8 +653,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean lineOfSightEndVertex(FramePoint2DReadOnly observer, FixedFramePoint2DBasics endVertexToPack)
    {
-      checkReferenceFrameMatch(observer);
-      checkReferenceFrameMatch(endVertexToPack);
+      checkReferenceFrameMatch(observer, endVertexToPack);
       return ConvexPolygon2DReadOnly.super.lineOfSightEndVertex(observer, endVertexToPack);
    }
 
@@ -859,8 +855,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWith(Line2DReadOnly line, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(line, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -920,8 +915,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWith(FrameLine2DReadOnly line, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(line);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(line, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(line, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -942,8 +936,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWith(FrameLine2DReadOnly line, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(line);
-      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(line, firstIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(line, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -964,9 +957,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWith(FrameLine2DReadOnly line, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(line);
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(line, firstIntersectionToPack, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(line, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1084,8 +1075,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWithRay(Line2DReadOnly ray, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWithRay(ray, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1148,8 +1138,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, Point2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(ray);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(ray, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWithRay(ray, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1170,8 +1159,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, FixedFramePoint2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(ray);
-      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(ray, firstIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWithRay(ray, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1192,9 +1180,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default int intersectionWithRay(FrameLine2DReadOnly ray, FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(ray);
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(ray, firstIntersectionToPack, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWithRay(ray, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1313,8 +1299,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    default int intersectionWith(LineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(lineSegment2D, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1375,8 +1360,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(lineSegment2D);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(lineSegment2D, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(lineSegment2D, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1398,8 +1382,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
                                 Point2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(lineSegment2D);
-      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(lineSegment2D, firstIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(lineSegment2D, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1422,9 +1405,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
    default int intersectionWith(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(lineSegment2D);
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(lineSegment2D, firstIntersectionToPack, secondIntersectionToPack);
       return ConvexPolygon2DReadOnly.super.intersectionWith(lineSegment2D, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1529,8 +1510,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean getClosestEdge(FramePoint2DReadOnly point, FixedFrameLineSegment2DBasics closestEdgeToPack)
    {
-      checkReferenceFrameMatch(point);
-      checkReferenceFrameMatch(closestEdgeToPack);
+      checkReferenceFrameMatch(point, closestEdgeToPack);
       return ConvexPolygon2DReadOnly.super.getClosestEdge(point, closestEdgeToPack);
    }
 
@@ -1680,8 +1660,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean getClosestVertex(FramePoint2DReadOnly point, FixedFramePoint2DBasics vertexToPack)
    {
-      checkReferenceFrameMatch(point);
-      checkReferenceFrameMatch(vertexToPack);
+      checkReferenceFrameMatch(point, vertexToPack);
       return ConvexPolygon2DReadOnly.super.getClosestVertex(point, vertexToPack);
    }
 
@@ -1801,8 +1780,7 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     */
    default boolean getClosestVertex(FrameLine2DReadOnly line, FixedFramePoint2DBasics vertexToPack)
    {
-      checkReferenceFrameMatch(line);
-      checkReferenceFrameMatch(vertexToPack);
+      checkReferenceFrameMatch(line, vertexToPack);
       return ConvexPolygon2DReadOnly.super.getClosestVertex(line, vertexToPack);
    }
 

@@ -27,6 +27,29 @@ public interface ReferenceFrameHolder
       checkReferenceFrameMatch(other.getReferenceFrame());
    }
 
+   default void checkReferenceFrameMatch(ReferenceFrameHolder otherA, ReferenceFrameHolder otherB) throws ReferenceFrameMismatchException
+   {
+      checkReferenceFrameMatch(otherA);
+      checkReferenceFrameMatch(otherB);
+   }
+
+   default void checkReferenceFrameMatch(ReferenceFrameHolder otherA, ReferenceFrameHolder otherB, ReferenceFrameHolder otherC)
+         throws ReferenceFrameMismatchException
+   {
+      checkReferenceFrameMatch(otherA);
+      checkReferenceFrameMatch(otherB);
+      checkReferenceFrameMatch(otherC);
+   }
+
+   default void checkReferenceFrameMatch(ReferenceFrameHolder otherA, ReferenceFrameHolder otherB, ReferenceFrameHolder otherC, ReferenceFrameHolder otherD)
+         throws ReferenceFrameMismatchException
+   {
+      checkReferenceFrameMatch(otherA);
+      checkReferenceFrameMatch(otherB);
+      checkReferenceFrameMatch(otherC);
+      checkReferenceFrameMatch(otherD);
+   }
+
    /**
     * Checks if the frame held by {@code this} matches the query {@code referenceFrame}.
     *

@@ -216,8 +216,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void add(FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.add(frameTuple1, frameTuple2);
    }
 
@@ -284,8 +283,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void sub(FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.sub(frameTuple1, frameTuple2);
    }
 
@@ -354,8 +352,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void scaleAdd(double scalar, FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.scaleAdd(scalar, frameTuple1, frameTuple2);
    }
 
@@ -426,8 +423,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void scaleSub(double scalar, FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.scaleSub(scalar, frameTuple1, frameTuple2);
    }
 
@@ -504,8 +500,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void interpolate(FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2, double alpha)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.interpolate(frameTuple1, frameTuple2, alpha);
    }
 

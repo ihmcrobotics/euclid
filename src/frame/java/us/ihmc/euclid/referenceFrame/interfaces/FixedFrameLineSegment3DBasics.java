@@ -138,8 +138,7 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     */
    default void set(FramePoint3DReadOnly firstEndpoint, FramePoint3DReadOnly secondEndpoint)
    {
-      checkReferenceFrameMatch(firstEndpoint);
-      checkReferenceFrameMatch(secondEndpoint);
+      checkReferenceFrameMatch(firstEndpoint, secondEndpoint);
       LineSegment3DBasics.super.set(firstEndpoint, secondEndpoint);
    }
 
@@ -188,8 +187,7 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     */
    default void set(FramePoint3DReadOnly firstEndpoint, FrameVector3DReadOnly fromFirstToSecondEndpoint)
    {
-      checkReferenceFrameMatch(firstEndpoint);
-      checkReferenceFrameMatch(fromFirstToSecondEndpoint);
+      checkReferenceFrameMatch(firstEndpoint, fromFirstToSecondEndpoint);
       LineSegment3DBasics.super.set(firstEndpoint, fromFirstToSecondEndpoint);
    }
 
