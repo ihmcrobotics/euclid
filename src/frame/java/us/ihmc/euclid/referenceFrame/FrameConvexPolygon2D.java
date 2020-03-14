@@ -11,8 +11,8 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -57,7 +57,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * in this list.
     * </p>
     */
-   private final List<FrameVertex2D> vertexBuffer = new ArrayList<>();
+   private final List<FixedFramePoint2DBasics> vertexBuffer = new ArrayList<>();
    private final List<FixedFramePoint2DBasics> vertexBufferView = Collections.unmodifiableList(vertexBuffer);
    /**
     * The smallest axis-aligned bounding box that contains all this polygon's vertices.
@@ -75,46 +75,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
     * {@link #update()}.
     * </p>
     */
-   private final FixedFramePoint2DBasics centroid = new FixedFramePoint2DBasics()
-   {
-      private double x, y;
-
-      @Override
-      public void setX(double x)
-      {
-         this.x = x;
-      };
-
-      @Override
-      public void setY(double y)
-      {
-         this.y = y;
-      }
-
-      @Override
-      public double getX()
-      {
-         return x;
-      }
-
-      @Override
-      public double getY()
-      {
-         return y;
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public String toString()
-      {
-         return EuclidCoreIOTools.getTuple2DString(this) + "-" + referenceFrame;
-      }
-   };
+   private final FixedFramePoint2DBasics centroid = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
    /**
     * The area of this convex polygon.
     * <p>
@@ -354,7 +315,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    private void setOrCreate(double x, double y, int i)
    {
       while (i >= vertexBuffer.size())
-         vertexBuffer.add(new FrameVertex2D());
+         vertexBuffer.add(EuclidFrameFactories.newFixedFramePoint2DBasics(this));
       vertexBuffer.get(i).set(x, y);
    }
 
@@ -485,8 +446,8 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    @Override
    public int hashCode()
    {
-      long bits = EuclidHashCodeTools.combineHashCode(Boolean.hashCode(clockwiseOrdered), vertexBufferView);
-      bits = EuclidHashCodeTools.combineHashCode(bits, referenceFrame);
+      long bits = EuclidHashCodeTools.addToHashCode(Boolean.hashCode(clockwiseOrdered), vertexBufferView);
+      bits = EuclidHashCodeTools.addToHashCode(bits, referenceFrame);
       return EuclidHashCodeTools.toIntHashCode(bits);
    }
 
@@ -495,66 +456,5 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    public String toString()
    {
       return EuclidFrameIOTools.getFrameConvexPolygon2DString(this);
-   }
-
-   private class FrameVertex2D implements FixedFramePoint2DBasics
-   {
-      private double x, y;
-
-      @Override
-      public void setX(double x)
-      {
-         this.x = x;
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         this.y = y;
-      }
-
-      @Override
-      public double getX()
-      {
-         return x;
-      }
-
-      @Override
-      public double getY()
-      {
-         return y;
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      /**
-       * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-       * {@link #equals(FrameTuple2DReadOnly)}, it returns {@code false} otherwise.
-       * <p>
-       * If the two points have different frames, this method returns {@code false}.
-       * </p>
-       *
-       * @param object the object to compare against this. Not modified.
-       * @return {@code true} if the two points are exactly equal component-wise and are expressed in the
-       *         same reference frame, {@code false} otherwise.
-       */
-      @Override
-      public boolean equals(Object object)
-      {
-         if (object instanceof FramePoint2DReadOnly)
-            return equals((FramePoint2DReadOnly) object);
-         else
-            return false;
-      }
-
-      @Override
-      public String toString()
-      {
-         return EuclidCoreIOTools.getTuple2DString(this) + "-" + referenceFrame;
-      }
    }
 }

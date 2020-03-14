@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -317,6 +318,6 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    @Override
    public int hashCode()
    {
-      return vector.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(vector, referenceFrame);
    }
 }

@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -305,6 +306,6 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public int hashCode()
    {
-      return point.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(point, referenceFrame);
    }
 }

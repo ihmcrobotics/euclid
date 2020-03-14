@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -9,7 +8,9 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
 /**
@@ -32,76 +33,10 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
-   /** The line segment. */
-   private final LineSegment2D lineSegment = new LineSegment2D();
+   private final FixedFramePoint2DBasics firstEndpoint = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
+   private final FixedFramePoint2DBasics secondEndpoint = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
    /** Rigid-body transform used to perform garbage-free operations. */
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
-
-   private final FixedFramePoint2DBasics firstEndpoint = new FixedFramePoint2DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         lineSegment.getFirstEndpoint().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         lineSegment.getFirstEndpoint().setY(y);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return lineSegment.getFirstEndpointX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return lineSegment.getFirstEndpointY();
-      }
-   };
-
-   private final FixedFramePoint2DBasics secondEndpoint = new FixedFramePoint2DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         lineSegment.getSecondEndpoint().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         lineSegment.getSecondEndpoint().setY(y);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return lineSegment.getSecondEndpointX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return lineSegment.getSecondEndpointY();
-      }
-   };
 
    /**
     * Default constructor that initializes both endpoints of this line segment to zero and its
@@ -314,6 +249,6 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    @Override
    public int hashCode()
    {
-      return lineSegment.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(firstEndpoint, secondEndpoint);
    }
 }

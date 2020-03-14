@@ -5,6 +5,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DBasics;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
@@ -305,6 +306,6 @@ public class FrameVector4D implements FrameVector4DBasics, GeometryObject<FrameV
    @Override
    public int hashCode()
    {
-      return vector.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(vector, referenceFrame);
    }
 }

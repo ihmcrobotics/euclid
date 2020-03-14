@@ -8,6 +8,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
 /**
@@ -324,6 +325,6 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    @Override
    public int hashCode()
    {
-      return matrix3D.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(matrix3D, referenceFrame);
    }
 }

@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -311,6 +312,6 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
    @Override
    public int hashCode()
    {
-      return point.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(point, referenceFrame);
    }
 }

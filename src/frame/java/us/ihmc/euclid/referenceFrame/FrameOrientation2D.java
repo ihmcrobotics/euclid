@@ -8,6 +8,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
 /**
@@ -232,6 +233,6 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    @Override
    public int hashCode()
    {
-      return orientation.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(orientation, referenceFrame);
    }
 }

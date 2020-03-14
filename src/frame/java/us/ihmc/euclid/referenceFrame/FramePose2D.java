@@ -1,13 +1,13 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
-import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -29,74 +29,8 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
-   /** Pose used to perform the operations. */
-   private final Pose2D pose = new Pose2D();
-
-   private final FixedFramePoint2DBasics positionPart = new FixedFramePoint2DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         pose.setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         pose.setY(y);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return pose.getX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return pose.getY();
-      }
-   };
-
-   private final FixedFrameOrientation2DBasics orientationPart = new FixedFrameOrientation2DBasics()
-   {
-      @Override
-      public void setYaw(double yaw)
-      {
-         pose.setYaw(yaw);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getYaw()
-      {
-         return pose.getYaw();
-      }
-
-      @Override
-      public void applyTransform(Transform transform)
-      {
-         pose.getOrientation().applyTransform(transform);
-      }
-
-      @Override
-      public void applyInverseTransform(Transform transform)
-      {
-         pose.getOrientation().applyInverseTransform(transform);
-      }
-   };
+   private final FixedFramePoint2DBasics position = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
+   private final FixedFrameOrientation2DBasics orientation = EuclidFrameFactories.newFixedFrameOrientation2DBasics(this);
 
    /**
     * Creates a new pose 2D initialized with its position at (0, 0) and orientation at 0 and its
@@ -218,14 +152,14 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    @Override
    public FixedFramePoint2DBasics getPosition()
    {
-      return positionPart;
+      return position;
    }
 
    /** {@inheritDoc} */
    @Override
    public FixedFrameOrientation2DBasics getOrientation()
    {
-      return orientationPart;
+      return orientation;
    }
 
    /**
@@ -303,6 +237,6 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    @Override
    public int hashCode()
    {
-      return pose.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
 }

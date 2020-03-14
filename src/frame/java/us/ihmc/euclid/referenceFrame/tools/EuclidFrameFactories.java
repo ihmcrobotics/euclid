@@ -2,11 +2,12 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.function.DoubleSupplier;
 
+import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -191,10 +192,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(point, getReferenceFrame());
          }
 
          @Override
@@ -209,7 +207,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
          }
       };
    }
@@ -247,10 +245,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
          }
 
          @Override
@@ -265,7 +260,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
          }
       };
    }
@@ -309,11 +304,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getZ());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(point, getReferenceFrame());
          }
 
          @Override
@@ -328,7 +319,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
          }
       };
    }
@@ -372,11 +363,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getZ());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
          }
 
          @Override
@@ -391,7 +378,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
          }
       };
    }
@@ -440,5 +427,410 @@ public class EuclidFrameFactories
    public static FrameVector3DReadOnly newNegativeLinkedFrameVector3D(FrameVector3DReadOnly originalVector)
    {
       return newLinkedFrameVector3DReadOnly(EuclidCoreFactories.newNegativeLinkedVector3D(originalVector), originalVector);
+   }
+
+   public static FixedFramePoint2DBasics newFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFramePoint2DBasics()
+      {
+         private double x, y;
+
+         @Override
+         public void setX(double x)
+         {
+            this.x = x;
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            this.y = y;
+         }
+
+         @Override
+         public double getX()
+         {
+            return x;
+         }
+
+         @Override
+         public double getY()
+         {
+            return y;
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FramePoint2DReadOnly)
+               return FixedFramePoint2DBasics.super.equals((FramePoint2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y), getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
+         }
+      };
+   }
+
+   public static FixedFrameVector2DBasics newFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameVector2DBasics()
+      {
+         private double x, y;
+
+         @Override
+         public void setX(double x)
+         {
+            this.x = x;
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            this.y = y;
+         }
+
+         @Override
+         public double getX()
+         {
+            return x;
+         }
+
+         @Override
+         public double getY()
+         {
+            return y;
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameVector2DReadOnly)
+               return FixedFrameVector2DBasics.super.equals((FrameVector2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y), getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
+         }
+      };
+   }
+
+   public static FixedFramePoint3DBasics newFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFramePoint3DBasics()
+      {
+         private double x, y, z;
+
+         @Override
+         public void setX(double x)
+         {
+            this.x = x;
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            this.y = y;
+         }
+
+         @Override
+         public void setZ(double z)
+         {
+            this.z = z;
+         }
+
+         @Override
+         public double getX()
+         {
+            return x;
+         }
+
+         @Override
+         public double getY()
+         {
+            return y;
+         }
+
+         @Override
+         public double getZ()
+         {
+            return z;
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FramePoint3DReadOnly)
+               return FixedFramePoint3DBasics.super.equals((FramePoint3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y, z), getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
+         }
+      };
+   }
+
+   public static FixedFrameVector3DBasics newFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameVector3DBasics()
+      {
+         private double x, y, z;
+
+         @Override
+         public void setX(double x)
+         {
+            this.x = x;
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            this.y = y;
+         }
+
+         @Override
+         public void setZ(double z)
+         {
+            this.z = z;
+         }
+
+         @Override
+         public double getX()
+         {
+            return x;
+         }
+
+         @Override
+         public double getY()
+         {
+            return y;
+         }
+
+         @Override
+         public double getZ()
+         {
+            return z;
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameVector3DReadOnly)
+               return FixedFrameVector3DBasics.super.equals((FrameVector3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y, z), getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
+         }
+      };
+   }
+
+   public static FixedFrameOrientation2DBasics newFixedFrameOrientation2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameOrientation2DBasics()
+      {
+         private final Orientation2D orientation2D = new Orientation2D();
+
+         @Override
+         public void setYaw(double yaw)
+         {
+            orientation2D.setYaw(yaw);
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getYaw()
+         {
+            return orientation2D.getYaw();
+         }
+
+         @Override
+         public void applyTransform(Transform transform)
+         {
+            orientation2D.applyTransform(transform);
+         }
+
+         @Override
+         public void applyInverseTransform(Transform transform)
+         {
+            orientation2D.applyInverseTransform(transform);
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameOrientation2DReadOnly)
+               return FixedFrameOrientation2DBasics.super.equals((FrameOrientation2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(orientation2D, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameOrientation2DString(this);
+         }
+      };
+   }
+
+   public static FixedFrameQuaternionBasics newLinkedFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameQuaternionBasics()
+      {
+         private double x, y, z, s;
+
+         @Override
+         public void setUnsafe(double qx, double qy, double qz, double qs)
+         {
+            x = qx;
+            y = qy;
+            z = qz;
+            s = qs;
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getX()
+         {
+            return x;
+         }
+
+         @Override
+         public double getY()
+         {
+            return y;
+         }
+
+         @Override
+         public double getZ()
+         {
+            return z;
+         }
+
+         @Override
+         public double getS()
+         {
+            return s;
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameQuaternionReadOnly)
+               return FixedFrameQuaternionBasics.super.equals((FrameQuaternionReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            long bits = EuclidHashCodeTools.toLongHashCode(x, y, z, s);
+            bits = EuclidHashCodeTools.addToHashCode(bits, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(bits);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple4DString(this);
+         }
+      };
    }
 }

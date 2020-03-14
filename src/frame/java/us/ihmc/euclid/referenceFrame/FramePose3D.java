@@ -1,13 +1,14 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -30,93 +31,8 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
-   /** Pose used to perform the operations. */
-   private final Pose3D pose = new Pose3D();
-
-   private final FixedFramePoint3DBasics positionPart = new FixedFramePoint3DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         pose.setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         pose.setY(y);
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         pose.setZ(z);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return pose.getX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return pose.getY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return pose.getZ();
-      }
-   };
-
-   private final FixedFrameQuaternionBasics orientationPart = new FixedFrameQuaternionBasics()
-   {
-
-      @Override
-      public void setUnsafe(double qx, double qy, double qz, double qs)
-      {
-         pose.getOrientation().setUnsafe(qx, qy, qz, qs);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return pose.getOrientation().getX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return pose.getOrientation().getY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return pose.getOrientation().getZ();
-      }
-
-      @Override
-      public double getS()
-      {
-         return pose.getOrientation().getS();
-      }
-   };
+   private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
+   private final FixedFrameQuaternionBasics orientation = EuclidFrameFactories.newLinkedFixedFrameQuaternionBasics(this);
 
    /**
     * Creates a new pose 3D initialized with its position and orientation set to zero and its reference
@@ -238,14 +154,14 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    @Override
    public FixedFramePoint3DBasics getPosition()
    {
-      return positionPart;
+      return position;
    }
 
    /** {@inheritDoc} */
    @Override
    public FixedFrameQuaternionBasics getOrientation()
    {
-      return orientationPart;
+      return orientation;
    }
 
    /**
@@ -323,6 +239,6 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    @Override
    public int hashCode()
    {
-      return pose.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
 }
