@@ -1230,7 +1230,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getMatrixString(this);
+      return EuclidCoreIOTools.getMatrix3DString(this);
    }
 
    /**

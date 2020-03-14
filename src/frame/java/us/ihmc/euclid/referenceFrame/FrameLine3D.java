@@ -2,10 +2,10 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.interfaces.*;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -431,7 +431,7 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLine3DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameLine3DString(this);
    }
 
    /**

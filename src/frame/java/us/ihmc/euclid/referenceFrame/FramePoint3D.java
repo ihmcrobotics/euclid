@@ -5,7 +5,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -294,7 +294,7 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple3DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameTuple3DString(this);
    }
 
    /**

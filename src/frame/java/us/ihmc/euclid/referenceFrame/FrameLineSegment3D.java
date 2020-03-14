@@ -3,12 +3,12 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 
 /**
  * {@code FrameLineSegment3D} is a 3D line segment expressed in a given reference frame.
@@ -279,7 +279,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLineSegment3DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameLineSegment3DString(this);
    }
 
    /**

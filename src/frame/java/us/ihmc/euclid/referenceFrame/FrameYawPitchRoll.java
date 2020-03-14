@@ -6,7 +6,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
@@ -266,7 +266,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getYawPitchRollString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameYawPitchRollString(this);
    }
 
    /**

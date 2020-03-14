@@ -3,13 +3,13 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
 /**
@@ -302,7 +302,7 @@ public class FrameLineSegment2D implements FrameLineSegment2DBasics, GeometryObj
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLineSegment2DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameLineSegment2DString(this);
    }
 
    /**

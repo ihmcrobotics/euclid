@@ -5,7 +5,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -305,7 +305,7 @@ public class FrameVector2D implements FrameVector2DBasics, GeometryObject<FrameV
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple2DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameTuple2DString(this);
    }
 
    /**

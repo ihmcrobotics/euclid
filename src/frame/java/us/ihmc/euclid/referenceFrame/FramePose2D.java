@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
@@ -291,7 +292,7 @@ public class FramePose2D implements FramePose2DBasics, GeometryObject<FramePose2
    @Override
    public String toString()
    {
-      return pose.toString() + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFramePose2DString(this);
    }
 
    /**

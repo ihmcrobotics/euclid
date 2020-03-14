@@ -7,6 +7,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -311,7 +312,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    @Override
    public String toString()
    {
-      return pose.toString() + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFramePose3DString(this);
    }
 
    /**

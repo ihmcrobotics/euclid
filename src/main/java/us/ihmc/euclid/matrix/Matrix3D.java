@@ -280,17 +280,20 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
    }
 
    /**
-    * Provides a {@code String} representation of this matrix as follows: <br>
-    * m00, m01, m02 <br>
-    * m10, m11, m12 <br>
-    * m20, m21, m22
+    * Provides a {@code String} representation of this matrix as follows:
+    * 
+    * <pre>
+    * /m00, m01, m02 \
+    * |m10, m11, m12 |
+    * \m20, m21, m22 /
+    * </pre>
     *
     * @return the {@code String} representing this matrix.
     */
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getMatrixString(this);
+      return EuclidCoreIOTools.getMatrix3DString(this);
    }
 
    /**

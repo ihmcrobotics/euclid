@@ -370,7 +370,7 @@ public class Matrix3DFeaturesTest
       double m20 = matrix.getM20();
       double m21 = matrix.getM21();
       double m22 = matrix.getM22();
-      String matrixAsString = EuclidCoreIOTools.getMatrixString(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      String matrixAsString = EuclidCoreIOTools.getMatrix3DString(m00, m01, m02, m10, m11, m12, m20, m21, m22);
 
       assertTrue(Matrix3DFeatures.isMatrix2D(m00, m01, m02, m10, m11, m12, m20, m21, m22, Matrix3DFeatures.EPS_CHECK_2D) == isMatrix2D);
 

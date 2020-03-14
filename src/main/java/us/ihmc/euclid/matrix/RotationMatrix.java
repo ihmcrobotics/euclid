@@ -1105,7 +1105,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getMatrixString(this);
+      return EuclidCoreIOTools.getMatrix3DString(this);
    }
 
    /**

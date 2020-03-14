@@ -7,6 +7,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
 /**
@@ -298,18 +299,21 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
    }
 
    /**
-    * Provides a {@code String} representation of this matrix as follows: <br>
-    * m00, m01, m02 <br>
-    * m10, m11, m12 <br>
-    * m20, m21, m22 <br>
+    * Provides a {@code String} representation of this matrix as follows:
+    * 
+    * <pre>
+    * /m00, m01, m02 \
+    * |m10, m11, m12 |
+    * \m20, m21, m22 /
     * worldFrame
+    * </pre>
     *
     * @return the {@code String} representing this frame matrix.
     */
    @Override
    public String toString()
    {
-      return matrix3D.toString() + "\n" + referenceFrame;
+      return EuclidFrameIOTools.getFrameMatrix3DString(this);
    }
 
    /**

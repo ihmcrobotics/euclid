@@ -497,7 +497,7 @@ public class EuclidCoreFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getMatrixString(this);
+            return EuclidCoreIOTools.getMatrix3DString(this);
          }
       };
    }

@@ -9,7 +9,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
@@ -359,7 +359,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple4DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameTuple4DString(this);
    }
 
    /**

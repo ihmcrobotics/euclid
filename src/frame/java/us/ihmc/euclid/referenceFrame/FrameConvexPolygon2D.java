@@ -8,10 +8,10 @@ import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -494,7 +494,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getConvexPolygon2DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameConvexPolygon2DString(this);
    }
 
    private class FrameVertex2D implements FixedFramePoint2DBasics
