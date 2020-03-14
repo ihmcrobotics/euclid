@@ -88,6 +88,36 @@ public class EuclidHashCodeTools
       return toIntHashCode(toLongHashCode(a0, a1, a2, a3));
    }
 
+   public static int toIntHashCode(Object a0, Object a1)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1));
+   }
+
+   public static int toIntHashCode(Object a0, Object a1, Object a2)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2));
+   }
+
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3));
+   }
+
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3, Object a4)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4));
+   }
+
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4, a5));
+   }
+
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5, Object a6)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4, a5, a6));
+   }
+
    public static long toLongHashCode(double a)
    {
       long bits = 1L;
@@ -206,6 +236,69 @@ public class EuclidHashCodeTools
       return bits;
    }
 
+   public static long toLongHashCode(Object a0, Object a1)
+   {
+      long bits = 1L;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      return bits;
+   }
+
+   public static long toLongHashCode(Object a0, Object a1, Object a2)
+   {
+      long bits = 1L;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      return bits;
+   }
+
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3)
+   {
+      long bits = 1L;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      return bits;
+   }
+
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4)
+   {
+      long bits = 1L;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      return bits;
+   }
+
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5)
+   {
+      long bits = 1L;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      bits = addToHashCode(bits, a5);
+      return bits;
+   }
+
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5, Object a6)
+   {
+      long bits = 1L;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      bits = addToHashCode(bits, a5);
+      bits = addToHashCode(bits, a6);
+      return bits;
+   }
+
    /**
     * Calls {@link #combineHashCode(long, long)} after converting {@code value} to long bits.
     *
@@ -230,6 +323,11 @@ public class EuclidHashCodeTools
       return combineHashCode(hashCode, Float.floatToIntBits(value));
    }
 
+   public static long addToHashCode(long hashCode1, Object object)
+   {
+      return hashCode1 + MULTIPLIER * Objects.hashCode(object);
+   }
+
    /**
     * Combine the two hash code bit streams.
     *
@@ -240,10 +338,5 @@ public class EuclidHashCodeTools
    public static long combineHashCode(long hashCode1, long hashCode2)
    {
       return hashCode1 + MULTIPLIER * hashCode2;
-   }
-
-   public static long combineHashCode(long hashCode1, Object object)
-   {
-      return hashCode1 + MULTIPLIER * Objects.hashCode(object);
    }
 }

@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -159,6 +160,22 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    }
 
    /**
+    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
+    * similar, i.e. the distance between their min and max points is less than or equal to
+    * {@code epsilon}.
+    *
+    * @param other   the bounding box to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(BoundingBox2D other, double epsilon)
+   {
+      return BoundingBox2DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(BoundingBox2DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -178,6 +195,12 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
       }
    }
 
+   @Override
+   public int hashCode()
+   {
+      return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+   }
+
    /**
     * Provides a {@code String} representation of this bounding box 2D as follows:<br>
     * Bounding Box 2D: min = (x, y), max = (x, y)
@@ -188,21 +211,5 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    public String toString()
    {
       return EuclidGeometryIOTools.getBoundingBox2DString(this);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the bounding box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(BoundingBox2D other, double epsilon)
-   {
-      return BoundingBox2DBasics.super.geometricallyEquals(other, epsilon);
    }
 }

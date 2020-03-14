@@ -404,7 +404,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    @Override
    public int hashCode()
    {
-      return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.combineHashCode(vertexBufferView.hashCode(), Boolean.hashCode(clockwiseOrdered)));
+      return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.addToHashCode(Boolean.hashCode(clockwiseOrdered), vertexBufferView));
    }
 
    /**

@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry;
 import us.ihmc.euclid.geometry.interfaces.*;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -204,7 +205,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public int hashCode()
    {
-      long bits = 31L * point.hashCode() + direction.hashCode();
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(point, direction);
    }
 }

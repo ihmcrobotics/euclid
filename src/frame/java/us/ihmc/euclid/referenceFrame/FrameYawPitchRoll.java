@@ -279,7 +279,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    @Override
    public int hashCode()
    {
-      long bits = EuclidHashCodeTools.combineHashCode(EuclidHashCodeTools.toLongHashCode(yaw, pitch, roll), referenceFrame);
+      long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(yaw, pitch, roll), referenceFrame);
       return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }
