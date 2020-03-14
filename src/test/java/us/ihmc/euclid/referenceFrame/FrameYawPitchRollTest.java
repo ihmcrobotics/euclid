@@ -426,7 +426,7 @@ public class FrameYawPitchRollTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         FrameYawPitchRoll actual = new FrameYawPitchRoll(worldFrame, expected);
+         FrameYawPitchRoll actual = new FrameYawPitchRoll(null, expected);
 
          assertEquals(expected.hashCode(), actual.hashCode());
       }
