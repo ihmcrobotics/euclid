@@ -64,10 +64,11 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Creates a new bounding box initialized with both its minimum and maximum coordinates to (0, 0).
+    * Creates a new bounding box initialized with both its minimum and maximum coordinates to ({@code Double.NaN}, {@code Double.NaN}, {@code Double.NaN}).
     */
    public BoundingBox3D()
    {
+      setToNaN();
    }
 
    /**
