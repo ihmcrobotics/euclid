@@ -8,7 +8,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
-public interface FixedFrameBox3DBasics extends Box3DBasics, FrameBox3DReadOnly
+public interface FixedFrameBox3DBasics extends Box3DBasics, FrameBox3DReadOnly, FixedFrameShape3DBasics
 {
    @Override
    FixedFrameVector3DBasics getSize();

@@ -7,10 +7,8 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.*;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.*;
@@ -310,6 +308,97 @@ public class EuclidFrameShapeTools
          double rangeY = halfLength * Math.abs(axisY) + capMinMaxY;
          double rangeZ = halfLength * Math.abs(axisZ) + capMinMaxZ;
          boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+      }
+   };
+
+   public static void boundingBoxEllipsoid3D(FrameEllipsoid3DReadOnly ellipsoid3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxEllipsoid3D(ellipsoid3D.getReferenceFrame(), ellipsoid3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   public static void boundingBoxEllipsoid3D(ReferenceFrame ellipsoid3DFrame, Ellipsoid3DReadOnly ellipsoid3D, ReferenceFrame boundingBoxFrame,
+                                             BoundingBox3DBasics boundingBoxToPack)
+   {
+      if (ellipsoid3DFrame == boundingBoxFrame)
+      {
+         ellipsoid3D.getBoundingBox(boundingBoxToPack);
+         return;
+      }
+
+      Point3DReadOnly shapePosition = ellipsoid3D.getPosition();
+      RotationMatrixReadOnly shapeOrientation = ellipsoid3D.getOrientation();
+
+      if (ellipsoid3DFrame.isRootFrame())
+      {
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxRotationPartGeneric(shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransform(shapeOrientation, shapePosition, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
+         }
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = ellipsoid3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxRotationPartGeneric(rotToRoot, false, shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotToRoot, transToRoot, false, shapeOrientation, shapePosition, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX,
+                                           transFromBBX,
+                                           true,
+                                           rotToRoot,
+                                           transToRoot,
+                                           false,
+                                           shapeOrientation,
+                                           shapePosition,
+                                           false,
+                                           boundingBoxToPack);
+         }
+      }
+   }
+
+   private static final BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly> ellipsoid3DCalculator = new BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly>()
+   {
+      @Override
+      public void computeBoundingBoxZeroRotation(Ellipsoid3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         Vector3DReadOnly radii = shape.getRadii();
+         boundingBoxToPack.set(-radii.getX(), -radii.getY(), -radii.getZ(), radii.getX(), radii.getY(), radii.getZ());
+      }
+
+      @Override
+      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                     Ellipsoid3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         Vector3DReadOnly radii = shape.getRadii();
+         double rx = radii.getX() * radii.getX();
+         double ry = radii.getY() * radii.getY();
+         double rz = radii.getZ() * radii.getZ();
+
+         double xRange = Math.sqrt(m00 * m00 * rx + m01 * m01 * ry + m02 * m02 * rz);
+         double yRange = Math.sqrt(m10 * m10 * rx + m11 * m11 * ry + m12 * m12 * rz);
+         double zRange = Math.sqrt(m20 * m20 * rx + m21 * m21 * ry + m22 * m22 * rz);
+         boundingBoxToPack.set(-xRange, -yRange, -zRange, xRange, yRange, zRange);
       }
    };
 

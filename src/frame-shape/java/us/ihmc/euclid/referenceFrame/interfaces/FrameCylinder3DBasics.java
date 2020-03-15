@@ -5,7 +5,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface FrameCylinder3DBasics extends FixedFrameCylinder3DBasics, FrameChangeable
+public interface FrameCylinder3DBasics extends FixedFrameCylinder3DBasics, FrameShape3DBasics
 {
    default void setToNaN(ReferenceFrame referenceFrame)
    {

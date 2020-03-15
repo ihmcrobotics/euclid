@@ -236,16 +236,6 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Packs the 3 radii of this ellipsoid in the given tuple.
-    *
-    * @param radiiToPack the tuple in which the radii are stored. Modified.
-    */
-   default void getRadii(Tuple3DBasics radiiToPack)
-   {
-      radiiToPack.set(getRadii());
-   }
-
-   /**
     * Gets the radius along the x-axis.
     *
     * @return the x radius.

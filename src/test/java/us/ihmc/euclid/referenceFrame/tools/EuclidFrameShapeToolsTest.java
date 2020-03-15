@@ -10,6 +10,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.primitives.Capsule3D;
 import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -200,10 +201,73 @@ public class EuclidFrameShapeToolsTest
          EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
       }
    }
+
+   @Test
+   public void testBoundingBoxEllipsoid3D()
+   {
+      Random random = new Random(5768787);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D: shapeFrame = world, boundingBoxFrame = world
+         Ellipsoid3D ellipsoidInFrame = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         ellipsoidInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         Ellipsoid3D ellipsoidInWorld = new Ellipsoid3D(ellipsoidInFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoidInWorld.getPosition(), ellipsoidInWorld.getOrientation(), ellipsoidInWorld.getRadii(), expected);
+         EuclidFrameShapeTools.boundingBoxEllipsoid3D(worldFrame, ellipsoidInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         ellipsoidInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D: shapeFrame != world, boundingBoxFrame = world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         Ellipsoid3D ellipsoidInFrame = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         ellipsoidInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         Ellipsoid3D ellipsoidInWorld = new Ellipsoid3D(ellipsoidInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(worldFrame, ellipsoidInWorld);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoidInWorld.getPosition(), ellipsoidInWorld.getOrientation(), ellipsoidInWorld.getRadii(), expected);
+         EuclidFrameShapeTools.boundingBoxEllipsoid3D(shapeFrame, ellipsoidInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         ellipsoidInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ellipsoid3D: shapeFrame != world, boundingBoxFrame != world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         RigidBodyTransform boundingBoxFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         ReferenceFrame boundingBoxFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("boundingBoxFrame",
+                                                                                                             worldFrame,
+                                                                                                             boundingBoxFrameTransform);
+         Ellipsoid3D ellipsoidInFrame = EuclidShapeRandomTools.nextEllipsoid3D(random);
+         ellipsoidInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         Ellipsoid3D ellipsoidInBBXFrame = new Ellipsoid3D(ellipsoidInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, ellipsoidInBBXFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoidInBBXFrame.getPosition(), ellipsoidInBBXFrame.getOrientation(), ellipsoidInBBXFrame.getRadii(), expected);
+         EuclidFrameShapeTools.boundingBoxEllipsoid3D(shapeFrame, ellipsoidInFrame, boundingBoxFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         ellipsoidInBBXFrame.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+   }
+
    private static RigidBodyTransform nextRigidBodyTransformWithIdentityEdgeCase(Random random, double rotationIdentityPercentage, double positionZeroPercentage)
    {
       RigidBodyTransform next = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      if (random.nextDouble() < rotationIdentityPercentage)
+//      if (random.nextDouble() < rotationIdentityPercentage)
          next.getRotation().setToZero();
       if (random.nextDouble() < positionZeroPercentage)
          next.getTranslation().setToZero();

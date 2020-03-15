@@ -5,10 +5,7 @@ import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getShape3DPoseString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
-import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 
 public class EuclidFrameShapeIOTools
 {
@@ -120,6 +117,43 @@ public class EuclidFrameShapeIOTools
    public static String getFrameCylinder3DString(String format, FrameCylinder3DReadOnly cylinder3D)
    {
       return getFrameCylinder3DString(format, cylinder3D) + " - " + cylinder3D.getReferenceFrame();
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code ellipsoid3D} as follows:
+    *
+    * <pre>
+    * Ellipsoid 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), radii: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
+    *
+    * @param ellipsoid3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameEllipsoid3DString(FrameEllipsoid3DReadOnly ellipsoid3D)
+   {
+      return getFrameEllipsoid3DString(DEFAULT_FORMAT, ellipsoid3D);
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code ellipsoid3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Ellipsoid 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), radii: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format      the format to use for each number.
+    * @param ellipsoid3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameEllipsoid3DString(String format, FrameEllipsoid3DReadOnly ellipsoid3D)
+   {
+      if (ellipsoid3D == null)
+         return "null";
+      else
+         return getFrameEllipsoid3DString(format, ellipsoid3D) + " - " + ellipsoid3D.getReferenceFrame();
    }
 
    /**

@@ -7,7 +7,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
-public interface FrameBox3DBasics extends FixedFrameBox3DBasics, FrameChangeable
+public interface FrameBox3DBasics extends FixedFrameBox3DBasics, FrameShape3DBasics
 {
    default void setToNaN(ReferenceFrame referenceFrame)
    {

@@ -5,7 +5,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public interface FrameCapsule3DBasics extends FixedFrameCapsule3DBasics, FrameChangeable
+public interface FrameCapsule3DBasics extends FixedFrameCapsule3DBasics, FrameShape3DBasics
 {
    default void setToNaN(ReferenceFrame referenceFrame)
    {
