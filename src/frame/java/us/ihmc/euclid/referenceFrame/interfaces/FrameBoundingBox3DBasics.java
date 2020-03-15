@@ -24,38 +24,35 @@ public interface FrameBoundingBox3DBasics extends FixedFrameBoundingBox3DBasics
    default void setIncludingFrame(FramePoint3DReadOnly min, FramePoint3DReadOnly max)
    {
       min.checkReferenceFrameMatch(max);
-      setReferenceFrame(min.getReferenceFrame());
-      set((Point3DReadOnly) min, (Point3DReadOnly) max);
+      setIncludingFrame(min.getReferenceFrame(), min, max);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, Point3DReadOnly min, Point3DReadOnly max)
    {
       setReferenceFrame(referenceFrame);
-      set((Point3DReadOnly) min, (Point3DReadOnly) max);
+      set(min, max);
    }
 
    default void setIncludingFrame(FramePoint3DReadOnly center, FrameVector3DReadOnly halfSize)
    {
       center.checkReferenceFrameMatch(halfSize);
-      setReferenceFrame(center.getReferenceFrame());
-      set((Point3DReadOnly) center, (Vector3DReadOnly) halfSize);
+      setIncludingFrame(center.getReferenceFrame(), center, halfSize);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, Point3DReadOnly center, Vector3DReadOnly halfSize)
    {
       setReferenceFrame(referenceFrame);
-      set((Point3DReadOnly) center, (Vector3DReadOnly) halfSize);
+      set(center, halfSize);
    }
 
    default void setIncludingFrame(FrameBoundingBox3DReadOnly other)
    {
-      setReferenceFrame(other.getReferenceFrame());
-      set((BoundingBox3DReadOnly) other);
+      setIncludingFrame(other.getReferenceFrame(), other);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, BoundingBox3DReadOnly boundingBox3DReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set((BoundingBox3DReadOnly) boundingBox3DReadOnly);
+      set(boundingBox3DReadOnly);
    }
 }

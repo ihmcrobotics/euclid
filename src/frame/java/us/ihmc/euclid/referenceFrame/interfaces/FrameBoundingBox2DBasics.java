@@ -24,38 +24,35 @@ public interface FrameBoundingBox2DBasics extends FixedFrameBoundingBox2DBasics
    default void setIncludingFrame(FramePoint2DReadOnly min, FramePoint2DReadOnly max)
    {
       min.checkReferenceFrameMatch(max);
-      setReferenceFrame(min.getReferenceFrame());
-      set((Point2DReadOnly) min, (Point2DReadOnly) max);
+      setIncludingFrame(min.getReferenceFrame(), min, max);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, Point2DReadOnly min, Point2DReadOnly max)
    {
       setReferenceFrame(referenceFrame);
-      set((Point2DReadOnly) min, (Point2DReadOnly) max);
+      set(min, max);
    }
 
    default void setIncludingFrame(FramePoint2DReadOnly center, FrameVector2DReadOnly halfSize)
    {
       center.checkReferenceFrameMatch(halfSize);
-      setReferenceFrame(center.getReferenceFrame());
-      set((Point2DReadOnly) center, (Vector2DReadOnly) halfSize);
+      setIncludingFrame(center.getReferenceFrame(), center, halfSize);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, Point2DReadOnly center, Vector2DReadOnly halfSize)
    {
       setReferenceFrame(referenceFrame);
-      set((Point2DReadOnly) center, (Vector2DReadOnly) halfSize);
+      set(center, halfSize);
    }
 
    default void setIncludingFrame(FrameBoundingBox2DReadOnly other)
    {
-      setReferenceFrame(other.getReferenceFrame());
-      set((BoundingBox2DReadOnly) other);
+      setIncludingFrame(other.getReferenceFrame(), other);
    }
 
    default void setIncludingFrame(ReferenceFrame referenceFrame, BoundingBox2DReadOnly boundingBox2DReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set((BoundingBox2DReadOnly) boundingBox2DReadOnly);
+      set(boundingBox2DReadOnly);
    }
 }
