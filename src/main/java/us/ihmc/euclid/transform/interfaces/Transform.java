@@ -1,9 +1,9 @@
 package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -442,7 +442,7 @@ public interface Transform
     *
     * @param matrixToTransform the rotation matrix to transform. Modified.
     */
-   default void transform(RotationMatrix matrixToTransform)
+   default void transform(RotationMatrixBasics matrixToTransform)
    {
       transform(matrixToTransform, matrixToTransform);
    }
@@ -459,7 +459,7 @@ public interface Transform
     * @param matrixOriginal    the rotation matrix to transform. Not modified.
     * @param matrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       transform((Orientation3DReadOnly) matrixOriginal, (Orientation3DBasics) matrixTransformed);
    }
@@ -790,13 +790,13 @@ public interface Transform
    /**
     * Performs the inverse of the transform on the given rotation matrix {@code matrixToTransform}.
     * <p>
-    * This is equivalent to calling {@link #transform(RotationMatrix)} with the inverse of this
+    * This is equivalent to calling {@link #transform(RotationMatrixBasics)} with the inverse of this
     * transform.
     * </p>
     *
     * @param matrixToTransform the rotation matrix to transform. Modified.
     */
-   default void inverseTransform(RotationMatrix matrixToTransform)
+   default void inverseTransform(RotationMatrixBasics matrixToTransform)
    {
       inverseTransform(matrixToTransform, matrixToTransform);
    }
@@ -805,14 +805,14 @@ public interface Transform
     * Performs the inverse of the transform on the given matrix {@code matrixOriginal} and stores the
     * result in {@code matrixTransformed}.
     * <p>
-    * This is equivalent to calling {@link #transform(RotationMatrixReadOnly, RotationMatrix)} with the
+    * This is equivalent to calling {@link #transform(RotationMatrixReadOnly, RotationMatrixBasics)} with the
     * inverse of this transform.
     * </p>
     *
     * @param matrixOriginal    the rotation matrix to transform. Not modified.
     * @param matrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       inverseTransform((Orientation3DReadOnly) matrixOriginal, (Orientation3DBasics) matrixTransformed);
    }

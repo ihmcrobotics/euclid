@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotARotationScaleMatrixException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
@@ -379,7 +380,7 @@ public class RotationScaleMatrixTest extends CommonMatrix3DBasicsTest<RotationSc
       matrix.checkIfRotationScaleMatrixProper(); // Should not throw any exception
       matrix.checkIfScalesProper(); // Should not throw any exception
 
-      RotationMatrix rotationMatrix = matrix.getRotationMatrix();
+      RotationMatrixBasics rotationMatrix = matrix.getRotationMatrix();
       rotationMatrix.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       matrix.checkIfScalesProper(); // Should not throw any exception
 

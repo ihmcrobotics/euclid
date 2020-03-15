@@ -1,9 +1,9 @@
 package us.ihmc.euclid.tools;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -1163,7 +1163,7 @@ public class QuaternionTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void transform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(quaternion, false, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }
@@ -1173,7 +1173,7 @@ public class QuaternionTools
     * {@code quaternion} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(QuaternionReadOnly, RotationMatrixReadOnly, RotationMatrix)} with the inverse
+    * {@link #transform(QuaternionReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with the inverse
     * of the given quaternion.
     * </p>
     * <p>
@@ -1193,7 +1193,7 @@ public class QuaternionTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(quaternion, true, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }

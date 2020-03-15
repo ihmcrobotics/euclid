@@ -1654,7 +1654,7 @@ public class AffineTransform
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
     *                             Modified.
     */
-   public void getRotation(RotationMatrix rotationMatrixToPack)
+   public void getRotation(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationScaleMatrix.getRotation(rotationMatrixToPack);
    }

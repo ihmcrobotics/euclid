@@ -7,10 +7,7 @@ import us.ihmc.euclid.exceptions.NotARotationScaleMatrixException;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
-import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
+import us.ihmc.euclid.matrix.interfaces.*;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -289,6 +286,12 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
    public void checkIfScalesProper()
    {
       checkIfScalesProper(scale.getX(), scale.getY(), scale.getZ());
+   }
+
+   @Override
+   public void normalize()
+   {
+      normalizeRotationMatrix();
    }
 
    /**
@@ -1173,7 +1176,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * @return the reference to the rotation matrix.
     */
    @Override
-   public RotationMatrix getRotationMatrix()
+   public RotationMatrixBasics getRotationMatrix()
    {
       return rotationMatrix;
    }

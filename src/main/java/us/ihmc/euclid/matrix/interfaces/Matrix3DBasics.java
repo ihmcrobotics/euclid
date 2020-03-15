@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -1159,7 +1158,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * </p>
     * <p>
     * Note: the transformation of a {@code Matrix3D} strongly differs from the transformation of a
-    * {@link RotationMatrix}.
+    * {@link RotationMatrixBasics}.
     * </p>
     */
    @Override
@@ -1176,7 +1175,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * </p>
     * <p>
     * Note: the transformation of a {@code Matrix3D} strongly differs from the transformation of a
-    * {@link RotationMatrix}.
+    * {@link RotationMatrixBasics}.
     * </p>
     */
    @Override

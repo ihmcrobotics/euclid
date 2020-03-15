@@ -1,7 +1,6 @@
 package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -36,6 +35,8 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  */
 public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DReadOnly
 {
+   boolean isDirty();
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
@@ -98,7 +99,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
 
    /** {@inheritDoc} */
    @Override
-   default void get(RotationMatrix rotationMatrixToPack)
+   default void get(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationMatrixToPack.set(this);
    }

@@ -1,10 +1,10 @@
 package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
@@ -312,7 +312,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
     *                             Modified.
     */
-   default void getRotation(RotationMatrix rotationMatrixToPack)
+   default void getRotation(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationMatrixToPack.set(getRotation());
    }
@@ -464,7 +464,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     * @param rotationMarixToPack the matrix to set to the rotation of this transform. Modified.
     * @param translationToPack   the tuple to set to the translation of this transform. Modified.
     */
-   default void get(RotationMatrix rotationMarixToPack, Tuple3DBasics translationToPack)
+   default void get(RotationMatrixBasics rotationMarixToPack, Tuple3DBasics translationToPack)
    {
       rotationMarixToPack.set(getRotation());
       translationToPack.set(getTranslation());

@@ -4,19 +4,13 @@ import org.ejml.data.DenseMatrix64F;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
-import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -40,7 +34,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadOnly, Orientation3DBasics, GeometryObject<RotationMatrix>
+public class RotationMatrix implements RotationMatrixBasics, GeometryObject<RotationMatrix>
 {
    /** The 1st row 1st column coefficient of this matrix. */
    private double m00;
@@ -197,13 +191,6 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       dirty = false;
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public boolean containsNaN()
-   {
-      return CommonMatrix3DBasics.super.containsNaN();
-   }
-
    /**
     * Orthonormalization of the rotation matrix using the
     * <a href="https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process"> Gram-Schmidt method</a>.
@@ -231,7 +218,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    public boolean isIdentity()
    {
       if (dirty)
-         isIdentity = RotationMatrixReadOnly.super.isIdentity();
+         isIdentity = RotationMatrixBasics.super.isIdentity();
       return isIdentity;
    }
 
@@ -250,6 +237,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    /**
     * Transposes this matrix: m = m<sup>T</sup>.
     */
+   @Override
    public void transpose()
    {
       double temp;
@@ -286,6 +274,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     * @param m21 the new 3rd row 2nd column coefficient for this matrix.
     * @param m22 the new 3rd row 3rd column coefficient for this matrix.
     */
+   @Override
    public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
       this.m00 = m00;
@@ -304,97 +293,6 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    }
 
    /**
-    * {@inheritDoc}
-    *
-    * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
-    */
-   @Override
-   public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      if (!isIdentity())
-         checkIfRotationMatrix();
-   }
-
-   /**
-    * Sets this rotation matrix from the given tuples each holding on the values of each row.
-    *
-    * <pre>
-    *        /  firstRow.getX()  firstRow.getY()  firstRow.getZ() \
-    * this = | secondRow.getX() secondRow.getY() secondRow.getZ() |
-    *        \  thirdRow.getX()  thirdRow.getY()  thirdRow.getZ() /
-    * </pre>
-    *
-    * @param firstRow  the tuple holding onto the values of the first row. Not modified.
-    * @param secondRow the tuple holding onto the values of the second row. Not modified.
-    * @param thirdRow  the tuple holding onto the values of the third row. Not modified.
-    * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
-    */
-   public void setRows(Tuple3DReadOnly firstRow, Tuple3DReadOnly secondRow, Tuple3DReadOnly thirdRow)
-   {
-      set(firstRow.getX(),
-          firstRow.getY(),
-          firstRow.getZ(),
-
-          secondRow.getX(),
-          secondRow.getY(),
-          secondRow.getZ(),
-
-          thirdRow.getX(),
-          thirdRow.getY(),
-          thirdRow.getZ());
-   }
-
-   /**
-    * Sets this rotation matrix from the given tuples each holding on the values of each column.
-    *
-    * <pre>
-    *        / firstColumn.getX() secondColumn.getX() thirdColumn.getX() \
-    * this = | firstColumn.getY() secondColumn.getY() thirdColumn.getY() |
-    *        \ firstColumn.getZ() secondColumn.getZ() thirdColumn.getZ() /
-    * </pre>
-    *
-    * @param firstColumn  the tuple holding onto the values of the first column. Not modified.
-    * @param secondColumn the tuple holding onto the values of the second column. Not modified.
-    * @param thirdColumn  the tuple holding onto the values of the third column. Not modified.
-    * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
-    */
-   public void setColumns(Tuple3DReadOnly firstColumn, Tuple3DReadOnly secondColumn, Tuple3DReadOnly thirdColumn)
-   {
-      set(firstColumn.getX(),
-          secondColumn.getX(),
-          thirdColumn.getX(),
-
-          firstColumn.getY(),
-          secondColumn.getY(),
-          thirdColumn.getY(),
-
-          firstColumn.getZ(),
-          secondColumn.getZ(),
-          thirdColumn.getZ());
-   }
-
-   /**
-    * Sets the 9 coefficients of this rotation matrix and then normalizes {@code this}.
-    *
-    * @param m00 the new 1st row 1st column coefficient for this matrix.
-    * @param m01 the new 1st row 2nd column coefficient for this matrix.
-    * @param m02 the new 1st row 3rd column coefficient for this matrix.
-    * @param m10 the new 2nd row 1st column coefficient for this matrix.
-    * @param m11 the new 2nd row 2nd column coefficient for this matrix.
-    * @param m12 the new 2nd row 3rd column coefficient for this matrix.
-    * @param m20 the new 3rd row 1st column coefficient for this matrix.
-    * @param m21 the new 3rd row 2nd column coefficient for this matrix.
-    * @param m22 the new 3rd row 3rd column coefficient for this matrix.
-    * @throws NotARotationMatrixException if the normalization failed.
-    */
-   public void setAndNormalize(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      normalize();
-   }
-
-   /**
     * Sets this rotation matrix to equal the given one {@code other}.
     *
     * @param other the other rotation matrix to copy the values from. Not modified.
@@ -410,6 +308,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
     *
     * @param other the other rotation matrix to copy the values from. Not modified.
     */
+   @Override
    public void set(RotationMatrixReadOnly other)
    {
       m00 = other.getM00();
@@ -422,560 +321,21 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
       m21 = other.getM21();
       m22 = other.getM22();
 
-      // TODO Need to copy the dirty and isIdentity bits over.
-      markAsDirty();
+      if (other.isDirty())
+      {
+         markAsDirty();
+      }
+      else
+      {
+         dirty = false;
+         isIdentity = other.isIdentity();
+      }
    }
 
    @Override
-   public void set(Orientation3DReadOnly orientation3DReadOnly)
+   public boolean isDirty()
    {
-      orientation3DReadOnly.get(this);
-   }
-
-   /**
-    * Sets this rotation matrix to equal the 3D matrix {@code matrix} and then normalizes {@code this}.
-    *
-    * @param matrix the matrix to copy the values from. Not modified.
-    * @throws NotARotationMatrixException if the normalization failed.
-    */
-   public void setAndNormalize(Matrix3DReadOnly matrix)
-   {
-      m00 = matrix.getM00();
-      m01 = matrix.getM01();
-      m02 = matrix.getM02();
-      m10 = matrix.getM10();
-      m11 = matrix.getM11();
-      m12 = matrix.getM12();
-      m20 = matrix.getM20();
-      m21 = matrix.getM21();
-      m22 = matrix.getM22();
-
-      markAsDirty();
-      normalize();
-   }
-
-   /**
-    * Sets this rotation matrix to equal the given {@code other} and then normalizes {@code this}.
-    *
-    * @param other the rotation matrix to copy the values from. Not modified.
-    * @throws NotARotationMatrixException if the normalization failed.
-    */
-   public void setAndNormalize(RotationMatrixReadOnly other)
-   {
-      setAndNormalize((Matrix3DReadOnly) other);
-   }
-
-   /**
-    * Sets this rotation matrix to the invert of the given {@code matrix}.
-    * <p>
-    * This operation uses the property: <br>
-    * R<sup>-1</sup> = R<sup>T</sup> </br>
-    * of a rotation matrix preventing to actually compute the inverse of the matrix.
-    * </p>
-    *
-    * @param matrix the matrix to copy the values from. Not modified.
-    * @throws NotARotationMatrixException if {@code matrix} is not a rotation matrix.
-    */
-   public void setAndInvert(Matrix3DReadOnly matrix)
-   {
-      setAndTranspose(matrix);
-   }
-
-   /**
-    * Sets this rotation matrix to the invert of the given one {@code other}.
-    * <p>
-    * This operation uses the property: <br>
-    * R<sup>-1</sup> = R<sup>T</sup> </br>
-    * of a rotation matrix preventing to actually compute the inverse of the matrix.
-    * </p>
-    *
-    * @param other the matrix to copy the values from. Not modified.
-    */
-   public void setAndInvert(RotationMatrixReadOnly other)
-   {
-      setAndTranspose(other);
-   }
-
-   /**
-    * Sets this rotation matrix to the transpose of the given {@code matrix}.
-    *
-    * @param matrix the matrix to copy the values from. Not modified.
-    * @throws NotARotationMatrixException if {@code matrix} is not a rotation matrix.
-    */
-   public void setAndTranspose(Matrix3DReadOnly matrix)
-   {
-      set(matrix);
-      transpose();
-   }
-
-   /**
-    * Sets this rotation matrix to the transpose of the given {@code other}.
-    *
-    * @param other the matrix to copy the values from. Not modified.
-    */
-   public void setAndTranspose(RotationMatrixReadOnly other)
-   {
-      set(other);
-      transpose();
-   }
-
-   @Override
-   public void setAxisAngle(double x, double y, double z, double angle)
-   {
-      RotationMatrixConversion.convertAxisAngleToMatrix(x, y, z, angle, this);
-   }
-
-   @Override
-   public void setRotationVector(double x, double y, double z)
-   {
-      RotationMatrixConversion.convertRotationVectorToMatrix(x, y, z, this);
-   }
-
-   @Override
-   public void setQuaternion(double x, double y, double z, double s)
-   {
-      RotationMatrixConversion.convertQuaternionToMatrix(x, y, z, s, this);
-   }
-
-   @Override
-   public void setYawPitchRoll(double yaw, double pitch, double roll)
-   {
-      RotationMatrixConversion.convertYawPitchRollToMatrix(yaw, pitch, roll, this);
-   }
-
-   @Override
-   public void setRotationMatrix(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-   }
-
-   /**
-    * Sets this rotation matrix to represent a counter clockwise rotation around the z-axis of an angle
-    * {@code yaw}.
-    *
-    * <pre>
-    *        / cos(yaw) -sin(yaw) 0 \
-    * this = | sin(yaw)  cos(yaw) 0 |
-    *        \    0         0     1 /
-    * </pre>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    * @deprecated Use {@link #setToYawOrientation(double)} instead
-    */
-   @Deprecated
-   public void setToYawMatrix(double yaw)
-   {
-      setToYawOrientation(yaw);
-   }
-
-   /**
-    * Sets this rotation matrix to represent a counter clockwise rotation around the z-axis of an angle
-    * {@code yaw}.
-    *
-    * <pre>
-    *        / cos(yaw) -sin(yaw) 0 \
-    * this = | sin(yaw)  cos(yaw) 0 |
-    *        \    0         0     1 /
-    * </pre>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   @Override
-   public void setToYawOrientation(double yaw)
-   {
-      RotationMatrixConversion.computeYawMatrix(yaw, this);
-   }
-
-   /**
-    * Sets this rotation matrix to represent a counter clockwise rotation around the y-axis of an angle
-    * {@code pitch}.
-    *
-    * <pre>
-    *        /  cos(pitch) 0 sin(pitch) \
-    * this = |      0      1     0      |
-    *        \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    * @deprecated Use {@link #setToPitchOrientation(double)} instead
-    */
-   @Deprecated
-   public void setToPitchMatrix(double pitch)
-   {
-      setToPitchOrientation(pitch);
-   }
-
-   /**
-    * Sets this rotation matrix to represent a counter clockwise rotation around the y-axis of an angle
-    * {@code pitch}.
-    *
-    * <pre>
-    *        /  cos(pitch) 0 sin(pitch) \
-    * this = |      0      1     0      |
-    *        \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   @Override
-   public void setToPitchOrientation(double pitch)
-   {
-      RotationMatrixConversion.computePitchMatrix(pitch, this);
-   }
-
-   /**
-    * Sets this rotation matrix to represent a counter clockwise rotation around the x-axis of an angle
-    * {@code roll}.
-    *
-    * <pre>
-    *        / 1     0          0     \
-    * this = | 0 cos(roll) -sin(roll) |
-    *        \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    * @deprecated Use {@link #setToRollOrientation(double)} instead
-    */
-   @Deprecated
-   public void setToRollMatrix(double roll)
-   {
-      setToRollOrientation(roll);
-   }
-
-   /**
-    * Sets this rotation matrix to represent a counter clockwise rotation around the x-axis of an angle
-    * {@code roll}.
-    *
-    * <pre>
-    *        / 1     0          0     \
-    * this = | 0 cos(roll) -sin(roll) |
-    *        \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    */
-   @Override
-   public void setToRollOrientation(double roll)
-   {
-      RotationMatrixConversion.computeRollMatrix(roll, this);
-   }
-
-   /**
-    * Inverts this rotation matrix.
-    * <p>
-    * This operation uses the property: <br>
-    * R<sup>-1</sup> = R<sup>T</sup> </br>
-    * of a rotation matrix preventing to actually compute the inverse of the matrix.
-    * </p>
-    * <p>
-    * This is equivalent to {@code this.transpose()}.
-    * </p>
-    */
-   @Override
-   public void invert()
-   {
-      transpose();
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = this * other
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void multiply(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiply(this, other, this);
-   }
-
-   @Override
-   public void append(Orientation3DReadOnly orientation)
-   {
-      RotationMatrixTools.multiply(this, false, orientation, false, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = this<sup>T</sup> * other
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void multiplyTransposeThis(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiplyTransposeLeft(this, other, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = this * other<sup>T</sup>
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void multiplyTransposeOther(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiplyTransposeRight(this, other, this);
-   }
-
-   @Override
-   public void appendInvertOther(Orientation3DReadOnly orientation)
-   {
-      RotationMatrixTools.multiply(this, false, orientation, true, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = this<sup>T</sup> * other<sup>T</sup>
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void multiplyTransposeBoth(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiplyTransposeBoth(this, other, this);
-   }
-
-   /**
-    * Append a rotation about the z-axis to this rotation matrix.
-    *
-    * <pre>
-    *               / cos(yaw) -sin(yaw) 0 \
-    * this = this * | sin(yaw)  cos(yaw) 0 |
-    *               \    0         0     1 /
-    * </pre>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   @Override
-   public void appendYawRotation(double yaw)
-   {
-      RotationMatrixTools.appendYawRotation(this, yaw, this);
-   }
-
-   /**
-    * Append a rotation about the y-axis to this rotation matrix.
-    *
-    * <pre>
-    *               /  cos(pitch) 0 sin(pitch) \
-    * this = this * |      0      1     0      |
-    *               \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   @Override
-   public void appendPitchRotation(double pitch)
-   {
-      RotationMatrixTools.appendPitchRotation(this, pitch, this);
-   }
-
-   /**
-    * Append a rotation about the x-axis to this rotation matrix.
-    *
-    * <pre>
-    *               / 1     0          0     \
-    * this = this * | 0 cos(roll) -sin(roll) |
-    *               \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    */
-   @Override
-   public void appendRollRotation(double roll)
-   {
-      RotationMatrixTools.appendRollRotation(this, roll, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = other * this
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void preMultiply(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiply(other, this, this);
-   }
-
-   @Override
-   public void prepend(Orientation3DReadOnly orientation)
-   {
-      RotationMatrixTools.multiply(orientation, false, this, false, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = other * this<sup>T</sup>
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void preMultiplyTransposeThis(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiplyTransposeRight(other, this, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = other<sup>T</sup> * this
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void preMultiplyTransposeOther(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiplyTransposeLeft(other, this, this);
-   }
-
-   @Override
-   public void prependInvertOther(Orientation3DReadOnly orientation)
-   {
-      RotationMatrixTools.multiply(orientation, true, this, false, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = other<sup>T</sup> * this<sup>T</sup>
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   public void preMultiplyTransposeBoth(RotationMatrixReadOnly other)
-   {
-      RotationMatrixTools.multiplyTransposeBoth(other, this, this);
-   }
-
-   /**
-    * Prepend a rotation about the z-axis to this rotation matrix.
-    *
-    * <pre>
-    *        / cos(yaw) -sin(yaw) 0 \
-    * this = | sin(yaw)  cos(yaw) 0 | * this
-    *        \    0         0     1 /
-    * </pre>
-    *
-    * @param yaw the angle to rotate about the z-axis.
-    */
-   @Override
-   public void prependYawRotation(double yaw)
-   {
-      RotationMatrixTools.prependYawRotation(yaw, this, this);
-   }
-
-   /**
-    * Prepend a rotation about the y-axis to this rotation matrix.
-    *
-    * <pre>
-    *        /  cos(pitch) 0 sin(pitch) \
-    * this = |      0      1     0      | * this
-    *        \ -sin(pitch) 0 cos(pitch) /
-    * </pre>
-    *
-    * @param pitch the angle to rotate about the y-axis.
-    */
-   @Override
-   public void prependPitchRotation(double pitch)
-   {
-      RotationMatrixTools.prependPitchRotation(pitch, this, this);
-   }
-
-   /**
-    * Append a rotation about the x-axis to this rotation matrix.
-    *
-    * <pre>
-    *        / 1     0          0     \
-    * this = | 0 cos(roll) -sin(roll) | * this
-    *        \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param roll the angle to rotate about the x-axis.
-    */
-   @Override
-   public void prependRollRotation(double roll)
-   {
-      RotationMatrixTools.prependRollRotation(roll, this, this);
-   }
-
-   /**
-    * Performs a linear interpolation in SO(3) from {@code this} to {@code rf} given the percentage
-    * {@code alpha}.
-    * <p>
-    * This is equivalent to but much more computationally expensive than the <i>Spherical Linear
-    * Interpolation</i> performed with quaternions.
-    * </p>
-    *
-    * @param rf    the other rotation matrix used for the interpolation. Not modified.
-    * @param alpha the percentage used for the interpolation. A value of 0 will result in not modifying
-    *              this rotation matrix, while a value of 1 is equivalent to setting this rotation
-    *              matrix to {@code rf}.
-    */
-   public void interpolate(RotationMatrixReadOnly rf, double alpha)
-   {
-      interpolate(this, rf, alpha);
-   }
-
-   /**
-    * Performs a linear interpolation in SO(3) from {@code r0} to {@code rf} given the percentage
-    * {@code alpha}.
-    * <p>
-    * This is equivalent to but much more computationally expensive than the <i>Spherical Linear
-    * Interpolation</i> performed with quaternions.
-    * </p>
-    *
-    * @param r0    the first rotation matrix used in the interpolation. Not modified.
-    * @param rf    the second rotation matrix used in the interpolation. Not modified.
-    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
-    *              this rotation matrix to {@code r0}, while a value of 1 is equivalent to setting this
-    *              rotation matrix to {@code rf}.
-    */
-   public void interpolate(RotationMatrixReadOnly r0, RotationMatrixReadOnly rf, double alpha)
-   {
-      RotationMatrixTools.interpolate(r0, rf, alpha, this);
-   }
-
-   /**
-    * {@inheritDoc}
-    * <p>
-    * this = R * this where 'R' is the 3-by-3 matrix representing the rotation part of the
-    * {@code transform}.
-    * </p>
-    * <p>
-    * Note: the transformation of a {@code RotationMatrix} strongly differs from the transformation of
-    * a {@link Matrix3DBasics}.
-    * </p>
-    */
-   @Override
-   public void applyTransform(Transform transform)
-   {
-      transform.transform(this);
-   }
-
-   /**
-    * {@inheritDoc}
-    * <p>
-    * this = R<sup>T</sup> * this where 'R' is the 3-by-3 matrix representing the rotation part of the
-    * {@code transform}.
-    * </p>
-    * <p>
-    * Note: the transformation of a {@code RotationMatrix} strongly differs from the transformation of
-    * a {@link Matrix3DBasics}.
-    * </p>
-    */
-   @Override
-   public void applyInverseTransform(Transform transform)
-   {
-      transform.inverseTransform(this);
+      return dirty;
    }
 
    /** {@inheritDoc} */
@@ -1069,7 +429,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public boolean epsilonEquals(RotationMatrix other, double epsilon)
    {
-      return RotationMatrixReadOnly.super.epsilonEquals(other, epsilon);
+      return RotationMatrixBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -1091,7 +451,7 @@ public class RotationMatrix implements CommonMatrix3DBasics, RotationMatrixReadO
    @Override
    public boolean geometricallyEquals(RotationMatrix other, double epsilon)
    {
-      return RotationMatrixReadOnly.super.geometricallyEquals(other, epsilon);
+      return RotationMatrixBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

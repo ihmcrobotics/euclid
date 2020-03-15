@@ -2,12 +2,8 @@ package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
+import us.ihmc.euclid.matrix.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -147,7 +143,7 @@ public interface Orientation3DReadOnly
     * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
     *                             Modified.
     */
-   void get(RotationMatrix rotationMatrixToPack);
+   void get(RotationMatrixBasics rotationMatrixToPack);
 
    /**
     * Converts, if necessary, and packs this orientation into an axis-angle.
@@ -500,7 +496,7 @@ public interface Orientation3DReadOnly
     *
     * @param matrixToTransform the rotation matrix to be transformed. Modified.
     */
-   default void transform(RotationMatrix matrixToTransform)
+   default void transform(RotationMatrixBasics matrixToTransform)
    {
       transform(matrixToTransform, matrixToTransform);
    }
@@ -515,7 +511,7 @@ public interface Orientation3DReadOnly
     * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
-   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       RotationMatrixTools.multiply(this, false, matrixOriginal, false, matrixTransformed);
    }
@@ -755,7 +751,7 @@ public interface Orientation3DReadOnly
     *
     * @param matrixToTransform the rotation matrix to be transformed. Modified.
     */
-   default void inverseTransform(RotationMatrix matrixToTransform)
+   default void inverseTransform(RotationMatrixBasics matrixToTransform)
    {
       inverseTransform(matrixToTransform, matrixToTransform);
    }
@@ -771,7 +767,7 @@ public interface Orientation3DReadOnly
     * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
-   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       RotationMatrixTools.multiply(this, true, matrixOriginal, false, matrixTransformed);
    }

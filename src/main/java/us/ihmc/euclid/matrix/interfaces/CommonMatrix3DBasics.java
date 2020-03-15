@@ -3,6 +3,8 @@ package us.ihmc.euclid.matrix.interfaces;
 import org.ejml.data.DenseMatrix64F;
 
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.tools.Matrix3DTools;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * Read interface for a 3-by-3 matrix object with a restricted writing interface.
@@ -50,6 +52,15 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    default boolean containsNaN()
    {
       return Matrix3DReadOnly.super.containsNaN();
+   }
+
+   /**
+    * Orthonormalization of this matrix using the
+    * <a href="https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process"> Gram-Schmidt method</a>.
+    */
+   default void normalize()
+   {
+      Matrix3DTools.normalize(this);
    }
 
    /**
@@ -173,5 +184,72 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
       double m21 = matrix.get(row, column++);
       double m22 = matrix.get(row, column);
       set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   /**
+    * Sets this matrix to equal the other matrix and then normalizes this, see {@link #normalize()}.
+    *
+    * @param other the other matrix used to update this matrix. Not modified.
+    */
+   default void setAndNormalize(Matrix3DReadOnly other)
+   {
+      set(other);
+      normalize();
+   }
+
+   /**
+    * Sets this matrix from the given tuples each holding on the values of each row.
+    *
+    * <pre>
+    *        /  firstRow.getX()  firstRow.getY()  firstRow.getZ() \
+    * this = | secondRow.getX() secondRow.getY() secondRow.getZ() |
+    *        \  thirdRow.getX()  thirdRow.getY()  thirdRow.getZ() /
+    * </pre>
+    *
+    * @param firstRow  the tuple holding onto the values of the first row. Not modified.
+    * @param secondRow the tuple holding onto the values of the second row. Not modified.
+    * @param thirdRow  the tuple holding onto the values of the third row. Not modified.
+    */
+   default void setRows(Tuple3DReadOnly firstRow, Tuple3DReadOnly secondRow, Tuple3DReadOnly thirdRow)
+   {
+      set(firstRow.getX(),
+          firstRow.getY(),
+          firstRow.getZ(),
+
+          secondRow.getX(),
+          secondRow.getY(),
+          secondRow.getZ(),
+
+          thirdRow.getX(),
+          thirdRow.getY(),
+          thirdRow.getZ());
+   }
+
+   /**
+    * Sets this matrix from the given tuples each holding on the values of each column.
+    *
+    * <pre>
+    *        / firstColumn.getX() secondColumn.getX() thirdColumn.getX() \
+    * this = | firstColumn.getY() secondColumn.getY() thirdColumn.getY() |
+    *        \ firstColumn.getZ() secondColumn.getZ() thirdColumn.getZ() /
+    * </pre>
+    *
+    * @param firstColumn  the tuple holding onto the values of the first column. Not modified.
+    * @param secondColumn the tuple holding onto the values of the second column. Not modified.
+    * @param thirdColumn  the tuple holding onto the values of the third column. Not modified.
+    */
+   default void setColumns(Tuple3DReadOnly firstColumn, Tuple3DReadOnly secondColumn, Tuple3DReadOnly thirdColumn)
+   {
+      set(firstColumn.getX(),
+          secondColumn.getX(),
+          thirdColumn.getX(),
+
+          firstColumn.getY(),
+          secondColumn.getY(),
+          thirdColumn.getY(),
+
+          firstColumn.getZ(),
+          secondColumn.getZ(),
+          thirdColumn.getZ());
    }
 }

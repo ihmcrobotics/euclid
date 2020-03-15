@@ -1,7 +1,7 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -50,7 +50,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
     * @return the orientation of this ramp.
     */
    @Override
-   default RotationMatrix getOrientation()
+   default RotationMatrixBasics getOrientation()
    {
       return getPose().getShapeOrientation();
    }

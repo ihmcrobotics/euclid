@@ -2,7 +2,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -20,7 +20,7 @@ public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransfo
     * @return the orientation part.
     */
    @Override
-   RotationMatrix getShapeOrientation();
+   RotationMatrixBasics getShapeOrientation();
 
    /**
     * Gets the reference to the position part of this pose.
@@ -32,7 +32,7 @@ public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransfo
 
    /** {@inheritDoc} */
    @Override
-   default RotationMatrix getRotation()
+   default RotationMatrixBasics getRotation()
    {
       return getShapeOrientation();
    }

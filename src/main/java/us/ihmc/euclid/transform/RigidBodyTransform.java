@@ -9,6 +9,7 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -790,7 +791,7 @@ public class RigidBodyTransform
    }
 
    @Override
-   public RotationMatrix getRotation()
+   public RotationMatrixBasics getRotation()
    {
       return rotationMatrix;
    }
