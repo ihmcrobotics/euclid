@@ -1,33 +1,21 @@
-package us.ihmc.euclid.shape.primitives;
+package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-/**
- * Implementation of a capsule 3D.
- * <p>
- * A capsule 3D is represented by its length, i.e. the distance separating the center of the two
- * half-spheres, its radius, the position of its center, and its axis of revolution.
- * </p>
- *
- * @author Sylvain Bertrand
- */
-public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
+public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<FrameCapsule3D>
 {
+   private ReferenceFrame referenceFrame;
    /** Position of this capsule's center. */
-   private final Point3D position = new Point3D();
+   private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    /** Axis of revolution of this capsule. */
-   private final Vector3D axis = new Vector3D(Axis.Z);
-
+   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameVector3DBasics(this);
    /** This capsule radius. */
    private double radius;
    /** This capsule length. */
@@ -36,67 +24,62 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    private double halfLength;
 
    /** Position of the top half-sphere center linked to this capsule properties. */
-   private final Point3DReadOnly topCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> halfLength * axis.getX() + position.getX(),
-                                                                                          () -> halfLength * axis.getY() + position.getY(),
-                                                                                          () -> halfLength * axis.getZ() + position.getZ());
+   private final FramePoint3DReadOnly topCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(() -> halfLength * axis.getX() + position.getX(),
+                                                                                                     () -> halfLength * axis.getY() + position.getY(),
+                                                                                                     () -> halfLength * axis.getZ() + position.getZ(),
+                                                                                                     this);
    /** Position of the bottom half-sphere center linked to this capsule properties. */
-   private final Point3DReadOnly bottomCenter = EuclidCoreFactories.newLinkedPoint3DReadOnly(() -> -halfLength * axis.getX() + position.getX(),
-                                                                                             () -> -halfLength * axis.getY() + position.getY(),
-                                                                                             () -> -halfLength * axis.getZ() + position.getZ());
+   private final FramePoint3DReadOnly bottomCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(() -> -halfLength * axis.getX() + position.getX(),
+                                                                                                        () -> -halfLength * axis.getY() + position.getY(),
+                                                                                                        () -> -halfLength * axis.getZ() + position.getZ(),
+                                                                                                        this);
 
-   /**
-    * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5.
-    */
-   public Capsule3D()
+   public FrameCapsule3D()
    {
-      this(1.0, 0.5);
+      this(ReferenceFrame.getWorldFrame());
    }
 
-   /**
-    * Creates a new capsule which axis is along the z-axis and initializes its size.
-    *
-    * @param length the length of this capsule.
-    * @param radius the radius of this capsule.
-    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
-    */
-   public Capsule3D(double length, double radius)
+   public FrameCapsule3D(ReferenceFrame referenceFrame)
    {
+      this(referenceFrame, 1.0, 0.5);
+   }
+
+   public FrameCapsule3D(ReferenceFrame referenceFrame, double length, double radius)
+   {
+      setReferenceFrame(referenceFrame);
       setSize(length, radius);
    }
 
-   /**
-    * Creates a new capsule 3D and initializes its pose and size.
-    *
-    * @param position the position of the center. Not modified.
-    * @param axis     the axis of revolution. Not modified.
-    * @param length   the length of this capsule.
-    * @param radius   the radius of this capsule.
-    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
-    */
-   public Capsule3D(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
+   public FrameCapsule3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
-      set(position, axis, length, radius);
+      setIncludingFrame(referenceFrame, position, axis, length, radius);
    }
 
-   /**
-    * Creates a new capsule 3D identical to {@code other}.
-    *
-    * @param other the other capsule to copy. Not modified.
-    */
-   public Capsule3D(Capsule3DReadOnly other)
+   public FrameCapsule3D(FramePoint3DReadOnly position, FrameVector3DReadOnly axis, double length, double radius)
    {
-      set(other);
+      setIncludingFrame(position, axis, length, radius);
    }
 
-   /**
-    * Copies the {@code other} capsule data into {@code this}.
-    *
-    * @param other the other capsule to copy. Not modified.
-    */
+   public FrameCapsule3D(ReferenceFrame referenceFrame, Capsule3DReadOnly other)
+   {
+      setIncludingFrame(referenceFrame, other);
+   }
+
+   public FrameCapsule3D(FrameCapsule3DReadOnly other)
+   {
+      setIncludingFrame(other);
+   }
+
    @Override
-   public void set(Capsule3D other)
+   public void set(FrameCapsule3D other)
    {
-      Capsule3DBasics.super.set(other);
+      FrameCapsule3DBasics.super.set(other);
+   }
+
+   @Override
+   public void setReferenceFrame(ReferenceFrame referenceFrame)
+   {
+      this.referenceFrame = referenceFrame;
    }
 
    /** {@inheritDoc} */
@@ -116,6 +99,12 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
          throw new IllegalArgumentException("The length of a Capsule3D cannot be negative: " + length);
       this.length = length;
       halfLength = 0.5 * length;
+   }
+
+   @Override
+   public ReferenceFrame getReferenceFrame()
+   {
+      return referenceFrame;
    }
 
    /** {@inheritDoc} */
@@ -141,28 +130,28 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    /** {@inheritDoc} */
    @Override
-   public Point3D getPosition()
+   public FixedFramePoint3DBasics getPosition()
    {
       return position;
    }
 
    /** {@inheritDoc} */
    @Override
-   public Vector3D getAxis()
+   public FixedFrameVector3DBasics getAxis()
    {
       return axis;
    }
 
    /** {@inheritDoc} */
    @Override
-   public Point3DReadOnly getTopCenter()
+   public FramePoint3DReadOnly getTopCenter()
    {
       return topCenter;
    }
 
    /** {@inheritDoc} */
    @Override
-   public Point3DReadOnly getBottomCenter()
+   public FramePoint3DReadOnly getBottomCenter()
    {
       return bottomCenter;
    }
@@ -175,9 +164,9 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
     * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
     */
    @Override
-   public boolean epsilonEquals(Capsule3D other, double epsilon)
+   public boolean epsilonEquals(FrameCapsule3D other, double epsilon)
    {
-      return Capsule3DBasics.super.epsilonEquals(other, epsilon);
+      return FrameCapsule3DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -189,9 +178,9 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
     * @return {@code true} if the capsules represent the same geometry, {@code false} otherwise.
     */
    @Override
-   public boolean geometricallyEquals(Capsule3D other, double epsilon)
+   public boolean geometricallyEquals(FrameCapsule3D other, double epsilon)
    {
-      return Capsule3DBasics.super.geometricallyEquals(other, epsilon);
+      return FrameCapsule3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -204,8 +193,8 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    @Override
    public boolean equals(Object object)
    {
-      if (object instanceof Capsule3DReadOnly)
-         return Capsule3DBasics.super.equals((Capsule3DReadOnly) object);
+      if (object instanceof FrameCapsule3DReadOnly)
+         return FrameCapsule3DBasics.super.equals((FrameCapsule3DReadOnly) object);
       else
          return false;
    }
@@ -234,6 +223,6 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    @Override
    public String toString()
    {
-      return EuclidShapeIOTools.getCapsule3DString(this);
+      return EuclidFrameShapeIOTools.getFrameCapsule3DString(this);
    }
 }

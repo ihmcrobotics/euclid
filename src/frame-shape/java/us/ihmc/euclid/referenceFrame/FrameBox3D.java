@@ -23,6 +23,11 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
     */
    private final FixedFrameVector3DBasics size = EuclidFrameShapeFactories.newPositiveFixedFrameVector3DBasics(this);
 
+   public FrameBox3D()
+   {
+      this(ReferenceFrame.getWorldFrame());
+   }
+
    public FrameBox3D(ReferenceFrame referenceFrame)
    {
       this(referenceFrame, 1.0, 1.0, 1.0);

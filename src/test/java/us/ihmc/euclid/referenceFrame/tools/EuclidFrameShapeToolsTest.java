@@ -8,6 +8,7 @@ import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.Capsule3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -20,7 +21,7 @@ public class EuclidFrameShapeToolsTest
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
 
    @Test
-   public void testBoundingBox3D()
+   public void testBoundingBoxBox3D()
    {
       Random random = new Random(5768787);
 
@@ -78,6 +79,65 @@ public class EuclidFrameShapeToolsTest
 
          boxInBBXFrame.getBoundingBox(expected);
          EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testBoundingBoxCapsule3D()
+   {
+      Random random = new Random(5768787);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Capsule3D: shapeFrame = world, boundingBoxFrame = world
+         Capsule3D capsuleInFrame = EuclidShapeRandomTools.nextCapsule3D(random);
+         Capsule3D capsuleInWorld = new Capsule3D(capsuleInFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         capsuleInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxCapsule3D(worldFrame, capsuleInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+
+         capsuleInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Capsule3D: shapeFrame != world, boundingBoxFrame = world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         Capsule3D capsuleInFrame = EuclidShapeRandomTools.nextCapsule3D(random);
+         Capsule3D capsuleInWorld = new Capsule3D(capsuleInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(worldFrame, capsuleInWorld);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         capsuleInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxCapsule3D(shapeFrame, capsuleInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+
+         capsuleInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Capsule3D: shapeFrame != world, boundingBoxFrame != world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         RigidBodyTransform boundingBoxFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         ReferenceFrame boundingBoxFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("boundingBoxFrame",
+                                                                                                             worldFrame,
+                                                                                                             boundingBoxFrameTransform);
+         Capsule3D capsuleInFrame = EuclidShapeRandomTools.nextCapsule3D(random);
+         Capsule3D capsuleInBBX = new Capsule3D(capsuleInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, capsuleInBBX);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         capsuleInBBX.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxCapsule3D(shapeFrame, capsuleInFrame, boundingBoxFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+
+         capsuleInBBX.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
       }
    }
 

@@ -5,7 +5,9 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.*;
@@ -363,6 +365,251 @@ public class EuclidFrameShapeTools
       boundingBoxToPack.set(-xRange, -yRange, -zRange, xRange, yRange, zRange);
    }
 
+   public static void boundingBoxCapsule3D(FrameCapsule3DReadOnly capsule3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxCapsule3D(capsule3D.getReferenceFrame(), capsule3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   public static void boundingBoxCapsule3D(ReferenceFrame capsule3DFrame, Capsule3DReadOnly capsule3D, ReferenceFrame boundingBoxFrame,
+                                           BoundingBox3DBasics boundingBoxToPack)
+   {
+      if (capsule3DFrame == boundingBoxFrame)
+      {
+         capsule3D.getBoundingBox(boundingBoxToPack);
+         return;
+      }
+
+      double halfLength = capsule3D.getHalfLength();
+      double radius = capsule3D.getRadius();
+      Vector3DReadOnly axis = capsule3D.getAxis();
+      Point3DReadOnly position = capsule3D.getPosition();
+
+      if (capsule3DFrame.isRootFrame())
+      {
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxCapsule3D(halfLength, radius, axis.getX(), axis.getY(), axis.getZ(), boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxCapsule3D(rotFromBBX, transFromBBX, true, halfLength, radius, axis, position, boundingBoxToPack);
+         }
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = capsule3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxCapsule3D(rotToRoot, transToRoot, false, halfLength, radius, axis, position, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxCapsule3D(rotFromBBX, transFromBBX, true, rotToRoot, transToRoot, false, halfLength, radius, axis, position, boundingBoxToPack);
+         }
+      }
+   }
+
+   private static void boundingBoxCapsule3D(RotationMatrixReadOnly rotation1, Tuple3DReadOnly translation1, boolean inverseTransform1,
+                                            RotationMatrixReadOnly rotation2, Tuple3DReadOnly translation2, boolean inverseTransform2, double halfLength,
+                                            double radius, Vector3DReadOnly axis, Point3DReadOnly position, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxCapsule3D(rotation1, inverseTransform1, rotation2, inverseTransform2, halfLength, radius, axis, boundingBoxToPack);
+      addTranslationPartOfTransforms(rotation1, translation1, inverseTransform1, rotation2, translation2, inverseTransform2, null, position, false, boundingBoxToPack);
+   }
+
+   private static void boundingBoxCapsule3D(RotationMatrixReadOnly rotation1, Tuple3DReadOnly translation1, boolean inverseTransform1, double halfLength,
+                                            double radius, Vector3DReadOnly axis, Point3DReadOnly position, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxCapsule3D(rotation1, inverseTransform1, halfLength, radius, axis, boundingBoxToPack);
+      addTranslationPartOfTransforms(rotation1, translation1, inverseTransform1, null, position, false, boundingBoxToPack);
+   }
+
+   private static void boundingBoxCapsule3D(RotationMatrixReadOnly rotation1, boolean inverseTransform1, RotationMatrixReadOnly rotation2,
+                                            boolean inverseTransform2, double halfLength, double radius, Vector3DReadOnly axis,
+                                            BoundingBox3DBasics boundingBoxToPack)
+   {
+      if (rotation1.isIdentity())
+      {
+         boundingBoxCapsule3D(rotation2, inverseTransform2, halfLength, radius, axis, boundingBoxToPack);
+      }
+      else
+      {
+         boundingBoxCapsule3D(rotation1.getM00(),
+                              rotation1.getM01(),
+                              rotation1.getM02(),
+                              rotation1.getM10(),
+                              rotation1.getM11(),
+                              rotation1.getM12(),
+                              rotation1.getM20(),
+                              rotation1.getM21(),
+                              rotation1.getM22(),
+                              inverseTransform1,
+                              rotation2,
+                              inverseTransform2,
+                              halfLength,
+                              radius,
+                              axis,
+
+                              boundingBoxToPack);
+      }
+   }
+
+   private static void boundingBoxCapsule3D(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                            boolean inverseTransform1, RotationMatrixReadOnly rotation2, boolean inverseTransform2, double halfLength,
+                                            double radius, Vector3DReadOnly axis, BoundingBox3DBasics boundingBoxToPack)
+   {
+      double a00, a01, a02;
+      double a10, a11, a12;
+      double a20, a21, a22;
+
+      if (inverseTransform1)
+      {
+         a00 = m00;
+         a01 = m10;
+         a02 = m20;
+         a10 = m01;
+         a11 = m11;
+         a12 = m21;
+         a20 = m02;
+         a21 = m12;
+         a22 = m22;
+      }
+      else
+      {
+         a00 = m00;
+         a01 = m01;
+         a02 = m02;
+         a10 = m10;
+         a11 = m11;
+         a12 = m12;
+         a20 = m20;
+         a21 = m21;
+         a22 = m22;
+      }
+
+      if (rotation2.isIdentity())
+      {
+         boundingBoxCapsule3D(a00, a01, a02, a10, a11, a12, a20, a21, a22, halfLength, radius, axis, boundingBoxToPack);
+      }
+      else
+      {
+         double b00, b01, b02;
+         double b10, b11, b12;
+         double b20, b21, b22;
+
+         if (inverseTransform2)
+         {
+            b00 = rotation2.getM00();
+            b01 = rotation2.getM10();
+            b02 = rotation2.getM20();
+            b10 = rotation2.getM01();
+            b11 = rotation2.getM11();
+            b12 = rotation2.getM21();
+            b20 = rotation2.getM02();
+            b21 = rotation2.getM12();
+            b22 = rotation2.getM22();
+         }
+         else
+         {
+            b00 = rotation2.getM00();
+            b01 = rotation2.getM01();
+            b02 = rotation2.getM02();
+            b10 = rotation2.getM10();
+            b11 = rotation2.getM11();
+            b12 = rotation2.getM12();
+            b20 = rotation2.getM20();
+            b21 = rotation2.getM21();
+            b22 = rotation2.getM22();
+         }
+
+         double c00, c01, c02;
+         double c10, c11, c12;
+         double c20, c21, c22;
+
+         c00 = a00 * b00 + a01 * b10 + a02 * b20;
+         c01 = a00 * b01 + a01 * b11 + a02 * b21;
+         c02 = a00 * b02 + a01 * b12 + a02 * b22;
+         c10 = a10 * b00 + a11 * b10 + a12 * b20;
+         c11 = a10 * b01 + a11 * b11 + a12 * b21;
+         c12 = a10 * b02 + a11 * b12 + a12 * b22;
+         c20 = a20 * b00 + a21 * b10 + a22 * b20;
+         c21 = a20 * b01 + a21 * b11 + a22 * b21;
+         c22 = a20 * b02 + a21 * b12 + a22 * b22;
+         boundingBoxCapsule3D(c00, c01, c02, c10, c11, c12, c20, c21, c22, halfLength, radius, axis, boundingBoxToPack);
+      }
+   }
+
+   private static void boundingBoxCapsule3D(RotationMatrixReadOnly rotation, boolean inverseTransform, double halfLength, double radius, Vector3DReadOnly axis,
+                                            BoundingBox3DBasics boundingBoxToPack)
+   {
+      double m00, m01, m02;
+      double m10, m11, m12;
+      double m20, m21, m22;
+
+      if (rotation.isIdentity())
+      {
+         boundingBoxCapsule3D(halfLength, radius, axis.getX(), axis.getY(), axis.getZ(), boundingBoxToPack);
+      }
+      else
+      {
+         if (inverseTransform)
+         {
+            m00 = rotation.getM00();
+            m01 = rotation.getM10();
+            m02 = rotation.getM20();
+            m10 = rotation.getM01();
+            m11 = rotation.getM11();
+            m12 = rotation.getM21();
+            m20 = rotation.getM02();
+            m21 = rotation.getM12();
+            m22 = rotation.getM22();
+         }
+         else
+         {
+            m00 = rotation.getM00();
+            m01 = rotation.getM01();
+            m02 = rotation.getM02();
+            m10 = rotation.getM10();
+            m11 = rotation.getM11();
+            m12 = rotation.getM12();
+            m20 = rotation.getM20();
+            m21 = rotation.getM21();
+            m22 = rotation.getM22();
+         }
+
+         boundingBoxCapsule3D(m00, m01, m02, m10, m11, m12, m20, m21, m22, halfLength, radius, axis, boundingBoxToPack);
+      }
+   }
+
+   private static void boundingBoxCapsule3D(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                            double halfLength, double radius, Vector3DReadOnly axis, BoundingBox3DBasics boundingBoxToPack)
+   {
+      double axisX = m00 * axis.getX() + m01 * axis.getY() + m02 * axis.getZ();
+      double axisY = m10 * axis.getX() + m11 * axis.getY() + m12 * axis.getZ();
+      double axisZ = m20 * axis.getX() + m21 * axis.getY() + m22 * axis.getZ();
+
+      boundingBoxCapsule3D(halfLength, radius, axisX, axisY, axisZ, boundingBoxToPack);
+   }
+
+   private static void boundingBoxCapsule3D(double halfLength, double radius, double axisX, double axisY, double axisZ, BoundingBox3DBasics boundingBoxToPack)
+   {
+      double rangeX = halfLength * Math.abs(axisX) + radius;
+      double rangeY = halfLength * Math.abs(axisY) + radius;
+      double rangeZ = halfLength * Math.abs(axisZ) + radius;
+      boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+   }
+
    private static void addTranslationPartOfTransforms(RotationMatrixReadOnly rotationPart1, Tuple3DReadOnly translationPart1, boolean inverseTransform1,
                                                       RotationMatrixReadOnly rotationPart2, Tuple3DReadOnly translationPart2, boolean inverseTransform2,
                                                       RotationMatrixReadOnly rotationPart3, Tuple3DReadOnly translationPart3, boolean inverseTransform3,
@@ -463,11 +710,13 @@ public class EuclidFrameShapeTools
       if (inverseTransform)
       {
          pointToTransform.sub(translationPart);
-         rotationPart.inverseTransform(pointToTransform);
+         if (rotationPart != null)
+            rotationPart.inverseTransform(pointToTransform);
       }
       else
       {
-         rotationPart.transform(pointToTransform);
+         if (rotationPart != null)
+            rotationPart.transform(pointToTransform);
          pointToTransform.add(translationPart);
       }
    }

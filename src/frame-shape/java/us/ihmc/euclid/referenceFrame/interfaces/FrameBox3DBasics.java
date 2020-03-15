@@ -9,9 +9,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface FrameBox3DBasics extends FixedFrameBox3DBasics, FrameChangeable
 {
-   @Override
-   void setReferenceFrame(ReferenceFrame referenceFrame);
-
    default void setToNaN(ReferenceFrame referenceFrame)
    {
       setReferenceFrame(referenceFrame);
