@@ -1,9 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
@@ -560,14 +557,50 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testHashCode() throws Exception
    {
-      Random random = new Random(763);
+      Random random = new Random(621541L);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random, 100);
+
+      FrameQuaternion q = EuclidFrameRandomTools.nextFrameQuaternion(random, frames[random.nextInt(frames.length)]);
+
+      int newHashCode, previousHashCode;
+      newHashCode = q.hashCode();
+      assertEquals(newHashCode, q.hashCode());
+
+      previousHashCode = q.hashCode();
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         FrameQuaternion actual = new FrameQuaternion(worldFrame, expected);
+         double qx = q.getX();
+         double qy = q.getY();
+         double qz = q.getZ();
+         double qs = q.getS();
+         switch (random.nextInt(4))
+         {
+            case 0:
+               qx = random.nextDouble();
+               break;
+            case 1:
+               qy = random.nextDouble();
+               break;
+            case 2:
+               qz = random.nextDouble();
+               break;
+            case 3:
+               qs = random.nextDouble();
+               break;
+         }
+         q.setUnsafe(qx, qy, qz, qs);
+         newHashCode = q.hashCode();
+         assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
 
-         assertEquals(expected.hashCode(), actual.hashCode());
+         ReferenceFrame oldFrame = q.getReferenceFrame();
+         ReferenceFrame newFrame = frames[random.nextInt(frames.length)];
+         q.setReferenceFrame(newFrame);
+         newHashCode = q.hashCode();
+         if (oldFrame != newFrame)
+            assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
       }
    }
 

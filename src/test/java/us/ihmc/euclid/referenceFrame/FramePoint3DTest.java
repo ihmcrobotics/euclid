@@ -1,9 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.HashMap;
@@ -241,14 +238,36 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
    @Test
    public void testHashCode() throws Exception
    {
-      Random random = new Random(763);
+      Random random = new Random(621541L);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random, 100);
+
+      FramePoint3D tuple = new FramePoint3D();
+
+      tuple.setX(random.nextDouble());
+      tuple.setY(random.nextDouble());
+      tuple.setZ(random.nextDouble());
+      tuple.setReferenceFrame(frames[random.nextInt(frames.length)]);
+
+      int newHashCode, previousHashCode;
+      newHashCode = tuple.hashCode();
+      assertEquals(newHashCode, tuple.hashCode());
+
+      previousHashCode = tuple.hashCode();
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D expected = EuclidCoreRandomTools.nextPoint3D(random, -1.0e15, 1.0e15);
-         FramePoint3D actual = new FramePoint3D(worldFrame, expected);
+         tuple.setElement(i % 3, random.nextDouble());
+         newHashCode = tuple.hashCode();
+         assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
 
-         assertEquals(expected.hashCode(), actual.hashCode());
+         ReferenceFrame oldFrame = tuple.getReferenceFrame();
+         ReferenceFrame newFrame = frames[random.nextInt(frames.length)];
+         tuple.setReferenceFrame(newFrame);
+         newHashCode = tuple.hashCode();
+         if (oldFrame != newFrame)
+            assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
       }
    }
 

@@ -1,9 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
@@ -167,15 +164,37 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
    @Test
    public void testHashCode() throws Exception
    {
-      Random random = new Random(763);
+      Random random = new Random(621541L);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random, 100);
+
+      FrameVector4D tuple = new FrameVector4D();
+
+      tuple.setX(random.nextDouble());
+      tuple.setY(random.nextDouble());
+      tuple.setZ(random.nextDouble());
+      tuple.setS(random.nextDouble());
+      tuple.setReferenceFrame(frames[random.nextInt(frames.length)]);
+
+      int newHashCode, previousHashCode;
+      newHashCode = tuple.hashCode();
+      assertEquals(newHashCode, tuple.hashCode());
+
+      previousHashCode = tuple.hashCode();
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector4D expected = EuclidCoreRandomTools.nextVector4D(random);
-         expected.scale(1.0e15);
-         FrameVector4D actual = new FrameVector4D(worldFrame, expected);
+         tuple.setElement(i % 4, random.nextDouble());
+         newHashCode = tuple.hashCode();
+         assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
 
-         assertEquals(expected.hashCode(), actual.hashCode());
+         ReferenceFrame oldFrame = tuple.getReferenceFrame();
+         ReferenceFrame newFrame = frames[random.nextInt(frames.length)];
+         tuple.setReferenceFrame(newFrame);
+         newHashCode = tuple.hashCode();
+         if (oldFrame != newFrame)
+            assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
       }
    }
 

@@ -33,8 +33,8 @@ public class BoundingBox2DTest
       Point2D min = new Point2D();
       Point2D max = new Point2D();
       BoundingBox2D boundingBox = new BoundingBox2D();
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(boundingBox.getMinPoint());
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(boundingBox.getMaxPoint());
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
@@ -185,6 +185,7 @@ public class BoundingBox2DTest
       EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       // Check exceptions
+      boundingBox.setToZero();
       try
       {
          boundingBox.setMin(new double[] {1.0, 0.0});
@@ -267,6 +268,7 @@ public class BoundingBox2DTest
       EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Check exceptions
+      boundingBox.setToZero();
       try
       {
          boundingBox.setMax(new double[] {-1.0, 0.0});
