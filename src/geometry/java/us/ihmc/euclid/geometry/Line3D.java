@@ -169,20 +169,16 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
     *
-    * @param obj the object to compare against this. Not modified.
+    * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
-      try
-      {
-         return equals((Line3DReadOnly) obj);
-      }
-      catch (ClassCastException e)
-      {
+      if (object instanceof Line3DReadOnly)
+         return equals((Line3DReadOnly) object);
+      else
          return false;
-      }
    }
 
    /**

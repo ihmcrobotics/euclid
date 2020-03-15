@@ -187,14 +187,10 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
-         return equals((BoundingBox2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      if (object instanceof BoundingBox2DReadOnly)
+         return BoundingBox2DBasics.super.equals((BoundingBox2DReadOnly) object);
+      else
          return false;
-      }
    }
 
    @Override

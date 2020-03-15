@@ -215,7 +215,9 @@ public class Plane3D implements GeometryObject<Plane3D>
     */
    public boolean equals(Plane3D other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return point.equals(other.point) && normal.equals(other.normal);
@@ -231,14 +233,10 @@ public class Plane3D implements GeometryObject<Plane3D>
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof Plane3D)
          return equals((Plane3D) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

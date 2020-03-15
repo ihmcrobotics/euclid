@@ -100,9 +100,7 @@ public class FrameBoundingBox2D
    @Override
    public boolean equals(Object object)
    {
-      if (object == this)
-         return true;
-      else if (object instanceof FrameBoundingBox2DReadOnly)
+      if (object instanceof FrameBoundingBox2DReadOnly)
          return FrameBoundingBox2DBasics.super.equals((FrameBoundingBox2DReadOnly) object);
       else
          return false;

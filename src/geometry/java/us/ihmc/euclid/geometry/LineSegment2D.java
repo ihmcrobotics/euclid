@@ -138,14 +138,10 @@ public class LineSegment2D implements LineSegment2DBasics, GeometryObject<LineSe
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof LineSegment2DReadOnly)
          return equals((LineSegment2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

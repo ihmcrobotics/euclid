@@ -112,14 +112,10 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof LineSegment3DReadOnly)
          return equals((LineSegment3DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**

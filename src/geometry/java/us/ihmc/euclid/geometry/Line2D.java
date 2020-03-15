@@ -156,20 +156,16 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
     *
-    * @param obj the object to compare against this. Not modified.
+    * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
-      try
-      {
-         return equals((Line2DReadOnly) obj);
-      }
-      catch (ClassCastException e)
-      {
+      if (object instanceof Line2DReadOnly)
+         return equals((Line2DReadOnly) object);
+      else
          return false;
-      }
    }
 
    /**

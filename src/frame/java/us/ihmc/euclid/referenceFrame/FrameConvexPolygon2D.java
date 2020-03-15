@@ -444,6 +444,15 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    }
 
    @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof FrameConvexPolygon2DReadOnly)
+         return FrameConvexPolygon2DBasics.super.equals((FrameConvexPolygon2DReadOnly) object);
+      else
+         return false;
+   }
+
+   @Override
    public int hashCode()
    {
       long bits = EuclidHashCodeTools.addToHashCode(Boolean.hashCode(clockwiseOrdered), vertexBufferView);

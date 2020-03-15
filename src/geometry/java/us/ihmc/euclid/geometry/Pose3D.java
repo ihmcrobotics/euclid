@@ -130,14 +130,10 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof Pose3DReadOnly)
          return equals((Pose3DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**
