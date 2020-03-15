@@ -440,6 +440,43 @@ public class EuclidFrameIOTools
    }
 
    /**
+    * Gets a representative {@code String} of {@code boundingBox3D} as follows:
+    *
+    * <pre>
+    * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 ), worldFrame
+    * </pre>
+    *
+    * @param boundingBox3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameBoundingBox3DString(FrameBoundingBox3DReadOnly boundingBox3D)
+   {
+      return getFrameBoundingBox3DString(DEFAULT_FORMAT, boundingBox3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code boundingBox3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 ), worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format        the format to use for each number.
+    * @param boundingBox3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameBoundingBox3DString(String format, FrameBoundingBox3DReadOnly boundingBox3D)
+   {
+      if (boundingBox3D == null)
+         return "null";
+      else
+         return getBoundingBox3DString(format, boundingBox3D) + ", " + boundingBox3D.getReferenceFrame();
+   }
+
+   /**
     * Gets a representative {@code String} of {@code orientation2D} as follows:
     *
     * <pre>

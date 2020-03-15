@@ -7,113 +7,95 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, ReferenceFrameHolder
 {
+   @Override
    FramePoint2DReadOnly getMinPoint();
 
+   @Override
    FramePoint2DReadOnly getMaxPoint();
-
-   default void getMinPoint(FixedFramePoint2DBasics minToPack)
-   {
-      minToPack.set(getMinPoint());
-   }
-
-   default void getMinPoint(FramePoint2DBasics minToPack)
-   {
-      minToPack.setIncludingFrame(getMinPoint());
-   }
-
-   default void getMaxPoint(FixedFramePoint2DBasics maxToPack)
-   {
-      maxToPack.set(getMaxPoint());
-   }
-
-   default void getMaxPoint(FramePoint2DBasics maxToPack)
-   {
-      maxToPack.setIncludingFrame(getMaxPoint());
-   }
 
    default void getCenterPoint(FixedFramePoint2DBasics centerToPack)
    {
       checkReferenceFrameMatch(centerToPack);
-      getCenterPoint((Point2DBasics) centerToPack);
+      BoundingBox2DReadOnly.super.getCenterPoint(centerToPack);
    }
 
    default void getCenterPoint(FramePoint2DBasics centerToPack)
    {
       centerToPack.setReferenceFrame(getReferenceFrame());
-      getCenterPoint((Point2DBasics) centerToPack);
+      BoundingBox2DReadOnly.super.getCenterPoint(centerToPack);
    }
 
    default void getPointGivenParameters(double xParameter, double yParameter, FixedFramePoint2DBasics pointToPack)
    {
       checkReferenceFrameMatch(pointToPack);
-      getPointGivenParameters(xParameter, yParameter, (Point2DBasics) pointToPack);
+      BoundingBox2DReadOnly.super.getPointGivenParameters(xParameter, yParameter, pointToPack);
    }
 
    default void getPointGivenParameters(double xParameter, double yParameter, FramePoint2DBasics pointToPack)
    {
       pointToPack.setReferenceFrame(getReferenceFrame());
-      getPointGivenParameters(xParameter, yParameter, (Point2DBasics) pointToPack);
+      BoundingBox2DReadOnly.super.getPointGivenParameters(xParameter, yParameter, pointToPack);
    }
 
    default boolean isInsideExclusive(FramePoint2DReadOnly query)
    {
       checkReferenceFrameMatch(query);
-      return isInsideExclusive((Point2DReadOnly) query);
+      return BoundingBox2DReadOnly.super.isInsideExclusive(query);
    }
 
    default boolean isInsideInclusive(FramePoint2DReadOnly query)
    {
       checkReferenceFrameMatch(query);
-      return isInsideInclusive((Point2DReadOnly) query);
+      return BoundingBox2DReadOnly.super.isInsideInclusive(query);
    }
 
    default boolean isInsideEpsilon(FramePoint2DReadOnly query, double epsilon)
    {
       checkReferenceFrameMatch(query);
-      return isInsideEpsilon((Point2DReadOnly) query, epsilon);
+      return BoundingBox2DReadOnly.super.isInsideEpsilon(query, epsilon);
    }
 
    default boolean intersectsExclusive(FrameBoundingBox2DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      return intersectsExclusive((BoundingBox2DReadOnly) other);
+      return BoundingBox2DReadOnly.super.intersectsExclusive(other);
    }
 
    default boolean intersectsInclusive(FrameBoundingBox2DReadOnly other)
    {
       checkReferenceFrameMatch(other);
-      return intersectsInclusive((BoundingBox2DReadOnly) other);
+      return BoundingBox2DReadOnly.super.intersectsInclusive(other);
    }
 
    default boolean intersectsEpsilon(FrameBoundingBox2DReadOnly other, double epsilon)
    {
       checkReferenceFrameMatch(other);
-      return intersectsEpsilon((BoundingBox2DReadOnly) other, epsilon);
+      return BoundingBox2DReadOnly.super.intersectsEpsilon(other, epsilon);
    }
 
    default boolean doesIntersectWithLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
-      checkReferenceFrameMatch(pointOnLine);
-      return doesIntersectWithLine2D((Point2DReadOnly) pointOnLine, lineDirection);
+      checkReferenceFrameMatch(pointOnLine, lineDirection);
+      return BoundingBox2DReadOnly.super.doesIntersectWithLine2D(pointOnLine, lineDirection);
    }
 
    default boolean doesIntersectWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
    {
-      checkReferenceFrameMatch(lineSegmentStart);
-      return doesIntersectWithLineSegment2D((Point2DReadOnly) lineSegmentStart, lineSegmentEnd);
+      checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
+      return BoundingBox2DReadOnly.super.doesIntersectWithLineSegment2D(lineSegmentStart, lineSegmentEnd);
    }
 
    default boolean doesIntersectWithRay2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection)
    {
-      checkReferenceFrameMatch(rayOrigin);
-      return doesIntersectWithRay2D((Point2DReadOnly) rayOrigin, rayDirection);
+      checkReferenceFrameMatch(rayOrigin, rayDirection);
+      return BoundingBox2DReadOnly.super.doesIntersectWithRay2D(rayOrigin, rayDirection);
    }
 
    default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection, Point2DBasics firstIntersectionToPack,
                                       Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
-      return intersectionWithLine2D((Point2DReadOnly) pointOnLine, (Vector2DReadOnly) lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLine2D(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, FixedFramePoint2DBasics firstIntersectionToPack,
@@ -123,7 +105,7 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
          checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          checkReferenceFrameMatch(secondIntersectionToPack);
-      return intersectionWithLine2D(pointOnLine, lineDirection, (Point2DBasics) firstIntersectionToPack, (Point2DBasics) secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLine2D(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, FramePoint2DBasics firstIntersectionToPack,
@@ -133,31 +115,36 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
          firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      return intersectionWithLine2D(pointOnLine, lineDirection, (Point2DBasics) firstIntersectionToPack, (Point2DBasics) secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLine2D(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection, FixedFramePoint2DBasics firstIntersectionToPack,
                                       FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
-      return intersectionWithLine2D((Point2DReadOnly) pointOnLine, (Vector2DReadOnly) lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      if (firstIntersectionToPack != null)
+         checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         checkReferenceFrameMatch(secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLine2D(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection, FramePoint2DBasics firstIntersectionToPack,
                                       FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
-      return intersectionWithLine2D((Point2DReadOnly) pointOnLine, (Vector2DReadOnly) lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return BoundingBox2DReadOnly.super.intersectionWithLine2D(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd, Point2DBasics firstIntersectionToPack,
                                              Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
-      return intersectionWithLineSegment2D((Point2DReadOnly) lineSegmentStart,
-                                           (Point2DReadOnly) lineSegmentEnd,
-                                           firstIntersectionToPack,
-                                           secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, FixedFramePoint2DBasics firstIntersectionToPack,
@@ -167,7 +154,7 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
          checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          checkReferenceFrameMatch(secondIntersectionToPack);
-      return intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, (Point2DBasics) firstIntersectionToPack, (Point2DBasics) secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, FramePoint2DBasics firstIntersectionToPack,
@@ -177,34 +164,36 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
          firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      return intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, (Point2DBasics) firstIntersectionToPack, (Point2DBasics) secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                              FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
-      return intersectionWithLineSegment2D((Point2DReadOnly) lineSegmentStart,
-                                           (Point2DReadOnly) lineSegmentEnd,
-                                           firstIntersectionToPack,
-                                           secondIntersectionToPack);
+      if (firstIntersectionToPack != null)
+         checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         checkReferenceFrameMatch(secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
                                              FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
-      return intersectionWithLineSegment2D((Point2DReadOnly) lineSegmentStart,
-                                           (Point2DReadOnly) lineSegmentEnd,
-                                           firstIntersectionToPack,
-                                           secondIntersectionToPack);
+      if (firstIntersectionToPack != null)
+         firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      if (secondIntersectionToPack != null)
+         secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return BoundingBox2DReadOnly.super.intersectionWithLineSegment2D(lineSegmentStart, lineSegmentEnd, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection, Point2DBasics firstIntersectionToPack,
                                      Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);
-      return intersectionWithRay2D((Point2DReadOnly) rayOrigin, (Vector2DReadOnly) rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithRay2D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, FramePoint2DBasics firstIntersectionToPack,
@@ -214,7 +203,7 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
          firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
       if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      return intersectionWithRay2D(rayOrigin, rayDirection, (Point2DBasics) firstIntersectionToPack, (Point2DBasics) secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithRay2D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, FixedFramePoint2DBasics firstIntersectionToPack,
@@ -224,14 +213,18 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
          checkReferenceFrameMatch(firstIntersectionToPack);
       if (secondIntersectionToPack != null)
          checkReferenceFrameMatch(secondIntersectionToPack);
-      return intersectionWithRay2D(rayOrigin, rayDirection, (Point2DBasics) firstIntersectionToPack, (Point2DBasics) secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithRay2D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection, FixedFramePoint2DBasics firstIntersectionToPack,
                                      FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);
-      return intersectionWithRay2D((Point2DReadOnly) rayOrigin, (Vector2DReadOnly) rayDirection, firstIntersectionToPack, secondIntersectionToPack);
+      if (firstIntersectionToPack != null)
+         checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         checkReferenceFrameMatch(secondIntersectionToPack);
+      return BoundingBox2DReadOnly.super.intersectionWithRay2D(rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default boolean equals(FrameBoundingBox2DReadOnly other)
@@ -248,12 +241,12 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
    {
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
-      return epsilonEquals((BoundingBox2DReadOnly) other, epsilon);
+      return BoundingBox2DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
    default boolean geometricallyEquals(FrameBoundingBox2DReadOnly other, double epsilon)
    {
       checkReferenceFrameMatch(other);
-      return geometricallyEquals((BoundingBox2DReadOnly) other, epsilon);
+      return BoundingBox2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 }
