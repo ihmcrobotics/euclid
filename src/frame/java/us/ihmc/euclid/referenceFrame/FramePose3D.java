@@ -32,7 +32,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
-   private final FixedFrameQuaternionBasics orientation = EuclidFrameFactories.newLinkedFixedFrameQuaternionBasics(this);
+   private final FixedFrameQuaternionBasics orientation = EuclidFrameFactories.newFixedFrameQuaternionBasics(this);
 
    /**
     * Creates a new pose 3D initialized with its position and orientation set to zero and its reference

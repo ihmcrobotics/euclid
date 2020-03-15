@@ -3,6 +3,8 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.function.DoubleSupplier;
 
 import us.ihmc.euclid.geometry.Orientation2D;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
@@ -762,7 +764,7 @@ public class EuclidFrameFactories
       };
    }
 
-   public static FixedFrameQuaternionBasics newLinkedFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder)
+   public static FixedFrameQuaternionBasics newFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return new FixedFrameQuaternionBasics()
       {
@@ -830,6 +832,124 @@ public class EuclidFrameFactories
          public String toString()
          {
             return EuclidFrameIOTools.getFrameTuple4DString(this);
+         }
+      };
+   }
+
+   public static FixedFrameRotationMatrixBasics newFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameRotationMatrixBasics()
+      {
+         private final RotationMatrix rotationMatrix = new RotationMatrix();
+
+         @Override
+         public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+         {
+            rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         }
+
+         @Override
+         public void set(RotationMatrixReadOnly other)
+         {
+            rotationMatrix.set(other);
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return rotationMatrix.isDirty();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM00()
+         {
+            return rotationMatrix.getM00();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM01()
+         {
+            return rotationMatrix.getM01();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM02()
+         {
+            return rotationMatrix.getM02();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM10()
+         {
+            return rotationMatrix.getM10();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM11()
+         {
+            return rotationMatrix.getM11();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM12()
+         {
+            return rotationMatrix.getM12();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM20()
+         {
+            return rotationMatrix.getM20();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM21()
+         {
+            return rotationMatrix.getM21();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM22()
+         {
+            return rotationMatrix.getM22();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameRotationMatrixReadOnly)
+               return FixedFrameRotationMatrixBasics.super.equals((FrameRotationMatrixReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(rotationMatrix, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameMatrix3DString(this);
          }
       };
    }

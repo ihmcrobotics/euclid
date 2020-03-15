@@ -135,10 +135,7 @@ public class EuclidCoreFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
          }
 
          @Override
@@ -184,10 +181,7 @@ public class EuclidCoreFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
          }
 
          @Override
@@ -240,11 +234,7 @@ public class EuclidCoreFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getZ());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
          }
 
          @Override
@@ -297,11 +287,7 @@ public class EuclidCoreFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getZ());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
          }
 
          @Override
@@ -472,17 +458,7 @@ public class EuclidCoreFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM00());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM01());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM02());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM10());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM11());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM12());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM20());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM21());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getM22());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
          }
 
          @Override

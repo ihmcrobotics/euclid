@@ -503,7 +503,7 @@ public class EuclidShapeIOTools
     */
    public static String getShape3DPoseString(Shape3DPoseReadOnly shape3DPose)
    {
-      return getShape3DPoseString(DEFAULT_FORMAT, shape3DPose.getShapeOrientation(), shape3DPose.getShapePosition());
+      return getShape3DPoseString(DEFAULT_FORMAT, shape3DPose);
    }
 
    /**

@@ -126,9 +126,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
    @Override
    public int hashCode()
    {
-      long hashCode = getShapePosition().hashCode();
-      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, getShapeOrientation().hashCode());
-      return EuclidHashCodeTools.toIntHashCode(hashCode);
+      return EuclidHashCodeTools.toIntHashCode(shapePosition, shapeOrientation);
    }
 
    @Override
