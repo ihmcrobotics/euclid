@@ -171,25 +171,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    }
 
    /**
-    * Sets all the coefficients of this matrix to zero.
-    */
-   @Override
-   default void setToZero()
-   {
-      setM00(0.0);
-      setM01(0.0);
-      setM02(0.0);
-
-      setM10(0.0);
-      setM11(0.0);
-      setM12(0.0);
-
-      setM20(0.0);
-      setM21(0.0);
-      setM22(0.0);
-   }
-
-   /**
     * Transposes this matrix: m = m<sup>T</sup>.
     */
    default void transpose()

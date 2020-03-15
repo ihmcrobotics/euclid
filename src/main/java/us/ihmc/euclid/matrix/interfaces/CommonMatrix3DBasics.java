@@ -33,6 +33,12 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     */
    public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22);
 
+   @Override
+   default void setToZero()
+   {
+      set(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+   }
+
    /**
     * Sets this matrix to contain only {@linkplain Double#NaN}:
     *

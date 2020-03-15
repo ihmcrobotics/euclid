@@ -160,15 +160,6 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
       setRotationVector(rotationVector);
    }
 
-   /**
-    * Sets this rotation matrix to identity representing a 'zero' rotation.
-    */
-   @Override
-   public void setToZero()
-   {
-      setIdentity();
-   }
-
    @Override
    public void setIdentity()
    {

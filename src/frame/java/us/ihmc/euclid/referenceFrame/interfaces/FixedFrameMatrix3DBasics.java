@@ -24,7 +24,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
  *
  * @author Sylvain Bertrand
  */
-public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3DBasics, Transformable
+public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3DBasics, Transformable, FixedFrameCommonMatrix3DBasics
 {
    /**
     * Sets the 9 coefficients of this matrix to the given ones.
@@ -60,18 +60,6 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    {
       checkReferenceFrameMatch(referenceFrame);
       set(matrix3DReadOnly);
-   }
-
-   /**
-    * Sets this matrix to {@code other}.
-    *
-    * @param other the other frame matrix to copy the values of. Not modified.
-    * @throws ReferenceFrameMismatchException if the matrix is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void set(FrameMatrix3DReadOnly other)
-   {
-      set(other.getReferenceFrame(), other);
    }
 
    /**
@@ -164,19 +152,6 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    {
       checkReferenceFrameMatch(other);
       Matrix3DBasics.super.setAndInvert(other);
-   }
-
-   /**
-    * Sets this matrix to equal the other matrix and then normalizes this, see {@link #normalize()}.
-    *
-    * @param other the other matrix used to update this matrix. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void setAndNormalize(FrameMatrix3DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      Matrix3DBasics.super.setAndNormalize(other);
    }
 
    /**

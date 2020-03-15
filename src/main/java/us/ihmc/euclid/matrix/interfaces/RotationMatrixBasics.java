@@ -17,6 +17,15 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
+    * Sets this rotation matrix to identity representing a 'zero' rotation.
+    */
+   @Override
+   default void setToZero()
+   {
+      setIdentity();
+   }
+
+   /**
     * Transposes this matrix: m = m<sup>T</sup>.
     */
    default void transpose()
