@@ -91,50 +91,6 @@ public interface BoundingBox3DReadOnly
    }
 
    /**
-    * Gets the minimum coordinate of this bounding box and stores it in the given {@code minToPack}.
-    *
-    * @param minToPack point 3D in which the minimum coordinate of this bounding box is stored.
-    *                  Modified.
-    */
-   default void getMinPoint(Point3DBasics minToPack)
-   {
-      minToPack.set(getMinPoint());
-   }
-
-   /**
-    * Gets the maximum coordinate of this bounding box and stores it in the given {@code maxToPack}.
-    *
-    * @param maxToPack point 3D in which the maximum coordinate of this bounding box is stored.
-    *                  Modified.
-    */
-   default void getMaxPoint(Point3DBasics maxToPack)
-   {
-      maxToPack.set(getMaxPoint());
-   }
-
-   /**
-    * Gets the minimum coordinate of this bounding box and stores it in the given array
-    * {@code maxToPack}.
-    *
-    * @param minToPack array in which the minimum coordinate of this bounding box is stored. Modified.
-    */
-   default void getMinPoint(double[] minToPack)
-   {
-      getMinPoint().get(minToPack);
-   }
-
-   /**
-    * Gets the maximum coordinate of this bounding box and stores it in the given array
-    * {@code maxToPack}.
-    *
-    * @param maxToPack array in which the maximum coordinate of this bounding box is stored. Modified.
-    */
-   default void getMaxPoint(double[] maxToPack)
-   {
-      getMaxPoint().get(maxToPack);
-   }
-
-   /**
     * Asserts that the minimum coordinates are less or equal to the maximum coordinates.
     *
     * @throws RuntimeException if any of the minimum coordinates is strictly greater than the maximum

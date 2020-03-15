@@ -1897,24 +1897,6 @@ public class BoundingBox3DTest
       Point3DReadOnly max = boundingBox3D.getMaxPoint();
 
       {
-         Point3D actualMin = new Point3D();
-         Point3D actualMax = new Point3D();
-         boundingBox3D.getMinPoint(actualMin);
-         boundingBox3D.getMaxPoint(actualMax);
-         assertEquals(min, actualMin);
-         assertEquals(max, actualMax);
-      }
-
-      {
-         double[] actualMin = new double[3];
-         double[] actualMax = new double[3];
-         boundingBox3D.getMinPoint(actualMin);
-         boundingBox3D.getMaxPoint(actualMax);
-         assertEquals(min, new Point3D(actualMin));
-         assertEquals(max, new Point3D(actualMax));
-      }
-
-      {
          assertTrue(min.getX() == boundingBox3D.getMinX());
          assertTrue(min.getY() == boundingBox3D.getMinY());
          assertTrue(min.getZ() == boundingBox3D.getMinZ());

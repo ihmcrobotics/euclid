@@ -1325,24 +1325,6 @@ public class BoundingBox2DTest
       Point2DReadOnly max = boundingBox2D.getMaxPoint();
 
       {
-         Point2D actualMin = new Point2D();
-         Point2D actualMax = new Point2D();
-         boundingBox2D.getMinPoint(actualMin);
-         boundingBox2D.getMaxPoint(actualMax);
-         assertEquals(min, actualMin);
-         assertEquals(max, actualMax);
-      }
-
-      {
-         double[] actualMin = new double[2];
-         double[] actualMax = new double[2];
-         boundingBox2D.getMinPoint(actualMin);
-         boundingBox2D.getMaxPoint(actualMax);
-         assertEquals(min, new Point2D(actualMin));
-         assertEquals(max, new Point2D(actualMax));
-      }
-
-      {
          assertTrue(min.getX() == boundingBox2D.getMinX());
          assertTrue(min.getY() == boundingBox2D.getMinY());
          assertTrue(max.getX() == boundingBox2D.getMaxX());
