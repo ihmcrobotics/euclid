@@ -63,10 +63,12 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Creates a new bounding box initialized with both its minimum and maximum coordinates to (0, 0).
+    * Creates a new bounding box initialized with both its minimum and maximum coordinates to
+    * ({@code Double.NaN}, {@code Double.NaN}).
     */
    public BoundingBox2D()
    {
+      setToNaN();
    }
 
    /**
