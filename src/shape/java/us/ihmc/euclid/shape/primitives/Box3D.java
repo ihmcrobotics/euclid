@@ -123,8 +123,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      getPose().set(pose);
-      setSize(sizeX, sizeY, sizeZ);
+      set(pose, sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -226,8 +225,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    @Override
    public int hashCode()
    {
-      long hash = EuclidHashCodeTools.combineHashCode(pose.hashCode(), size.hashCode());
-      return EuclidHashCodeTools.toIntHashCode(hash);
+      return EuclidHashCodeTools.toIntHashCode(pose, size);
    }
 
    /**
