@@ -26,6 +26,11 @@ public class FrameBoundingBox3D
       setToNaN();
    }
 
+   public FrameBoundingBox3D(ReferenceFrame referenceFrame)
+   {
+      setToNaN(referenceFrame);
+   }
+
    public FrameBoundingBox3D(FramePoint3DReadOnly min, FramePoint3DReadOnly max)
    {
       setIncludingFrame(min, max);

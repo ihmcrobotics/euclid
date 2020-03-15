@@ -25,6 +25,11 @@ public class FrameBoundingBox2D
       setToNaN();
    }
 
+   public FrameBoundingBox2D(ReferenceFrame referenceFrame)
+   {
+      setToNaN(referenceFrame);
+   }
+
    public FrameBoundingBox2D(FramePoint2DReadOnly min, FramePoint2DReadOnly max)
    {
       setIncludingFrame(min, max);
