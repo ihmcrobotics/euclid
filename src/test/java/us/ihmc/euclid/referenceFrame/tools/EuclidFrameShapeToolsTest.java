@@ -26,16 +26,8 @@ public class EuclidFrameShapeToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Box3D: shapeFrame = world, boundingBoxFrame = world
-         RigidBodyTransform frameTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         if (random.nextDouble() < 0.3)
-            frameTransform.getRotation().setToZero();
-         if (random.nextDouble() < 0.3)
-            frameTransform.getTranslation().setToZero();
          Box3D boxInFrame = EuclidShapeRandomTools.nextBox3D(random);
-         if (random.nextDouble() < 0.3)
-            boxInFrame.getOrientation().setToZero();
-         if (random.nextDouble() < 0.3)
-            boxInFrame.getPosition().setToZero();
+         boxInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
          Box3D boxInWorld = new Box3D(boxInFrame);
          BoundingBox3D expected = new BoundingBox3D();
          BoundingBox3D actual = new BoundingBox3D();
@@ -49,22 +41,15 @@ public class EuclidFrameShapeToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Box3D: shapeFrame != world, boundingBoxFrame = world
-         RigidBodyTransform frameTransform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         if (random.nextDouble() < 0.3)
-            frameTransform.getRotation().setToZero();
-         if (random.nextDouble() < 0.3)
-            frameTransform.getTranslation().setToZero();
-         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, frameTransform);
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
          Box3D boxInFrame = EuclidShapeRandomTools.nextBox3D(random);
-         if (random.nextDouble() < 0.3)
-            boxInFrame.getOrientation().setToZero();
-         if (random.nextDouble() < 0.3)
-            boxInFrame.getPosition().setToZero();
+         boxInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
          Box3D boxInWorld = new Box3D(boxInFrame);
          shapeFrame.transformFromThisToDesiredFrame(worldFrame, boxInWorld);
          BoundingBox3D expected = new BoundingBox3D();
          BoundingBox3D actual = new BoundingBox3D();
-         EuclidFrameShapeTools.boundingBoxBox3D(worldFrame, boxInWorld, worldFrame, expected);
+         EuclidShapeTools.boundingBoxBox3D(boxInWorld.getPosition(), boxInWorld.getOrientation(), boxInWorld.getSize(), expected);
          EuclidFrameShapeTools.boundingBoxBox3D(shapeFrame, boxInFrame, worldFrame, actual);
          EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
 
@@ -83,15 +68,15 @@ public class EuclidFrameShapeToolsTest
                                                                                                              boundingBoxFrameTransform);
          Box3D boxInFrame = EuclidShapeRandomTools.nextBox3D(random);
          boxInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
-         Box3D boxInWorld = new Box3D(boxInFrame);
-         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, boxInWorld);
+         Box3D boxInBBXFrame = new Box3D(boxInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, boxInBBXFrame);
          BoundingBox3D expected = new BoundingBox3D();
          BoundingBox3D actual = new BoundingBox3D();
-         EuclidFrameShapeTools.boundingBoxBox3D(boundingBoxFrame, boxInWorld, boundingBoxFrame, expected);
+         EuclidShapeTools.boundingBoxBox3D(boxInBBXFrame.getPosition(), boxInBBXFrame.getOrientation(), boxInBBXFrame.getSize(), expected);
          EuclidFrameShapeTools.boundingBoxBox3D(shapeFrame, boxInFrame, boundingBoxFrame, actual);
          EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
 
-         boxInWorld.getBoundingBox(expected);
+         boxInBBXFrame.getBoundingBox(expected);
          EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
       }
    }
