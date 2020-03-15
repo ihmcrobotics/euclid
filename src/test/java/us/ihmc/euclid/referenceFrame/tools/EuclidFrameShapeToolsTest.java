@@ -9,6 +9,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.primitives.Capsule3D;
+import us.ihmc.euclid.shape.primitives.Cylinder3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -141,6 +142,64 @@ public class EuclidFrameShapeToolsTest
       }
    }
 
+   @Test
+   public void testBoundingBoxCylinder3D()
+   {
+      Random random = new Random(5768787);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Cylinder3D: shapeFrame = world, boundingBoxFrame = world
+         Cylinder3D cylinderInFrame = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D cylinderInWorld = new Cylinder3D(cylinderInFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         cylinderInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxCylinder3D(worldFrame, cylinderInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+
+         cylinderInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Cylinder3D: shapeFrame != world, boundingBoxFrame = world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         Cylinder3D cylinderInFrame = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D cylinderInWorld = new Cylinder3D(cylinderInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(worldFrame, cylinderInWorld);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         cylinderInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxCylinder3D(shapeFrame, cylinderInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+
+         cylinderInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Cylinder3D: shapeFrame != world, boundingBoxFrame != world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         RigidBodyTransform boundingBoxFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         ReferenceFrame boundingBoxFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("boundingBoxFrame",
+                                                                                                             worldFrame,
+                                                                                                             boundingBoxFrameTransform);
+         Cylinder3D cylinderInFrame = EuclidShapeRandomTools.nextCylinder3D(random);
+         Cylinder3D cylinderInBBX = new Cylinder3D(cylinderInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, cylinderInBBX);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         cylinderInBBX.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxCylinder3D(shapeFrame, cylinderInFrame, boundingBoxFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+
+         cylinderInBBX.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals(expected, actual, EPSILON);
+      }
+   }
    private static RigidBodyTransform nextRigidBodyTransformWithIdentityEdgeCase(Random random, double rotationIdentityPercentage, double positionZeroPercentage)
    {
       RigidBodyTransform next = EuclidCoreRandomTools.nextRigidBodyTransform(random);

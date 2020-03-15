@@ -6,8 +6,10 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -29,63 +31,6 @@ public class EuclidFrameShapeTools
       void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22, T shape,
                               BoundingBox3DBasics boundingBoxToPack);
    }
-
-   private static final BoundingBoxRotationPartCalculator<Box3DReadOnly> box3DCalculator = new BoundingBoxRotationPartCalculator<Box3DReadOnly>()
-   {
-      @Override
-      public void computeBoundingBoxZeroRotation(Box3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
-      {
-         double halfSizeX = 0.5 * shape.getSizeX();
-         double halfSizeY = 0.5 * shape.getSizeY();
-         double halfSizeZ = 0.5 * shape.getSizeZ();
-         boundingBoxToPack.set(-halfSizeX, -halfSizeY, -halfSizeZ, halfSizeX, halfSizeY, halfSizeZ);
-      }
-
-      @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Box3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
-      {
-         double halfSizeX = 0.5 * shape.getSizeX();
-         double halfSizeY = 0.5 * shape.getSizeY();
-         double halfSizeZ = 0.5 * shape.getSizeZ();
-         double xRange = Math.abs(m00) * halfSizeX + Math.abs(m01) * halfSizeY + Math.abs(m02) * halfSizeZ;
-         double yRange = Math.abs(m10) * halfSizeX + Math.abs(m11) * halfSizeY + Math.abs(m12) * halfSizeZ;
-         double zRange = Math.abs(m20) * halfSizeX + Math.abs(m21) * halfSizeY + Math.abs(m22) * halfSizeZ;
-         boundingBoxToPack.set(-xRange, -yRange, -zRange, xRange, yRange, zRange);
-      }
-   };
-
-   private static final BoundingBoxRotationPartCalculator<Capsule3DReadOnly> capsule3DCalculator = new BoundingBoxRotationPartCalculator<Capsule3DReadOnly>()
-   {
-      @Override
-      public void computeBoundingBoxZeroRotation(Capsule3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
-      {
-         double halfLength = shape.getHalfLength();
-         double radius = shape.getRadius();
-         Vector3DReadOnly axis = shape.getAxis();
-         double rangeX = halfLength * Math.abs(axis.getX()) + radius;
-         double rangeY = halfLength * Math.abs(axis.getY()) + radius;
-         double rangeZ = halfLength * Math.abs(axis.getZ()) + radius;
-         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
-      }
-
-      @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Capsule3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
-      {
-         double halfLength = shape.getHalfLength();
-         double radius = shape.getRadius();
-         Vector3DReadOnly axis = shape.getAxis();
-         double axisX = m00 * axis.getX() + m01 * axis.getY() + m02 * axis.getZ();
-         double axisY = m10 * axis.getX() + m11 * axis.getY() + m12 * axis.getZ();
-         double axisZ = m20 * axis.getX() + m21 * axis.getY() + m22 * axis.getZ();
-
-         double rangeX = halfLength * Math.abs(axisX) + radius;
-         double rangeY = halfLength * Math.abs(axisY) + radius;
-         double rangeZ = halfLength * Math.abs(axisZ) + radius;
-         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
-      }
-   };
 
    public static void boundingBoxBox3D(FrameBox3DReadOnly box3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
@@ -152,6 +97,31 @@ public class EuclidFrameShapeTools
       }
    }
 
+   private static final BoundingBoxRotationPartCalculator<Box3DReadOnly> box3DCalculator = new BoundingBoxRotationPartCalculator<Box3DReadOnly>()
+   {
+      @Override
+      public void computeBoundingBoxZeroRotation(Box3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfSizeX = 0.5 * shape.getSizeX();
+         double halfSizeY = 0.5 * shape.getSizeY();
+         double halfSizeZ = 0.5 * shape.getSizeZ();
+         boundingBoxToPack.set(-halfSizeX, -halfSizeY, -halfSizeZ, halfSizeX, halfSizeY, halfSizeZ);
+      }
+
+      @Override
+      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                     Box3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfSizeX = 0.5 * shape.getSizeX();
+         double halfSizeY = 0.5 * shape.getSizeY();
+         double halfSizeZ = 0.5 * shape.getSizeZ();
+         double xRange = Math.abs(m00) * halfSizeX + Math.abs(m01) * halfSizeY + Math.abs(m02) * halfSizeZ;
+         double yRange = Math.abs(m10) * halfSizeX + Math.abs(m11) * halfSizeY + Math.abs(m12) * halfSizeZ;
+         double zRange = Math.abs(m20) * halfSizeX + Math.abs(m21) * halfSizeY + Math.abs(m22) * halfSizeZ;
+         boundingBoxToPack.set(-xRange, -yRange, -zRange, xRange, yRange, zRange);
+      }
+   };
+
    public static void boundingBoxCapsule3D(FrameCapsule3DReadOnly capsule3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxCapsule3D(capsule3D.getReferenceFrame(), capsule3D, boundingBoxFrame, boundingBoxToPack);
@@ -206,6 +176,142 @@ public class EuclidFrameShapeTools
          }
       }
    }
+
+   private static final BoundingBoxRotationPartCalculator<Capsule3DReadOnly> capsule3DCalculator = new BoundingBoxRotationPartCalculator<Capsule3DReadOnly>()
+   {
+      @Override
+      public void computeBoundingBoxZeroRotation(Capsule3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfLength = shape.getHalfLength();
+         double radius = shape.getRadius();
+         Vector3DReadOnly axis = shape.getAxis();
+         double axisX = axis.getX();
+         double axisY = axis.getY();
+         double axisZ = axis.getZ();
+         double rangeX = halfLength * Math.abs(axisX) + radius;
+         double rangeY = halfLength * Math.abs(axisY) + radius;
+         double rangeZ = halfLength * Math.abs(axisZ) + radius;
+         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+      }
+
+      @Override
+      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                     Capsule3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfLength = shape.getHalfLength();
+         double radius = shape.getRadius();
+         Vector3DReadOnly axis = shape.getAxis();
+         double axisX = m00 * axis.getX() + m01 * axis.getY() + m02 * axis.getZ();
+         double axisY = m10 * axis.getX() + m11 * axis.getY() + m12 * axis.getZ();
+         double axisZ = m20 * axis.getX() + m21 * axis.getY() + m22 * axis.getZ();
+
+         double rangeX = halfLength * Math.abs(axisX) + radius;
+         double rangeY = halfLength * Math.abs(axisY) + radius;
+         double rangeZ = halfLength * Math.abs(axisZ) + radius;
+         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+      }
+   };
+
+   public static void boundingBoxCylinder3D(FrameCylinder3DReadOnly cylinder3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxCylinder3D(cylinder3D.getReferenceFrame(), cylinder3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   public static void boundingBoxCylinder3D(ReferenceFrame cylinder3DFrame, Cylinder3DReadOnly cylinder3D, ReferenceFrame boundingBoxFrame,
+                                            BoundingBox3DBasics boundingBoxToPack)
+   {
+      if (cylinder3DFrame == boundingBoxFrame)
+      {
+         cylinder3D.getBoundingBox(boundingBoxToPack);
+         return;
+      }
+
+      Point3DReadOnly position = cylinder3D.getPosition();
+
+      if (cylinder3DFrame.isRootFrame())
+      {
+         if (boundingBoxFrame.isRootFrame())
+         {
+            cylinder3DCalculator.computeBoundingBoxZeroRotation(cylinder3D, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxRotationPartGeneric(rotFromBBX, true, cylinder3D, cylinder3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
+         }
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = cylinder3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxRotationPartGeneric(rotToRoot, false, cylinder3D, cylinder3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxRotationPartGeneric(rotFromBBX, true, rotToRoot, false, cylinder3D, cylinder3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+      }
+   }
+
+   private static final BoundingBoxRotationPartCalculator<Cylinder3DReadOnly> cylinder3DCalculator = new BoundingBoxRotationPartCalculator<Cylinder3DReadOnly>()
+   {
+      @Override
+      public void computeBoundingBoxZeroRotation(Cylinder3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfLength = shape.getHalfLength();
+         double radius = shape.getRadius();
+         Vector3DReadOnly axis = shape.getAxis();
+         double axisX = axis.getX();
+         double axisY = axis.getY();
+         double axisZ = axis.getZ();
+
+         double invNormSquared = 1.0 / axis.lengthSquared();
+         double capMinMaxX = Math.max(0.0, radius * Math.sqrt(1.0 - axisX * axisX * invNormSquared));
+         double capMinMaxY = Math.max(0.0, radius * Math.sqrt(1.0 - axisY * axisY * invNormSquared));
+         double capMinMaxZ = Math.max(0.0, radius * Math.sqrt(1.0 - axisZ * axisZ * invNormSquared));
+
+         double rangeX = halfLength * Math.abs(axisX) + capMinMaxX;
+         double rangeY = halfLength * Math.abs(axisY) + capMinMaxY;
+         double rangeZ = halfLength * Math.abs(axisZ) + capMinMaxZ;
+         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+      }
+
+      @Override
+      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                     Cylinder3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double halfLength = shape.getHalfLength();
+         double radius = shape.getRadius();
+         Vector3DReadOnly axis = shape.getAxis();
+         double axisX = m00 * axis.getX() + m01 * axis.getY() + m02 * axis.getZ();
+         double axisY = m10 * axis.getX() + m11 * axis.getY() + m12 * axis.getZ();
+         double axisZ = m20 * axis.getX() + m21 * axis.getY() + m22 * axis.getZ();
+
+         double invNormSquared = 1.0 / axis.lengthSquared();
+         double capMinMaxX = Math.max(0.0, radius * Math.sqrt(1.0 - axisX * axisX * invNormSquared));
+         double capMinMaxY = Math.max(0.0, radius * Math.sqrt(1.0 - axisY * axisY * invNormSquared));
+         double capMinMaxZ = Math.max(0.0, radius * Math.sqrt(1.0 - axisZ * axisZ * invNormSquared));
+
+         double rangeX = halfLength * Math.abs(axisX) + capMinMaxX;
+         double rangeY = halfLength * Math.abs(axisY) + capMinMaxY;
+         double rangeZ = halfLength * Math.abs(axisZ) + capMinMaxZ;
+         boundingBoxToPack.set(-rangeX, -rangeY, -rangeZ, rangeX, rangeY, rangeZ);
+      }
+   };
 
    private static void addTranslationPartOfTransforms(RotationMatrixReadOnly rotationPart1, Tuple3DReadOnly translationPart1, boolean inverseTransform1,
                                                       RotationMatrixReadOnly rotationPart2, Tuple3DReadOnly translationPart2, boolean inverseTransform2,

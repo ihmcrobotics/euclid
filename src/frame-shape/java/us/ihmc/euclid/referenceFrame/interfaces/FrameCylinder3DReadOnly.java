@@ -4,10 +4,10 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
-import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
-public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DReadOnly
+public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3DReadOnly
 {
    @Override
    FramePoint3DReadOnly getPosition();
@@ -30,21 +30,21 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
       return bottomCenter;
    }
 
-   default boolean epsilonEquals(FrameCapsule3DReadOnly other, double epsilon)
+   default boolean epsilonEquals(FrameCylinder3DReadOnly other, double epsilon)
    {
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
-         return Capsule3DReadOnly.super.epsilonEquals(other, epsilon);
+         return Cylinder3DReadOnly.super.epsilonEquals(other, epsilon);
    }
 
-   default boolean geometricallyEquals(FrameCapsule3DReadOnly other, double epsilon)
+   default boolean geometricallyEquals(FrameCylinder3DReadOnly other, double epsilon)
    {
       checkReferenceFrameMatch(other);
-      return Capsule3DReadOnly.super.geometricallyEquals(other, epsilon);
+      return Cylinder3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
 
-   default boolean equals(FrameCapsule3DReadOnly other)
+   default boolean equals(FrameCylinder3DReadOnly other)
    {
       if (other == this)
       {
@@ -79,6 +79,6 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
    @Override
    default void getBoundingBox(ReferenceFrame destinationFrame, BoundingBox3DBasics boundingBoxToPack)
    {
-      EuclidFrameShapeTools.boundingBoxCapsule3D(this, destinationFrame, boundingBoxToPack);
+      EuclidFrameShapeTools.boundingBoxCylinder3D(this, destinationFrame, boundingBoxToPack);
    }
 }

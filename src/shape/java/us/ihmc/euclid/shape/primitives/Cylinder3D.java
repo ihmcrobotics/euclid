@@ -240,10 +240,8 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    public int hashCode()
    {
       long hash = 1L;
-      hash = EuclidHashCodeTools.addToHashCode(hash, length);
-      hash = EuclidHashCodeTools.addToHashCode(hash, radius);
-      hash = EuclidHashCodeTools.combineHashCode(hash, position.hashCode());
-      hash = EuclidHashCodeTools.combineHashCode(hash, axis.hashCode());
+      hash = EuclidHashCodeTools.toLongHashCode(length, radius);
+      hash = EuclidHashCodeTools.combineHashCode(hash, EuclidHashCodeTools.toLongHashCode(position, axis));
       return EuclidHashCodeTools.toIntHashCode(hash);
    }
 
