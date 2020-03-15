@@ -1,6 +1,9 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.referenceFrame.FrameBoundingBox3D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -124,5 +127,51 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
    {
       checkReferenceFrameMatch(pointToProject);
       return orthogonalProjection((Point3DReadOnly) pointToProject, projectionToPack);
+   }
+
+   @Override
+   default FrameBoundingBox3DReadOnly getBoundingBox()
+   {
+      FrameBoundingBox3D boundingBox3D = new FrameBoundingBox3D();
+      getBoundingBox(boundingBox3D);
+      return boundingBox3D;
+   }
+
+   default FrameBoundingBox3DReadOnly getBoundingBox(ReferenceFrame destinationFrame)
+   {
+      FrameBoundingBox3D boundingBox3D = new FrameBoundingBox3D();
+      getBoundingBox(destinationFrame, boundingBox3D);
+      return boundingBox3D;
+   }
+
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      getBoundingBox(getReferenceFrame(), boundingBoxToPack);
+   }
+
+   default void getBoundingBox(FixedFrameBoundingBox3DBasics boundingBoxToPack)
+   {
+      checkReferenceFrameMatch(boundingBoxToPack);
+      getBoundingBox(getReferenceFrame(), boundingBoxToPack);
+   }
+
+   default void getBoundingBox(FrameBoundingBox3DBasics boundingBoxToPack)
+   {
+      getBoundingBox(getReferenceFrame(), boundingBoxToPack);
+   }
+
+   void getBoundingBox(ReferenceFrame destinationFrame, BoundingBox3DBasics boundingBoxToPack);
+
+   default void getBoundingBox(ReferenceFrame destinationFrame, FixedFrameBoundingBox3DBasics boundingBoxToPack)
+   {
+      destinationFrame.checkReferenceFrameMatch(boundingBoxToPack);
+      getBoundingBox(destinationFrame, (BoundingBox3DBasics) boundingBoxToPack);
+   }
+
+   default void getBoundingBox(ReferenceFrame destinationFrame, FrameBoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxToPack.setReferenceFrame(destinationFrame);
+      getBoundingBox(destinationFrame, (BoundingBox3DBasics) boundingBoxToPack);
    }
 }
