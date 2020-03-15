@@ -3,6 +3,8 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -83,6 +85,18 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    {
       yawPitchRollToPack.setReferenceFrame(getReferenceFrame());
       get((YawPitchRollBasics) yawPitchRollToPack);
+   }
+
+   default void get(FrameRotationMatrixBasics rotationMatrixToPack)
+   {
+      rotationMatrixToPack.setReferenceFrame(getReferenceFrame());
+      get((RotationMatrixBasics) rotationMatrixToPack);
+   }
+
+   default void get(FixedFrameRotationMatrixBasics rotationMatrixToPack)
+   {
+      checkReferenceFrameMatch(rotationMatrixToPack);
+      get((RotationMatrixBasics) rotationMatrixToPack);
    }
 
    /**
@@ -838,6 +852,24 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    */
+   default void transform(Matrix3DReadOnly matrixOriginal, FrameMatrix3DBasics matrixTransformed)
+   {
+      matrixTransformed.setReferenceFrame(getReferenceFrame());
+      transform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+   }
+
+   /**
+    * Transforms the matrix {@code matrixOriginal} by this orientation and stores the result in
+    * {@code matrixTransformed}.
+    * <p>
+    * If the given matrix is expressed in the local frame described by this orientation, then the
+    * matrix is transformed such that it is, after this method is called, expressed in the base frame
+    * in which this orientation is expressed.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
     * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the same
     *                                         frame as {@code this}.
     */
@@ -1143,6 +1175,43 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       checkReferenceFrameMatch(orientationOriginal);
       orientationTransformed.setReferenceFrame(getReferenceFrame());
       transform((Orientation3DReadOnly) orientationOriginal, (Orientation3DBasics) orientationTransformed);
+   }
+
+   default void transform(FixedFrameRotationMatrixBasics matrixToTransform)
+   {
+      checkReferenceFrameMatch(matrixToTransform);
+      transform((RotationMatrixBasics) matrixToTransform);
+   }
+
+   default void transform(FrameRotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixOriginal);
+      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void transform(RotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
+   {
+      matrixTransformed.setReferenceFrame(getReferenceFrame());
+      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void transform(RotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixTransformed);
+      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void transform(FrameRotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixOriginal, matrixTransformed);
+      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void transform(FrameRotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixOriginal);
+      matrixTransformed.setReferenceFrame(getReferenceFrame());
+      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
    /**
@@ -1592,6 +1661,26 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the same
     *                                         frame as {@code this}.
     */
+   default void inverseTransform(Matrix3DReadOnly matrixOriginal, FrameMatrix3DBasics matrixTransformed)
+   {
+      matrixTransformed.setReferenceFrame(getReferenceFrame());
+      inverseTransform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+   }
+
+   /**
+    * Performs the inverse of the transform to the matrix {@code matrixOriginal} by this orientation
+    * and stores the result in {@code matrixTransformed}.
+    * <p>
+    * If the given matrix is expressed in the base frame in which this orientation is expressed, then
+    * the matrix is transformed such that it is, after this method is called, expressed in the local
+    * frame described by this orientation.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if {@code matrixTransformed} is not expressed in the same
+    *                                         frame as {@code this}.
+    */
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixTransformed);
@@ -1899,5 +1988,42 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       checkReferenceFrameMatch(orientationOriginal);
       orientationTransformed.setReferenceFrame(getReferenceFrame());
       Orientation3DReadOnly.super.inverseTransform(orientationOriginal, orientationTransformed);
+   }
+
+   default void inverseTransform(FixedFrameRotationMatrixBasics matrixToTransform)
+   {
+      checkReferenceFrameMatch(matrixToTransform);
+      inverseTransform((RotationMatrixBasics) matrixToTransform);
+   }
+
+   default void inverseTransform(FrameRotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixOriginal);
+      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
+   {
+      matrixTransformed.setReferenceFrame(getReferenceFrame());
+      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixTransformed);
+      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void inverseTransform(FrameRotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixOriginal, matrixTransformed);
+      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   default void inverseTransform(FrameRotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
+   {
+      checkReferenceFrameMatch(matrixOriginal);
+      matrixTransformed.setReferenceFrame(getReferenceFrame());
+      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 }

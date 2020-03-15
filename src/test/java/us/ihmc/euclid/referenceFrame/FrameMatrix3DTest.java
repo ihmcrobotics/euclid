@@ -53,7 +53,7 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
       framelessMethodsToIgnore.put("equals", new Class<?>[] {Matrix3D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Matrix3D.class, Double.TYPE});
       framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Matrix3D.class, Double.TYPE});
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameMatrix3D.class, Matrix3D.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameMatrix3D.class, Matrix3D.class, false, 1, framelessMethodsToIgnore);
    }
 
    @Test

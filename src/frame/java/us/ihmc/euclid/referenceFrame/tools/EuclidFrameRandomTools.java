@@ -712,10 +712,12 @@ public class EuclidFrameRandomTools
     */
    public static FrameOrientation3DBasics nextFrameOrientation3D(Random random, ReferenceFrame referenceFrame)
    {
-      switch (random.nextInt(2))
+      switch (random.nextInt(3))
       {
          case 0:
             return nextFrameQuaternion(random, referenceFrame);
+         case 1:
+            return nextFrameRotationMatrix(random, referenceFrame);
          default:
             return nextFrameYawPitchRoll(random, referenceFrame);
       }
@@ -1005,6 +1007,39 @@ public class EuclidFrameRandomTools
    public static FrameMatrix3D nextFrameMatrix3D(Random random, ReferenceFrame referenceFrame, double minValue, double maxValue)
    {
       return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextMatrix3D(random, minValue, maxValue));
+   }
+
+   /**
+    * Generates a random frame rotation matrix uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated rotation matrix is in [-<i>pi</i>; <i>pi</i>].
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame rotation matrix reference frame.
+    * @return the random frame rotation matrix.
+    */
+   public static FrameRotationMatrix nextFrameRotationMatrix(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameRotationMatrix(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random));
+   }
+
+   /**
+    * Generates a random frame rotation matrix uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated rotation matrix is in [-{@code minMaxAngle};
+    * {@code minMaxAngle}].
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame rotation matrix's reference frame.
+    * @param minMaxAngle    the maximum absolute angle described by the generated rotation matrix.
+    * @return the random frame rotation matrix.
+    * @throws RuntimeException if {@code minMaxAngle < 0}.
+    */
+   public static FrameRotationMatrix nextFrameRotationMatrix(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
+   {
+      return new FrameRotationMatrix(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random, minMaxAngle));
    }
 
    /**

@@ -21,12 +21,8 @@ import us.ihmc.euclid.geometry.interfaces.*;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
+import us.ihmc.euclid.matrix.interfaces.*;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
@@ -67,8 +63,6 @@ public class EuclidFrameAPITestTools
    static
    {
       HashSet<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(RotationMatrixReadOnly.class);
-      modifiableSet.add(RotationMatrix.class);
       modifiableSet.add(RotationScaleMatrixReadOnly.class);
       modifiableSet.add(RotationScaleMatrix.class);
       modifiableSet.add(AxisAngleReadOnly.class);
@@ -102,6 +96,8 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(QuaternionBasics.class, FixedFrameQuaternionBasics.class);
       modifiableMap.put(YawPitchRollReadOnly.class, FrameYawPitchRollReadOnly.class);
       modifiableMap.put(YawPitchRollBasics.class, FixedFrameYawPitchRollBasics.class);
+      modifiableMap.put(RotationMatrixReadOnly.class, RotationMatrixReadOnly.class);
+      modifiableMap.put(RotationMatrixBasics.class, FixedFrameRotationMatrixBasics.class);
 
       modifiableMap.put(Orientation3DReadOnly.class, FrameOrientation3DReadOnly.class);
       modifiableMap.put(Orientation3DBasics.class, FixedFrameOrientation3DBasics.class);
@@ -163,6 +159,8 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(FrameQuaternionBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
       modifiableMap.put(FrameYawPitchRollReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameYawPitchRoll(random, frame));
       modifiableMap.put(FrameYawPitchRollBasics.class, frame -> EuclidFrameRandomTools.nextFrameYawPitchRoll(random, frame));
+      modifiableMap.put(FrameRotationMatrixReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameRotationMatrix(random, frame));
+      modifiableMap.put(FrameRotationMatrixBasics.class, frame -> EuclidFrameRandomTools.nextFrameRotationMatrix(random, frame));
       modifiableMap.put(FrameOrientation3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
       modifiableMap.put(FrameOrientation3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
 
@@ -221,6 +219,7 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Tuple4DBasics.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
       modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.nextVector4D(random));
       modifiableMap.put(Vector4DBasics.class, () -> EuclidCoreRandomTools.nextVector4D(random));
+      modifiableMap.put(RotationMatrixBasics.class, () -> EuclidCoreRandomTools.nextRotationMatrix(random));
       modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.nextRotationMatrix(random));
       modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.nextMatrix3D(random));
       modifiableMap.put(Matrix3DBasics.class, () -> EuclidCoreRandomTools.nextMatrix3D(random));
@@ -255,20 +254,7 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Vertex2DSupplier.class, () -> EuclidGeometryRandomTools.nextVertex2DSupplier(random, 20));
       modifiableMap.put(Vertex3DSupplier.class, () -> EuclidGeometryRandomTools.nextVertex3DSupplier(random, 20));
 
-      modifiableMap.put(Orientation3DReadOnly.class, () ->
-      {
-         switch (random.nextInt(4))
-         {
-            case 0:
-               return EuclidCoreRandomTools.nextQuaternion(random);
-            case 1:
-               return EuclidCoreRandomTools.nextAxisAngle(random);
-            case 2:
-               return EuclidCoreRandomTools.nextYawPitchRoll(random);
-            default:
-               return EuclidCoreRandomTools.nextRotationMatrix(random);
-         }
-      });
+      modifiableMap.put(Orientation3DReadOnly.class, () -> EuclidCoreRandomTools.nextOrientation3D(random));
 
       framelessTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -287,6 +273,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameVector4DReadOnly.class);
       modifiableSet.add(FrameQuaternionReadOnly.class);
       modifiableSet.add(FrameYawPitchRollReadOnly.class);
+      modifiableSet.add(FrameRotationMatrixReadOnly.class);
       modifiableSet.add(FrameOrientation2DReadOnly.class);
       modifiableSet.add(FrameOrientation3DReadOnly.class);
       modifiableSet.add(FramePose2DReadOnly.class);
@@ -317,6 +304,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FixedFrameVector4DBasics.class);
       modifiableSet.add(FixedFrameQuaternionBasics.class);
       modifiableSet.add(FixedFrameYawPitchRollBasics.class);
+      modifiableSet.add(FixedFrameRotationMatrixBasics.class);
       modifiableSet.add(FixedFrameOrientation2DBasics.class);
       modifiableSet.add(FixedFrameOrientation3DBasics.class);
       modifiableSet.add(FixedFramePose2DBasics.class);
@@ -345,6 +333,7 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameVector4DBasics.class);
       modifiableSet.add(FrameQuaternionBasics.class);
       modifiableSet.add(FrameYawPitchRollBasics.class);
+      modifiableSet.add(FrameRotationMatrixBasics.class);
       modifiableSet.add(FrameOrientation2DBasics.class);
       modifiableSet.add(FrameOrientation3DBasics.class);
       modifiableSet.add(FramePose2DBasics.class);
