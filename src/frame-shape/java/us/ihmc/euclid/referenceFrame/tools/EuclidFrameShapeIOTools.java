@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getBox3DString;
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DString;
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getShape3DPoseString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
@@ -154,6 +155,40 @@ public class EuclidFrameShapeIOTools
          return "null";
       else
          return getFrameEllipsoid3DString(format, ellipsoid3D) + " - " + ellipsoid3D.getReferenceFrame();
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pointShape3D} as follows:
+    *
+    * <pre>
+    * Point shape 3D: (-0.362, -0.617,  0.066 ) - worldFrame
+    * </pre>
+    *
+    * @param pointShape3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFramePointShape3DString(FramePointShape3DReadOnly pointShape3D)
+   {
+      return getFramePointShape3DString(DEFAULT_FORMAT, pointShape3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code pointShape3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Point shape 3D: (-0.362, -0.617,  0.066 ) - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format       the format to use for each number.
+    * @param pointShape3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFramePointShape3DString(String format, FramePointShape3DReadOnly pointShape3D)
+   {
+      return getPointShape3DString(format, pointShape3D) + " - " + pointShape3D.getReferenceFrame();
    }
 
    /**

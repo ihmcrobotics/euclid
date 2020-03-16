@@ -137,11 +137,7 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = EuclidHashCodeTools.addToHashCode(bits, x);
-      bits = EuclidHashCodeTools.addToHashCode(bits, y);
-      bits = EuclidHashCodeTools.addToHashCode(bits, z);
-      return EuclidHashCodeTools.toIntHashCode(bits);
+      return EuclidHashCodeTools.toIntHashCode(x, y, z);
    }
 
    /**

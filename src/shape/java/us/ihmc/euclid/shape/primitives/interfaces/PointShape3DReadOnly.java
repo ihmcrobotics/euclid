@@ -83,16 +83,4 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    {
       return true;
    }
-
-   /**
-    * Tests on a per component basis, if this point shape 3D is exactly equal to {@code other}.
-    *
-    * @param other the other point shape 3D to compare against this. Not modified.
-    * @return {@code true} if the two point shapes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(PointShape3DReadOnly other)
-   {
-      return Point3DReadOnly.super.equals(other);
-   }
 }
