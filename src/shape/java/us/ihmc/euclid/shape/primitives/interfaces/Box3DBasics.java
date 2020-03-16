@@ -114,7 +114,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(orientation, position);
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -129,7 +129,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
    default void set(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(pose);
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -144,7 +144,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
    default void set(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(pose);
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -157,20 +157,7 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
    default void set(RigidBodyTransformReadOnly pose, double[] size)
    {
       getPose().set(pose);
-      setSize(size[0], size[1], size[2]);
-   }
-
-   /**
-    * Sets the size of this box.
-    *
-    * @param sizeX the size of this box along the x-axis.
-    * @param sizeY the size of this box along the y-axis.
-    * @param sizeZ the size of this box along the z-axis.
-    * @throws IllegalArgumentException if any of the three arguments is negative.
-    */
-   default void setSize(double sizeX, double sizeY, double sizeZ)
-   {
-      getSize().set(sizeX, sizeY, sizeZ);
+      getSize().set(size[0], size[1], size[2]);
    }
 
    /**

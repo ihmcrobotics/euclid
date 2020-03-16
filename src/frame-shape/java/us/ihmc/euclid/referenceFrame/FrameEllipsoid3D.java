@@ -36,7 +36,7 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    public FrameEllipsoid3D(ReferenceFrame referenceFrame, double radiusX, double radiusY, double radiusZ)
    {
       setReferenceFrame(referenceFrame);
-      setRadii(radiusX, radiusY, radiusZ);
+      getRadii().set(radiusX, radiusY, radiusZ);
    }
 
    public FrameEllipsoid3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY,

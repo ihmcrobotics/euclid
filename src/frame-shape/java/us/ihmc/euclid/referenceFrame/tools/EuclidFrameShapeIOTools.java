@@ -192,6 +192,43 @@ public class EuclidFrameShapeIOTools
    }
 
    /**
+    * Gets the representative {@code String} of {@code ramp3D} as follows:
+    *
+    * <pre>
+    * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
+    *
+    * @param ramp3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameRamp3DString(FrameRamp3DReadOnly ramp3D)
+   {
+      return getFrameRamp3DString(DEFAULT_FORMAT, ramp3D);
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code ramp3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Ramp 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )] - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param ramp3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameRamp3DString(String format, FrameRamp3DReadOnly ramp3D)
+   {
+      if (ramp3D == null)
+         return "null";
+      else
+         return getFrameRamp3DString(format, ramp3D) + " - " + ramp3D.getReferenceFrame();
+   }
+
+   /**
     * Gets the representative {@code String} of {@code shape3DPose} as follows:
     *
     * <pre>

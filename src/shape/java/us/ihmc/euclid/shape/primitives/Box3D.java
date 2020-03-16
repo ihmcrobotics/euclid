@@ -77,7 +77,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(double sizeX, double sizeY, double sizeZ)
    {
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
    }
 
    /**

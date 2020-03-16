@@ -7,10 +7,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.shape.primitives.Box3D;
-import us.ihmc.euclid.shape.primitives.Capsule3D;
-import us.ihmc.euclid.shape.primitives.Cylinder3D;
-import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
+import us.ihmc.euclid.shape.primitives.*;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -255,7 +252,10 @@ public class EuclidFrameShapeToolsTest
          shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, ellipsoidInBBXFrame);
          BoundingBox3D expected = new BoundingBox3D();
          BoundingBox3D actual = new BoundingBox3D();
-         EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoidInBBXFrame.getPosition(), ellipsoidInBBXFrame.getOrientation(), ellipsoidInBBXFrame.getRadii(), expected);
+         EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoidInBBXFrame.getPosition(),
+                                                 ellipsoidInBBXFrame.getOrientation(),
+                                                 ellipsoidInBBXFrame.getRadii(),
+                                                 expected);
          EuclidFrameShapeTools.boundingBoxEllipsoid3D(shapeFrame, ellipsoidInFrame, boundingBoxFrame, actual);
          EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
 
@@ -264,11 +264,73 @@ public class EuclidFrameShapeToolsTest
       }
    }
 
+   @Test
+   public void testBoundingBoxRamp3D()
+   {
+      Random random = new Random(5768787);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ramp3D: shapeFrame = world, boundingBoxFrame = world
+         Ramp3D rampInFrame = EuclidShapeRandomTools.nextRamp3D(random);
+         rampInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         Ramp3D rampInWorld = new Ramp3D(rampInFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         rampInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxRamp3D(worldFrame, rampInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         rampInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ramp3D: shapeFrame != world, boundingBoxFrame = world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         Ramp3D rampInFrame = EuclidShapeRandomTools.nextRamp3D(random);
+         rampInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         Ramp3D rampInWorld = new Ramp3D(rampInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(worldFrame, rampInWorld);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         rampInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxRamp3D(shapeFrame, rampInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         rampInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Ramp3D: shapeFrame != world, boundingBoxFrame != world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         RigidBodyTransform boundingBoxFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         ReferenceFrame boundingBoxFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("boundingBoxFrame",
+                                                                                                             worldFrame,
+                                                                                                             boundingBoxFrameTransform);
+         Ramp3D rampInFrame = EuclidShapeRandomTools.nextRamp3D(random);
+         rampInFrame.getPose().set(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         Ramp3D rampInBBXFrame = new Ramp3D(rampInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, rampInBBXFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         rampInBBXFrame.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxRamp3D(shapeFrame, rampInFrame, boundingBoxFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         rampInBBXFrame.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+   }
+
    private static RigidBodyTransform nextRigidBodyTransformWithIdentityEdgeCase(Random random, double rotationIdentityPercentage, double positionZeroPercentage)
    {
       RigidBodyTransform next = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-//      if (random.nextDouble() < rotationIdentityPercentage)
-         next.getRotation().setToZero();
+      //      if (random.nextDouble() < rotationIdentityPercentage)
+      next.getRotation().setToZero();
       if (random.nextDouble() < positionZeroPercentage)
          next.getTranslation().setToZero();
       return next;

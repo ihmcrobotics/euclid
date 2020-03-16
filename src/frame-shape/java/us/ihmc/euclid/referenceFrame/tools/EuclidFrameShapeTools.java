@@ -4,10 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.shape.primitives.interfaces.*;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -376,6 +373,118 @@ public class EuclidFrameShapeTools
          }
       }
    }
+
+   public static void boundingBoxRamp3D(FrameRamp3DReadOnly ramp3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxRamp3D(ramp3D.getReferenceFrame(), ramp3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   public static void boundingBoxRamp3D(ReferenceFrame ramp3DFrame, Ramp3DReadOnly ramp3D, ReferenceFrame boundingBoxFrame,
+                                        BoundingBox3DBasics boundingBoxToPack)
+   {
+      if (ramp3DFrame == boundingBoxFrame)
+      {
+         ramp3D.getBoundingBox(boundingBoxToPack);
+         return;
+      }
+
+      Point3DReadOnly shapePosition = ramp3D.getPosition();
+      RotationMatrixReadOnly shapeOrientation = ramp3D.getOrientation();
+
+      if (ramp3DFrame.isRootFrame())
+      {
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxRotationPartGeneric(shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransform(shapeOrientation, shapePosition, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
+         }
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = ramp3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxRotationPartGeneric(rotToRoot, false, shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotToRoot, transToRoot, false, shapeOrientation, shapePosition, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX,
+                                           transFromBBX,
+                                           true,
+                                           rotToRoot,
+                                           transToRoot,
+                                           false,
+                                           shapeOrientation,
+                                           shapePosition,
+                                           false,
+                                           boundingBoxToPack);
+         }
+      }
+   }
+
+   private static final BoundingBoxRotationPartCalculator<Ramp3DReadOnly> ramp3DCalculator = new BoundingBoxRotationPartCalculator<Ramp3DReadOnly>()
+   {
+      @Override
+      public void computeBoundingBoxZeroRotation(Ramp3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double sizeX = shape.getSizeX();
+         double halfSizeY = 0.5 * shape.getSizeY();
+         double sizeZ = shape.getSizeZ();
+         boundingBoxToPack.set(0.0, -halfSizeY, 0.0, sizeX, halfSizeY, sizeZ);
+      }
+
+      @Override
+      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                     Ramp3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         double sizeX = shape.getSizeX();
+         double halfSizeY = 0.5 * shape.getSizeY();
+         double sizeZ = shape.getSizeZ();
+         double minX = Double.POSITIVE_INFINITY;
+         double minY = Double.POSITIVE_INFINITY;
+         double minZ = Double.POSITIVE_INFINITY;
+         double maxX = Double.NEGATIVE_INFINITY;
+         double maxY = Double.NEGATIVE_INFINITY;
+         double maxZ = Double.NEGATIVE_INFINITY;
+
+         for (int i = 0; i < 6; i++)
+         {
+            double xLocal = (i & 2) == 0 ? sizeX : 0.0;
+            double yLocal = (i & 1) == 0 ? halfSizeY : -halfSizeY;
+            double zLocal = (i & 4) == 0 ? 0.0 : sizeZ;
+
+            double xRoot = m00 * xLocal + m01 * yLocal + m02 * zLocal;
+            double yRoot = m10 * xLocal + m11 * yLocal + m12 * zLocal;
+            double zRoot = m20 * xLocal + m21 * yLocal + m22 * zLocal;
+
+            minX = Math.min(minX, xRoot);
+            minY = Math.min(minY, yRoot);
+            minZ = Math.min(minZ, zRoot);
+            maxX = Math.max(maxX, xRoot);
+            maxY = Math.max(maxY, yRoot);
+            maxZ = Math.max(maxZ, zRoot);
+         }
+         boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
+      }
+   };
 
    private static final BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly> ellipsoid3DCalculator = new BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly>()
    {

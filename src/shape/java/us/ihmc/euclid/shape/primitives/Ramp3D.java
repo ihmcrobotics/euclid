@@ -281,8 +281,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    @Override
    public int hashCode()
    {
-      long hash = EuclidHashCodeTools.combineHashCode(pose.hashCode(), size.hashCode());
-      return EuclidHashCodeTools.toIntHashCode(hash);
+      return EuclidHashCodeTools.toIntHashCode(pose, size);
    }
 
    /**

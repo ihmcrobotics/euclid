@@ -74,7 +74,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
     */
    public Ellipsoid3D(double radiusX, double radiusY, double radiusZ)
    {
-      setRadii(radiusX, radiusY, radiusZ);
+      getRadii().set(radiusX, radiusY, radiusZ);
    }
 
    /**
