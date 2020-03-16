@@ -39,19 +39,17 @@ public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygo
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameConvexPolygon2D(random, frame), methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameConvexPolygon2D, methodFilter);
    }
 
    @Test
    public void testConsistencyWithTuple2D() throws Exception
    {
-      Random random = new Random(3422);
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, polygon) -> createFrameConvexPolygon2D(frame,
                                                                                                                          (ConvexPolygon2DReadOnly) polygon);
-      GenericTypeBuilder framelessTypeBuilber = () -> createRandomFramelessConvexPolygon2D(random);
+      GenericTypeBuilder framelessTypeBuilber = this::createRandomFramelessConvexPolygon2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode")
             && Arrays.stream(m.getParameterTypes()).noneMatch(p -> Collection.class.isAssignableFrom(p));
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);

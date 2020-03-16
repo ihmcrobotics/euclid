@@ -405,14 +405,12 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testConsistencyWithQuaternion()
    {
-      Random random = new Random(234235L);
-
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, quaternion) -> createFrameTuple(frame, (QuaternionReadOnly) quaternion);
-      GenericTypeBuilder framelessTypeBuilder = () -> EuclidCoreRandomTools.nextQuaternion(random);
+      GenericTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextQuaternion;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
 
-      GenericTypeBuilder frameless2DTypeBuilder = () -> new Quaternion(createRandom2DFrameTuple(random, ReferenceFrame.getWorldFrame()));
+      GenericTypeBuilder frameless2DTypeBuilder = (random) -> new Quaternion(createRandom2DFrameTuple(random, ReferenceFrame.getWorldFrame()));
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 

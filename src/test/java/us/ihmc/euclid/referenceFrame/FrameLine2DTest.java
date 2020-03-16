@@ -29,11 +29,9 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
    @Test
    public void testConsistencyWithLine2D()
    {
-      Random random = new Random(234235L);
-
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame,
                                                                                                                                    (Line2DReadOnly) line);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextLine2D(random);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

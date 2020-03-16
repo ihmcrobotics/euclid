@@ -36,10 +36,9 @@ public abstract class FrameMatrix3DReadOnlyTest<T extends FrameMatrix3DReadOnly>
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("setMatchingFrame");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameMatrix3D(random, frame), methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameMatrix3D, methodFilter);
    }
 
    @Test

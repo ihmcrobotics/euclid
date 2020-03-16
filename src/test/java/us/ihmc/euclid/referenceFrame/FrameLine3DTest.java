@@ -32,11 +32,9 @@ public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
    @Test
    public void testConsistencyWithLine3D()
    {
-      Random random = new Random(234235L);
-
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame,
                                                                                                                                    (Line3DReadOnly) line);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextLine3D(random);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

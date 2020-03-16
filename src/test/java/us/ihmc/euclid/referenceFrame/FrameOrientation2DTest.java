@@ -34,10 +34,8 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
    @Test
    public void testConsistencyWithOrientation2D()
    {
-      Random random = new Random(234235L);
-
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFrameOrientation(frame, (Orientation2DReadOnly) pose);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextOrientation2D(random);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextOrientation2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

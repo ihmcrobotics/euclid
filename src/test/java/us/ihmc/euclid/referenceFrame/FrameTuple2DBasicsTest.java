@@ -451,18 +451,16 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple, methodFilter);
    }
 
    @Test
    public void testConsistencyWithTuple2D() throws Exception
    {
-      Random random = new Random(3422);
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createFrameTuple(frame, (Tuple2DReadOnly) tuple);
-      GenericTypeBuilder framelessTypeBuilber = () -> createRandomFramelessTuple(random);
+      GenericTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
    }

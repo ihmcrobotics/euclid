@@ -15,18 +15,15 @@ import org.ejml.ops.MatrixFeatures;
 import org.ejml.ops.RandomMatrices;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
-import us.ihmc.euclid.matrix.interfaces.*;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
-import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
+import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
@@ -34,11 +31,6 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple2D.interfaces.*;
-import us.ihmc.euclid.tuple3D.interfaces.*;
-import us.ihmc.euclid.tuple4D.interfaces.*;
-import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
-import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * This class provides tools that using reflection can perform a variety of comparison-based
@@ -59,281 +51,309 @@ public class EuclidFrameAPITestTools
    private final static Random random = new Random(345345);
    private final static double epsilon = 1.0e-12;
 
-   private final static Set<Class<?>> framelessTypesWithoutFrameEquivalent;
+   private final static Set<Class<?>> framelessTypesWithoutFrameEquivalent = new HashSet<>();
+   private final static Map<Class<?>, Class<?>> framelessTypesToFrameTypesTable = new HashMap<>();
+   private final static Map<Class<?>, RandomFrameTypeBuilder<?>> frameTypeBuilders = new HashMap<>();
+   private final static Map<Class<?>, GenericTypeBuilder> framelessTypeBuilders = new HashMap<>();
+   private final static Set<Class<?>> frameReadOnlyTypes = new HashSet<>();
+   private final static Set<Class<?>> fixedFrameMutableTypes = new HashSet<>();
+   private final static Set<Class<?>> mutableFrameMutableTypes = new HashSet<>();
+
+   private final static Set<Class<?>> frameRandomGeneratorLibrary = new HashSet<>();
+   private final static Set<Class<?>> framelessRandomGeneratorLibrary = new HashSet<>();
+
    static
    {
-      HashSet<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(RotationScaleMatrixReadOnly.class);
-      modifiableSet.add(RotationScaleMatrix.class);
-      modifiableSet.add(AxisAngleReadOnly.class);
-      modifiableSet.add(AxisAngleBasics.class);
-      framelessTypesWithoutFrameEquivalent = Collections.unmodifiableSet(modifiableSet);
+      registerFrameRandomGeneratorClasses(EuclidFrameRandomTools.class);
+      registerFramelessRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class);
+
+      registerFrameTypesSmart(FrameTuple2DBasics.class, FrameVector2DBasics.class, FramePoint2DBasics.class);
+      registerFrameTypesSmart(FrameTuple3DBasics.class, FrameVector3DBasics.class, FramePoint3DBasics.class);
+      registerFrameTypesSmart(FrameTuple4DBasics.class, FrameVector4DBasics.class, FrameQuaternionBasics.class);
+      registerFrameTypeSmart(FrameYawPitchRollBasics.class);
+      registerFrameTypesSmart(FrameRotationMatrixBasics.class, FrameMatrix3DBasics.class);
+      registerFrameTypesSmart(FrameOrientation2DBasics.class, FrameOrientation3DBasics.class);
+      registerFrameTypesSmart(FramePose2DBasics.class, FramePose3DBasics.class);
+      registerFrameTypesSmart(FrameLine2DBasics.class, FrameLine3DBasics.class);
+      registerFrameTypesSmart(FrameLineSegment2DBasics.class, FrameLineSegment3DBasics.class);
+      registerFrameTypesSmart(FrameConvexPolygon2DBasics.class);
+      registerFrameTypesSmart(FrameBoundingBox2DBasics.class, FrameBoundingBox3DBasics.class);
+
+      registerFrameType(null,
+                        null,
+                        FrameVertex2DSupplier.class,
+                        null,
+                        Vertex2DSupplier.class,
+                        EuclidFrameRandomTools::nextFrameVertex2DSupplier,
+                        EuclidGeometryRandomTools::nextVertex2DSupplier);
+      registerFrameType(null,
+                        null,
+                        FrameVertex3DSupplier.class,
+                        null,
+                        Vertex3DSupplier.class,
+                        EuclidFrameRandomTools::nextFrameVertex3DSupplier,
+                        EuclidGeometryRandomTools::nextVertex3DSupplier);
+
+      registerFramelessTypeSmart(AxisAngleBasics.class);
+      registerFramelessType(RotationScaleMatrix.class, RotationScaleMatrixReadOnly.class, EuclidCoreRandomTools::nextRotationScaleMatrix);
    }
 
-   private final static Map<Class<?>, Class<?>> framelessTypesToFrameTypesTable;
+   private final static Set<Class<?>> acceptableExceptions = new HashSet<>();
    static
    {
-      HashMap<Class<?>, Class<?>> modifiableMap = new HashMap<>();
-      modifiableMap.put(Tuple2DReadOnly.class, FrameTuple2DReadOnly.class);
-      modifiableMap.put(Tuple2DBasics.class, FixedFrameTuple2DBasics.class);
-      modifiableMap.put(Point2DReadOnly.class, FramePoint2DReadOnly.class);
-      modifiableMap.put(Point2DBasics.class, FixedFramePoint2DBasics.class);
-      modifiableMap.put(Vector2DReadOnly.class, FrameVector2DReadOnly.class);
-      modifiableMap.put(Vector2DBasics.class, FixedFrameVector2DBasics.class);
-
-      modifiableMap.put(Tuple3DReadOnly.class, FrameTuple3DReadOnly.class);
-      modifiableMap.put(Tuple3DBasics.class, FixedFrameTuple3DBasics.class);
-      modifiableMap.put(Point3DReadOnly.class, FramePoint3DReadOnly.class);
-      modifiableMap.put(Point3DBasics.class, FixedFramePoint3DBasics.class);
-      modifiableMap.put(Vector3DReadOnly.class, FrameVector3DReadOnly.class);
-      modifiableMap.put(Vector3DBasics.class, FixedFrameVector3DBasics.class);
-
-      modifiableMap.put(Tuple4DReadOnly.class, FrameTuple4DReadOnly.class);
-      modifiableMap.put(Tuple4DBasics.class, FixedFrameTuple4DBasics.class);
-      modifiableMap.put(Vector4DReadOnly.class, FrameVector4DReadOnly.class);
-      modifiableMap.put(Vector4DBasics.class, FixedFrameVector4DBasics.class);
-      modifiableMap.put(QuaternionReadOnly.class, FrameQuaternionReadOnly.class);
-      modifiableMap.put(QuaternionBasics.class, FixedFrameQuaternionBasics.class);
-      modifiableMap.put(YawPitchRollReadOnly.class, FrameYawPitchRollReadOnly.class);
-      modifiableMap.put(YawPitchRollBasics.class, FixedFrameYawPitchRollBasics.class);
-      modifiableMap.put(RotationMatrixReadOnly.class, RotationMatrixReadOnly.class);
-      modifiableMap.put(RotationMatrixBasics.class, FixedFrameRotationMatrixBasics.class);
-
-      modifiableMap.put(Orientation3DReadOnly.class, FrameOrientation3DReadOnly.class);
-      modifiableMap.put(Orientation3DBasics.class, FixedFrameOrientation3DBasics.class);
-
-      modifiableMap.put(Orientation2DReadOnly.class, FrameOrientation2DReadOnly.class);
-      modifiableMap.put(Orientation2DBasics.class, FixedFrameOrientation2DBasics.class);
-
-      modifiableMap.put(Pose2DReadOnly.class, FramePose2DReadOnly.class);
-      modifiableMap.put(Pose2DBasics.class, FixedFramePose2DBasics.class);
-
-      modifiableMap.put(Pose3DReadOnly.class, FramePose3DReadOnly.class);
-      modifiableMap.put(Pose3DBasics.class, FixedFramePose3DBasics.class);
-
-      modifiableMap.put(LineSegment2DReadOnly.class, FrameLineSegment2DReadOnly.class);
-      modifiableMap.put(LineSegment2DBasics.class, FixedFrameLineSegment2DBasics.class);
-      modifiableMap.put(LineSegment3DReadOnly.class, FrameLineSegment3DReadOnly.class);
-      modifiableMap.put(LineSegment3DBasics.class, FixedFrameLineSegment3DBasics.class);
-
-      modifiableMap.put(Line2DReadOnly.class, FrameLine2DReadOnly.class);
-      modifiableMap.put(Line2DBasics.class, FixedFrameLine2DBasics.class);
-      modifiableMap.put(Line3DReadOnly.class, FrameLine3DReadOnly.class);
-      modifiableMap.put(Line3DBasics.class, FixedFrameLine3DBasics.class);
-
-      modifiableMap.put(ConvexPolygon2DReadOnly.class, FrameConvexPolygon2DReadOnly.class);
-      modifiableMap.put(ConvexPolygon2DBasics.class, FixedFrameConvexPolygon2DBasics.class);
-
-      modifiableMap.put(Vertex2DSupplier.class, FrameVertex2DSupplier.class);
-      modifiableMap.put(Vertex3DSupplier.class, FrameVertex3DSupplier.class);
-
-      modifiableMap.put(Matrix3DReadOnly.class, FrameMatrix3DReadOnly.class);
-      modifiableMap.put(Matrix3DBasics.class, FixedFrameMatrix3DBasics.class);
-
-      modifiableMap.put(BoundingBox2DReadOnly.class, FrameBoundingBox2DReadOnly.class);
-      modifiableMap.put(BoundingBox2DBasics.class, FixedFrameBoundingBox2DBasics.class);
-      modifiableMap.put(BoundingBox3DReadOnly.class, FrameBoundingBox3DReadOnly.class);
-      modifiableMap.put(BoundingBox3DBasics.class, FixedFrameBoundingBox3DBasics.class);
-
-      framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
+      acceptableExceptions.add(BoundingBoxException.class);
+      acceptableExceptions.add(IllegalArgumentException.class);
+      acceptableExceptions.add(RuntimeException.class);
    }
 
-   private final static Map<Class<?>, RandomFrameTypeBuilder<?>> frameTypeBuilders;
-   static
+   public static void registerFramelessTypesSmart(Class<?>... framelessMutableTypes)
    {
-      HashMap<Class<?>, RandomFrameTypeBuilder<?>> modifiableMap = new HashMap<>();
-      modifiableMap.put(FrameTuple2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
-      modifiableMap.put(FramePoint2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint2D(random, frame));
-      modifiableMap.put(FrameVector2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector2D(random, frame));
-
-      modifiableMap.put(FrameTuple3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
-      modifiableMap.put(FramePoint3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePoint3D(random, frame));
-      modifiableMap.put(FrameVector3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector3D(random, frame));
-
-      modifiableMap.put(FrameTuple4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-      modifiableMap.put(FrameVector4DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameVector4D(random, frame));
-      modifiableMap.put(FrameQuaternionReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-      modifiableMap.put(FrameYawPitchRollReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameYawPitchRoll(random, frame));
-      modifiableMap.put(FrameRotationMatrixReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameRotationMatrix(random, frame));
-      modifiableMap.put(FrameOrientation3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameQuaternion(random, frame));
-
-      modifiableMap.put(FrameOrientation2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameOrientation2D(random, frame));
-
-      modifiableMap.put(FramePose3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePose3D(random, frame));
-
-      modifiableMap.put(FramePose2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFramePose2D(random, frame));
-
-      modifiableMap.put(FrameLineSegment2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment2D(random, frame));
-      modifiableMap.put(FrameLineSegment3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLineSegment3D(random, frame));
-
-      modifiableMap.put(FrameLine2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine2D(random, frame));
-      modifiableMap.put(FrameLine3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameLine3D(random, frame));
-
-      modifiableMap.put(FrameConvexPolygon2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, frame, 1.0, 10));
-
-      modifiableMap.put(FrameVertex2DSupplier.class, frame -> EuclidFrameRandomTools.nextFrameVertex2DSupplier(random, frame, 20));
-      modifiableMap.put(FrameVertex3DSupplier.class, frame -> EuclidFrameRandomTools.nextFrameVertex3DSupplier(random, frame, 20));
-
-      modifiableMap.put(FrameMatrix3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameMatrix3D(random, frame));
-
-      modifiableMap.put(FrameBoundingBox2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameBoundingBox2D(random, frame));
-      modifiableMap.put(FrameBoundingBox3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameBoundingBox3D(random, frame));
-
-      frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
+      for (Class<?> framelessMutableType : framelessMutableTypes)
+      {
+         registerFramelessTypeSmart(framelessMutableType);
+      }
    }
 
-   private final static Map<Class<?>, GenericTypeBuilder> framelessTypeBuilders;
-   static
+   public static void registerFramelessTypeSmart(Class<?> framelessMutableType)
    {
-      HashMap<Class<?>, GenericTypeBuilder> modifiableMap = new HashMap<>();
-      modifiableMap.put(Tuple2DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
-      modifiableMap.put(Point2DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint2D(random));
-      modifiableMap.put(Vector2DReadOnly.class, () -> EuclidCoreRandomTools.nextVector2D(random));
+      Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessMutableType.getSimpleName().replace("Basics", "ReadOnly"),
+                                                                          framelessMutableType);
+      GenericTypeBuilder framelessTypeBuilder = searchFramelessGenerator(framelessMutableType);
 
-      modifiableMap.put(Tuple3DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
-      modifiableMap.put(Point3DReadOnly.class, () -> EuclidCoreRandomTools.nextPoint3D(random));
-      modifiableMap.put(Vector3DReadOnly.class, () -> EuclidCoreRandomTools.nextVector3D(random));
-
-      modifiableMap.put(AxisAngleReadOnly.class, () -> EuclidCoreRandomTools.nextAxisAngle(random));
-
-      modifiableMap.put(Tuple4DReadOnly.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
-      modifiableMap.put(Vector4DReadOnly.class, () -> EuclidCoreRandomTools.nextVector4D(random));
-      modifiableMap.put(RotationMatrixReadOnly.class, () -> EuclidCoreRandomTools.nextRotationMatrix(random));
-      modifiableMap.put(Matrix3DReadOnly.class, () -> EuclidCoreRandomTools.nextMatrix3D(random));
-      modifiableMap.put(RotationScaleMatrixReadOnly.class, () -> EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0));
-      modifiableMap.put(QuaternionReadOnly.class, () -> EuclidCoreRandomTools.nextQuaternion(random));
-      modifiableMap.put(YawPitchRollReadOnly.class, () -> EuclidCoreRandomTools.nextYawPitchRoll(random));
-
-      modifiableMap.put(Orientation2DReadOnly.class, () -> EuclidGeometryRandomTools.nextOrientation2D(random));
-
-      modifiableMap.put(Pose2DReadOnly.class, () -> EuclidGeometryRandomTools.nextPose2D(random));
-      modifiableMap.put(Pose3DReadOnly.class, () -> EuclidGeometryRandomTools.nextPose3D(random));
-
-      modifiableMap.put(Line2DReadOnly.class, () -> EuclidGeometryRandomTools.nextLine2D(random));
-      modifiableMap.put(Line3DReadOnly.class, () -> EuclidGeometryRandomTools.nextLine3D(random));
-
-      modifiableMap.put(LineSegment2DReadOnly.class, () -> EuclidGeometryRandomTools.nextLineSegment2D(random));
-      modifiableMap.put(LineSegment3DReadOnly.class, () -> EuclidGeometryRandomTools.nextLineSegment3D(random));
-
-      modifiableMap.put(ConvexPolygon2DReadOnly.class, () -> EuclidGeometryRandomTools.nextConvexPolygon2D(random, 1.0, 10));
-
-      modifiableMap.put(Vertex2DSupplier.class, () -> EuclidGeometryRandomTools.nextVertex2DSupplier(random, 20));
-      modifiableMap.put(Vertex3DSupplier.class, () -> EuclidGeometryRandomTools.nextVertex3DSupplier(random, 20));
-
-      modifiableMap.put(Orientation3DReadOnly.class, () -> EuclidCoreRandomTools.nextOrientation3D(random));
-
-      modifiableMap.put(BoundingBox2DReadOnly.class, () -> EuclidGeometryRandomTools.nextBoundingBox2D(random));
-      modifiableMap.put(BoundingBox3DReadOnly.class, () -> EuclidGeometryRandomTools.nextBoundingBox3D(random));
-
-      framelessTypeBuilders = Collections.unmodifiableMap(modifiableMap);
+      Objects.requireNonNull(framelessReadOnlyType);
+      registerFramelessType(framelessMutableType, framelessReadOnlyType, framelessTypeBuilder);
    }
 
-   private final static Set<Class<?>> frameReadOnlyTypes;
-   static
+   public static void registerFramelessType(Class<?> framelessMutableType, Class<?> framelessReadOnlyType, GenericTypeBuilder framelessTypeBuilder)
    {
-      Set<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(FrameTuple2DReadOnly.class);
-      modifiableSet.add(FramePoint2DReadOnly.class);
-      modifiableSet.add(FrameVector2DReadOnly.class);
-      modifiableSet.add(FrameTuple3DReadOnly.class);
-      modifiableSet.add(FramePoint3DReadOnly.class);
-      modifiableSet.add(FrameVector3DReadOnly.class);
-      modifiableSet.add(FrameTuple4DReadOnly.class);
-      modifiableSet.add(FrameVector4DReadOnly.class);
-      modifiableSet.add(FrameQuaternionReadOnly.class);
-      modifiableSet.add(FrameYawPitchRollReadOnly.class);
-      modifiableSet.add(FrameRotationMatrixReadOnly.class);
-      modifiableSet.add(FrameOrientation2DReadOnly.class);
-      modifiableSet.add(FrameOrientation3DReadOnly.class);
-      modifiableSet.add(FramePose2DReadOnly.class);
-      modifiableSet.add(FramePose3DReadOnly.class);
-      modifiableSet.add(FrameLine2DReadOnly.class);
-      modifiableSet.add(FrameLine3DReadOnly.class);
-      modifiableSet.add(FrameLineSegment2DReadOnly.class);
-      modifiableSet.add(FrameLineSegment3DReadOnly.class);
-      modifiableSet.add(FrameConvexPolygon2DReadOnly.class);
-      modifiableSet.add(FrameVertex2DSupplier.class);
-      modifiableSet.add(FrameVertex3DSupplier.class);
-      modifiableSet.add(FrameMatrix3DReadOnly.class);
-      modifiableSet.add(FrameBoundingBox2DReadOnly.class);
-      modifiableSet.add(FrameBoundingBox3DReadOnly.class);
-
-      frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
+      framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
+      framelessTypeBuilders.put(framelessReadOnlyType, framelessTypeBuilder);
    }
 
-   private final static Set<Class<?>> fixedFrameMutableTypes;
-   static
+   public static void registerFrameTypesSmart(Class<?>... mutableFrameMutableTypes)
    {
-      Set<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(FixedFrameTuple2DBasics.class);
-      modifiableSet.add(FixedFramePoint2DBasics.class);
-      modifiableSet.add(FixedFrameVector2DBasics.class);
-      modifiableSet.add(FixedFrameTuple3DBasics.class);
-      modifiableSet.add(FixedFramePoint3DBasics.class);
-      modifiableSet.add(FixedFrameVector3DBasics.class);
-      modifiableSet.add(FixedFrameTuple4DBasics.class);
-      modifiableSet.add(FixedFrameVector4DBasics.class);
-      modifiableSet.add(FixedFrameQuaternionBasics.class);
-      modifiableSet.add(FixedFrameYawPitchRollBasics.class);
-      modifiableSet.add(FixedFrameRotationMatrixBasics.class);
-      modifiableSet.add(FixedFrameOrientation2DBasics.class);
-      modifiableSet.add(FixedFrameOrientation3DBasics.class);
-      modifiableSet.add(FixedFramePose2DBasics.class);
-      modifiableSet.add(FixedFramePose3DBasics.class);
-      modifiableSet.add(FixedFrameLine2DBasics.class);
-      modifiableSet.add(FixedFrameLine3DBasics.class);
-      modifiableSet.add(FixedFrameLineSegment2DBasics.class);
-      modifiableSet.add(FixedFrameLineSegment3DBasics.class);
-      modifiableSet.add(FixedFrameConvexPolygon2DBasics.class);
-      modifiableSet.add(FixedFrameMatrix3DBasics.class);
-      modifiableSet.add(FixedFrameBoundingBox2DBasics.class);
-      modifiableSet.add(FixedFrameBoundingBox3DBasics.class);
-
-      fixedFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
+      for (Class<?> mutableFrameMutableType : mutableFrameMutableTypes)
+      {
+         registerFrameTypeSmart(mutableFrameMutableType);
+      }
    }
 
-   private final static Set<Class<?>> mutableFrameMutableTypes;
-   static
+   public static void registerFrameTypeSmart(Class<?> mutableFrameMutableType)
    {
-      Set<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(FrameTuple2DBasics.class);
-      modifiableSet.add(FramePoint2DBasics.class);
-      modifiableSet.add(FrameVector2DBasics.class);
-      modifiableSet.add(FrameTuple3DBasics.class);
-      modifiableSet.add(FramePoint3DBasics.class);
-      modifiableSet.add(FrameVector3DBasics.class);
-      modifiableSet.add(FrameTuple4DBasics.class);
-      modifiableSet.add(FrameVector4DBasics.class);
-      modifiableSet.add(FrameQuaternionBasics.class);
-      modifiableSet.add(FrameYawPitchRollBasics.class);
-      modifiableSet.add(FrameRotationMatrixBasics.class);
-      modifiableSet.add(FrameOrientation2DBasics.class);
-      modifiableSet.add(FrameOrientation3DBasics.class);
-      modifiableSet.add(FramePose2DBasics.class);
-      modifiableSet.add(FramePose3DBasics.class);
-      modifiableSet.add(FrameLineSegment2D.class);
-      modifiableSet.add(FrameLineSegment3D.class);
-      modifiableSet.add(FrameLine2DBasics.class);
-      modifiableSet.add(FrameLine3DBasics.class);
-      modifiableSet.add(FrameLineSegment2DBasics.class);
-      modifiableSet.add(FrameLineSegment3DBasics.class);
-      modifiableSet.add(FrameConvexPolygon2DBasics.class);
-      modifiableSet.add(FrameMatrix3DBasics.class);
-      modifiableSet.add(FrameBoundingBox2DBasics.class);
-      modifiableSet.add(FrameBoundingBox3DBasics.class);
+      String mutableFrameMutableTypeName = mutableFrameMutableType.getSimpleName();
 
-      mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
+      String fixedFrameMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "FixedFrame");
+      Class<?> fixedFrameMutableType = searchSuperInterfaceFromSimpleName(fixedFrameMutableTypeName, mutableFrameMutableType);
+
+      String frameReadOnlyTypeName = mutableFrameMutableTypeName.replace("Basics", "ReadOnly");
+      Class<?> frameReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyTypeName, fixedFrameMutableType);
+
+      String framelessMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "");
+      Class<?> framelessMutableType = searchSuperInterfaceFromSimpleName(framelessMutableTypeName, fixedFrameMutableType);
+
+      String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace("Basics", "ReadOnly");
+      Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessReadOnlyTypeName, framelessMutableType);
+
+      RandomFrameTypeBuilder<?> frameTypeBuilder = searchFrameGenerator(mutableFrameMutableType);
+      GenericTypeBuilder framelessTypeBuilder = searchFramelessGenerator(framelessMutableType);
+
+      Objects.requireNonNull(fixedFrameMutableType);
+      Objects.requireNonNull(frameReadOnlyType);
+      Objects.requireNonNull(framelessMutableType);
+      Objects.requireNonNull(framelessReadOnlyType);
+
+      registerFrameType(mutableFrameMutableType,
+                        fixedFrameMutableType,
+                        frameReadOnlyType,
+                        framelessMutableType,
+                        framelessReadOnlyType,
+                        frameTypeBuilder,
+                        framelessTypeBuilder);
    }
 
-   private final static Set<Class<?>> acceptableExceptions;
-   static
+   private static GenericTypeBuilder searchFramelessGenerator(Class<?> framelessMutableType)
    {
-      Set<Class<?>> modifiableSet = new HashSet<>();
-      modifiableSet.add(BoundingBoxException.class);
-      modifiableSet.add(IllegalArgumentException.class);
-      modifiableSet.add(RuntimeException.class);
+      List<Method> searchResult = new ArrayList<>();
 
-      acceptableExceptions = Collections.unmodifiableSet(modifiableSet);
+      List<Method> allMethods = framelessRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
+                                                               .collect(Collectors.toList());
+
+      for (Method method : allMethods)
+      {
+         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
+            continue;
+
+         if (method.getParameterCount() != 1)
+            continue;
+
+         if (method.getParameterTypes()[0] != Random.class)
+            continue;
+
+         if (!framelessMutableType.isAssignableFrom(method.getReturnType()))
+            continue;
+
+         searchResult.add(method);
+      }
+
+      int nameLength = Integer.MAX_VALUE;
+      Method randomGenerator = null;
+
+      for (Method method : searchResult)
+      {
+         if (method.getName().length() < nameLength)
+         {
+            nameLength = method.getName().length();
+            randomGenerator = method;
+         }
+      }
+      System.out.println("Random generator for " + framelessMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
+
+      Objects.requireNonNull(randomGenerator);
+      final Method finalRandomGenerator = randomGenerator;
+
+      return random ->
+      {
+         try
+         {
+            return finalRandomGenerator.invoke(null, random);
+         }
+         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+         {
+            throw new RuntimeException(e);
+         }
+      };
+   }
+
+   private static RandomFrameTypeBuilder<?> searchFrameGenerator(Class<?> mutableFrameMutableType)
+   {
+      List<Method> searchResult = new ArrayList<>();
+
+      List<Method> allMethods = frameRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
+                                                           .collect(Collectors.toList());
+
+      for (Method method : allMethods)
+      {
+         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
+            continue;
+
+         if (method.getParameterCount() != 2)
+            continue;
+
+         if (method.getParameterTypes()[0] != Random.class || method.getParameterTypes()[1] != ReferenceFrame.class)
+            continue;
+
+         if (!mutableFrameMutableType.isAssignableFrom(method.getReturnType()))
+            continue;
+
+         searchResult.add(method);
+      }
+
+      int nameLength = Integer.MAX_VALUE;
+      Method randomGenerator = null;
+
+      for (Method method : searchResult)
+      {
+         if (method.getName().length() < nameLength)
+         {
+            nameLength = method.getName().length();
+            randomGenerator = method;
+         }
+      }
+
+      Objects.requireNonNull(randomGenerator);
+
+      System.out.println("Random generator for " + mutableFrameMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
+
+      final Method finalRandomGenerator = randomGenerator;
+
+      return (random, frame) ->
+      {
+         try
+         {
+            return finalRandomGenerator.invoke(null, random, frame);
+         }
+         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+         {
+            throw new RuntimeException(e);
+         }
+      };
+   }
+
+   public static void registerFrameTypeSmart(Class<?> mutableFrameMutableType, RandomFrameTypeBuilder<?> frameTypeBuilder,
+                                             GenericTypeBuilder framelessTypeBuilder)
+   {
+      String mutableFrameMutableTypeName = mutableFrameMutableType.getSimpleName();
+
+      String fixedFrameMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "FixedFrame");
+      Class<?> fixedFrameMutableType = searchSuperInterfaceFromSimpleName(fixedFrameMutableTypeName, mutableFrameMutableType);
+
+      String frameReadOnlyTypeName = mutableFrameMutableTypeName.replace("Basics", "ReadOnly");
+      Class<?> frameReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyTypeName, fixedFrameMutableType);
+
+      String framelessMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "");
+      Class<?> framelessMutableType = searchSuperInterfaceFromSimpleName(framelessMutableTypeName, fixedFrameMutableType);
+
+      String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace("Basics", "ReadOnly");
+      Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessReadOnlyTypeName, framelessMutableType);
+
+      Objects.requireNonNull(fixedFrameMutableType);
+      Objects.requireNonNull(frameReadOnlyType);
+      Objects.requireNonNull(framelessMutableType);
+      Objects.requireNonNull(framelessReadOnlyType);
+      registerFrameType(mutableFrameMutableType,
+                        fixedFrameMutableType,
+                        frameReadOnlyType,
+                        framelessMutableType,
+                        framelessReadOnlyType,
+                        frameTypeBuilder,
+                        framelessTypeBuilder);
+   }
+
+   public static void registerFrameRandomGeneratorClasses(Class<?>... classes)
+   {
+      frameRandomGeneratorLibrary.addAll(Arrays.asList(classes));
+   }
+
+   public static void registerFramelessRandomGeneratorClasses(Class<?>... classes)
+   {
+      framelessRandomGeneratorLibrary.addAll(Arrays.asList(classes));
+   }
+
+   private static Class<?> searchSuperInterfaceFromSimpleName(String name, Class<?> typeToStartFrom)
+   {
+      for (Class<?> superInterface : typeToStartFrom.getInterfaces())
+      {
+         if (superInterface.getSimpleName().equals(name))
+         {
+            return superInterface;
+         }
+      }
+
+      for (Class<?> superInterface : typeToStartFrom.getInterfaces())
+      {
+         Class<?> thoroughSearchResult = searchSuperInterfaceFromSimpleName(name, superInterface);
+         if (thoroughSearchResult != null)
+            return thoroughSearchResult;
+      }
+      return null;
+   }
+
+   public static void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType,
+                                        Class<?> framelessMutableType, Class<?> framelessReadOnlyType, RandomFrameTypeBuilder<?> frameTypeBuilder,
+                                        GenericTypeBuilder framelessTypeBuilder)
+   {
+      framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
+      if (fixedFrameMutableType != null && framelessMutableType != null)
+         framelessTypesToFrameTypesTable.put(framelessMutableType, fixedFrameMutableType);
+
+      frameTypeBuilders.put(frameReadOnlyType, frameTypeBuilder);
+      framelessTypeBuilders.put(framelessReadOnlyType, framelessTypeBuilder);
+
+      frameReadOnlyTypes.add(frameReadOnlyType);
+      if (fixedFrameMutableType != null)
+         fixedFrameMutableTypes.add(fixedFrameMutableType);
+      if (mutableFrameMutableType != null)
+         mutableFrameMutableTypes.add(mutableFrameMutableType);
    }
 
    private EuclidFrameAPITestTools()
@@ -755,7 +775,7 @@ public class EuclidFrameAPITestTools
                                                                              Predicate<Method> methodFilter)
          throws Throwable
    {
-      Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(worldFrame).getClass();
+      Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
       // We need at least 1 frame arguments to assert anything.
       List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(frameType.getMethods(), 1);
@@ -774,7 +794,7 @@ public class EuclidFrameAPITestTools
          // First check that the method is fine with the holder and all the arguments in the same frame.
          for (Method frameMethod : frameMethods)
          {
-            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -798,7 +818,7 @@ public class EuclidFrameAPITestTools
          // Check that the method checks the reference frames.
          for (Method frameMethod : frameMethods)
          {
-            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
 
             int numberOfArgumentsToTest = 0;
@@ -859,7 +879,7 @@ public class EuclidFrameAPITestTools
          // Check that the frame of each mutable is changed (optional)
          for (Method frameMethod : frameMethods)
          {
-            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -905,7 +925,7 @@ public class EuclidFrameAPITestTools
          // Check for methods returning a frame type that the reference frame is properly set.
          for (Method frameMethod : methodsWithReturnFrameType)
          {
-            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(frameA);
+            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -1138,8 +1158,8 @@ public class EuclidFrameAPITestTools
                                                                            GenericTypeBuilder framelessTypeBuilber, Predicate<Method> methodFilter)
    {
 
-      Class<? extends ReferenceFrameHolder> frameTypeToTest = frameTypeBuilder.newInstance(worldFrame, framelessTypeBuilber.newInstance()).getClass();
-      Class<? extends Object> framelessType = framelessTypeBuilber.newInstance().getClass();
+      Class<? extends ReferenceFrameHolder> frameTypeToTest = frameTypeBuilder.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+      Class<? extends Object> framelessType = framelessTypeBuilber.newInstance(random).getClass();
 
       List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(frameTypeToTest.getMethods(), 0);
 
@@ -1162,7 +1182,7 @@ public class EuclidFrameAPITestTools
 
          for (int iteration = 0; iteration < FUNCTIONALITY_ITERATIONS; iteration++)
          {
-            Object framelessObject = framelessTypeBuilber.newInstance();
+            Object framelessObject = framelessTypeBuilber.newInstance(random);
             ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(worldFrame, framelessObject);
 
             try
@@ -1992,7 +2012,7 @@ public class EuclidFrameAPITestTools
          }
       }
 
-      return builder == null ? null : builder.newInstance();
+      return builder == null ? null : builder.newInstance(random);
    }
 
    private static Object createFrameObject(Class<?> type, ReferenceFrame referenceFrame)
@@ -2012,7 +2032,7 @@ public class EuclidFrameAPITestTools
          }
       }
 
-      return builder == null ? null : builder.newInstance(referenceFrame);
+      return builder == null ? null : builder.newInstance(random, referenceFrame);
    }
 
    private static Object newInstanceOf(Class<?> type)
@@ -2099,7 +2119,7 @@ public class EuclidFrameAPITestTools
        *                       in.
        * @return the next random frame object.
        */
-      T newInstance(ReferenceFrame referenceFrame);
+      T newInstance(Random random, ReferenceFrame referenceFrame);
    }
 
    /**
@@ -2146,6 +2166,6 @@ public class EuclidFrameAPITestTools
        *
        * @return the next object.
        */
-      Object newInstance();
+      Object newInstance(Random random);
    }
 }

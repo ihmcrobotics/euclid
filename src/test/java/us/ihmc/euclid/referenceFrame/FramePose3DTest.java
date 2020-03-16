@@ -33,15 +33,13 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
    @Test
    public void testConsistencyWithPose3D()
    {
-      Random random = new Random(234235L);
-
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFramePose(frame,
                                                                                                                                    (Pose3DReadOnly) pose);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextPose3D(random);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextPose3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
 
-      EuclidFrameAPITestTools.GenericTypeBuilder frameless2DTypeBuilder = () -> new Pose3D(createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()));
+      EuclidFrameAPITestTools.GenericTypeBuilder frameless2DTypeBuilder = (random) -> new Pose3D(createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()));
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 

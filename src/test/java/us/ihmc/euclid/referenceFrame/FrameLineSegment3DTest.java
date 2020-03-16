@@ -33,12 +33,10 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
    @Test
    public void testConsistencyWithLineSegment2D()
    {
-      Random random = new Random(234235L);
-
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
                                                                                                    quaternion) -> createFrameLineSegment(frame,
                                                                                                                                          (LineSegment3DReadOnly) quaternion);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextLineSegment3D(random);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLineSegment3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

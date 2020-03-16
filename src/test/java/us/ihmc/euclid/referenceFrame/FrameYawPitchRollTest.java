@@ -252,27 +252,24 @@ public class FrameYawPitchRollTest
    @Test
    public void testConsistencyWithYawPitchRoll()
    {
-      Random random = new Random(234235L);
-
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, yawPitchRoll) -> new FrameYawPitchRoll(frame,
                                                                                                                          (YawPitchRollReadOnly) yawPitchRoll);
-      GenericTypeBuilder framelessTypeBuilder = () -> EuclidCoreRandomTools.nextYawPitchRoll(random);
+      GenericTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextYawPitchRoll;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
 
-      GenericTypeBuilder frameless2DTypeBuilder = () -> new YawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0.0, 0.0);
+      GenericTypeBuilder frameless2DTypeBuilder = (random) -> new YawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0.0, 0.0);
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
-      RandomFrameTypeBuilder<FrameYawPitchRoll> frameTypeBuilder = frame -> EuclidFrameRandomTools.nextFrameYawPitchRoll(random, frame);
+      RandomFrameTypeBuilder<FrameYawPitchRoll> frameTypeBuilder = EuclidFrameRandomTools::nextFrameYawPitchRoll;
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frameTypeBuilder, methodFilter);
-      RandomFrameTypeBuilder<FrameYawPitchRoll> frame2DTypeBuilder = frame -> new FrameYawPitchRoll(frame, nextDouble(random, Math.PI), 0.0, 0.0);
+      RandomFrameTypeBuilder<FrameYawPitchRoll> frame2DTypeBuilder = (random, frame) -> new FrameYawPitchRoll(frame, nextDouble(random, Math.PI), 0.0, 0.0);
       EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame2DTypeBuilder, methodFilter);
    }
 

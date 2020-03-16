@@ -6,6 +6,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.tools.Matrix3DTools;
 
 /**
  * Write and read interface for generic matrix 3D expressed in a constant reference frame, i.e. this
@@ -450,6 +451,27 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    /**
     * Performs a matrix multiplication on this.
     * <p>
+    * this = this * other<sup>-1</sup>
+    * </p>
+    * <p>
+    * This operation uses the property: <br>
+    * R<sup>-1</sup> = R<sup>T</sup> </br>
+    * of the rotation matrix preventing to actually compute its inverse.
+    * </p>
+    *
+    * @param other the other matrix to multiply this by. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void multiplyInvertOther(FrameRotationMatrixReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Matrix3DBasics.super.multiplyInvertOther(other);
+   }
+
+   /**
+    * Performs a matrix multiplication on this.
+    * <p>
     * this = other * this
     * </p>
     *
@@ -543,5 +565,26 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    {
       checkReferenceFrameMatch(other);
       Matrix3DBasics.super.preMultiplyInvertOther(other);
+   }
+
+   /**
+    * Performs a matrix multiplication on this.
+    * <p>
+    * this = other<sup>-1</sup> * this
+    * </p>
+    * <p>
+    * This operation uses the property: <br>
+    * R<sup>-1</sup> = R<sup>T</sup> </br>
+    * of the rotation matrix preventing to actually compute its inverse.
+    * </p>
+    *
+    * @param other the other matrix to multiply this by. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void preMultiplyInvertOther(FrameRotationMatrixReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Matrix3DTools.multiplyInvertLeft(other, this, this);
    }
 }

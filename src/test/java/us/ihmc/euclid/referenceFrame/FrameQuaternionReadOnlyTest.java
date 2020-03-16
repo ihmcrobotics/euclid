@@ -49,11 +49,9 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Random random = new Random(234);
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameTuple(random, frame), methodFilter);
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandom2DFrameTuple(random, frame), methodFilter);
+      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple, methodFilter);
    }
 
    @Override

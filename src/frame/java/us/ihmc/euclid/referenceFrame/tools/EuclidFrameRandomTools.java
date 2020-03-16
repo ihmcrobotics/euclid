@@ -939,6 +939,20 @@ public class EuclidFrameRandomTools
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     *
+    * @param random         the random generator to use.
+    * @param referenceFrame the polygon's reference frame.
+    * @return the random convex polygon.
+    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
+    */
+   public static FrameConvexPolygon2D nextFrameConvexPolygon2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameConvexPolygon2D(referenceFrame, EuclidGeometryRandomTools.nextConvexPolygon2D(random, 1.0, 10));
+   }
+
+   /**
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
+    *
     * @param random                 the random generator to use.
     * @param referenceFrame         the polygon's reference frame.
     * @param maxAbsoluteXY          the maximum absolute value for each coordinate of the vertices.
@@ -951,6 +965,18 @@ public class EuclidFrameRandomTools
    public static FrameConvexPolygon2D nextFrameConvexPolygon2D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteXY, int numberOfPossiblePoints)
    {
       return new FrameConvexPolygon2D(referenceFrame, EuclidGeometryRandomTools.nextConvexPolygon2D(random, maxAbsoluteXY, numberOfPossiblePoints));
+   }
+
+   /**
+    * Generates a fixed-size supplier of random frame vertex 2D.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the reference frame for the vertices.
+    * @return the random supplier.
+    */
+   public static FrameVertex2DSupplier nextFrameVertex2DSupplier(Random random, ReferenceFrame referenceFrame)
+   {
+      return nextFrameVertex2DSupplier(random, referenceFrame, 20);
    }
 
    /**
@@ -979,6 +1005,18 @@ public class EuclidFrameRandomTools
             return new FramePoint2D(referenceFrame, vertex2dSupplier.getVertex(index));
          }
       };
+   }
+
+   /**
+    * Generates a fixed-size supplier of random frame vertex 3D.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the reference frame for the vertices.
+    * @return the random supplier.
+    */
+   public static FrameVertex3DSupplier nextFrameVertex3DSupplier(Random random, ReferenceFrame referenceFrame)
+   {
+      return nextFrameVertex3DSupplier(random, referenceFrame, 20);
    }
 
    /**

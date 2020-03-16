@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -25,12 +24,10 @@ public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<Frame
    @Test
    public void testConsistencyWithBoundingBox3D()
    {
-      Random random = new Random(234235L);
-
       EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
                                                                                                    boundingBox) -> createFrameBoundingBox(frame,
                                                                                                                                           (BoundingBox3DReadOnly) boundingBox);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextBoundingBox3D(random);
+      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextBoundingBox3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

@@ -433,6 +433,19 @@ public class EuclidGeometryRandomTools
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     *
+    * @param random the random generator to use.
+    * @return the random convex polygon.
+    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
+    */
+   public static ConvexPolygon2D nextConvexPolygon2D(Random random)
+   {
+      return nextConvexPolygon2D(random, 1.0, 10);
+   }
+
+   /**
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
+    *
     * @param random                 the random generator to use.
     * @param maxAbsoluteXY          the maximum absolute value for each coordinate of the vertices.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
@@ -644,6 +657,17 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a fixed-size supplier of random vertex 2D.
     *
+    * @param random the random generator to use.
+    * @return the random supplier.
+    */
+   public static Vertex2DSupplier nextVertex2DSupplier(Random random)
+   {
+      return nextVertex2DSupplier(random, 20);
+   }
+
+   /**
+    * Generates a fixed-size supplier of random vertex 2D.
+    *
     * @param random           the random generator to use.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
@@ -652,6 +676,17 @@ public class EuclidGeometryRandomTools
    {
       List<Point2D> vertices = IntStream.range(0, numberOfVertices).mapToObj(i -> nextPoint2D(random)).collect(Collectors.toList());
       return Vertex2DSupplier.asVertex2DSupplier(vertices);
+   }
+
+   /**
+    * Generates a fixed-size supplier of random vertex 3D.
+    *
+    * @param random the random generator to use.
+    * @return the random supplier.
+    */
+   public static Vertex3DSupplier nextVertex3DSupplier(Random random)
+   {
+      return nextVertex3DSupplier(random, 20);
    }
 
    /**

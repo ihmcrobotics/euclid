@@ -621,6 +621,26 @@ public class EuclidCoreRandomTools
     * <ul>
     * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
     * in [-<i>pi</i>; <i>pi</i>].
+    * <li>Each scale factor is in ]0.0; 10.0].
+    * </ul>
+    * </p>
+    *
+    * @param random   the random generator to use.
+    * @param maxScale the maximum scale value used for each scale factor.
+    * @return the random rotation-scale matrix.
+    * @throws RuntimeException if {@code maxScale < 0}.
+    */
+   public static RotationScaleMatrix nextRotationScaleMatrix(Random random)
+   {
+      return nextRotationScaleMatrix(random, 10.0);
+   }
+
+   /**
+    * Generates a random rotation-scale matrix.
+    * <p>
+    * <ul>
+    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
+    * in [-<i>pi</i>; <i>pi</i>].
     * <li>Each scale factor is in ]0.0; {@code maxScale}].
     * </ul>
     * </p>
