@@ -326,6 +326,65 @@ public class EuclidFrameShapeToolsTest
       }
    }
 
+   @Test
+   public void testBoundingBoxSphere3D()
+   {
+      Random random = new Random(5768787);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Sphere3D: shapeFrame = world, boundingBoxFrame = world
+         Sphere3D sphereInFrame = EuclidShapeRandomTools.nextSphere3D(random);
+         Sphere3D sphereInWorld = new Sphere3D(sphereInFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         sphereInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxSphere3D(worldFrame, sphereInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         sphereInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Sphere3D: shapeFrame != world, boundingBoxFrame = world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         Sphere3D sphereInFrame = EuclidShapeRandomTools.nextSphere3D(random);
+         Sphere3D sphereInWorld = new Sphere3D(sphereInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(worldFrame, sphereInWorld);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         sphereInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxSphere3D(shapeFrame, sphereInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         sphereInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Sphere3D: shapeFrame != world, boundingBoxFrame != world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         RigidBodyTransform boundingBoxFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         ReferenceFrame boundingBoxFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("boundingBoxFrame",
+                                                                                                             worldFrame,
+                                                                                                             boundingBoxFrameTransform);
+         Sphere3D sphereInFrame = EuclidShapeRandomTools.nextSphere3D(random);
+         Sphere3D sphereInBBXFrame = new Sphere3D(sphereInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, sphereInBBXFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         sphereInBBXFrame.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxSphere3D(shapeFrame, sphereInFrame, boundingBoxFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         sphereInBBXFrame.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+   }
+
    private static RigidBodyTransform nextRigidBodyTransformWithIdentityEdgeCase(Random random, double rotationIdentityPercentage, double positionZeroPercentage)
    {
       RigidBodyTransform next = EuclidCoreRandomTools.nextRigidBodyTransform(random);

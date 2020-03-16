@@ -1,9 +1,6 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getBox3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getShape3DPoseString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
 import us.ihmc.euclid.referenceFrame.interfaces.*;
@@ -226,6 +223,40 @@ public class EuclidFrameShapeIOTools
          return "null";
       else
          return getFrameRamp3DString(format, ramp3D) + " - " + ramp3D.getReferenceFrame();
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code sphere3D} as follows:
+    *
+    * <pre>
+    * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906] - worldFrame
+    * </pre>
+    *
+    * @param sphere3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameSphere3DString(FrameSphere3DReadOnly sphere3D)
+   {
+      return getFrameSphere3DString(DEFAULT_FORMAT, sphere3D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code sphere3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906] - worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format   the format to use for each number.
+    * @param sphere3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameSphere3DString(String format, FrameSphere3DReadOnly sphere3D)
+   {
+      return getSphere3DString(format, sphere3D) + " - " + sphere3D.getReferenceFrame();
    }
 
    /**

@@ -440,6 +440,66 @@ public class EuclidFrameShapeTools
       }
    }
 
+   public static void boundingBoxSphere3D(FrameSphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxSphere3D(sphere3D.getReferenceFrame(), sphere3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   public static void boundingBoxSphere3D(ReferenceFrame sphere3DFrame, Sphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame,
+                                          BoundingBox3DBasics boundingBoxToPack)
+   {
+      if (sphere3DFrame == boundingBoxFrame)
+      {
+         sphere3D.getBoundingBox(boundingBoxToPack);
+         return;
+      }
+
+      double minX = -sphere3D.getRadius();
+      double minY = -sphere3D.getRadius();
+      double minZ = -sphere3D.getRadius();
+      double maxX = sphere3D.getRadius();
+      double maxY = sphere3D.getRadius();
+      double maxZ = sphere3D.getRadius();
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
+
+      Point3DReadOnly position = sphere3D.getPosition();
+
+      if (sphere3DFrame.isRootFrame())
+      {
+         if (boundingBoxFrame.isRootFrame())
+         {
+            return;
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
+         }
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = sphere3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            addTranslationPartOfTransforms(rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+      }
+   }
+
    private static final BoundingBoxRotationPartCalculator<Ramp3DReadOnly> ramp3DCalculator = new BoundingBoxRotationPartCalculator<Ramp3DReadOnly>()
    {
       @Override
