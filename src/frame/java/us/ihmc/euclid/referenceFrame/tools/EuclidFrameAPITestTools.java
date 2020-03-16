@@ -130,6 +130,11 @@ public class EuclidFrameAPITestTools
       modifiableMap.put(Matrix3DReadOnly.class, FrameMatrix3DReadOnly.class);
       modifiableMap.put(Matrix3DBasics.class, FixedFrameMatrix3DBasics.class);
 
+      modifiableMap.put(BoundingBox2DReadOnly.class, FrameBoundingBox2DReadOnly.class);
+      modifiableMap.put(BoundingBox2DBasics.class, FixedFrameBoundingBox2DBasics.class);
+      modifiableMap.put(BoundingBox3DReadOnly.class, FrameBoundingBox3DReadOnly.class);
+      modifiableMap.put(BoundingBox3DBasics.class, FixedFrameBoundingBox3DBasics.class);
+
       framelessTypesToFrameTypesTable = Collections.unmodifiableMap(modifiableMap);
    }
 
@@ -191,6 +196,11 @@ public class EuclidFrameAPITestTools
 
       modifiableMap.put(FrameMatrix3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameMatrix3D(random, frame));
       modifiableMap.put(FrameMatrix3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameMatrix3D(random, frame));
+
+      modifiableMap.put(FrameBoundingBox2DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameBoundingBox2D(random, frame));
+      modifiableMap.put(FrameBoundingBox2DBasics.class, frame -> EuclidFrameRandomTools.nextFrameBoundingBox2D(random, frame));
+      modifiableMap.put(FrameBoundingBox3DReadOnly.class, frame -> EuclidFrameRandomTools.nextFrameBoundingBox3D(random, frame));
+      modifiableMap.put(FrameBoundingBox3DBasics.class, frame -> EuclidFrameRandomTools.nextFrameBoundingBox3D(random, frame));
 
       frameTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
@@ -256,6 +266,9 @@ public class EuclidFrameAPITestTools
 
       modifiableMap.put(Orientation3DReadOnly.class, () -> EuclidCoreRandomTools.nextOrientation3D(random));
 
+      modifiableMap.put(BoundingBox2DReadOnly.class, () -> EuclidGeometryRandomTools.nextBoundingBox2D(random));
+      modifiableMap.put(BoundingBox3DReadOnly.class, () -> EuclidGeometryRandomTools.nextBoundingBox3D(random));
+
       framelessTypeBuilders = Collections.unmodifiableMap(modifiableMap);
    }
 
@@ -286,6 +299,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameVertex2DSupplier.class);
       modifiableSet.add(FrameVertex3DSupplier.class);
       modifiableSet.add(FrameMatrix3DReadOnly.class);
+      modifiableSet.add(FrameBoundingBox2DReadOnly.class);
+      modifiableSet.add(FrameBoundingBox3DReadOnly.class);
 
       frameReadOnlyTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -315,6 +330,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FixedFrameLineSegment3DBasics.class);
       modifiableSet.add(FixedFrameConvexPolygon2DBasics.class);
       modifiableSet.add(FixedFrameMatrix3DBasics.class);
+      modifiableSet.add(FixedFrameBoundingBox2DBasics.class);
+      modifiableSet.add(FixedFrameBoundingBox3DBasics.class);
 
       fixedFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -346,6 +363,8 @@ public class EuclidFrameAPITestTools
       modifiableSet.add(FrameLineSegment3DBasics.class);
       modifiableSet.add(FrameConvexPolygon2DBasics.class);
       modifiableSet.add(FrameMatrix3DBasics.class);
+      modifiableSet.add(FrameBoundingBox2DBasics.class);
+      modifiableSet.add(FrameBoundingBox3DBasics.class);
 
       mutableFrameMutableTypes = Collections.unmodifiableSet(modifiableSet);
    }
@@ -503,6 +522,9 @@ public class EuclidFrameAPITestTools
 
       for (Method framelessMethod : framelessMethods)
       {
+         if (Modifier.isStatic(framelessMethod.getModifiers()))
+            continue;
+
          if (framelessMethodFilter.test(framelessMethod))
          {
             // Creating all the expected combinations

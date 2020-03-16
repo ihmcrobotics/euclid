@@ -886,6 +886,56 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random the random generator to use.
+    * @return the random bounding box.
+    */
+   public static FrameBoundingBox2D nextFrameBoundingBox2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameBoundingBox2D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox2D(random));
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random       the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax      the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    */
+   public static FrameBoundingBox2D nextFrameBoundingBox2D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double sizeMax)
+   {
+      return new FrameBoundingBox2D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox2D(random, centerMinMax, sizeMax));
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random the random generator to use.
+    * @return the random bounding box.
+    */
+   public static FrameBoundingBox3D nextFrameBoundingBox3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameBoundingBox3D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox3D(random));
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random       the random generator to use.
+    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax      the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    */
+   public static FrameBoundingBox3D nextFrameBoundingBox3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double sizeMax)
+   {
+      return new FrameBoundingBox3D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox3D(random, centerMinMax, sizeMax));
+   }
+
+   /**
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     *

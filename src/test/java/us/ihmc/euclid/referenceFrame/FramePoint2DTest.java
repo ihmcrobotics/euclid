@@ -39,6 +39,14 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
    }
 
    @Test
+   @Override
+   public void testConsistencyWithTuple2D() throws Exception
+   {
+      // TODO Auto-generated method stub
+      super.testConsistencyWithTuple2D();
+   }
+
+   @Test
    public void testConstructors() throws Exception
    {
       Random random = new Random(435345);

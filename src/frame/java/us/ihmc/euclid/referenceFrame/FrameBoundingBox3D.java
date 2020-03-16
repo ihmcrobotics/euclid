@@ -23,7 +23,7 @@ public class FrameBoundingBox3D
 
    public FrameBoundingBox3D()
    {
-      setToNaN();
+      this(ReferenceFrame.getWorldFrame());
    }
 
    public FrameBoundingBox3D(ReferenceFrame referenceFrame)

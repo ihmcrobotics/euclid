@@ -22,7 +22,7 @@ public class FrameBoundingBox2D
 
    public FrameBoundingBox2D()
    {
-      setToNaN();
+      this(ReferenceFrame.getWorldFrame());
    }
 
    public FrameBoundingBox2D(ReferenceFrame referenceFrame)
