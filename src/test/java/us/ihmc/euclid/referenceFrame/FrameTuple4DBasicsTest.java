@@ -17,9 +17,9 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools.FrameTypeBuilder;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools.GenericTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.FrameTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.GenericTypeBuilder;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
@@ -453,7 +453,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    {
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple, methodFilter);
    }
 
    @Test
@@ -462,7 +462,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
       FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple4DReadOnly) tuple);
       GenericTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
    }
 
    @Override
@@ -470,7 +470,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    {
       super.testOverloading();
       Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple4DBasics.class, Tuple4DBasics.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameTuple4DBasics.class, Tuple4DBasics.class, true, 1, framelessMethodsToIgnore);
    }
 
    @Test

@@ -14,7 +14,7 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -33,12 +33,12 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
    @Test
    public void testConsistencyWithLineSegment2D()
    {
-      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
+      EuclidFrameAPITester.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
                                                                                                    quaternion) -> createFrameLineSegment(frame,
                                                                                                                                          (LineSegment3DReadOnly) quaternion);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLineSegment3D;
+      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLineSegment3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }
 
    @Override
@@ -51,7 +51,7 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
       framelessMethodsToIgnore.put("equals", new Class<?>[] {LineSegment3D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {LineSegment3D.class, Double.TYPE});
       framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {LineSegment3D.class, Double.TYPE});
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLineSegment3D.class, LineSegment3D.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameLineSegment3D.class, LineSegment3D.class, true, 1, framelessMethodsToIgnore);
    }
 
    @Test

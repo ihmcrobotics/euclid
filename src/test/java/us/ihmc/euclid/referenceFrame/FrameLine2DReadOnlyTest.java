@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
 
 public abstract class FrameLine2DReadOnlyTest<T extends FrameLine2DReadOnly>
@@ -28,7 +28,7 @@ public abstract class FrameLine2DReadOnlyTest<T extends FrameLine2DReadOnly>
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLine2DReadOnly.class, Line2DReadOnly.class, true);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameLine2DReadOnly.class, Line2DReadOnly.class, true);
    }
 
    @Test
@@ -36,6 +36,6 @@ public abstract class FrameLine2DReadOnlyTest<T extends FrameLine2DReadOnly>
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("setMatchingFrame");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameLine, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameLine, methodFilter);
    }
 }

@@ -9,7 +9,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
@@ -279,6 +279,6 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
       framelessMethodsToIgnore.put("set", new Class<?>[] {Point3D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Point3D.class, Double.TYPE});
       framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Point3D.class, Double.TYPE});
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FramePoint3D.class, Point3D.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FramePoint3D.class, Point3D.class, true, 1, framelessMethodsToIgnore);
    }
 }

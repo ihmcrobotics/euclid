@@ -43,7 +43,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  *
  * @author Sylvain Bertrand
  */
-public class EuclidFrameAPITestTools
+public class EuclidFrameAPITester
 {
    private static final String READ_ONLY = "ReadOnly";
    private static final String BASICS = "Basics";
@@ -211,7 +211,7 @@ public class EuclidFrameAPITestTools
          mutableFrameMutableTypes.add(mutableFrameMutableType);
    }
 
-   private EuclidFrameAPITestTools()
+   private EuclidFrameAPITester()
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }

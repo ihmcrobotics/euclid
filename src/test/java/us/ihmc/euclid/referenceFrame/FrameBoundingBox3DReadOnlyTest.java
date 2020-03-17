@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 
 public abstract class FrameBoundingBox3DReadOnlyTest<T extends FrameBoundingBox3DReadOnly>
@@ -28,7 +28,7 @@ public abstract class FrameBoundingBox3DReadOnlyTest<T extends FrameBoundingBox3
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameBoundingBox3DReadOnly.class, BoundingBox3DReadOnly.class, false);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameBoundingBox3DReadOnly.class, BoundingBox3DReadOnly.class, false);
    }
 
    @Test
@@ -36,6 +36,6 @@ public abstract class FrameBoundingBox3DReadOnlyTest<T extends FrameBoundingBox3
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("setMatchingFrame");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameBoundingBox, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameBoundingBox, methodFilter);
    }
 }

@@ -12,7 +12,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -43,19 +43,19 @@ public class EuclidFrameToolsTest
       methodsToIgnore.put("closestPoint3DsBetweenTwoLineSegment3Ds",
                           new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
 
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodsToIgnore);
    }
 
    @Test
    public void testReferenceFrameChecked() throws Throwable
    {
-      EuclidFrameAPITestTools.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class);
+      EuclidFrameAPITester.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class);
    }
 
    @Test
    public void testConservedFunctionality() throws Exception
    {
-      EuclidFrameAPITestTools.assertStaticMethodsPreserveFunctionality(EuclidFrameTools.class, EuclidGeometryTools.class);
+      EuclidFrameAPITester.assertStaticMethodsPreserveFunctionality(EuclidFrameTools.class, EuclidGeometryTools.class);
    }
 
    @Test

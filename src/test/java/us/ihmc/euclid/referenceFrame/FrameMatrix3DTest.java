@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -33,12 +33,12 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
    @Test
    public void testConsistencyWithMatrix3D()
    {
-      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
+      EuclidFrameAPITester.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
                                                                                                    matrix) -> createFrameMatrix3D(frame,
                                                                                                                                   (Matrix3DReadOnly) matrix);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextMatrix3D;
+      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextMatrix3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }
 
    @Override
@@ -51,7 +51,7 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
       framelessMethodsToIgnore.put("equals", new Class<?>[] {Matrix3D.class});
       framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Matrix3D.class, Double.TYPE});
       framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Matrix3D.class, Double.TYPE});
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameMatrix3D.class, Matrix3D.class, false, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameMatrix3D.class, Matrix3D.class, false, 1, framelessMethodsToIgnore);
    }
 
    @Test
