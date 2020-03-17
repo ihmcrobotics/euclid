@@ -15,8 +15,9 @@ import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
@@ -32,9 +33,8 @@ public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
    @Test
    public void testConsistencyWithLine3D()
    {
-      EuclidFrameAPITester.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame,
-                                                                                                                                   (Line3DReadOnly) line);
-      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine3D;
+      FrameTypeCopier frameTypeBuilder = (frame, line) -> createFrameLine(frame, (Line3DReadOnly) line);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

@@ -13,9 +13,10 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -33,10 +34,8 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
    @Test
    public void testConsistencyWithMatrix3D()
    {
-      EuclidFrameAPITester.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
-                                                                                                   matrix) -> createFrameMatrix3D(frame,
-                                                                                                                                  (Matrix3DReadOnly) matrix);
-      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextMatrix3D;
+      FrameTypeCopier frameTypeBuilder = (frame, matrix) -> createFrameMatrix3D(frame, (Matrix3DReadOnly) matrix);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextMatrix3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

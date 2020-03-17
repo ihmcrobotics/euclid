@@ -11,7 +11,8 @@ import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 
 public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<FrameBoundingBox3D>
 {
@@ -24,10 +25,8 @@ public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<Frame
    @Test
    public void testConsistencyWithBoundingBox3D()
    {
-      EuclidFrameAPITester.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame,
-                                                                                                   boundingBox) -> createFrameBoundingBox(frame,
-                                                                                                                                          (BoundingBox3DReadOnly) boundingBox);
-      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextBoundingBox3D;
+      FrameTypeCopier frameTypeBuilder = (frame, boundingBox) -> createFrameBoundingBox(frame, (BoundingBox3DReadOnly) boundingBox);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextBoundingBox3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

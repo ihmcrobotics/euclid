@@ -15,10 +15,10 @@ import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.FrameTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<FrameOrientation2D>
@@ -34,8 +34,8 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
    @Test
    public void testConsistencyWithOrientation2D()
    {
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFrameOrientation(frame, (Orientation2DReadOnly) pose);
-      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextOrientation2D;
+      FrameTypeCopier frameTypeBuilder = (frame, pose) -> createFrameOrientation(frame, (Orientation2DReadOnly) pose);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextOrientation2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

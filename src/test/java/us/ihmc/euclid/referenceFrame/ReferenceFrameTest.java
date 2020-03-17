@@ -22,6 +22,7 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 
+@Disabled
 public class ReferenceFrameTest
 {
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();

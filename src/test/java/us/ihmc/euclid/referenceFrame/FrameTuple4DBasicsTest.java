@@ -18,12 +18,11 @@ import org.ejml.ops.RandomMatrices;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.FrameTypeBuilder;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.GenericTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -459,8 +458,8 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    @Test
    public void testConsistencyWithTuple4D() throws Exception
    {
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple4DReadOnly) tuple);
-      GenericTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
+      FrameTypeCopier frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple4DReadOnly) tuple);
+      RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
    }

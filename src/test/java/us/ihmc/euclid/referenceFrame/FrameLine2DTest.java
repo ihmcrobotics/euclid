@@ -11,9 +11,10 @@ import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
@@ -29,9 +30,8 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
    @Test
    public void testConsistencyWithLine2D()
    {
-      EuclidFrameAPITester.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame,
-                                                                                                                                   (Line2DReadOnly) line);
-      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine2D;
+      FrameTypeCopier frameTypeBuilder = (frame, line) -> createFrameLine(frame, (Line2DReadOnly) line);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
    }

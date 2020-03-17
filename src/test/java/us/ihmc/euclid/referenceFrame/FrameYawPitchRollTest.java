@@ -22,11 +22,14 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.FrameTypeBuilder;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.GenericTypeBuilder;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.RandomFrameTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFrameTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
@@ -252,13 +255,12 @@ public class FrameYawPitchRollTest
    @Test
    public void testConsistencyWithYawPitchRoll()
    {
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, yawPitchRoll) -> new FrameYawPitchRoll(frame,
-                                                                                                                         (YawPitchRollReadOnly) yawPitchRoll);
-      GenericTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextYawPitchRoll;
+      FrameTypeCopier frameTypeBuilder = (frame, yawPitchRoll) -> new FrameYawPitchRoll(frame, (YawPitchRollReadOnly) yawPitchRoll);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextYawPitchRoll;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
 
-      GenericTypeBuilder frameless2DTypeBuilder = (random) -> new YawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0.0, 0.0);
+      RandomFramelessTypeBuilder frameless2DTypeBuilder = (random) -> new YawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0.0, 0.0);
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 
@@ -267,9 +269,9 @@ public class FrameYawPitchRollTest
    {
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
-      RandomFrameTypeBuilder<FrameYawPitchRoll> frameTypeBuilder = EuclidFrameRandomTools::nextFrameYawPitchRoll;
+      RandomFrameTypeBuilder frameTypeBuilder = EuclidFrameRandomTools::nextFrameYawPitchRoll;
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frameTypeBuilder, methodFilter);
-      RandomFrameTypeBuilder<FrameYawPitchRoll> frame2DTypeBuilder = (random, frame) -> new FrameYawPitchRoll(frame, nextDouble(random, Math.PI), 0.0, 0.0);
+      RandomFrameTypeBuilder frame2DTypeBuilder = (random, frame) -> new FrameYawPitchRoll(frame, nextDouble(random, Math.PI), 0.0, 0.0);
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame2DTypeBuilder, methodFilter);
    }
 

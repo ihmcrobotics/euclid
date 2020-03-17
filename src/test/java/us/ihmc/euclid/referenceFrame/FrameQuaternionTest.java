@@ -17,13 +17,12 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.FrameTypeBuilder;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.GenericTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
@@ -405,12 +404,12 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testConsistencyWithQuaternion()
    {
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, quaternion) -> createFrameTuple(frame, (QuaternionReadOnly) quaternion);
-      GenericTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextQuaternion;
+      FrameTypeCopier frameTypeBuilder = (frame, quaternion) -> createFrameTuple(frame, (QuaternionReadOnly) quaternion);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextQuaternion;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
 
-      GenericTypeBuilder frameless2DTypeBuilder = (random) -> new Quaternion(createRandom2DFrameTuple(random, ReferenceFrame.getWorldFrame()));
+      RandomFramelessTypeBuilder frameless2DTypeBuilder = (random) -> new Quaternion(createRandom2DFrameTuple(random, ReferenceFrame.getWorldFrame()));
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 

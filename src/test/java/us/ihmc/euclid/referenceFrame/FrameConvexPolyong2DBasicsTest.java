@@ -13,11 +13,10 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.FrameTypeBuilder;
-import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester.GenericTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 
@@ -47,9 +46,8 @@ public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygo
    @Test
    public void testConsistencyWithTuple2D() throws Exception
    {
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, polygon) -> createFrameConvexPolygon2D(frame,
-                                                                                                                         (ConvexPolygon2DReadOnly) polygon);
-      GenericTypeBuilder framelessTypeBuilber = this::createRandomFramelessConvexPolygon2D;
+      FrameTypeCopier frameTypeBuilder = (frame, polygon) -> createFrameConvexPolygon2D(frame, (ConvexPolygon2DReadOnly) polygon);
+      RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessConvexPolygon2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode")
             && Arrays.stream(m.getParameterTypes()).noneMatch(p -> Collection.class.isAssignableFrom(p));
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);

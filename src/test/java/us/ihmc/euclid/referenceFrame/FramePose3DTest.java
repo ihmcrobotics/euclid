@@ -15,9 +15,10 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePose3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
@@ -33,13 +34,12 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
    @Test
    public void testConsistencyWithPose3D()
    {
-      EuclidFrameAPITester.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, pose) -> createFramePose(frame,
-                                                                                                                                   (Pose3DReadOnly) pose);
-      EuclidFrameAPITester.GenericTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextPose3D;
+      FrameTypeCopier frameTypeBuilder = (frame, pose) -> createFramePose(frame, (Pose3DReadOnly) pose);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextPose3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
 
-      EuclidFrameAPITester.GenericTypeBuilder frameless2DTypeBuilder = (random) -> new Pose3D(createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()));
+      RandomFramelessTypeBuilder frameless2DTypeBuilder = (random) -> new Pose3D(createRandom2DFramePose(random, ReferenceFrame.getWorldFrame()));
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
    }
 

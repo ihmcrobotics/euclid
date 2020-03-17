@@ -1,5 +1,7 @@
 package us.ihmc.euclid.referenceFrame.api;
 
+import static us.ihmc.euclid.referenceFrame.api.MethodSignature.getMethodSimpleName;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,8 +13,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.MatrixFeatures;
-import org.ejml.ops.RandomMatrices;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
@@ -20,18 +20,14 @@ import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.transform.interfaces.Transform;
 
 /**
  * This class provides tools that using reflection can perform a variety of comparison-based
@@ -54,19 +50,14 @@ public class EuclidFrameAPITester
    private static final boolean DEBUG = false;
    private final static int FRAME_CHECK_ITERATIONS = 10;
    private final static int FUNCTIONALITY_ITERATIONS = 50;
-   private final static Random random = new Random(345345);
+   final static Random random = new Random(345345);
    private final static double epsilon = 1.0e-12;
 
    private final static Set<Class<?>> framelessTypesWithoutFrameEquivalent = new HashSet<>();
    private final static Map<Class<?>, Class<?>> framelessTypesToFrameTypesTable = new HashMap<>();
-   private final static Map<Class<?>, RandomFrameTypeBuilder<?>> frameTypeBuilders = new HashMap<>();
-   private final static Map<Class<?>, GenericTypeBuilder> framelessTypeBuilders = new HashMap<>();
    private final static Set<Class<?>> frameReadOnlyTypes = new HashSet<>();
    private final static Set<Class<?>> fixedFrameMutableTypes = new HashSet<>();
    private final static Set<Class<?>> mutableFrameMutableTypes = new HashSet<>();
-
-   private final static Set<Class<?>> frameRandomGeneratorLibrary = new HashSet<>();
-   private final static Set<Class<?>> framelessRandomGeneratorLibrary = new HashSet<>();
 
    static
    {
@@ -75,8 +66,8 @@ public class EuclidFrameAPITester
 
    private static void registerEuclidFrameTypes()
    {
-      registerFrameRandomGeneratorClasses(EuclidFrameRandomTools.class);
-      registerFramelessRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class);
+      ReflectionBasedBuilders.registerFrameRandomGeneratorClasses(EuclidFrameRandomTools.class);
+      ReflectionBasedBuilders.registerFramelessRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class);
 
       registerFrameTypesSmart(FrameTuple2DBasics.class, FrameVector2DBasics.class, FramePoint2DBasics.class);
       registerFrameTypesSmart(FrameTuple3DBasics.class, FrameVector3DBasics.class, FramePoint3DBasics.class);
@@ -105,16 +96,6 @@ public class EuclidFrameAPITester
       acceptableExceptions.add(RuntimeException.class);
    }
 
-   public static void registerFrameRandomGeneratorClasses(Class<?>... classes)
-   {
-      frameRandomGeneratorLibrary.addAll(Arrays.asList(classes));
-   }
-
-   public static void registerFramelessRandomGeneratorClasses(Class<?>... classes)
-   {
-      framelessRandomGeneratorLibrary.addAll(Arrays.asList(classes));
-   }
-
    public static void registerFramelessTypesSmart(Class<?>... framelessMutableTypes)
    {
       for (Class<?> framelessMutableType : framelessMutableTypes)
@@ -125,16 +106,17 @@ public class EuclidFrameAPITester
    {
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY),
                                                                           framelessMutableType);
-      GenericTypeBuilder framelessTypeBuilder = searchFramelessGenerator(framelessMutableType);
+
+      ReflectionBasedBuilders.registerFramelessTypeBuilderSmart(framelessMutableType);
 
       Objects.requireNonNull(framelessReadOnlyType);
-      registerFramelessType(framelessMutableType, framelessReadOnlyType, framelessTypeBuilder);
+      framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
    }
 
-   public static void registerFramelessType(Class<?> framelessMutableType, Class<?> framelessReadOnlyType, GenericTypeBuilder framelessTypeBuilder)
+   public static void registerFramelessType(Class<?> framelessMutableType, Class<?> framelessReadOnlyType, RandomFramelessTypeBuilder framelessTypeBuilder)
    {
       framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
-      framelessTypeBuilders.put(framelessReadOnlyType, framelessTypeBuilder);
+      ReflectionBasedBuilders.registerFramelessTypeBuilder(framelessReadOnlyType, framelessTypeBuilder);
    }
 
    public static void registerFrameTypesSmart(Class<?>... mutableFrameMutableTypes)
@@ -159,21 +141,19 @@ public class EuclidFrameAPITester
       String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY);
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessReadOnlyTypeName, framelessMutableType);
 
-      RandomFrameTypeBuilder<?> frameTypeBuilder = searchFrameGenerator(mutableFrameMutableType);
-      GenericTypeBuilder framelessTypeBuilder = searchFramelessGenerator(framelessMutableType);
+      ReflectionBasedBuilders.registerFrameTypeBuilderSmart(frameReadOnlyType);
+      ReflectionBasedBuilders.registerFramelessTypeBuilderSmart(framelessReadOnlyType);
 
       Objects.requireNonNull(fixedFrameMutableType);
       Objects.requireNonNull(frameReadOnlyType);
       Objects.requireNonNull(framelessMutableType);
       Objects.requireNonNull(framelessReadOnlyType);
 
-      registerFrameType(mutableFrameMutableType,
-                        fixedFrameMutableType,
-                        frameReadOnlyType,
-                        framelessMutableType,
-                        framelessReadOnlyType,
-                        frameTypeBuilder,
-                        framelessTypeBuilder);
+      framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
+      framelessTypesToFrameTypesTable.put(framelessMutableType, fixedFrameMutableType);
+      frameReadOnlyTypes.add(frameReadOnlyType);
+      fixedFrameMutableTypes.add(fixedFrameMutableType);
+      mutableFrameMutableTypes.add(mutableFrameMutableType);
    }
 
    public static void registerReadOnlyFrameTypeSmart(Class<?>... frameReadOnlyTypes)
@@ -187,22 +167,23 @@ public class EuclidFrameAPITester
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyType.getSimpleName().replace(FRAME, ""), frameReadOnlyType);
       Objects.requireNonNull(framelessReadOnlyType);
 
-      RandomFrameTypeBuilder<?> frameTypeBuilder = searchFrameGenerator(frameReadOnlyType);
-      GenericTypeBuilder framelessTypeBuilder = searchFramelessGenerator(framelessReadOnlyType);
+      ReflectionBasedBuilders.registerFrameTypeBuilderSmart(frameReadOnlyType);
+      ReflectionBasedBuilders.registerFramelessTypeBuilderSmart(framelessReadOnlyType);
 
-      registerFrameType(null, null, frameReadOnlyType, null, framelessReadOnlyType, frameTypeBuilder, framelessTypeBuilder);
+      framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
+      frameReadOnlyTypes.add(frameReadOnlyType);
    }
 
    public static void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType,
-                                        Class<?> framelessMutableType, Class<?> framelessReadOnlyType, RandomFrameTypeBuilder<?> frameTypeBuilder,
-                                        GenericTypeBuilder framelessTypeBuilder)
+                                        Class<?> framelessMutableType, Class<?> framelessReadOnlyType, RandomFrameTypeBuilder frameTypeBuilder,
+                                        RandomFramelessTypeBuilder framelessTypeBuilder)
    {
       framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
       if (fixedFrameMutableType != null && framelessMutableType != null)
          framelessTypesToFrameTypesTable.put(framelessMutableType, fixedFrameMutableType);
 
-      frameTypeBuilders.put(frameReadOnlyType, frameTypeBuilder);
-      framelessTypeBuilders.put(framelessReadOnlyType, framelessTypeBuilder);
+      ReflectionBasedBuilders.registerFrameTypeBuilder(frameReadOnlyType, frameTypeBuilder);
+      ReflectionBasedBuilders.registerFramelessTypeBuilder(framelessReadOnlyType, framelessTypeBuilder);
 
       frameReadOnlyTypes.add(frameReadOnlyType);
       if (fixedFrameMutableType != null)
@@ -360,17 +341,56 @@ public class EuclidFrameAPITester
          if (!framelessMethodFilter.test(framelessMethod))
             continue;
 
-         // Creating all the expected combinations
-         List<Class<?>[]> expectedMethodSignatures = createExpectedMethodSignaturesWithFrameArgument(framelessMethod, assertAllCombinations);
+         MethodSignature framelessSignature = new MethodSignature(framelessMethod);
 
-         for (Class<?>[] expectedMethodSignature : expectedMethodSignatures)
+         // Creating all the expected combinations
+         List<MethodSignature> expectedMethodSignatures = createExpectedMethodSignaturesWithFrameArgument(framelessSignature, assertAllCombinations);
+
+         for (MethodSignature expectedMethodSignature : expectedMethodSignatures)
          {
             assertMethodOverloadedWithSpecificSignature(typeWithFrameMethods,
                                                         typeWithFramelessMethods,
-                                                        framelessMethod,
+                                                        framelessSignature,
                                                         expectedMethodSignature,
                                                         typeWithFrameMethods);
          }
+      }
+   }
+
+   private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethod,
+                                                                   MethodSignature originalSignature, MethodSignature overloadingSignature,
+                                                                   Class<?> typeToSearchIn)
+         throws SecurityException
+   {
+      try
+      {
+         Method overloadingMethod = typeToSearchIn.getMethod(originalSignature.getName(), overloadingSignature.getParameterTypes());
+         Class<?> originalReturnType = originalSignature.getReturnType();
+         Class<?> overloadingReturnType = overloadingMethod.getReturnType();
+
+         { // Assert the return type is proper
+            if (originalReturnType == null && overloadingReturnType != null)
+            {
+               String message = "Inconsistency found in the return type.";
+               message += "\nOriginal method: " + originalSignature.getMethodSimpleName();
+               message += "\nOverloading method: " + getMethodSimpleName(overloadingMethod);
+               message += "\nOriginal type declaring method: " + typeWithOriginalMethod.getSimpleName();
+               message += "\nType overloading original: " + typeWithOverloadingMethods.getSimpleName();
+               throw new AssertionError(message);
+            }
+
+            if (overloadingReturnType.equals(originalReturnType))
+               return;
+
+            if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
+               throw new AssertionError("Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName() + ", actual: "
+                     + overloadingReturnType.getSimpleName());
+         }
+      }
+      catch (NoSuchMethodException e)
+      {
+         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + originalSignature.getMethodSimpleName()
+               + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n" + overloadingSignature.getMethodSimpleName());
       }
    }
 
@@ -424,13 +444,9 @@ public class EuclidFrameAPITester
     */
    public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, Predicate<Method> methodFilter) throws Throwable
    {
-      // We need at least 2 frame arguments to assert anything.
-      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeDeclaringStaticMethodsToTest.getMethods(), 2);
-      // We keep only the public & static methods
-      frameMethods = frameMethods.stream().filter(m -> Modifier.isStatic(m.getModifiers())).filter(m -> Modifier.isPublic(m.getModifiers()))
-                                 .collect(Collectors.toList());
-      // Apply the custom filter
-      frameMethods = frameMethods.stream().filter(methodFilter).collect(Collectors.toList());
+      Predicate<Method> filter = methodFilter.and(filterWithAtLeastNFrameParameters(2)).and(m -> Modifier.isStatic(m.getModifiers()))
+                                             .and(m -> Modifier.isPublic(m.getModifiers()));
+      List<Method> frameMethods = Stream.of(typeDeclaringStaticMethodsToTest.getMethods()).filter(filter).collect(Collectors.toList());
       // Methods returning a frame type
       List<Method> methodsWithReturnFrameType = frameMethods.stream().filter(m -> isFrameType(m.getReturnType())).collect(Collectors.toList());
 
@@ -448,7 +464,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = instantiateParameterType(frameA, parameterType);
+               parameters[i] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
             }
 
             try
@@ -487,7 +503,7 @@ public class EuclidFrameAPITester
 
                   if (!mutateFrame)
                   {
-                     parameters[j] = instantiateParameterType(frameA, parameterType);
+                     parameters[j] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
                   }
                   else
                   {
@@ -495,7 +511,7 @@ public class EuclidFrameAPITester
                      int mask = (int) Math.pow(2, currentByte);
                      if ((i & mask) != 0)
                         frame = frameB;
-                     parameters[j] = instantiateParameterType(frame, parameterType);
+                     parameters[j] = ReflectionBasedBuilders.newInstance(frame, parameterType);
                      currentByte++;
                   }
                }
@@ -532,9 +548,9 @@ public class EuclidFrameAPITester
             {
                Class<?> parameterType = parameterTypes[i];
                if (isMutableFrameMutableType(parameterType))
-                  parameters[i] = instantiateParameterType(frameB, parameterType);
+                  parameters[i] = ReflectionBasedBuilders.newInstance(frameB, parameterType);
                else
-                  parameters[i] = instantiateParameterType(frameA, parameterType);
+                  parameters[i] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
             }
 
             try
@@ -576,7 +592,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = instantiateParameterType(frameA, parameterType);
+               parameters[i] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
             }
 
             Object result = null;
@@ -627,18 +643,14 @@ public class EuclidFrameAPITester
     *                         methods for which {@code methodFilter.test(method)} returns {@code true}.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
-   public static void assertMethodsOfReferenceFrameHolderCheckReferenceFrame(RandomFrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder,
-                                                                             Predicate<Method> methodFilter)
+   public static void assertMethodsOfReferenceFrameHolderCheckReferenceFrame(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter)
          throws Throwable
    {
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
-      // We need at least 1 frame arguments to assert anything.
-      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(frameType.getMethods(), 1);
-      // We keep only the public & static methods
-      frameMethods = frameMethods.stream().filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
-      // Apply the custom filter
-      frameMethods = frameMethods.stream().filter(methodFilter).collect(Collectors.toList());
+      Predicate<Method> filter = methodFilter.and(m -> Modifier.isPublic(m.getModifiers())).and(filterWithAtLeastNFrameParameters(1));
+
+      List<Method> frameMethods = Stream.of(frameType.getMethods()).filter(filter).collect(Collectors.toList());
       // Methods returning a frame type
       List<Method> methodsWithReturnFrameType = frameMethods.stream().filter(m -> isFrameType(m.getReturnType())).collect(Collectors.toList());
 
@@ -657,7 +669,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = instantiateParameterType(frameA, parameterType);
+               parameters[i] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
             }
 
             try
@@ -697,7 +709,7 @@ public class EuclidFrameAPITester
 
                   if (!mutateFrame)
                   {
-                     parameters[j] = instantiateParameterType(frameA, parameterType);
+                     parameters[j] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
                   }
                   else
                   {
@@ -705,7 +717,7 @@ public class EuclidFrameAPITester
                      int mask = (int) Math.pow(2, currentByte);
                      if ((i & mask) != 0)
                         frame = frameB;
-                     parameters[j] = instantiateParameterType(frame, parameterType);
+                     parameters[j] = ReflectionBasedBuilders.newInstance(frame, parameterType);
                      currentByte++;
                   }
                }
@@ -743,9 +755,9 @@ public class EuclidFrameAPITester
             {
                Class<?> parameterType = parameterTypes[i];
                if (isMutableFrameMutableType(parameterType))
-                  parameters[i] = instantiateParameterType(frameB, parameterType);
+                  parameters[i] = ReflectionBasedBuilders.newInstance(frameB, parameterType);
                else
-                  parameters[i] = instantiateParameterType(frameA, parameterType);
+                  parameters[i] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
             }
 
             try
@@ -788,7 +800,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = instantiateParameterType(frameA, parameterType);
+               parameters[i] = ReflectionBasedBuilders.newInstance(frameA, parameterType);
             }
 
             Object result = null;
@@ -861,7 +873,7 @@ public class EuclidFrameAPITester
    public static void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods,
                                                                Predicate<Method> methodFilter)
    {
-      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(typeWithFrameMethodsToTest.getMethods(), 0);
+      List<Method> frameMethods = Stream.of(typeWithFrameMethodsToTest.getMethods()).filter(methodFilter).collect(Collectors.toList());
 
       for (Method frameMethod : frameMethods)
       {
@@ -885,18 +897,10 @@ public class EuclidFrameAPITester
             try
             {
                Method framelessMethod = typeWithFramelessMethods.getMethod(frameMethodName, framelessMethodParameterTypes);
-               Object[] frameMethodParameters = instantiateParameterTypes(worldFrame, frameMethodParameterTypes);
+               Object[] frameMethodParameters = ReflectionBasedBuilders.newInstance(worldFrame, frameMethodParameterTypes);
 
-               if (frameMethodParameters == null)
-               {
-                  if (DEBUG)
-                  {
-                     String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod)
-                           + ". The method is not tested.";
-                     System.err.println(message);
-                  }
-                  break;
-               }
+               String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod) + ". The method is not tested.";
+               Objects.requireNonNull(frameMethodParameters, message);
 
                Object[] framelessMethodParameters = clone(frameMethodParameters);
                Throwable expectedException = null;
@@ -918,14 +922,9 @@ public class EuclidFrameAPITester
                }
                catch (Throwable e)
                {
-                  if (e.getClass() != expectedException.getClass())
+                  if (expectedException == null || e.getClass() != expectedException.getClass())
                   {
-                     String message = "";
-                     message += "The method: " + getMethodSimpleName(frameMethod);
-                     message += "\ndid not throw the same exception as the original method: " + getMethodSimpleName(framelessMethod);
-                     message += "\nExpected exception class: " + expectedException.getClass().getSimpleName();
-                     message += "\nActual exception class: " + e.getClass().getSimpleName();
-                     throw new AssertionError(message);
+                     reportInconsistentException(frameMethod, framelessMethod, expectedException, e);
                   }
                   else
                   {
@@ -938,55 +937,25 @@ public class EuclidFrameAPITester
                   Object framelessParameter = framelessMethodParameters[i];
                   Object frameParameter = frameMethodParameters[i];
 
-                  if (!epsilonEquals(framelessParameter, frameParameter, epsilon))
-                  {
-                     String message = "";
-                     message += "Detected a frame method inconsistent with its original frameless method.";
-                     message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-                     message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-                     message += "\nFrame arguments after call:\n" + Arrays.toString(frameMethodParameters);
-                     message += "\nFrameless arguments after call:\n" + toStringAsFramelessObjects(framelessMethodParameters);
-                     throw new AssertionError(message);
-                  }
+                  if (!ReflectionBasedComparer.epsilonEquals(framelessParameter, frameParameter, epsilon))
+                     reportInconsistentArguments(frameMethod,
+                                                 framelessMethod,
+                                                 frameMethodParameters,
+                                                 framelessMethodParameters,
+                                                 framelessParameter,
+                                                 frameParameter);
                }
 
-               if (!epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, epsilon))
-               {
-                  String message = "";
-                  message += "Detected a frame method inconsistent with its original frameless method.";
-                  message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-                  message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-                  message += "\nFrame method returned:" + frameMethodReturnObject;
-                  message += "\nFrameless method returned:" + toStringAsFramelessObject(framelessMethodReturnObject);
-                  throw new AssertionError(message);
-               }
+               if (!ReflectionBasedComparer.epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, epsilon))
+                  reportInconsistentReturnedType(frameMethod, framelessMethod, framelessMethodReturnObject, frameMethodReturnObject);
             }
             catch (NoSuchMethodException e)
             {
-               if (DEBUG)
-               {
-                  String message = "";
-                  message += "-------------------------------------------------------------------";
-                  message += "\nCould not find the corresponding method: " + getMethodSimpleName(frameMethod);
-                  message += "\nMethod is from type: " + typeWithFrameMethodsToTest.getSimpleName();
-                  message += "\nSearched in: " + typeWithFramelessMethods.getSimpleName();
-                  message += "\nSearched with argument type: " + getSimpleNames(framelessMethodParameterTypes);
-                  message += "\n-------------------------------------------------------------------";
-                  System.err.println(message);
-               }
+               debugNoSuchMethodException(typeWithFrameMethodsToTest, typeWithFramelessMethods, frameMethod, framelessMethodParameterTypes);
             }
             catch (SecurityException e)
             {
-               if (DEBUG)
-               {
-                  String message = "";
-                  message += "-------------------------------------------------------------------";
-                  message += "\nUnable to access method with name: " + frameMethodName + " and argument types: "
-                        + getSimpleNames(framelessMethodParameterTypes);
-                  message += "\nin type: " + typeWithFramelessMethods.getSimpleName();
-                  message += "\n-------------------------------------------------------------------";
-                  System.err.println(message);
-               }
+               debugSecurityException(typeWithFramelessMethods, frameMethodName, framelessMethodParameterTypes);
             }
          }
       }
@@ -1003,27 +972,24 @@ public class EuclidFrameAPITester
     * both classes are invoked to compare the output.
     * </p>
     *
-    * @param frameTypeBuilder     the builder for creating instances of the frame object to test.
+    * @param frameTypeCopier      the builder for creating instances of the frame object to test.
     * @param framelessTypeBuilber the builder for creating instances of the corresponding frameless
     *                             objects.
     * @param methodFilter         custom filter used on the methods. The assertions are performed on
     *                             the methods for which {@code methodFilter.test(method)} returns
     *                             {@code true}.
     */
-   public static void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder,
-                                                                           GenericTypeBuilder framelessTypeBuilber, Predicate<Method> methodFilter)
+   public static void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
+                                                                           Predicate<Method> methodFilter)
    {
 
-      Class<? extends ReferenceFrameHolder> frameTypeToTest = frameTypeBuilder.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+      Class<? extends ReferenceFrameHolder> frameTypeToTest = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
       Class<? extends Object> framelessType = framelessTypeBuilber.newInstance(random).getClass();
 
-      List<Method> frameMethods = keepOnlyMethodsWithAtLeastNFrameArguments(frameTypeToTest.getMethods(), 0);
+      List<Method> frameMethods = Stream.of(frameTypeToTest.getMethods()).filter(methodFilter).collect(Collectors.toList());
 
       for (Method frameMethod : frameMethods)
       {
-         if (!methodFilter.test(frameMethod))
-            continue;
-
          String frameMethodName = frameMethod.getName();
          Class<?>[] frameMethodParameterTypes = frameMethod.getParameterTypes();
          Class<?>[] framelessMethodParameterTypes = new Class[frameMethodParameterTypes.length];
@@ -1039,12 +1005,12 @@ public class EuclidFrameAPITester
          for (int iteration = 0; iteration < FUNCTIONALITY_ITERATIONS; iteration++)
          {
             Object framelessObject = framelessTypeBuilber.newInstance(random);
-            ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(worldFrame, framelessObject);
+            ReferenceFrameHolder frameObject = frameTypeCopier.newInstance(worldFrame, framelessObject);
 
             try
             {
                Method framelessMethod = framelessType.getMethod(frameMethodName, framelessMethodParameterTypes);
-               Object[] frameMethodParameters = instantiateParameterTypes(worldFrame, frameMethodParameterTypes);
+               Object[] frameMethodParameters = ReflectionBasedBuilders.newInstance(worldFrame, frameMethodParameterTypes);
 
                if (frameMethodParameters == null)
                {
@@ -1079,12 +1045,7 @@ public class EuclidFrameAPITester
                {
                   if (expectedException == null || e.getClass() != expectedException.getClass())
                   {
-                     String message = "";
-                     message += "The method: " + getMethodSimpleName(frameMethod);
-                     message += "\ndid not throw the same exception as the original method: " + getMethodSimpleName(framelessMethod);
-                     message += "\nExpected exception class: " + (expectedException == null ? "none" : expectedException.getClass().getSimpleName());
-                     message += "\nActual exception class: " + e.getClass().getSimpleName();
-                     throw new AssertionError(message);
+                     reportInconsistentException(frameMethod, framelessMethod, expectedException, e);
                   }
                   else
                   {
@@ -1097,67 +1058,29 @@ public class EuclidFrameAPITester
                   Object framelessParameter = framelessMethodParameters[i];
                   Object frameParameter = frameMethodParameters[i];
 
-                  if (!epsilonEquals(framelessParameter, frameParameter, epsilon))
-                  {
-                     String message = "";
-                     message += "Detected a frame method inconsistent with its original frameless method.";
-                     message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-                     message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-                     message += "\nFrame arguments after call:\n" + Arrays.toString(frameMethodParameters);
-                     message += "\nFrameless arguments after call:\n" + toStringAsFramelessObjects(framelessMethodParameters);
-                     throw new AssertionError(message);
-                  }
+                  if (!ReflectionBasedComparer.epsilonEquals(framelessParameter, frameParameter, epsilon))
+                     reportInconsistentArguments(frameMethod,
+                                                 framelessMethod,
+                                                 frameMethodParameters,
+                                                 framelessMethodParameters,
+                                                 framelessParameter,
+                                                 frameParameter);
                }
 
-               if (!epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, epsilon))
-               {
-                  String message = "";
-                  message += "Detected a frame method inconsistent with its original frameless method.";
-                  message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-                  message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-                  message += "\nFrame method returned:" + frameMethodReturnObject;
-                  message += "\nFrameless method returned:" + toStringAsFramelessObject(framelessMethodReturnObject);
-                  throw new AssertionError(message);
-               }
+               if (!ReflectionBasedComparer.epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, epsilon))
+                  reportInconsistentReturnedType(frameMethod, framelessMethod, framelessMethodReturnObject, frameMethodReturnObject);
 
-               if (!epsilonEquals(framelessObject, frameObject, epsilon))
-               {
-                  String message = "";
-                  message += "Detected a frame method inconsistent with its original frameless method.";
-                  message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-                  message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-                  message += "\nFrame object after method call:" + frameObject;
-                  message += "\nFrameless object after method call:" + framelessObject;
-                  throw new AssertionError(message);
-               }
+               if (!ReflectionBasedComparer.epsilonEquals(framelessObject, frameObject, epsilon))
+                  reportInconsistentObject(frameMethod, framelessObject, frameObject, framelessMethod);
 
             }
             catch (NoSuchMethodException e)
             {
-               if (DEBUG)
-               {
-                  String message = "";
-                  message += "-------------------------------------------------------------------";
-                  message += "\nCould not find the corresponding method: " + getMethodSimpleName(frameMethod);
-                  message += "\nMethod is from type: " + frameTypeToTest.getSimpleName();
-                  message += "\nSearched in: " + framelessType.getSimpleName();
-                  message += "\nSearched with argument type: " + getSimpleNames(framelessMethodParameterTypes);
-                  message += "\n-------------------------------------------------------------------";
-                  System.err.println(message);
-               }
+               debugNoSuchMethodException(frameTypeToTest, framelessType, frameMethod, framelessMethodParameterTypes);
             }
             catch (SecurityException e)
             {
-               if (DEBUG)
-               {
-                  String message = "";
-                  message += "-------------------------------------------------------------------";
-                  message += "\nUnable to access method with name: " + frameMethodName + " and argument types: "
-                        + getSimpleNames(framelessMethodParameterTypes);
-                  message += "\nin type: " + framelessType.getSimpleName();
-                  message += "\n-------------------------------------------------------------------";
-                  System.err.println(message);
-               }
+               debugSecurityException(framelessType, frameMethodName, framelessMethodParameterTypes);
             }
             catch (RuntimeException e)
             {
@@ -1169,259 +1092,90 @@ public class EuclidFrameAPITester
       }
    }
 
-   private static String toStringAsFramelessObjects(Object[] frameObjects)
+   private static void debugSecurityException(Class<?> typeWithFramelessMethods, String frameMethodName, Class<?>[] framelessMethodParameterTypes)
    {
-      String ret = "[";
-      for (int i = 0; i < frameObjects.length; i++)
+      if (DEBUG)
       {
-         ret += toStringAsFramelessObject(frameObjects[i]);
-         if (i < frameObjects.length - 1)
-            ret += ", ";
-         else
-            ret += "]";
+         String message = "";
+         message += "-------------------------------------------------------------------";
+         message += "\nUnable to access method with name: " + frameMethodName + " and argument types: " + getSimpleNames(framelessMethodParameterTypes);
+         message += "\nin type: " + typeWithFramelessMethods.getSimpleName();
+         message += "\n-------------------------------------------------------------------";
+         System.err.println(message);
       }
-      return ret;
+   }
+
+   private static void debugNoSuchMethodException(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods, Method frameMethod,
+                                                  Class<?>[] framelessMethodParameterTypes)
+   {
+      if (DEBUG)
+      {
+         String message = "";
+         message += "-------------------------------------------------------------------";
+         message += "\nCould not find the corresponding method: " + getMethodSimpleName(frameMethod);
+         message += "\nMethod is from type: " + typeWithFrameMethodsToTest.getSimpleName();
+         message += "\nSearched in: " + typeWithFramelessMethods.getSimpleName();
+         message += "\nSearched with argument type: " + getSimpleNames(framelessMethodParameterTypes);
+         message += "\n-------------------------------------------------------------------";
+         System.err.println(message);
+      }
+   }
+
+   private static void reportInconsistentObject(Method frameMethod, Object framelessObject, ReferenceFrameHolder frameObject, Method framelessMethod)
+         throws AssertionError
+   {
+      String message = "";
+      message += "Detected a frame method inconsistent with its original frameless method.";
+      message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
+      message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
+      message += "\nFrame object after method call:" + frameObject;
+      message += "\nFrameless object after method call:" + framelessObject;
+      throw new AssertionError(message);
+   }
+
+   private static void reportInconsistentException(Method frameMethod, Method framelessMethod, Throwable expectedException, Throwable e) throws AssertionError
+   {
+      String message = "";
+      message += "The method: " + getMethodSimpleName(frameMethod);
+      message += "\ndid not throw the same exception as the original method: " + getMethodSimpleName(framelessMethod);
+      message += "\nExpected exception class: " + (expectedException == null ? "none" : expectedException.getClass().getSimpleName());
+      message += "\nActual exception class: " + e.getClass().getSimpleName();
+      throw new AssertionError(message);
+   }
+
+   private static void reportInconsistentArguments(Method frameMethod, Method framelessMethod, Object[] frameMethodParameters,
+                                                   Object[] framelessMethodParameters, Object framelessParameter, Object frameParameter)
+         throws AssertionError
+   {
+      String message = "";
+      message += "Detected a frame method inconsistent with its original frameless method.";
+      message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
+      message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
+      message += "\nFrame arguments after call:\n" + Arrays.toString(frameMethodParameters);
+      message += "\nFrameless arguments after call:\n"
+            + EuclidCoreIOTools.getCollectionString("[", "]", ", ", Arrays.asList(framelessMethodParameters), EuclidFrameAPITester::toStringAsFramelessObject);
+      throw new AssertionError(message);
+   }
+
+   private static void reportInconsistentReturnedType(Method frameMethod, Method framelessMethod, Object framelessMethodReturnObject,
+                                                      Object frameMethodReturnObject)
+         throws AssertionError
+   {
+      String message = "";
+      message += "Detected a frame method inconsistent with its original frameless method.";
+      message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
+      message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
+      message += "\nFrame method returned:" + frameMethodReturnObject;
+      message += "\nFrameless method returned:" + toStringAsFramelessObject(framelessMethodReturnObject);
+      throw new AssertionError(message);
    }
 
    private static String toStringAsFramelessObject(Object frameObject)
    {
       if (isFrameObject(frameObject))
-      {
          return findCorrespondingFramelessType(frameObject.getClass()).cast(frameObject).toString();
-      }
       else
-      {
          return frameObject.toString();
-      }
-   }
-
-   @SuppressWarnings("unchecked")
-   private static <T> boolean epsilonEquals(Object framelessParameter, Object frameParameter, double epsilon)
-   {
-      if (framelessParameter == null && frameParameter == null)
-         return true;
-
-      if (framelessParameter != null ^ frameParameter != null)
-         return false;
-
-      if (framelessParameter instanceof Clearable && frameParameter instanceof Clearable)
-      {
-         if (((Clearable) framelessParameter).containsNaN() && ((Clearable) frameParameter).containsNaN())
-            return true;
-      }
-
-      if (isVertexSupplier(frameParameter.getClass()))
-      {
-         try
-         {
-            Method epsilonEqualsMethod = frameParameter.getClass().getMethod("epsilonEquals", framelessParameter.getClass().getInterfaces()[0], double.class);
-            boolean epsilonEqualsResult = (boolean) epsilonEqualsMethod.invoke(frameParameter, framelessParameter, epsilon);
-            return epsilonEqualsResult;
-         }
-         catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-         {
-            System.err.println("Something went wrong when invoking the epsilonEquals method for " + frameParameter.getClass().getSimpleName());
-            System.err.println("Objects used as parameters: " + getArgumentTypeString(framelessParameter, epsilon));
-            e.printStackTrace();
-            throw new AssertionError(e);
-         }
-
-      }
-      else if (isFramelessObject(framelessParameter))
-      {
-         if (!isFrameObject(frameParameter) && !isFramelessObject(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
-
-         if (isFrameObject(frameParameter))
-         {
-            Method epsilonEqualsMethod;
-            try
-            {
-               epsilonEqualsMethod = Arrays.stream(frameParameter.getClass().getMethods()).filter(m -> m.getName().equals("epsilonEquals"))
-                                           .filter(m -> m.getParameterTypes()[0] != Object.class) // Filters the method from FrameGeometryObject.
-                                           .filter(m -> m.getParameterTypes()[0].isAssignableFrom(framelessParameter.getClass())).findFirst().orElse(null);
-            }
-            catch (SecurityException e)
-            {
-               throw new AssertionError(e);
-            }
-
-            boolean epsilonEqualsResult = false;
-
-            try
-            {
-               epsilonEqualsResult = (boolean) epsilonEqualsMethod.invoke(frameParameter, framelessParameter, epsilon);
-            }
-            catch (IllegalAccessException | IllegalArgumentException e)
-            {
-               System.err.println("Something went wrong when invoking the epsilonEquals method for " + frameParameter.getClass().getSimpleName());
-               System.err.println("Objects used as parameters: " + getArgumentTypeString(framelessParameter, epsilon));
-               e.printStackTrace();
-               throw new AssertionError(e);
-            }
-            catch (InvocationTargetException e)
-            {
-               throw new AssertionError(e.getCause());
-            }
-            return epsilonEqualsResult;
-         }
-         else
-         {
-            return ((EpsilonComparable<T>) framelessParameter).epsilonEquals((T) frameParameter, epsilon);
-         }
-      }
-
-      if (isFrameObject(framelessParameter))
-      {
-         if (!isFrameObject(frameParameter) && !isFramelessObject(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
-
-         if (isFrameObject(frameParameter))
-            return ((EpsilonComparable<T>) framelessParameter).epsilonEquals((T) frameParameter, epsilon);
-      }
-
-      if (Double.TYPE.isInstance(framelessParameter) || Float.TYPE.isInstance(framelessParameter))
-      {
-         if (!Double.TYPE.isInstance(frameParameter) && !Float.TYPE.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
-
-         return EuclidCoreTools.epsilonEquals((double) framelessParameter, (double) frameParameter, epsilon);
-      }
-
-      if (Integer.TYPE.isInstance(framelessParameter) || Long.TYPE.isInstance(framelessParameter))
-      {
-         if (!Integer.TYPE.isInstance(frameParameter) && !Long.TYPE.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
-
-         return (long) framelessParameter == (long) frameParameter;
-      }
-
-      if (Double.class.isInstance(framelessParameter) || Float.class.isInstance(framelessParameter))
-      {
-         if (!Double.class.isInstance(frameParameter) && !Float.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
-
-         double framelessDouble = ((Number) framelessParameter).doubleValue();
-         double frameDouble = ((Number) frameParameter).doubleValue();
-         return Double.compare(framelessDouble, frameDouble) == 0 || EuclidCoreTools.epsilonEquals(framelessDouble, frameDouble, epsilon);
-      }
-
-      if (Integer.class.isInstance(framelessParameter) || Long.class.isInstance(framelessParameter))
-      {
-         if (!Integer.class.isInstance(frameParameter) && !Long.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
-
-         return ((Number) framelessParameter).longValue() == ((Number) frameParameter).longValue();
-      }
-
-      if (Boolean.class.isInstance(framelessParameter))
-      {
-         if (!Boolean.class.isInstance(frameParameter))
-            throw new RuntimeException("Reached unexpected state.");
-
-         return (boolean) framelessParameter == (boolean) frameParameter;
-      }
-
-      if (framelessParameter instanceof EpsilonComparable && frameParameter instanceof EpsilonComparable)
-      {
-         return ((EpsilonComparable<T>) framelessParameter).epsilonEquals((T) frameParameter, epsilon);
-      }
-
-      if (framelessParameter instanceof List)
-      {
-         if (frameParameter instanceof List)
-         {
-            List<?> framelessList = (List<?>) framelessParameter;
-            List<?> frameList = (List<?>) frameParameter;
-
-            if (framelessList.size() != frameList.size())
-               return false;
-
-            for (int i = 0; i < framelessList.size(); i++)
-            {
-               if (!epsilonEquals(framelessList.get(i), frameList.get(i), epsilon))
-                  return false;
-            }
-            return true;
-         }
-         else
-         {
-            throw new RuntimeException("Reached unexpected state.");
-         }
-      }
-
-      if (framelessParameter instanceof DenseMatrix64F && frameParameter instanceof DenseMatrix64F)
-      {
-         return MatrixFeatures.isEquals((DenseMatrix64F) framelessParameter, (DenseMatrix64F) frameParameter, epsilon);
-      }
-
-      if (framelessParameter instanceof int[] && frameParameter instanceof int[])
-      {
-         int[] framelessArray = (int[]) framelessParameter;
-         int[] frameArray = (int[]) frameParameter;
-
-         if (framelessArray.length != frameArray.length)
-            return false;
-         for (int i = 0; i < framelessArray.length; i++)
-         {
-            if (Float.compare(framelessArray[i], frameArray[i]) != 0 && !EuclidCoreTools.epsilonEquals(framelessArray[i], frameArray[i], epsilon))
-               return false;
-         }
-         return true;
-      }
-
-      if (framelessParameter instanceof float[] && frameParameter instanceof float[])
-      {
-         float[] framelessArray = (float[]) framelessParameter;
-         float[] frameArray = (float[]) frameParameter;
-
-         if (framelessArray.length != frameArray.length)
-            return false;
-         for (int i = 0; i < framelessArray.length; i++)
-         {
-            if (Float.compare(framelessArray[i], frameArray[i]) != 0 && !EuclidCoreTools.epsilonEquals(framelessArray[i], frameArray[i], epsilon))
-               return false;
-         }
-         return true;
-      }
-
-      if (framelessParameter instanceof double[] && frameParameter instanceof double[])
-      {
-         double[] framelessArray = (double[]) framelessParameter;
-         double[] frameArray = (double[]) frameParameter;
-
-         if (framelessArray.length != frameArray.length)
-            return false;
-         for (int i = 0; i < framelessArray.length; i++)
-         {
-            if (Double.compare(framelessArray[i], frameArray[i]) != 0 && !EuclidCoreTools.epsilonEquals(framelessArray[i], frameArray[i], epsilon))
-               return false;
-         }
-         return true;
-      }
-
-      if (framelessParameter instanceof String && frameParameter instanceof String)
-         return true;
-
-      if (framelessParameter instanceof Class && frameParameter instanceof Class)
-         return true;
-
-      if (framelessParameter.getClass().isArray() && frameParameter.getClass().isArray())
-      {
-         Object[] framelessArray = (Object[]) framelessParameter;
-         Object[] frameArray = (Object[]) frameParameter;
-         if (framelessArray.length != frameArray.length)
-            return false;
-         for (int i = 0; i < framelessArray.length; i++)
-         {
-            if (!epsilonEquals(framelessArray[i], frameArray[i], epsilon))
-               return false;
-         }
-         return true;
-      }
-
-      throw new RuntimeException("Did not expect the following types: " + framelessParameter.getClass().getSimpleName() + " & "
-            + frameParameter.getClass().getSimpleName());
    }
 
    private static boolean isMutableFrameMutableType(Class<?> frameType)
@@ -1479,62 +1233,7 @@ public class EuclidFrameAPITester
 
    private static String getArgumentTypeString(Object... arguments)
    {
-      String string = "";
-      for (int i = 0; i < arguments.length; i++)
-      {
-         string += arguments[i].getClass().getSimpleName();
-         if (i < arguments.length - 1)
-            string += ", ";
-      }
-      return string;
-   }
-
-   private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethod, Method originalMethod,
-                                                                   Class<?>[] overloadingSignature, Class<?> typeToSearchIn)
-         throws SecurityException
-   {
-      try
-      {
-         Method overloadingMethod = typeToSearchIn.getMethod(originalMethod.getName(), overloadingSignature);
-         Class<?> originalReturnType = originalMethod.getReturnType();
-         Class<?> overloadingReturnType = overloadingMethod.getReturnType();
-
-         { // Assert the return type is proper
-            if (originalReturnType == null && overloadingReturnType != null)
-            {
-               String message = "Inconsistency found in the return type.";
-               message += "\nOriginal method: " + getMethodSimpleName(originalMethod);
-               message += "\nOverloading method: " + getMethodSimpleName(overloadingMethod);
-               message += "\nOriginal type declaring method: " + typeWithOriginalMethod.getSimpleName();
-               message += "\nType overloading original: " + typeWithOverloadingMethods.getSimpleName();
-               throw new AssertionError(message);
-            }
-
-            if (overloadingReturnType.equals(originalReturnType))
-               return;
-
-            if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
-               throw new AssertionError("Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName() + ", actual: "
-                     + overloadingReturnType.getSimpleName());
-         }
-      }
-      catch (NoSuchMethodException e)
-      {
-         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + getMethodSimpleName(originalMethod)
-               + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n"
-               + getMethodSimpleName(originalMethod.getReturnType(), originalMethod.getName(), overloadingSignature));
-      }
-   }
-
-   private static String getMethodSimpleName(Method method)
-   {
-      return getMethodSimpleName(method.getReturnType(), method.getName(), method.getParameterTypes());
-   }
-
-   private static String getMethodSimpleName(Class<?> returnType, String methodName, Class<?>[] parameterTypes)
-   {
-      String returnTypeName = returnType == null ? "void" : returnType.getSimpleName();
-      return returnTypeName + " " + methodName + "(" + getSimpleNames(parameterTypes) + ")";
+      return EuclidCoreIOTools.getCollectionString(", ", Arrays.asList(arguments), o -> o.getClass().getSimpleName());
    }
 
    private static String getSimpleNames(Class<?>[] types)
@@ -1543,31 +1242,24 @@ public class EuclidFrameAPITester
       return ret.substring(1, ret.length() - 1);
    }
 
-   private static List<Method> keepOnlyMethodsWithAtLeastNFrameArguments(Method[] methodsToFilter, int minNumberOfFrameArguments)
+   private static Predicate<Method> filterWithAtLeastNFrameParameters(int minNumberOfFrameArguments)
    {
-      return keepOnlyMethodsWithAtLeastNFrameArguments(Arrays.asList(methodsToFilter), minNumberOfFrameArguments);
-   }
-
-   private static List<Method> keepOnlyMethodsWithAtLeastNFrameArguments(List<Method> methodsToFilter, int minNumberOfFrameArguments)
-   {
-      return methodsToFilter.stream().filter(m -> methodHasAtLeastNFrameArguments(m, minNumberOfFrameArguments)).collect(Collectors.toList());
-   }
-
-   private static boolean methodHasAtLeastNFrameArguments(Method method, int minNumberOfFrameArguments)
-   {
-      int numberOfFrameArguments = 0;
-
-      for (Class<?> parameterType : method.getParameterTypes())
+      return method ->
       {
-         if (isFrameType(parameterType))
-         {
-            numberOfFrameArguments++;
-            if (numberOfFrameArguments >= minNumberOfFrameArguments)
-               return true;
-         }
-      }
+         int numberOfFrameArguments = 0;
 
-      return numberOfFrameArguments >= minNumberOfFrameArguments;
+         for (Class<?> parameterType : method.getParameterTypes())
+         {
+            if (isFrameType(parameterType))
+            {
+               numberOfFrameArguments++;
+               if (numberOfFrameArguments >= minNumberOfFrameArguments)
+                  return true;
+            }
+         }
+
+         return numberOfFrameArguments >= minNumberOfFrameArguments;
+      };
    }
 
    private static List<Method> keepOnlyMethodsWithAtLeastNFramelessArguments(Method[] methodsToFilter, int minNumberOfFramelessArguments)
@@ -1597,58 +1289,49 @@ public class EuclidFrameAPITester
       return numberOfFramelessArguments >= minNumberOfFramelessArguments;
    }
 
-   private static List<Class<?>[]> createExpectedMethodSignaturesWithFrameArgument(Method methodWithoutFrameArguments, boolean createAllCombinations)
+   private static List<MethodSignature> createExpectedMethodSignaturesWithFrameArgument(MethodSignature framelessSignature, boolean createAllCombinations)
    {
-      Class<?>[] framelessMethodArgumentTypes = methodWithoutFrameArguments.getParameterTypes();
-      List<Class<?>[]> expectedMethodSignatures = new ArrayList<>();
+      List<MethodSignature> expectedFrameSignatures = new ArrayList<>();
 
       if (!createAllCombinations)
       {
-         Class<?>[] combination = new Class<?>[framelessMethodArgumentTypes.length];
-         System.arraycopy(framelessMethodArgumentTypes, 0, combination, 0, combination.length);
+         MethodSignature combination = new MethodSignature(framelessSignature);
 
-         for (int k = 0; k < combination.length; k++)
+         for (int k = 0; k < combination.getParameterCount(); k++)
          {
-            if (isFramelessTypeWithFrameEquivalent(combination[k]))
-               combination[k] = findCorrespondingFrameType(combination[k]);
+            if (isFramelessTypeWithFrameEquivalent(combination.getParameterType(k)))
+               combination.setParameterType(k, findCorrespondingFrameType(combination.getParameterType(k)));
          }
-         expectedMethodSignatures.add(combination);
+         expectedFrameSignatures.add(combination);
       }
       else
       {
-         int numberOfArgumentsToOverload = (int) Arrays.stream(framelessMethodArgumentTypes).filter(t -> isFramelessTypeWithFrameEquivalent(t)).count();
+         int numberOfArgumentsToOverload = (int) Arrays.stream(framelessSignature.getParameterTypes()).filter(t -> isFramelessTypeWithFrameEquivalent(t))
+                                                       .count();
          int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToOverload);
 
          for (int i = 0; i < numberOfCombinations; i++)
          {
-            Class<?>[] combination = new Class<?>[framelessMethodArgumentTypes.length];
-            System.arraycopy(framelessMethodArgumentTypes, 0, combination, 0, combination.length);
+            MethodSignature combination = new MethodSignature(framelessSignature);
             int currentByte = 0;
 
-            for (int k = 0; k < combination.length; k++)
+            for (int k = 0; k < combination.getParameterCount(); k++)
             {
-               if (isFramelessTypeWithFrameEquivalent(combination[k]))
+               if (isFramelessTypeWithFrameEquivalent(combination.getParameterType(k)))
                {
                   int mask = (int) Math.pow(2, currentByte);
                   if ((i & mask) != 0)
-                     combination[k] = findCorrespondingFrameType(combination[k]);
+                     combination.setParameterType(k, findCorrespondingFrameType(combination.getParameterType(k)));
                   currentByte++;
                }
             }
-            expectedMethodSignatures.add(combination);
+            expectedFrameSignatures.add(combination);
          }
 
          // Remove the original method from the combinations
-         for (int combinationIndex = 0; combinationIndex < expectedMethodSignatures.size(); combinationIndex++)
-         {
-            if (Arrays.equals(framelessMethodArgumentTypes, expectedMethodSignatures.get(combinationIndex)))
-            {
-               expectedMethodSignatures.remove(combinationIndex);
-               break;
-            }
-         }
+         expectedFrameSignatures = expectedFrameSignatures.stream().filter(signature -> !signature.equals(framelessSignature)).collect(Collectors.toList());
       }
-      return expectedMethodSignatures;
+      return expectedFrameSignatures;
    }
 
    private static Class<?> findCorrespondingFrameType(Class<?> framelessType)
@@ -1716,11 +1399,6 @@ public class EuclidFrameAPITester
       return false;
    }
 
-   private static boolean isFramelessObject(Object object)
-   {
-      return isFramelessType(object.getClass());
-   }
-
    private static boolean isFramelessType(Class<?> type)
    {
       if (ReferenceFrameHolder.class.isAssignableFrom(type))
@@ -1734,11 +1412,11 @@ public class EuclidFrameAPITester
       return false;
    }
 
-   private static boolean isFramelessTypeWithFrameEquivalent(Class<?> type)
+   private static boolean isFramelessTypeWithFrameEquivalent(Class<?> framelessType)
    {
-      if (type.isArray())
-         return isFramelessTypeWithFrameEquivalent(type.getComponentType());
-      return isFramelessType(type) && !framelessTypesWithoutFrameEquivalent.contains(type);
+      if (framelessType.isArray())
+         return isFramelessTypeWithFrameEquivalent(framelessType.getComponentType());
+      return isFramelessType(framelessType) && !framelessTypesWithoutFrameEquivalent.contains(framelessType);
    }
 
    private static Object[] clone(Object[] parametersToClone)
@@ -1789,7 +1467,7 @@ public class EuclidFrameAPITester
                }
                else
                {
-                  clone[i] = newInstanceOf(parameterType);
+                  clone[i] = ReflectionBasedBuilders.newInstance(parameterType);
                   Method setter = parameterType.getMethod("set", parameterType);
                   setter.invoke(clone[i], parametersToClone[i]);
                }
@@ -1811,220 +1489,6 @@ public class EuclidFrameAPITester
       return implementSupplier && !ConvexPolygon2DReadOnly.class.isAssignableFrom(classToTest);
    }
 
-   private static Object[] instantiateParameterTypes(ReferenceFrame frame, Class<?>[] parameterTypes)
-   {
-      Object[] parameters = new Object[parameterTypes.length];
-
-      for (int i = 0; i < parameterTypes.length; i++)
-      {
-         Class<?> parameterType = parameterTypes[i];
-         if (parameterType.isArray() && !parameterType.getComponentType().isPrimitive())
-         {
-            Class<?> componentType = parameterType.getComponentType();
-            Object[] array = (Object[]) Array.newInstance(componentType, random.nextInt(15));
-            for (int j = 0; j < array.length; j++)
-            {
-               array[j] = instantiateParameterType(frame, componentType);
-               if (array[j] == null)
-                  return null;
-            }
-            parameters[i] = array;
-         }
-         else
-         {
-            parameters[i] = instantiateParameterType(frame, parameterType);
-            if (parameters[i] == null)
-               return null;
-         }
-      }
-      return parameters;
-   }
-
-   private static Object instantiateParameterType(ReferenceFrame frame, Class<?> parameterType)
-   {
-      Object object = createFrameObject(parameterType, frame);
-      if (object != null)
-         return object;
-      object = createFramelessObject(parameterType);
-      if (object != null)
-         return object;
-      return newInstanceOf(parameterType);
-   }
-
-   private static Object createFramelessObject(Class<?> type)
-   {
-      GenericTypeBuilder builder = null;
-      Class<?> bestMatchingType = null;
-
-      for (Entry<Class<?>, GenericTypeBuilder> entry : framelessTypeBuilders.entrySet())
-      {
-         if (!entry.getKey().isAssignableFrom(type))
-            continue;
-
-         if (bestMatchingType == null || bestMatchingType.isAssignableFrom(entry.getKey()))
-         {
-            bestMatchingType = entry.getKey();
-            builder = entry.getValue();
-         }
-      }
-
-      return builder == null ? null : builder.newInstance(random);
-   }
-
-   private static Object createFrameObject(Class<?> type, ReferenceFrame referenceFrame)
-   {
-      RandomFrameTypeBuilder<?> builder = null;
-      Class<?> bestMatchingType = null;
-
-      for (Entry<Class<?>, RandomFrameTypeBuilder<?>> entry : frameTypeBuilders.entrySet())
-      {
-         if (!entry.getKey().isAssignableFrom(type))
-            continue;
-
-         if (bestMatchingType == null || bestMatchingType.isAssignableFrom(entry.getKey()))
-         {
-            bestMatchingType = entry.getKey();
-            builder = entry.getValue();
-         }
-      }
-
-      return builder == null ? null : builder.newInstance(random, referenceFrame);
-   }
-
-   private static Object newInstanceOf(Class<?> type)
-   {
-      if (type.isPrimitive())
-      {
-         if (type.equals(Boolean.TYPE))
-            return random.nextBoolean();
-         else if (type.equals(Integer.TYPE) || type.equals(Character.TYPE) || type.equals(Long.TYPE))
-            return random.nextInt(1000) - 500;
-         else if (type.equals(Float.TYPE) || type.equals(Double.TYPE))
-            return EuclidCoreRandomTools.nextDouble(random, 10.0);
-         else
-            return 0;
-      }
-
-      if (Transform.class.equals(type))
-         return EuclidCoreRandomTools.nextAffineTransform(random);
-      if (RigidBodyTransformReadOnly.class.isAssignableFrom(type))
-         return EuclidCoreRandomTools.nextRigidBodyTransform(random);
-
-      if (DenseMatrix64F.class.equals(type))
-      {
-         return RandomMatrices.createRandom(20, 20, random);
-      }
-
-      if (float[].class.equals(type))
-      {
-         float[] ret = new float[20];
-         for (int i = 0; i < ret.length; i++)
-            ret[i] = random.nextFloat();
-         return ret;
-      }
-
-      if (double[].class.equals(type))
-      {
-         double[] ret = new double[20];
-         for (int i = 0; i < ret.length; i++)
-            ret[i] = random.nextDouble();
-         return ret;
-      }
-
-      if (Collection.class.equals(type))
-      {
-         return null;
-      }
-
-      if (Object.class.equals(type))
-      {
-         return null;
-      }
-
-      try
-      {
-         return type.getConstructor().newInstance();
-      }
-      catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-            | SecurityException e)
-      {
-         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName() + " " + type);
-      }
-   }
-
-   /**
-    * Implement this interface to create builders for frame types such as {@code FramePoint2D}.
-    * <p>
-    * The frame objects created using this builder should contain random values changing from one
-    * object to the next.
-    * </p>
-    *
-    * @author Sylvain Bertrand
-    * @param <T> the type this builder can instantiate.
-    */
-   public static interface RandomFrameTypeBuilder<T>
-   {
-      /**
-       * Creates a new instance of the frame type.
-       * <p>
-       * The frame objects created using this builder should contain random values changing from one
-       * object to the next.
-       * </p>
-       *
-       * @param referenceFrame the reference frame in which the returned frame object should be expressed
-       *                       in.
-       * @return the next random frame object.
-       */
-      T newInstance(Random random, ReferenceFrame referenceFrame);
-   }
-
-   /**
-    * Implement this interface to create builders for frame types such as {@code FrameQuaternion}.
-    * <p>
-    * The frame objects created using this builder should be initialized using the given reference
-    * frame and frameless object.
-    * </p>
-    *
-    * @author Sylvain Bertrand
-    * @param <T> the type this builder can instantiate.
-    */
-   public static interface FrameTypeBuilder<T extends ReferenceFrameHolder>
-   {
-      /**
-       * Creates a new instance of the frame type.
-       * <p>
-       * The frame objects created using this builder should be initialized using the given reference
-       * frame and frameless object.
-       * </p>
-       *
-       * @param referenceFrame  the reference frame in which the returned frame object should be expressed
-       *                        in.
-       * @param framelessObject the frameless object to use for initializing the values of the new frame
-       *                        object.
-       * @return the new frame object.
-       */
-      T newInstance(ReferenceFrame referenceFrame, Object framelessObject);
-   }
-
-   /**
-    * Implement this interface to create builders for any type.
-    * <p>
-    * The objects created using this builder should contain random values changing from one object to
-    * the next.
-    * </p>
-    *
-    * @author Sylvain Bertrand
-    */
-   public static interface GenericTypeBuilder
-   {
-      /**
-       * Creates a new instance of the same object initialized with random values.
-       *
-       * @return the next object.
-       */
-      Object newInstance(Random random);
-   }
-
    private static Class<?> searchSuperInterfaceFromSimpleName(String name, Class<?> typeToStartFrom)
    {
       for (Class<?> superInterface : typeToStartFrom.getInterfaces())
@@ -2042,113 +1506,5 @@ public class EuclidFrameAPITester
             return thoroughSearchResult;
       }
       return null;
-   }
-
-   private static GenericTypeBuilder searchFramelessGenerator(Class<?> framelessMutableType)
-   {
-      List<Method> searchResult = new ArrayList<>();
-
-      List<Method> allMethods = framelessRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
-                                                               .collect(Collectors.toList());
-
-      for (Method method : allMethods)
-      {
-         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
-            continue;
-
-         if (method.getParameterCount() != 1)
-            continue;
-
-         if (method.getParameterTypes()[0] != Random.class)
-            continue;
-
-         if (!framelessMutableType.isAssignableFrom(method.getReturnType()))
-            continue;
-
-         searchResult.add(method);
-      }
-
-      int nameLength = Integer.MAX_VALUE;
-      Method randomGenerator = null;
-
-      for (Method method : searchResult)
-      {
-         if (method.getName().length() < nameLength)
-         {
-            nameLength = method.getName().length();
-            randomGenerator = method;
-         }
-      }
-      System.out.println("Random generator for " + framelessMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
-
-      Objects.requireNonNull(randomGenerator);
-      final Method finalRandomGenerator = randomGenerator;
-
-      return random ->
-      {
-         try
-         {
-            return finalRandomGenerator.invoke(null, random);
-         }
-         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-         {
-            throw new RuntimeException(e);
-         }
-      };
-   }
-
-   private static RandomFrameTypeBuilder<?> searchFrameGenerator(Class<?> mutableFrameMutableType)
-   {
-      List<Method> searchResult = new ArrayList<>();
-
-      List<Method> allMethods = frameRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
-                                                           .collect(Collectors.toList());
-
-      for (Method method : allMethods)
-      {
-         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
-            continue;
-
-         if (method.getParameterCount() != 2)
-            continue;
-
-         if (method.getParameterTypes()[0] != Random.class || method.getParameterTypes()[1] != ReferenceFrame.class)
-            continue;
-
-         if (!mutableFrameMutableType.isAssignableFrom(method.getReturnType()))
-            continue;
-
-         searchResult.add(method);
-      }
-
-      int nameLength = Integer.MAX_VALUE;
-      Method randomGenerator = null;
-
-      for (Method method : searchResult)
-      {
-         if (method.getName().length() < nameLength)
-         {
-            nameLength = method.getName().length();
-            randomGenerator = method;
-         }
-      }
-
-      Objects.requireNonNull(randomGenerator);
-
-      System.out.println("Random generator for " + mutableFrameMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
-
-      final Method finalRandomGenerator = randomGenerator;
-
-      return (random, frame) ->
-      {
-         try
-         {
-            return finalRandomGenerator.invoke(null, random, frame);
-         }
-         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-         {
-            throw new RuntimeException(e);
-         }
-      };
    }
 }
