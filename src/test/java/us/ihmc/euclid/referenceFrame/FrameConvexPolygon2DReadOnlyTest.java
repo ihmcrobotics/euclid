@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
 public abstract class FrameConvexPolygon2DReadOnlyTest<F extends FrameConvexPolygon2DReadOnly>

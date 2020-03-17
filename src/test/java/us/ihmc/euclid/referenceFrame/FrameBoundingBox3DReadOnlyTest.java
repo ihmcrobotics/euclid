@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 
 public abstract class FrameBoundingBox3DReadOnlyTest<T extends FrameBoundingBox3DReadOnly>
 {

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 
 public abstract class FrameLineSegment3DReadOnlyTest<T extends FrameLineSegment3DReadOnly>
 {

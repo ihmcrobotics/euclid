@@ -1,4 +1,4 @@
-package us.ihmc.euclid.referenceFrame.tools;
+package us.ihmc.euclid.referenceFrame.api;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +27,7 @@ import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -44,6 +45,11 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  */
 public class EuclidFrameAPITestTools
 {
+   private static final String READ_ONLY = "ReadOnly";
+   private static final String BASICS = "Basics";
+   private static final String FRAME = "Frame";
+   private static final String FIXED_FRAME = "FixedFrame";
+
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private static final boolean DEBUG = false;
    private final static int FRAME_CHECK_ITERATIONS = 10;
@@ -64,6 +70,11 @@ public class EuclidFrameAPITestTools
 
    static
    {
+      registerEuclidFrameTypes();
+   }
+
+   private static void registerEuclidFrameTypes()
+   {
       registerFrameRandomGeneratorClasses(EuclidFrameRandomTools.class);
       registerFramelessRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class);
 
@@ -79,20 +90,8 @@ public class EuclidFrameAPITestTools
       registerFrameTypesSmart(FrameConvexPolygon2DBasics.class);
       registerFrameTypesSmart(FrameBoundingBox2DBasics.class, FrameBoundingBox3DBasics.class);
 
-      registerFrameType(null,
-                        null,
-                        FrameVertex2DSupplier.class,
-                        null,
-                        Vertex2DSupplier.class,
-                        EuclidFrameRandomTools::nextFrameVertex2DSupplier,
-                        EuclidGeometryRandomTools::nextVertex2DSupplier);
-      registerFrameType(null,
-                        null,
-                        FrameVertex3DSupplier.class,
-                        null,
-                        Vertex3DSupplier.class,
-                        EuclidFrameRandomTools::nextFrameVertex3DSupplier,
-                        EuclidGeometryRandomTools::nextVertex3DSupplier);
+      registerReadOnlyFrameTypeSmart(FrameVertex2DSupplier.class);
+      registerReadOnlyFrameTypeSmart(FrameVertex3DSupplier.class);
 
       registerFramelessTypeSmart(AxisAngleBasics.class);
       registerFramelessType(RotationScaleMatrix.class, RotationScaleMatrixReadOnly.class, EuclidCoreRandomTools::nextRotationScaleMatrix);
@@ -106,17 +105,25 @@ public class EuclidFrameAPITestTools
       acceptableExceptions.add(RuntimeException.class);
    }
 
+   public static void registerFrameRandomGeneratorClasses(Class<?>... classes)
+   {
+      frameRandomGeneratorLibrary.addAll(Arrays.asList(classes));
+   }
+
+   public static void registerFramelessRandomGeneratorClasses(Class<?>... classes)
+   {
+      framelessRandomGeneratorLibrary.addAll(Arrays.asList(classes));
+   }
+
    public static void registerFramelessTypesSmart(Class<?>... framelessMutableTypes)
    {
       for (Class<?> framelessMutableType : framelessMutableTypes)
-      {
          registerFramelessTypeSmart(framelessMutableType);
-      }
    }
 
    public static void registerFramelessTypeSmart(Class<?> framelessMutableType)
    {
-      Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessMutableType.getSimpleName().replace("Basics", "ReadOnly"),
+      Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY),
                                                                           framelessMutableType);
       GenericTypeBuilder framelessTypeBuilder = searchFramelessGenerator(framelessMutableType);
 
@@ -133,25 +140,23 @@ public class EuclidFrameAPITestTools
    public static void registerFrameTypesSmart(Class<?>... mutableFrameMutableTypes)
    {
       for (Class<?> mutableFrameMutableType : mutableFrameMutableTypes)
-      {
          registerFrameTypeSmart(mutableFrameMutableType);
-      }
    }
 
    public static void registerFrameTypeSmart(Class<?> mutableFrameMutableType)
    {
       String mutableFrameMutableTypeName = mutableFrameMutableType.getSimpleName();
 
-      String fixedFrameMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "FixedFrame");
+      String fixedFrameMutableTypeName = mutableFrameMutableTypeName.replace(FRAME, FIXED_FRAME);
       Class<?> fixedFrameMutableType = searchSuperInterfaceFromSimpleName(fixedFrameMutableTypeName, mutableFrameMutableType);
 
-      String frameReadOnlyTypeName = mutableFrameMutableTypeName.replace("Basics", "ReadOnly");
+      String frameReadOnlyTypeName = mutableFrameMutableTypeName.replace(BASICS, READ_ONLY);
       Class<?> frameReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyTypeName, fixedFrameMutableType);
 
-      String framelessMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "");
+      String framelessMutableTypeName = mutableFrameMutableTypeName.replace(FRAME, "");
       Class<?> framelessMutableType = searchSuperInterfaceFromSimpleName(framelessMutableTypeName, fixedFrameMutableType);
 
-      String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace("Basics", "ReadOnly");
+      String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY);
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessReadOnlyTypeName, framelessMutableType);
 
       RandomFrameTypeBuilder<?> frameTypeBuilder = searchFrameGenerator(mutableFrameMutableType);
@@ -171,171 +176,21 @@ public class EuclidFrameAPITestTools
                         framelessTypeBuilder);
    }
 
-   private static GenericTypeBuilder searchFramelessGenerator(Class<?> framelessMutableType)
+   public static void registerReadOnlyFrameTypeSmart(Class<?>... frameReadOnlyTypes)
    {
-      List<Method> searchResult = new ArrayList<>();
-
-      List<Method> allMethods = framelessRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
-                                                               .collect(Collectors.toList());
-
-      for (Method method : allMethods)
-      {
-         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
-            continue;
-
-         if (method.getParameterCount() != 1)
-            continue;
-
-         if (method.getParameterTypes()[0] != Random.class)
-            continue;
-
-         if (!framelessMutableType.isAssignableFrom(method.getReturnType()))
-            continue;
-
-         searchResult.add(method);
-      }
-
-      int nameLength = Integer.MAX_VALUE;
-      Method randomGenerator = null;
-
-      for (Method method : searchResult)
-      {
-         if (method.getName().length() < nameLength)
-         {
-            nameLength = method.getName().length();
-            randomGenerator = method;
-         }
-      }
-      System.out.println("Random generator for " + framelessMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
-
-      Objects.requireNonNull(randomGenerator);
-      final Method finalRandomGenerator = randomGenerator;
-
-      return random ->
-      {
-         try
-         {
-            return finalRandomGenerator.invoke(null, random);
-         }
-         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-         {
-            throw new RuntimeException(e);
-         }
-      };
+      for (Class<?> frameReadOnlyType : frameReadOnlyTypes)
+         registerReadOnlyFrameTypeSmart(frameReadOnlyType);
    }
 
-   private static RandomFrameTypeBuilder<?> searchFrameGenerator(Class<?> mutableFrameMutableType)
+   public static void registerReadOnlyFrameTypeSmart(Class<?> frameReadOnlyType)
    {
-      List<Method> searchResult = new ArrayList<>();
-
-      List<Method> allMethods = frameRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
-                                                           .collect(Collectors.toList());
-
-      for (Method method : allMethods)
-      {
-         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
-            continue;
-
-         if (method.getParameterCount() != 2)
-            continue;
-
-         if (method.getParameterTypes()[0] != Random.class || method.getParameterTypes()[1] != ReferenceFrame.class)
-            continue;
-
-         if (!mutableFrameMutableType.isAssignableFrom(method.getReturnType()))
-            continue;
-
-         searchResult.add(method);
-      }
-
-      int nameLength = Integer.MAX_VALUE;
-      Method randomGenerator = null;
-
-      for (Method method : searchResult)
-      {
-         if (method.getName().length() < nameLength)
-         {
-            nameLength = method.getName().length();
-            randomGenerator = method;
-         }
-      }
-
-      Objects.requireNonNull(randomGenerator);
-
-      System.out.println("Random generator for " + mutableFrameMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
-
-      final Method finalRandomGenerator = randomGenerator;
-
-      return (random, frame) ->
-      {
-         try
-         {
-            return finalRandomGenerator.invoke(null, random, frame);
-         }
-         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-         {
-            throw new RuntimeException(e);
-         }
-      };
-   }
-
-   public static void registerFrameTypeSmart(Class<?> mutableFrameMutableType, RandomFrameTypeBuilder<?> frameTypeBuilder,
-                                             GenericTypeBuilder framelessTypeBuilder)
-   {
-      String mutableFrameMutableTypeName = mutableFrameMutableType.getSimpleName();
-
-      String fixedFrameMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "FixedFrame");
-      Class<?> fixedFrameMutableType = searchSuperInterfaceFromSimpleName(fixedFrameMutableTypeName, mutableFrameMutableType);
-
-      String frameReadOnlyTypeName = mutableFrameMutableTypeName.replace("Basics", "ReadOnly");
-      Class<?> frameReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyTypeName, fixedFrameMutableType);
-
-      String framelessMutableTypeName = mutableFrameMutableTypeName.replace("Frame", "");
-      Class<?> framelessMutableType = searchSuperInterfaceFromSimpleName(framelessMutableTypeName, fixedFrameMutableType);
-
-      String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace("Basics", "ReadOnly");
-      Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessReadOnlyTypeName, framelessMutableType);
-
-      Objects.requireNonNull(fixedFrameMutableType);
-      Objects.requireNonNull(frameReadOnlyType);
-      Objects.requireNonNull(framelessMutableType);
+      Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyType.getSimpleName().replace(FRAME, ""), frameReadOnlyType);
       Objects.requireNonNull(framelessReadOnlyType);
-      registerFrameType(mutableFrameMutableType,
-                        fixedFrameMutableType,
-                        frameReadOnlyType,
-                        framelessMutableType,
-                        framelessReadOnlyType,
-                        frameTypeBuilder,
-                        framelessTypeBuilder);
-   }
 
-   public static void registerFrameRandomGeneratorClasses(Class<?>... classes)
-   {
-      frameRandomGeneratorLibrary.addAll(Arrays.asList(classes));
-   }
+      RandomFrameTypeBuilder<?> frameTypeBuilder = searchFrameGenerator(frameReadOnlyType);
+      GenericTypeBuilder framelessTypeBuilder = searchFramelessGenerator(framelessReadOnlyType);
 
-   public static void registerFramelessRandomGeneratorClasses(Class<?>... classes)
-   {
-      framelessRandomGeneratorLibrary.addAll(Arrays.asList(classes));
-   }
-
-   private static Class<?> searchSuperInterfaceFromSimpleName(String name, Class<?> typeToStartFrom)
-   {
-      for (Class<?> superInterface : typeToStartFrom.getInterfaces())
-      {
-         if (superInterface.getSimpleName().equals(name))
-         {
-            return superInterface;
-         }
-      }
-
-      for (Class<?> superInterface : typeToStartFrom.getInterfaces())
-      {
-         Class<?> thoroughSearchResult = searchSuperInterfaceFromSimpleName(name, superInterface);
-         if (thoroughSearchResult != null)
-            return thoroughSearchResult;
-      }
-      return null;
+      registerFrameType(null, null, frameReadOnlyType, null, framelessReadOnlyType, frameTypeBuilder, framelessTypeBuilder);
    }
 
    public static void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType,
@@ -465,7 +320,8 @@ public class EuclidFrameAPITestTools
    /**
     * Asserts, using reflection, that all methods with frameless arguments, such as
     * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
-    * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
+    * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2DBasics} and/or
+    * {@code FixedFrameTuple2DBasics}.
     *
     * @param typeWithFrameMethods          refers to the type to be tested. This asserts that
     *                                      {@code typeWithFrameMethods} properly has all the methods
@@ -501,19 +357,19 @@ public class EuclidFrameAPITestTools
          if (Modifier.isStatic(framelessMethod.getModifiers()))
             continue;
 
-         if (framelessMethodFilter.test(framelessMethod))
-         {
-            // Creating all the expected combinations
-            List<Class<?>[]> expectedMethodSignatures = createExpectedMethodSignaturesWithFrameArgument(framelessMethod, assertAllCombinations);
+         if (!framelessMethodFilter.test(framelessMethod))
+            continue;
 
-            for (Class<?>[] expectedMethodSignature : expectedMethodSignatures)
-            {
-               assertMethodOverloadedWithSpecificSignature(typeWithFrameMethods,
-                                                           typeWithFramelessMethods,
-                                                           framelessMethod,
-                                                           expectedMethodSignature,
-                                                           typeWithFrameMethods);
-            }
+         // Creating all the expected combinations
+         List<Class<?>[]> expectedMethodSignatures = createExpectedMethodSignaturesWithFrameArgument(framelessMethod, assertAllCombinations);
+
+         for (Class<?>[] expectedMethodSignature : expectedMethodSignatures)
+         {
+            assertMethodOverloadedWithSpecificSignature(typeWithFrameMethods,
+                                                        typeWithFramelessMethods,
+                                                        framelessMethod,
+                                                        expectedMethodSignature,
+                                                        typeWithFrameMethods);
          }
       }
    }
@@ -2167,5 +2023,132 @@ public class EuclidFrameAPITestTools
        * @return the next object.
        */
       Object newInstance(Random random);
+   }
+
+   private static Class<?> searchSuperInterfaceFromSimpleName(String name, Class<?> typeToStartFrom)
+   {
+      for (Class<?> superInterface : typeToStartFrom.getInterfaces())
+      {
+         if (superInterface.getSimpleName().equals(name))
+         {
+            return superInterface;
+         }
+      }
+
+      for (Class<?> superInterface : typeToStartFrom.getInterfaces())
+      {
+         Class<?> thoroughSearchResult = searchSuperInterfaceFromSimpleName(name, superInterface);
+         if (thoroughSearchResult != null)
+            return thoroughSearchResult;
+      }
+      return null;
+   }
+
+   private static GenericTypeBuilder searchFramelessGenerator(Class<?> framelessMutableType)
+   {
+      List<Method> searchResult = new ArrayList<>();
+
+      List<Method> allMethods = framelessRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
+                                                               .collect(Collectors.toList());
+
+      for (Method method : allMethods)
+      {
+         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
+            continue;
+
+         if (method.getParameterCount() != 1)
+            continue;
+
+         if (method.getParameterTypes()[0] != Random.class)
+            continue;
+
+         if (!framelessMutableType.isAssignableFrom(method.getReturnType()))
+            continue;
+
+         searchResult.add(method);
+      }
+
+      int nameLength = Integer.MAX_VALUE;
+      Method randomGenerator = null;
+
+      for (Method method : searchResult)
+      {
+         if (method.getName().length() < nameLength)
+         {
+            nameLength = method.getName().length();
+            randomGenerator = method;
+         }
+      }
+      System.out.println("Random generator for " + framelessMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
+
+      Objects.requireNonNull(randomGenerator);
+      final Method finalRandomGenerator = randomGenerator;
+
+      return random ->
+      {
+         try
+         {
+            return finalRandomGenerator.invoke(null, random);
+         }
+         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+         {
+            throw new RuntimeException(e);
+         }
+      };
+   }
+
+   private static RandomFrameTypeBuilder<?> searchFrameGenerator(Class<?> mutableFrameMutableType)
+   {
+      List<Method> searchResult = new ArrayList<>();
+
+      List<Method> allMethods = frameRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
+                                                           .collect(Collectors.toList());
+
+      for (Method method : allMethods)
+      {
+         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
+            continue;
+
+         if (method.getParameterCount() != 2)
+            continue;
+
+         if (method.getParameterTypes()[0] != Random.class || method.getParameterTypes()[1] != ReferenceFrame.class)
+            continue;
+
+         if (!mutableFrameMutableType.isAssignableFrom(method.getReturnType()))
+            continue;
+
+         searchResult.add(method);
+      }
+
+      int nameLength = Integer.MAX_VALUE;
+      Method randomGenerator = null;
+
+      for (Method method : searchResult)
+      {
+         if (method.getName().length() < nameLength)
+         {
+            nameLength = method.getName().length();
+            randomGenerator = method;
+         }
+      }
+
+      Objects.requireNonNull(randomGenerator);
+
+      System.out.println("Random generator for " + mutableFrameMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
+
+      final Method finalRandomGenerator = randomGenerator;
+
+      return (random, frame) ->
+      {
+         try
+         {
+            return finalRandomGenerator.invoke(null, random, frame);
+         }
+         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+         {
+            throw new RuntimeException(e);
+         }
+      };
    }
 }
