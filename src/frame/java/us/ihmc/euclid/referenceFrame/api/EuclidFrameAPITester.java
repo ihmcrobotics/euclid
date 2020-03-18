@@ -66,8 +66,7 @@ public class EuclidFrameAPITester
 
    private static void registerEuclidFrameTypes()
    {
-      ReflectionBasedBuilders.registerFrameRandomGeneratorClasses(EuclidFrameRandomTools.class);
-      ReflectionBasedBuilders.registerFramelessRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class);
+      ReflectionBasedBuilders.registerRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class, EuclidFrameRandomTools.class);
 
       registerFrameTypesSmart(FrameTuple2DBasics.class, FrameVector2DBasics.class, FramePoint2DBasics.class);
       registerFrameTypesSmart(FrameTuple3DBasics.class, FrameVector3DBasics.class, FramePoint3DBasics.class);
@@ -85,7 +84,7 @@ public class EuclidFrameAPITester
       registerReadOnlyFrameTypeSmart(FrameVertex3DSupplier.class);
 
       registerFramelessTypeSmart(AxisAngleBasics.class);
-      registerFramelessType(RotationScaleMatrix.class, RotationScaleMatrixReadOnly.class, EuclidCoreRandomTools::nextRotationScaleMatrix);
+      registerFramelessType(RotationScaleMatrix.class, RotationScaleMatrixReadOnly.class);
    }
 
    private final static Set<Class<?>> acceptableExceptions = new HashSet<>();
@@ -107,16 +106,13 @@ public class EuclidFrameAPITester
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY),
                                                                           framelessMutableType);
 
-      ReflectionBasedBuilders.registerFramelessTypeBuilderSmart(framelessMutableType);
-
       Objects.requireNonNull(framelessReadOnlyType);
       framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
    }
 
-   public static void registerFramelessType(Class<?> framelessMutableType, Class<?> framelessReadOnlyType, RandomFramelessTypeBuilder framelessTypeBuilder)
+   public static void registerFramelessType(Class<?> framelessMutableType, Class<?> framelessReadOnlyType)
    {
       framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
-      ReflectionBasedBuilders.registerFramelessTypeBuilder(framelessReadOnlyType, framelessTypeBuilder);
    }
 
    public static void registerFrameTypesSmart(Class<?>... mutableFrameMutableTypes)
@@ -141,9 +137,6 @@ public class EuclidFrameAPITester
       String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY);
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessReadOnlyTypeName, framelessMutableType);
 
-      ReflectionBasedBuilders.registerFrameTypeBuilderSmart(frameReadOnlyType);
-      ReflectionBasedBuilders.registerFramelessTypeBuilderSmart(framelessReadOnlyType);
-
       Objects.requireNonNull(fixedFrameMutableType);
       Objects.requireNonNull(frameReadOnlyType);
       Objects.requireNonNull(framelessMutableType);
@@ -167,29 +160,8 @@ public class EuclidFrameAPITester
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyType.getSimpleName().replace(FRAME, ""), frameReadOnlyType);
       Objects.requireNonNull(framelessReadOnlyType);
 
-      ReflectionBasedBuilders.registerFrameTypeBuilderSmart(frameReadOnlyType);
-      ReflectionBasedBuilders.registerFramelessTypeBuilderSmart(framelessReadOnlyType);
-
       framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
       frameReadOnlyTypes.add(frameReadOnlyType);
-   }
-
-   public static void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType,
-                                        Class<?> framelessMutableType, Class<?> framelessReadOnlyType, RandomFrameTypeBuilder frameTypeBuilder,
-                                        RandomFramelessTypeBuilder framelessTypeBuilder)
-   {
-      framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
-      if (fixedFrameMutableType != null && framelessMutableType != null)
-         framelessTypesToFrameTypesTable.put(framelessMutableType, fixedFrameMutableType);
-
-      ReflectionBasedBuilders.registerFrameTypeBuilder(frameReadOnlyType, frameTypeBuilder);
-      ReflectionBasedBuilders.registerFramelessTypeBuilder(framelessReadOnlyType, framelessTypeBuilder);
-
-      frameReadOnlyTypes.add(frameReadOnlyType);
-      if (fixedFrameMutableType != null)
-         fixedFrameMutableTypes.add(fixedFrameMutableType);
-      if (mutableFrameMutableType != null)
-         mutableFrameMutableTypes.add(mutableFrameMutableType);
    }
 
    private EuclidFrameAPITester()
@@ -864,7 +836,7 @@ public class EuclidFrameAPITester
             try
             {
                Method framelessMethod = typeWithFramelessMethods.getMethod(frameMethodName, framelessMethodParameterTypes);
-               Object[] frameMethodParameters = ReflectionBasedBuilders.newInstance(random, worldFrame, frameMethodParameterTypes);
+               Object[] frameMethodParameters = ReflectionBasedBuilders.next(random, worldFrame, frameMethodParameterTypes);
 
                String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod) + ". The method is not tested.";
                Objects.requireNonNull(frameMethodParameters, message);
@@ -977,7 +949,7 @@ public class EuclidFrameAPITester
             try
             {
                Method framelessMethod = framelessType.getMethod(frameMethodName, framelessMethodParameterTypes);
-               Object[] frameMethodParameters = ReflectionBasedBuilders.newInstance(random, worldFrame, frameMethodParameterTypes);
+               Object[] frameMethodParameters = ReflectionBasedBuilders.next(random, worldFrame, frameMethodParameterTypes);
 
                if (frameMethodParameters == null)
                {

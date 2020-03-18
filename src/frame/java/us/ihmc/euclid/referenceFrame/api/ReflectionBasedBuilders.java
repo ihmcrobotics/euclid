@@ -1,11 +1,8 @@
 package us.ihmc.euclid.referenceFrame.api;
 
-import static us.ihmc.euclid.referenceFrame.api.MethodSignature.getMethodSimpleName;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -17,14 +14,11 @@ import org.ejml.ops.RandomMatrices;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.transform.AffineTransform;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 
 public class ReflectionBasedBuilders
 {
-   private final static Set<Class<?>> frameRandomGeneratorLibrary = new HashSet<>();
-   private final static Set<Class<?>> framelessRandomGeneratorLibrary = new HashSet<>();
-
    private final static Map<Class<?>, RandomFrameTypeBuilder> frameTypeBuilders = new HashMap<>();
    private final static Map<Class<?>, RandomFramelessTypeBuilder> framelessTypeBuilders = new HashMap<>();
 
@@ -44,53 +38,97 @@ public class ReflectionBasedBuilders
       framelessTypeBuilders.put(char[].class, random -> nextCharArray(random));
       framelessTypeBuilders.put(long[].class, random -> random.longs(20, -100, 100).toArray());
 
-      framelessTypeBuilders.put(Transform.class, random -> EuclidCoreRandomTools.nextAffineTransform(random));
-      framelessTypeBuilders.put(RigidBodyTransformReadOnly.class, random -> EuclidCoreRandomTools.nextRigidBodyTransform(random));
+      framelessTypeBuilders.put(AffineTransform.class, random -> EuclidCoreRandomTools.nextAffineTransform(random));
+      framelessTypeBuilders.put(RigidBodyTransform.class, random -> EuclidCoreRandomTools.nextRigidBodyTransform(random));
       framelessTypeBuilders.put(DenseMatrix64F.class, random -> RandomMatrices.createRandom(20, 20, random));
    }
 
-   public static void registerFrameRandomGeneratorClasses(Class<?>... classes)
+   public static void registerFrameTypeBuilder(RandomFrameTypeBuilder frameTypeBuilder)
    {
-      frameRandomGeneratorLibrary.addAll(Arrays.asList(classes));
+      frameTypeBuilders.put(frameTypeBuilder.newInstance(new Random(), ReferenceFrame.getWorldFrame()).getClass(), frameTypeBuilder);
    }
 
-   public static void registerFramelessRandomGeneratorClasses(Class<?>... classes)
+   public static void registerFramelessTypeBuilder(RandomFramelessTypeBuilder framelessTypeBuilder)
    {
-      framelessRandomGeneratorLibrary.addAll(Arrays.asList(classes));
+      framelessTypeBuilders.put(framelessTypeBuilder.newInstance(new Random()).getClass(), framelessTypeBuilder);
    }
 
-   public static void registerFrameTypeBuilderSmart(Class<?> frameType)
+   public static void registerRandomGeneratorClasses(Class<?>... classes)
    {
-      registerFrameTypeBuilder(frameType, searchFrameGenerator(frameType));
+      for (Class<?> clazz : classes)
+         registerRandomGeneratorsFromClass(clazz);
    }
 
-   public static void registerFrameTypeBuilder(Class<?> frameType, RandomFrameTypeBuilder frameTypeBuilder)
+   private static void registerRandomGeneratorsFromClass(Class<?> classDeclaringRandomGenerators)
    {
-      frameTypeBuilders.put(frameType, frameTypeBuilder);
+      List<Method> frameTypeRandomGenerators = Stream.of(classDeclaringRandomGenerators.getMethods()).filter(method -> isFrameRandomGenerator(method))
+                                                     .collect(Collectors.toList());
+
+      for (Method generator : frameTypeRandomGenerators)
+      {
+         frameTypeBuilders.put(generator.getReturnType(), (random, frame) ->
+         {
+            try
+            {
+               return (ReferenceFrameHolder) generator.invoke(null, random, frame);
+            }
+            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+            {
+               throw new RuntimeException(e);
+            }
+         });
+      }
+
+      List<Method> framelessTypeGenerators = Stream.of(classDeclaringRandomGenerators.getMethods()).filter(method -> isFramelessRandomGenerator(method))
+                                                   .collect(Collectors.toList());
+
+      for (Method generator : framelessTypeGenerators)
+      {
+         framelessTypeBuilders.put(generator.getReturnType(), random ->
+         {
+            try
+            {
+               return generator.invoke(null, random);
+            }
+            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+            {
+               throw new RuntimeException(e);
+            }
+         });
+      }
    }
 
-   public static void registerFramelessTypeBuilderSmart(Class<?> framelessType)
+   private static boolean isFramelessRandomGenerator(Method method)
    {
-      registerFramelessTypeBuilder(framelessType, searchFramelessGenerator(framelessType, true));
+      return method.getParameterCount() == 1 && method.getParameterTypes()[0] == Random.class;
    }
 
-   public static void registerFramelessTypeBuilder(Class<?> framelessType, RandomFramelessTypeBuilder framelessTypeBuilder)
+   private static boolean isFrameRandomGenerator(Method method)
    {
-      framelessTypeBuilders.put(framelessType, framelessTypeBuilder);
+      if (method.getParameterCount() != 2)
+         return false;
+      if (method.getParameterTypes()[0] != Random.class || method.getParameterTypes()[1] != ReferenceFrame.class)
+         return false;
+      return ReferenceFrameHolder.class.isAssignableFrom(method.getReturnType());
    }
 
    static Object next(Random random, ReferenceFrame frame, Class<?> type)
    {
-      Object object = newInstanceOfFrameType(random, type, frame);
+      if (Object.class.equals(type))
+         return null;
+      if (Collection.class.equals(type))
+         return null;
+
+      Object object = nextFrameType(random, type, frame);
       if (object != null)
          return object;
-      object = newInstanceOfFramelessType(random, type);
+      object = nextFramelessType(random, type);
       if (object != null)
          return object;
-      return newInstanceOfGenericType(random, type);
+      throw new IllegalStateException("Unknown class: " + type.getSimpleName());
    }
 
-   static Object[] newInstance(Random random, ReferenceFrame frame, Class<?>[] types)
+   static Object[] next(Random random, ReferenceFrame frame, Class<?>[] types)
    {
       Object[] instances = new Object[types.length];
 
@@ -122,191 +160,26 @@ public class ReflectionBasedBuilders
       return instances;
    }
 
-   private static Object newInstanceOfFramelessType(Random random, Class<?> type)
+   private static Object nextFramelessType(Random random, Class<?> type)
    {
-      RandomFramelessTypeBuilder builder = null;
-      Class<?> bestMatchingType = null;
+      List<RandomFramelessTypeBuilder> matchingBuilders = framelessTypeBuilders.entrySet().stream().filter(entry -> type.isAssignableFrom(entry.getKey()))
+                                                                               .map(Entry::getValue).collect(Collectors.toList());
 
-      for (Entry<Class<?>, RandomFramelessTypeBuilder> entry : ReflectionBasedBuilders.framelessTypeBuilders.entrySet())
-      {
-         if (!entry.getKey().isAssignableFrom(type))
-            continue;
-
-         if (bestMatchingType == null || bestMatchingType.isAssignableFrom(entry.getKey()))
-         {
-            bestMatchingType = entry.getKey();
-            builder = entry.getValue();
-         }
-      }
-
-      return builder == null ? null : builder.newInstance(random);
-   }
-
-   private static Object newInstanceOfFrameType(Random random, Class<?> type, ReferenceFrame referenceFrame)
-   {
-      RandomFrameTypeBuilder builder = null;
-      Class<?> bestMatchingType = null;
-
-      for (Entry<Class<?>, RandomFrameTypeBuilder> entry : ReflectionBasedBuilders.frameTypeBuilders.entrySet())
-      {
-         if (!entry.getKey().isAssignableFrom(type))
-            continue;
-
-         if (bestMatchingType == null || bestMatchingType.isAssignableFrom(entry.getKey()))
-         {
-            bestMatchingType = entry.getKey();
-            builder = entry.getValue();
-         }
-      }
-
-      return builder == null ? null : builder.newInstance(random, referenceFrame);
-   }
-
-   private static Object newInstanceOfGenericType(Random random, Class<?> type)
-   {
-      if (Collection.class.equals(type))
-      {
+      if (matchingBuilders.isEmpty())
          return null;
-      }
-
-      if (Object.class.equals(type))
-      {
-         return null;
-      }
-
-      RandomFramelessTypeBuilder generator = searchFramelessGenerator(type, false);
-
-      if (generator != null)
-      {
-         framelessTypeBuilders.put(type, generator);
-         return generator.newInstance(random);
-      }
-
-      throw new RuntimeException("Unknown class: " + type.getSimpleName());
-      //      try
-      //      {
-      //         return type.getConstructor().newInstance();
-      //      }
-      //      catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-      //            | SecurityException e)
-      //      {
-      //         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName() + " " + type);
-      //      }
+      else
+         return matchingBuilders.get(random.nextInt(matchingBuilders.size())).newInstance(random);
    }
 
-   private static RandomFramelessTypeBuilder searchFramelessGenerator(Class<?> type, boolean required)
+   private static Object nextFrameType(Random random, Class<?> type, ReferenceFrame referenceFrame)
    {
-      List<Method> searchResult = new ArrayList<>();
+      List<RandomFrameTypeBuilder> matchingBuilders = frameTypeBuilders.entrySet().stream().filter(entry -> type.isAssignableFrom(entry.getKey()))
+                                                                       .map(Entry::getValue).collect(Collectors.toList());
 
-      List<Method> allMethods = framelessRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
-                                                               .collect(Collectors.toList());
-
-      for (Method method : allMethods)
-      {
-         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
-            continue;
-
-         if (method.getParameterCount() != 1)
-            continue;
-
-         if (method.getParameterTypes()[0] != Random.class)
-            continue;
-
-         if (!type.isAssignableFrom(method.getReturnType()))
-            continue;
-
-         searchResult.add(method);
-      }
-
-      int nameLength = Integer.MAX_VALUE;
-      Method randomGenerator = null;
-
-      for (Method method : searchResult)
-      {
-         if (method.getName().length() < nameLength)
-         {
-            nameLength = method.getName().length();
-            randomGenerator = method;
-         }
-      }
-
-      System.out.println("Random generator for " + type.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
-
-      if (!required && randomGenerator == null)
-      {
-         System.err.println("Unable to find a random generator for the type " + type.getSimpleName());
+      if (matchingBuilders.isEmpty())
          return null;
-      }
-
-      Objects.requireNonNull(randomGenerator);
-      final Method finalRandomGenerator = randomGenerator;
-
-      return random ->
-      {
-         try
-         {
-            return finalRandomGenerator.invoke(null, random);
-         }
-         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-         {
-            throw new RuntimeException(e);
-         }
-      };
-   }
-
-   private static RandomFrameTypeBuilder searchFrameGenerator(Class<?> mutableFrameMutableType)
-   {
-      List<Method> searchResult = new ArrayList<>();
-
-      List<Method> allMethods = frameRandomGeneratorLibrary.stream().flatMap(generatorClass -> Stream.of(generatorClass.getMethods()))
-                                                           .collect(Collectors.toList());
-
-      for (Method method : allMethods)
-      {
-         if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers()))
-            continue;
-
-         if (method.getParameterCount() != 2)
-            continue;
-
-         if (method.getParameterTypes()[0] != Random.class || method.getParameterTypes()[1] != ReferenceFrame.class)
-            continue;
-
-         if (!mutableFrameMutableType.isAssignableFrom(method.getReturnType()))
-            continue;
-
-         searchResult.add(method);
-      }
-
-      int nameLength = Integer.MAX_VALUE;
-      Method randomGenerator = null;
-
-      for (Method method : searchResult)
-      {
-         if (method.getName().length() < nameLength)
-         {
-            nameLength = method.getName().length();
-            randomGenerator = method;
-         }
-      }
-
-      Objects.requireNonNull(randomGenerator);
-
-      System.out.println("Random generator for " + mutableFrameMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
-
-      final Method finalRandomGenerator = randomGenerator;
-
-      return (random, frame) ->
-      {
-         try
-         {
-            return (ReferenceFrameHolder) finalRandomGenerator.invoke(null, random, frame);
-         }
-         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-         {
-            throw new RuntimeException(e);
-         }
-      };
+      else
+         return matchingBuilders.get(random.nextInt(matchingBuilders.size())).newInstance(random, referenceFrame);
    }
 
    private static float[] nextFloatArray(Random random)
