@@ -331,40 +331,35 @@ public class EuclidFrameAPITester
                                                         int minNumberOfFramelessArguments, Predicate<Method> framelessMethodFilter)
    {
       // The frame methods are all the methods from 'typeWithFramelessMethods' that have at least one geometry argument.
-      List<Method> framelessMethods = keepOnlyMethodsWithAtLeastNFramelessArguments(typeWithFramelessMethods.getMethods(), minNumberOfFramelessArguments);
+      Predicate<Method> filter = framelessMethodFilter.and(atLeastNFramelessParameters(minNumberOfFramelessArguments));
+      List<MethodSignature> framelessSignatures = Stream.of(typeWithFramelessMethods.getMethods()).filter(filter).map(MethodSignature::new)
+                                                        .collect(Collectors.toList());
 
-      for (Method framelessMethod : framelessMethods)
+      for (MethodSignature framelessSignature : framelessSignatures)
       {
-         if (Modifier.isStatic(framelessMethod.getModifiers()))
-            continue;
-
-         if (!framelessMethodFilter.test(framelessMethod))
-            continue;
-
-         MethodSignature framelessSignature = new MethodSignature(framelessMethod);
-
          // Creating all the expected combinations
          List<MethodSignature> expectedMethodSignatures = createExpectedMethodSignaturesWithFrameArgument(framelessSignature, assertAllCombinations);
 
          for (MethodSignature expectedMethodSignature : expectedMethodSignatures)
          {
-            assertMethodOverloadedWithSpecificSignature(typeWithFrameMethods,
-                                                        typeWithFramelessMethods,
-                                                        framelessSignature,
-                                                        expectedMethodSignature,
-                                                        typeWithFrameMethods);
+            assertMethodOverloadedWithSpecificSignature(typeWithFrameMethods, typeWithFramelessMethods, framelessSignature, expectedMethodSignature);
          }
       }
    }
 
+   public static void assertAPICompleteWithMatchingFrameSetters(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods,
+                                                                Predicate<Method> framelessMethodFilter)
+   {
+      // TODO Implement me!
+   }
+
    private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethod,
-                                                                   MethodSignature originalSignature, MethodSignature overloadingSignature,
-                                                                   Class<?> typeToSearchIn)
+                                                                   MethodSignature originalSignature, MethodSignature overloadingSignature)
          throws SecurityException
    {
       try
       {
-         Method overloadingMethod = typeToSearchIn.getMethod(originalSignature.getName(), overloadingSignature.getParameterTypes());
+         Method overloadingMethod = typeWithOverloadingMethods.getMethod(originalSignature.getName(), overloadingSignature.getParameterTypes());
          Class<?> originalReturnType = originalSignature.getReturnType();
          Class<?> overloadingReturnType = overloadingMethod.getReturnType();
 
@@ -390,7 +385,8 @@ public class EuclidFrameAPITester
       catch (NoSuchMethodException e)
       {
          throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + originalSignature.getMethodSimpleName()
-               + "\nis not properly overloaded, expected to find in " + typeToSearchIn.getSimpleName() + ":\n" + overloadingSignature.getMethodSimpleName());
+               + "\nis not properly overloaded, expected to find in " + typeWithOverloadingMethods.getSimpleName() + ":\n"
+               + overloadingSignature.getMethodSimpleName());
       }
    }
 
@@ -444,7 +440,7 @@ public class EuclidFrameAPITester
     */
    public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, Predicate<Method> methodFilter) throws Throwable
    {
-      Predicate<Method> filter = methodFilter.and(filterWithAtLeastNFrameParameters(2)).and(m -> Modifier.isStatic(m.getModifiers()))
+      Predicate<Method> filter = methodFilter.and(atLeastNFrameParameters(2)).and(m -> Modifier.isStatic(m.getModifiers()))
                                              .and(m -> Modifier.isPublic(m.getModifiers()));
       List<Method> frameMethods = Stream.of(typeDeclaringStaticMethodsToTest.getMethods()).filter(filter).collect(Collectors.toList());
       // Methods returning a frame type
@@ -648,7 +644,7 @@ public class EuclidFrameAPITester
    {
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
-      Predicate<Method> filter = methodFilter.and(m -> Modifier.isPublic(m.getModifiers())).and(filterWithAtLeastNFrameParameters(1));
+      Predicate<Method> filter = methodFilter.and(m -> Modifier.isPublic(m.getModifiers())).and(atLeastNFrameParameters(1));
 
       List<Method> frameMethods = Stream.of(frameType.getMethods()).filter(filter).collect(Collectors.toList());
       // Methods returning a frame type
@@ -1242,51 +1238,24 @@ public class EuclidFrameAPITester
       return ret.substring(1, ret.length() - 1);
    }
 
-   private static Predicate<Method> filterWithAtLeastNFrameParameters(int minNumberOfFrameArguments)
+   private static Predicate<Method> atLeastNFrameParameters(int minNumberOfFrameParameters)
    {
-      return method ->
-      {
-         int numberOfFrameArguments = 0;
-
-         for (Class<?> parameterType : method.getParameterTypes())
-         {
-            if (isFrameType(parameterType))
-            {
-               numberOfFrameArguments++;
-               if (numberOfFrameArguments >= minNumberOfFrameArguments)
-                  return true;
-            }
-         }
-
-         return numberOfFrameArguments >= minNumberOfFrameArguments;
-      };
+      return method -> countFrameParameters(method) >= minNumberOfFrameParameters;
    }
 
-   private static List<Method> keepOnlyMethodsWithAtLeastNFramelessArguments(Method[] methodsToFilter, int minNumberOfFramelessArguments)
+   private static int countFrameParameters(Method method)
    {
-      return keepOnlyMethodsWithAtLeastNFramelessArguments(Arrays.asList(methodsToFilter), minNumberOfFramelessArguments);
+      return (int) Stream.of(method.getParameterTypes()).filter(EuclidFrameAPITester::isFrameType).count();
    }
 
-   private static List<Method> keepOnlyMethodsWithAtLeastNFramelessArguments(List<Method> methodsToFilter, int minNumberOfFramelessArguments)
+   private static Predicate<Method> atLeastNFramelessParameters(int minNumberOfFramelessParameters)
    {
-      return methodsToFilter.stream().filter(m -> methodHasAtLeastNFramelessArguments(m, minNumberOfFramelessArguments)).collect(Collectors.toList());
+      return method -> countFramelessParameters(method) >= minNumberOfFramelessParameters;
    }
 
-   private static boolean methodHasAtLeastNFramelessArguments(Method method, int minNumberOfFramelessArguments)
+   private static int countFramelessParameters(Method method)
    {
-      int numberOfFramelessArguments = 0;
-
-      for (Class<?> parameterType : method.getParameterTypes())
-      {
-         if (isFramelessTypeWithFrameEquivalent(parameterType))
-         {
-            numberOfFramelessArguments++;
-            if (numberOfFramelessArguments >= minNumberOfFramelessArguments)
-               return true;
-         }
-      }
-
-      return numberOfFramelessArguments >= minNumberOfFramelessArguments;
+      return (int) Stream.of(method.getParameterTypes()).filter(EuclidFrameAPITester::isFrameType).count();
    }
 
    private static List<MethodSignature> createExpectedMethodSignaturesWithFrameArgument(MethodSignature framelessSignature, boolean createAllCombinations)
