@@ -22,11 +22,32 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 
 public class ReflectionBasedBuilders
 {
+   private final static Set<Class<?>> frameRandomGeneratorLibrary = new HashSet<>();
+   private final static Set<Class<?>> framelessRandomGeneratorLibrary = new HashSet<>();
+
    private final static Map<Class<?>, RandomFrameTypeBuilder> frameTypeBuilders = new HashMap<>();
    private final static Map<Class<?>, RandomFramelessTypeBuilder> framelessTypeBuilders = new HashMap<>();
 
-   private final static Set<Class<?>> frameRandomGeneratorLibrary = new HashSet<>();
-   private final static Set<Class<?>> framelessRandomGeneratorLibrary = new HashSet<>();
+   static
+   {
+      framelessTypeBuilders.put(double.class, random -> EuclidCoreRandomTools.nextDouble(random, 10.0));
+      framelessTypeBuilders.put(float.class, random -> (float) EuclidCoreRandomTools.nextDouble(random, 10.0));
+      framelessTypeBuilders.put(boolean.class, random -> random.nextBoolean());
+      framelessTypeBuilders.put(int.class, random -> random.nextInt(1000) - 500);
+      framelessTypeBuilders.put(char.class, random -> (char) (random.nextInt(1000) - 500));
+      framelessTypeBuilders.put(long.class, random -> (long) (random.nextInt(1000) - 500));
+
+      framelessTypeBuilders.put(double[].class, random -> random.doubles(20, -10.0, 10.0).toArray());
+      framelessTypeBuilders.put(float[].class, random -> nextFloatArray(random));
+      framelessTypeBuilders.put(boolean[].class, random -> nextBooleanArray(random));
+      framelessTypeBuilders.put(int[].class, random -> random.ints(20, -100, 100).toArray());
+      framelessTypeBuilders.put(char[].class, random -> nextCharArray(random));
+      framelessTypeBuilders.put(long[].class, random -> random.longs(20, -100, 100).toArray());
+
+      framelessTypeBuilders.put(Transform.class, random -> EuclidCoreRandomTools.nextAffineTransform(random));
+      framelessTypeBuilders.put(RigidBodyTransformReadOnly.class, random -> EuclidCoreRandomTools.nextRigidBodyTransform(random));
+      framelessTypeBuilders.put(DenseMatrix64F.class, random -> RandomMatrices.createRandom(20, 20, random));
+   }
 
    public static void registerFrameRandomGeneratorClasses(Class<?>... classes)
    {
@@ -50,7 +71,7 @@ public class ReflectionBasedBuilders
 
    public static void registerFramelessTypeBuilderSmart(Class<?> framelessType)
    {
-      registerFramelessTypeBuilder(framelessType, searchFramelessGenerator(framelessType));
+      registerFramelessTypeBuilder(framelessType, searchFramelessGenerator(framelessType, true));
    }
 
    public static void registerFramelessTypeBuilder(Class<?> framelessType, RandomFramelessTypeBuilder framelessTypeBuilder)
@@ -58,23 +79,18 @@ public class ReflectionBasedBuilders
       framelessTypeBuilders.put(framelessType, framelessTypeBuilder);
    }
 
-   static Object newInstance(Class<?> type)
+   static Object next(Random random, ReferenceFrame frame, Class<?> type)
    {
-      return newInstance(ReferenceFrame.getWorldFrame(), type);
-   }
-
-   static Object newInstance(ReferenceFrame frame, Class<?> type)
-   {
-      Object object = newInstanceOfFrameType(type, frame);
+      Object object = newInstanceOfFrameType(random, type, frame);
       if (object != null)
          return object;
-      object = newInstanceOfFramelessType(type);
+      object = newInstanceOfFramelessType(random, type);
       if (object != null)
          return object;
-      return newInstanceOfGenericType(type);
+      return newInstanceOfGenericType(random, type);
    }
 
-   static Object[] newInstance(ReferenceFrame frame, Class<?>[] types)
+   static Object[] newInstance(Random random, ReferenceFrame frame, Class<?>[] types)
    {
       Object[] instances = new Object[types.length];
 
@@ -86,11 +102,11 @@ public class ReflectionBasedBuilders
          {
             Class<?> componentType = type.getComponentType();
 
-            Object[] array = (Object[]) Array.newInstance(componentType, EuclidFrameAPITester.random.nextInt(15));
+            Object[] array = (Object[]) Array.newInstance(componentType, random.nextInt(15));
 
             for (int j = 0; j < array.length; j++)
             {
-               array[j] = newInstance(frame, componentType);
+               array[j] = next(random, frame, componentType);
                if (array[j] == null)
                   return null;
             }
@@ -98,7 +114,7 @@ public class ReflectionBasedBuilders
          }
          else
          {
-            instances[i] = newInstance(frame, type);
+            instances[i] = next(random, frame, type);
             if (instances[i] == null)
                return null;
          }
@@ -106,7 +122,7 @@ public class ReflectionBasedBuilders
       return instances;
    }
 
-   private static Object newInstanceOfFramelessType(Class<?> type)
+   private static Object newInstanceOfFramelessType(Random random, Class<?> type)
    {
       RandomFramelessTypeBuilder builder = null;
       Class<?> bestMatchingType = null;
@@ -123,10 +139,10 @@ public class ReflectionBasedBuilders
          }
       }
 
-      return builder == null ? null : builder.newInstance(EuclidFrameAPITester.random);
+      return builder == null ? null : builder.newInstance(random);
    }
 
-   private static Object newInstanceOfFrameType(Class<?> type, ReferenceFrame referenceFrame)
+   private static Object newInstanceOfFrameType(Random random, Class<?> type, ReferenceFrame referenceFrame)
    {
       RandomFrameTypeBuilder builder = null;
       Class<?> bestMatchingType = null;
@@ -143,49 +159,11 @@ public class ReflectionBasedBuilders
          }
       }
 
-      return builder == null ? null : builder.newInstance(EuclidFrameAPITester.random, referenceFrame);
+      return builder == null ? null : builder.newInstance(random, referenceFrame);
    }
 
-   private static Object newInstanceOfGenericType(Class<?> type)
+   private static Object newInstanceOfGenericType(Random random, Class<?> type)
    {
-      if (type.isPrimitive())
-      {
-         if (type.equals(boolean.class))
-            return EuclidFrameAPITester.random.nextBoolean();
-         else if (type.equals(int.class) || type.equals(char.class) || type.equals(long.class))
-            return EuclidFrameAPITester.random.nextInt(1000) - 500;
-         else if (type.equals(float.class) || type.equals(double.class))
-            return EuclidCoreRandomTools.nextDouble(EuclidFrameAPITester.random, 10.0);
-         else
-            return 0;
-      }
-
-      if (Transform.class.equals(type))
-         return EuclidCoreRandomTools.nextAffineTransform(EuclidFrameAPITester.random);
-      if (RigidBodyTransformReadOnly.class.isAssignableFrom(type))
-         return EuclidCoreRandomTools.nextRigidBodyTransform(EuclidFrameAPITester.random);
-
-      if (DenseMatrix64F.class.equals(type))
-      {
-         return RandomMatrices.createRandom(20, 20, EuclidFrameAPITester.random);
-      }
-
-      if (float[].class.equals(type))
-      {
-         float[] ret = new float[20];
-         for (int i = 0; i < ret.length; i++)
-            ret[i] = EuclidFrameAPITester.random.nextFloat();
-         return ret;
-      }
-
-      if (double[].class.equals(type))
-      {
-         double[] ret = new double[20];
-         for (int i = 0; i < ret.length; i++)
-            ret[i] = EuclidFrameAPITester.random.nextDouble();
-         return ret;
-      }
-
       if (Collection.class.equals(type))
       {
          return null;
@@ -196,18 +174,27 @@ public class ReflectionBasedBuilders
          return null;
       }
 
-      try
+      RandomFramelessTypeBuilder generator = searchFramelessGenerator(type, false);
+
+      if (generator != null)
       {
-         return type.getConstructor().newInstance();
+         framelessTypeBuilders.put(type, generator);
+         return generator.newInstance(random);
       }
-      catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-            | SecurityException e)
-      {
-         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName() + " " + type);
-      }
+
+      throw new RuntimeException("Unknown class: " + type.getSimpleName());
+      //      try
+      //      {
+      //         return type.getConstructor().newInstance();
+      //      }
+      //      catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+      //            | SecurityException e)
+      //      {
+      //         throw new RuntimeException("Could not instantiate an object of the type: " + type.getSimpleName() + " " + type);
+      //      }
    }
 
-   private static RandomFramelessTypeBuilder searchFramelessGenerator(Class<?> framelessMutableType)
+   private static RandomFramelessTypeBuilder searchFramelessGenerator(Class<?> type, boolean required)
    {
       List<Method> searchResult = new ArrayList<>();
 
@@ -225,7 +212,7 @@ public class ReflectionBasedBuilders
          if (method.getParameterTypes()[0] != Random.class)
             continue;
 
-         if (!framelessMutableType.isAssignableFrom(method.getReturnType()))
+         if (!type.isAssignableFrom(method.getReturnType()))
             continue;
 
          searchResult.add(method);
@@ -242,7 +229,14 @@ public class ReflectionBasedBuilders
             randomGenerator = method;
          }
       }
-      System.out.println("Random generator for " + framelessMutableType.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
+
+      System.out.println("Random generator for " + type.getSimpleName() + ", " + getMethodSimpleName(randomGenerator));
+
+      if (!required && randomGenerator == null)
+      {
+         System.err.println("Unable to find a random generator for the type " + type.getSimpleName());
+         return null;
+      }
 
       Objects.requireNonNull(randomGenerator);
       final Method finalRandomGenerator = randomGenerator;
@@ -313,5 +307,29 @@ public class ReflectionBasedBuilders
             throw new RuntimeException(e);
          }
       };
+   }
+
+   private static float[] nextFloatArray(Random random)
+   {
+      float[] next = new float[20];
+      for (int i = 0; i < next.length; i++)
+         next[i] = random.nextFloat();
+      return next;
+   }
+
+   private static boolean[] nextBooleanArray(Random random)
+   {
+      boolean[] next = new boolean[20];
+      for (int i = 0; i < next.length; i++)
+         next[i] = random.nextBoolean();
+      return next;
+   }
+
+   private static char[] nextCharArray(Random random)
+   {
+      char[] next = new char[20];
+      for (int i = 0; i < next.length; i++)
+         next[i] = (char) random.nextInt();
+      return next;
    }
 }
