@@ -1,8 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 
 public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<FrameBoundingBox3D>
@@ -36,10 +37,12 @@ public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<Frame
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {BoundingBox3D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {BoundingBox3D.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {BoundingBox3D.class, Double.TYPE});
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameBoundingBox3D.class, BoundingBox3D.class, false, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", BoundingBox3D.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", BoundingBox3D.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", BoundingBox3D.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameBoundingBox3D.class, BoundingBox3D.class, false, 1, methodFilter);
    }
 }

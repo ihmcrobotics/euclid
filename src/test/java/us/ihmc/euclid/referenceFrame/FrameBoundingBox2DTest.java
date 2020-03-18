@@ -1,8 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 
 public class FrameBoundingBox2DTest extends FrameBoundingBox2DReadOnlyTest<FrameBoundingBox2D>
@@ -36,10 +37,12 @@ public class FrameBoundingBox2DTest extends FrameBoundingBox2DReadOnlyTest<Frame
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {BoundingBox2D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {BoundingBox2D.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {BoundingBox2D.class, Double.TYPE});
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameBoundingBox2D.class, BoundingBox2D.class, false, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", BoundingBox2D.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", BoundingBox2D.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", BoundingBox2D.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameBoundingBox2D.class, BoundingBox2D.class, false, 1, methodFilter);
    }
 }

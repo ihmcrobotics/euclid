@@ -1,15 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -468,8 +463,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameTuple4DBasics.class, Tuple4DBasics.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameTuple4DBasics.class, Tuple4DBasics.class, true, 1);
    }
 
    @Test

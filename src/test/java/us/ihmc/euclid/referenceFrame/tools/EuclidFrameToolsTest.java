@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +15,7 @@ import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -24,26 +27,28 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class EuclidFrameToolsTest
 {
-   private static final Class<?> d = double.class;
+   private static final Class<Point3DReadOnly> P3_RO = Point3DReadOnly.class;
+   private static final Class<Point3DBasics> P3_BA = Point3DBasics.class;
+   private static final Class<Point2DReadOnly> P2_RO = Point2DReadOnly.class;
+   private static final Class<Point2DBasics> P2_BA = Point2DBasics.class;
+   private static final Class<?> D = double.class;
    private static final double EPSILON = 1.0e-12;
 
    @Test
    public void testAPIIsComplete()
    {
-      Map<String, Class<?>[]> methodsToIgnore = new HashMap<>();
-      methodsToIgnore.put("orthogonalProjectionOnLine3D", new Class<?>[] {Point3DReadOnly.class, d, d, d, d, d, d, Point3DBasics.class});
-      methodsToIgnore.put("orthogonalProjectionOnLine2D", new Class<?>[] {Point2DReadOnly.class, d, d, d, d, Point2DBasics.class});
-      methodsToIgnore.put("orthogonalProjectionOnLineSegment2D", new Class<?>[] {Point2DReadOnly.class, d, d, d, d, Point2DBasics.class});
-      methodsToIgnore.put("orthogonalProjectionOnLineSegment3D", new Class<?>[] {Point3DReadOnly.class, d, d, d, d, d, d, Point3DBasics.class});
-      methodsToIgnore.put("intersectionBetweenLine3DAndBoundingBox3D",
-                          new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
-      methodsToIgnore.put("intersectionBetweenLine3DAndCylinder3D",
-                          new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
-      methodsToIgnore.put("intersectionBetweenLine3DAndEllipsoid3D", new Class<?>[] {d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
-      methodsToIgnore.put("closestPoint3DsBetweenTwoLineSegment3Ds",
-                          new Class<?>[] {d, d, d, d, d, d, d, d, d, d, d, d, Point3DBasics.class, Point3DBasics.class});
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("orthogonalProjectionOnLine3D", P3_RO, D, D, D, D, D, D, P3_BA));
+      signaturesToIgnore.add(new MethodSignature("orthogonalProjectionOnLine2D", P2_RO, D, D, D, D, P2_BA));
+      signaturesToIgnore.add(new MethodSignature("orthogonalProjectionOnLineSegment2D", P2_RO, D, D, D, D, P2_BA));
+      signaturesToIgnore.add(new MethodSignature("orthogonalProjectionOnLineSegment3D", P3_RO, D, D, D, D, D, D, P3_BA));
+      signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndBoundingBox3D", D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
+      signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndCylinder3D", D, D, D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
+      signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndEllipsoid3D", D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
+      signaturesToIgnore.add(new MethodSignature("closestPoint3DsBetweenTwoLineSegment3Ds", D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
 
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodsToIgnore);
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodFilter);
    }
 
    @Test

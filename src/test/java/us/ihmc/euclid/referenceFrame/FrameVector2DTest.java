@@ -3,13 +3,16 @@ package us.ihmc.euclid.referenceFrame;
 import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
@@ -251,10 +254,12 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {Vector2D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Vector2D.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Vector2D.class, Double.TYPE});
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameVector2D.class, Vector2D.class, true, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", Vector2D.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", Vector2D.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Vector2D.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameVector2D.class, Vector2D.class, true, 1, methodFilter);
    }
 }

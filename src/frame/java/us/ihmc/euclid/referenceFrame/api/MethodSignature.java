@@ -17,6 +17,12 @@ public class MethodSignature
    {
    }
 
+   public MethodSignature(String name, Class<?>... parameterTypes)
+   {
+      setName(name);
+      setParameterTypes(parameterTypes);
+   }
+
    public MethodSignature(MethodSignature other)
    {
       set(other);

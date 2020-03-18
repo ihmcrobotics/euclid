@@ -3,8 +3,8 @@ package us.ihmc.euclid.referenceFrame;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -16,6 +16,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
@@ -45,12 +46,14 @@ public class FrameLineSegment2DTest extends FrameLineSegment2DReadOnlyTest<Frame
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {LineSegment2D.class});
-      framelessMethodsToIgnore.put("equals", new Class<?>[] {LineSegment2D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {LineSegment2D.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {LineSegment2D.class, Double.TYPE});
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameLineSegment2D.class, LineSegment2D.class, true, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", LineSegment2D.class));
+      signaturesToIgnore.add(new MethodSignature("equals", LineSegment2D.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", LineSegment2D.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", LineSegment2D.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameLineSegment2D.class, LineSegment2D.class, true, 1, methodFilter);
    }
 
    @Test

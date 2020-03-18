@@ -2,7 +2,9 @@ package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -31,8 +33,7 @@ public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygo
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameTuple2DBasics.class, Tuple2DBasics.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameTuple2DBasics.class, Tuple2DBasics.class, true, 1);
    }
 
    @Test

@@ -250,52 +250,23 @@ public class EuclidFrameAPITester
       assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, minNumberOfFramelessArguments, m -> true);
    }
 
-   /**
-    * Asserts, using reflection, that all methods with frameless arguments, such as
-    * {@code Tuple3DReadOnly}, are overloaded with their frame type equivalent, i.e.
-    * {@code Tuple2DBasics} is to be overloaded with {@code FrameTuple2D}.
-    *
-    * @param typeWithFrameMethods          refers to the type to be tested. This asserts that
-    *                                      {@code typeWithFrameMethods} properly has all the methods
-    *                                      necessary to properly overload
-    *                                      {@code typeWithFramelessMethods}.
-    * @param typeWithFramelessMethods      refers to the type declaring methods with frameless objects
-    *                                      that are to be overloaded.
-    * @param assertAllCombinations         when {@code false}, this asserts that for each method in
-    *                                      {@code typeWithFramelessMethods} there is one overloading
-    *                                      method in {@code typeWithFrameMethods} with all the
-    *                                      arguments using the equivalent frame type. When
-    *                                      {@code true}, this asserts that for each method in
-    *                                      {@code typeWithFramelessArguments},
-    *                                      {@code typeWithFrameMethods} overloads it with all the
-    *                                      possible combinations of frame & frameless arguments, except
-    *                                      for the original frameless signature.
-    * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
-    *                                      {@code typeWithFramelessMethods}.
-    * @param framelessMethodsToIgnore      map containing the name and argument types of the methods in
-    *                                      {@code typeWithFramelessMethods} to be ignored in this test.
-    */
-   public static void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
-                                                        int minNumberOfFramelessArguments, Map<String, Class<?>[]> framelessMethodsToIgnore)
+   public static Predicate<Method> methodFilterFromSignature(Collection<MethodSignature> signaturesToIgnore)
    {
-      Predicate<Method> methodFilter = new Predicate<Method>()
-      {
-         @Override
-         public boolean test(Method m)
-         {
-            for (Entry<String, Class<?>[]> methodToIgnore : framelessMethodsToIgnore.entrySet())
-            {
-               if (m.getName().equals(methodToIgnore.getKey()))
-               {
-                  if (Arrays.equals(m.getParameterTypes(), methodToIgnore.getValue()))
-                     return false;
-               }
-            }
-            return true;
-         }
-      };
+      List<Predicate<Method>> filters = signaturesToIgnore.stream().map(EuclidFrameAPITester::methodFilterFromSignature).collect(Collectors.toList());
+      return method -> filters.stream().allMatch(filter -> filter.test(method));
+   }
 
-      assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, minNumberOfFramelessArguments, methodFilter);
+   public static Predicate<Method> methodFilterFromSignature(MethodSignature signatureToIgnore)
+   {
+      return method ->
+      {
+         if (!signatureToIgnore.getName().equals(method.getName()))
+            return true;
+         if (Arrays.equals(method.getParameterTypes(), signatureToIgnore.getParameterTypes()))
+            return false;
+         else
+            return true;
+      };
    }
 
    /**
@@ -1255,7 +1226,7 @@ public class EuclidFrameAPITester
 
    private static int countFramelessParameters(Method method)
    {
-      return (int) Stream.of(method.getParameterTypes()).filter(EuclidFrameAPITester::isFrameType).count();
+      return (int) Stream.of(method.getParameterTypes()).filter(EuclidFrameAPITester::isFramelessType).count();
    }
 
    private static List<MethodSignature> createExpectedMethodSignaturesWithFrameArgument(MethodSignature framelessSignature, boolean createAllCombinations)

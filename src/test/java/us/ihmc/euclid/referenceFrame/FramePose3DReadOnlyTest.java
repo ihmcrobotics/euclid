@@ -1,8 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -53,7 +51,6 @@ public abstract class FramePose3DReadOnlyTest<T extends FramePose3DReadOnly>
    @Test
    public void testOverloading() throws Exception
    {
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FramePose3DReadOnly.class, Pose3DReadOnly.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FramePose3DReadOnly.class, Pose3DReadOnly.class, true, 1);
    }
 }

@@ -3,8 +3,8 @@ package us.ihmc.euclid.referenceFrame;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -14,6 +14,7 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
@@ -45,12 +46,14 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {Matrix3D.class});
-      framelessMethodsToIgnore.put("equals", new Class<?>[] {Matrix3D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Matrix3D.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Matrix3D.class, Double.TYPE});
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameMatrix3D.class, Matrix3D.class, false, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", Matrix3D.class));
+      signaturesToIgnore.add(new MethodSignature("equals", Matrix3D.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", Matrix3D.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Matrix3D.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
+      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameMatrix3D.class, Matrix3D.class, false, 1, methodFilter);
    }
 
    @Test
