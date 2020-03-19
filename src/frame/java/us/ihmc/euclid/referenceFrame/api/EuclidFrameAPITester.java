@@ -453,12 +453,7 @@ public class EuclidFrameAPITester
                try
                {
                   invokeStaticMethod(frameMethod, parameters);
-                  String message = "Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName();
-                  message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
-                  message += "\nMethod: " + getMethodSimpleName(frameMethod);
-                  message += "\nArguments used: " + Arrays.toString(parameters);
-                  message += "\nArgument types: " + getArgumentTypeString(parameters);
-                  throw new AssertionError(message);
+                  failToThrowReferenceFrameMismatchException(typeDeclaringStaticMethodsToTest, frameMethod, parameters);
                }
                catch (ReferenceFrameMismatchException e)
                {
@@ -506,13 +501,7 @@ public class EuclidFrameAPITester
                {
                   ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
                   if (newFrame != frameA)
-                  {
-                     String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (i + 1) + "th parameter.";
-                     message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
-                     message += "\nArguments used: " + Arrays.toString(parameters);
-                     message += "\nArgument types: " + getArgumentTypeString(parameters);
-                     throw new AssertionError(message);
-                  }
+                     failToChangeParameterFrame(typeDeclaringStaticMethodsToTest, frameMethod, parameters, i);
                }
             }
          }
@@ -546,14 +535,7 @@ public class EuclidFrameAPITester
 
             ReferenceFrame resultFrame = ((ReferenceFrameHolder) result).getReferenceFrame();
             if (resultFrame != frameA)
-            {
-               String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not set the frame of the result.";
-               message += "\nType being tested: " + typeDeclaringStaticMethodsToTest.getSimpleName();
-               message += "\nArguments used: " + Arrays.toString(parameters);
-               message += "\nArgument types: " + getArgumentTypeString(parameters);
-               message += "\nResult: " + result;
-               throw new AssertionError(message);
-            }
+               failToSetResultFrame(typeDeclaringStaticMethodsToTest, frameMethod, parameters, result);
          }
       }
    }
@@ -659,12 +641,7 @@ public class EuclidFrameAPITester
                try
                {
                   invokeMethod(frameObject, frameMethod, parameters);
-                  String message = "Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName();
-                  message += "\nType being tested: " + frameType.getSimpleName();
-                  message += "\nMethod: " + getMethodSimpleName(frameMethod);
-                  message += "\nArguments used: " + Arrays.toString(parameters);
-                  message += "\nArgument types: " + getArgumentTypeString(parameters);
-                  throw new AssertionError(message);
+                  failToThrowReferenceFrameMismatchException(frameType, frameMethod, parameters);
                }
                catch (ReferenceFrameMismatchException e)
                {
@@ -713,13 +690,7 @@ public class EuclidFrameAPITester
                {
                   ReferenceFrame newFrame = ((ReferenceFrameHolder) parameters[i]).getReferenceFrame();
                   if (newFrame != frameA)
-                  {
-                     String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (i + 1) + "th parameter.";
-                     message += "\nType being tested: " + frameType.getSimpleName();
-                     message += "\nArguments used: " + Arrays.toString(parameters);
-                     message += "\nArgument types: " + getArgumentTypeString(parameters);
-                     throw new AssertionError(message);
-                  }
+                     failToChangeParameterFrame(frameType, frameMethod, parameters, i);
                }
             }
          }
@@ -754,14 +725,7 @@ public class EuclidFrameAPITester
 
             ReferenceFrame resultFrame = ((ReferenceFrameHolder) result).getReferenceFrame();
             if (resultFrame != frameA)
-            {
-               String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not set the frame of the result.";
-               message += "\nType being tested: " + frameType.getSimpleName();
-               message += "\nArguments used: " + Arrays.toString(parameters);
-               message += "\nArgument types: " + getArgumentTypeString(parameters);
-               message += "\nResult: " + result;
-               throw new AssertionError(message);
-            }
+               failToSetResultFrame(frameType, frameMethod, parameters, result);
          }
       }
    }
@@ -1024,6 +988,36 @@ public class EuclidFrameAPITester
             }
          }
       }
+   }
+
+   private static void failToSetResultFrame(Class<?> typeDeclaringMethod, Method frameMethod, Object[] parameters, Object result) throws AssertionError
+   {
+      String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not set the frame of the result.";
+      message += "\nType being tested: " + typeDeclaringMethod.getSimpleName();
+      message += "\nArguments used: " + Arrays.toString(parameters);
+      message += "\nArgument types: " + getArgumentTypeString(parameters);
+      message += "\nResult: " + result;
+      throw new AssertionError(message);
+   }
+
+   private static void failToChangeParameterFrame(Class<?> typeDeclaringMethod, Method frameMethod, Object[] parameters, int parameterIndex)
+         throws AssertionError
+   {
+      String message = "The method: " + getMethodSimpleName(frameMethod) + "\ndid not change the frame of the " + (parameterIndex + 1) + "th parameter.";
+      message += "\nType being tested: " + typeDeclaringMethod.getSimpleName();
+      message += "\nArguments used: " + Arrays.toString(parameters);
+      message += "\nArgument types: " + getArgumentTypeString(parameters);
+      throw new AssertionError(message);
+   }
+
+   private static void failToThrowReferenceFrameMismatchException(Class<?> typeDeclaringMethod, Method frameMethod, Object[] parameters) throws AssertionError
+   {
+      String message = "Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName();
+      message += "\nType being tested: " + typeDeclaringMethod.getSimpleName();
+      message += "\nMethod: " + getMethodSimpleName(frameMethod);
+      message += "\nArguments used: " + Arrays.toString(parameters);
+      message += "\nArgument types: " + getArgumentTypeString(parameters);
+      throw new AssertionError(message);
    }
 
    private static void debugSecurityException(Class<?> typeWithFramelessMethods, String frameMethodName, Class<?>[] framelessMethodParameterTypes)
