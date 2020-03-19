@@ -12,13 +12,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.ejml.data.DenseMatrix64F;
-
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
-import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
-import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
@@ -841,7 +836,7 @@ public class EuclidFrameAPITester
                String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod) + ". The method is not tested.";
                Objects.requireNonNull(frameMethodParameters, message);
 
-               Object[] framelessMethodParameters = clone(frameMethodParameters);
+               Object[] framelessMethodParameters = ReflectionBasedBuilders.clone(frameMethodParameters);
                Throwable expectedException = null;
                Object framelessMethodReturnObject = null;
                Object frameMethodReturnObject = null;
@@ -962,7 +957,7 @@ public class EuclidFrameAPITester
                   break;
                }
 
-               Object[] framelessMethodParameters = clone(frameMethodParameters);
+               Object[] framelessMethodParameters = ReflectionBasedBuilders.clone(frameMethodParameters);
                Throwable expectedException = null;
                Object framelessMethodReturnObject = null;
                Object frameMethodReturnObject = null;
@@ -1329,76 +1324,6 @@ public class EuclidFrameAPITester
       if (framelessType.isArray())
          return isFramelessTypeWithFrameEquivalent(framelessType.getComponentType());
       return isFramelessType(framelessType) && !framelessTypesWithoutFrameEquivalent.contains(framelessType);
-   }
-
-   private static Object[] clone(Object[] parametersToClone)
-   {
-      Object[] clone = (Object[]) Array.newInstance(parametersToClone.getClass().getComponentType(), parametersToClone.length);
-
-      for (int i = 0; i < parametersToClone.length; i++)
-      {
-         Class<? extends Object> parameterType = parametersToClone[i].getClass();
-
-         if (parameterType.isPrimitive() || parametersToClone[i] instanceof Number || parametersToClone[i] instanceof Boolean)
-         {
-            clone[i] = parametersToClone[i];
-         }
-         else if (DenseMatrix64F.class.equals(parameterType))
-         {
-            clone[i] = new DenseMatrix64F((DenseMatrix64F) parametersToClone[i]);
-         }
-         else if (float[].class.equals(parameterType))
-         {
-            float[] arrayToClone = (float[]) parametersToClone[i];
-            clone[i] = new float[arrayToClone.length];
-            System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
-         }
-         else if (double[].class.equals(parameterType))
-         {
-            double[] arrayToClone = (double[]) parametersToClone[i];
-            clone[i] = new double[arrayToClone.length];
-            System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
-         }
-         else if (int[].class.equals(parameterType))
-         {
-            int[] arrayToClone = (int[]) parametersToClone[i];
-            clone[i] = new int[arrayToClone.length];
-            System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
-         }
-         else if (isVertexSupplier(parameterType))
-         {
-            clone[i] = parametersToClone[i];
-         }
-         else
-         {
-            try
-            {
-               if (parameterType.isArray())
-               {
-                  clone[i] = clone((Object[]) parametersToClone[i]);
-               }
-               else
-               {
-                  clone[i] = ReflectionBasedBuilders.next(random, ReferenceFrame.getWorldFrame(), parameterType);
-                  Method setter = parameterType.getMethod("set", parameterType);
-                  setter.invoke(clone[i], parametersToClone[i]);
-               }
-            }
-            catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-            {
-               throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName(), e);
-            }
-         }
-      }
-
-      return clone;
-   }
-
-   private static boolean isVertexSupplier(Class<?> classToTest)
-   {
-      boolean implementSupplier = Stream.of(Vertex2DSupplier.class, Vertex3DSupplier.class, FrameVertex2DSupplier.class, FrameVertex3DSupplier.class)
-                                        .anyMatch(supplierType -> supplierType.isAssignableFrom(classToTest));
-      return implementSupplier && !ConvexPolygon2DReadOnly.class.isAssignableFrom(classToTest);
    }
 
    private static Class<?> searchSuperInterfaceFromSimpleName(String name, Class<?> typeToStartFrom)

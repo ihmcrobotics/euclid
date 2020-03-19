@@ -160,6 +160,66 @@ public class ReflectionBasedBuilders
       return instances;
    }
 
+   static Object[] clone(Object[] parametersToClone)
+   {
+      Object[] clone = (Object[]) Array.newInstance(parametersToClone.getClass().getComponentType(), parametersToClone.length);
+
+      for (int i = 0; i < parametersToClone.length; i++)
+      {
+         Class<? extends Object> parameterType = parametersToClone[i].getClass();
+
+         if (parameterType.isPrimitive() || parametersToClone[i] instanceof Number || parametersToClone[i] instanceof Boolean)
+         {
+            clone[i] = parametersToClone[i];
+         }
+         else if (DenseMatrix64F.class.equals(parameterType))
+         {
+            clone[i] = new DenseMatrix64F((DenseMatrix64F) parametersToClone[i]);
+         }
+         else if (float[].class.equals(parameterType))
+         {
+            float[] arrayToClone = (float[]) parametersToClone[i];
+            clone[i] = new float[arrayToClone.length];
+            System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
+         }
+         else if (double[].class.equals(parameterType))
+         {
+            double[] arrayToClone = (double[]) parametersToClone[i];
+            clone[i] = new double[arrayToClone.length];
+            System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
+         }
+         else if (int[].class.equals(parameterType))
+         {
+            int[] arrayToClone = (int[]) parametersToClone[i];
+            clone[i] = new int[arrayToClone.length];
+            System.arraycopy(arrayToClone, 0, clone[i], 0, arrayToClone.length);
+         }
+         else if (parameterType.isArray())
+         {
+            clone[i] = clone((Object[]) parametersToClone[i]);
+         }
+         else if (parameterType.isAnonymousClass())
+         {
+            clone[i] = parametersToClone[i];
+         }
+         else
+         {
+            try
+            {
+               clone[i] = next(new Random(), ReferenceFrame.getWorldFrame(), parameterType);
+               Method setter = parameterType.getMethod("set", parameterType);
+               setter.invoke(clone[i], parametersToClone[i]);
+            }
+            catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+            {
+               throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName(), e);
+            }
+         }
+      }
+
+      return clone;
+   }
+
    private static Object nextFramelessType(Random random, Class<?> type)
    {
       List<RandomFramelessTypeBuilder> matchingBuilders = framelessTypeBuilders.entrySet().stream().filter(entry -> type.isAssignableFrom(entry.getKey()))
