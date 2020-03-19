@@ -229,7 +229,7 @@ public class EuclidFrameAPITester
       {
          if (!signatureToIgnore.getName().equals(method.getName()))
             return true;
-         if (Arrays.equals(method.getParameterTypes(), signatureToIgnore.getParameterTypes()))
+         if (Arrays.equals(method.getParameterTypes(), signatureToIgnore.toParameterTypeArray()))
             return false;
          else
             return true;
@@ -285,19 +285,13 @@ public class EuclidFrameAPITester
       }
    }
 
-   public static void assertAPICompleteWithMatchingFrameSetters(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods,
-                                                                Predicate<Method> framelessMethodFilter)
-   {
-      // TODO Implement me!
-   }
-
    private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethod,
                                                                    MethodSignature originalSignature, MethodSignature overloadingSignature)
          throws SecurityException
    {
       try
       {
-         Method overloadingMethod = typeWithOverloadingMethods.getMethod(originalSignature.getName(), overloadingSignature.getParameterTypes());
+         Method overloadingMethod = typeWithOverloadingMethods.getMethod(originalSignature.getName(), overloadingSignature.toParameterTypeArray());
          Class<?> originalReturnType = originalSignature.getReturnType();
          Class<?> overloadingReturnType = overloadingMethod.getReturnType();
 
@@ -325,6 +319,142 @@ public class EuclidFrameAPITester
          throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + originalSignature.getMethodSimpleName()
                + "\nis not properly overloaded, expected to find in " + typeWithOverloadingMethods.getSimpleName() + ":\n"
                + overloadingSignature.getMethodSimpleName());
+      }
+   }
+
+   /**
+    * Convention is that for a setter like {@code FramelessType.set(Point2DReadOnly, Tuple3DReadOnly)}
+    * the following setters should be declared in the frame type:
+    * <ul>
+    * <li>{@code FrameType.setMatchingFrame(ReferenceFrame, Point2DReadOnly, Tuple3DReadOnly)}
+    * <li>{@code FrameType.setMatchingFrame(FramePoint2DReadOnly, FrameTuple3DReadOnly)}
+    * </ul>
+    * 
+    * @param typeWithFrameMethods
+    * @param typeWithFramelessMethods
+    * @param framelessMethodFilter
+    */
+   public static void assertAPIDeclareMatchingFrameSetters(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods,
+                                                           Predicate<Method> framelessMethodFilter)
+         throws SecurityException
+   {
+      Predicate<Method> filter = framelessMethodFilter.and(atLeastNFramelessParameters(1)).and(m -> m.getName().equals("set"));
+      List<MethodSignature> framelessSignatures = Stream.of(typeWithFramelessMethods.getMethods()).filter(filter).map(MethodSignature::new)
+                                                        .collect(Collectors.toList());
+
+      for (MethodSignature framelessSetterSignature : framelessSignatures)
+      {
+         List<MethodSignature> expectedSetMatchingFrameSignatures = createExpectedSetMatchingFrameSignatures(framelessSetterSignature);
+
+         for (MethodSignature expectedSetMatchingFrameSignature : expectedSetMatchingFrameSignatures)
+         {
+            try
+            {
+               Method setMatchingFrameMethod = typeWithFrameMethods.getMethod(expectedSetMatchingFrameSignature.getName(),
+                                                                              expectedSetMatchingFrameSignature.toParameterTypeArray());
+
+               Class<?> originalReturnType = framelessSetterSignature.getReturnType();
+               Class<?> overloadingReturnType = setMatchingFrameMethod.getReturnType();
+
+               { // Assert the return type is proper
+                  if (originalReturnType == null && overloadingReturnType != null)
+                  {
+                     String message = "Inconsistency found in the return type.";
+                     message += "\nOriginal setter: " + framelessSetterSignature.getMethodSimpleName();
+                     message += "\nCorresponding setMatchingFrame: " + getMethodSimpleName(setMatchingFrameMethod);
+                     message += "\nOriginal type declaring method: " + typeWithFramelessMethods.getSimpleName();
+                     message += "\nType declaring setMatchingFrame: " + typeWithFrameMethods.getSimpleName();
+                     throw new AssertionError(message);
+                  }
+
+                  if (overloadingReturnType.equals(originalReturnType))
+                     return;
+
+                  if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
+                     throw new AssertionError("Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName()
+                           + ", actual: " + overloadingReturnType.getSimpleName());
+               }
+            }
+            catch (NoSuchMethodException e)
+            {
+               throw new AssertionError("Could not find setMatchingFrame correspond to the original setter in " + typeWithFramelessMethods.getSimpleName()
+                     + ":\n" + framelessSetterSignature.getMethodSimpleName() + "\nExpected to find in " + typeWithFrameMethods.getSimpleName() + ":\n"
+                     + expectedSetMatchingFrameSignature.getMethodSimpleName());
+            }
+         }
+      }
+   }
+
+   private static List<MethodSignature> createExpectedSetMatchingFrameSignatures(MethodSignature framelessSetterSignature)
+   {
+      assert framelessSetterSignature.getName().equals("set");
+
+      List<MethodSignature> signatures = new ArrayList<>();
+      // setMatchingFrame(ReferenceFrame, FramelessType(s))
+      MethodSignature expectedSetMatchingFrameSignature = new MethodSignature(framelessSetterSignature);
+      expectedSetMatchingFrameSignature.setName("setMatchingFrame");
+      expectedSetMatchingFrameSignature.addParameterType(0, ReferenceFrame.class);
+      signatures.add(expectedSetMatchingFrameSignature);
+
+      // setMatchingFrame(FrameType(s))
+      expectedSetMatchingFrameSignature = new MethodSignature(framelessSetterSignature);
+      expectedSetMatchingFrameSignature.setName("setMatchingFrame");
+
+      for (int i = 0; i < expectedSetMatchingFrameSignature.getParameterCount(); i++)
+      {
+         Class<?> parameterType = expectedSetMatchingFrameSignature.getParameterType(i);
+         if (isFramelessTypeWithFrameEquivalent(parameterType))
+            expectedSetMatchingFrameSignature.setParameterType(i, findCorrespondingFrameType(parameterType));
+      }
+      signatures.add(expectedSetMatchingFrameSignature);
+      return signatures;
+   }
+
+   public static void assertSetMatchingFramePreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
+                                                                  Predicate<Method> methodFilter)
+   {
+      Class<? extends Object> framelessType = framelessTypeBuilber.newInstance(random).getClass();
+      Class<? extends ReferenceFrameHolder> frameType = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+
+      Predicate<Method> filter = methodFilter.and(m -> m.getName().equals("setMatchingFrame"));
+      List<Method> frameMethods = Stream.of(frameType.getMethods()).filter(filter).collect(Collectors.toList());
+
+      for (Method frameMethod : frameMethods)
+      {
+         Method framelessSetter = findCorrespondingFramelessSetterToSetMatchingFrame(frameMethod, framelessType);
+
+         // First testing with the arguments expressed in the same frame as the holder.
+      }
+   }
+
+   private static Method findCorrespondingFramelessSetterToSetMatchingFrame(Method setMatchingFrameMethod, Class<?> framelessType)
+   {
+      MethodSignature framelessSetterSignature = new MethodSignature(setMatchingFrameMethod);
+      framelessSetterSignature.setName("set");
+      if (framelessSetterSignature.getParameterType(0) == ReferenceFrame.class)
+      {
+         framelessSetterSignature.removeParameterType(0);
+      }
+
+      List<Class<?>> parameterTypes = framelessSetterSignature.getParameterTypes();
+      for (int i = 0; i < parameterTypes.size(); i++)
+      {
+         Class<?> parameterType = parameterTypes.get(i);
+         if (isFrameType(parameterType))
+         {
+            framelessSetterSignature.setParameterType(i, findCorrespondingFramelessType(parameterType));
+         }
+      }
+
+      try
+      {
+         return framelessType.getMethod(framelessSetterSignature.getName(), framelessSetterSignature.toParameterTypeArray());
+      }
+      catch (NoSuchMethodException e)
+      {
+         throw new AssertionError("Could not find the frameless setter that corresponds to :\n" + getMethodSimpleName(setMatchingFrameMethod) + ", declared in "
+               + setMatchingFrameMethod.getDeclaringClass().getSimpleName() + "\nExpected to find in " + framelessType.getSimpleName() + ":\n"
+               + framelessSetterSignature.getMethodSimpleName());
       }
    }
 
@@ -775,9 +905,6 @@ public class EuclidFrameAPITester
 
       for (Method frameMethod : frameMethods)
       {
-         if (!methodFilter.test(frameMethod))
-            continue;
-
          String frameMethodName = frameMethod.getName();
          Class<?>[] frameMethodParameterTypes = frameMethod.getParameterTypes();
          Class<?>[] framelessMethodParameterTypes = new Class[frameMethodParameterTypes.length];
@@ -1207,7 +1334,7 @@ public class EuclidFrameAPITester
       }
       else
       {
-         int numberOfArgumentsToOverload = (int) Arrays.stream(framelessSignature.getParameterTypes()).filter(t -> isFramelessTypeWithFrameEquivalent(t))
+         int numberOfArgumentsToOverload = (int) Arrays.stream(framelessSignature.toParameterTypeArray()).filter(t -> isFramelessTypeWithFrameEquivalent(t))
                                                        .count();
          int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToOverload);
 

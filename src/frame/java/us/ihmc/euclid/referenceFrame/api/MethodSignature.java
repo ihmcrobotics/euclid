@@ -2,7 +2,10 @@ package us.ihmc.euclid.referenceFrame.api;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
@@ -10,7 +13,7 @@ public class MethodSignature
 {
    private String name;
    private int modifiers;
-   private Class<?>[] parameterTypes;
+   private List<Class<?>> parameterTypes;
    private Class<?> returnType;
 
    public MethodSignature()
@@ -37,9 +40,7 @@ public class MethodSignature
    {
       name = other.getName();
       modifiers = other.getModifiers();
-      parameterTypes = new Class<?>[other.getParameterCount()];
-      for (int i = 0; i < other.getParameterCount(); i++)
-         parameterTypes[i] = other.getParameterTypes()[i];
+      setParameterTypes(other.toParameterTypeArray());
       returnType = other.getReturnType();
    }
 
@@ -47,9 +48,7 @@ public class MethodSignature
    {
       name = method.getName();
       modifiers = method.getModifiers();
-      parameterTypes = new Class<?>[method.getParameterCount()];
-      for (int i = 0; i < method.getParameterCount(); i++)
-         parameterTypes[i] = method.getParameterTypes()[i];
+      setParameterTypes(method.getParameterTypes());
       returnType = method.getReturnType();
    }
 
@@ -65,22 +64,27 @@ public class MethodSignature
 
    public int getParameterCount()
    {
-      return parameterTypes.length;
+      return parameterTypes.size();
    }
 
    public void setParameterTypes(Class<?>[] parameterTypes)
    {
-      this.parameterTypes = parameterTypes;
+      this.parameterTypes = new ArrayList<>(Arrays.asList(parameterTypes));
+   }
+
+   public void addParameterType(int index, Class<?> parameterType)
+   {
+      parameterTypes.add(index, parameterType);
+   }
+
+   public void removeParameterType(int index)
+   {
+      parameterTypes.remove(index);
    }
 
    public void setParameterType(int index, Class<?> parameterType)
    {
-      parameterTypes[index] = parameterType;
-   }
-
-   public void initializeParameterTypes(int numberOfParameters)
-   {
-      parameterTypes = new Class<?>[numberOfParameters];
+      parameterTypes.set(index, parameterType);
    }
 
    public void setReturnType(Class<?> returnType)
@@ -108,14 +112,19 @@ public class MethodSignature
       return Modifier.isStatic(modifiers);
    }
 
-   public Class<?>[] getParameterTypes()
+   public Class<?>[] toParameterTypeArray()
+   {
+      return parameterTypes.toArray(new Class<?>[0]);
+   }
+
+   public List<Class<?>> getParameterTypes()
    {
       return parameterTypes;
    }
 
    public Class<?> getParameterType(int index)
    {
-      return parameterTypes[index];
+      return parameterTypes.get(index);
    }
 
    public Class<?> getReturnType()
@@ -135,8 +144,13 @@ public class MethodSignature
 
    public static String getMethodSimpleName(Class<?> returnType, String methodName, Class<?>... parameterTypes)
    {
+      return getMethodSimpleName(returnType, methodName, Arrays.asList(parameterTypes));
+   }
+
+   public static String getMethodSimpleName(Class<?> returnType, String methodName, Collection<Class<?>> parameterTypes)
+   {
       String returnTypeName = returnType == null ? "void" : returnType.getSimpleName();
-      return returnTypeName + " " + methodName + EuclidCoreIOTools.getCollectionString("(", ")", ", ", Arrays.asList(parameterTypes), Class::getSimpleName);
+      return returnTypeName + " " + methodName + EuclidCoreIOTools.getCollectionString("(", ")", ", ", parameterTypes, Class::getSimpleName);
    }
 
    @Override
@@ -150,11 +164,11 @@ public class MethodSignature
       {
          MethodSignature other = (MethodSignature) object;
 
-         if (name == null ? other.name == null : !name.equals(other.name))
+         if (name == null ? other.name != null : !name.equals(other.name))
             return false;
          if (modifiers != other.modifiers)
             return false;
-         if (!Arrays.equals(parameterTypes, other.parameterTypes))
+         if (parameterTypes == null ? other.parameterTypes != null : !parameterTypes.equals(other.parameterTypes))
             return false;
          if (returnType != other.returnType)
             return false;
