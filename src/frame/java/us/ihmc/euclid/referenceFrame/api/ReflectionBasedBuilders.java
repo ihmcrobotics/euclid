@@ -206,13 +206,21 @@ public class ReflectionBasedBuilders
          {
             try
             {
-               clone[i] = next(new Random(), ReferenceFrame.getWorldFrame(), parameterType);
+               ReferenceFrame frame = ReferenceFrame.getWorldFrame();
+               if (parametersToClone[i] instanceof ReferenceFrameHolder)
+                  frame = ((ReferenceFrameHolder) parametersToClone[i]).getReferenceFrame();
+
+               clone[i] = next(new Random(), frame, parameterType);
                Method setter = parameterType.getMethod("set", parameterType);
                setter.invoke(clone[i], parametersToClone[i]);
             }
-            catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+            catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException e)
             {
                throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName(), e);
+            }
+            catch (InvocationTargetException e)
+            {
+               throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName(), e.getTargetException());
             }
          }
       }
