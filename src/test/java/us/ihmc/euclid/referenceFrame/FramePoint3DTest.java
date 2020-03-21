@@ -290,4 +290,11 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
 
       EuclidFrameAPITester.assertOverloadingWithFrameObjects(FramePoint3D.class, Point3D.class, true, 1, methodFilter);
    }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFramePoint3D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }

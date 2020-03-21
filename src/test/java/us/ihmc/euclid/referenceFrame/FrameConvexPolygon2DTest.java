@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
@@ -17,6 +18,8 @@ import us.ihmc.euclid.geometry.ConvexPolygon2D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameConvexPolygon2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 
@@ -195,22 +198,29 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
                                                                        m -> true,
                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
-//      Random random = new Random(544354);
-//
-//      for (int i = 0; i < ITERATIONS; i++)
-//      {
-//         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
-//         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
-//
-//         FrameConvexPolygon2DReadOnly source = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, sourceFrame, 1.0, 10);
-//         FixedFrameConvexPolygon2DBasics actual = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, destinationFrame, 1.0, 10);
-//
-//         actual.setMatchingFrame(source, true);
-//
-//         FrameConvexPolygon2D expected = new FrameConvexPolygon2D(source);
-//         expected.changeFrame(destinationFrame);
-//
-//         assertTrue(expected.epsilonEquals((FrameConvexPolygon2D) actual, EPSILON));
-//      }
+      Random random = new Random(544354);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ReferenceFrame sourceFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+         ReferenceFrame destinationFrame = EuclidFrameRandomTools.nextReferenceFrame(random, true);
+
+         FrameConvexPolygon2DReadOnly source = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, sourceFrame, 1.0, 10);
+         FixedFrameConvexPolygon2DBasics actual = EuclidFrameRandomTools.nextFrameConvexPolygon2D(random, destinationFrame, 1.0, 10);
+
+         actual.setMatchingFrame(source, true);
+
+         FrameConvexPolygon2D expected = new FrameConvexPolygon2D(source);
+         expected.changeFrame(destinationFrame);
+
+         assertTrue(expected.epsilonEquals((FrameConvexPolygon2D) actual, EPSILON));
+      }
+   }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameConvexPolygon2D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

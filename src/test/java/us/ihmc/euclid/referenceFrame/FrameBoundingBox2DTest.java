@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -15,6 +16,7 @@ import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FrameBoundingBox2DTest extends FrameBoundingBox2DReadOnlyTest<FrameBoundingBox2D>
 {
@@ -47,6 +49,15 @@ public class FrameBoundingBox2DTest extends FrameBoundingBox2DReadOnlyTest<Frame
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", BoundingBox2D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
+      methodFilter = methodFilter.and(m -> !Modifier.isStatic(m.getModifiers()));
+
       EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameBoundingBox2D.class, BoundingBox2D.class, false, 1, methodFilter);
+   }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameBoundingBox2D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

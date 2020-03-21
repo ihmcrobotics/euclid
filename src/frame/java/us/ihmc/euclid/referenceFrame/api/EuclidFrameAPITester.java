@@ -430,7 +430,7 @@ public class EuclidFrameAPITester
             ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
             ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
-            Method setterMethod = findCorrespondingSetterToSetMatchingFrame(frameType, matchingFrameMethod);
+            Method setterMethod = findCorrespondingSetterToSetMatchingIncludingFrame(frameType, matchingFrameMethod);
 
             for (int iteration = 0; iteration < numberOfIterations; iteration++)
             {
@@ -516,10 +516,12 @@ public class EuclidFrameAPITester
                   }
                }
 
+               int shift = matchingFrameMethod.getParameterTypes()[0] == ReferenceFrame.class ? 1 : 0;
+
                for (int i = 0; i < setterMethodParameters.length; i++)
                {
                   Object setterParameter = setterMethodParameters[i];
-                  Object matchingFrameParameter = matchingFrameMethodParameters[i];
+                  Object matchingFrameParameter = matchingFrameMethodParameters[i + shift];
 
                   if (!ReflectionBasedComparer.epsilonEquals(setterParameter, matchingFrameParameter, epsilon))
                      reportInconsistentArguments(matchingFrameMethod,
@@ -545,16 +547,118 @@ public class EuclidFrameAPITester
       }
    }
 
-   private static Method findCorrespondingSetterToSetMatchingFrame(Class<?> frameType, Method setMatchingFrameMethod)
+   public static void assertSetIncludingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, int numberOfIterations)
    {
-      MethodSignature frameSetterSignature = new MethodSignature(setMatchingFrameMethod);
+      assertSetIncludingFramePreserveFunctionality(frameTypeBuilder, m -> true, numberOfIterations);
+   }
+
+   public static void assertSetIncludingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
+                                                                   int numberOfIterations)
+   {
+      Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
+
+      Predicate<Method> filter = methodFilter.and(m -> m.getName().equals("setIncludingFrame"));
+      List<Method> frameMethods = Stream.of(frameType.getMethods()).filter(filter).collect(Collectors.toList());
+
+      for (Method includingFrameMethod : frameMethods)
+      {
+         try
+         {
+            ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+            ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
+
+            Method setterMethod = findCorrespondingSetterToSetMatchingIncludingFrame(frameType, includingFrameMethod);
+
+            for (int iteration = 0; iteration < numberOfIterations; iteration++)
+            {
+               Object[] includingFrameMethodParameters = ReflectionBasedBuilders.next(random, frameA, includingFrameMethod.getParameterTypes());
+               Object[] setterMethodParameters = ReflectionBasedBuilders.clone(includingFrameMethodParameters);
+
+               if (includingFrameMethod.getParameterTypes()[0] == ReferenceFrame.class)
+               {
+                  includingFrameMethodParameters[0] = frameA;
+                  setterMethodParameters = Arrays.copyOfRange(setterMethodParameters, 1, setterMethodParameters.length);
+               }
+
+               ReferenceFrameHolder includingFrameObject = frameTypeBuilder.newInstance(random, frameB);
+               ReferenceFrameHolder setterObject = frameTypeBuilder.newInstance(random, frameA);
+
+               Throwable expectedException = null;
+               Object setterMethodReturnObject = null;
+               Object includingFrameMethodReturnObject = null;
+
+               try
+               {
+                  setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
+               }
+               catch (Throwable e)
+               {
+                  expectedException = e;
+               }
+
+               try
+               {
+                  includingFrameMethodReturnObject = invokeMethod(includingFrameObject, includingFrameMethod, includingFrameMethodParameters);
+               }
+               catch (Throwable e)
+               {
+                  if (expectedException == null || e.getClass() != expectedException.getClass())
+                  {
+                     reportInconsistentException(includingFrameMethod, setterMethod, expectedException, e);
+                  }
+                  else
+                  {
+                     continue;
+                  }
+               }
+
+               int shift = includingFrameMethod.getParameterTypes()[0] == ReferenceFrame.class ? 1 : 0;
+
+               for (int i = 0; i < setterMethodParameters.length; i++)
+               {
+                  Object setterParameter = setterMethodParameters[i];
+                  Object matchingFrameParameter = includingFrameMethodParameters[i + shift];
+
+                  if (!ReflectionBasedComparer.epsilonEquals(setterParameter, matchingFrameParameter, epsilon))
+                     reportInconsistentArguments(includingFrameMethod,
+                                                 setterMethod,
+                                                 includingFrameMethodParameters,
+                                                 setterMethodParameters,
+                                                 setterParameter,
+                                                 matchingFrameParameter);
+               }
+
+               if (!ReflectionBasedComparer.epsilonEquals(setterMethodReturnObject, includingFrameMethodReturnObject, epsilon))
+                  reportInconsistentReturnedType(includingFrameMethod, setterMethod, setterMethodReturnObject, includingFrameMethodReturnObject);
+
+               if (!ReflectionBasedComparer.epsilonEquals(setterObject, includingFrameObject, epsilon))
+                  reportInconsistentObject(includingFrameMethod, setterObject, includingFrameObject, setterMethod);
+            }
+         }
+         catch (RuntimeException e)
+         {
+            System.err.println("Problem when evaluating the method: " + getMethodSimpleName(includingFrameMethod));
+            throw e;
+         }
+      }
+   }
+
+   private static Method findCorrespondingSetterToSetMatchingIncludingFrame(Class<?> frameType, Method setMatchingIncludingFrameMethod)
+   {
+      MethodSignature frameSetterSignature = new MethodSignature(setMatchingIncludingFrameMethod);
       frameSetterSignature.setName("set");
 
-      Class<?> lastParameter = setMatchingFrameMethod.getParameterTypes()[setMatchingFrameMethod.getParameterCount() - 1];
+      // The following is for setMatchingFrame for 2D frame objects.
+      Class<?> lastParameter = frameSetterSignature.getParameterType(setMatchingIncludingFrameMethod.getParameterCount() - 1);
 
       if (lastParameter == boolean.class && is2DType(frameType))
       {
-         frameSetterSignature.removeParameterType(setMatchingFrameMethod.getParameterCount() - 1);
+         frameSetterSignature.removeParameterType(frameSetterSignature.getParameterCount() - 1);
+      }
+
+      if (frameSetterSignature.getParameterType(0) == ReferenceFrame.class)
+      {
+         frameSetterSignature.removeParameterType(0);
       }
 
       try
@@ -563,9 +667,9 @@ public class EuclidFrameAPITester
       }
       catch (NoSuchMethodException e)
       {
-         throw new AssertionError("Could not find the frameless setter that corresponds to :\n" + getMethodSimpleName(setMatchingFrameMethod) + ", declared in "
-               + setMatchingFrameMethod.getDeclaringClass().getSimpleName() + "\nExpected to find in " + frameType.getSimpleName() + ":\n"
-               + frameSetterSignature.getMethodSimpleName());
+         throw new AssertionError("Could not find the frameless setter that corresponds to :\n" + getMethodSimpleName(setMatchingIncludingFrameMethod)
+               + ", declared in " + setMatchingIncludingFrameMethod.getDeclaringClass().getSimpleName() + "\nExpected to find in " + frameType.getSimpleName()
+               + ":\n" + frameSetterSignature.getMethodSimpleName());
       }
    }
 
@@ -1299,11 +1403,11 @@ public class EuclidFrameAPITester
          throws AssertionError
    {
       String message = "";
-      message += "Detected a frame method inconsistent with its original frameless method.";
-      message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-      message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-      message += "\nFrame object after method call:" + frameObject;
-      message += "\nFrameless object after method call:" + framelessObject;
+      message += "Detected a method inconsistent with its original method.";
+      message += "\nInconsistent method: " + getMethodSimpleName(frameMethod);
+      message += "\nOriginal     method: " + getMethodSimpleName(framelessMethod);
+      message += "\nActual   object after method call:" + frameObject;
+      message += "\nExpected object after method call:" + framelessObject;
       throw new AssertionError(message);
    }
 
@@ -1313,7 +1417,7 @@ public class EuclidFrameAPITester
       message += "The method: " + getMethodSimpleName(frameMethod);
       message += "\ndid not throw the same exception as the original method: " + getMethodSimpleName(framelessMethod);
       message += "\nExpected exception class: " + (expectedException == null ? "none" : expectedException.getClass().getSimpleName());
-      message += "\nActual exception class: " + e.getClass().getSimpleName();
+      message += "\nActual   exception class: " + e.getClass().getSimpleName();
       throw new AssertionError(message);
    }
 
@@ -1322,11 +1426,11 @@ public class EuclidFrameAPITester
          throws AssertionError
    {
       String message = "";
-      message += "Detected a frame method inconsistent with its original frameless method.";
-      message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-      message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-      message += "\nFrame arguments after call:\n" + Arrays.toString(frameMethodParameters);
-      message += "\nFrameless arguments after call:\n"
+      message += "Detected a method inconsistent with its original method.";
+      message += "\nInconsistent method: " + getMethodSimpleName(frameMethod);
+      message += "\nOriginal     method: " + getMethodSimpleName(framelessMethod);
+      message += "\nActual   arguments after call:\n" + Arrays.toString(frameMethodParameters);
+      message += "\nExpected arguments after call:\n"
             + EuclidCoreIOTools.getCollectionString("[", "]", ", ", Arrays.asList(framelessMethodParameters), EuclidFrameAPITester::toStringAsFramelessObject);
       throw new AssertionError(message);
    }
@@ -1336,11 +1440,11 @@ public class EuclidFrameAPITester
          throws AssertionError
    {
       String message = "";
-      message += "Detected a frame method inconsistent with its original frameless method.";
-      message += "\nInconsistent frame method: " + getMethodSimpleName(frameMethod);
-      message += "\nOriginal frameless method: " + getMethodSimpleName(framelessMethod);
-      message += "\nFrame method returned:" + frameMethodReturnObject;
-      message += "\nFrameless method returned:" + toStringAsFramelessObject(framelessMethodReturnObject);
+      message += "Detected a method inconsistent with its original method.";
+      message += "\nInconsistent method: " + getMethodSimpleName(frameMethod);
+      message += "\nOriginal     method: " + getMethodSimpleName(framelessMethod);
+      message += "\nActual   method returned:" + frameMethodReturnObject;
+      message += "\nExpected method returned:" + toStringAsFramelessObject(framelessMethodReturnObject);
       throw new AssertionError(message);
    }
 

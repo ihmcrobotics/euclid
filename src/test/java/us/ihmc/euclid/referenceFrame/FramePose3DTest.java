@@ -90,4 +90,11 @@ public class FramePose3DTest extends FramePose3DReadOnlyTest<FramePose3D>
          EuclidGeometryTestTools.assertPose3DEquals(expected, actual, EPSILON);
       }
    }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFramePose3D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }

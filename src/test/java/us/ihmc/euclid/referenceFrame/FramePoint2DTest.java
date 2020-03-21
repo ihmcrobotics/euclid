@@ -297,4 +297,11 @@ public class FramePoint2DTest extends FrameTuple2DBasicsTest<FramePoint2D>
 
       EuclidFrameAPITester.assertOverloadingWithFrameObjects(FramePoint2D.class, Point2D.class, true, 1, methodFilter);
    }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFramePoint2D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }

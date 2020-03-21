@@ -84,4 +84,15 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
          EuclidGeometryTestTools.assertOrientation2DEquals(expected, actual, EPSILON);
       }
    }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("setIncludingFrame", ReferenceFrame.class, double.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameOrientation2D,
+                                                                        methodFilter,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }

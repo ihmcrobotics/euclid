@@ -143,6 +143,13 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
    }
 
    @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector2D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
+
+   @Test
    public void testChangeFrame() throws Exception
    {
       Random random = new Random(43563);

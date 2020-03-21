@@ -74,4 +74,11 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
          EuclidGeometryTestTools.assertLine2DEquals(expected, actual, EPSILON);
       }
    }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLine2D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }
