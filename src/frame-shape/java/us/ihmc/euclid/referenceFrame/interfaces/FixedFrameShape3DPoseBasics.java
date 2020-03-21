@@ -62,6 +62,12 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
       set(rotationMatrix.getReferenceFrame(), rotationMatrix, translation);
    }
 
+   default void setAndInvert(FrameShape3DPoseReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Shape3DPoseBasics.super.setAndInvert(other);
+   }
+
    default void setRotation(FrameOrientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
@@ -178,5 +184,41 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
    {
       checkReferenceFrameMatch(translation);
       Shape3DPoseBasics.super.prependTranslation(translation);
+   }
+
+   default void multiply(FrameShape3DPoseReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Shape3DPoseBasics.super.multiply(other);
+   }
+
+   default void multiplyInvertThis(FrameShape3DPoseReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Shape3DPoseBasics.super.multiplyInvertThis(other);
+   }
+
+   default void multiplyInvertOther(FrameShape3DPoseReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Shape3DPoseBasics.super.multiplyInvertOther(other);
+   }
+
+   default void preMultiply(FrameShape3DPoseReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Shape3DPoseBasics.super.preMultiply(other);
+   }
+
+   default void preMultiplyInvertThis(FrameShape3DPoseReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Shape3DPoseBasics.super.preMultiplyInvertThis(other);
+   }
+
+   default void preMultiplyInvertOther(FrameShape3DPoseReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Shape3DPoseBasics.super.preMultiplyInvertOther(other);
    }
 }

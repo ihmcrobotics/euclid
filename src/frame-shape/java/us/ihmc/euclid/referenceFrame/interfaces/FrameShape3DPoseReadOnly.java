@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, ReferenceFrameHolder
 {
@@ -61,7 +60,7 @@ public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, Reference
       checkReferenceFrameMatch(eulerAnglesToPack);
       Shape3DPoseReadOnly.super.getRotationEuler(eulerAnglesToPack);
    }
-   
+
    default void getRotationEuler(FrameVector3DBasics eulerAnglesToPack)
    {
       eulerAnglesToPack.setReferenceFrame(getReferenceFrame());
@@ -309,6 +308,25 @@ public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, Reference
       Shape3DPoseReadOnly.super.transform(matrixOriginal, matrixTransformed);
    }
 
+   default void transform(FixedFrameShape3DPoseBasics rigidBodyTransformToTransform)
+   {
+      checkReferenceFrameMatch(rigidBodyTransformToTransform);
+      Shape3DPoseReadOnly.super.transform(rigidBodyTransformToTransform);
+   }
+
+   default void transform(FrameShape3DPoseReadOnly original, FixedFrameShape3DPoseBasics transformed)
+   {
+      checkReferenceFrameMatch(original, transformed);
+      Shape3DPoseReadOnly.super.transform(original, transformed);
+   }
+
+   default void transform(FrameShape3DPoseReadOnly original, FrameShape3DPoseBasics transformed)
+   {
+      checkReferenceFrameMatch(original);
+      transformed.setReferenceFrame(getReferenceFrame());
+      Shape3DPoseReadOnly.super.transform(original, transformed);
+   }
+
    default void inverseTransform(FixedFramePoint3DBasics pointToTransform)
    {
       checkReferenceFrameMatch(pointToTransform);
@@ -521,5 +539,24 @@ public interface FrameShape3DPoseReadOnly extends Shape3DPoseReadOnly, Reference
    {
       checkReferenceFrameMatch(other);
       return Shape3DPoseReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
+   default void inverseTransform(FixedFrameShape3DPoseBasics rigidBodyTransformToTransform)
+   {
+      checkReferenceFrameMatch(rigidBodyTransformToTransform);
+      Shape3DPoseReadOnly.super.inverseTransform(rigidBodyTransformToTransform);
+   }
+
+   default void inverseTransform(FrameShape3DPoseReadOnly original, FixedFrameShape3DPoseBasics inverseTransformed)
+   {
+      checkReferenceFrameMatch(original, inverseTransformed);
+      Shape3DPoseReadOnly.super.inverseTransform(original, inverseTransformed);
+   }
+
+   default void inverseTransform(FrameShape3DPoseReadOnly original, FrameShape3DPoseBasics inverseTransformed)
+   {
+      checkReferenceFrameMatch(original);
+      inverseTransformed.setReferenceFrame(getReferenceFrame());
+      Shape3DPoseReadOnly.super.inverseTransform(original, inverseTransformed);
    }
 }
