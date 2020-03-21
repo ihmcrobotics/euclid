@@ -154,6 +154,12 @@ public class MethodSignature
    }
 
    @Override
+   public String toString()
+   {
+      return getMethodSimpleName();
+   }
+
+   @Override
    public boolean equals(Object object)
    {
       if (object == this)
