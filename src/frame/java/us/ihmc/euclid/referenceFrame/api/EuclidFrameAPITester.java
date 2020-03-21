@@ -146,7 +146,7 @@ public class EuclidFrameAPITester
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY),
                                                                           framelessMutableType);
 
-      Objects.requireNonNull(framelessReadOnlyType);
+      Objects.requireNonNull(framelessReadOnlyType, "Could not find read-only type for " + framelessMutableType.getSimpleName());
       framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
    }
 
@@ -207,10 +207,10 @@ public class EuclidFrameAPITester
       String framelessReadOnlyTypeName = framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY);
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessReadOnlyTypeName, framelessMutableType);
 
-      Objects.requireNonNull(fixedFrameMutableType);
-      Objects.requireNonNull(frameReadOnlyType);
-      Objects.requireNonNull(framelessMutableType);
-      Objects.requireNonNull(framelessReadOnlyType);
+      Objects.requireNonNull(fixedFrameMutableType, "Could not find fixed-frame mutable type for " + mutableFrameMutableType.getSimpleName());
+      Objects.requireNonNull(frameReadOnlyType, "Could not find frame read-only type for " + mutableFrameMutableType.getSimpleName());
+      Objects.requireNonNull(framelessMutableType, "Could not find frameless mutable type for " + mutableFrameMutableType.getSimpleName());
+      Objects.requireNonNull(framelessReadOnlyType, "Could not find frameless read-only type for " + mutableFrameMutableType.getSimpleName());
 
       registerFrameType(mutableFrameMutableType, fixedFrameMutableType, frameReadOnlyType, framelessMutableType, framelessReadOnlyType);
    }
@@ -260,7 +260,7 @@ public class EuclidFrameAPITester
    public static void registerReadOnlyFrameTypeSmart(Class<?> frameReadOnlyType)
    {
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyType.getSimpleName().replace(FRAME, ""), frameReadOnlyType);
-      Objects.requireNonNull(framelessReadOnlyType);
+      Objects.requireNonNull(framelessReadOnlyType, "Could not find frameless read-only type for " + frameReadOnlyType.getSimpleName());
 
       framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
       frameReadOnlyTypes.add(frameReadOnlyType);
@@ -416,7 +416,7 @@ public class EuclidFrameAPITester
          Class<?> overloadingReturnType = overloadingMethod.getReturnType();
 
          { // Assert the return type is proper
-            if (originalReturnType == null && overloadingReturnType != null)
+            if ((originalReturnType == null) != (overloadingReturnType == null))
             {
                String message = "Inconsistency found in the return type.";
                message += "\nOriginal method: " + originalSignature.getMethodSimpleName();
@@ -426,7 +426,7 @@ public class EuclidFrameAPITester
                throw new AssertionError(message);
             }
 
-            if (overloadingReturnType.equals(originalReturnType))
+            if (overloadingReturnType.equals(originalReturnType) || overloadingReturnType == findCorrespondingFrameType(originalReturnType))
                return;
 
             if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
@@ -609,6 +609,7 @@ public class EuclidFrameAPITester
    public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
                                                                   int numberOfIterations)
    {
+      // TODO Assert that if arguments are in different frames, the method throws an exception.
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
       Predicate<Method> filter = methodFilter.and(m -> m.getName().equals(SET_MATCHING_FRAME));
@@ -771,6 +772,7 @@ public class EuclidFrameAPITester
    public static void assertSetIncludingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
                                                                    int numberOfIterations)
    {
+      // TODO Assert that if arguments are in different frames, the method throws an exception.
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
       Predicate<Method> filter = methodFilter.and(m -> m.getName().equals(SET_INCLUDING_FRAME));
