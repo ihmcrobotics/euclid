@@ -311,6 +311,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
     *                             Modified.
+    * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
     */
    default void getRotation(RotationMatrixBasics rotationMatrixToPack)
    {
@@ -322,6 +323,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *
     * @param rotationMatrixToPack the rotation-scale matrix that is set to this transform's rotation.
     *                             The scale part is reset. Modified.
+    * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
     */
    default void getRotation(RotationScaleMatrix rotationMatrixToPack)
    {
@@ -333,6 +335,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *
     * @param orientationToPack the orientation that is set to the rotation part of this transform.
     *                          Modified.
+    * @deprecated Use {@code orientationToPack.set(this.getRotation())} instead.
     */
    default void getRotation(Orientation3DBasics orientationToPack)
    {
@@ -349,6 +352,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *
     * @param rotationVectorToPack the rotation vector that is set to the rotation part of this
     *                             transform. Modified.
+    * @deprecated Use {@code this.getRotation().getRotationVector(rotationVectorToPack)} instead.
     */
    default void getRotation(Vector3DBasics rotationVectorToPack)
    {
@@ -381,6 +385,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     * </p>
     *
     * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
+    * @deprecated Use {@code this.getRotation().getEuler(rotationVectorToPack)} instead.
     */
    default void getRotationEuler(Vector3DBasics eulerAnglesToPack)
    {
@@ -389,10 +394,12 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /**
     * Packs the translation part of this rigid-body transform.
-    *
+    * 
     * @param translationToPack the tuple in which the translation part of this transform is stored.
     *                          Modified.
+    * @deprecated Use {@code translationToPack.set(this.getTranslation())} instead.
     */
+   @Deprecated
    default void getTranslation(Tuple3DBasics translationToPack)
    {
       translationToPack.set(getTranslation());
