@@ -63,6 +63,9 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
    @Test
    public void testSetMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameOrientation2D,
+                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(544354);
 
       for (int i = 0; i < ITERATIONS; i++)

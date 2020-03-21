@@ -63,6 +63,8 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
    @Test
    public void testSetMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameMatrix3D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(544354);
 
       for (int i = 0; i < ITERATIONS; i++)

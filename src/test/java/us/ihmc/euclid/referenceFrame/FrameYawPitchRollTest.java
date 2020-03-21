@@ -142,6 +142,9 @@ public class FrameYawPitchRollTest
    @Test
    public void testMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameYawPitchRoll,
+                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(3225);
 
       for (int i = 0; i < ITERATIONS; i++)

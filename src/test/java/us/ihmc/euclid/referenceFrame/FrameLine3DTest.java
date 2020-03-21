@@ -62,6 +62,9 @@ public class FrameLine3DTest extends FrameLine3DReadOnlyTest<FrameLine3D>
    @Test
    public void testSetMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLine3D,
+                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(544354);
 
       for (int i = 0; i < ITERATIONS; i++)

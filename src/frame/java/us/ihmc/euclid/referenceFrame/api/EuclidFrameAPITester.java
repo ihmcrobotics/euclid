@@ -410,12 +410,13 @@ public class EuclidFrameAPITester
       return signatures;
    }
 
-   public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder)
+   public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, int numberOfIterations)
    {
-      assertSetMatchingFramePreserveFunctionality(frameTypeBuilder, m -> true);
+      assertSetMatchingFramePreserveFunctionality(frameTypeBuilder, m -> true, numberOfIterations);
    }
 
-   public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter)
+   public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
+                                                                  int numberOfIterations)
    {
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
@@ -431,107 +432,110 @@ public class EuclidFrameAPITester
 
             Method setterMethod = findCorrespondingSetterToSetMatchingFrame(frameType, matchingFrameMethod);
 
-            Object[] matchingFrameMethodParameters = ReflectionBasedBuilders.next(random, frameA, matchingFrameMethod.getParameterTypes());
-            Object[] setterMethodParameters = ReflectionBasedBuilders.clone(matchingFrameMethodParameters);
-            boolean isLastParameterToCheck2DTransform = is2DType(frameType)
-                  && matchingFrameMethod.getParameterTypes()[matchingFrameMethod.getParameterCount() - 1] == boolean.class;
-
-            if (isLastParameterToCheck2DTransform)
-            { // Last argument is "boolean checkIfTransformInXYPlane"
-               setterMethodParameters = Arrays.copyOfRange(setterMethodParameters, 0, setterMethodParameters.length - 1);
-            }
-
-            ReferenceFrameHolder matchingFrameObject = frameTypeBuilder.newInstance(random, frameB);
-            ReferenceFrameHolder setterObject = frameTypeBuilder.newInstance(random, frameA);
-
-            Throwable expectedException = null;
-            Object setterMethodReturnObject = null;
-            Object matchingFrameMethodReturnObject = null;
-
-            try
+            for (int iteration = 0; iteration < numberOfIterations; iteration++)
             {
+               Object[] matchingFrameMethodParameters = ReflectionBasedBuilders.next(random, frameA, matchingFrameMethod.getParameterTypes());
+               Object[] setterMethodParameters = ReflectionBasedBuilders.clone(matchingFrameMethodParameters);
+               boolean isLastParameterToCheck2DTransform = is2DType(frameType)
+                     && matchingFrameMethod.getParameterTypes()[matchingFrameMethod.getParameterCount() - 1] == boolean.class;
+
                if (isLastParameterToCheck2DTransform)
-               {
-                  setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
-                  Method applyTransformMethod = frameType.getMethod("applyTransform", Transform.class, boolean.class);
-                  invokeMethod(setterObject,
-                               applyTransformMethod,
-                               frameA.getTransformToDesiredFrame(frameB),
-                               matchingFrameMethodParameters[matchingFrameMethodParameters.length - 1]);
-                  ((FrameChangeable) setterObject).setReferenceFrame(frameB);
+               { // Last argument is "boolean checkIfTransformInXYPlane"
+                  setterMethodParameters = Arrays.copyOfRange(setterMethodParameters, 0, setterMethodParameters.length - 1);
                }
-               else if (is2DType(frameType) && Stream.of(setterMethodParameters).map(Object::getClass).allMatch(EuclidFrameAPITester::is3DType))
-               { // The transformation should be done on the arguments not the holder.
-                  setterObject = frameTypeBuilder.newInstance(random, frameB);
 
-                  Object[] localSetterMethodParameters = ReflectionBasedBuilders.clone(setterMethodParameters);
+               ReferenceFrameHolder matchingFrameObject = frameTypeBuilder.newInstance(random, frameB);
+               ReferenceFrameHolder setterObject = frameTypeBuilder.newInstance(random, frameA);
 
-                  for (int paramIndex = 0; paramIndex < localSetterMethodParameters.length; paramIndex++)
+               Throwable expectedException = null;
+               Object setterMethodReturnObject = null;
+               Object matchingFrameMethodReturnObject = null;
+
+               try
+               {
+                  if (isLastParameterToCheck2DTransform)
                   {
-                     Object setterMethodParameter = localSetterMethodParameters[paramIndex];
-
-                     if (setterMethodParameter instanceof FrameVertex3DSupplier)
-                     {
-                        FrameVertex3DSupplier asSupplier = (FrameVertex3DSupplier) setterMethodParameter;
-                        List<FramePoint3D> vertices = new ArrayList<>();
-                        for (int vertexIndex = 0; vertexIndex < asSupplier.getNumberOfVertices(); vertexIndex++)
-                           vertices.add(new FramePoint3D(asSupplier.getVertex(vertexIndex)));
-                        vertices.forEach(v -> v.changeFrame(frameB));
-                        localSetterMethodParameters[paramIndex] = FrameVertex3DSupplier.asFrameVertex3DSupplier(vertices);
-                     }
-                     else
-                     {
-                        ((FrameChangeable) setterMethodParameter).changeFrame(frameB);
-                     }
+                     setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
+                     Method applyTransformMethod = frameType.getMethod("applyTransform", Transform.class, boolean.class);
+                     invokeMethod(setterObject,
+                                  applyTransformMethod,
+                                  frameA.getTransformToDesiredFrame(frameB),
+                                  matchingFrameMethodParameters[matchingFrameMethodParameters.length - 1]);
+                     ((FrameChangeable) setterObject).setReferenceFrame(frameB);
                   }
-                  setterMethodReturnObject = invokeMethod(setterObject, setterMethod, localSetterMethodParameters);
+                  else if (is2DType(frameType) && Stream.of(setterMethodParameters).map(Object::getClass).allMatch(EuclidFrameAPITester::is3DType))
+                  { // The transformation should be done on the arguments not the holder.
+                     setterObject = frameTypeBuilder.newInstance(random, frameB);
+
+                     Object[] localSetterMethodParameters = ReflectionBasedBuilders.clone(setterMethodParameters);
+
+                     for (int paramIndex = 0; paramIndex < localSetterMethodParameters.length; paramIndex++)
+                     {
+                        Object setterMethodParameter = localSetterMethodParameters[paramIndex];
+
+                        if (setterMethodParameter instanceof FrameVertex3DSupplier)
+                        {
+                           FrameVertex3DSupplier asSupplier = (FrameVertex3DSupplier) setterMethodParameter;
+                           List<FramePoint3D> vertices = new ArrayList<>();
+                           for (int vertexIndex = 0; vertexIndex < asSupplier.getNumberOfVertices(); vertexIndex++)
+                              vertices.add(new FramePoint3D(asSupplier.getVertex(vertexIndex)));
+                           vertices.forEach(v -> v.changeFrame(frameB));
+                           localSetterMethodParameters[paramIndex] = FrameVertex3DSupplier.asFrameVertex3DSupplier(vertices);
+                        }
+                        else
+                        {
+                           ((FrameChangeable) setterMethodParameter).changeFrame(frameB);
+                        }
+                     }
+                     setterMethodReturnObject = invokeMethod(setterObject, setterMethod, localSetterMethodParameters);
+                  }
+                  else
+                  {
+                     setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
+                     ((FrameChangeable) setterObject).changeFrame(frameB);
+                  }
                }
-               else
+               catch (Throwable e)
                {
-                  setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
-                  ((FrameChangeable) setterObject).changeFrame(frameB);
+                  expectedException = e;
                }
-            }
-            catch (Throwable e)
-            {
-               expectedException = e;
-            }
 
-            try
-            {
-               matchingFrameMethodReturnObject = invokeMethod(matchingFrameObject, matchingFrameMethod, matchingFrameMethodParameters);
-            }
-            catch (Throwable e)
-            {
-               if (expectedException == null || e.getClass() != expectedException.getClass())
+               try
                {
-                  reportInconsistentException(matchingFrameMethod, setterMethod, expectedException, e);
+                  matchingFrameMethodReturnObject = invokeMethod(matchingFrameObject, matchingFrameMethod, matchingFrameMethodParameters);
                }
-               else
+               catch (Throwable e)
                {
-                  continue;
+                  if (expectedException == null || e.getClass() != expectedException.getClass())
+                  {
+                     reportInconsistentException(matchingFrameMethod, setterMethod, expectedException, e);
+                  }
+                  else
+                  {
+                     continue;
+                  }
                }
+
+               for (int i = 0; i < setterMethodParameters.length; i++)
+               {
+                  Object setterParameter = setterMethodParameters[i];
+                  Object matchingFrameParameter = matchingFrameMethodParameters[i];
+
+                  if (!ReflectionBasedComparer.epsilonEquals(setterParameter, matchingFrameParameter, epsilon))
+                     reportInconsistentArguments(matchingFrameMethod,
+                                                 setterMethod,
+                                                 matchingFrameMethodParameters,
+                                                 setterMethodParameters,
+                                                 setterParameter,
+                                                 matchingFrameParameter);
+               }
+
+               if (!ReflectionBasedComparer.epsilonEquals(setterMethodReturnObject, matchingFrameMethodReturnObject, epsilon))
+                  reportInconsistentReturnedType(matchingFrameMethod, setterMethod, setterMethodReturnObject, matchingFrameMethodReturnObject);
+
+               if (!ReflectionBasedComparer.epsilonEquals(setterObject, matchingFrameObject, epsilon))
+                  reportInconsistentObject(matchingFrameMethod, setterObject, matchingFrameObject, setterMethod);
             }
-
-            for (int i = 0; i < setterMethodParameters.length; i++)
-            {
-               Object setterParameter = setterMethodParameters[i];
-               Object matchingFrameParameter = matchingFrameMethodParameters[i];
-
-               if (!ReflectionBasedComparer.epsilonEquals(setterParameter, matchingFrameParameter, epsilon))
-                  reportInconsistentArguments(matchingFrameMethod,
-                                              setterMethod,
-                                              matchingFrameMethodParameters,
-                                              setterMethodParameters,
-                                              setterParameter,
-                                              matchingFrameParameter);
-            }
-
-            if (!ReflectionBasedComparer.epsilonEquals(setterMethodReturnObject, matchingFrameMethodReturnObject, epsilon))
-               reportInconsistentReturnedType(matchingFrameMethod, setterMethod, setterMethodReturnObject, matchingFrameMethodReturnObject);
-
-            if (!ReflectionBasedComparer.epsilonEquals(setterObject, matchingFrameObject, epsilon))
-               reportInconsistentObject(matchingFrameMethod, setterObject, matchingFrameObject, setterMethod);
          }
          catch (RuntimeException e)
          {

@@ -254,6 +254,9 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameQuaternion,
+                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(3225);
 
       for (int i = 0; i < ITERATIONS; i++)

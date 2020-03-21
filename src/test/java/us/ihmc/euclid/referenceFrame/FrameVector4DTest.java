@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
@@ -103,6 +104,12 @@ public class FrameVector4DTest extends FrameTuple4DBasicsTest<FrameVector4D>
          EuclidCoreTestTools.assertTuple4DEquals(randomTuple, frameVector4D, EPSILON);
          EuclidFrameTestTools.assertFrameTuple4DEquals(randomTuple, frameVector4D, EPSILON);
       }
+   }
+
+   @Test
+   public void testSetMatchingFrame()
+   {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector4D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test
