@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 
 public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<FrameShape3DPose>
 {
@@ -40,6 +41,11 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    }
 
    public FrameShape3DPose(ReferenceFrame referenceFrame, Pose3DReadOnly pose)
+   {
+      setIncludingFrame(referenceFrame, pose);
+   }
+
+   public FrameShape3DPose(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose)
    {
       setIncludingFrame(referenceFrame, pose);
    }

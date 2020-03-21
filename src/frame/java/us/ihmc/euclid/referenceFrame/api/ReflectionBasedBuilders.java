@@ -125,7 +125,12 @@ public class ReflectionBasedBuilders
       object = nextFramelessType(random, type);
       if (object != null)
          return object;
-      throw new IllegalStateException("Unknown class: " + type.getSimpleName());
+      throw new IllegalStateException("Unknown class: " + type.getSimpleName()
+            + "\nThis class can be handled simply by registering a class that declares random generator as method with the following signature:\n\t"
+            + type.getSimpleName() + " generatorNameDoesNotMatter(Random)\nor:\n\t" + type.getSimpleName()
+            + " generatorNameDoesNotMatter(Random, ReferenceFrame) if the type is a frame type.\nNote that the return type can be any sub-class of "
+            + type.getSimpleName() + "\nThe class declaring the generator is to be registered using " + ReflectionBasedBuilders.class.getSimpleName()
+            + ".registerRandomGeneratorClasses(Class<?>...).");
    }
 
    static Object[] next(Random random, ReferenceFrame frame, Class<?>[] types)

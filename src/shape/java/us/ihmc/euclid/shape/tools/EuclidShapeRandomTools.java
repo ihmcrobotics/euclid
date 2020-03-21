@@ -43,6 +43,11 @@ public class EuclidShapeRandomTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   public static Shape3DPose nextShape3DPose(Random random)
+   {
+      return new Shape3DPose(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+   }
+
    /**
     * Generates a random box 3D.
     * <ul>

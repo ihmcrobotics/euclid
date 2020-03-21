@@ -14,6 +14,11 @@ public class EuclidFrameShapeRandomTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   public static FrameShape3DPose nextFrameShape3DPose(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameShape3DPose(referenceFrame, EuclidShapeRandomTools.nextShape3DPose(random));
+   }
+
    /**
     * Generates a random box 3D.
     * <ul>

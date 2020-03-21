@@ -84,60 +84,60 @@ public interface FixedFrameEllipsoid3DBasics extends Ellipsoid3DBasics, FrameEll
       set(pose.getReferenceFrame(), pose, radii);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, Ellipsoid3DReadOnly other)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Ellipsoid3DReadOnly other)
    {
       set(other);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FrameEllipsoid3DReadOnly other)
+   default void setMatchingFrame(FrameEllipsoid3DReadOnly other)
    {
-      setMacthingFrame(other.getReferenceFrame(), other);
+      setMatchingFrame(other.getReferenceFrame(), other);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY,
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY,
                                  double radiusZ)
    {
       set(position, orientation, radiusX, radiusY, radiusZ);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
+   default void setMatchingFrame(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
    {
       position.checkReferenceFrameMatch(orientation);
-      setMacthingFrame(position.getReferenceFrame(), position, orientation, radiusX, radiusY, radiusZ);
+      setMatchingFrame(position.getReferenceFrame(), position, orientation, radiusX, radiusY, radiusZ);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Pose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       set(pose, radiusX, radiusY, radiusZ);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FramePose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
+   default void setMatchingFrame(FramePose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
-      setMacthingFrame(pose.getReferenceFrame(), pose, radiusX, radiusY, radiusZ);
+      setMatchingFrame(pose.getReferenceFrame(), pose, radiusX, radiusY, radiusZ);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       set(pose, radiusX, radiusY, radiusZ);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FrameShape3DPoseReadOnly pose, double radiusX, double radiusY, double radiusZ)
+   default void setMatchingFrame(FrameShape3DPoseReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
-      setMacthingFrame(pose.getReferenceFrame(), pose, radiusX, radiusY, radiusZ);
+      setMatchingFrame(pose.getReferenceFrame(), pose, radiusX, radiusY, radiusZ);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double[] radii)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double[] radii)
    {
       set(pose, radii);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FrameShape3DPoseReadOnly pose, double[] radii)
+   default void setMatchingFrame(FrameShape3DPoseReadOnly pose, double[] radii)
    {
-      setMacthingFrame(pose.getReferenceFrame(), pose, radii);
+      setMatchingFrame(pose.getReferenceFrame(), pose, radii);
    }
 }

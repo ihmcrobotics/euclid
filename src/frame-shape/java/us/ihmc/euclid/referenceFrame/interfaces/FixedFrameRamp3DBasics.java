@@ -84,60 +84,60 @@ public interface FixedFrameRamp3DBasics extends Ramp3DBasics, FrameRamp3DReadOnl
       set(pose.getReferenceFrame(), pose, size);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, Ramp3DReadOnly other)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Ramp3DReadOnly other)
    {
       set(other);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FrameRamp3DReadOnly other)
+   default void setMatchingFrame(FrameRamp3DReadOnly other)
    {
-      setMacthingFrame(other.getReferenceFrame(), other);
+      setMatchingFrame(other.getReferenceFrame(), other);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY,
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY,
                                  double sizeZ)
    {
       set(position, orientation, sizeX, sizeY, sizeZ);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
+   default void setMatchingFrame(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       position.checkReferenceFrameMatch(orientation);
-      setMacthingFrame(position.getReferenceFrame(), position, orientation, sizeX, sizeY, sizeZ);
+      setMatchingFrame(position.getReferenceFrame(), position, orientation, sizeX, sizeY, sizeZ);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       set(pose, sizeX, sizeY, sizeZ);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FramePose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
+   default void setMatchingFrame(FramePose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      setMacthingFrame(pose.getReferenceFrame(), pose, sizeX, sizeY, sizeZ);
+      setMatchingFrame(pose.getReferenceFrame(), pose, sizeX, sizeY, sizeZ);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       set(pose, sizeX, sizeY, sizeZ);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FrameShape3DPoseReadOnly pose, double sizeX, double sizeY, double sizeZ)
+   default void setMatchingFrame(FrameShape3DPoseReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      setMacthingFrame(pose.getReferenceFrame(), pose, sizeX, sizeY, sizeZ);
+      setMatchingFrame(pose.getReferenceFrame(), pose, sizeX, sizeY, sizeZ);
    }
 
-   default void setMacthingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double[] size)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double[] size)
    {
       set(pose, size);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
-   default void setMacthingFrame(FrameShape3DPoseReadOnly pose, double[] size)
+   default void setMatchingFrame(FrameShape3DPoseReadOnly pose, double[] size)
    {
-      setMacthingFrame(pose.getReferenceFrame(), pose, size);
+      setMatchingFrame(pose.getReferenceFrame(), pose, size);
    }
 }

@@ -1219,7 +1219,7 @@ public class EuclidFrameAPITester
                catch (Throwable t)
                {
                   if (!(t instanceof ReferenceFrameMismatchException))
-                     throw t;
+                     failToThrowReferenceFrameMismatchException(frameType, frameMethod, parameters, t);
                }
             }
          }
@@ -1580,12 +1580,22 @@ public class EuclidFrameAPITester
 
    private static void failToThrowReferenceFrameMismatchException(Class<?> typeDeclaringMethod, Method frameMethod, Object[] parameters) throws AssertionError
    {
+      failToThrowReferenceFrameMismatchException(typeDeclaringMethod, frameMethod, parameters, null);
+   }
+
+   private static void failToThrowReferenceFrameMismatchException(Class<?> typeDeclaringMethod, Method frameMethod, Object[] parameters,
+                                                                  Throwable exceptionThrownInstead)
+         throws AssertionError
+   {
       String message = "Should have thrown a " + ReferenceFrameMismatchException.class.getSimpleName();
       message += "\nType being tested: " + typeDeclaringMethod.getSimpleName();
       message += "\nMethod: " + getMethodSimpleName(frameMethod);
       message += "\nArguments used: " + Arrays.toString(parameters);
       message += "\nArgument types: " + getArgumentTypeString(parameters);
-      throw new AssertionError(message);
+      if (exceptionThrownInstead != null)
+         throw new AssertionError(message, exceptionThrownInstead);
+      else
+         throw new AssertionError(message);
    }
 
    private static void debugSecurityException(Class<?> typeWithFramelessMethods, String frameMethodName, Class<?>[] framelessMethodParameterTypes)

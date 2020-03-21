@@ -6,6 +6,7 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.shape.primitives.interfaces.*;
+import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.*;
@@ -36,7 +37,7 @@ public class EuclidFrameShapeTools
    {
       if (box3DFrame == boundingBoxFrame)
       {
-         box3D.getBoundingBox(boundingBoxToPack);
+         EuclidShapeTools.boundingBoxBox3D(box3D.getPosition(), box3D.getOrientation(), box3D.getSize(), boundingBoxToPack);
          return;
       }
 
@@ -127,7 +128,7 @@ public class EuclidFrameShapeTools
    {
       if (capsule3DFrame == boundingBoxFrame)
       {
-         capsule3D.getBoundingBox(boundingBoxToPack);
+         EuclidShapeTools.boundingBoxCapsule3D(capsule3D.getPosition(), capsule3D.getAxis(), capsule3D.getLength(), capsule3D.getRadius(), boundingBoxToPack);
          return;
       }
 
@@ -217,7 +218,11 @@ public class EuclidFrameShapeTools
    {
       if (cylinder3DFrame == boundingBoxFrame)
       {
-         cylinder3D.getBoundingBox(boundingBoxToPack);
+         EuclidShapeTools.boundingBoxCylinder3D(cylinder3D.getPosition(),
+                                                cylinder3D.getAxis(),
+                                                cylinder3D.getLength(),
+                                                cylinder3D.getRadius(),
+                                                boundingBoxToPack);
          return;
       }
 
@@ -318,7 +323,7 @@ public class EuclidFrameShapeTools
    {
       if (ellipsoid3DFrame == boundingBoxFrame)
       {
-         ellipsoid3D.getBoundingBox(boundingBoxToPack);
+         EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoid3D.getPosition(), ellipsoid3D.getOrientation(), ellipsoid3D.getRadii(), boundingBoxToPack);
          return;
       }
 

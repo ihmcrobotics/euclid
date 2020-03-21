@@ -49,13 +49,11 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
                                 FramePoint3DBasics secondIntersectionToPack)
    {
-      int numberOfIntersections = Sphere3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
-
-      if (numberOfIntersections >= 1 && firstIntersectionToPack != null)
+      if (firstIntersectionToPack != null)
          firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      if (numberOfIntersections == 2 && secondIntersectionToPack != null)
+      if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      return numberOfIntersections;
+      return Sphere3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
@@ -72,13 +70,11 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
                                 FramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
-      int numberOfIntersections = Sphere3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
-
-      if (numberOfIntersections >= 1 && firstIntersectionToPack != null)
+      if (firstIntersectionToPack != null)
          firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      if (numberOfIntersections == 2 && secondIntersectionToPack != null)
+      if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      return numberOfIntersections;
+      return Sphere3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
@@ -95,7 +91,7 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
-      FrameShape3DReadOnly.super.getBoundingBox(boundingBoxToPack);
+      Sphere3DReadOnly.super.getBoundingBox(boundingBoxToPack);
    }
 
    @Override

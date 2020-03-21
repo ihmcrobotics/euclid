@@ -65,13 +65,12 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
                                 FramePoint3DBasics secondIntersectionToPack)
    {
-      int numberOfIntersections = Box3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
-
-      if (numberOfIntersections >= 1 && firstIntersectionToPack != null)
+      if (firstIntersectionToPack != null)
          firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      if (numberOfIntersections == 2 && secondIntersectionToPack != null)
+      if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      return numberOfIntersections;
+
+      return Box3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
@@ -88,13 +87,11 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
                                 FramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
-      int numberOfIntersections = Box3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
-
-      if (numberOfIntersections >= 1 && firstIntersectionToPack != null)
+      if (firstIntersectionToPack != null)
          firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      if (numberOfIntersections == 2 && secondIntersectionToPack != null)
+      if (secondIntersectionToPack != null)
          secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
-      return numberOfIntersections;
+      return Box3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,

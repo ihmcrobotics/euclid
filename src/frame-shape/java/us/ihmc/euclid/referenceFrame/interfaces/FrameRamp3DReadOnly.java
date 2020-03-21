@@ -30,7 +30,7 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
    @Override
    default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
    {
-      FrameShape3DReadOnly.super.getBoundingBox(boundingBoxToPack);
+      Ramp3DReadOnly.super.getBoundingBox(boundingBoxToPack);
    }
 
    @Override
