@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
@@ -38,7 +39,10 @@ public class FrameMatrix3DTest extends FrameMatrix3DReadOnlyTest<FrameMatrix3D>
       FrameTypeCopier frameTypeBuilder = (frame, matrix) -> createFrameMatrix3D(frame, (Matrix3DReadOnly) matrix);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextMatrix3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                framelessTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override

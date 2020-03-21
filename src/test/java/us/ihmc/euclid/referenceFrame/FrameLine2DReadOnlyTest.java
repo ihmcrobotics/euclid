@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
@@ -36,6 +37,8 @@ public abstract class FrameLine2DReadOnlyTest<T extends FrameLine2DReadOnly>
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("setMatchingFrame");
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameLine, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameLine,
+                                                                                  methodFilter,
+                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 }

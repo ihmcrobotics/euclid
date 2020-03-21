@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
@@ -36,6 +37,8 @@ public abstract class FrameBoundingBox3DReadOnlyTest<T extends FrameBoundingBox3
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("setMatchingFrame");
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameBoundingBox, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameBoundingBox,
+                                                                                  methodFilter,
+                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 }

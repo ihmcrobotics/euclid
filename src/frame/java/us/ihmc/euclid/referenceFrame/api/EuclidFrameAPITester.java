@@ -45,8 +45,6 @@ public class EuclidFrameAPITester
 
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private static final boolean DEBUG = false;
-   private final static int FRAME_CHECK_ITERATIONS = 10;
-   private final static int FUNCTIONALITY_ITERATIONS = 50;
    private final static Random random = new Random(345345);
    private final static double epsilon = 1.0e-12;
 
@@ -585,11 +583,12 @@ public class EuclidFrameAPITester
     * </p>
     *
     * @param typeDeclaringStaticMethodsToTest the type in which the methods are to be tested.
+    * @param numberOfIterations               number of iterations to perform for each method.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
-   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest) throws Throwable
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, int numberOfIterations) throws Throwable
    {
-      assertStaticMethodsCheckReferenceFrame(typeDeclaringStaticMethodsToTest, m -> true);
+      assertStaticMethodsCheckReferenceFrame(typeDeclaringStaticMethodsToTest, m -> true, numberOfIterations);
    }
 
    /**
@@ -613,9 +612,11 @@ public class EuclidFrameAPITester
     * @param methodFilter                     custom filter used on the methods. The assertions are
     *                                         performed on the methods for which
     *                                         {@code methodFilter.test(method)} returns {@code true}.
+    * @param numberOfIterations               number of iterations to perform for each method.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
-   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, Predicate<Method> methodFilter) throws Throwable
+   public static void assertStaticMethodsCheckReferenceFrame(Class<?> typeDeclaringStaticMethodsToTest, Predicate<Method> methodFilter, int numberOfIterations)
+         throws Throwable
    {
       Predicate<Method> filter = methodFilter.and(atLeastNFrameParameters(2)).and(m -> Modifier.isStatic(m.getModifiers()))
                                              .and(m -> Modifier.isPublic(m.getModifiers()));
@@ -623,7 +624,7 @@ public class EuclidFrameAPITester
       // Methods returning a frame type
       List<Method> methodsWithReturnFrameType = frameMethods.stream().filter(m -> isFrameType(m.getReturnType())).collect(Collectors.toList());
 
-      for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
+      for (int iteration = 0; iteration < numberOfIterations; iteration++)
       {
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
@@ -793,12 +794,15 @@ public class EuclidFrameAPITester
     * in a different reference frame.
     * </p>
     *
-    * @param frameTypeBuilder builder used to generate an instance of the type to be tested.
-    * @param methodFilter     custom filter used on the methods. The assertions are performed on the
-    *                         methods for which {@code methodFilter.test(method)} returns {@code true}.
+    * @param frameTypeBuilder   builder used to generate an instance of the type to be tested.
+    * @param methodFilter       custom filter used on the methods. The assertions are performed on the
+    *                           methods for which {@code methodFilter.test(method)} returns
+    *                           {@code true}.
+    * @param numberOfIterations number of iterations to perform for each method.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
-   public static void assertMethodsOfReferenceFrameHolderCheckReferenceFrame(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter)
+   public static void assertMethodsOfReferenceFrameHolderCheckReferenceFrame(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
+                                                                             int numberOfIterations)
          throws Throwable
    {
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
@@ -809,7 +813,7 @@ public class EuclidFrameAPITester
       // Methods returning a frame type
       List<Method> methodsWithReturnFrameType = frameMethods.stream().filter(m -> isFrameType(m.getReturnType())).collect(Collectors.toList());
 
-      for (int iteration = 0; iteration < FRAME_CHECK_ITERATIONS; iteration++)
+      for (int iteration = 0; iteration < numberOfIterations; iteration++)
       {
          ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
          ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
@@ -983,10 +987,11 @@ public class EuclidFrameAPITester
     * @param typeWithFrameMethodsToTest the type in which the methods are to be tested.
     * @param typeWithFramelessMethods   the type declaring the methods against which the methods from
     *                                   {@code typeWithFrameMethodsToTest} are to be compared.
+    * @param numberOfIterations         number of iterations to perform for each method.
     */
-   public static void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods)
+   public static void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods, int numberOfIterations)
    {
-      assertStaticMethodsPreserveFunctionality(typeWithFrameMethodsToTest, typeWithFramelessMethods, m -> true);
+      assertStaticMethodsPreserveFunctionality(typeWithFrameMethodsToTest, typeWithFramelessMethods, m -> true, numberOfIterations);
    }
 
    /**
@@ -1006,9 +1011,10 @@ public class EuclidFrameAPITester
     * @param methodFilter               custom filter used on the methods. The assertions are performed
     *                                   on the methods for which {@code methodFilter.test(method)}
     *                                   returns {@code true}.
+    * @param numberOfIterations         number of iterations to perform for each method.
     */
    public static void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods,
-                                                               Predicate<Method> methodFilter)
+                                                               Predicate<Method> methodFilter, int numberOfIterations)
    {
       List<Method> frameMethods = Stream.of(typeWithFrameMethodsToTest.getMethods()).filter(methodFilter).collect(Collectors.toList());
 
@@ -1026,7 +1032,7 @@ public class EuclidFrameAPITester
                framelessMethodParameterTypes[i] = frameMethodParameterTypes[i];
          }
 
-         for (int iteration = 0; iteration < FUNCTIONALITY_ITERATIONS; iteration++)
+         for (int iteration = 0; iteration < numberOfIterations; iteration++)
          {
             try
             {
@@ -1112,9 +1118,10 @@ public class EuclidFrameAPITester
     * @param methodFilter         custom filter used on the methods. The assertions are performed on
     *                             the methods for which {@code methodFilter.test(method)} returns
     *                             {@code true}.
+    * @param numberOfIterations   number of iterations to perform for each method.
     */
    public static void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
-                                                                           Predicate<Method> methodFilter)
+                                                                           Predicate<Method> methodFilter, int numberOfIterations)
    {
 
       Class<? extends ReferenceFrameHolder> frameTypeToTest = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
@@ -1136,7 +1143,7 @@ public class EuclidFrameAPITester
                framelessMethodParameterTypes[i] = frameMethodParameterTypes[i];
          }
 
-         for (int iteration = 0; iteration < FUNCTIONALITY_ITERATIONS; iteration++)
+         for (int iteration = 0; iteration < numberOfIterations; iteration++)
          {
             Object framelessObject = framelessTypeBuilber.newInstance(random);
             ReferenceFrameHolder frameObject = frameTypeCopier.newInstance(worldFrame, framelessObject);

@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -38,7 +39,10 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
       FrameTypeCopier frameTypeBuilder = (frame, quaternion) -> createFrameLineSegment(frame, (LineSegment3DReadOnly) quaternion);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLineSegment3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                framelessTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override

@@ -12,6 +12,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
@@ -447,7 +448,9 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    {
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple,
+                                                                                  methodFilter,
+                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test
@@ -456,7 +459,10 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
       FrameTypeCopier frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple4DReadOnly) tuple);
       RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilber, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                framelessTypeBuilber,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override

@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -29,7 +30,10 @@ public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<Frame
       FrameTypeCopier frameTypeBuilder = (frame, boundingBox) -> createFrameBoundingBox(frame, (BoundingBox3DReadOnly) boundingBox);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextBoundingBox3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                framelessTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override
@@ -42,7 +46,7 @@ public class FrameBoundingBox3DTest extends FrameBoundingBox3DReadOnlyTest<Frame
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", BoundingBox3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", BoundingBox3D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
-      
+
       EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameBoundingBox3D.class, BoundingBox3D.class, false, 1, methodFilter);
    }
 }

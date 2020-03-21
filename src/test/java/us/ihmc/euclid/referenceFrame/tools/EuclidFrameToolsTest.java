@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -54,13 +55,15 @@ public class EuclidFrameToolsTest
    @Test
    public void testReferenceFrameChecked() throws Throwable
    {
-      EuclidFrameAPITester.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class);
+      EuclidFrameAPITester.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test
    public void testConservedFunctionality() throws Exception
    {
-      EuclidFrameAPITester.assertStaticMethodsPreserveFunctionality(EuclidFrameTools.class, EuclidGeometryTools.class);
+      EuclidFrameAPITester.assertStaticMethodsPreserveFunctionality(EuclidFrameTools.class,
+                                                                    EuclidGeometryTools.class,
+                                                                    EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test

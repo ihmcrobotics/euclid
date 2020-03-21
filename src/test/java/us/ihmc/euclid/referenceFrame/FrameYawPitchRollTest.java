@@ -1,6 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
 
@@ -13,6 +16,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -252,10 +256,16 @@ public class FrameYawPitchRollTest
       FrameTypeCopier frameTypeBuilder = (frame, yawPitchRoll) -> new FrameYawPitchRoll(frame, (YawPitchRollReadOnly) yawPitchRoll);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextYawPitchRoll;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                framelessTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
       RandomFramelessTypeBuilder frameless2DTypeBuilder = (random) -> new YawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0.0, 0.0);
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                frameless2DTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test
@@ -264,9 +274,13 @@ public class FrameYawPitchRollTest
       Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
             && !m.getName().equals("epsilonEquals");
       RandomFrameTypeBuilder frameTypeBuilder = EuclidFrameRandomTools::nextFrameYawPitchRoll;
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frameTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frameTypeBuilder,
+                                                                                  methodFilter,
+                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
       RandomFrameTypeBuilder frame2DTypeBuilder = (random, frame) -> new FrameYawPitchRoll(frame, nextDouble(random, Math.PI), 0.0, 0.0);
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame2DTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame2DTypeBuilder,
+                                                                                  methodFilter,
+                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test

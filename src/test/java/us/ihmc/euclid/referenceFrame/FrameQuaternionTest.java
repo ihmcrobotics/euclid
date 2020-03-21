@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 import org.ejml.data.DenseMatrix64F;
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -408,10 +409,16 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       FrameTypeCopier frameTypeBuilder = (frame, quaternion) -> createFrameTuple(frame, (QuaternionReadOnly) quaternion);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextQuaternion;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                framelessTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
       RandomFramelessTypeBuilder frameless2DTypeBuilder = (random) -> new Quaternion(createRandom2DFrameTuple(random, ReferenceFrame.getWorldFrame()));
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                frameless2DTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override

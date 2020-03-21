@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -38,7 +39,10 @@ public class FramePose2DTest extends FramePose2DReadOnlyTest<FramePose2D>
       FrameTypeCopier frameTypeBuilder = (frame, pose) -> createFramePose(frame, (Pose2DReadOnly) pose);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextPose2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                                framelessTypeBuilder,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override
@@ -52,7 +56,7 @@ public class FramePose2DTest extends FramePose2DReadOnlyTest<FramePose2D>
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Pose2D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Pose2D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
-      
+
       EuclidFrameAPITester.assertOverloadingWithFrameObjects(FramePose2D.class, Pose2D.class, true, 1, methodFilter);
    }
 
