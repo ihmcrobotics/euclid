@@ -33,6 +33,28 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  * These tools are still experimental and are improved through heavy internal usage for building
  * Euclid's test suite. The objective it to make this class usable for third party classes.
  * </p>
+ * <p>
+ * This class relies on several conventions including the following:
+ * <ul>
+ * <li>A class with a name ending with the keyword "ReadOnly" refers to a geometry type which cannot
+ * be modified.
+ * <li>A class with a name ending with the keyword "Basics" refers to a geometry type which can be
+ * modified.
+ * <li>A class with a name starting with the keyword "FixedFrame" refers to a geometry type defined
+ * in a {@code ReferenceFrame} which cannot be modified.
+ * <li>A class with a name starting with the keyword "Frame" refers to a geometry type defined in a
+ * {@code ReferenceFrame} which can be modified.
+ * <li>A class with a name that does not start with either "Frame" or "FixedFrame" is a geometry
+ * without the information of the frame in which it is expressed.
+ * <li>Any setter named "setIncludingFrame" sets all the values of the geometry and sets its
+ * reference frame from one of the arguments.
+ * <li>Any setter named "setMatchingFrame" sets all the values of the geometry without changing it
+ * reference frame. The arguments should be expressed in the same reference frame, but that
+ * reference frame can be different from the geometry declaring the method. If the reference frame
+ * is different, a transformation is applied on either the arguments or the geometry (depending on
+ * which provides a natural outcome) without modifying the arguments.
+ * </ul>
+ * </p>
  *
  * @author Sylvain Bertrand
  */
@@ -42,6 +64,9 @@ public class EuclidFrameAPITester
    private static final String BASICS = "Basics";
    private static final String FRAME = "Frame";
    private static final String FIXED_FRAME = "FixedFrame";
+
+   private static final String SET_MATCHING_FRAME = "setMatchingFrame";
+   private static final String SET_INCLUDING_FRAME = "setIncludingFrame";
 
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private static final boolean DEBUG = false;
@@ -90,12 +115,32 @@ public class EuclidFrameAPITester
       acceptableExceptions.add(RuntimeException.class);
    }
 
+   /**
+    * Registers frameless types that do not have a frame type equivalent.
+    * <p>
+    * This is needed for preventing false assertion errors.
+    * </p>
+    * 
+    * @param framelessMutableTypes the mutable API of the frameless geometry types to be registered.
+    * @see #registerFramelessTypeSmart(Class)
+    */
    public static void registerFramelessTypesSmart(Class<?>... framelessMutableTypes)
    {
       for (Class<?> framelessMutableType : framelessMutableTypes)
          registerFramelessTypeSmart(framelessMutableType);
    }
 
+   /**
+    * Registers a frameless type that does not have a frame type equivalent.
+    * <p>
+    * This is needed for preventing false assertion errors.
+    * </p>
+    * <p>
+    * The read-only equivalent type is retrieved by using naming convention and registered.
+    * </p>
+    * 
+    * @param framelessMutableType the mutable API of the frameless geometry type to be registered.
+    */
    public static void registerFramelessTypeSmart(Class<?> framelessMutableType)
    {
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(framelessMutableType.getSimpleName().replace(BASICS, READ_ONLY),
@@ -105,17 +150,47 @@ public class EuclidFrameAPITester
       framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
    }
 
+   /**
+    * Registers the read-only and basics API for a frameless type that does not have a frame type
+    * equivalent.
+    * <p>
+    * This is needed for preventing false assertion errors.
+    * </p>
+    * 
+    * @param framelessMutableType  the mutable API of the frameless geometry type.
+    * @param framelessReadOnlyType the read-only API of the frameless geometry type.
+    */
    public static void registerFramelessType(Class<?> framelessMutableType, Class<?> framelessReadOnlyType)
    {
       framelessTypesWithoutFrameEquivalent.addAll(Arrays.asList(framelessMutableType, framelessReadOnlyType));
    }
 
+   /**
+    * Registers the given types as frame geometries which values and frame can be modified.
+    * 
+    * @param mutableFrameMutableTypes the types to be registered.
+    * @see #registerFramelessTypeSmart(Class)
+    */
    public static void registerFrameTypesSmart(Class<?>... mutableFrameMutableTypes)
    {
       for (Class<?> mutableFrameMutableType : mutableFrameMutableTypes)
          registerFrameTypeSmart(mutableFrameMutableType);
    }
 
+   /**
+    * Registers the given type as a frame geometry which values and frame can be modified.
+    * <p>
+    * <ul>
+    * <li>The fixed-frame and read-only super types are retrieved by using naming convention and
+    * registered.
+    * <li>The mutable and read-only frameless equivalent types are retrieved by using naming convention
+    * and registered.
+    * </ul>
+    * </p>
+    * 
+    * @param mutableFrameMutableType the geometry with: mutable values and mutable frame to be
+    *                                registered.
+    */
    public static void registerFrameTypeSmart(Class<?> mutableFrameMutableType)
    {
       String mutableFrameMutableTypeName = mutableFrameMutableType.getSimpleName();
@@ -137,6 +212,24 @@ public class EuclidFrameAPITester
       Objects.requireNonNull(framelessMutableType);
       Objects.requireNonNull(framelessReadOnlyType);
 
+      registerFrameType(mutableFrameMutableType, fixedFrameMutableType, frameReadOnlyType, framelessMutableType, framelessReadOnlyType);
+   }
+
+   /**
+    * Registers the given types as representing the same geometry with varying attributes.
+    * <p>
+    * This tester requires all needed types to be registered before performing assertions.
+    * </p>
+    * 
+    * @param mutableFrameMutableType the geometry with: mutable values and mutable frame.
+    * @param fixedFrameMutableType   the geometry with: mutable values and immutable frame.
+    * @param frameReadOnlyType       the geometry with: immutable values and immutable frame.
+    * @param framelessMutableType    the geometry with: mutable values and no frame information.
+    * @param framelessReadOnlyType   the geometry with: immutable values and no frame information.
+    */
+   private static void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType,
+                                         Class<?> framelessMutableType, Class<?> framelessReadOnlyType)
+   {
       framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
       framelessTypesToFrameTypesTable.put(framelessMutableType, fixedFrameMutableType);
       frameReadOnlyTypes.add(frameReadOnlyType);
@@ -144,12 +237,26 @@ public class EuclidFrameAPITester
       mutableFrameMutableTypes.add(mutableFrameMutableType);
    }
 
+   /**
+    * Registers frame types that only declares read-only API.
+    * 
+    * @param frameReadOnlyTypes the read-only frame types to be registered.
+    * @see #registerReadOnlyFrameTypeSmart(Class)
+    */
    public static void registerReadOnlyFrameTypeSmart(Class<?>... frameReadOnlyTypes)
    {
       for (Class<?> frameReadOnlyType : frameReadOnlyTypes)
          registerReadOnlyFrameTypeSmart(frameReadOnlyType);
    }
 
+   /**
+    * Registers a frame type that only declares read-only API.
+    * <p>
+    * The read-only frameless equivalent type is retrieved by using naming convention and registered.
+    * </p>
+    * 
+    * @param frameReadOnlyType the read-only frame type to be registered.
+    */
    public static void registerReadOnlyFrameTypeSmart(Class<?> frameReadOnlyType)
    {
       Class<?> framelessReadOnlyType = searchSuperInterfaceFromSimpleName(frameReadOnlyType.getSimpleName().replace(FRAME, ""), frameReadOnlyType);
@@ -217,12 +324,25 @@ public class EuclidFrameAPITester
       assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, minNumberOfFramelessArguments, m -> true);
    }
 
+   /**
+    * Creates a filter that can be used to ignore the collection of methods as defined by the given
+    * signatures.
+    * 
+    * @param signaturesToIgnore the signatures of the methods to be ignored.
+    * @return the filter.
+    */
    public static Predicate<Method> methodFilterFromSignature(Collection<MethodSignature> signaturesToIgnore)
    {
       List<Predicate<Method>> filters = signaturesToIgnore.stream().map(EuclidFrameAPITester::methodFilterFromSignature).collect(Collectors.toList());
       return method -> filters.stream().allMatch(filter -> filter.test(method));
    }
 
+   /**
+    * Creates a filter that can be used to ignore the method as defined by the given signature.
+    * 
+    * @param signatureToIgnore the signature of the method to be ignored.
+    * @return the filter.
+    */
    public static Predicate<Method> methodFilterFromSignature(MethodSignature signatureToIgnore)
    {
       return method ->
@@ -323,20 +443,22 @@ public class EuclidFrameAPITester
    }
 
    /**
-    * Convention is that for a setter like {@code FramelessType.set(Point2DReadOnly, Tuple3DReadOnly)}
-    * the following setters should be declared in the frame type:
+    * Asserts API convention for setMatchingFrame: for a setter like
+    * {@code FramelessType.set(Point2DReadOnly, Tuple3DReadOnly)} the following setters should be
+    * declared in the frame type:
     * <ul>
     * <li>{@code FrameType.setMatchingFrame(ReferenceFrame, Point2DReadOnly, Tuple3DReadOnly)}
     * <li>{@code FrameType.setMatchingFrame(FramePoint2DReadOnly, FrameTuple3DReadOnly)}
     * </ul>
     *
-    * @param typeWithFrameMethods
-    * @param typeWithFramelessMethods
-    * @param framelessMethodFilter
+    * @param typeWithFrameMethods     the frame type which API is to be tested.
+    * @param typeWithFramelessMethods the frameless type used as reference.
+    * @param framelessMethodFilter    custom filter used on the methods. The assertions are performed
+    *                                 on the methods for which
+    *                                 {@code framelessMethodFilter.test(method)} returns {@code true}.
     */
    public static void assertAPIDeclareMatchingFrameSetters(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods,
                                                            Predicate<Method> framelessMethodFilter)
-         throws SecurityException
    {
       Predicate<Method> filter = framelessMethodFilter.and(atLeastNFramelessParameters(1)).and(m -> m.getName().equals("set"));
       List<MethodSignature> framelessSignatures = Stream.of(typeWithFramelessMethods.getMethods()).filter(filter).map(MethodSignature::new)
@@ -392,13 +514,13 @@ public class EuclidFrameAPITester
       List<MethodSignature> signatures = new ArrayList<>();
       // setMatchingFrame(ReferenceFrame, FramelessType(s))
       MethodSignature expectedSetMatchingFrameSignature = new MethodSignature(framelessSetterSignature);
-      expectedSetMatchingFrameSignature.setName("setMatchingFrame");
+      expectedSetMatchingFrameSignature.setName(SET_MATCHING_FRAME);
       expectedSetMatchingFrameSignature.addParameterType(0, ReferenceFrame.class);
       signatures.add(expectedSetMatchingFrameSignature);
 
       // setMatchingFrame(FrameType(s))
       expectedSetMatchingFrameSignature = new MethodSignature(framelessSetterSignature);
-      expectedSetMatchingFrameSignature.setName("setMatchingFrame");
+      expectedSetMatchingFrameSignature.setName(SET_MATCHING_FRAME);
 
       for (int i = 0; i < expectedSetMatchingFrameSignature.getParameterCount(); i++)
       {
@@ -410,17 +532,86 @@ public class EuclidFrameAPITester
       return signatures;
    }
 
+   /**
+    * Asserts that the method "setMatchingFrame" implementations are consistent with the regular
+    * setters.
+    * <p>
+    * When the arguments are expressed in a different reference frame than the geometry on which the
+    * method is called, a transformation as to be performed such that
+    * {@code frameGeometry.setMatchingFrame(frameArgument)} is equivalent to either:
+    * 
+    * <pre>
+    * ReferenceFrame originalFrame = frameGeometry.getReferenceFrame();
+    * frameGeometry.setReferenceFrame(frameArgument.getReferenceFrame());
+    * frameGeometry.set(frameArgument);
+    * frameGeometry.changeFrame(originalFrame);
+    * </pre>
+    * 
+    * or:
+    * 
+    * <pre>
+    * ReferenceFrame originalFrame = frameArgument.getReferenceFrame();
+    * frameArgument.changeFrame(frameGeometry.getReferenceFrame());
+    * frameGeometry.set(frameArgument);
+    * frameArgument.changeFrame(originalFrame);
+    * </pre>
+    * 
+    * without modifying the arguments. Most of the time, the operation should be equivalent to the
+    * first example, but for instance when {@code frameGeometry} is a 2D geometry and that
+    * {@code frameArgument} is a 3D geometry, then the second option is expected as transforming the 2D
+    * geometry would result in loss of information pre-transformation.
+    * </p>
+    * 
+    * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
+    * @param numberOfIterations number of iterations to perform for each method.
+    */
    public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, int numberOfIterations)
    {
       assertSetMatchingFramePreserveFunctionality(frameTypeBuilder, m -> true, numberOfIterations);
    }
 
+   /**
+    * Asserts that the method "setMatchingFrame" implementations are consistent with the regular
+    * setters.
+    * <p>
+    * When the arguments are expressed in a different reference frame than the geometry on which the
+    * method is called, a transformation as to be performed such that
+    * {@code frameGeometry.setMatchingFrame(frameArgument)} is equivalent to either:
+    * 
+    * <pre>
+    * ReferenceFrame originalFrame = frameGeometry.getReferenceFrame();
+    * frameGeometry.setReferenceFrame(frameArgument.getReferenceFrame());
+    * frameGeometry.set(frameArgument);
+    * frameGeometry.changeFrame(originalFrame);
+    * </pre>
+    * 
+    * or:
+    * 
+    * <pre>
+    * ReferenceFrame originalFrame = frameArgument.getReferenceFrame();
+    * frameArgument.changeFrame(frameGeometry.getReferenceFrame());
+    * frameGeometry.set(frameArgument);
+    * frameArgument.changeFrame(originalFrame);
+    * </pre>
+    * 
+    * without modifying the arguments. Most of the time, the operation should be equivalent to the
+    * first example, but for instance when {@code frameGeometry} is a 2D geometry and that
+    * {@code frameArgument} is a 3D geometry, then the second option is expected as transforming the 2D
+    * geometry would result in loss of information pre-transformation.
+    * </p>
+    * 
+    * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
+    * @param methodFilter       custom filter used on the methods. The assertions are performed on the
+    *                           methods for which {@code methodFilter.test(method)} returns
+    *                           {@code true}.
+    * @param numberOfIterations number of iterations to perform for each method.
+    */
    public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
                                                                   int numberOfIterations)
    {
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
-      Predicate<Method> filter = methodFilter.and(m -> m.getName().equals("setMatchingFrame"));
+      Predicate<Method> filter = methodFilter.and(m -> m.getName().equals(SET_MATCHING_FRAME));
       List<Method> frameMethods = Stream.of(frameType.getMethods()).filter(filter).collect(Collectors.toList());
 
       for (Method matchingFrameMethod : frameMethods)
@@ -547,17 +738,42 @@ public class EuclidFrameAPITester
       }
    }
 
+   /**
+    * Asserts that the method "setIncludingFrame" implementations are consistent with the regular
+    * setters.
+    * <p>
+    * While "set" does not modify the frame of the holder, "setIncludingFrame" set the values AND the
+    * frame of the holder.
+    * </p>
+    * 
+    * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
+    * @param numberOfIterations number of iterations to perform for each method.
+    */
    public static void assertSetIncludingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, int numberOfIterations)
    {
       assertSetIncludingFramePreserveFunctionality(frameTypeBuilder, m -> true, numberOfIterations);
    }
 
+   /**
+    * Asserts that the method "setIncludingFrame" implementations are consistent with the regular
+    * setters.
+    * <p>
+    * While "set" does not modify the frame of the holder, "setIncludingFrame" set the values AND the
+    * frame of the holder.
+    * </p>
+    * 
+    * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
+    * @param methodFilter       custom filter used on the methods. The assertions are performed on the
+    *                           methods for which {@code methodFilter.test(method)} returns
+    *                           {@code true}.
+    * @param numberOfIterations number of iterations to perform for each method.
+    */
    public static void assertSetIncludingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
                                                                    int numberOfIterations)
    {
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
-      Predicate<Method> filter = methodFilter.and(m -> m.getName().equals("setIncludingFrame"));
+      Predicate<Method> filter = methodFilter.and(m -> m.getName().equals(SET_INCLUDING_FRAME));
       List<Method> frameMethods = Stream.of(frameType.getMethods()).filter(filter).collect(Collectors.toList());
 
       for (Method includingFrameMethod : frameMethods)
