@@ -1,9 +1,13 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShape3DReadOnly
 {
@@ -22,6 +26,84 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
    default FramePoint3DReadOnly getPosition()
    {
       return getPose().getShapePosition();
+   }
+
+   default int intersectionWith(FrameLine3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   default int intersectionWith(FrameLine3DReadOnly line, FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   default int intersectionWith(Line3DReadOnly line, FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   default int intersectionWith(Line3DReadOnly line, FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   default int intersectionWith(FrameLine3DReadOnly line, FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   {
+      return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+                                Point3DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(pointOnLine, lineDirection);
+      return Ellipsoid3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+                                FramePoint3DBasics secondIntersectionToPack)
+   {
+      int numberOfIntersections = Ellipsoid3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+
+      if (numberOfIntersections >= 1 && firstIntersectionToPack != null)
+         firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      if (numberOfIntersections == 2 && secondIntersectionToPack != null)
+         secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return numberOfIntersections;
+   }
+
+   default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+                                FixedFramePoint3DBasics secondIntersectionToPack)
+   {
+      if (firstIntersectionToPack != null)
+         checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         checkReferenceFrameMatch(secondIntersectionToPack);
+      return Ellipsoid3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+                                FramePoint3DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(pointOnLine, lineDirection);
+      int numberOfIntersections = Ellipsoid3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
+
+      if (numberOfIntersections >= 1 && firstIntersectionToPack != null)
+         firstIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      if (numberOfIntersections == 2 && secondIntersectionToPack != null)
+         secondIntersectionToPack.setReferenceFrame(getReferenceFrame());
+      return numberOfIntersections;
+   }
+
+   default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+                                FixedFramePoint3DBasics secondIntersectionToPack)
+   {
+      checkReferenceFrameMatch(pointOnLine, lineDirection);
+      if (firstIntersectionToPack != null)
+         checkReferenceFrameMatch(firstIntersectionToPack);
+      if (secondIntersectionToPack != null)
+         checkReferenceFrameMatch(secondIntersectionToPack);
+      return Ellipsoid3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
    @Override
