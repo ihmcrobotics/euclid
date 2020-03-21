@@ -17,12 +17,14 @@ import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
+import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
 
 /**
  * This class provides tools that using reflection can perform a variety of comparison-based
@@ -329,7 +331,7 @@ public class EuclidFrameAPITester
     * <li>{@code FrameType.setMatchingFrame(ReferenceFrame, Point2DReadOnly, Tuple3DReadOnly)}
     * <li>{@code FrameType.setMatchingFrame(FramePoint2DReadOnly, FrameTuple3DReadOnly)}
     * </ul>
-    * 
+    *
     * @param typeWithFrameMethods
     * @param typeWithFramelessMethods
     * @param framelessMethodFilter
@@ -410,51 +412,158 @@ public class EuclidFrameAPITester
       return signatures;
    }
 
-   public static void assertSetMatchingFramePreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
-                                                                  Predicate<Method> methodFilter)
+   public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder)
    {
-      Class<? extends Object> framelessType = framelessTypeBuilber.newInstance(random).getClass();
-      Class<? extends ReferenceFrameHolder> frameType = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+      assertSetMatchingFramePreserveFunctionality(frameTypeBuilder, m -> true);
+   }
+
+   public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter)
+   {
+      Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
       Predicate<Method> filter = methodFilter.and(m -> m.getName().equals("setMatchingFrame"));
       List<Method> frameMethods = Stream.of(frameType.getMethods()).filter(filter).collect(Collectors.toList());
 
-      for (Method frameMethod : frameMethods)
+      for (Method matchingFrameMethod : frameMethods)
       {
-         Method framelessSetter = findCorrespondingFramelessSetterToSetMatchingFrame(frameMethod, framelessType);
+         try
+         {
+            ReferenceFrame frameA = EuclidFrameRandomTools.nextReferenceFrame("frameA", random, worldFrame);
+            ReferenceFrame frameB = EuclidFrameRandomTools.nextReferenceFrame("frameB", random, worldFrame);
 
-         // First testing with the arguments expressed in the same frame as the holder.
+            Method setterMethod = findCorrespondingSetterToSetMatchingFrame(frameType, matchingFrameMethod);
+
+            Object[] matchingFrameMethodParameters = ReflectionBasedBuilders.next(random, frameA, matchingFrameMethod.getParameterTypes());
+            Object[] setterMethodParameters = ReflectionBasedBuilders.clone(matchingFrameMethodParameters);
+            boolean isLastParameterToCheck2DTransform = is2DType(frameType)
+                  && matchingFrameMethod.getParameterTypes()[matchingFrameMethod.getParameterCount() - 1] == boolean.class;
+
+            if (isLastParameterToCheck2DTransform)
+            { // Last argument is "boolean checkIfTransformInXYPlane"
+               setterMethodParameters = Arrays.copyOfRange(setterMethodParameters, 0, setterMethodParameters.length - 1);
+            }
+
+            ReferenceFrameHolder matchingFrameObject = frameTypeBuilder.newInstance(random, frameB);
+            ReferenceFrameHolder setterObject = frameTypeBuilder.newInstance(random, frameA);
+
+            Throwable expectedException = null;
+            Object setterMethodReturnObject = null;
+            Object matchingFrameMethodReturnObject = null;
+
+            try
+            {
+               if (isLastParameterToCheck2DTransform)
+               {
+                  setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
+                  Method applyTransformMethod = frameType.getMethod("applyTransform", Transform.class, boolean.class);
+                  invokeMethod(setterObject,
+                               applyTransformMethod,
+                               frameA.getTransformToDesiredFrame(frameB),
+                               matchingFrameMethodParameters[matchingFrameMethodParameters.length - 1]);
+                  ((FrameChangeable) setterObject).setReferenceFrame(frameB);
+               }
+               else if (is2DType(frameType) && Stream.of(setterMethodParameters).map(Object::getClass).allMatch(EuclidFrameAPITester::is3DType))
+               { // The transformation should be done on the arguments not the holder.
+                  setterObject = frameTypeBuilder.newInstance(random, frameB);
+
+                  Object[] localSetterMethodParameters = ReflectionBasedBuilders.clone(setterMethodParameters);
+
+                  for (int paramIndex = 0; paramIndex < localSetterMethodParameters.length; paramIndex++)
+                  {
+                     Object setterMethodParameter = localSetterMethodParameters[paramIndex];
+
+                     if (setterMethodParameter instanceof FrameVertex3DSupplier)
+                     {
+                        FrameVertex3DSupplier asSupplier = (FrameVertex3DSupplier) setterMethodParameter;
+                        List<FramePoint3D> vertices = new ArrayList<>();
+                        for (int vertexIndex = 0; vertexIndex < asSupplier.getNumberOfVertices(); vertexIndex++)
+                           vertices.add(new FramePoint3D(asSupplier.getVertex(vertexIndex)));
+                        vertices.forEach(v -> v.changeFrame(frameB));
+                        localSetterMethodParameters[paramIndex] = FrameVertex3DSupplier.asFrameVertex3DSupplier(vertices);
+                     }
+                     else
+                     {
+                        ((FrameChangeable) setterMethodParameter).changeFrame(frameB);
+                     }
+                  }
+                  setterMethodReturnObject = invokeMethod(setterObject, setterMethod, localSetterMethodParameters);
+               }
+               else
+               {
+                  setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
+                  ((FrameChangeable) setterObject).changeFrame(frameB);
+               }
+            }
+            catch (Throwable e)
+            {
+               expectedException = e;
+            }
+
+            try
+            {
+               matchingFrameMethodReturnObject = invokeMethod(matchingFrameObject, matchingFrameMethod, matchingFrameMethodParameters);
+            }
+            catch (Throwable e)
+            {
+               if (expectedException == null || e.getClass() != expectedException.getClass())
+               {
+                  reportInconsistentException(matchingFrameMethod, setterMethod, expectedException, e);
+               }
+               else
+               {
+                  continue;
+               }
+            }
+
+            for (int i = 0; i < setterMethodParameters.length; i++)
+            {
+               Object setterParameter = setterMethodParameters[i];
+               Object matchingFrameParameter = matchingFrameMethodParameters[i];
+
+               if (!ReflectionBasedComparer.epsilonEquals(setterParameter, matchingFrameParameter, epsilon))
+                  reportInconsistentArguments(matchingFrameMethod,
+                                              setterMethod,
+                                              matchingFrameMethodParameters,
+                                              setterMethodParameters,
+                                              setterParameter,
+                                              matchingFrameParameter);
+            }
+
+            if (!ReflectionBasedComparer.epsilonEquals(setterMethodReturnObject, matchingFrameMethodReturnObject, epsilon))
+               reportInconsistentReturnedType(matchingFrameMethod, setterMethod, setterMethodReturnObject, matchingFrameMethodReturnObject);
+
+            if (!ReflectionBasedComparer.epsilonEquals(setterObject, matchingFrameObject, epsilon))
+               reportInconsistentObject(matchingFrameMethod, setterObject, matchingFrameObject, setterMethod);
+         }
+         catch (RuntimeException e)
+         {
+            System.err.println("Problem when evaluating the method: " + getMethodSimpleName(matchingFrameMethod));
+            throw e;
+         }
       }
    }
 
-   private static Method findCorrespondingFramelessSetterToSetMatchingFrame(Method setMatchingFrameMethod, Class<?> framelessType)
+   private static Method findCorrespondingSetterToSetMatchingFrame(Class<?> frameType, Method setMatchingFrameMethod)
    {
-      MethodSignature framelessSetterSignature = new MethodSignature(setMatchingFrameMethod);
-      framelessSetterSignature.setName("set");
-      if (framelessSetterSignature.getParameterType(0) == ReferenceFrame.class)
-      {
-         framelessSetterSignature.removeParameterType(0);
-      }
+      MethodSignature frameSetterSignature = new MethodSignature(setMatchingFrameMethod);
+      frameSetterSignature.setName("set");
 
-      List<Class<?>> parameterTypes = framelessSetterSignature.getParameterTypes();
-      for (int i = 0; i < parameterTypes.size(); i++)
+      Class<?> lastParameter = setMatchingFrameMethod.getParameterTypes()[setMatchingFrameMethod.getParameterCount() - 1];
+
+      if (lastParameter == boolean.class && is2DType(frameType))
       {
-         Class<?> parameterType = parameterTypes.get(i);
-         if (isFrameType(parameterType))
-         {
-            framelessSetterSignature.setParameterType(i, findCorrespondingFramelessType(parameterType));
-         }
+         frameSetterSignature.removeParameterType(setMatchingFrameMethod.getParameterCount() - 1);
       }
 
       try
       {
-         return framelessType.getMethod(framelessSetterSignature.getName(), framelessSetterSignature.toParameterTypeArray());
+         return frameType.getMethod(frameSetterSignature.getName(), frameSetterSignature.toParameterTypeArray());
       }
       catch (NoSuchMethodException e)
       {
          throw new AssertionError("Could not find the frameless setter that corresponds to :\n" + getMethodSimpleName(setMatchingFrameMethod) + ", declared in "
-               + setMatchingFrameMethod.getDeclaringClass().getSimpleName() + "\nExpected to find in " + framelessType.getSimpleName() + ":\n"
-               + framelessSetterSignature.getMethodSimpleName());
+               + setMatchingFrameMethod.getDeclaringClass().getSimpleName() + "\nExpected to find in " + frameType.getSimpleName() + ":\n"
+               + frameSetterSignature.getMethodSimpleName());
       }
    }
 
@@ -1097,7 +1206,6 @@ public class EuclidFrameAPITester
 
                if (!ReflectionBasedComparer.epsilonEquals(framelessObject, frameObject, epsilon))
                   reportInconsistentObject(frameMethod, framelessObject, frameObject, framelessMethod);
-
             }
             catch (NoSuchMethodException e)
             {
@@ -1262,7 +1370,7 @@ public class EuclidFrameAPITester
       }
    }
 
-   private static Object invokeMethod(Object methodHolder, Method frameMethod, Object[] parameters) throws Throwable
+   private static Object invokeMethod(Object methodHolder, Method frameMethod, Object... parameters) throws Throwable
    {
       try
       {
@@ -1445,6 +1553,16 @@ public class EuclidFrameAPITester
       if (framelessType.isArray())
          return isFramelessTypeWithFrameEquivalent(framelessType.getComponentType());
       return isFramelessType(framelessType) && !framelessTypesWithoutFrameEquivalent.contains(framelessType);
+   }
+
+   private static boolean is2DType(Class<?> type)
+   {
+      return findCorrespondingFramelessType(type).getSimpleName().contains("2D");
+   }
+
+   private static boolean is3DType(Class<?> type)
+   {
+      return findCorrespondingFramelessType(type).getSimpleName().contains("3D");
    }
 
    private static Class<?> searchSuperInterfaceFromSimpleName(String name, Class<?> typeToStartFrom)

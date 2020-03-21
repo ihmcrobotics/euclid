@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
@@ -191,6 +193,8 @@ public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<Fra
    @Test
    public void testSetMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameConvexPolygon2D, m -> true);
+
       Random random = new Random(544354);
 
       for (int i = 0; i < ITERATIONS; i++)
