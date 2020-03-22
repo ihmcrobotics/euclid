@@ -64,4 +64,11 @@ public class FramePointShape3DTest extends FrameShapeSetupTest
       EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFramePointShape3D,
                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFramePointShape3D,
+                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }
