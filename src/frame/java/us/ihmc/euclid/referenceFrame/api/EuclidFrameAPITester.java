@@ -66,8 +66,9 @@ public class EuclidFrameAPITester
    private static final String FIXED_FRAME = "FixedFrame";
 
    private static final String MATCHING_FRAME = "MatchingFrame";
+   private static final String INCLUDING_FRAME = "IncludingFrame";
    private static final String SET_MATCHING_FRAME = "set" + MATCHING_FRAME;
-   private static final String SET_INCLUDING_FRAME = "setIncludingFrame";
+   private static final String SET_INCLUDING_FRAME = "set" + INCLUDING_FRAME;
 
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private static final boolean DEBUG = false;
@@ -1177,6 +1178,11 @@ public class EuclidFrameAPITester
                assertSetMatchingFrameChecksFrames(frameTypeBuilder, frameMethod, frameA, frameB);
                continue;
             }
+            else if (frameMethod.getName().endsWith(INCLUDING_FRAME))
+            {
+               assertSetIncludingFrameChecksFrames(frameTypeBuilder, frameMethod, frameA, frameB);
+               continue;
+            }
 
             ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
@@ -1306,6 +1312,12 @@ public class EuclidFrameAPITester
       }
    }
 
+   private static void assertSetIncludingFrameChecksFrames(RandomFrameTypeBuilder frameTypeBuilder, Method setIncludingFrameMethod, ReferenceFrame frameA,
+                                                           ReferenceFrame frameB)
+   { // For reference frame check, it should behave the same as setMatchingFrame.
+      assertSetMatchingFrameChecksFrames(frameTypeBuilder, setIncludingFrameMethod, frameA, frameB);
+   }
+
    private static void assertSetMatchingFrameChecksFrames(RandomFrameTypeBuilder frameTypeBuilder, Method setMatchingFrameMethod, ReferenceFrame frameA,
                                                           ReferenceFrame frameB)
    {
@@ -1320,7 +1332,7 @@ public class EuclidFrameAPITester
          {
             if (!frameReadOnlyTypes.contains(parameterType))
             {
-               String message = "Any setMatchingFrame method is expected to only request read-only parameters.\n";
+               String message = setMatchingFrameMethod.getName() + " is expected to only request read-only parameters.\n";
                message += "In " + frameType.getSimpleName() + " the " + i + "th parameter is not a read-only:\n";
                message += getMethodSimpleName(setMatchingFrameMethod);
                throw new AssertionError(message);

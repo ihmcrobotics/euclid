@@ -38,8 +38,7 @@ public class FrameSphere3DTest extends FrameShapeSetupTest
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame");
-      methodFilter = methodFilter.and(m -> !m.getName().equals("equals"));
+      Predicate<Method> methodFilter = m -> !m.getName().equals("equals");
       methodFilter = methodFilter.and(m -> !m.getName().equals("epsilonEquals"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("getBoundingBox")
             || !Arrays.equals(m.getParameterTypes(), new Class<?>[] {ReferenceFrame.class, FrameBoundingBox3DBasics.class}));

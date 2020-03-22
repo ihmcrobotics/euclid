@@ -446,7 +446,7 @@ public abstract class FrameTuple3DBasicsTest<F extends FrameTuple3DBasics> exten
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple,
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);

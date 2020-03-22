@@ -35,7 +35,7 @@ public abstract class FrameBoundingBox2DReadOnlyTest<T extends FrameBoundingBox2
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameBoundingBox,
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);

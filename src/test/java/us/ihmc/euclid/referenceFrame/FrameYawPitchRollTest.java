@@ -282,8 +282,7 @@ public class FrameYawPitchRollTest
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals")
-            && !m.getName().equals("epsilonEquals");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
       RandomFrameTypeBuilder frameTypeBuilder = EuclidFrameRandomTools::nextFrameYawPitchRoll;
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frameTypeBuilder,
                                                                                   methodFilter,
