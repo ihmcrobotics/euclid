@@ -264,6 +264,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FrameVector2DReadOnly)} instead.
     */
    default void setIncludingFrame(FramePoint2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
@@ -278,6 +279,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FrameVector2DReadOnly)} instead.
     */
    default void setIncludingFrame(Point2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
    {
@@ -303,6 +305,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FrameVector3DReadOnly)} instead.
     */
    default void setIncludingFrame(FramePoint3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
@@ -314,6 +317,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param pointOnLine   new point on this line. Not modified.
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FrameVector3DReadOnly)} instead.
     */
    default void setIncludingFrame(Point3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
    {
@@ -345,6 +349,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FramePoint2DReadOnly)}
     */
    default void setIncludingFrame(FramePoint2DReadOnly firstPointOnLine, Point2DReadOnly secondPointOnLine)
    {
@@ -359,6 +364,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint2DReadOnly, FramePoint2DReadOnly)}
     */
    default void setIncludingFrame(Point2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine)
    {
@@ -384,6 +390,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FramePoint3DReadOnly)}
     */
    default void setIncludingFrame(FramePoint3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine)
    {
@@ -395,6 +402,7 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     *
     * @param firstPointOnLine  first point on this line. Not modified.
     * @param secondPointOnLine second point on this line. Not modified.
+    * @deprecated Use {@link #setIncludingFrame(FramePoint3DReadOnly, FramePoint3DReadOnly)}
     */
    default void setIncludingFrame(Point3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine)
    {
