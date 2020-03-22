@@ -611,7 +611,6 @@ public class EuclidFrameAPITester
    public static void assertSetMatchingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
                                                                   int numberOfIterations)
    {
-      // TODO Assert that if arguments are in different frames, the method throws an exception.
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
       Predicate<Method> filter = methodFilter.and(m -> m.getName().equals(SET_MATCHING_FRAME));
@@ -774,7 +773,6 @@ public class EuclidFrameAPITester
    public static void assertSetIncludingFramePreserveFunctionality(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
                                                                    int numberOfIterations)
    {
-      // TODO Assert that if arguments are in different frames, the method throws an exception.
       Class<? extends ReferenceFrameHolder> frameType = frameTypeBuilder.newInstance(random, worldFrame).getClass();
 
       Predicate<Method> filter = methodFilter.and(m -> m.getName().equals(SET_INCLUDING_FRAME));
