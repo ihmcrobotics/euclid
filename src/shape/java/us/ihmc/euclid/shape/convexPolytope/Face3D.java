@@ -3,7 +3,6 @@ package us.ihmc.euclid.shape.convexPolytope;
 import java.util.Collection;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -34,7 +33,8 @@ public class Face3D extends AbstractFace3D<Vertex3D, HalfEdge3D, Face3D>
     */
    public Face3D(Vector3DReadOnly initialGuessNormal)
    {
-      super(HalfEdge3D::new, initialGuessNormal, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
+      super(HalfEdge3D::new);
+      initialize(initialGuessNormal);
    }
 
    /**
@@ -46,7 +46,8 @@ public class Face3D extends AbstractFace3D<Vertex3D, HalfEdge3D, Face3D>
     */
    public Face3D(Vector3DReadOnly initialGuessNormal, double constructionEpsilon)
    {
-      super(HalfEdge3D::new, initialGuessNormal, constructionEpsilon);
+      super(HalfEdge3D::new, constructionEpsilon);
+      initialize(initialGuessNormal);
    }
 
    /**
@@ -60,7 +61,8 @@ public class Face3D extends AbstractFace3D<Vertex3D, HalfEdge3D, Face3D>
     */
    public Face3D(Collection<HalfEdge3D> faceEdges, Vector3DReadOnly normal, double constructionEpsilon)
    {
-      super(HalfEdge3D::new, faceEdges, normal, constructionEpsilon);
+      super(HalfEdge3D::new, constructionEpsilon);
+      initialize(faceEdges, normal);
    }
 
    @Override

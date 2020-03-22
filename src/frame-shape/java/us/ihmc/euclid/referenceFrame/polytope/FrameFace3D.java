@@ -11,7 +11,6 @@ import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.convexPolytope.AbstractFace3D;
-import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 
 public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D> implements FrameFace3DReadOnly, Clearable, Transformable
 {
@@ -30,8 +29,9 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
     */
    public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, FrameVector3DReadOnly initialGuessNormal)
    {
-      super(edgeFactory(referenceFrameHolder), initialGuessNormal, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
+      super(edgeFactory(referenceFrameHolder));
       this.referenceFrameHolder = referenceFrameHolder;
+      initialize(initialGuessNormal);
    }
 
    /**
@@ -43,8 +43,9 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
     */
    public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, FrameVector3DReadOnly initialGuessNormal, double constructionEpsilon)
    {
-      super(edgeFactory(referenceFrameHolder), initialGuessNormal, constructionEpsilon);
+      super(edgeFactory(referenceFrameHolder), constructionEpsilon);
       this.referenceFrameHolder = referenceFrameHolder;
+      initialize(initialGuessNormal);
    }
 
    /**
@@ -59,8 +60,9 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
    public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, Collection<FrameHalfEdge3D> faceEdges, FrameVector3DReadOnly normal,
                       double constructionEpsilon)
    {
-      super(edgeFactory(referenceFrameHolder), faceEdges, normal, constructionEpsilon);
+      super(edgeFactory(referenceFrameHolder), constructionEpsilon);
       this.referenceFrameHolder = referenceFrameHolder;
+      initialize(faceEdges, normal);
    }
 
    private static BiFunction<FrameVertex3D, FrameVertex3D, FrameHalfEdge3D> edgeFactory(ReferenceFrameHolder referenceFrameHolder)

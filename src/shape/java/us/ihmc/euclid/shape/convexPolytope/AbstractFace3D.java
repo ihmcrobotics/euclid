@@ -54,41 +54,35 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
     *
     * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
     */
-   public AbstractFace3D(BiFunction<Vertex, Vertex, Edge> edgeFactory, Vector3DReadOnly initialGuessNormal)
+   public AbstractFace3D(BiFunction<Vertex, Vertex, Edge> edgeFactory)
    {
-      this(edgeFactory, initialGuessNormal, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
+      this(edgeFactory, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
    }
 
    /**
     * Creates a new empty face.
     *
-    * @param initialGuessNormal  initial guess for what this face's normal should be. Not modified.
     * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
     *                            edge-cases.
     */
-   public AbstractFace3D(BiFunction<Vertex, Vertex, Edge> edgeFactory, Vector3DReadOnly initialGuessNormal, double constructionEpsilon)
+   public AbstractFace3D(BiFunction<Vertex, Vertex, Edge> edgeFactory, double constructionEpsilon)
    {
-      getNormal().setAndNormalize(initialGuessNormal);
-      getBoundingBox().setToNaN();
       this.constructionEpsilon = constructionEpsilon;
       this.edgeFactory = edgeFactory;
    }
 
    /**
-    * Creates a new face given its edges.
-    *
-    * @param faceEdges           the edges composing the new face. Not modified, reference to the edges
-    *                            saved.
-    * @param normal              the face's normal. Not modified.
-    * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
-    *                            edge-cases.
+    * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
     */
-   public AbstractFace3D(BiFunction<Vertex, Vertex, Edge> edgeFactory, Collection<Edge> faceEdges, Vector3DReadOnly normal, double constructionEpsilon)
+   protected void initialize(Vector3DReadOnly initialGuessNormal)
+   {
+      getNormal().setAndNormalize(initialGuessNormal);
+      getBoundingBox().setToNaN();
+   }
+
+   protected void initialize(Collection<Edge> faceEdges, Vector3DReadOnly normal)
    {
       getBoundingBox().setToNaN();
-      this.constructionEpsilon = constructionEpsilon;
-      this.edgeFactory = edgeFactory;
-
       set(faceEdges, normal);
    }
 
