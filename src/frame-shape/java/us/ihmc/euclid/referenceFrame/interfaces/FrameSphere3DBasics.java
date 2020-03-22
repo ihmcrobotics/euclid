@@ -6,18 +6,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface FrameSphere3DBasics extends FixedFrameSphere3DBasics, FrameShape3DBasics
 {
-   default void setToNaN(ReferenceFrame referenceFrame)
-   {
-      setReferenceFrame(referenceFrame);
-      setToNaN();
-   }
-
-   default void setToZero(ReferenceFrame referenceFrame)
-   {
-      setReferenceFrame(referenceFrame);
-      setToZero();
-   }
-
    default void setIncludingFrame(ReferenceFrame referenceFrame, Sphere3DReadOnly other)
    {
       setReferenceFrame(referenceFrame);

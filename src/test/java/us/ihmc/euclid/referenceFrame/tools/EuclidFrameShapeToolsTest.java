@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.primitives.*;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -381,6 +382,68 @@ public class EuclidFrameShapeToolsTest
          EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
 
          sphereInBBXFrame.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testBoundingBoxConvexPolytope3D()
+   {
+      Random random = new Random(5768787);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // ConvexPolytope3D: shapeFrame = world, boundingBoxFrame = world
+         ConvexPolytope3D convexPolytopeInFrame = EuclidShapeRandomTools.nextConvexPolytope3D(random);
+         convexPolytopeInFrame.applyTransform(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         ConvexPolytope3D convexPolytopeInWorld = new ConvexPolytope3D(convexPolytopeInFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         convexPolytopeInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxConvexPolytope3D(worldFrame, convexPolytopeInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         convexPolytopeInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // ConvexPolytope3D: shapeFrame != world, boundingBoxFrame = world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         ConvexPolytope3D convexPolytopeInFrame = EuclidShapeRandomTools.nextConvexPolytope3D(random);
+         convexPolytopeInFrame.applyTransform(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         ConvexPolytope3D convexPolytopeInWorld = new ConvexPolytope3D(convexPolytopeInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(worldFrame, convexPolytopeInWorld);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         convexPolytopeInWorld.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxConvexPolytope3D(shapeFrame, convexPolytopeInFrame, worldFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         convexPolytopeInWorld.getBoundingBox(expected);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // ConvexPolytope3D: shapeFrame != world, boundingBoxFrame != world
+         RigidBodyTransform shapeFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+         RigidBodyTransform boundingBoxFrameTransform = nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3);
+
+         ReferenceFrame shapeFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("shapeFrame", worldFrame, shapeFrameTransform);
+         ReferenceFrame boundingBoxFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent("boundingBoxFrame",
+                                                                                                             worldFrame,
+                                                                                                             boundingBoxFrameTransform);
+         ConvexPolytope3D convexPolytopeInFrame = EuclidShapeRandomTools.nextConvexPolytope3D(random);
+         convexPolytopeInFrame.applyTransform(nextRigidBodyTransformWithIdentityEdgeCase(random, 0.3, 0.3));
+         ConvexPolytope3D convexPolytopeInBBXFrame = new ConvexPolytope3D(convexPolytopeInFrame);
+         shapeFrame.transformFromThisToDesiredFrame(boundingBoxFrame, convexPolytopeInBBXFrame);
+         BoundingBox3D expected = new BoundingBox3D();
+         BoundingBox3D actual = new BoundingBox3D();
+         convexPolytopeInBBXFrame.getBoundingBox(expected);
+         EuclidFrameShapeTools.boundingBoxConvexPolytope3D(shapeFrame, convexPolytopeInFrame, boundingBoxFrame, actual);
+         EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
+
+         convexPolytopeInBBXFrame.getBoundingBox(expected);
          EuclidGeometryTestTools.assertBoundingBox3DEquals("Iteration " + i, expected, actual, EPSILON);
       }
    }

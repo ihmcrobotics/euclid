@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.convexPolytope;
+package us.ihmc.euclid.shape.convexPolytope.impl;
 
 import java.util.ArrayList;
 import java.util.List;

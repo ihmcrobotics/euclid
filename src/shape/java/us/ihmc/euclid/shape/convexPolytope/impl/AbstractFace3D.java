@@ -1,10 +1,9 @@
-package us.ihmc.euclid.shape.convexPolytope;
+package us.ihmc.euclid.shape.convexPolytope.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
@@ -15,6 +14,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -47,14 +47,14 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
    /** Eigen decomposition solver used to compute this face normal. */
    private final EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(3, true, true);
 
-   private final BiFunction<Vertex, Vertex, Edge> edgeFactory;
+   private final HalfEdge3DFactory<Vertex, Edge> edgeFactory;
 
    /**
     * Creates a new empty face.
     *
     * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
     */
-   public AbstractFace3D(BiFunction<Vertex, Vertex, Edge> edgeFactory)
+   public AbstractFace3D(HalfEdge3DFactory<Vertex, Edge> edgeFactory)
    {
       this(edgeFactory, EuclidPolytopeConstructionTools.DEFAULT_CONSTRUCTION_EPSILON);
    }
@@ -65,7 +65,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
     * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
     *                            edge-cases.
     */
-   public AbstractFace3D(BiFunction<Vertex, Vertex, Edge> edgeFactory, double constructionEpsilon)
+   public AbstractFace3D(HalfEdge3DFactory<Vertex, Edge> edgeFactory, double constructionEpsilon)
    {
       this.constructionEpsilon = constructionEpsilon;
       this.edgeFactory = edgeFactory;
@@ -191,7 +191,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
    @SuppressWarnings("unchecked")
    private boolean handleNoEdgeCase(Vertex vertexToAdd)
    {
-      Edge newEdge = edgeFactory.apply(vertexToAdd, vertexToAdd);
+      Edge newEdge = edgeFactory.newInstance(vertexToAdd, vertexToAdd);
       newEdge.setFace((Face) this);
       newEdge.setNext(newEdge);
       newEdge.setPrevious(newEdge);
@@ -208,7 +208,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
 
       // Set the edge for the two points and then create its twin
       firstEdge.setDestination(vertexToAdd);
-      Edge newEdge = edgeFactory.apply(vertexToAdd, firstEdge.getOrigin());
+      Edge newEdge = edgeFactory.newInstance(vertexToAdd, firstEdge.getOrigin());
       newEdge.setFace((Face) this);
       newEdge.setNext(firstEdge);
       newEdge.setPrevious(firstEdge);
@@ -262,7 +262,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
       }
 
       secondEdge.setDestination(vertexToAdd);
-      Edge newEdge = edgeFactory.apply(vertexToAdd, firstEdge.getOrigin());
+      Edge newEdge = edgeFactory.newInstance(vertexToAdd, firstEdge.getOrigin());
       newEdge.setFace((Face) this);
       newEdge.setPrevious(secondEdge);
       newEdge.setNext(firstEdge);
@@ -327,7 +327,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
 
       if (lineOfSight.size() == 1)
       {
-         Edge additionalEdge = edgeFactory.apply(vertexToAdd, firstVisibleEdge.getDestination());
+         Edge additionalEdge = edgeFactory.newInstance(vertexToAdd, firstVisibleEdge.getDestination());
          additionalEdge.setFace((Face) this);
          firstVisibleEdge.setDestination(vertexToAdd);
          additionalEdge.setNext(firstVisibleEdge.getNext());

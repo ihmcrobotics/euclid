@@ -6,7 +6,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
-import us.ihmc.euclid.shape.convexPolytope.AbstractHalfEdge3D;
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 
 public class FrameHalfEdge3D extends AbstractHalfEdge3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D>
       implements FrameHalfEdge3DReadOnly, FixedFrameLineSegment3DBasics

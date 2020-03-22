@@ -3,6 +3,7 @@ package us.ihmc.euclid.shape.convexPolytope;
 import java.util.Collection;
 
 import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;

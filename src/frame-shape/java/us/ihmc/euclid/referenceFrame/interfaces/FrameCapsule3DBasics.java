@@ -7,18 +7,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface FrameCapsule3DBasics extends FixedFrameCapsule3DBasics, FrameShape3DBasics
 {
-   default void setToNaN(ReferenceFrame referenceFrame)
-   {
-      setReferenceFrame(referenceFrame);
-      setToNaN();
-   }
-
-   default void setToZero(ReferenceFrame referenceFrame)
-   {
-      setReferenceFrame(referenceFrame);
-      setToZero();
-   }
-
    default void setIncludingFrame(ReferenceFrame referenceFrame, Capsule3DReadOnly other)
    {
       setReferenceFrame(referenceFrame);

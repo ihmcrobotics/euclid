@@ -986,7 +986,7 @@ public class EuclidFrameFactories
 
    public static FixedFrameBoundingBox2DBasics newFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
-      return new FixedFrameBoundingBox2DBasics()
+      FixedFrameBoundingBox2DBasics fixedFrameBoundingBox2DBasics = new FixedFrameBoundingBox2DBasics()
       {
          private final FixedFramePoint2DBasics minPoint = EuclidFrameFactories.newFixedFramePoint2DBasics(referenceFrameHolder);
          private final FixedFramePoint2DBasics maxPoint = EuclidFrameFactories.newFixedFramePoint2DBasics(referenceFrameHolder);
@@ -1030,11 +1030,15 @@ public class EuclidFrameFactories
             return EuclidFrameIOTools.getFrameBoundingBox2DString(this);
          }
       };
+
+      fixedFrameBoundingBox2DBasics.setToNaN();
+
+      return fixedFrameBoundingBox2DBasics;
    }
 
    public static FixedFrameBoundingBox3DBasics newFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
-      return new FixedFrameBoundingBox3DBasics()
+      FixedFrameBoundingBox3DBasics fixedFrameBoundingBox3DBasics = new FixedFrameBoundingBox3DBasics()
       {
          private final FixedFramePoint3DBasics minPoint = EuclidFrameFactories.newFixedFramePoint3DBasics(referenceFrameHolder);
          private final FixedFramePoint3DBasics maxPoint = EuclidFrameFactories.newFixedFramePoint3DBasics(referenceFrameHolder);
@@ -1078,5 +1082,9 @@ public class EuclidFrameFactories
             return EuclidFrameIOTools.getFrameBoundingBox3DString(this);
          }
       };
+
+      fixedFrameBoundingBox3DBasics.setToNaN();
+
+      return fixedFrameBoundingBox3DBasics;
    }
 }

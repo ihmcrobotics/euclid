@@ -413,12 +413,17 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
+      return getSupportingVertex(null, supportDirection);
+   }
+
+   default Vertex3DReadOnly getSupportingVertex(Vertex3DReadOnly seed, Vector3DReadOnly supportDirection)
+   {
       if (isEmpty())
          return null;
       if (getNumberOfFaces() == 1)
          return getFace(0).getSupportingVertex(supportDirection);
 
-      Vertex3DReadOnly bestVertex = getFace(0).getEdge(0).getOrigin();
+      Vertex3DReadOnly bestVertex = seed != null ? seed : getFace(0).getEdge(0).getOrigin();
 
       if (getNumberOfVertices() == 1)
          return bestVertex;

@@ -5,10 +5,14 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.*;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.*;
 
 public class EuclidFrameShapeTools
@@ -35,6 +39,8 @@ public class EuclidFrameShapeTools
 
    public static void boundingBoxBox3D(ReferenceFrame box3DFrame, Box3DReadOnly box3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
+      box3DFrame.verifySameRoots(boundingBoxFrame);
+
       if (box3DFrame == boundingBoxFrame)
       {
          EuclidShapeTools.boundingBoxBox3D(box3D.getPosition(), box3D.getOrientation(), box3D.getSize(), boundingBoxToPack);
@@ -46,20 +52,12 @@ public class EuclidFrameShapeTools
 
       if (box3DFrame.isRootFrame())
       {
-         if (boundingBoxFrame.isRootFrame())
-         {
-            boundingBoxRotationPartGeneric(shapeOrientation, false, box3D, box3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransform(shapeOrientation, shapePosition, false, boundingBoxToPack);
-         }
-         else
-         {
-            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
-            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
-            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, box3D, box3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
-         }
+         boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, box3D, box3DCalculator, boundingBoxToPack);
+         addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
       }
       else
       {
@@ -78,7 +76,7 @@ public class EuclidFrameShapeTools
             Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
             RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, box3D, box3DCalculator, boundingBoxToPack);
+            boundingBoxRotationPartGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, box3D, box3DCalculator, boundingBoxToPack);
             addTranslationPartOfTransforms(rotFromBBX,
                                            transFromBBX,
                                            true,
@@ -126,6 +124,8 @@ public class EuclidFrameShapeTools
    public static void boundingBoxCapsule3D(ReferenceFrame capsule3DFrame, Capsule3DReadOnly capsule3D, ReferenceFrame boundingBoxFrame,
                                            BoundingBox3DBasics boundingBoxToPack)
    {
+      capsule3DFrame.verifySameRoots(boundingBoxFrame);
+
       if (capsule3DFrame == boundingBoxFrame)
       {
          EuclidShapeTools.boundingBoxCapsule3D(capsule3D.getPosition(), capsule3D.getAxis(), capsule3D.getLength(), capsule3D.getRadius(), boundingBoxToPack);
@@ -136,19 +136,12 @@ public class EuclidFrameShapeTools
 
       if (capsule3DFrame.isRootFrame())
       {
-         if (boundingBoxFrame.isRootFrame())
-         {
-            capsule3DCalculator.computeBoundingBoxZeroRotation(capsule3D, boundingBoxToPack);
-         }
-         else
-         {
-            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
-            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
-            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxRotationPartGeneric(rotFromBBX, true, capsule3D, capsule3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
-         }
+         boundingBoxRotationPartGeneric(rotFromBBX, true, capsule3D, capsule3DCalculator, boundingBoxToPack);
+         addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
       }
       else
       {
@@ -216,6 +209,8 @@ public class EuclidFrameShapeTools
    public static void boundingBoxCylinder3D(ReferenceFrame cylinder3DFrame, Cylinder3DReadOnly cylinder3D, ReferenceFrame boundingBoxFrame,
                                             BoundingBox3DBasics boundingBoxToPack)
    {
+      cylinder3DFrame.verifySameRoots(boundingBoxFrame);
+
       if (cylinder3DFrame == boundingBoxFrame)
       {
          EuclidShapeTools.boundingBoxCylinder3D(cylinder3D.getPosition(),
@@ -230,19 +225,12 @@ public class EuclidFrameShapeTools
 
       if (cylinder3DFrame.isRootFrame())
       {
-         if (boundingBoxFrame.isRootFrame())
-         {
-            cylinder3DCalculator.computeBoundingBoxZeroRotation(cylinder3D, boundingBoxToPack);
-         }
-         else
-         {
-            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
-            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
-            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxRotationPartGeneric(rotFromBBX, true, cylinder3D, cylinder3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
-         }
+         boundingBoxRotationPartGeneric(rotFromBBX, true, cylinder3D, cylinder3DCalculator, boundingBoxToPack);
+         addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
       }
       else
       {
@@ -321,6 +309,8 @@ public class EuclidFrameShapeTools
    public static void boundingBoxEllipsoid3D(ReferenceFrame ellipsoid3DFrame, Ellipsoid3DReadOnly ellipsoid3D, ReferenceFrame boundingBoxFrame,
                                              BoundingBox3DBasics boundingBoxToPack)
    {
+      ellipsoid3DFrame.verifySameRoots(boundingBoxFrame);
+
       if (ellipsoid3DFrame == boundingBoxFrame)
       {
          EuclidShapeTools.boundingBoxEllipsoid3D(ellipsoid3D.getPosition(), ellipsoid3D.getOrientation(), ellipsoid3D.getRadii(), boundingBoxToPack);
@@ -332,20 +322,12 @@ public class EuclidFrameShapeTools
 
       if (ellipsoid3DFrame.isRootFrame())
       {
-         if (boundingBoxFrame.isRootFrame())
-         {
-            boundingBoxRotationPartGeneric(shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransform(shapeOrientation, shapePosition, false, boundingBoxToPack);
-         }
-         else
-         {
-            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
-            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
-            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
-         }
+         boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
+         addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
       }
       else
       {
@@ -364,7 +346,7 @@ public class EuclidFrameShapeTools
             Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
             RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
+            boundingBoxRotationPartGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, ellipsoid3D, ellipsoid3DCalculator, boundingBoxToPack);
             addTranslationPartOfTransforms(rotFromBBX,
                                            transFromBBX,
                                            true,
@@ -379,6 +361,31 @@ public class EuclidFrameShapeTools
       }
    }
 
+   private static final BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly> ellipsoid3DCalculator = new BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly>()
+   {
+      @Override
+      public void computeBoundingBoxZeroRotation(Ellipsoid3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         Vector3DReadOnly radii = shape.getRadii();
+         boundingBoxToPack.set(-radii.getX(), -radii.getY(), -radii.getZ(), radii.getX(), radii.getY(), radii.getZ());
+      }
+
+      @Override
+      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                     Ellipsoid3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      {
+         Vector3DReadOnly radii = shape.getRadii();
+         double rx = radii.getX() * radii.getX();
+         double ry = radii.getY() * radii.getY();
+         double rz = radii.getZ() * radii.getZ();
+
+         double xRange = Math.sqrt(m00 * m00 * rx + m01 * m01 * ry + m02 * m02 * rz);
+         double yRange = Math.sqrt(m10 * m10 * rx + m11 * m11 * ry + m12 * m12 * rz);
+         double zRange = Math.sqrt(m20 * m20 * rx + m21 * m21 * ry + m22 * m22 * rz);
+         boundingBoxToPack.set(-xRange, -yRange, -zRange, xRange, yRange, zRange);
+      }
+   };
+
    public static void boundingBoxRamp3D(FrameRamp3DReadOnly ramp3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxRamp3D(ramp3D.getReferenceFrame(), ramp3D, boundingBoxFrame, boundingBoxToPack);
@@ -387,6 +394,8 @@ public class EuclidFrameShapeTools
    public static void boundingBoxRamp3D(ReferenceFrame ramp3DFrame, Ramp3DReadOnly ramp3D, ReferenceFrame boundingBoxFrame,
                                         BoundingBox3DBasics boundingBoxToPack)
    {
+      ramp3DFrame.verifySameRoots(boundingBoxFrame);
+
       if (ramp3DFrame == boundingBoxFrame)
       {
          ramp3D.getBoundingBox(boundingBoxToPack);
@@ -398,20 +407,12 @@ public class EuclidFrameShapeTools
 
       if (ramp3DFrame.isRootFrame())
       {
-         if (boundingBoxFrame.isRootFrame())
-         {
-            boundingBoxRotationPartGeneric(shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransform(shapeOrientation, shapePosition, false, boundingBoxToPack);
-         }
-         else
-         {
-            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
-            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
-            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
-            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
-         }
+         boundingBoxRotationPartGeneric(rotFromBBX, true, shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
+         addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, shapeOrientation, shapePosition, false, boundingBoxToPack);
       }
       else
       {
@@ -430,7 +431,7 @@ public class EuclidFrameShapeTools
             Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
             RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
 
-            boundingBoxGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
+            boundingBoxRotationPartGeneric(rotFromBBX, true, rotToRoot, false, shapeOrientation, false, ramp3D, ramp3DCalculator, boundingBoxToPack);
             addTranslationPartOfTransforms(rotFromBBX,
                                            transFromBBX,
                                            true,
@@ -441,66 +442,6 @@ public class EuclidFrameShapeTools
                                            shapePosition,
                                            false,
                                            boundingBoxToPack);
-         }
-      }
-   }
-
-   public static void boundingBoxSphere3D(FrameSphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
-   {
-      boundingBoxSphere3D(sphere3D.getReferenceFrame(), sphere3D, boundingBoxFrame, boundingBoxToPack);
-   }
-
-   public static void boundingBoxSphere3D(ReferenceFrame sphere3DFrame, Sphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame,
-                                          BoundingBox3DBasics boundingBoxToPack)
-   {
-      if (sphere3DFrame == boundingBoxFrame)
-      {
-         sphere3D.getBoundingBox(boundingBoxToPack);
-         return;
-      }
-
-      double minX = -sphere3D.getRadius();
-      double minY = -sphere3D.getRadius();
-      double minZ = -sphere3D.getRadius();
-      double maxX = sphere3D.getRadius();
-      double maxY = sphere3D.getRadius();
-      double maxZ = sphere3D.getRadius();
-      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
-
-      Point3DReadOnly position = sphere3D.getPosition();
-
-      if (sphere3DFrame.isRootFrame())
-      {
-         if (boundingBoxFrame.isRootFrame())
-         {
-            return;
-         }
-         else
-         {
-            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
-            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
-            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
-
-            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
-         }
-      }
-      else
-      {
-         RigidBodyTransform transformToRoot = sphere3DFrame.getTransformToRoot();
-         Vector3DBasics transToRoot = transformToRoot.getTranslation();
-         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
-
-         if (boundingBoxFrame.isRootFrame())
-         {
-            addTranslationPartOfTransforms(rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
-         }
-         else
-         {
-            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
-            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
-            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
-
-            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
          }
       }
    }
@@ -551,28 +492,149 @@ public class EuclidFrameShapeTools
       }
    };
 
-   private static final BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly> ellipsoid3DCalculator = new BoundingBoxRotationPartCalculator<Ellipsoid3DReadOnly>()
+   public static void boundingBoxSphere3D(FrameSphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxSphere3D(sphere3D.getReferenceFrame(), sphere3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   public static void boundingBoxSphere3D(ReferenceFrame sphere3DFrame, Sphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame,
+                                          BoundingBox3DBasics boundingBoxToPack)
+   {
+      sphere3DFrame.verifySameRoots(boundingBoxFrame);
+
+      if (sphere3DFrame == boundingBoxFrame)
+      {
+         sphere3D.getBoundingBox(boundingBoxToPack);
+         return;
+      }
+
+      double minX = -sphere3D.getRadius();
+      double minY = -sphere3D.getRadius();
+      double minZ = -sphere3D.getRadius();
+      double maxX = sphere3D.getRadius();
+      double maxY = sphere3D.getRadius();
+      double maxZ = sphere3D.getRadius();
+      boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
+
+      Point3DReadOnly position = sphere3D.getPosition();
+
+      if (sphere3DFrame.isRootFrame())
+      {
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+         addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, null, position, false, boundingBoxToPack);
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = sphere3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            addTranslationPartOfTransforms(rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, rotToRoot, transToRoot, false, null, position, false, boundingBoxToPack);
+         }
+      }
+   }
+
+   public static void boundingBoxConvexPolytope3D(FrameConvexPolytope3DReadOnly convexPolytope3D, ReferenceFrame boundingBoxFrame,
+                                                  BoundingBox3DBasics boundingBoxToPack)
+   {
+      boundingBoxConvexPolytope3D(convexPolytope3D.getReferenceFrame(), convexPolytope3D, boundingBoxFrame, boundingBoxToPack);
+   }
+
+   public static void boundingBoxConvexPolytope3D(ReferenceFrame convexPolytope3DFrame, ConvexPolytope3DReadOnly convexPolytope3D,
+                                                  ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      convexPolytope3DFrame.verifySameRoots(boundingBoxFrame);
+
+      if (convexPolytope3DFrame == boundingBoxFrame)
+      {
+         boundingBoxToPack.set(convexPolytope3D.getBoundingBox());
+         return;
+      }
+
+      if (convexPolytope3DFrame.isRootFrame())
+      {
+         RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+         Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+         RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+         boundingBoxRotationPartGeneric(rotFromBBX, true, convexPolytope3D, convexPolytope3DCalculator, boundingBoxToPack);
+         addTranslationPartOfTransform(rotFromBBX, transFromBBX, true, boundingBoxToPack);
+      }
+      else
+      {
+         RigidBodyTransform transformToRoot = convexPolytope3DFrame.getTransformToRoot();
+         Vector3DBasics transToRoot = transformToRoot.getTranslation();
+         RotationMatrixBasics rotToRoot = transformToRoot.getRotation();
+
+         if (boundingBoxFrame.isRootFrame())
+         {
+            boundingBoxRotationPartGeneric(rotToRoot, false, convexPolytope3D, convexPolytope3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransform(rotToRoot, transToRoot, false, boundingBoxToPack);
+         }
+         else
+         {
+            RigidBodyTransform transformFromBBX = boundingBoxFrame.getTransformToRoot();
+            Vector3DBasics transFromBBX = transformFromBBX.getTranslation();
+            RotationMatrixBasics rotFromBBX = transformFromBBX.getRotation();
+
+            boundingBoxRotationPartGeneric(rotFromBBX, true, rotToRoot, false, convexPolytope3D, convexPolytope3DCalculator, boundingBoxToPack);
+            addTranslationPartOfTransforms(rotFromBBX, transFromBBX, true, rotToRoot, transToRoot, false, boundingBoxToPack);
+         }
+      }
+   }
+
+   private static final BoundingBoxRotationPartCalculator<ConvexPolytope3DReadOnly> convexPolytope3DCalculator = new BoundingBoxRotationPartCalculator<ConvexPolytope3DReadOnly>()
    {
       @Override
-      public void computeBoundingBoxZeroRotation(Ellipsoid3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      public void computeBoundingBoxZeroRotation(ConvexPolytope3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
       {
-         Vector3DReadOnly radii = shape.getRadii();
-         boundingBoxToPack.set(-radii.getX(), -radii.getY(), -radii.getZ(), radii.getX(), radii.getY(), radii.getZ());
+         boundingBoxToPack.set(shape.getBoundingBox());
       }
+
+      private final Vector3D supportDirection = new Vector3D();
 
       @Override
       public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Ellipsoid3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+                                     ConvexPolytope3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
       {
-         Vector3DReadOnly radii = shape.getRadii();
-         double rx = radii.getX() * radii.getX();
-         double ry = radii.getY() * radii.getY();
-         double rz = radii.getZ() * radii.getZ();
+         supportDirection.set(m00, m01, m02);
+         Vertex3DReadOnly vertexMaxX = shape.getSupportingVertex(supportDirection);
+         double maxX = vertexMaxX.dot(supportDirection);
 
-         double xRange = Math.sqrt(m00 * m00 * rx + m01 * m01 * ry + m02 * m02 * rz);
-         double yRange = Math.sqrt(m10 * m10 * rx + m11 * m11 * ry + m12 * m12 * rz);
-         double zRange = Math.sqrt(m20 * m20 * rx + m21 * m21 * ry + m22 * m22 * rz);
-         boundingBoxToPack.set(-xRange, -yRange, -zRange, xRange, yRange, zRange);
+         supportDirection.set(m10, m11, m12);
+         Vertex3DReadOnly vertexMaxY = shape.getSupportingVertex(vertexMaxX, supportDirection);
+         double maxY = vertexMaxY.dot(supportDirection);
+
+         supportDirection.set(-m00, -m01, -m02);
+         Vertex3DReadOnly vertexMinX = shape.getSupportingVertex(vertexMaxY, supportDirection);
+         double minX = -vertexMinX.dot(supportDirection);
+
+         supportDirection.set(-m10, -m11, -m12);
+         Vertex3DReadOnly vertexMinY = shape.getSupportingVertex(vertexMinX, supportDirection);
+         double minY = -vertexMinY.dot(supportDirection);
+
+         supportDirection.set(m20, m21, m22);
+         Vertex3DReadOnly vertexMaxZ = shape.getSupportingVertex(vertexMinX, supportDirection);
+         double maxZ = vertexMaxZ.dot(supportDirection);
+
+         supportDirection.set(-m20, -m21, -m22);
+         Vertex3DReadOnly vertexMinZ = shape.getSupportingVertex(vertexMinX, supportDirection);
+         double minZ = -vertexMinZ.dot(supportDirection);
+
+         boundingBoxToPack.set(minX, minY, minZ, maxX, maxY, maxZ);
       }
    };
 
@@ -687,10 +749,11 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static <T extends Shape3DReadOnly> void boundingBoxGeneric(RotationMatrixReadOnly rotation1, boolean inverseTransform1,
-                                                                      RotationMatrixReadOnly rotation2, boolean inverseTransform2,
-                                                                      RotationMatrixReadOnly rotation3, boolean inverseTransform3, T shape,
-                                                                      BoundingBoxRotationPartCalculator<T> calculator, BoundingBox3DBasics boundingBoxToPack)
+   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(RotationMatrixReadOnly rotation1, boolean inverseTransform1,
+                                                                                  RotationMatrixReadOnly rotation2, boolean inverseTransform2,
+                                                                                  RotationMatrixReadOnly rotation3, boolean inverseTransform3, T shape,
+                                                                                  BoundingBoxRotationPartCalculator<T> calculator,
+                                                                                  BoundingBox3DBasics boundingBoxToPack)
    {
       if (rotation1.isIdentity())
       {

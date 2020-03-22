@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.convexPolytope;
+package us.ihmc.euclid.shape.convexPolytope.impl;
 
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;

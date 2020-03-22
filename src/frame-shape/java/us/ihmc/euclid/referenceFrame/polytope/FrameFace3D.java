@@ -1,7 +1,6 @@
 package us.ihmc.euclid.referenceFrame.polytope;
 
 import java.util.Collection;
-import java.util.function.BiFunction;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -10,7 +9,9 @@ import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
-import us.ihmc.euclid.shape.convexPolytope.AbstractFace3D;
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DFactory;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D> implements FrameFace3DReadOnly, Clearable, Transformable
 {
@@ -27,7 +28,7 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
     *
     * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
     */
-   public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, FrameVector3DReadOnly initialGuessNormal)
+   public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialGuessNormal)
    {
       super(edgeFactory(referenceFrameHolder));
       this.referenceFrameHolder = referenceFrameHolder;
@@ -41,7 +42,7 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
     * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
     *                            edge-cases.
     */
-   public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, FrameVector3DReadOnly initialGuessNormal, double constructionEpsilon)
+   public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialGuessNormal, double constructionEpsilon)
    {
       super(edgeFactory(referenceFrameHolder), constructionEpsilon);
       this.referenceFrameHolder = referenceFrameHolder;
@@ -65,7 +66,7 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
       initialize(faceEdges, normal);
    }
 
-   private static BiFunction<FrameVertex3D, FrameVertex3D, FrameHalfEdge3D> edgeFactory(ReferenceFrameHolder referenceFrameHolder)
+   private static HalfEdge3DFactory<FrameVertex3D, FrameHalfEdge3D> edgeFactory(ReferenceFrameHolder referenceFrameHolder)
    {
       return (origin, destination) -> new FrameHalfEdge3D(referenceFrameHolder, origin, destination);
    }

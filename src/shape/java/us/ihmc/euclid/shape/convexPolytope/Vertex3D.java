@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**

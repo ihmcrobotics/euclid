@@ -1,5 +1,7 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
+
 /**
  * Implementation of a half-edge 3D that belongs to a convex polytope 3D.
  * <p>

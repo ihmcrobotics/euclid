@@ -5,7 +5,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
-import us.ihmc.euclid.shape.convexPolytope.AbstractVertex3D;
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 

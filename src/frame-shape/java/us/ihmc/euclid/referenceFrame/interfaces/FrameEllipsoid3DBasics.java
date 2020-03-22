@@ -9,18 +9,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface FrameEllipsoid3DBasics extends FixedFrameEllipsoid3DBasics, FrameShape3DBasics
 {
-   default void setToNaN(ReferenceFrame referenceFrame)
-   {
-      setReferenceFrame(referenceFrame);
-      setToNaN();
-   }
-
-   default void setToZero(ReferenceFrame referenceFrame)
-   {
-      setReferenceFrame(referenceFrame);
-      setToZero();
-   }
-
    default void setIncludingFrame(ReferenceFrame referenceFrame, Ellipsoid3DReadOnly other)
    {
       setReferenceFrame(referenceFrame);

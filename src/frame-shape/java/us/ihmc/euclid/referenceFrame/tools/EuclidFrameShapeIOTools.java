@@ -4,6 +4,7 @@ import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
@@ -451,4 +452,89 @@ public class EuclidFrameShapeIOTools
          return EuclidShapeIOTools.getFace3DString(format, face3D) + "\n\t" + face3D.getReferenceFrame();
    }
 
+   /**
+    * Gets the representative {@code String} of {@code convexPolytope3D} as follows:
+    *
+    * <pre>
+    * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
+    * Face list:
+    *    centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
+    *    centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
+    *    centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
+    *    centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
+    * Edge list:
+    *    [( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.674,  0.482,  0.712 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
+    * Vertex list:
+    *    ( 0.674,  0.482,  0.712 )
+    *    ( 0.870,  0.251,  0.229 )
+    *    ( 0.204, -0.803, -0.461 )
+    *    (-0.283, -0.207, -0.595 )
+    * worldFrame
+    * </pre>
+    *
+    * @param convexPolytope3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameConvexPolytope3DString(FrameConvexPolytope3DReadOnly convexPolytope3D)
+   {
+      return getFrameConvexPolytope3DString(DEFAULT_FORMAT, convexPolytope3D);
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code convexPolytope3D} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Convex polytope 3D: number of: [faces: 4, edges: 12, vertices: 4
+    * Face list:
+    *    centroid: ( 0.582, -0.023,  0.160 ), normal: ( 0.516, -0.673,  0.530 )
+    *    centroid: ( 0.420,  0.176,  0.115 ), normal: (-0.038,  0.895, -0.444 )
+    *    centroid: ( 0.264, -0.253, -0.276 ), normal: ( 0.506,  0.225, -0.833 )
+    *    centroid: ( 0.198, -0.176, -0.115 ), normal: (-0.643, -0.374,  0.668 )
+    * Edge list:
+    *    [( 0.674,  0.482,  0.712 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.870,  0.251,  0.229 ); ( 0.674,  0.482,  0.712 )]
+    *    [( 0.674,  0.482,  0.712 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.204, -0.803, -0.461 ); ( 0.870,  0.251,  0.229 )]
+    *    [( 0.870,  0.251,  0.229 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.674,  0.482,  0.712 ); ( 0.204, -0.803, -0.461 )]
+    *    [( 0.204, -0.803, -0.461 ); (-0.283, -0.207, -0.595 )]
+    *    [(-0.283, -0.207, -0.595 ); ( 0.674,  0.482,  0.712 )]
+    * Vertex list:
+    *    ( 0.674,  0.482,  0.712 )
+    *    ( 0.870,  0.251,  0.229 )
+    *    ( 0.204, -0.803, -0.461 )
+    *    (-0.283, -0.207, -0.595 )
+    * worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format           the format to use for each number.
+    * @param convexPolytope3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameConvexPolytope3DString(String format, FrameConvexPolytope3DReadOnly convexPolytope3D)
+   {
+      if (convexPolytope3D == null)
+         return "null";
+      else
+         return EuclidShapeIOTools.getConvexPolytope3DString(format, convexPolytope3D) + "\n" + convexPolytope3D.getReferenceFrame();
+   }
 }
