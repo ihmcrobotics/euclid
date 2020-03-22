@@ -853,7 +853,7 @@ public class EuclidFrameFactories
          {
             rotationMatrix.set(other);
          }
-         
+
          @Override
          public void setIdentity()
          {
@@ -980,6 +980,102 @@ public class EuclidFrameFactories
          public String toString()
          {
             return EuclidFrameIOTools.getFrameMatrix3DString(this);
+         }
+      };
+   }
+
+   public static FixedFrameBoundingBox2DBasics newFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameBoundingBox2DBasics()
+      {
+         private final FixedFramePoint2DBasics minPoint = EuclidFrameFactories.newFixedFramePoint2DBasics(referenceFrameHolder);
+         private final FixedFramePoint2DBasics maxPoint = EuclidFrameFactories.newFixedFramePoint2DBasics(referenceFrameHolder);
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public FixedFramePoint2DBasics getMinPoint()
+         {
+            return minPoint;
+         }
+
+         @Override
+         public FixedFramePoint2DBasics getMaxPoint()
+         {
+            return maxPoint;
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameBoundingBox2DReadOnly)
+               return FixedFrameBoundingBox2DBasics.super.equals((FrameBoundingBox2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameBoundingBox2DString(this);
+         }
+      };
+   }
+
+   public static FixedFrameBoundingBox3DBasics newFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameBoundingBox3DBasics()
+      {
+         private final FixedFramePoint3DBasics minPoint = EuclidFrameFactories.newFixedFramePoint3DBasics(referenceFrameHolder);
+         private final FixedFramePoint3DBasics maxPoint = EuclidFrameFactories.newFixedFramePoint3DBasics(referenceFrameHolder);
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public FixedFramePoint3DBasics getMinPoint()
+         {
+            return minPoint;
+         }
+
+         @Override
+         public FixedFramePoint3DBasics getMaxPoint()
+         {
+            return maxPoint;
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameBoundingBox3DReadOnly)
+               return FixedFrameBoundingBox3DBasics.super.equals((FrameBoundingBox3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameBoundingBox3DString(this);
          }
       };
    }
