@@ -20,6 +20,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
 import us.ihmc.euclid.shape.primitives.Shape3DPose;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -55,5 +56,15 @@ public class FrameShape3DPoseTest extends FrameShapeSetupTest
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
 
+   }
+
+   @Test
+   public void testConsistencyWithShape3DPose()
+   {
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, shape3DPose) -> new FrameShape3DPose(frame, (Shape3DPose) shape3DPose),
+                                                                                EuclidShapeRandomTools::nextShape3DPose,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

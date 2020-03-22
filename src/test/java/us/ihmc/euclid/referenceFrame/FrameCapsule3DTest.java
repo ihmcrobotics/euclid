@@ -18,6 +18,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
 import us.ihmc.euclid.shape.primitives.Capsule3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
 public class FrameCapsule3DTest extends FrameShapeSetupTest
 {
@@ -45,5 +46,15 @@ public class FrameCapsule3DTest extends FrameShapeSetupTest
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameCapsule3D,
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+   }
+
+   @Test
+   public void testConsistencyWithCapsule3D()
+   {
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, capsule) -> new FrameCapsule3D(frame, (Capsule3D) capsule),
+                                                                                EuclidShapeRandomTools::nextCapsule3D,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

@@ -80,7 +80,10 @@ public class EuclidFrameShapeIOTools
     */
    public static String getFrameCapsule3DString(String format, FrameCapsule3DReadOnly capsule3D)
    {
-      return getCapsule3DString(format, capsule3D) + " - " + capsule3D.getReferenceFrame();
+      if (capsule3D == null)
+         return "null";
+      else
+         return getCapsule3DString(format, capsule3D) + " - " + capsule3D.getReferenceFrame();
    }
 
    /**
@@ -114,7 +117,10 @@ public class EuclidFrameShapeIOTools
     */
    public static String getFrameCylinder3DString(String format, FrameCylinder3DReadOnly cylinder3D)
    {
-      return getFrameCylinder3DString(format, cylinder3D) + " - " + cylinder3D.getReferenceFrame();
+      if (cylinder3D == null)
+         return "null";
+      else
+         return getCylinder3DString(format, cylinder3D) + " - " + cylinder3D.getReferenceFrame();
    }
 
    /**
@@ -151,7 +157,7 @@ public class EuclidFrameShapeIOTools
       if (ellipsoid3D == null)
          return "null";
       else
-         return getFrameEllipsoid3DString(format, ellipsoid3D) + " - " + ellipsoid3D.getReferenceFrame();
+         return getEllipsoid3DString(format, ellipsoid3D) + " - " + ellipsoid3D.getReferenceFrame();
    }
 
    /**
@@ -185,7 +191,10 @@ public class EuclidFrameShapeIOTools
     */
    public static String getFramePointShape3DString(String format, FramePointShape3DReadOnly pointShape3D)
    {
-      return getPointShape3DString(format, pointShape3D) + " - " + pointShape3D.getReferenceFrame();
+      if (pointShape3D == null)
+         return "null";
+      else
+         return getPointShape3DString(format, pointShape3D) + " - " + pointShape3D.getReferenceFrame();
    }
 
    /**
@@ -222,7 +231,7 @@ public class EuclidFrameShapeIOTools
       if (ramp3D == null)
          return "null";
       else
-         return getFrameRamp3DString(format, ramp3D) + " - " + ramp3D.getReferenceFrame();
+         return getRamp3DString(format, ramp3D) + " - " + ramp3D.getReferenceFrame();
    }
 
    /**
@@ -256,7 +265,10 @@ public class EuclidFrameShapeIOTools
     */
    public static String getFrameSphere3DString(String format, FrameSphere3DReadOnly sphere3D)
    {
-      return getSphere3DString(format, sphere3D) + " - " + sphere3D.getReferenceFrame();
+      if (sphere3D == null)
+         return "null";
+      else
+         return getSphere3DString(format, sphere3D) + " - " + sphere3D.getReferenceFrame();
    }
 
    /**

@@ -18,6 +18,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
 import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
 public class FrameEllipsoid3DTest extends FrameShapeSetupTest
 {
@@ -45,5 +46,15 @@ public class FrameEllipsoid3DTest extends FrameShapeSetupTest
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameEllipsoid3D,
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+   }
+
+   @Test
+   public void testConsistencyWithEllipsoid3D()
+   {
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().contains("IntermediateVariableSupplier");
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, ellipsoid) -> new FrameEllipsoid3D(frame, (Ellipsoid3D) ellipsoid),
+                                                                                EuclidShapeRandomTools::nextEllipsoid3D,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

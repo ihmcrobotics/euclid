@@ -18,6 +18,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
 import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
 public class FrameBox3DTest extends FrameShapeSetupTest
 {
@@ -45,5 +46,15 @@ public class FrameBox3DTest extends FrameShapeSetupTest
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameBox3D,
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+   }
+
+   @Test
+   public void testConsistencyWithBox3D()
+   {
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().contains("IntermediateVariableSupplier");
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, box) -> new FrameBox3D(frame, (Box3D) box),
+                                                                                EuclidShapeRandomTools::nextBox3D,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

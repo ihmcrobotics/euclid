@@ -18,6 +18,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
 import us.ihmc.euclid.shape.primitives.Sphere3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
 public class FrameSphere3DTest extends FrameShapeSetupTest
 {
@@ -45,5 +46,15 @@ public class FrameSphere3DTest extends FrameShapeSetupTest
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameSphere3D,
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+   }
+
+   @Test
+   public void testConsistencyWithSphere3D()
+   {
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, sphere) -> new FrameSphere3D(frame, (Sphere3D) sphere),
+                                                                                EuclidShapeRandomTools::nextSphere3D,
+                                                                                methodFilter,
+                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

@@ -853,6 +853,36 @@ public class EuclidFrameFactories
          {
             rotationMatrix.set(other);
          }
+         
+         @Override
+         public void setIdentity()
+         {
+            rotationMatrix.setIdentity();
+         }
+
+         @Override
+         public void setToNaN()
+         {
+            rotationMatrix.setToNaN();
+         }
+
+         @Override
+         public void normalize()
+         {
+            rotationMatrix.normalize();
+         }
+
+         @Override
+         public boolean isIdentity()
+         {
+            return rotationMatrix.isIdentity();
+         }
+
+         @Override
+         public void transpose()
+         {
+            rotationMatrix.transpose();
+         }
 
          @Override
          public ReferenceFrame getReferenceFrame()
