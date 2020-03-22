@@ -48,7 +48,6 @@ public class FrameShape3DPoseTest extends FrameShapeSetupTest
    public void testReferenceFrameChecks() throws Throwable
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame");
-      methodFilter = methodFilter.and(m -> !m.getName().equals("setMatchingFrame"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("equals"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("epsilonEquals"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("getBoundingBox")
@@ -56,5 +55,6 @@ public class FrameShape3DPoseTest extends FrameShapeSetupTest
       EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameShape3DPose,
                                                                                   methodFilter,
                                                                                   EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+
    }
 }

@@ -39,7 +39,6 @@ public class FrameEllipsoid3DTest extends FrameShapeSetupTest
    public void testReferenceFrameChecks() throws Throwable
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("setIncludingFrame");
-      methodFilter = methodFilter.and(m -> !m.getName().equals("setMatchingFrame"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("equals"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("epsilonEquals"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("getBoundingBox")

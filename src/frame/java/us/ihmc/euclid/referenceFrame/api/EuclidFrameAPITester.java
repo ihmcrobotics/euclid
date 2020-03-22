@@ -65,7 +65,8 @@ public class EuclidFrameAPITester
    private static final String FRAME = "Frame";
    private static final String FIXED_FRAME = "FixedFrame";
 
-   private static final String SET_MATCHING_FRAME = "setMatchingFrame";
+   private static final String MATCHING_FRAME = "MatchingFrame";
+   private static final String SET_MATCHING_FRAME = "set" + MATCHING_FRAME;
    private static final String SET_INCLUDING_FRAME = "setIncludingFrame";
 
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
@@ -1171,6 +1172,12 @@ public class EuclidFrameAPITester
          // Check that the method checks the reference frames.
          for (Method frameMethod : frameMethods)
          {
+            if (frameMethod.getName().endsWith(MATCHING_FRAME))
+            {
+               assertSetMatchingFrameChecksFrames(frameTypeBuilder, frameMethod, frameA, frameB);
+               continue;
+            }
+
             ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
             Class<?>[] parameterTypes = frameMethod.getParameterTypes();
 
@@ -1295,6 +1302,77 @@ public class EuclidFrameAPITester
             ReferenceFrame resultFrame = ((ReferenceFrameHolder) result).getReferenceFrame();
             if (resultFrame != frameA)
                failToSetResultFrame(frameType, frameMethod, parameters, result);
+         }
+      }
+   }
+
+   private static void assertSetMatchingFrameChecksFrames(RandomFrameTypeBuilder frameTypeBuilder, Method setMatchingFrameMethod, ReferenceFrame frameA,
+                                                          ReferenceFrame frameB)
+   {
+      ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
+      Class<? extends ReferenceFrameHolder> frameType = frameObject.getClass();
+      Class<?>[] parameterTypes = setMatchingFrameMethod.getParameterTypes();
+
+      for (int i = 0; i < setMatchingFrameMethod.getParameterCount(); i++)
+      {
+         Class<?> parameterType = parameterTypes[i];
+         if (isFrameType(parameterType))
+         {
+            if (!frameReadOnlyTypes.contains(parameterType))
+            {
+               String message = "Any setMatchingFrame method is expected to only request read-only parameters.\n";
+               message += "In " + frameType.getSimpleName() + " the " + i + "th parameter is not a read-only:\n";
+               message += getMethodSimpleName(setMatchingFrameMethod);
+               throw new AssertionError(message);
+            }
+         }
+      }
+
+      int numberOfArgumentsToTest = countFrameParameters(setMatchingFrameMethod);
+      if (numberOfArgumentsToTest < 2)
+      { // If there's less than 2 frame parameters, no reference frame check can be done.
+         return;
+      }
+
+      int numberOfCombinations = (int) Math.pow(2, numberOfArgumentsToTest);
+
+      for (int i = 1; i < numberOfCombinations - 1; i++)
+      {
+         Object[] parameters = new Object[parameterTypes.length];
+         int currentByte = 0;
+
+         for (int j = 0; j < parameterTypes.length; j++)
+         {
+            Class<?> parameterType = parameterTypes[j];
+
+            if (isFrameType(parameterType))
+            {
+               ReferenceFrame frame = frameA;
+               int mask = (int) Math.pow(2, currentByte);
+               if ((i & mask) != 0)
+                  frame = frameB;
+               parameters[j] = ReflectionBasedBuilders.next(random, frame, parameterType);
+               currentByte++;
+            }
+            else
+            {
+               parameters[j] = ReflectionBasedBuilders.next(random, frameA, parameterType);
+            }
+         }
+
+         try
+         {
+            invokeMethod(frameObject, setMatchingFrameMethod, parameters);
+            failToThrowReferenceFrameMismatchException(frameType, setMatchingFrameMethod, parameters);
+         }
+         catch (ReferenceFrameMismatchException e)
+         {
+            // Good
+         }
+         catch (Throwable t)
+         {
+            if (!isExceptionAcceptable(t))
+               failToThrowReferenceFrameMismatchException(frameType, setMatchingFrameMethod, parameters, t);
          }
       }
    }

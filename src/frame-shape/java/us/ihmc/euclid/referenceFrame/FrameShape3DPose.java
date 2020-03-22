@@ -30,6 +30,11 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
                                                                                                    shapeOrientation::getM22,
                                                                                                    this);
 
+   public FrameShape3DPose()
+   {
+      this(ReferenceFrame.getWorldFrame());
+   }
+
    public FrameShape3DPose(ReferenceFrame referenceFrame)
    {
       setToZero(referenceFrame);
