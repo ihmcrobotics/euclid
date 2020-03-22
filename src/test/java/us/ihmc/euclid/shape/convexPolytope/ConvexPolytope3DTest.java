@@ -33,6 +33,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class ConvexPolytope3DTest
 {
@@ -248,7 +249,7 @@ public class ConvexPolytope3DTest
          for (int faceIndex = 0; faceIndex < 4; faceIndex++)
          {
             Face3D face = convexPolytope3D.getFace(faceIndex);
-            Vector3D normal = face.getNormal();
+            Vector3DBasics normal = face.getNormal();
 
             if (normal.epsilonEquals(bottomNormal, EPSILON))
             {
@@ -964,8 +965,8 @@ public class ConvexPolytope3DTest
             HalfEdge3D closestEdge = convexPolytope3D.getHalfEdge(random.nextInt(convexPolytope3D.getNumberOfHalfEdges()));
             {// We pick an edge at random, construct a vector that points outside, translate by the expectedDistance
                Vector3D towardOutside = new Vector3D();
-               Vector3D normalA = closestEdge.getFace().getNormal();
-               Vector3D normalB = closestEdge.getTwin().getFace().getNormal();
+               Vector3DBasics normalA = closestEdge.getFace().getNormal();
+               Vector3DBasics normalB = closestEdge.getTwin().getFace().getNormal();
                towardOutside.interpolate(normalA, normalB, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
                towardOutside.normalize();
                point.interpolate(closestEdge.getOrigin(), closestEdge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
@@ -1070,8 +1071,8 @@ public class ConvexPolytope3DTest
             {// We pick an edge at random, construct a vector that points outside, translate by the expectedDistance
                HalfEdge3D edge = convexPolytope3D.getHalfEdge(random.nextInt(convexPolytope3D.getNumberOfHalfEdges()));
                Vector3D towardOutside = new Vector3D();
-               Vector3D normalA = edge.getFace().getNormal();
-               Vector3D normalB = edge.getTwin().getFace().getNormal();
+               Vector3DBasics normalA = edge.getFace().getNormal();
+               Vector3DBasics normalB = edge.getTwin().getFace().getNormal();
                towardOutside.interpolate(normalA, normalB, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
                towardOutside.normalize();
                point.interpolate(edge.getOrigin(), edge.getDestination(), EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));

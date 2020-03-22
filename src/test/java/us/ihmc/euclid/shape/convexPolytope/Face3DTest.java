@@ -436,7 +436,7 @@ public class Face3DTest
 
          assertTrue(face3D.getNumberOfEdges() >= 3);
 
-         Vector3D actualNormal = face3D.getNormal();
+         Vector3DBasics actualNormal = face3D.getNormal();
          String errorMessage = "Iteration: " + i + ", angle between the vectors: " + expectedNormal.angle(actualNormal);
          assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5), errorMessage);
          EuclidCoreTestTools.assertVector3DGeometricallyEquals(expectedNormal, actualNormal, EPSILON);
@@ -484,7 +484,7 @@ public class Face3DTest
          assertTrue(edge == face.getEdges().get(edgeIndex));
          assertTrue(face.getNumberOfEdges() >= 3);
 
-         Point3D centroid = face.getCentroid();
+         Point3DBasics centroid = face.getCentroid();
 
          Vector3D towardOutside = new Vector3D();
          Vector3DBasics edgeDirection = edge.getDirection(true);

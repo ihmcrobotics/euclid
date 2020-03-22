@@ -4,6 +4,10 @@ import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 
 public class EuclidFrameShapeIOTools
 {
@@ -306,6 +310,145 @@ public class EuclidFrameShapeIOTools
          return "null";
       else
          return getShape3DPoseString(format, shape3DPose) + " - " + shape3DPose.getReferenceFrame();
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code vertex3D} as follows:
+    *
+    * <pre>
+    * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
+    *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
+    *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
+    *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
+    *         worldFrame
+    * </pre>
+    *
+    * @param vertex3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameVertex3DString(FrameVertex3DReadOnly vertex3D)
+   {
+      return getFrameVertex3DString(DEFAULT_FORMAT, vertex3D);
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code vertex3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Vertex 3D: (-1.004, -3.379, -0.387 ), number of edges: 3
+    *         [(-1.004, -3.379, -0.387 ); ( 1.372, -3.150,  0.556 )]
+    *         [(-1.004, -3.379, -0.387 ); (-0.937, -3.539, -0.493 )]
+    *         [(-1.004, -3.379, -0.387 ); (-1.046, -3.199, -0.303 )]
+    *         worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format   the format to use for each number.
+    * @param vertex3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameVertex3DString(String format, FrameVertex3DReadOnly vertex3D)
+   {
+      if (vertex3D == null)
+         return "null";
+      else
+         return EuclidShapeIOTools.getVertex3DString(format, vertex3D) + "\n\t" + vertex3D.getReferenceFrame();
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code halfEdge3D} as follows:
+    *
+    * <pre>
+    * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
+    *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
+    *    Next    : [( 3.310,  6.118, -3.108 ); ( 3.411,  2.581, -3.144 )]
+    *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
+    *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
+    *    worldFrame
+    * </pre>
+    *
+    * @param halfEdge3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameHalfEdge3DString(FrameHalfEdge3DReadOnly halfEdge3D)
+   {
+      return getFrameHalfEdge3DString(DEFAULT_FORMAT, halfEdge3D);
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code halfEdge3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Half-edge 3D: [( 2.350,  4.284,  0.427 ); ( 3.310,  6.118, -3.108 )]
+    *    Twin    : [( 3.310,  6.118, -3.108 ); ( 2.350,  4.284,  0.427 )]
+    *    Next    : [( 3.310,  6.118, -3.108 ); ( 3.411,  2.581, -3.144 )]
+    *    Previous: [( 3.411,  2.581, -3.144 ); ( 2.350,  4.284,  0.427 )]
+    *    Face: centroid: ( 3.024,  4.328, -1.941 ), normal: ( 0.961,  0.025,  0.274 )
+    *    worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format     the format to use for each number.
+    * @param halfEdge3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameHalfEdge3DString(String format, FrameHalfEdge3DReadOnly halfEdge3D)
+   {
+      if (halfEdge3D == null)
+         return "null";
+      else
+         return EuclidShapeIOTools.getHalfEdge3DString(format, halfEdge3D) + "\n\t" + halfEdge3D.getReferenceFrame();
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code face3D} as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    *    worldFrame
+    * </pre>
+    *
+    * @param face3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameFace3DString(FrameFace3DReadOnly face3D)
+   {
+      return getFrameFace3DString(DEFAULT_FORMAT, face3D);
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code face3D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * Face 3D: centroid: ( 2.621, -0.723, -1.355 ), normal: ( 0.903, -0.202,  0.378 ), area:  0.180, number of edges: 4
+    *    [( 2.590, -0.496, -1.161 ); ( 2.746, -0.536, -1.554 )]
+    *    [( 2.746, -0.536, -1.554 ); ( 2.651, -0.950, -1.549 )]
+    *    [( 2.651, -0.950, -1.549 ); ( 2.496, -0.910, -1.157 )]
+    *    [( 2.496, -0.910, -1.157 ); ( 2.590, -0.496, -1.161 )]
+    *    worldFrame
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @param face3D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getFrameFace3DString(String format, FrameFace3DReadOnly face3D)
+   {
+      if (face3D == null)
+         return "null";
+      else
+         return EuclidShapeIOTools.getFace3DString(format, face3D) + "\n\t" + face3D.getReferenceFrame();
    }
 
 }
