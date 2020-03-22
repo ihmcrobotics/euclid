@@ -632,6 +632,12 @@ public class EuclidFrameAPITester
                boolean isLastParameterToCheck2DTransform = is2DType(frameType)
                      && matchingFrameMethod.getParameterTypes()[matchingFrameMethod.getParameterCount() - 1] == boolean.class;
 
+               if (matchingFrameMethod.getParameterTypes()[0] == ReferenceFrame.class)
+               {
+                  matchingFrameMethodParameters[0] = frameA;
+                  setterMethodParameters = Arrays.copyOfRange(setterMethodParameters, 1, setterMethodParameters.length);
+               }
+
                if (isLastParameterToCheck2DTransform)
                { // Last argument is "boolean checkIfTransformInXYPlane"
                   setterMethodParameters = Arrays.copyOfRange(setterMethodParameters, 0, setterMethodParameters.length - 1);

@@ -67,4 +67,11 @@ public class FrameShape3DPoseTest extends FrameShapeSetupTest
                                                                                 methodFilter,
                                                                                 EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
+
+   @Test
+   public void testSetMatchingFrame()
+   {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFrameShape3DPose,
+                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }

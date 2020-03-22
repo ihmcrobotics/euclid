@@ -57,4 +57,11 @@ public class FrameEllipsoid3DTest extends FrameShapeSetupTest
                                                                                 methodFilter,
                                                                                 EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
+
+   @Test
+   public void testSetMatchingFrame()
+   {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFrameEllipsoid3D,
+                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
 }

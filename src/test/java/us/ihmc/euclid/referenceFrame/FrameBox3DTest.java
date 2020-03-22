@@ -51,10 +51,18 @@ public class FrameBox3DTest extends FrameShapeSetupTest
    @Test
    public void testConsistencyWithBox3D()
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals") && !m.getName().contains("IntermediateVariableSupplier");
+      Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals")
+            && !m.getName().contains("IntermediateVariableSupplier");
       EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, box) -> new FrameBox3D(frame, (Box3D) box),
                                                                                 EuclidShapeRandomTools::nextBox3D,
                                                                                 methodFilter,
                                                                                 EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
+
+   @Test
+   public void testSetMatchingFrame()
+   {
+      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFrameBox3D,
+                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }
