@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -25,6 +26,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidFrameToolsTest
 {
@@ -47,6 +49,7 @@ public class EuclidFrameToolsTest
       signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndCylinder3D", D, D, D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
       signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndEllipsoid3D", D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
       signaturesToIgnore.add(new MethodSignature("closestPoint3DsBetweenTwoLineSegment3Ds", D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
+      signaturesToIgnore.add(new MethodSignature("axisAngleFromZUpToVector3D", Vector3DReadOnly.class, AxisAngleBasics.class));
 
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       EuclidFrameAPITester.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodFilter);

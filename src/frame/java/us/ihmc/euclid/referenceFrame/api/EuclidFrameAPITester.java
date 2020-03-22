@@ -1458,9 +1458,16 @@ public class EuclidFrameAPITester
             {
                Method framelessMethod = typeWithFramelessMethods.getMethod(frameMethodName, framelessMethodParameterTypes);
                Object[] frameMethodParameters = ReflectionBasedBuilders.next(random, worldFrame, frameMethodParameterTypes);
-
-               String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod) + ". The method is not tested.";
-               Objects.requireNonNull(frameMethodParameters, message);
+               if (frameMethodParameters == null)
+               {
+                  if (DEBUG)
+                  {
+                     String message = "Could not instantiate the parameters for the method: " + getMethodSimpleName(frameMethod)
+                           + ". The method is not tested.";
+                     System.err.println(message);
+                  }
+                  break;
+               }
 
                Object[] framelessMethodParameters = ReflectionBasedBuilders.clone(frameMethodParameters);
                Throwable expectedException = null;
