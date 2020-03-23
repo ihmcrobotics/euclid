@@ -229,14 +229,26 @@ public class EuclidFrameAPITester
     * @param framelessMutableType    the geometry with: mutable values and no frame information.
     * @param framelessReadOnlyType   the geometry with: immutable values and no frame information.
     */
-   private static void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType,
-                                         Class<?> framelessMutableType, Class<?> framelessReadOnlyType)
+   public static void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType,
+                                        Class<?> framelessMutableType, Class<?> framelessReadOnlyType)
    {
+      Objects.requireNonNull(framelessReadOnlyType, "Frameless read-only type cannot be null.");
+      Objects.requireNonNull(frameReadOnlyType, "Frame read-only type cannot be null.");
       framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
-      framelessTypesToFrameTypesTable.put(framelessMutableType, fixedFrameMutableType);
+      Objects.requireNonNull(framelessMutableType, "Frameless mutable type cannot be null.");
+      if (fixedFrameMutableType != null)
+         framelessTypesToFrameTypesTable.put(framelessMutableType, fixedFrameMutableType);
+      else if (mutableFrameMutableType != null)
+         framelessTypesToFrameTypesTable.put(framelessMutableType, mutableFrameMutableType);
+      else
+         throw new NullPointerException("Either fixedFrameMutableType or mutableFrameMutableType has to be not null.");
+
       frameReadOnlyTypes.add(frameReadOnlyType);
-      fixedFrameMutableTypes.add(fixedFrameMutableType);
-      mutableFrameMutableTypes.add(mutableFrameMutableType);
+
+      if (fixedFrameMutableType != null)
+         fixedFrameMutableTypes.add(fixedFrameMutableType);
+      if (mutableFrameMutableType != null)
+         mutableFrameMutableTypes.add(mutableFrameMutableType);
    }
 
    /**
@@ -407,7 +419,7 @@ public class EuclidFrameAPITester
       }
    }
 
-   private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethod,
+   private static void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethods,
                                                                    MethodSignature originalSignature, MethodSignature overloadingSignature)
          throws SecurityException
    {
@@ -421,10 +433,10 @@ public class EuclidFrameAPITester
             if ((originalReturnType == null) != (overloadingReturnType == null))
             {
                String message = "Inconsistency found in the return type.";
-               message += "\nOriginal method: " + originalSignature.getMethodSimpleName();
+               message += "\nOriginal    method: " + originalSignature.getMethodSimpleName();
                message += "\nOverloading method: " + getMethodSimpleName(overloadingMethod);
-               message += "\nOriginal type declaring method: " + typeWithOriginalMethod.getSimpleName();
-               message += "\nType overloading original: " + typeWithOverloadingMethods.getSimpleName();
+               message += "\nOriginal type declaring method: " + typeWithOriginalMethods.getSimpleName();
+               message += "\nType overloading original     : " + typeWithOverloadingMethods.getSimpleName();
                throw new AssertionError(message);
             }
 
@@ -432,13 +444,20 @@ public class EuclidFrameAPITester
                return;
 
             if (overloadingReturnType.isAssignableFrom(findCorrespondingFrameType(originalReturnType)))
-               throw new AssertionError("Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName() + ", actual: "
-                     + overloadingReturnType.getSimpleName());
+            {
+               String message = "Unexpected return type: expected: " + findCorrespondingFrameType(originalReturnType).getSimpleName() + ", actual: "
+                     + overloadingReturnType.getSimpleName();
+               message += "\nOriginal    method: " + originalSignature.getMethodSimpleName();
+               message += "\nOverloading method: " + getMethodSimpleName(overloadingMethod);
+               message += "\nOriginal type declaring method: " + typeWithOriginalMethods.getSimpleName();
+               message += "\nType overloading original     : " + typeWithOverloadingMethods.getSimpleName();
+               throw new AssertionError(message);
+            }
          }
       }
       catch (NoSuchMethodException e)
       {
-         throw new AssertionError("The original method in " + typeWithOriginalMethod.getSimpleName() + ":\n" + originalSignature.getMethodSimpleName()
+         throw new AssertionError("The original method in " + typeWithOriginalMethods.getSimpleName() + ":\n" + originalSignature.getMethodSimpleName()
                + "\nis not properly overloaded, expected to find in " + typeWithOverloadingMethods.getSimpleName() + ":\n"
                + overloadingSignature.getMethodSimpleName());
       }

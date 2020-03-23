@@ -5,7 +5,23 @@ import org.junit.jupiter.api.BeforeAll;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.ReflectionBasedBuilders;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
+import us.ihmc.euclid.referenceFrame.polytope.FrameFace3D;
+import us.ihmc.euclid.referenceFrame.polytope.FrameHalfEdge3D;
+import us.ihmc.euclid.referenceFrame.polytope.FrameVertex3D;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
+import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
+import us.ihmc.euclid.shape.convexPolytope.Face3D;
+import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
+import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
@@ -24,5 +40,13 @@ public class FrameShapeSetupTest
                                                    FrameRamp3DBasics.class,
                                                    FrameShape3DPoseBasics.class,
                                                    FrameSphere3DBasics.class);
+      EuclidFrameAPITester.registerFrameType(FrameConvexPolytope3D.class,
+                                             null,
+                                             FrameConvexPolytope3DReadOnly.class,
+                                             ConvexPolytope3D.class,
+                                             ConvexPolytope3DReadOnly.class);
+      EuclidFrameAPITester.registerFrameType(FrameFace3D.class, null, FrameFace3DReadOnly.class, Face3D.class, Face3DReadOnly.class);
+      EuclidFrameAPITester.registerFrameType(FrameHalfEdge3D.class, null, FrameHalfEdge3DReadOnly.class, HalfEdge3D.class, HalfEdge3DReadOnly.class);
+      EuclidFrameAPITester.registerFrameType(FrameVertex3D.class, null, FrameVertex3DReadOnly.class, Vertex3D.class, Vertex3DReadOnly.class);
    }
 }

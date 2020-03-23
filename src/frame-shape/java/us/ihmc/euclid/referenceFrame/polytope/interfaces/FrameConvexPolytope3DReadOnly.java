@@ -7,6 +7,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
@@ -118,15 +119,33 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
       return getSupportingVertex((FrameVertex3DReadOnly) null, supportDirection);
    }
 
+   default FrameVertex3DReadOnly getSupportingVertex(FrameVector3DReadOnly supportDirection)
+   {
+      checkReferenceFrameMatch(supportDirection);
+      return getSupportingVertex((Vector3DReadOnly) supportDirection);
+   }
+
    @Override
    default FrameVertex3DReadOnly getSupportingVertex(Vertex3DReadOnly seed, Vector3DReadOnly supportDirection)
    {
       return (FrameVertex3DReadOnly) ConvexPolytope3DReadOnly.super.getSupportingVertex(seed, supportDirection);
    }
 
+   default FrameVertex3DReadOnly getSupportingVertex(Vertex3DReadOnly seed, FrameVector3DReadOnly supportDirection)
+   {
+      checkReferenceFrameMatch(supportDirection);
+      return getSupportingVertex(seed, (Vector3DReadOnly) supportDirection);
+   }
+
    default FrameVertex3DReadOnly getSupportingVertex(FrameVertex3DReadOnly seed, Vector3DReadOnly supportDirection)
    {
       return getSupportingVertex((Vertex3DReadOnly) seed, supportDirection);
+   }
+
+   default FrameVertex3DReadOnly getSupportingVertex(FrameVertex3DReadOnly seed, FrameVector3DReadOnly supportDirection)
+   {
+      checkReferenceFrameMatch(supportDirection);
+      return getSupportingVertex((Vertex3DReadOnly) seed, (Vector3DReadOnly) supportDirection);
    }
 
    default boolean epsilonEquals(FrameConvexPolytope3DReadOnly other, double epsilon)

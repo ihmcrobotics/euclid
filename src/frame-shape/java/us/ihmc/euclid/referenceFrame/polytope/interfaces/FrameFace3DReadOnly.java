@@ -218,6 +218,12 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       return (FrameVertex3DReadOnly) Face3DReadOnly.super.getSupportingVertex(supportDirection);
    }
 
+   default FrameVertex3DReadOnly getSupportingVertex(FrameVector3DReadOnly supportDirection)
+   {
+      checkReferenceFrameMatch(supportDirection);
+      return getSupportingVertex((Vector3DReadOnly) supportDirection);
+   }
+
    default boolean epsilonEquals(FrameFace3DReadOnly other, double epsilon)
    {
       checkReferenceFrameMatch(other);
