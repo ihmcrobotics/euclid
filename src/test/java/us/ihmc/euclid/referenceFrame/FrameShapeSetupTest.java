@@ -45,8 +45,8 @@ public class FrameShapeSetupTest
                                              FrameConvexPolytope3DReadOnly.class,
                                              ConvexPolytope3D.class,
                                              ConvexPolytope3DReadOnly.class);
-      EuclidFrameAPITester.registerFrameType(FrameFace3D.class, null, FrameFace3DReadOnly.class, Face3D.class, Face3DReadOnly.class);
-      EuclidFrameAPITester.registerFrameType(FrameHalfEdge3D.class, null, FrameHalfEdge3DReadOnly.class, HalfEdge3D.class, HalfEdge3DReadOnly.class);
-      EuclidFrameAPITester.registerFrameType(FrameVertex3D.class, null, FrameVertex3DReadOnly.class, Vertex3D.class, Vertex3DReadOnly.class);
+      EuclidFrameAPITester.registerFrameType(null, FrameFace3D.class, FrameFace3DReadOnly.class, Face3D.class, Face3DReadOnly.class);
+      EuclidFrameAPITester.registerFrameType(null, FrameHalfEdge3D.class, FrameHalfEdge3DReadOnly.class, HalfEdge3D.class, HalfEdge3DReadOnly.class);
+      EuclidFrameAPITester.registerFrameType(null, FrameVertex3D.class, FrameVertex3DReadOnly.class, Vertex3D.class, Vertex3DReadOnly.class);
    }
 }
