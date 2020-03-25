@@ -14,14 +14,17 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D>
-      implements FrameConvexPolytope3DReadOnly, FrameShape3DBasics, GeometryObject<FrameConvexPolytope3D>
+      implements FrameConvexPolytope3DReadOnly, FrameShape3DBasics, FrameChangeable, GeometryObject<FrameConvexPolytope3D>
 {
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newFixedFrameBoundingBox3DBasics(this);
+   /** Variable to store intermediate results for garbage-free operations. */
+   private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    public FrameConvexPolytope3D()
    {
@@ -161,6 +164,18 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
+   }
+
+   @Override
+   public void changeFrame(ReferenceFrame desiredFrame)
+   {
+      if (desiredFrame == referenceFrame)
+         return;
+
+      // Overwriting the default method so a single transformation is performed.
+      referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
+      applyTransform(transformToDesiredFrame);
+      referenceFrame = desiredFrame;
    }
 
    @Override
