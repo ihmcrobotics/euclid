@@ -169,6 +169,13 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
+   {
+      return true;
+   }
+
    /**
     * Tests separately and on a per component basis if the pose and the radius of this sphere and
     * {@code other}'s pose and radius are equal to an {@code epsilon}.

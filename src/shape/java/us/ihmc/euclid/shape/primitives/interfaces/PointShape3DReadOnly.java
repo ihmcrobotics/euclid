@@ -83,4 +83,11 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    {
       return true;
    }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
+   {
+      return true;
+   }
 }

@@ -176,4 +176,15 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @return {@code true} if this shape's implementation is convex, {@code false} otherwise.
     */
    boolean isConvex();
+
+   /**
+    * Gets whether this shape is a primitive shape or not.
+    * <p>
+    * A primitive shape is a simple geometric shape such as a sphere or a box. Transformation
+    * operations on primitive shapes are cheap.
+    * </p>
+    * 
+    * @return {@code true} if this shape's implementation is a primitive, {@code false} otherwise.
+    */
+   boolean isPrimitive();
 }

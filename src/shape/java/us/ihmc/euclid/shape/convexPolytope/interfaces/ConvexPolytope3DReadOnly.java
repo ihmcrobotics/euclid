@@ -480,6 +480,13 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
+   {
+      return false;
+   }
+
    /**
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an
     * {@code epsilon}.
