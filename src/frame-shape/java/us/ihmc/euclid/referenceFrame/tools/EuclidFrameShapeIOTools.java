@@ -1,8 +1,10 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools.getFrameTuple3DString;
 import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
+import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.*;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
@@ -311,6 +313,85 @@ public class EuclidFrameShapeIOTools
          return "null";
       else
          return getShape3DPoseString(format, shape3DPose) + " - " + shape3DPose.getReferenceFrame();
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} as follows:<br>
+    * When shapes are colliding:
+    *
+    * <pre>
+    * Collision test result: colliding, depth: 0.539
+    * Shape A: Box3D - shapeFrameA, location: ( 0.540,  0.110,  0.319 ) - locationFrameA, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * Shape B: Capsule3D - shapeFrameB, location: ( 0.540,  0.110,  0.319 ) - locationFrameB, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * </pre>
+    *
+    * When shapes are not colliding:
+    *
+    * <pre>
+    * Collision test result: non-colliding, separating distance: 0.539
+    * Shape A: Box3D - shapeFrameA, location: ( 0.540,  0.110,  0.319 ) - locationFrameA, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * Shape B: Capsule3D - shapeFrameB, location: ( 0.540,  0.110,  0.319 ) - locationFrameB, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * </pre>
+    *
+    * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getEuclidFrameShape3DCollisionResultString(EuclidFrameShape3DCollisionResultReadOnly euclidShape3DCollisionResult)
+   {
+      return getEuclidFrameShape3DCollisionResultString(DEFAULT_FORMAT, euclidShape3DCollisionResult);
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} given a specific
+    * format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
+    * When shapes are colliding:
+    *
+    * <pre>
+    * Collision test result: colliding, depth: 0.539
+    * Shape A: Box3D - shapeFrameA, location: ( 0.540,  0.110,  0.319 ) - locationFrameA, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * Shape B: Capsule3D - shapeFrameB, location: ( 0.540,  0.110,  0.319 ) - locationFrameB, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * </pre>
+    *
+    * When shapes are not colliding:
+    *
+    * <pre>
+    * Collision test result: non-colliding, separating distance: 0.539
+    * Shape A: Box3D - shapeFrameA, location: ( 0.540,  0.110,  0.319 ) - locationFrameA, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * Shape B: Capsule3D - shapeFrameB, location: ( 0.540,  0.110,  0.319 ) - locationFrameB, normal: ( 0.540,  0.110,  0.319 ) - normalFrameB
+    * </pre>
+    * </p>
+    *
+    * @param format                       the format to use for each number.
+    * @param euclidShape3DCollisionResult the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getEuclidFrameShape3DCollisionResultString(String format, EuclidFrameShape3DCollisionResultReadOnly euclidShape3DCollisionResult)
+   {
+      if (euclidShape3DCollisionResult == null)
+         return "null";
+
+      String string = "Collision test result: ";
+      if (euclidShape3DCollisionResult.areShapesColliding())
+      {
+         string += "colliding, depth: " + euclidShape3DCollisionResult.getSignedDistance() + "\n";
+      }
+      else
+      {
+         string += "non-colliding, separating distance: " + euclidShape3DCollisionResult.getSignedDistance() + "\n";
+      }
+
+      FrameShape3DReadOnly shapeA = euclidShape3DCollisionResult.getShapeA();
+      FrameShape3DReadOnly shapeB = euclidShape3DCollisionResult.getShapeB();
+
+      string += "Shape A: " + (shapeA == null ? "null" : (shapeA.getClass().getSimpleName() + " - " + shapeA.getReferenceFrame().getName()));
+      string += ", location: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getPointOnA());
+      string += ", normal: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getNormalOnA()) + "\n";
+      string += "Shape B: " + (shapeB == null ? "null" : (shapeB.getClass().getSimpleName() + " - " + shapeB.getReferenceFrame().getName()));
+      string += ", location: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getPointOnB());
+      string += ", normal: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getNormalOnB());
+      return string;
    }
 
    /**

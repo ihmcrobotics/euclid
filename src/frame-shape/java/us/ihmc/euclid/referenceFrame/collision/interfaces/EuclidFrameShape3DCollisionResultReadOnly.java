@@ -1,0 +1,82 @@
+package us.ihmc.euclid.referenceFrame.collision.interfaces;
+
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
+
+/**
+ * Read-only interface adding {@code ReferenceFrame} support to
+ * {@link EuclidShape3DCollisionResultReadOnly}.
+ *
+ * @author Sylvain Bertrand
+ */
+public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3DCollisionResultReadOnly
+{
+   /** {@inheritDoc} */
+   @Override
+   FramePoint3DReadOnly getPointOnA();
+
+   /** {@inheritDoc} */
+   @Override
+   FramePoint3DReadOnly getPointOnB();
+
+   /** {@inheritDoc} */
+   @Override
+   FrameVector3DReadOnly getNormalOnA();
+
+   /** {@inheritDoc} */
+   @Override
+   FrameVector3DReadOnly getNormalOnB();
+
+   @Override
+   FrameShape3DReadOnly getShapeA();
+
+   @Override
+   FrameShape3DReadOnly getShapeB();
+
+   /**
+    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
+    *
+    * @param other   the other collision result to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the two collision results are equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean epsilonEquals(EuclidFrameShape3DCollisionResultReadOnly other, double epsilon)
+   {
+      return EuclidShape3DCollisionResultReadOnly.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Tests each feature of {@code this} against {@code other} for geometric similarity.
+    *
+    * @param other   the other collision result to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each feature.
+    * @return {@code true} if the two collision results are considered geometrically similar,
+    *         {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} does not hold the same reference frames
+    *                                         as {@code this}.
+    */
+   default boolean geometricallyEquals(EuclidFrameShape3DCollisionResultReadOnly other, double epsilon)
+   {
+      return EuclidShape3DCollisionResultReadOnly.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this collision result is exactly equal to {@code other}.
+    * <p>
+    * Two instances of collision frame results are not considered equal when their respective frames
+    * are different.
+    * </p>
+    *
+    * @param other the other collision result to compare against this. Not modified.
+    * @return {@code true} if the two collision results are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(EuclidFrameShape3DCollisionResultReadOnly other)
+   {
+      return EuclidShape3DCollisionResultReadOnly.super.equals(other);
+   }
+}
