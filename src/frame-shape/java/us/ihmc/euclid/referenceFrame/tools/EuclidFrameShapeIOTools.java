@@ -5,7 +5,15 @@ import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;

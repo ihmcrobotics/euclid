@@ -2,7 +2,11 @@ package us.ihmc.euclid.shape.collision;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -20,7 +24,13 @@ import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.primitives.*;
+import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.Capsule3D;
+import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
+import us.ihmc.euclid.shape.primitives.PointShape3D;
+import us.ihmc.euclid.shape.primitives.Ramp3D;
+import us.ihmc.euclid.shape.primitives.Sphere3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;

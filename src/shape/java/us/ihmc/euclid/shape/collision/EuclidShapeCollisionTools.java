@@ -2,7 +2,14 @@ package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
-import us.ihmc.euclid.shape.primitives.interfaces.*;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;

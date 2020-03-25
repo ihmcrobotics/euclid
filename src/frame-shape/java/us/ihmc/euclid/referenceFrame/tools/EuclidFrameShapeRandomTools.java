@@ -3,7 +3,15 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.List;
 import java.util.Random;
 
-import us.ihmc.euclid.referenceFrame.*;
+import us.ihmc.euclid.referenceFrame.FrameBox3D;
+import us.ihmc.euclid.referenceFrame.FrameCapsule3D;
+import us.ihmc.euclid.referenceFrame.FrameCylinder3D;
+import us.ihmc.euclid.referenceFrame.FrameEllipsoid3D;
+import us.ihmc.euclid.referenceFrame.FramePointShape3D;
+import us.ihmc.euclid.referenceFrame.FrameRamp3D;
+import us.ihmc.euclid.referenceFrame.FrameShape3DPose;
+import us.ihmc.euclid.referenceFrame.FrameSphere3D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
 import us.ihmc.euclid.referenceFrame.polytope.FrameFace3D;

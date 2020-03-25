@@ -1,9 +1,6 @@
 package us.ihmc.euclid.shape.collision.epa;
 
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.compareSigns;
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.xyTriangleAreaCalculator;
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.yzTriangleAreaCalculator;
-import static us.ihmc.euclid.shape.collision.gjk.GJKTools.zxTriangleAreaCalculator;
+import static us.ihmc.euclid.shape.collision.gjk.GJKTools.*;
 
 import java.util.ArrayList;
 import java.util.List;

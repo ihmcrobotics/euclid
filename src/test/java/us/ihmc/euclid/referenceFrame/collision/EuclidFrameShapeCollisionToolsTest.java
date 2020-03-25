@@ -5,9 +5,24 @@ import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.referenceFrame.*;
+import us.ihmc.euclid.referenceFrame.FrameBox3D;
+import us.ihmc.euclid.referenceFrame.FrameCapsule3D;
+import us.ihmc.euclid.referenceFrame.FrameCylinder3D;
+import us.ihmc.euclid.referenceFrame.FrameEllipsoid3D;
+import us.ihmc.euclid.referenceFrame.FramePointShape3D;
+import us.ihmc.euclid.referenceFrame.FrameRamp3D;
+import us.ihmc.euclid.referenceFrame.FrameSphere3D;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;

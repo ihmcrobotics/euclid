@@ -1,8 +1,8 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 

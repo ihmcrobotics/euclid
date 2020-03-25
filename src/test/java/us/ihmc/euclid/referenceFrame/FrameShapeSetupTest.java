@@ -4,7 +4,14 @@ import org.junit.jupiter.api.BeforeAll;
 
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.ReflectionBasedBuilders;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DBasics;
 import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
 import us.ihmc.euclid.referenceFrame.polytope.FrameFace3D;
 import us.ihmc.euclid.referenceFrame.polytope.FrameHalfEdge3D;

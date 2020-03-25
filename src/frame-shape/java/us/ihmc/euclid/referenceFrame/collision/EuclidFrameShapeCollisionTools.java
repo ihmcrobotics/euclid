@@ -3,7 +3,16 @@ package us.ihmc.euclid.referenceFrame.collision;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 
 public class EuclidFrameShapeCollisionTools

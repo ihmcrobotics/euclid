@@ -1,9 +1,21 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;

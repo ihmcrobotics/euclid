@@ -4,16 +4,31 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCylinder3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.*;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class EuclidFrameShapeTools
 {

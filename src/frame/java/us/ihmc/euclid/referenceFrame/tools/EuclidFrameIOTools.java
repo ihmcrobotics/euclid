@@ -3,7 +3,24 @@ package us.ihmc.euclid.referenceFrame.tools;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePose2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
 
 /**
  * {@code EuclidCoreIOTools} is intended to gather the input & output tools for printing, saving,

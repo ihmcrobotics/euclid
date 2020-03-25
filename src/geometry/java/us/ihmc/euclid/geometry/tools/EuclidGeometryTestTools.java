@@ -4,7 +4,17 @@ import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
 
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**
