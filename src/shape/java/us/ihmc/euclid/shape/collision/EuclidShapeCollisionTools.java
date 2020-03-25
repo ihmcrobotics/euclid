@@ -272,6 +272,37 @@ public class EuclidShapeCollisionTools
    }
 
    /**
+    * Evaluates the collision state between two point shapes.
+    * <p>
+    * Note that the two shapes never collide.
+    * </p>
+    * 
+    * @param shapeA       the first point shape. Not modified.
+    * @param shapeB       the second point shape. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
+   public static void evaluatePointShape3DPointShape3DCollision(PointShape3DReadOnly shapeA, PointShape3DReadOnly shapeB,
+                                                                EuclidShape3DCollisionResultBasics resultToPack)
+   {
+      Point3DBasics pointOnA = resultToPack.getPointOnA();
+      Point3DBasics pointOnB = resultToPack.getPointOnB();
+      Vector3DBasics normalOnA = resultToPack.getNormalOnA();
+      Vector3DBasics normalOnB = resultToPack.getNormalOnB();
+
+      pointOnA.set(shapeA);
+      pointOnB.set(shapeB);
+      double distance = pointOnA.distance(pointOnB);
+      normalOnA.sub(pointOnB, pointOnA);
+      normalOnA.scale(1.0 / distance);
+      normalOnB.setAndNegate(normalOnA);
+
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
+      resultToPack.setShapesAreColliding(false);
+      resultToPack.setSignedDistance(distance);
+   }
+
+   /**
     * Evaluates the collision state between a point shape and a ramp.
     *
     * @param pointShape3D the point shape. Not modified.

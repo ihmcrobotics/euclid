@@ -5,7 +5,6 @@ import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DReadOnly
 {
@@ -23,7 +22,8 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
       return topCenter;
    }
 
-   default Point3DReadOnly getBottomCenter()
+   @Override
+   default FramePoint3DReadOnly getBottomCenter()
    {
       FramePoint3D bottomCenter = new FramePoint3D(getReferenceFrame());
       bottomCenter.scaleAdd(-getHalfLength(), getAxis(), getPosition());
