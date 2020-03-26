@@ -5,6 +5,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
@@ -205,6 +206,12 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    public FrameVertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
       return (FrameVertex3DReadOnly) super.getSupportingVertex(supportDirection);
+   }
+
+   @Override
+   public FixedFrameShape3DPoseBasics getPose()
+   {
+      return null;
    }
 
    @Override

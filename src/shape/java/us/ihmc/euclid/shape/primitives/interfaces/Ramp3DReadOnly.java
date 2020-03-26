@@ -41,6 +41,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @return the pose of this ramp.
     */
+   @Override
    Shape3DPoseReadOnly getPose();
 
    /**
@@ -347,9 +348,9 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
-
+   @Override
    Ramp3DReadOnly copy();
-   
+
    /**
     * Tests separately and on a per component basis if the pose and the size of this ramp and
     * {@code other}'s pose and size are equal to an {@code epsilon}.

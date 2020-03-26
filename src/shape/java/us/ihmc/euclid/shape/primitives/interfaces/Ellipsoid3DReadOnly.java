@@ -38,6 +38,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     *
     * @return the pose of this ellipsoid.
     */
+   @Override
    Shape3DPoseReadOnly getPose();
 
    /**
@@ -282,6 +283,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return getRadii().getZ();
    }
 
+   @Override
    Ellipsoid3DReadOnly copy();
 
    /**

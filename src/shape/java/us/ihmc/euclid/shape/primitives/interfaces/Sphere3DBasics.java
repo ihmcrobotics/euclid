@@ -92,6 +92,13 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
       setRadius(radius);
    }
 
+   @Override
+   default Shape3DPoseBasics getPose()
+   {
+      return null;
+   }
+
+   @Override
    Sphere3DBasics copy();
 
    /** {@inheritDoc} */

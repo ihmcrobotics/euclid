@@ -130,6 +130,13 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
       setSize(length, radius);
    }
 
+   @Override
+   default Shape3DPoseBasics getPose()
+   {
+      return null;
+   }
+
+   @Override
    Cylinder3DBasics copy();
 
    /** {@inheritDoc} */

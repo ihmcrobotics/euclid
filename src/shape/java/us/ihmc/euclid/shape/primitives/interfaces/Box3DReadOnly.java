@@ -39,6 +39,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     *
     * @return the pose of this box.
     */
+   @Override
    Shape3DPoseReadOnly getPose();
 
    /**
@@ -374,6 +375,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       transformToWorld(vertexToPack);
    }
 
+   @Override
    Box3DReadOnly copy();
 
    /**

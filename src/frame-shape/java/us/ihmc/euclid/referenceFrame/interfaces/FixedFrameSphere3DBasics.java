@@ -67,5 +67,11 @@ public interface FixedFrameSphere3DBasics extends Sphere3DBasics, FrameSphere3DR
    }
 
    @Override
+   default FixedFrameShape3DPoseBasics getPose()
+   {
+      return null;
+   }
+
+   @Override
    FixedFrameSphere3DBasics copy();
 }

@@ -193,6 +193,7 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
       getRadii().setZ(radiusZ);
    }
 
+   @Override
    Ellipsoid3DBasics copy();
 
    /** {@inheritDoc} */

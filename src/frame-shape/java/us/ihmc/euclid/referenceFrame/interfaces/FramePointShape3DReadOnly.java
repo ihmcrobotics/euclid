@@ -27,5 +27,11 @@ public interface FramePointShape3DReadOnly extends PointShape3DReadOnly, FrameSh
    }
 
    @Override
+   default FrameShape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
    FramePointShape3DReadOnly copy();
 }

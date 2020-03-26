@@ -7,6 +7,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -494,6 +495,13 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
    ConvexPolytope3DReadOnly copy();
 
    /**

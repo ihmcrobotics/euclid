@@ -175,5 +175,9 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
       getBoundingBox(destinationFrame, (BoundingBox3DBasics) boundingBoxToPack);
    }
 
+   @Override
+   FrameShape3DPoseReadOnly getPose();
+
+   @Override
    FrameShape3DReadOnly copy();
 }

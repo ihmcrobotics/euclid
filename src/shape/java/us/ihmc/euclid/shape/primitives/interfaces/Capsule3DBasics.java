@@ -130,6 +130,13 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
       setSize(length, radius);
    }
 
+   @Override
+   default Shape3DPoseBasics getPose()
+   {
+      return null;
+   }
+
+   @Override
    Capsule3DBasics copy();
 
    /** {@inheritDoc} */

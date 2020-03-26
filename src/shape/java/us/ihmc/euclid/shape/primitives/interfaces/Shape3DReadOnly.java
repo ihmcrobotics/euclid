@@ -183,7 +183,7 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * A primitive shape is a simple geometric shape such as a sphere or a box. Transformation
     * operations on primitive shapes are cheap.
     * </p>
-    * 
+    *
     * @return {@code true} if this shape's implementation is a primitive, {@code false} otherwise.
     */
    boolean isPrimitive();
@@ -201,11 +201,19 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * transformation is needed. By using this information, algorithms can be adjusted to minimize their
     * number of operations.
     * </p>
-    * 
+    *
     * @return {@code true} if this geometry uses a 3D pose to position itself in space, {@code false}
     *         otherwise.
     */
    boolean isDefinedByPose();
+
+   /**
+    * Gets the pose defining this shape only if it is part of the geometry definition, i.e.
+    * {@code this.isDefinedByPose() == true}, otherwise this method returns {@code null}.
+    *
+    * @return the pose defining this shape, or {@code null} if this shape is not defined with a pose.
+    */
+   Shape3DPoseReadOnly getPose();
 
    Shape3DReadOnly copy();
 }

@@ -72,5 +72,11 @@ public interface FixedFrameCapsule3DBasics extends Capsule3DBasics, FrameCapsule
    }
 
    @Override
+   default FixedFrameShape3DPoseBasics getPose()
+   {
+      return null;
+   }
+
+   @Override
    FixedFrameCapsule3DBasics copy();
 }

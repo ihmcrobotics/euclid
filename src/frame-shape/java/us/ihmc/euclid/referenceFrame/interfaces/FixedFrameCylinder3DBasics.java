@@ -72,5 +72,11 @@ public interface FixedFrameCylinder3DBasics extends Cylinder3DBasics, FrameCylin
    }
 
    @Override
+   default FixedFrameShape3DPoseBasics getPose()
+   {
+      return null;
+   }
+
+   @Override
    FixedFrameCylinder3DBasics copy();
 }

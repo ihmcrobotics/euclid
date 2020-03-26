@@ -218,6 +218,13 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
    Cylinder3DReadOnly copy();
 
    /**

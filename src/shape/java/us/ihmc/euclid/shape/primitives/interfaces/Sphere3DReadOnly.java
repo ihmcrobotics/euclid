@@ -183,6 +183,13 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
    Sphere3DReadOnly copy();
 
    /**

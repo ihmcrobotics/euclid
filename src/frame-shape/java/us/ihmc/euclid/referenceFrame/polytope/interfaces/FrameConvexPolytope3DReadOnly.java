@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeTools;
@@ -161,6 +162,12 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
    default void getBoundingBox(ReferenceFrame destinationFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       EuclidFrameShapeTools.boundingBoxConvexPolytope3D(this, destinationFrame, boundingBoxToPack);
+   }
+
+   @Override
+   default FrameShape3DPoseReadOnly getPose()
+   {
+      return null;
    }
 
    @Override

@@ -98,5 +98,12 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
       return false;
    }
 
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
    PointShape3DReadOnly copy();
 }

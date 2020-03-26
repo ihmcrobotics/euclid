@@ -24,6 +24,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -538,6 +539,12 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    {
       lastSupportingVertex = getSupportingVertex(lastSupportingVertex, supportDirection);
       return lastSupportingVertex;
+   }
+
+   @Override
+   public Shape3DPoseBasics getPose()
+   {
+      return null;
    }
 
    @Override

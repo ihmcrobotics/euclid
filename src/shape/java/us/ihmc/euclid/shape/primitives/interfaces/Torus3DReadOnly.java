@@ -124,6 +124,13 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
    Torus3DReadOnly copy();
 
    /**
