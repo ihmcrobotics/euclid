@@ -133,6 +133,12 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    }
 
    @Override
+   public FrameBox3D copy()
+   {
+      return new FrameBox3D(this);
+   }
+
+   @Override
    public boolean epsilonEquals(FrameBox3D other, double epsilon)
    {
       return FrameBox3DBasics.super.epsilonEquals(other, epsilon);

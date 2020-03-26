@@ -140,4 +140,7 @@ public interface FixedFrameRamp3DBasics extends Ramp3DBasics, FrameRamp3DReadOnl
    {
       setMatchingFrame(pose.getReferenceFrame(), pose, size);
    }
+
+   @Override
+   FixedFrameRamp3DBasics copy();
 }

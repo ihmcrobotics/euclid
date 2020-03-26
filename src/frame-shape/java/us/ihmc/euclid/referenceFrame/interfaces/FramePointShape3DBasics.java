@@ -15,4 +15,7 @@ public interface FramePointShape3DBasics extends FixedFramePointShape3DBasics, F
    {
       FrameShape3DBasics.super.setToNaN(referenceFrame);
    }
+
+   @Override
+   FramePointShape3DBasics copy();
 }

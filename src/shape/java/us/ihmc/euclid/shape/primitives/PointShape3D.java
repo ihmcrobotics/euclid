@@ -86,6 +86,12 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
       return z;
    }
 
+   @Override
+   public PointShape3D copy()
+   {
+      return new PointShape3D(this);
+   }
+
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(PointShape3DReadOnly)}, it returns {@code false} otherwise.

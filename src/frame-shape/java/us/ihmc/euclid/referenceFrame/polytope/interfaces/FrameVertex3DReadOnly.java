@@ -8,8 +8,10 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 
 public interface FrameVertex3DReadOnly extends Vertex3DReadOnly, FramePoint3DReadOnly
 {
+   @Override
    Collection<? extends FrameHalfEdge3DReadOnly> getAssociatedEdges();
 
+   @Override
    FrameHalfEdge3DReadOnly getAssociatedEdge(int index);
 
    default boolean isEdgeAssociated(FrameHalfEdge3DReadOnly edgeToCheck)
@@ -18,6 +20,7 @@ public interface FrameVertex3DReadOnly extends Vertex3DReadOnly, FramePoint3DRea
       return Vertex3DReadOnly.super.isEdgeAssociated(edgeToCheck);
    }
 
+   @Override
    default FrameHalfEdge3DReadOnly getEdgeTo(Vertex3DReadOnly destination)
    {
       return (FrameHalfEdge3DReadOnly) Vertex3DReadOnly.super.getEdgeTo(destination);

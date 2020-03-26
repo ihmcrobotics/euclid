@@ -29,4 +29,7 @@ public interface FrameCapsule3DBasics extends FixedFrameCapsule3DBasics, FrameSh
       position.checkReferenceFrameMatch(axis);
       setIncludingFrame(position.getReferenceFrame(), position, axis, length, radius);
    }
+
+   @Override
+   FrameCapsule3DBasics copy();
 }

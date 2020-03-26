@@ -16,4 +16,6 @@ public interface FrameShape3DBasics extends FixedFrameShape3DBasics, FrameChange
       setToZero();
    }
 
+   @Override
+   FrameShape3DBasics copy();
 }

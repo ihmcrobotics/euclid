@@ -65,4 +65,7 @@ public interface FixedFrameSphere3DBasics extends Sphere3DBasics, FrameSphere3DR
    {
       setMatchingFrame(center.getReferenceFrame(), center, radius);
    }
+
+   @Override
+   FixedFrameSphere3DBasics copy();
 }

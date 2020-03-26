@@ -188,6 +188,12 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
       return bottomCenter;
    }
 
+   @Override
+   public Cylinder3D copy()
+   {
+      return new Cylinder3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

@@ -94,6 +94,12 @@ public class FramePointShape3D implements FramePointShape3DBasics, GeometryObjec
    }
 
    @Override
+   public FramePointShape3D copy()
+   {
+      return new FramePointShape3D(this);
+   }
+
+   @Override
    public boolean equals(Object object)
    {
       if (object instanceof FramePointShape3DReadOnly)

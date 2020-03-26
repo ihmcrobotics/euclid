@@ -138,11 +138,13 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       return Face3DReadOnly.super.isPointDirectlyAboveOrBelow(query);
    }
 
+   @Override
    default FrameFace3DReadOnly getNeighbor(int index)
    {
       return (FrameFace3DReadOnly) Face3DReadOnly.super.getNeighbor(index);
    }
 
+   @Override
    default FrameHalfEdge3DReadOnly getCommonEdgeWith(Face3DReadOnly neighbor)
    {
       return (FrameHalfEdge3DReadOnly) Face3DReadOnly.super.getCommonEdgeWith(neighbor);
@@ -154,6 +156,7 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       return getCommonEdgeWith((Face3DReadOnly) neighbor);
    }
 
+   @Override
    default FrameHalfEdge3DReadOnly getClosestEdge(Point3DReadOnly query)
    {
       return (FrameHalfEdge3DReadOnly) Face3DReadOnly.super.getClosestEdge(query);
@@ -223,6 +226,7 @@ public interface FrameFace3DReadOnly extends Face3DReadOnly, SupportingFrameVert
       return (FrameVertex3DReadOnly) Face3DReadOnly.super.getSupportingVertex(supportDirection);
    }
 
+   @Override
    default FrameVertex3DReadOnly getSupportingVertex(FrameVector3DReadOnly supportDirection)
    {
       checkReferenceFrameMatch(supportDirection);

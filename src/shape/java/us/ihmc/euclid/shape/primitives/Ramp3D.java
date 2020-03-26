@@ -229,6 +229,12 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       return angleOfRampIncline;
    }
 
+   @Override
+   public Ramp3D copy()
+   {
+      return new Ramp3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

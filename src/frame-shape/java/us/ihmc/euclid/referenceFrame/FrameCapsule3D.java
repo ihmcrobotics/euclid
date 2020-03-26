@@ -161,6 +161,12 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
       return bottomCenter;
    }
 
+   @Override
+   public FrameCapsule3D copy()
+   {
+      return new FrameCapsule3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

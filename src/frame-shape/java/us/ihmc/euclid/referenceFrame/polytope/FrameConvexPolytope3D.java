@@ -207,6 +207,12 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
       return (FrameVertex3DReadOnly) super.getSupportingVertex(supportDirection);
    }
 
+   @Override
+   public FrameConvexPolytope3D copy()
+   {
+      return new FrameConvexPolytope3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

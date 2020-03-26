@@ -161,6 +161,12 @@ public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<Fr
       return bottomCenter;
    }
 
+   @Override
+   public FrameCylinder3D copy()
+   {
+      return new FrameCylinder3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

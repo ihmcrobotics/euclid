@@ -494,6 +494,8 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   ConvexPolytope3DReadOnly copy();
+
    /**
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an
     * {@code epsilon}.

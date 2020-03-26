@@ -167,6 +167,12 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
       return bottomCenter;
    }
 
+   @Override
+   public Capsule3D copy()
+   {
+      return new Capsule3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

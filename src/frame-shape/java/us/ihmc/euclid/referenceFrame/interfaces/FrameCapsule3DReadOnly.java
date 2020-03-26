@@ -30,6 +30,15 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
       return bottomCenter;
    }
 
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      FrameShape3DReadOnly.super.getBoundingBox(boundingBoxToPack);
+   }
+
+   @Override
+   FrameCapsule3DReadOnly copy();
+
    default boolean epsilonEquals(FrameCapsule3DReadOnly other, double epsilon)
    {
       if (getReferenceFrame() != other.getReferenceFrame())
@@ -68,12 +77,6 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
             return false;
          return true;
       }
-   }
-
-   @Override
-   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
-   {
-      FrameShape3DReadOnly.super.getBoundingBox(boundingBoxToPack);
    }
 
    @Override

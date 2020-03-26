@@ -126,6 +126,12 @@ public class ConvexPolytope3D extends AbstractConvexPolytope3D<Vertex3D, HalfEdg
       return boundingBox;
    }
 
+   @Override
+   public ConvexPolytope3D copy()
+   {
+      return new ConvexPolytope3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

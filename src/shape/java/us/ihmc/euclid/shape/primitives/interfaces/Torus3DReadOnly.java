@@ -124,6 +124,8 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   Torus3DReadOnly copy();
+
    /**
     * Tests separately and on a per component basis if the pose and the radii of this torus and
     * {@code other}'s pose and radii are equal to an {@code epsilon}.

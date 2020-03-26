@@ -33,4 +33,7 @@ public interface FrameSphere3DBasics extends FixedFrameSphere3DBasics, FrameShap
    {
       setIncludingFrame(center.getReferenceFrame(), center, radius);
    }
+
+   @Override
+   FrameSphere3DBasics copy();
 }

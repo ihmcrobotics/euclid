@@ -134,6 +134,12 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    }
 
    @Override
+   public FrameEllipsoid3D copy()
+   {
+      return new FrameEllipsoid3D(this);
+   }
+
+   @Override
    public boolean epsilonEquals(FrameEllipsoid3D other, double epsilon)
    {
       return FrameEllipsoid3DBasics.super.epsilonEquals(other, epsilon);

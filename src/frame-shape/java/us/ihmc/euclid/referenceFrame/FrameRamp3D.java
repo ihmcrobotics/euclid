@@ -29,7 +29,7 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
     * Represents the sizeX, sizeY, and sizeZ of this ramp.
     */
    private final FixedFrameVector3DBasics size = EuclidFrameShapeFactories.newPositiveFixedFrameVector3DBasics(this);
-   
+
    public FrameRamp3D()
    {
       this(ReferenceFrame.getWorldFrame());
@@ -130,6 +130,12 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    public void set(FrameRamp3D other)
    {
       FrameRamp3DBasics.super.set(other);
+   }
+
+   @Override
+   public FrameRamp3D copy()
+   {
+      return new FrameRamp3D(this);
    }
 
    @Override

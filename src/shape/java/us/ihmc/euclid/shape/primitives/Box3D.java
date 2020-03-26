@@ -175,6 +175,12 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       Box3DBasics.super.set(other);
    }
 
+   @Override
+   public Box3D copy()
+   {
+      return new Box3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

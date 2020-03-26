@@ -25,4 +25,7 @@ public interface FramePointShape3DReadOnly extends PointShape3DReadOnly, FrameSh
       getReferenceFrame().transformFromThisToDesiredFrame(destinationFrame, boundingBoxToPack.getMinPoint());
       boundingBoxToPack.getMaxPoint().set(boundingBoxToPack.getMinPoint());
    }
+
+   @Override
+   FramePointShape3DReadOnly copy();
 }

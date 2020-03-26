@@ -97,4 +97,6 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    {
       return false;
    }
+
+   PointShape3DReadOnly copy();
 }

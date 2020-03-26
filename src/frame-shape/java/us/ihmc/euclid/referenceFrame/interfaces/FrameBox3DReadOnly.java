@@ -117,6 +117,7 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
       EuclidFrameShapeTools.boundingBoxBox3D(this, destinationFrame, boundingBoxToPack);
    }
 
+   @Override
    default FramePoint3DBasics[] getVertices()
    {
       FramePoint3D[] vertices = new FramePoint3D[8];
@@ -143,6 +144,7 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
          getVertex(vertexIndex, verticesToPack[vertexIndex]);
    }
 
+   @Override
    default FramePoint3DBasics getVertex(int vertexIndex)
    {
       FramePoint3D vertex = new FramePoint3D();
@@ -161,6 +163,9 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
       checkReferenceFrameMatch(vertexToPack);
       getVertex(vertexIndex, (Point3DBasics) vertexToPack);
    }
+
+   @Override
+   FrameBox3DReadOnly copy();
 
    default boolean epsilonEquals(FrameBox3DReadOnly other, double epsilon)
    {

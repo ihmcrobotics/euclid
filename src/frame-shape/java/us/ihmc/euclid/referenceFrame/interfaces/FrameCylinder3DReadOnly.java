@@ -26,6 +26,7 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
       return topCenter;
    }
 
+   @Override
    default Point3DReadOnly getBottomCenter()
    {
       FramePoint3D bottomCenter = new FramePoint3D(getReferenceFrame());
@@ -107,6 +108,21 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
       return Cylinder3DReadOnly.super.intersectionWith(pointOnLine, lineDirection, firstIntersectionToPack, secondIntersectionToPack);
    }
 
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      FrameShape3DReadOnly.super.getBoundingBox(boundingBoxToPack);
+   }
+
+   @Override
+   default void getBoundingBox(ReferenceFrame destinationFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      EuclidFrameShapeTools.boundingBoxCylinder3D(this, destinationFrame, boundingBoxToPack);
+   }
+
+   @Override
+   FrameCylinder3DReadOnly copy();
+
    default boolean epsilonEquals(FrameCylinder3DReadOnly other, double epsilon)
    {
       if (getReferenceFrame() != other.getReferenceFrame())
@@ -145,17 +161,5 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
             return false;
          return true;
       }
-   }
-
-   @Override
-   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
-   {
-      FrameShape3DReadOnly.super.getBoundingBox(boundingBoxToPack);
-   }
-
-   @Override
-   default void getBoundingBox(ReferenceFrame destinationFrame, BoundingBox3DBasics boundingBoxToPack)
-   {
-      EuclidFrameShapeTools.boundingBoxCylinder3D(this, destinationFrame, boundingBoxToPack);
    }
 }

@@ -212,6 +212,8 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
       getSize().set(sizeX, sizeY, sizeZ);
    }
 
+   Ramp3DBasics copy();
+
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

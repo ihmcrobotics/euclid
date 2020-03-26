@@ -531,6 +531,18 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
       return volume;
    }
 
+   private Vertex3DReadOnly lastSupportingVertex = null;
+
+   @Override
+   public Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
+   {
+      lastSupportingVertex = getSupportingVertex(lastSupportingVertex, supportDirection);
+      return lastSupportingVertex;
+   }
+
+   @Override
+   public abstract AbstractConvexPolytope3D<Vertex, Edge, Face> copy();
+
    /** {@inheritDoc} */
    @Override
    public void applyTransform(Transform transform)
@@ -550,15 +562,6 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
 
       updateBoundingBox();
       updateCentroidAndVolume();
-   }
-
-   private Vertex3DReadOnly lastSupportingVertex = null;
-
-   @Override
-   public Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
-   {
-      lastSupportingVertex = getSupportingVertex(lastSupportingVertex, supportDirection);
-      return lastSupportingVertex;
    }
 
    /** {@inheritDoc} */

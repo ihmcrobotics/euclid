@@ -140,4 +140,7 @@ public interface FixedFrameBox3DBasics extends Box3DBasics, FrameBox3DReadOnly, 
    {
       setMatchingFrame(pose.getReferenceFrame(), pose, size);
    }
+
+   @Override
+   FixedFrameBox3DBasics copy();
 }

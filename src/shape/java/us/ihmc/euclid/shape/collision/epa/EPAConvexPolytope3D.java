@@ -152,6 +152,12 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
       return faces;
    }
 
+   @Override
+   public EPAConvexPolytope3D copy()
+   {
+      throw new UnsupportedOperationException("Copy is not supported.");
+   }
+
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(ConvexPolytope3DReadOnly)}, it returns {@code false} otherwise.

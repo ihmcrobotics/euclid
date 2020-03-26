@@ -12,6 +12,7 @@ public interface FrameHalfEdge3DReadOnly extends HalfEdge3DReadOnly, FrameLineSe
    @Override
    FrameVertex3DReadOnly getDestination();
 
+   @Override
    default FramePoint3DReadOnly getFirstEndpoint()
    {
       return getOrigin();
@@ -44,9 +45,9 @@ public interface FrameHalfEdge3DReadOnly extends HalfEdge3DReadOnly, FrameLineSe
          return true;
       else if (other == null)
          return false;
-      else if ((getOrigin() == null) != (other.getOrigin() == null))
+      else if (getOrigin() == null != (other.getOrigin() == null))
          return false;
-      else if ((getDestination() == null) != (other.getDestination() == null))
+      else if (getDestination() == null != (other.getDestination() == null))
          return false;
       else
          return FrameLineSegment3DReadOnly.super.equals(other);

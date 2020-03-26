@@ -65,4 +65,7 @@ public interface FrameBox3DBasics extends FixedFrameBox3DBasics, FrameShape3DBas
    {
       setIncludingFrame(pose.getReferenceFrame(), pose, size);
    }
+
+   @Override
+   FrameBox3DBasics copy();
 }

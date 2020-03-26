@@ -18,4 +18,6 @@ public interface PointShape3DBasics extends PointShape3DReadOnly, Shape3DBasics,
    {
       return PointShape3DReadOnly.super.containsNaN();
    }
+
+   PointShape3DBasics copy();
 }

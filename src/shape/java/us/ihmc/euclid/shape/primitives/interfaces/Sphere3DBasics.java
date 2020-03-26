@@ -92,6 +92,8 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
       setRadius(radius);
    }
 
+   Sphere3DBasics copy();
+
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

@@ -374,6 +374,8 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       transformToWorld(vertexToPack);
    }
 
+   Box3DReadOnly copy();
+
    /**
     * Tests separately and on a per component basis if the pose and the size of this box and
     * {@code other}'s pose and size are equal to an {@code epsilon}.

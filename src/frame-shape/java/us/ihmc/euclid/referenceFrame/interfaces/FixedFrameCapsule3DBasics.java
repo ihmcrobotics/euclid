@@ -70,4 +70,7 @@ public interface FixedFrameCapsule3DBasics extends Capsule3DBasics, FrameCapsule
       position.checkReferenceFrameMatch(axis);
       setMatchingFrame(position.getReferenceFrame(), position, axis, length, radius);
    }
+
+   @Override
+   FixedFrameCapsule3DBasics copy();
 }

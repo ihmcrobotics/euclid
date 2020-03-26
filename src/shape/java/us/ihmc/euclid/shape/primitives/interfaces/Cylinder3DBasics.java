@@ -130,6 +130,8 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
       setSize(length, radius);
    }
 
+   Cylinder3DBasics copy();
+
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

@@ -174,4 +174,6 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
       boundingBoxToPack.setReferenceFrame(destinationFrame);
       getBoundingBox(destinationFrame, (BoundingBox3DBasics) boundingBoxToPack);
    }
+
+   FrameShape3DReadOnly copy();
 }

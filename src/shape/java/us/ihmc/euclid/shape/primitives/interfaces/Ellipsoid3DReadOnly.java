@@ -282,6 +282,8 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return getRadii().getZ();
    }
 
+   Ellipsoid3DReadOnly copy();
+
    /**
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and
     * {@code other}'s pose and size are equal to an {@code epsilon}.

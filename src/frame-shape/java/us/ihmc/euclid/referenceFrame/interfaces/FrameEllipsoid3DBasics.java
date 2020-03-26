@@ -65,4 +65,7 @@ public interface FrameEllipsoid3DBasics extends FixedFrameEllipsoid3DBasics, Fra
    {
       setIncludingFrame(pose.getReferenceFrame(), pose, radii);
    }
+
+   @Override
+   FrameEllipsoid3DBasics copy();
 }

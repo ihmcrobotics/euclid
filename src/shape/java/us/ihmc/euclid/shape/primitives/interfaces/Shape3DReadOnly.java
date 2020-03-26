@@ -206,4 +206,6 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     *         otherwise.
     */
    boolean isDefinedByPose();
+
+   Shape3DReadOnly copy();
 }

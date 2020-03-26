@@ -169,6 +169,12 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
       Ellipsoid3DBasics.super.set(other);
    }
 
+   @Override
+   public Ellipsoid3D copy()
+   {
+      return new Ellipsoid3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

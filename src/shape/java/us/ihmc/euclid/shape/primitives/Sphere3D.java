@@ -115,6 +115,12 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
       Sphere3DBasics.super.set(other);
    }
 
+   @Override
+   public Sphere3D copy()
+   {
+      return new Sphere3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

@@ -135,6 +135,12 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
       return axis;
    }
 
+   @Override
+   public Torus3D copy()
+   {
+      return new Torus3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *

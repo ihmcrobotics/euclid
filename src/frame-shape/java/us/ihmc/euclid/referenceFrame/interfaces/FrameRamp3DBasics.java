@@ -65,4 +65,7 @@ public interface FrameRamp3DBasics extends FixedFrameRamp3DBasics, FrameShape3DB
    {
       setIncludingFrame(pose.getReferenceFrame(), pose, size);
    }
+
+   @Override
+   FrameRamp3DBasics copy();
 }

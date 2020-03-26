@@ -39,6 +39,7 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
       EuclidFrameShapeTools.boundingBoxRamp3D(this, destinationFrame, boundingBoxToPack);
    }
 
+   @Override
    default FrameVector3DBasics getRampSurfaceNormal()
    {
       FrameVector3D surfaceNormal = new FrameVector3D();
@@ -58,6 +59,7 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
       Ramp3DReadOnly.super.getRampSurfaceNormal(surfaceNormalToPack);
    }
 
+   @Override
    default FramePoint3DBasics[] getVertices()
    {
       FramePoint3D[] vertices = new FramePoint3D[6];
@@ -84,6 +86,7 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
          getVertex(vertexIndex, verticesToPack[vertexIndex]);
    }
 
+   @Override
    default FramePoint3DBasics getVertex(int vertexIndex)
    {
       FramePoint3D vertex = new FramePoint3D();
@@ -102,6 +105,9 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
       checkReferenceFrameMatch(vertexToPack);
       Ramp3DReadOnly.super.getVertex(vertexIndex, vertexToPack);
    }
+
+   @Override
+   FrameRamp3DReadOnly copy();
 
    default boolean epsilonEquals(FrameRamp3DReadOnly other, double epsilon)
    {

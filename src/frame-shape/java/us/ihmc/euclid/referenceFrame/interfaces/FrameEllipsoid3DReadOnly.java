@@ -11,6 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShape3DReadOnly
 {
+   @Override
    FrameVector3DReadOnly getRadii();
 
    @Override
@@ -113,6 +114,9 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
    {
       EuclidFrameShapeTools.boundingBoxEllipsoid3D(this, destinationFrame, boundingBoxToPack);
    }
+
+   @Override
+   FrameEllipsoid3DReadOnly copy();
 
    default boolean epsilonEquals(FrameEllipsoid3DReadOnly other, double epsilon)
    {

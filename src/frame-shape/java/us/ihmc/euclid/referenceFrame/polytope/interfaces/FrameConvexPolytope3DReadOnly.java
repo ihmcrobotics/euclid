@@ -88,6 +88,7 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
     *
     * @return this polytope centroid location.
     */
+   @Override
    FramePoint3DReadOnly getCentroid();
 
    /**
@@ -96,6 +97,7 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
     * @param query the coordinates of the query. Not modified.
     * @return the closest face to the query.
     */
+   @Override
    default FrameFace3DReadOnly getClosestFace(Point3DReadOnly query)
    {
       return (FrameFace3DReadOnly) ConvexPolytope3DReadOnly.super.getClosestFace(query);
@@ -119,6 +121,7 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
       return getSupportingVertex((FrameVertex3DReadOnly) null, supportDirection);
    }
 
+   @Override
    default FrameVertex3DReadOnly getSupportingVertex(FrameVector3DReadOnly supportDirection)
    {
       checkReferenceFrameMatch(supportDirection);
@@ -148,6 +151,21 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
       return getSupportingVertex((Vertex3DReadOnly) seed, (Vector3DReadOnly) supportDirection);
    }
 
+   @Override
+   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
+   {
+      ConvexPolytope3DReadOnly.super.getBoundingBox(boundingBoxToPack);
+   }
+
+   @Override
+   default void getBoundingBox(ReferenceFrame destinationFrame, BoundingBox3DBasics boundingBoxToPack)
+   {
+      EuclidFrameShapeTools.boundingBoxConvexPolytope3D(this, destinationFrame, boundingBoxToPack);
+   }
+
+   @Override
+   FrameConvexPolytope3DReadOnly copy();
+
    default boolean epsilonEquals(FrameConvexPolytope3DReadOnly other, double epsilon)
    {
       if (getReferenceFrame() != other.getReferenceFrame())
@@ -168,17 +186,5 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
          return false;
       else
          return ConvexPolytope3DReadOnly.super.equals(other);
-   }
-
-   @Override
-   default void getBoundingBox(BoundingBox3DBasics boundingBoxToPack)
-   {
-      ConvexPolytope3DReadOnly.super.getBoundingBox(boundingBoxToPack);
-   }
-
-   @Override
-   default void getBoundingBox(ReferenceFrame destinationFrame, BoundingBox3DBasics boundingBoxToPack)
-   {
-      EuclidFrameShapeTools.boundingBoxConvexPolytope3D(this, destinationFrame, boundingBoxToPack);
    }
 }

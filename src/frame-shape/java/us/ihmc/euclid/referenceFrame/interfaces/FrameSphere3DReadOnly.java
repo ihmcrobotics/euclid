@@ -100,6 +100,9 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
       EuclidFrameShapeTools.boundingBoxSphere3D(this, destinationFrame, boundingBoxToPack);
    }
 
+   @Override
+   FrameSphere3DReadOnly copy();
+
    default boolean epsilonEquals(FrameSphere3DReadOnly other, double epsilon)
    {
       if (getReferenceFrame() != other.getReferenceFrame())

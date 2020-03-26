@@ -104,6 +104,12 @@ public class FrameSphere3D implements FrameSphere3DBasics, GeometryObject<FrameS
    }
 
    @Override
+   public FrameSphere3D copy()
+   {
+      return new FrameSphere3D(this);
+   }
+
+   @Override
    public void set(FrameSphere3D other)
    {
       FrameSphere3DBasics.super.set(other);

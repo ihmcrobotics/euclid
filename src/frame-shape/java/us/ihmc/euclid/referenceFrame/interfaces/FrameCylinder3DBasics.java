@@ -29,4 +29,7 @@ public interface FrameCylinder3DBasics extends FixedFrameCylinder3DBasics, Frame
       position.checkReferenceFrameMatch(axis);
       setIncludingFrame(position.getReferenceFrame(), position, axis, length, radius);
    }
+
+   @Override
+   FrameCylinder3DBasics copy();
 }
