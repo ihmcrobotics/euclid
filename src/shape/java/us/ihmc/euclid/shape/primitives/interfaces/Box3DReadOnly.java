@@ -252,6 +252,13 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return true;
+   }
+
    /**
     * Gets this box size along the x-axis.
     *

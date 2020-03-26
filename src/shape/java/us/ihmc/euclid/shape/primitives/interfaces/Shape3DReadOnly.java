@@ -187,4 +187,23 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @return {@code true} if this shape's implementation is a primitive, {@code false} otherwise.
     */
    boolean isPrimitive();
+
+   /**
+    * Indicates whether this geometry relies on a 3D pose, i.e. position and orientation, to defined in
+    * space.
+    * <p>
+    * For instance, a 3D box is defined by its size and 3D pose, so
+    * {@link Box3DReadOnly#isDefinedByPose()} is {@code true}, while a 3D sphere is defined by its
+    * radius and position, so {@link Sphere3DReadOnly#isDefinedByPose()} is {@code false}.
+    * </p>
+    * <p>
+    * For shapes defined by a pose, performing queries result in extra computation as an additional
+    * transformation is needed. By using this information, algorithms can be adjusted to minimize their
+    * number of operations.
+    * </p>
+    * 
+    * @return {@code true} if this geometry uses a 3D pose to position itself in space, {@code false}
+    *         otherwise.
+    */
+   boolean isDefinedByPose();
 }

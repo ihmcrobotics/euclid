@@ -211,6 +211,13 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return false;
+   }
+
    /**
     * Tests on a per component basis if this cylinder and {@code other} are equal to an
     * {@code epsilon}.
