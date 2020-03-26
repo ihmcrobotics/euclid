@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -216,4 +217,6 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
    Shape3DPoseReadOnly getPose();
 
    Shape3DReadOnly copy();
+
+   Shape3DReadOnly applyTransformCopy(Transform transform);
 }

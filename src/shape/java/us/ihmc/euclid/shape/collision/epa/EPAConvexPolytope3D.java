@@ -13,6 +13,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
@@ -156,6 +157,12 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
    public EPAConvexPolytope3D copy()
    {
       throw new UnsupportedOperationException("Copy is not supported.");
+   }
+
+   @Override
+   public EPAConvexPolytope3D applyTransformCopy(Transform transform)
+   {
+      throw new UnsupportedOperationException("applyTransformCopy is not supported.");
    }
 
    /**
