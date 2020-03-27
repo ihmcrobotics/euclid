@@ -167,7 +167,7 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   Capsule3DReadOnly copy();
+   Capsule3DBasics copy();
 
    /**
     * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.

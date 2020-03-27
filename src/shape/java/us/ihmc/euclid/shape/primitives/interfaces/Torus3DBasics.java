@@ -106,9 +106,6 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
       return null;
    }
 
-   @Override
-   Torus3DBasics copy();
-
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

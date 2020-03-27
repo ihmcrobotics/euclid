@@ -76,7 +76,4 @@ public interface FixedFrameCylinder3DBasics extends Cylinder3DBasics, FrameCylin
    {
       return null;
    }
-
-   @Override
-   FixedFrameCylinder3DBasics copy();
 }

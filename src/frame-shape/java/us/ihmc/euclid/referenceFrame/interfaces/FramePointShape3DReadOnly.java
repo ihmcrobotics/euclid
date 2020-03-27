@@ -33,5 +33,5 @@ public interface FramePointShape3DReadOnly extends PointShape3DReadOnly, FrameSh
    }
 
    @Override
-   FramePointShape3DReadOnly copy();
+   FixedFramePointShape3DBasics copy();
 }

@@ -225,7 +225,7 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   Cylinder3DReadOnly copy();
+   Cylinder3DBasics copy();
 
    /**
     * Tests on a per component basis if this cylinder and {@code other} are equal to an

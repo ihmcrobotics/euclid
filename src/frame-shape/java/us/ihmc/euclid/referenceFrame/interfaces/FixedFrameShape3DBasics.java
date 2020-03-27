@@ -6,7 +6,4 @@ public interface FixedFrameShape3DBasics extends Shape3DBasics, FrameShape3DRead
 {
    @Override
    FixedFrameShape3DPoseBasics getPose();
-
-   @Override
-   FixedFrameShape3DBasics copy();
 }

@@ -43,7 +43,7 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
    }
 
    @Override
-   FrameCapsule3DReadOnly copy();
+   FixedFrameCapsule3DBasics copy();
 
    default boolean epsilonEquals(FrameCapsule3DReadOnly other, double epsilon)
    {

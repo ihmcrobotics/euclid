@@ -105,5 +105,5 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
    }
 
    @Override
-   PointShape3DReadOnly copy();
+   PointShape3DBasics copy();
 }

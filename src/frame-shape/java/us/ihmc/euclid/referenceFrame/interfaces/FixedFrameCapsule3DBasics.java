@@ -76,7 +76,4 @@ public interface FixedFrameCapsule3DBasics extends Capsule3DBasics, FrameCapsule
    {
       return null;
    }
-
-   @Override
-   FixedFrameCapsule3DBasics copy();
 }

@@ -9,7 +9,4 @@ public interface FixedFramePointShape3DBasics extends PointShape3DBasics, FrameP
    {
       return null;
    }
-
-   @Override
-   FixedFramePointShape3DBasics copy();
 }

@@ -376,7 +376,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   Box3DReadOnly copy();
+   Box3DBasics copy();
 
    /**
     * Tests separately and on a per component basis if the pose and the size of this box and

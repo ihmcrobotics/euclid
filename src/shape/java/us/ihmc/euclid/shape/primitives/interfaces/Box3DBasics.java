@@ -173,9 +173,6 @@ public interface Box3DBasics extends Box3DReadOnly, Shape3DBasics
       getSize().scale(scale);
    }
 
-   @Override
-   Box3DBasics copy();
-
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

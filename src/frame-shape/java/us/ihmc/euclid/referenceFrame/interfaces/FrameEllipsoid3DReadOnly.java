@@ -116,7 +116,7 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
    }
 
    @Override
-   FrameEllipsoid3DReadOnly copy();
+   FixedFrameEllipsoid3DBasics copy();
 
    default boolean epsilonEquals(FrameEllipsoid3DReadOnly other, double epsilon)
    {

@@ -7,6 +7,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -502,7 +503,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   ConvexPolytope3DReadOnly copy();
+   Shape3DBasics copy();
 
    /**
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an

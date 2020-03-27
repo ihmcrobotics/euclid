@@ -140,7 +140,4 @@ public interface FixedFrameEllipsoid3DBasics extends Ellipsoid3DBasics, FrameEll
    {
       setMatchingFrame(pose.getReferenceFrame(), pose, radii);
    }
-
-   @Override
-   FixedFrameEllipsoid3DBasics copy();
 }

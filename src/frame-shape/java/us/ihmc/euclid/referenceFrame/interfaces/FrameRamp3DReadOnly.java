@@ -107,7 +107,7 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
    }
 
    @Override
-   FrameRamp3DReadOnly copy();
+   FixedFrameRamp3DBasics copy();
 
    default boolean epsilonEquals(FrameRamp3DReadOnly other, double epsilon)
    {

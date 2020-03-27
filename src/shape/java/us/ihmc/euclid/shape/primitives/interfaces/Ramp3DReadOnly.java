@@ -349,7 +349,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   Ramp3DReadOnly copy();
+   Ramp3DBasics copy();
 
    /**
     * Tests separately and on a per component basis if the pose and the size of this ramp and

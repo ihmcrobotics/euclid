@@ -127,7 +127,7 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
    }
 
    @Override
-   FrameCylinder3DReadOnly copy();
+   FixedFrameCylinder3DBasics copy();
 
    default boolean epsilonEquals(FrameCylinder3DReadOnly other, double epsilon)
    {

@@ -136,9 +136,6 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
       return null;
    }
 
-   @Override
-   Capsule3DBasics copy();
-
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

@@ -71,7 +71,4 @@ public interface FixedFrameSphere3DBasics extends Sphere3DBasics, FrameSphere3DR
    {
       return null;
    }
-
-   @Override
-   FixedFrameSphere3DBasics copy();
 }

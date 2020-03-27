@@ -98,9 +98,6 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
       return null;
    }
 
-   @Override
-   Sphere3DBasics copy();
-
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

@@ -165,7 +165,7 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
    }
 
    @Override
-   FrameBox3DReadOnly copy();
+   FixedFrameBox3DBasics copy();
 
    default boolean epsilonEquals(FrameBox3DReadOnly other, double epsilon)
    {

@@ -179,5 +179,5 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
    FrameShape3DPoseReadOnly getPose();
 
    @Override
-   FrameShape3DReadOnly copy();
+   FixedFrameShape3DBasics copy();
 }

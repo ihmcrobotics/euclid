@@ -107,7 +107,7 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
    }
 
    @Override
-   FrameSphere3DReadOnly copy();
+   FixedFrameSphere3DBasics copy();
 
    default boolean epsilonEquals(FrameSphere3DReadOnly other, double epsilon)
    {

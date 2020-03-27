@@ -284,7 +284,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   Ellipsoid3DReadOnly copy();
+   Ellipsoid3DBasics copy();
 
    /**
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and

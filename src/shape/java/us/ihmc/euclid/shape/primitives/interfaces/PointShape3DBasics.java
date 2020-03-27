@@ -24,7 +24,4 @@ public interface PointShape3DBasics extends PointShape3DReadOnly, Shape3DBasics,
    {
       return null;
    }
-
-   @Override
-   PointShape3DBasics copy();
 }

@@ -12,6 +12,8 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -27,7 +29,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * @author Sylvain Bertrand
  * @see ExpandingPolytopeAlgorithm
  */
-public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
+public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly, Shape3DBasics
 {
    /** The list of the vertices composing this convex polytope. */
    private final List<EPAVertex3D> vertices = new ArrayList<>();
@@ -97,6 +99,12 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
       collectFacesRecursively(face.getEdge2().getTwin().getFace(), facesToPack);
    }
 
+   @Override
+   public boolean containsNaN()
+   {
+      return ConvexPolytope3DReadOnly.super.containsNaN();
+   }
+
    /** {@inheritDoc} */
    @Override
    public BoundingBox3DReadOnly getBoundingBox()
@@ -154,15 +162,39 @@ public class EPAConvexPolytope3D implements ConvexPolytope3DReadOnly
    }
 
    @Override
-   public EPAConvexPolytope3D copy()
+   public Shape3DPoseBasics getPose()
    {
-      throw new UnsupportedOperationException("Copy is not supported.");
+      return null;
    }
 
    @Override
-   public EPAConvexPolytope3D applyTransformCopy(Transform transform)
+   public void setToNaN()
    {
-      throw new UnsupportedOperationException("applyTransformCopy is not supported.");
+      throw new UnsupportedOperationException();
+   }
+
+   @Override
+   public void setToZero()
+   {
+      throw new UnsupportedOperationException();
+   }
+
+   @Override
+   public EPAConvexPolytope3D copy()
+   {
+      throw new UnsupportedOperationException();
+   }
+
+   @Override
+   public void applyTransform(Transform transform)
+   {
+      throw new UnsupportedOperationException();
+   }
+
+   @Override
+   public void applyInverseTransform(Transform transform)
+   {
+      throw new UnsupportedOperationException();
    }
 
    /**

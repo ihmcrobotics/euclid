@@ -4,6 +4,7 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
@@ -171,7 +172,7 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
    }
 
    @Override
-   FrameConvexPolytope3DReadOnly copy();
+   FixedFrameShape3DBasics copy();
 
    default boolean epsilonEquals(FrameConvexPolytope3DReadOnly other, double epsilon)
    {

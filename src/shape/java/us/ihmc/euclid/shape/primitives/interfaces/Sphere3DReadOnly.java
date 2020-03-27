@@ -190,7 +190,7 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
    }
 
    @Override
-   Sphere3DReadOnly copy();
+   Sphere3DBasics copy();
 
    /**
     * Tests separately and on a per component basis if the pose and the radius of this sphere and
