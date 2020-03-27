@@ -30,6 +30,18 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    /**
     * Creates a new point shape and initializes its position.
     *
+    * @param x the value for the x-coordinate of this shape.
+    * @param y the value for the y-coordinate of this shape.
+    * @param z the value for the z-coordinate of this shape.
+    */
+   public PointShape3D(double x, double y, double z)
+   {
+      set(x, y, z);
+   }
+
+   /**
+    * Creates a new point shape and initializes its position.
+    *
     * @param tuple3DReadOnly the position of the point shape. Not modified.
     */
    public PointShape3D(Tuple3DReadOnly tuple3DReadOnly)
