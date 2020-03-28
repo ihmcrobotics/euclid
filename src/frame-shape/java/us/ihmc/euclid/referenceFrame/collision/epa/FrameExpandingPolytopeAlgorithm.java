@@ -1,52 +1,39 @@
-package us.ihmc.euclid.referenceFrame.collision.gjk;
+package us.ihmc.euclid.referenceFrame.collision.epa;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.collision.EuclidFrameShape3DCollisionResult;
+import us.ihmc.euclid.referenceFrame.collision.gjk.FrameGilbertJohnsonKeerthiCollisionDetector.SupportingVertexTransformer;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.SupportingFrameVertexHolder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
+import us.ihmc.euclid.shape.collision.epa.EPAFace3D;
 import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
 import us.ihmc.euclid.shape.collision.gjk.GJKSimplex3D;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public class FrameGilbertJohnsonKeerthiCollisionDetector
+public class FrameExpandingPolytopeAlgorithm
 {
    private final SupportingVertexTransformer supportingVertexTransformer = new SupportingVertexTransformer();
-   private final GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+   private final ExpandingPolytopeAlgorithm epaAlgorithm = new ExpandingPolytopeAlgorithm();
    private final RigidBodyTransform transform = new RigidBodyTransform();
    private ReferenceFrame detectorFrame;
-   private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(gjkCollisionDetector.getSupportDirection(),
+   private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(epaAlgorithm.getGJKCollisionDetector()
+                                                                                                                          .getSupportDirection(),
                                                                                                               () -> detectorFrame);
-   private final FrameVector3D initialSupportDirection = new FrameVector3D(null, Axis.Y);
+   private final FrameVector3D gjkInitialSupportDirection = new FrameVector3D(null, Axis.Y);
 
-   public FrameGilbertJohnsonKeerthiCollisionDetector()
+   public FrameExpandingPolytopeAlgorithm()
    {
-      initialSupportDirection.setToNaN();
    }
 
-   /**
-    * Evaluates the collision state between the two given shapes.
-    * <p>
-    * This algorithm does not evaluate the surface normals. In case the two shapes are colliding, this
-    * algorithm does not provide any further information. To obtain additional information such as the
-    * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
-    * </p>
-    *
-    * @param shapeA the first shape to evaluate. Not modified.
-    * @param shapeB the second shape to evaluate. Not modified.
-    * @return the collision result.
-    */
    public EuclidFrameShape3DCollisionResult evaluateCollision(FrameShape3DReadOnly shapeA, FrameShape3DReadOnly shapeB)
    {
       EuclidFrameShape3DCollisionResult result = new EuclidFrameShape3DCollisionResult();
@@ -57,9 +44,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
    /**
     * Evaluates the collision state between the two given shapes.
     * <p>
-    * This algorithm does not evaluate the surface normals. In case the two shapes are colliding, this
-    * algorithm does not provide any further information. To obtain additional information such as the
-    * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
+    * This algorithm does not evaluate the surface normals.
     * </p>
     *
     * @param shapeA       the first shape to evaluate. Not modified.
@@ -74,7 +59,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
       if (shapeA.getReferenceFrame() == shapeB.getReferenceFrame())
       {
          initializeGJK(shapeA.getReferenceFrame());
-         areColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
+         areColliding = epaAlgorithm.evaluateCollision(shapeA, shapeB, resultToPack);
       }
       else if (!shapeA.isPrimitive())
       {
@@ -108,7 +93,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
                FixedFrameShape3DBasics localShapeB = shapeB.copy();
                localShapeB.applyTransform(transform);
                initializeGJK(shapeA.getReferenceFrame());
-               areColliding = gjkCollisionDetector.evaluateCollision(shapeA, localShapeB, resultToPack);
+               areColliding = epaAlgorithm.evaluateCollision(shapeA, localShapeB, resultToPack);
             }
          }
       }
@@ -139,7 +124,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
             FixedFrameShape3DBasics localShapeA = shapeA.copy();
             localShapeA.applyTransform(transform);
             initializeGJK(shapeB.getReferenceFrame());
-            areColliding = gjkCollisionDetector.evaluateCollision((SupportingVertexHolder) shapeB, (SupportingVertexHolder) localShapeA, resultToPack);
+            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) shapeB, (SupportingVertexHolder) localShapeA, resultToPack);
             resultToPack.swapShapes();
          }
       }
@@ -154,7 +139,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
             FixedFrameShape3DBasics localShapeB = shapeB.copy();
             localShapeB.applyInverseTransform(transform);
             initializeGJK(shapeA.getReferenceFrame());
-            areColliding = gjkCollisionDetector.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
             resultToPack.applyTransform(shapeA.getPose());
          }
          else if (shapeB.isDefinedByPose())
@@ -166,7 +151,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
             FixedFrameShape3DBasics localShapeB = shapeB.copy();
             localShapeB.getPose().setToZero();
             initializeGJK(shapeB.getReferenceFrame());
-            areColliding = gjkCollisionDetector.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
             resultToPack.applyTransform(shapeB.getPose());
          }
          else
@@ -176,12 +161,14 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
             localShapeA.applyInverseTransform(transform);
             FixedFrameShape3DBasics localShapeB = shapeB.copy();
             initializeGJK(shapeB.getReferenceFrame());
-            areColliding = gjkCollisionDetector.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
          }
       }
 
       resultToPack.getPointOnA().setReferenceFrame(detectorFrame);
       resultToPack.getPointOnB().setReferenceFrame(detectorFrame);
+      resultToPack.getNormalOnA().setReferenceFrame(detectorFrame);
+      resultToPack.getNormalOnB().setReferenceFrame(detectorFrame);
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
 
@@ -191,16 +178,13 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
    /**
     * Evaluates the collision state between the two given shapes.
     * <p>
-    * This algorithm does not evaluate the surface normals. In case the two shapes are colliding, this
-    * algorithm does not provide any further information. To obtain additional information such as the
-    * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
+    * This algorithm does not evaluate the surface normals.
     * </p>
     *
     * @param shapeA the first shape to evaluate. Not modified.
     * @param shapeB the second shape to evaluate. Not modified.
     * @return the collision result.
     */
-
    public EuclidFrameShape3DCollisionResult evaluateCollision(SupportingFrameVertexHolder shapeA, SupportingFrameVertexHolder shapeB)
    {
       EuclidFrameShape3DCollisionResult result = new EuclidFrameShape3DCollisionResult();
@@ -211,9 +195,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
    /**
     * Evaluates the collision state between the two given shapes.
     * <p>
-    * This algorithm does not evaluate the surface normals. In case the two shapes are colliding, this
-    * algorithm does not provide any further information. To obtain additional information such as the
-    * collision vector for colliding shapes, see {@link ExpandingPolytopeAlgorithm}.
+    * This algorithm does not evaluate the surface normals.
     * </p>
     *
     * @param shapeA       the first shape to evaluate. Not modified.
@@ -229,6 +211,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
       boolean areColliding = evaluateCollision(shapeA, shapeB, transform, resultToPack);
       resultToPack.getPointOnA().setReferenceFrame(detectorFrame);
       resultToPack.getPointOnB().setReferenceFrame(detectorFrame);
+      resultToPack.getNormalOnA().setReferenceFrame(detectorFrame);
+      resultToPack.getNormalOnB().setReferenceFrame(detectorFrame);
       return areColliding;
    }
 
@@ -236,11 +220,11 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
    {
       this.detectorFrame = detectorFrame;
 
-      if (initialSupportDirection.getReferenceFrame() != null)
+      if (gjkInitialSupportDirection.getReferenceFrame() != null)
       {
-         initialSupportDirection.changeFrame(detectorFrame);
-         gjkCollisionDetector.setInitialSupportDirection(initialSupportDirection);
-         initialSupportDirection.setReferenceFrame(null);
+         gjkInitialSupportDirection.changeFrame(detectorFrame);
+         epaAlgorithm.getGJKCollisionDetector().setInitialSupportDirection(gjkInitialSupportDirection);
+         gjkInitialSupportDirection.setReferenceFrame(null);
       }
    }
 
@@ -248,32 +232,63 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
                                      EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
       supportingVertexTransformer.initialize(shapeA, transformFromAToB);
-      return gjkCollisionDetector.evaluateCollision(supportingVertexTransformer, shapeB, resultToPack);
+      return epaAlgorithm.evaluateCollision(supportingVertexTransformer, shapeB, resultToPack);
    }
 
-   public static class SupportingVertexTransformer implements SupportingVertexHolder
+   /**
+    * Sets the limit to the number of iterations in case the algorithm does not succeed to converge.
+    *
+    * @param maxIterations the maximum of iterations allowed before terminating.
+    */
+   public void setMaxIterations(int maxIterations)
    {
-      private final Vector3D localSupportDirection = new Vector3D();
-      private SupportingVertexHolder original;
-      private RigidBodyTransformReadOnly transform;
-
-      public void initialize(SupportingVertexHolder original, RigidBodyTransformReadOnly transform)
-      {
-         this.original = original;
-         this.transform = transform;
-      }
-
-      @Override
-      public boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
-      {
-         transform.inverseTransform(supportDirection, localSupportDirection);
-         boolean success = original.getSupportingVertex(localSupportDirection, supportingVertexToPack);
-         if (success)
-            transform.transform(supportingVertexToPack);
-         return success;
-      }
+      epaAlgorithm.setMaxIterations(maxIterations);
    }
 
+   /**
+    * Sets the tolerance used to trigger the termination condition of this algorithm.
+    *
+    * @param epsilon the terminal condition tolerance to use, default value
+    *                {@value ExpandingPolytopeAlgorithm#DEFAULT_TERMINAL_CONDITION_EPSILON}.
+    */
+   public void setTerminalConditionEpsilon(double epsilon)
+   {
+      epaAlgorithm.setTerminalConditionEpsilon(epsilon);
+   }
+
+   /**
+    * Gets the current value of the tolerance used to trigger the termination condition of this
+    * algorithm.
+    *
+    * @return the current terminal condition tolerance.
+    */
+   public double getTerminalConditionEpsilon()
+   {
+      return epaAlgorithm.getTerminalConditionEpsilon();
+   }
+
+   /**
+    * Gets the number of iterations needed for the last evaluation.
+    *
+    * @return the number of iterations from the last evaluation.
+    */
+   public int getNumberOfIterations()
+   {
+      return epaAlgorithm.getNumberOfIterations();
+   }
+
+   /**
+    * Gets the face that is the closest to the origin or at the origin resulting from the last
+    * collision evaluation.
+    *
+    * @return the last evaluation resulting face.
+    */
+   public EPAFace3D getClosestFace()
+   {
+      return epaAlgorithm.getClosestFace();
+   }
+
+   // GJK algorithm parameters
    /**
     * Sets the support direction to use for the first iteration of future evaluations.
     * <p>
@@ -284,9 +299,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     * @param initialSupportDirection the first support direction to use for future collision
     *                                evaluations. Not modified.
     */
-   public void setInitialSupportDirection(FrameVector3DReadOnly initialSupportDirection)
+   public void setGJKInitialSupportDirection(FrameVector3DReadOnly initialSupportDirection)
    {
-      this.initialSupportDirection.setIncludingFrame(initialSupportDirection);
+      this.gjkInitialSupportDirection.setIncludingFrame(initialSupportDirection);
    }
 
    /**
@@ -294,9 +309,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     *
     * @param maxIterations the maximum of iterations allowed before terminating.
     */
-   public void setMaxIterations(int maxIterations)
+   public void setGJKMaxIterations(int maxIterations)
    {
-      gjkCollisionDetector.setMaxIterations(maxIterations);
+      epaAlgorithm.getGJKCollisionDetector().setMaxIterations(maxIterations);
    }
 
    /**
@@ -305,9 +320,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     * @param epsilon the terminal condition tolerance to use, default value
     *                {@value GilbertJohnsonKeerthiCollisionDetector#DEFAULT_TERMINAL_CONDITION_EPSILON}.
     */
-   public void setTerminalConditionEpsilon(double epsilon)
+   public void setGJKTerminalConditionEpsilon(double epsilon)
    {
-      gjkCollisionDetector.setTerminalConditionEpsilon(epsilon);
+      epaAlgorithm.getGJKCollisionDetector().setTerminalConditionEpsilon(epsilon);
    }
 
    /**
@@ -324,9 +339,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     *                value
     *                {@value GilbertJohnsonKeerthiCollisionDetector#DEFAULT_EPSILON_SUPPORT_DIRECTION_SWITCH}.
     */
-   public void setEpsilonTriangleNormalSwitch(double epsilon)
+   public void setGJKEpsilonTriangleNormalSwitch(double epsilon)
    {
-      gjkCollisionDetector.setEpsilonTriangleNormalSwitch(epsilon);
+      epaAlgorithm.getGJKCollisionDetector().setEpsilonTriangleNormalSwitch(epsilon);
    }
 
    /**
@@ -335,9 +350,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     *
     * @return the current terminal condition tolerance.
     */
-   public double getTerminalConditionEpsilon()
+   public double getGJKTerminalConditionEpsilon()
    {
-      return gjkCollisionDetector.getTerminalConditionEpsilon();
+      return epaAlgorithm.getGJKCollisionDetector().getTerminalConditionEpsilon();
    }
 
    /**
@@ -348,7 +363,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     */
    public double getEpsilonTriangleNormalSwitch()
    {
-      return gjkCollisionDetector.getEpsilonTriangleNormalSwitch();
+      return epaAlgorithm.getGJKCollisionDetector().getEpsilonTriangleNormalSwitch();
    }
 
    /**
@@ -356,9 +371,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     *
     * @return the number of iterations from the last evaluation.
     */
-   public int getNumberOfIterations()
+   public int getGJKNumberOfIterations()
    {
-      return gjkCollisionDetector.getNumberOfIterations();
+      return epaAlgorithm.getGJKCollisionDetector().getNumberOfIterations();
    }
 
    /**
@@ -367,9 +382,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     *
     * @return the last evaluation resulting simplex.
     */
-   public GJKSimplex3D getSimplex()
+   public GJKSimplex3D getGJKSimplex()
    {
-      return gjkCollisionDetector.getSimplex();
+      return epaAlgorithm.getGJKCollisionDetector().getSimplex();
    }
 
    /**
@@ -377,7 +392,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     *
     * @return the last support direction.
     */
-   public FrameVector3DReadOnly getSupportDirection()
+   public FrameVector3DReadOnly getGJKSupportDirection()
    {
       return supportDirection;
    }
