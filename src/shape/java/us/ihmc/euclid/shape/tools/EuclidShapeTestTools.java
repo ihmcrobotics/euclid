@@ -1171,6 +1171,28 @@ public class EuclidShapeTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
+    * @param expected        the expected collision result. Not modified.
+    * @param actual          the actual collision result. Not modified.
+    * @param distanceEpsilon the tolerance to use when comparing distance.
+    * @param pointEpsilon    the tolerance to use when comparing points on shapes.
+    * @param normalEpsilon   the tolerance to use when comparing normals on shapes.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
+                                                                            double pointEpsilon, double normalEpsilon)
+   {
+      assertEuclidShape3DCollisionResultGeometricallyEquals(null, expected, actual, distanceEpsilon, pointEpsilon, normalEpsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
     * @param messagePrefix prefix to add to the automated message.
     * @param expected      the expected collision result. Not modified.
     * @param actual        the actual collision result. Not modified.
@@ -1182,6 +1204,29 @@ public class EuclidShapeTestTools
                                                                             EuclidShape3DCollisionResultReadOnly actual, double epsilon)
    {
       assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix   prefix to add to the automated message.
+    * @param expected        the expected collision result. Not modified.
+    * @param actual          the actual collision result. Not modified.
+    * @param distanceEpsilon the tolerance to use when comparing distance.
+    * @param pointEpsilon    the tolerance to use when comparing points on shapes.
+    * @param normalEpsilon   the tolerance to use when comparing normals on shapes.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
+                                                                            double pointEpsilon, double normalEpsilon)
+   {
+      assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, distanceEpsilon, pointEpsilon, normalEpsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -1203,14 +1248,58 @@ public class EuclidShapeTestTools
    public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
                                                                             EuclidShape3DCollisionResultReadOnly actual, double epsilon, String format)
    {
+      assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, epsilon, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix   prefix to add to the automated message.
+    * @param expected        the expected collision result. Not modified.
+    * @param actual          the actual collision result. Not modified.
+    * @param distanceEpsilon the tolerance to use when comparing distance.
+    * @param pointEpsilon    the tolerance to use when comparing points on shapes.
+    * @param normalEpsilon   the tolerance to use when comparing normals on shapes.
+    * @param format          the format to use for printing each component when an
+    *                        {@code AssertionError} is thrown.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
+                                                                            double pointEpsilon, double normalEpsilon, String format)
+   {
       if (expected == null && actual == null)
          return;
 
       if (!(expected != null && actual != null))
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
-      if (!expected.geometricallyEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      if (!expected.geometricallyEquals(actual, distanceEpsilon, pointEpsilon, normalEpsilon))
+      {
+         if (expected.areShapesColliding() != actual.areShapesColliding())
+         {
+            throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         }
+         else
+         {
+            Vector3D differenceNormalOnA = new Vector3D();
+            differenceNormalOnA.sub(expected.getNormalOnA(), actual.getNormalOnA());
+            Vector3D differenceNormalOnB = new Vector3D();
+            differenceNormalOnB.sub(expected.getNormalOnB(), actual.getNormalOnB());
+
+            String difference = "[";
+            difference += "distance: " + Math.abs(expected.getSignedDistance() - actual.getSignedDistance());
+            difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.length();
+            difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.length();
+            difference += "]";
+            throwNotEqualAssertionError(messagePrefix, expected, actual, format, difference);
+         }
+      }
    }
 
    /**

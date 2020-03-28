@@ -33,7 +33,7 @@ public interface EuclidFrameShape3DCollisionResultBasics extends EuclidFrameShap
    @Override
    default void setShapeA(Shape3DReadOnly shapeA)
    {
-      if (shapeA instanceof FrameShape3DReadOnly)
+      if (shapeA == null || shapeA instanceof FrameShape3DReadOnly)
          setFrameShapeA((FrameShape3DReadOnly) shapeA);
       else
          throw new IllegalArgumentException("This collision result only supports frame shapes.");
@@ -42,7 +42,7 @@ public interface EuclidFrameShape3DCollisionResultBasics extends EuclidFrameShap
    @Override
    default void setShapeB(Shape3DReadOnly shapeB)
    {
-      if (shapeB instanceof FrameShape3DReadOnly)
+      if (shapeB == null || shapeB instanceof FrameShape3DReadOnly)
          setFrameShapeB((FrameShape3DReadOnly) shapeB);
       else
          throw new IllegalArgumentException("This collision result only supports frame shapes.");
