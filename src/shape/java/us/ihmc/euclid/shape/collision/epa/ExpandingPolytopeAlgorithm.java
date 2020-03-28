@@ -9,6 +9,8 @@ import us.ihmc.euclid.shape.collision.gjk.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
@@ -111,10 +113,40 @@ public class ExpandingPolytopeAlgorithm
     */
    public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, GJKVertex3D[] simplex, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      boolean areShapesColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, simplex, resultToPack);
+      boolean areColliding;
+
+      if (!shapeA.isPrimitive() || !shapeB.isPrimitive())
+      { // If any of the 2 shapes is not a primitive, doing any copy or transform would probably be expensive. Using the generic approach.
+         areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      }
+      else if (shapeA.isDefinedByPose())
+      { // Transforming shapeB to be in the local frame of shapeA would save transformations.
+         Shape3DPoseReadOnly poseA = shapeA.getPose();
+         Shape3DBasics localShapeA = shapeA.copy();
+         localShapeA.getPose().setToZero();
+         Shape3DBasics localShapeB = shapeB.copy();
+         localShapeB.applyInverseTransform(poseA);
+         areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+         resultToPack.applyTransform(poseA);
+      }
+      else if (shapeB.isDefinedByPose())
+      { // Transforming shapeA to be in the local frame of shapeB would save transformations.
+         Shape3DPoseReadOnly poseB = shapeB.getPose();
+         Shape3DBasics localShapeA = shapeA.copy();
+         localShapeA.applyInverseTransform(poseB);
+         Shape3DBasics localShapeB = shapeB.copy();
+         localShapeB.getPose().setToZero();
+         areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+         resultToPack.applyTransform(poseB);
+      }
+      else
+      { // None of the 2 shapes is defined with a pose, using the generic algorithm.
+         areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      }
+
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
-      return areShapesColliding;
+      return areColliding;
    }
 
    /**
