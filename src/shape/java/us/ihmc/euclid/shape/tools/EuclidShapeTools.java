@@ -1269,7 +1269,7 @@ public class EuclidShapeTools
     */
    public static double computeRamp3DIncline(Vector3DReadOnly ramp3DSize)
    {
-      return computeRanp3DIncline(ramp3DSize.getX(), ramp3DSize.getZ());
+      return computeRamp3DIncline(ramp3DSize.getX(), ramp3DSize.getZ());
    }
 
    /**
@@ -1279,7 +1279,7 @@ public class EuclidShapeTools
     * @param ramp3DSizeZ the z-component of the ramp.
     * @return the slope angle.
     */
-   public static double computeRanp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
+   public static double computeRamp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
    {
       return EuclidCoreTools.atan(ramp3DSizeZ / ramp3DSizeX);
    }

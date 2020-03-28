@@ -169,7 +169,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    private void updateRamp(double x, double z)
    {
       rampLength = EuclidShapeTools.computeRamp3DLength(x, z);
-      angleOfRampIncline = EuclidShapeTools.computeRanp3DIncline(x, z);
+      angleOfRampIncline = EuclidShapeTools.computeRamp3DIncline(x, z);
    }
 
    /** {@inheritDoc} */
