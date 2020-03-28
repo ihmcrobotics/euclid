@@ -2226,4 +2226,79 @@ public class EuclidShapeTools
    {
       return edgeLength * EuclidCoreTools.sin(0.4 * Math.PI);
    }
+
+   /**
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * compare the two points by independently measuring the error along and orthogonal to a given
+    * normal vector.
+    * 
+    * @param expected          the expected value. Not modified.
+    * @param actual            the actual value. Not modified.
+    * @param normal            the normal vector used to measure the normal error and the tangential
+    *                          error. Not modified.
+    * @param normalEpsilon     the tolerance for the error along the normal vector.
+    * @param tangentialEpsilon the tolerance for the error orthogonal to the normal vector.
+    * @return {@code true} if the two points are considered to represent the same geometry,
+    *         {@code false} otherwise.
+    */
+   public static boolean geometricallyEquals(Point3DReadOnly expected, Point3DReadOnly actual, Vector3DReadOnly normal, double normalEpsilon,
+                                             double tangentialEpsilon)
+   {
+      double normalX = normal.getX();
+      double normalY = normal.getY();
+      double normalZ = normal.getZ();
+      return geometricallyEquals(expected, actual, normalX, normalY, normalZ, normalEpsilon, tangentialEpsilon);
+   }
+
+   /**
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * compare the two points by independently measuring the error along and orthogonal to a given
+    * normal vector.
+    * 
+    * @param expected          the expected value. Not modified.
+    * @param actual            the actual value. Not modified.
+    * @param normalX           the x-component of the normal vector used to measure the normal error
+    *                          and the tangential error. Not modified.
+    * @param normalY           the y-component of the normal vector used to measure the normal error
+    *                          and the tangential error. Not modified.
+    * @param normalZ           the z-component of the normal vector used to measure the normal error
+    *                          and the tangential error. Not modified.
+    * @param normalEpsilon     the tolerance for the error along the normal vector.
+    * @param tangentialEpsilon the tolerance for the error orthogonal to the normal vector.
+    * @return {@code true} if the two points are considered to represent the same geometry,
+    *         {@code false} otherwise.
+    */
+   public static boolean geometricallyEquals(Point3DReadOnly expected, Point3DReadOnly actual, double normalX, double normalY, double normalZ,
+                                             double normalEpsilon, double tangentialEpsilon)
+   {
+      double normalLengthSquared = EuclidCoreTools.normSquared(normalX, normalY, normalZ);
+
+      if (!EuclidCoreTools.epsilonEquals(1.0, normalLengthSquared, 1.0e-12))
+      {
+         double normalLengthInverse = 1.0 / EuclidCoreTools.fastSquareRoot(normalLengthSquared);
+         normalX *= normalLengthInverse;
+         normalY *= normalLengthInverse;
+         normalZ *= normalLengthInverse;
+      }
+
+      double errorX = expected.getX() - actual.getX();
+      double errorY = expected.getY() - actual.getY();
+      double errorZ = expected.getZ() - actual.getZ();
+
+      double errorNormal = errorX * normalX + errorY * normalY + errorZ * normalZ;
+
+      if (!EuclidCoreTools.isZero(errorNormal, normalEpsilon))
+         return false;
+
+      double errorNormalX = errorNormal * normalX;
+      double errorNormalY = errorNormal * normalY;
+      double errorNormalZ = errorNormal * normalZ;
+
+      double errorTangentialX = errorX - errorNormalX;
+      double errorTangentialY = errorY - errorNormalY;
+      double errorTangentialZ = errorZ - errorNormalZ;
+      double errorTangential = EuclidCoreTools.norm(errorTangentialX, errorTangentialY, errorTangentialZ);
+
+      return EuclidCoreTools.isZero(errorTangential, tangentialEpsilon);
+   }
 }

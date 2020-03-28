@@ -1171,19 +1171,23 @@ public class EuclidShapeTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param expected        the expected collision result. Not modified.
-    * @param actual          the actual collision result. Not modified.
-    * @param distanceEpsilon the tolerance to use when comparing distance.
-    * @param pointEpsilon    the tolerance to use when comparing points on shapes.
-    * @param normalEpsilon   the tolerance to use when comparing normals on shapes.
+    * @param expected               the expected collision result. Not modified.
+    * @param actual                 the actual collision result. Not modified.
+    * @param distanceEpsilon        the tolerance to use when comparing distance.
+    * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
+    *                               {@code pointOnB} in the plane perpendicular to the collision
+    *                               vector, i.e. {@code collisionVector = pointOnA - pointOnB}. The
+    *                               {@code distanceEpsilon} is used for comparing the points along the
+    *                               collision vector.
+    * @param normalEpsilon          the tolerance to use when comparing normals on shapes.
     * @throws AssertionError if the two collision results do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
    public static void assertEuclidShape3DCollisionResultGeometricallyEquals(EuclidShape3DCollisionResultReadOnly expected,
                                                                             EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
-                                                                            double pointEpsilon, double normalEpsilon)
+                                                                            double pointTangentialEpsilon, double normalEpsilon)
    {
-      assertEuclidShape3DCollisionResultGeometricallyEquals(null, expected, actual, distanceEpsilon, pointEpsilon, normalEpsilon, DEFAULT_FORMAT);
+      assertEuclidShape3DCollisionResultGeometricallyEquals(null, expected, actual, distanceEpsilon, pointTangentialEpsilon, normalEpsilon, DEFAULT_FORMAT);
    }
 
    /**
@@ -1213,20 +1217,30 @@ public class EuclidShapeTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param messagePrefix   prefix to add to the automated message.
-    * @param expected        the expected collision result. Not modified.
-    * @param actual          the actual collision result. Not modified.
-    * @param distanceEpsilon the tolerance to use when comparing distance.
-    * @param pointEpsilon    the tolerance to use when comparing points on shapes.
-    * @param normalEpsilon   the tolerance to use when comparing normals on shapes.
+    * @param messagePrefix          prefix to add to the automated message.
+    * @param expected               the expected collision result. Not modified.
+    * @param actual                 the actual collision result. Not modified.
+    * @param distanceEpsilon        the tolerance to use when comparing distance.
+    * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
+    *                               {@code pointOnB} in the plane perpendicular to the collision
+    *                               vector, i.e. {@code collisionVector = pointOnA - pointOnB}. The
+    *                               {@code distanceEpsilon} is used for comparing the points along the
+    *                               collision vector.
+    * @param normalEpsilon          the tolerance to use when comparing normals on shapes.
     * @throws AssertionError if the two collision results do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
    public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
                                                                             EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
-                                                                            double pointEpsilon, double normalEpsilon)
+                                                                            double pointTangentialEpsilon, double normalEpsilon)
    {
-      assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, distanceEpsilon, pointEpsilon, normalEpsilon, DEFAULT_FORMAT);
+      assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix,
+                                                            expected,
+                                                            actual,
+                                                            distanceEpsilon,
+                                                            pointTangentialEpsilon,
+                                                            normalEpsilon,
+                                                            DEFAULT_FORMAT);
    }
 
    /**
@@ -1258,20 +1272,24 @@ public class EuclidShapeTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
-    * @param messagePrefix   prefix to add to the automated message.
-    * @param expected        the expected collision result. Not modified.
-    * @param actual          the actual collision result. Not modified.
-    * @param distanceEpsilon the tolerance to use when comparing distance.
-    * @param pointEpsilon    the tolerance to use when comparing points on shapes.
-    * @param normalEpsilon   the tolerance to use when comparing normals on shapes.
-    * @param format          the format to use for printing each component when an
-    *                        {@code AssertionError} is thrown.
+    * @param messagePrefix          prefix to add to the automated message.
+    * @param expected               the expected collision result. Not modified.
+    * @param actual                 the actual collision result. Not modified.
+    * @param distanceEpsilon        the tolerance to use when comparing distance.
+    * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
+    *                               {@code pointOnB} in the plane perpendicular to the collision
+    *                               vector, i.e. {@code collisionVector = pointOnA - pointOnB}. The
+    *                               {@code distanceEpsilon} is used for comparing the points along the
+    *                               collision vector.
+    * @param normalEpsilon          the tolerance to use when comparing normals on shapes.
+    * @param format                 the format to use for printing each component when an
+    *                               {@code AssertionError} is thrown.
     * @throws AssertionError if the two collision results do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
    public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
                                                                             EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
-                                                                            double pointEpsilon, double normalEpsilon, String format)
+                                                                            double pointTangentialEpsilon, double normalEpsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1279,7 +1297,7 @@ public class EuclidShapeTestTools
       if (!(expected != null && actual != null))
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
-      if (!expected.geometricallyEquals(actual, distanceEpsilon, pointEpsilon, normalEpsilon))
+      if (!expected.geometricallyEquals(actual, distanceEpsilon, pointTangentialEpsilon, normalEpsilon))
       {
          if (expected.areShapesColliding() != actual.areShapesColliding())
          {
