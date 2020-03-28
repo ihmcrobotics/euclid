@@ -23,6 +23,11 @@ public class FramePointShape3D implements FramePointShape3DBasics, GeometryObjec
       setToZero(referenceFrame);
    }
 
+   public FramePointShape3D(ReferenceFrame referenceFrame, double x, double y, double z)
+   {
+      setIncludingFrame(referenceFrame, x, y, z);
+   }
+
    public FramePointShape3D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
    {
       setIncludingFrame(referenceFrame, tuple3DReadOnly);
