@@ -679,10 +679,26 @@ public class EuclidFrameAPITester
 
             Method setterMethod = findCorrespondingSetterToSetMatchingIncludingFrame(frameType, matchingFrameMethod);
 
+            int retryCounter = 0;
+
             for (int iteration = 0; iteration < numberOfIterations; iteration++)
             {
                Object[] matchingFrameMethodParameters = ReflectionBasedBuilders.next(random, frameA, matchingFrameMethod.getParameterTypes());
+
                Object[] setterMethodParameters = ReflectionBasedBuilders.clone(matchingFrameMethodParameters);
+               if (setterMethodParameters == null)
+               {
+                  System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(matchingFrameMethod) + "\n\tparameters: "
+                        + getArgumentTypeString(matchingFrameMethodParameters));
+                  retryCounter++;
+                  if (retryCounter > 50)
+                     throw new AssertionError("Retried too many times, aborting.");
+                  else
+                     System.out.println("Retrying.");
+                  iteration--;
+                  continue;
+               }
+
                boolean isLastParameterToCheck2DTransform = is2DType(frameType)
                      && matchingFrameMethod.getParameterTypes()[matchingFrameMethod.getParameterCount() - 1] == boolean.class;
 
@@ -721,6 +737,18 @@ public class EuclidFrameAPITester
                      setterObject = frameTypeBuilder.newInstance(random, frameB);
 
                      Object[] localSetterMethodParameters = ReflectionBasedBuilders.clone(setterMethodParameters);
+                     if (setterMethodParameters == null)
+                     {
+                        System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(matchingFrameMethod) + "\n\tparameters: "
+                              + getArgumentTypeString(matchingFrameMethodParameters));
+                        retryCounter++;
+                        if (retryCounter > 50)
+                           throw new AssertionError("Retried too many times, aborting.");
+                        else
+                           System.out.println("Retrying.");
+                        iteration--;
+                        continue;
+                     }
 
                      for (int paramIndex = 0; paramIndex < localSetterMethodParameters.length; paramIndex++)
                      {
@@ -847,10 +875,24 @@ public class EuclidFrameAPITester
 
             Method setterMethod = findCorrespondingSetterToSetMatchingIncludingFrame(frameType, includingFrameMethod);
 
+            int retryCounter = 0;
+
             for (int iteration = 0; iteration < numberOfIterations; iteration++)
             {
                Object[] includingFrameMethodParameters = ReflectionBasedBuilders.next(random, frameA, includingFrameMethod.getParameterTypes());
                Object[] setterMethodParameters = ReflectionBasedBuilders.clone(includingFrameMethodParameters);
+               if (setterMethodParameters == null)
+               {
+                  System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(includingFrameMethod) + "\n\tparameters: "
+                        + getArgumentTypeString(includingFrameMethodParameters));
+                  retryCounter++;
+                  if (retryCounter > 50)
+                     throw new AssertionError("Retried too many times, aborting.");
+                  else
+                     System.out.println("Retrying.");
+                  iteration--;
+                  continue;
+               }
 
                if (includingFrameMethod.getParameterTypes()[0] == ReferenceFrame.class)
                {
@@ -1506,6 +1548,8 @@ public class EuclidFrameAPITester
                framelessMethodParameterTypes[i] = frameMethodParameterTypes[i];
          }
 
+         int retryCounter = 0;
+
          for (int iteration = 0; iteration < numberOfIterations; iteration++)
          {
             try
@@ -1524,6 +1568,18 @@ public class EuclidFrameAPITester
                }
 
                Object[] framelessMethodParameters = ReflectionBasedBuilders.clone(frameMethodParameters);
+               if (framelessMethodParameters == null)
+               {
+                  System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(frameMethod) + "\n\tparameters: "
+                        + getArgumentTypeString(frameMethodParameters));
+                  retryCounter++;
+                  if (retryCounter > 50)
+                     throw new AssertionError("Retried too many times, aborting.");
+                  else
+                     System.out.println("Retrying.");
+                  iteration--;
+                  continue;
+               }
                Throwable expectedException = null;
                Object framelessMethodReturnObject = null;
                Object frameMethodReturnObject = null;
@@ -1624,6 +1680,8 @@ public class EuclidFrameAPITester
                framelessMethodParameterTypes[i] = frameMethodParameterTypes[i];
          }
 
+         int retryCounter = 0;
+
          for (int iteration = 0; iteration < numberOfIterations; iteration++)
          {
             Object framelessObject = framelessTypeBuilber.newInstance(random);
@@ -1646,6 +1704,18 @@ public class EuclidFrameAPITester
                }
 
                Object[] framelessMethodParameters = ReflectionBasedBuilders.clone(frameMethodParameters);
+               if (framelessMethodParameters == null)
+               {
+                  System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(frameMethod) + "\n\tparameters: "
+                        + getArgumentTypeString(frameMethodParameters));
+                  retryCounter++;
+                  if (retryCounter > 50)
+                     throw new AssertionError("Retried too many times, aborting.");
+                  else
+                     System.out.println("Retyring.");
+                  iteration--;
+                  continue;
+               }
                Throwable expectedException = null;
                Object framelessMethodReturnObject = null;
                Object frameMethodReturnObject = null;

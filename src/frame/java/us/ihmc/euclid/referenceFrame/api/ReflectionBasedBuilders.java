@@ -225,11 +225,14 @@ public class ReflectionBasedBuilders
             }
             catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException e)
             {
-               throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName(), e);
+               System.err.println("Unhandled type: " + parameterType.getSimpleName());
+               return null;
             }
             catch (InvocationTargetException e)
             {
-               throw new RuntimeException("Unhandled type: " + parameterType.getSimpleName(), e.getTargetException());
+               System.err.println("Unhandled type: " + parameterType.getSimpleName());
+               e.getTargetException().printStackTrace();
+               return null;
             }
          }
       }
