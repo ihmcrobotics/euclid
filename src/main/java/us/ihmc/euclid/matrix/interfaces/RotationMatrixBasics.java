@@ -8,8 +8,26 @@ import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
+/**
+ * Write and read interface used for 3-by-3 rotation matrices.
+ * <p>
+ * A rotation matrix is used to represent a 3D orientation through its 9 coefficients. A rotation
+ * matrix has to comply to several constraints:
+ * <ul>
+ * <li>each column of the matrix represents a unitary vector,
+ * <li>each row of the matrix represents a unitary vector,
+ * <li>every pair of columns of the matrix represents two orthogonal vectors,
+ * <li>every pair of rows of the matrix represents two orthogonal vectors,
+ * <li>the matrix determinant is equal to {@code 1}.
+ * </ul>
+ * A rotation matrix has the nice property <i>R<sup>T</sup> = R<sup>-1</sup></i>.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatrixReadOnly, Orientation3DBasics, Transformable
 {
+   /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
    {
@@ -50,6 +68,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
       transpose();
    }
 
+   /** {@inheritDoc} */
    @Override
    default void normalize()
    {
@@ -141,6 +160,13 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
       normalize();
    }
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * If the argument implements {@link RotationMatrixReadOnly}, a redirection
+    * {@link #set(RotationMatrixReadOnly)} is done.
+    * </p>
+    */
    @Override
    default void set(Matrix3DReadOnly other)
    {
@@ -150,6 +176,13 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
          CommonMatrix3DBasics.super.set(other);
    }
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * If the argument implements {@link RotationMatrixReadOnly}, a redirection
+    * {@link #set(RotationMatrixReadOnly)} is done.
+    * </p>
+    */
    @Override
    default void set(Orientation3DReadOnly orientation3DReadOnly)
    {
@@ -159,6 +192,12 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
          orientation3DReadOnly.get(this);
    }
 
+   /**
+    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags for the other
+    * matrix.
+    * 
+    * @param other the other rotation matrix to copy.
+    */
    void set(RotationMatrixReadOnly other);
 
    /**

@@ -17,7 +17,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
 /**
- * Read interface used for 3-by-3 rotation matrices.
+ * Read-only interface used for 3-by-3 rotation matrices.
  * <p>
  * A rotation matrix is used to represent a 3D orientation through its 9 coefficients. A rotation
  * matrix has to comply to several constraints:
@@ -35,6 +35,15 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  */
 public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DReadOnly
 {
+   /**
+    * Returns the state of this matrix dirty flag.
+    * <p>
+    * This matrix is matrix is marked as dirty to indicate its values have been updated and not yet
+    * propagated to this matrix features.
+    * </p>
+    * 
+    * @return the current value of the dirty flag.
+    */
    boolean isDirty();
 
    /** {@inheritDoc} */

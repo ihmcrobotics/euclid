@@ -626,7 +626,6 @@ public class EuclidCoreRandomTools
     * </p>
     *
     * @param random   the random generator to use.
-    * @param maxScale the maximum scale value used for each scale factor.
     * @return the random rotation-scale matrix.
     * @throws RuntimeException if {@code maxScale < 0}.
     */
