@@ -2,10 +2,15 @@ package us.ihmc.euclid.shape.primitives;
 
 import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedVector3DReadOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -20,10 +25,65 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPose>
 {
+   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
+
    /** The orientation part. */
-   private final RotationMatrix shapeOrientation = new RotationMatrix();
+   private final RotationMatrix shapeOrientation = new RotationMatrix()
+   {
+      @Override
+      public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+      {
+         super.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         notifyChangeListeners();
+      };
+
+      @Override
+      public void set(RotationMatrixReadOnly other)
+      {
+         super.set(other);
+         notifyChangeListeners();
+      };
+
+      @Override
+      public void transpose()
+      {
+         super.transpose();
+         notifyChangeListeners();
+      };
+   };
    /** The position part. */
-   private final Point3D shapePosition = new Point3D();
+   private final Point3D shapePosition = new Point3D()
+   {
+      @Override
+      public void setX(double x)
+      {
+         if (x != getX())
+         {
+            super.setX(x);
+            notifyChangeListeners();
+         }
+      };
+
+      @Override
+      public void setY(double y)
+      {
+         if (y != getY())
+         {
+            super.setY(y);
+            notifyChangeListeners();
+         }
+      };
+
+      @Override
+      public void setZ(double z)
+      {
+         if (z != getZ())
+         {
+            super.setZ(z);
+            notifyChangeListeners();
+         }
+      };
+   };
 
    /** Vector linked to the components of the x-axis unit-vector. */
    private final Vector3DReadOnly xAxis = newLinkedVector3DReadOnly(shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20);
@@ -100,6 +160,30 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
    public Vector3DReadOnly getZAxis()
    {
       return zAxis;
+   }
+
+   public void notifyChangeListeners()
+   {
+      for (int i = 0; i < changeListeners.size(); i++)
+         changeListeners.get(i).changed();
+   }
+
+   public void addChangeListeners(List<Shape3DChangeListener> listeners)
+   {
+      for (int i = 0; i < listeners.size(); i++)
+      {
+         addChangeListener(listeners.get(i));
+      }
+   }
+
+   public void addChangeListener(Shape3DChangeListener listener)
+   {
+      changeListeners.add(listener);
+   }
+
+   public boolean removeChangeListener(Shape3DChangeListener listener)
+   {
+      return changeListeners.remove(listener);
    }
 
    @Override
