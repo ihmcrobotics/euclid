@@ -32,6 +32,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 
 /**
  * Default API tester configuration that includes the types of the {@code euclid-frame} project.
@@ -65,7 +66,7 @@ public class EuclidFrameAPIDefaultConfiguration implements EuclidFrameAPITestCon
       testerToConfigure.registerReadOnlyFrameTypeSmart(FrameVertex2DSupplier.class);
       testerToConfigure.registerReadOnlyFrameTypeSmart(FrameVertex3DSupplier.class);
 
-      testerToConfigure.registerFramelessTypeSmart(AxisAngleBasics.class);
+      testerToConfigure.registerFramelessTypesSmart(AxisAngleBasics.class, RigidBodyTransformBasics.class);
       testerToConfigure.registerFramelessType(RotationScaleMatrix.class, RotationScaleMatrixReadOnly.class);
    }
 }
