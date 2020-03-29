@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -1282,6 +1283,50 @@ public class EuclidShapeTools
    public static double computeRamp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
    {
       return EuclidCoreTools.atan(ramp3DSizeZ / ramp3DSizeX);
+   }
+
+   /**
+    * Computes the centroid of a ramp of the given size.
+    * 
+    * @param ramp3DPose     the pose of the ramp. Not modified.
+    * @param size           the ramp's size. Not modified.
+    * @param centroidToPack the object used to store the result. Modified.
+    */
+   public static void computeRamp3DCentroid(Shape3DPoseReadOnly ramp3DPose, Vector3DReadOnly size, Point3DBasics centroidToPack)
+   {
+      double xLocal = 2.0 / 3.0 * size.getX();
+      double yLocal = 0.0;
+      double zLocal = 1.0 / 3.0 * size.getZ();
+
+      if (ramp3DPose == null)
+      {
+         centroidToPack.set(xLocal, yLocal, zLocal);
+      }
+      else
+      {
+         double xWorld, yWorld, zWorld;
+
+         if (ramp3DPose.hasRotation())
+         {
+            RotationMatrixReadOnly ramp3DRotation = ramp3DPose.getRotation();
+
+            xWorld = ramp3DRotation.getM00() * xLocal + ramp3DRotation.getM02() * zLocal;
+            yWorld = ramp3DRotation.getM10() * xLocal + ramp3DRotation.getM12() * zLocal;
+            zWorld = ramp3DRotation.getM20() * xLocal + ramp3DRotation.getM22() * zLocal;
+         }
+         else
+         {
+            xWorld = xLocal;
+            yWorld = yLocal;
+            zWorld = zLocal;
+         }
+
+         xWorld += ramp3DPose.getTranslationX();
+         yWorld += ramp3DPose.getTranslationY();
+         zWorld += ramp3DPose.getTranslationZ();
+
+         centroidToPack.set(xWorld, yWorld, zWorld);
+      }
    }
 
    /**
