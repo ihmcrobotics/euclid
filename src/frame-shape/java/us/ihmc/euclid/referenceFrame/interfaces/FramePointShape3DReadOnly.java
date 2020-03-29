@@ -6,6 +6,18 @@ import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 
 public interface FramePointShape3DReadOnly extends PointShape3DReadOnly, FrameShape3DReadOnly, FramePoint3DReadOnly
 {
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this point shape.
+    * </p>
+    */
+   @Override
+   default FramePoint3DReadOnly getCentroid()
+   {
+      return this;
+   }
+
    @Override
    default double distance(FramePoint3DReadOnly point)
    {

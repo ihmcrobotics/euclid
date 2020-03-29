@@ -63,6 +63,18 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    }
 
    /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this box.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
+   /**
     * Gets the intermediate variable supplier that can be used for performing operations in either a
     * garbage-free of thread-safe manner.
     *

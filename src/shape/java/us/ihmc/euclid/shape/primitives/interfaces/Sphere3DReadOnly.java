@@ -34,6 +34,18 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
     */
    Point3DReadOnly getPosition();
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this sphere.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()

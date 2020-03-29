@@ -61,6 +61,18 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
    Vector3DReadOnly getAxis();
 
    /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this cylinder.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
+   /**
     * Gets the read-only reference to the center of the top cap.
     * <p>
     * WARNING: The default implementation of this method generates garbage.

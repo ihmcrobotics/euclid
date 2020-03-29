@@ -14,6 +14,18 @@ public interface FrameSphere3DReadOnly extends Sphere3DReadOnly, FrameShape3DRea
    @Override
    FramePoint3DReadOnly getPosition();
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this sphere.
+    * </p>
+    */
+   @Override
+   default FramePoint3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
    default int intersectionWith(FrameLine3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);

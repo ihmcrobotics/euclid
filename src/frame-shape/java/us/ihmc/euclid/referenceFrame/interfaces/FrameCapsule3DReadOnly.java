@@ -14,6 +14,18 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
    @Override
    FrameVector3DReadOnly getAxis();
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this capsule.
+    * </p>
+    */
+   @Override
+   default FramePoint3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
    @Override
    default FramePoint3DReadOnly getTopCenter()
    {

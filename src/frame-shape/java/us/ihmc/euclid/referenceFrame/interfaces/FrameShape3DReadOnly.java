@@ -11,6 +11,15 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVertexHolder
 {
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this cylinder.
+    * </p>
+    */
+   @Override
+   FramePoint3DReadOnly getCentroid();
+   
    default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, FixedFramePoint3DBasics closestPointOnSurfaceToPack,
                                             FixedFrameVector3DBasics normalAtClosestPointToPack)
    {

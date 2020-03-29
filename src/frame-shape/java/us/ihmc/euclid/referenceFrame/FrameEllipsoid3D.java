@@ -11,24 +11,50 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeFactories;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<FrameEllipsoid3D>
 {
    private ReferenceFrame referenceFrame;
-   private final FixedFrameShape3DPoseBasics pose = EuclidFrameShapeFactories.newFixedFrameShape3DPoseBasics(this);
+   private final FixedFrameShape3DPose pose = new FixedFrameShape3DPose(this);
    /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
    /**
     * Represents the radiusX, radiusY, and radiusZ of this ellipsoid.
     */
-   private final FixedFrameVector3DBasics radii = EuclidFrameShapeFactories.newPositiveFixedFrameVector3DBasics(this);
+   private final FixedFrameVector3DBasics radii = EuclidFrameFactories.newLinkedFixedFrameVector3DBasics(this, new Vector3D()
+   {
+      @Override
+      public void setX(double x)
+      {
+         if (x < 0.0)
+            throw new IllegalArgumentException("The x-radius of an FrameEllipsoid3D cannot be negative: " + x);
+         super.setX(x);
+      }
+
+      @Override
+      public void setY(double y)
+      {
+         if (y < 0.0)
+            throw new IllegalArgumentException("The y-radius of an FrameEllipsoid3D cannot be negative: " + y);
+         super.setY(y);
+      }
+
+      @Override
+      public void setZ(double z)
+      {
+         if (z < 0.0)
+            throw new IllegalArgumentException("The z-radius of an FrameEllipsoid3D cannot be negative: " + z);
+         super.setZ(z);
+      }
+   });
 
    public FrameEllipsoid3D()
    {

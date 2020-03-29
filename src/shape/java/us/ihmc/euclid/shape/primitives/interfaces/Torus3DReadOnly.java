@@ -48,6 +48,18 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
     */
    Vector3DReadOnly getAxis();
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this torus.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()

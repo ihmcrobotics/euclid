@@ -29,6 +29,18 @@ public interface FrameEllipsoid3DReadOnly extends Ellipsoid3DReadOnly, FrameShap
       return getPose().getShapePosition();
    }
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this ellipsoid.
+    * </p>
+    */
+   @Override
+   default FramePoint3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
    default int intersectionWith(FrameLine3DReadOnly line, Point3DBasics firstIntersectionToPack, Point3DBasics secondIntersectionToPack)
    {
       return intersectionWith(line.getPoint(), line.getDirection(), firstIntersectionToPack, secondIntersectionToPack);

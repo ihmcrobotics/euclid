@@ -16,6 +16,18 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
 {
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this point shape.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return this;
+   }
+
    /** {@inheritDoc} */
    @Override
    default double distance(Point3DReadOnly point)

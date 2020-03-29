@@ -17,6 +17,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public interface Shape3DReadOnly extends SupportingVertexHolder
 {
    /**
+    * Gets the position of this shape centroid.
+    * 
+    * @return this shape centroid.
+    */
+   Point3DReadOnly getCentroid();
+
+   /**
     * Tests whether this shape contains at least one {@link Double#NaN} or not.
     *
     * @return {@code true} if this shape contains {@link Double#NaN}, {@code false} otherwise.

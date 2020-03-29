@@ -18,6 +18,18 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
    @Override
    FrameVector3DReadOnly getAxis();
 
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this cylinder.
+    * </p>
+    */
+   @Override
+   default FramePoint3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
+
    @Override
    default FramePoint3DReadOnly getTopCenter()
    {

@@ -1,15 +1,20 @@
 package us.ihmc.euclid.shape.primitives;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -43,31 +48,41 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       @Override
       public void setX(double x)
       {
-         if (x < 0.0)
-            throw new IllegalArgumentException("The x-size of a Ramp3D cannot be negative: " + x);
          if (x != getX())
-            updateRamp(x, getZ());
-         super.setX(x);
+         {
+            if (x < 0.0)
+               throw new IllegalArgumentException("The x-size of a Ramp3D cannot be negative: " + x);
+            super.setX(x);
+            notifyChangeListeners();
+         }
       }
 
       @Override
       public void setY(double y)
       {
-         if (y < 0.0)
-            throw new IllegalArgumentException("The y-size of a Ramp3D cannot be negative: " + y);
-         super.setY(y);
+         if (y != getY())
+         {
+            if (y < 0.0)
+               throw new IllegalArgumentException("The y-size of a Ramp3D cannot be negative: " + y);
+            super.setY(y);
+            notifyChangeListeners();
+         }
       }
 
       @Override
       public void setZ(double z)
       {
-         if (z < 0.0)
-            throw new IllegalArgumentException("The z-size of a Ramp3D cannot be negative: " + z);
          if (z != getZ())
-            updateRamp(getX(), z);
-         super.setZ(z);
+         {
+            if (z < 0.0)
+               throw new IllegalArgumentException("The z-size of a Ramp3D cannot be negative: " + z);
+            super.setZ(z);
+            notifyChangeListeners();
+         }
       }
    };
+
+   private boolean rampFeaturesDirty = true;
 
    /** Length of the slope face of this ramp. */
    private double rampLength;
@@ -76,6 +91,34 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     * face.
     */
    private double angleOfRampIncline;
+
+   private boolean centroidDirty = true;
+
+   private final Point3D centroid = new Point3D()
+   {
+      @Override
+      public double getX()
+      {
+         updateCentroid();
+         return super.getX();
+      };
+
+      @Override
+      public double getY()
+      {
+         updateCentroid();
+         return super.getY();
+      };
+
+      @Override
+      public double getZ()
+      {
+         updateCentroid();
+         return super.getZ();
+      };
+   };
+
+   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
 
    /**
     * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0}.
@@ -97,6 +140,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D(double sizeX, double sizeY, double sizeZ)
    {
       setSize(sizeX, sizeY, sizeZ);
+      setupListeners();
    }
 
    /**
@@ -113,6 +157,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       set(position, orientation, sizeX, sizeY, sizeZ);
+      setupListeners();
    }
 
    /**
@@ -128,6 +173,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       set(pose, sizeX, sizeY, sizeZ);
+      setupListeners();
    }
 
    /**
@@ -143,6 +189,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       set(pose, sizeX, sizeY, sizeZ);
+      setupListeners();
    }
 
    /**
@@ -153,6 +200,33 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D(Ramp3DReadOnly other)
    {
       set(other);
+      setupListeners();
+   }
+
+   private void setupListeners()
+   {
+      changeListeners.add(() -> rampFeaturesDirty = true);
+      changeListeners.add(() -> centroidDirty = true);
+      pose.addChangeListeners(changeListeners);
+   }
+
+   private void updateRamp()
+   {
+      if (!rampFeaturesDirty)
+         return;
+
+      rampLength = EuclidShapeTools.computeRamp3DLength(size.getX(), size.getZ());
+      angleOfRampIncline = EuclidShapeTools.computeRamp3DIncline(size.getX(), size.getZ());
+      rampFeaturesDirty = false;
+   }
+
+   private void updateCentroid()
+   {
+      if (!centroidDirty)
+         return;
+
+      EuclidShapeTools.computeRamp3DCentroid(pose, size, centroid);
+      centroidDirty = false;
    }
 
    /**
@@ -164,12 +238,6 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public void set(Ramp3D other)
    {
       Ramp3DBasics.super.set(other);
-   }
-
-   private void updateRamp(double x, double z)
-   {
-      rampLength = EuclidShapeTools.computeRamp3DLength(x, z);
-      angleOfRampIncline = EuclidShapeTools.computeRamp3DIncline(x, z);
    }
 
    /** {@inheritDoc} */
@@ -184,6 +252,20 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Vector3DBasics getSize()
    {
       return size;
+   }
+
+   @Override
+   public Point3DReadOnly getCentroid()
+   {
+      return centroid;
+   }
+
+   public void notifyChangeListeners()
+   {
+      for (int i = 0; i < changeListeners.size(); i++)
+      {
+         changeListeners.get(i).changed();
+      }
    }
 
    /** {@inheritDoc} */
@@ -212,6 +294,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    @Override
    public double getRampLength()
    {
+      updateRamp();
       return rampLength;
    }
 
@@ -226,6 +309,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    @Override
    public double getRampIncline()
    {
+      updateRamp();
       return angleOfRampIncline;
    }
 

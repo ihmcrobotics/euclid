@@ -148,6 +148,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     *
     * @return this polytope centroid location.
     */
+   @Override
    Point3DReadOnly getCentroid();
 
    /**
