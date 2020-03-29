@@ -39,6 +39,11 @@ public class GilbertJohnsonKeerthiCollisionDetector
    /** The default value for the tolerance used to trigger the terminal condition. */
    public static final double DEFAULT_TERMINAL_CONDITION_EPSILON = 1.0e-16;
    /**
+    * When a component of the support direction is exactly zero, this is used to wiggle around zero to
+    * force edge-cases to trigger.
+    */
+   private static final double SUPPORT_DIRECTION_ZERO_COMPONENT = 1.234e-16;
+   /**
     * The default value for the tolerance used to switch method for obtaining the next support
     * direction.
     */
@@ -201,6 +206,22 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
             if (previousOutput.contains(newVertex))
             {
+               if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setX(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+               else if (supportDirection.getY() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setY(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+               else if (supportDirection.getZ() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setZ(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+
                simplex = previousOutput;
                areColliding = false;
                if (VERBOSE)
@@ -252,6 +273,14 @@ public class GilbertJohnsonKeerthiCollisionDetector
                supportDirection.set(output.getTriangleNormal());
             else
                supportDirection.setAndNegate(output.getClosestPointToOrigin());
+
+            if (supportDirection.getX() == 0.0)
+               supportDirection.setX(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getY() == 0.0)
+               supportDirection.setY(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getZ() == 0.0)
+               supportDirection.setZ(SUPPORT_DIRECTION_ZERO_COMPONENT);
+
             vertexA = shapeA.getSupportingVertex(supportDirection);
             supportDirection.negate();
             vertexB = shapeB.getSupportingVertex(supportDirection);

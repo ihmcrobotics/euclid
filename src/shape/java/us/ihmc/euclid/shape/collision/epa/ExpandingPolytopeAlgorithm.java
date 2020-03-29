@@ -39,7 +39,6 @@ public class ExpandingPolytopeAlgorithm
    private static final boolean VERBOSE = false;
    /** The default value for the tolerance used to trigger the terminal condition. */
    public static final double DEFAULT_TERMINAL_CONDITION_EPSILON = 1.0e-12;
-
    /**
     * When a component of the support direction is exactly zero, this is used to wiggle around zero to
     * force edge-cases to trigger.
@@ -253,11 +252,20 @@ public class ExpandingPolytopeAlgorithm
             if (entry.contains(newVertex))
             {
                if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
                   supportDirection.setX(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
                else if (supportDirection.getY() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
                   supportDirection.setY(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
                else if (supportDirection.getZ() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
                   supportDirection.setZ(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
 
                if (VERBOSE)
                   System.out.println("New vertex equals to a vertex of entry, terminating.");
