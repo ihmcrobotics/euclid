@@ -31,11 +31,11 @@ import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 public class EuclidFrameShapeAPIDefaultConfiguration extends EuclidFrameAPIDefaultConfiguration
 {
    @Override
-   public void configure(EuclidFrameAPITester testerToConfigure, ReflectionBasedBuilders buildersToConfigure)
+   public void configure(EuclidFrameAPITester testerToConfigure, ReflectionBasedBuilder builderToConfigure)
    {
-      super.configure(testerToConfigure, buildersToConfigure);
+      super.configure(testerToConfigure, builderToConfigure);
 
-      buildersToConfigure.registerRandomGeneratorClasses(EuclidFrameShapeRandomTools.class, EuclidShapeRandomTools.class);
+      builderToConfigure.registerRandomGeneratorClasses(EuclidFrameShapeRandomTools.class, EuclidShapeRandomTools.class);
       testerToConfigure.registerFramelessTypesSmart(Torus3DBasics.class);
       testerToConfigure.registerFrameTypesSmart(FrameBox3DBasics.class,
                                                 FrameCapsule3DBasics.class,

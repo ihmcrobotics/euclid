@@ -20,8 +20,6 @@ import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
-import us.ihmc.euclid.transform.AffineTransform;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 
 /**
  * The class provides tools for generating random objects and cloning them.
@@ -38,12 +36,18 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  * @see EuclidFrameAPITester
  * @author Sylvain Bertrand
  */
-public class ReflectionBasedBuilders
+public class ReflectionBasedBuilder
 {
    private final Map<Class<?>, RandomFrameTypeBuilder> frameTypeBuilders = new HashMap<>();
    private final Map<Class<?>, RandomFramelessTypeBuilder> framelessTypeBuilders = new HashMap<>();
 
-   public ReflectionBasedBuilders()
+   /**
+    * Create a new builder.
+    * <p>
+    * Custom random generators can be registered.
+    * </p>
+    */
+   public ReflectionBasedBuilder()
    {
       framelessTypeBuilders.put(double.class, random -> EuclidCoreRandomTools.nextDouble(random, 10.0));
       framelessTypeBuilders.put(float.class, random -> (float) EuclidCoreRandomTools.nextDouble(random, 10.0));
@@ -59,21 +63,43 @@ public class ReflectionBasedBuilders
       framelessTypeBuilders.put(char[].class, random -> nextCharArray(random));
       framelessTypeBuilders.put(long[].class, random -> random.longs(20, -100, 100).toArray());
 
-      framelessTypeBuilders.put(AffineTransform.class, random -> EuclidCoreRandomTools.nextAffineTransform(random));
-      framelessTypeBuilders.put(RigidBodyTransform.class, random -> EuclidCoreRandomTools.nextRigidBodyTransform(random));
       framelessTypeBuilders.put(DenseMatrix64F.class, random -> RandomMatrices.createRandom(20, 20, random));
    }
 
+   /**
+    * Registers a new random generator that can generate random frame object to this builder.
+    * 
+    * @param frameTypeBuilder the generator to register.
+    */
    public void registerFrameTypeBuilder(RandomFrameTypeBuilder frameTypeBuilder)
    {
       frameTypeBuilders.put(frameTypeBuilder.newInstance(new Random(), ReferenceFrame.getWorldFrame()).getClass(), frameTypeBuilder);
    }
 
+   /**
+    * Registers a new random generator that can generate random frameless object to this builder.
+    * 
+    * @param framelessTypeBuilder the generator to register.
+    */
    public void registerFramelessTypeBuilder(RandomFramelessTypeBuilder framelessTypeBuilder)
    {
       framelessTypeBuilders.put(framelessTypeBuilder.newInstance(new Random()).getClass(), framelessTypeBuilder);
    }
 
+   /**
+    * Registers random generators declared as static method in the given {@code classes}.
+    * <p>
+    * Convention used to extract the random generators:
+    * <ul>
+    * <li>Any static method declaring a non-void return type and with a single parameter type that is
+    * {@link Random} is extracted into a random frameless type generator.
+    * <li>Any static method declaring a non-void return type and with two parameter types that are in
+    * order {@link Random} and {@link ReferenceFrame} is extracted into a random frame type generator.
+    * </ul>
+    * </p>
+    * 
+    * @param classes the classes from which to extract random generators.
+    */
    public void registerRandomGeneratorClasses(Class<?>... classes)
    {
       for (Class<?> clazz : classes)
@@ -87,6 +113,9 @@ public class ReflectionBasedBuilders
 
       for (Method generator : frameTypeRandomGenerators)
       {
+         if (generator.getReturnType() == null || generator.getReturnType() == void.class)
+            continue;
+
          frameTypeBuilders.put(generator.getReturnType(), (random, frame) ->
          {
             try
@@ -150,7 +179,7 @@ public class ReflectionBasedBuilders
             + "\nThis class can be handled simply by registering a class that declares random generator as method with the following signature:\n\t"
             + type.getSimpleName() + " generatorNameDoesNotMatter(Random)\nor:\n\t" + type.getSimpleName()
             + " generatorNameDoesNotMatter(Random, ReferenceFrame) if the type is a frame type.\nNote that the return type can be any sub-class of "
-            + type.getSimpleName() + "\nThe class declaring the generator is to be registered using " + ReflectionBasedBuilders.class.getSimpleName()
+            + type.getSimpleName() + "\nThe class declaring the generator is to be registered using " + ReflectionBasedBuilder.class.getSimpleName()
             + ".registerRandomGeneratorClasses(Class<?>...).");
    }
 

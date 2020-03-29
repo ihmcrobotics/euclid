@@ -13,7 +13,7 @@ import org.ejml.ops.MatrixFeatures;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 
-public class ReflectionBasedComparer
+class ReflectionBasedComparer
 {
    private static final String EPSILON_EQUALS = "epsilonEquals";
    private static final Predicate<Method> epsilonEqualsMethodFilter = m ->

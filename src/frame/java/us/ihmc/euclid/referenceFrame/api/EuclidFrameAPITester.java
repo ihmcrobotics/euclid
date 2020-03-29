@@ -65,14 +65,36 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  */
 public class EuclidFrameAPITester
 {
+   /** Expected suffix for the name of a read-only interface. */
    public static final String READ_ONLY = "ReadOnly";
+   /** Expected suffix for the name of a write and read interface. */
    public static final String BASICS = "Basics";
+   /** Expected prefix for the name of an interface for frame geometry which frame can be modified. */
    public static final String FRAME = "Frame";
+   /**
+    * Expected prefix for the name of an interface for frame geometry which frame cannot be modified.
+    */
    public static final String FIXED_FRAME = "FixedFrame";
 
+   /**
+    * Method name suffix for a frame type, indicate that if the argument is expressed in a different
+    * frame, a transformation will be applied to match the frame of the method's owner.
+    */
    public static final String MATCHING_FRAME = "MatchingFrame";
+   /**
+    * Method name suffix for a frame type, indicate that method, usually a setter, will set the
+    * reference frame of the method's owner.
+    */
    public static final String INCLUDING_FRAME = "IncludingFrame";
+   /**
+    * Setter name for a frame type, indicate that if the argument is expressed in a different frame, a
+    * transformation will be applied to match the frame of the method's owner.
+    */
    public static final String SET_MATCHING_FRAME = "set" + MATCHING_FRAME;
+   /**
+    * Setter suffix for a frame type, indicate that method will set the reference frame of the method's
+    * owner.
+    */
    public static final String SET_INCLUDING_FRAME = "set" + INCLUDING_FRAME;
 
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
@@ -81,7 +103,7 @@ public class EuclidFrameAPITester
 
    private final Random random = new Random(345345);
 
-   private final ReflectionBasedBuilders reflectionBasedBuilders = new ReflectionBasedBuilders();
+   private final ReflectionBasedBuilder reflectionBasedBuilder = new ReflectionBasedBuilder();
 
    private final Set<Class<?>> framelessTypesWithoutFrameEquivalent = new HashSet<>();
    private final Map<Class<?>, Class<?>> framelessTypesToFrameTypesTable = new HashMap<>();
@@ -90,11 +112,35 @@ public class EuclidFrameAPITester
    private final Set<Class<?>> mutableFrameMutableTypes = new HashSet<>();
    private final Set<Class<?>> exceptionsToIgnore = new HashSet<>();
 
-   public EuclidFrameAPITester(EuclidFrameAPIDefaultConfiguration configuration)
+   /**
+    * Creates a new API tester.
+    * <p>
+    * The new tester and the internal reflection-based builders need to be configured.
+    * </p>
+    * 
+    * @see #getReflectionBasedBuilder()
+    */
+   public EuclidFrameAPITester()
    {
-      configuration.configure(this, reflectionBasedBuilders);
    }
 
+   /**
+    * Creates a new API tester given a {@code configuration} that is ready for use.
+    * 
+    * @param configuration the configuration used to specify the frame types, frameless types,
+    *                      exception types to ignore, and random generators to use during the test.
+    */
+   public EuclidFrameAPITester(EuclidFrameAPIDefaultConfiguration configuration)
+   {
+      configuration.configure(this, reflectionBasedBuilder);
+   }
+
+   /**
+    * Registers exception types that are to be ignored if thrown by a method when invoked during the
+    * test.
+    * 
+    * @param exceptionTypes the types of exception to be ignored during the test.
+    */
    public void registerExceptionsToIgnore(Class<?>... exceptionTypes)
    {
       for (Class<?> exceptionType : exceptionTypes)
@@ -264,6 +310,19 @@ public class EuclidFrameAPITester
 
       framelessTypesToFrameTypesTable.put(framelessReadOnlyType, frameReadOnlyType);
       frameReadOnlyTypes.add(frameReadOnlyType);
+   }
+
+   /**
+    * Gets the internal builders.
+    * <p>
+    * This method can be used to access and configure the builders.
+    * </p>
+    * 
+    * @return the internal reflection-based builders used during the tests.
+    */
+   public ReflectionBasedBuilder getReflectionBasedBuilder()
+   {
+      return reflectionBasedBuilder;
    }
 
    /**
@@ -627,9 +686,9 @@ public class EuclidFrameAPITester
 
             for (int iteration = 0; iteration < numberOfIterations; iteration++)
             {
-               Object[] matchingFrameMethodParameters = reflectionBasedBuilders.next(random, frameA, matchingFrameMethod.getParameterTypes());
+               Object[] matchingFrameMethodParameters = reflectionBasedBuilder.next(random, frameA, matchingFrameMethod.getParameterTypes());
 
-               Object[] setterMethodParameters = reflectionBasedBuilders.clone(matchingFrameMethodParameters);
+               Object[] setterMethodParameters = reflectionBasedBuilder.clone(matchingFrameMethodParameters);
                if (setterMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(matchingFrameMethod) + "\n\tparameters: "
@@ -680,7 +739,7 @@ public class EuclidFrameAPITester
                   { // The transformation should be done on the arguments not the holder.
                      setterObject = frameTypeBuilder.newInstance(random, frameB);
 
-                     Object[] localSetterMethodParameters = reflectionBasedBuilders.clone(setterMethodParameters);
+                     Object[] localSetterMethodParameters = reflectionBasedBuilder.clone(setterMethodParameters);
                      if (setterMethodParameters == null)
                      {
                         System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(matchingFrameMethod) + "\n\tparameters: "
@@ -822,8 +881,8 @@ public class EuclidFrameAPITester
 
             for (int iteration = 0; iteration < numberOfIterations; iteration++)
             {
-               Object[] includingFrameMethodParameters = reflectionBasedBuilders.next(random, frameA, includingFrameMethod.getParameterTypes());
-               Object[] setterMethodParameters = reflectionBasedBuilders.clone(includingFrameMethodParameters);
+               Object[] includingFrameMethodParameters = reflectionBasedBuilder.next(random, frameA, includingFrameMethod.getParameterTypes());
+               Object[] setterMethodParameters = reflectionBasedBuilder.clone(includingFrameMethodParameters);
                if (setterMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(includingFrameMethod) + "\n\tparameters: "
@@ -1009,7 +1068,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = reflectionBasedBuilders.next(random, frameA, parameterType);
+               parameters[i] = reflectionBasedBuilder.next(random, frameA, parameterType);
             }
 
             try
@@ -1048,7 +1107,7 @@ public class EuclidFrameAPITester
 
                   if (!mutateFrame)
                   {
-                     parameters[j] = reflectionBasedBuilders.next(random, frameA, parameterType);
+                     parameters[j] = reflectionBasedBuilder.next(random, frameA, parameterType);
                   }
                   else
                   {
@@ -1056,7 +1115,7 @@ public class EuclidFrameAPITester
                      int mask = (int) Math.pow(2, currentByte);
                      if ((i & mask) != 0)
                         frame = frameB;
-                     parameters[j] = reflectionBasedBuilders.next(random, frame, parameterType);
+                     parameters[j] = reflectionBasedBuilder.next(random, frame, parameterType);
                      currentByte++;
                   }
                }
@@ -1088,9 +1147,9 @@ public class EuclidFrameAPITester
             {
                Class<?> parameterType = parameterTypes[i];
                if (isMutableFrameMutableType(parameterType))
-                  parameters[i] = reflectionBasedBuilders.next(random, frameB, parameterType);
+                  parameters[i] = reflectionBasedBuilder.next(random, frameB, parameterType);
                else
-                  parameters[i] = reflectionBasedBuilders.next(random, frameA, parameterType);
+                  parameters[i] = reflectionBasedBuilder.next(random, frameA, parameterType);
             }
 
             try
@@ -1126,7 +1185,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = reflectionBasedBuilders.next(random, frameA, parameterType);
+               parameters[i] = reflectionBasedBuilder.next(random, frameA, parameterType);
             }
 
             Object result = null;
@@ -1199,7 +1258,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = reflectionBasedBuilders.next(random, frameA, parameterType);
+               parameters[i] = reflectionBasedBuilder.next(random, frameA, parameterType);
             }
 
             try
@@ -1250,7 +1309,7 @@ public class EuclidFrameAPITester
 
                   if (!mutateFrame)
                   {
-                     parameters[j] = reflectionBasedBuilders.next(random, frameA, parameterType);
+                     parameters[j] = reflectionBasedBuilder.next(random, frameA, parameterType);
                   }
                   else
                   {
@@ -1258,7 +1317,7 @@ public class EuclidFrameAPITester
                      int mask = (int) Math.pow(2, currentByte);
                      if ((i & mask) != 0)
                         frame = frameB;
-                     parameters[j] = reflectionBasedBuilders.next(random, frame, parameterType);
+                     parameters[j] = reflectionBasedBuilder.next(random, frame, parameterType);
                      currentByte++;
                   }
                }
@@ -1291,9 +1350,9 @@ public class EuclidFrameAPITester
             {
                Class<?> parameterType = parameterTypes[i];
                if (isMutableFrameMutableType(parameterType))
-                  parameters[i] = reflectionBasedBuilders.next(random, frameB, parameterType);
+                  parameters[i] = reflectionBasedBuilder.next(random, frameB, parameterType);
                else
-                  parameters[i] = reflectionBasedBuilders.next(random, frameA, parameterType);
+                  parameters[i] = reflectionBasedBuilder.next(random, frameA, parameterType);
             }
 
             try
@@ -1330,7 +1389,7 @@ public class EuclidFrameAPITester
             for (int i = 0; i < parameterTypes.length; i++)
             {
                Class<?> parameterType = parameterTypes[i];
-               parameters[i] = reflectionBasedBuilders.next(random, frameA, parameterType);
+               parameters[i] = reflectionBasedBuilder.next(random, frameA, parameterType);
             }
 
             Object result = null;
@@ -1406,12 +1465,12 @@ public class EuclidFrameAPITester
                int mask = (int) Math.pow(2, currentByte);
                if ((i & mask) != 0)
                   frame = frameB;
-               parameters[j] = reflectionBasedBuilders.next(random, frame, parameterType);
+               parameters[j] = reflectionBasedBuilder.next(random, frame, parameterType);
                currentByte++;
             }
             else
             {
-               parameters[j] = reflectionBasedBuilders.next(random, frameA, parameterType);
+               parameters[j] = reflectionBasedBuilder.next(random, frameA, parameterType);
             }
          }
 
@@ -1498,7 +1557,7 @@ public class EuclidFrameAPITester
             try
             {
                Method framelessMethod = typeWithFramelessMethods.getMethod(frameMethodName, framelessMethodParameterTypes);
-               Object[] frameMethodParameters = reflectionBasedBuilders.next(random, worldFrame, frameMethodParameterTypes);
+               Object[] frameMethodParameters = reflectionBasedBuilder.next(random, worldFrame, frameMethodParameterTypes);
                if (frameMethodParameters == null)
                {
                   if (DEBUG)
@@ -1510,7 +1569,7 @@ public class EuclidFrameAPITester
                   break;
                }
 
-               Object[] framelessMethodParameters = reflectionBasedBuilders.clone(frameMethodParameters);
+               Object[] framelessMethodParameters = reflectionBasedBuilder.clone(frameMethodParameters);
                if (framelessMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(frameMethod) + "\n\tparameters: "
@@ -1633,7 +1692,7 @@ public class EuclidFrameAPITester
             try
             {
                Method framelessMethod = framelessType.getMethod(frameMethodName, framelessMethodParameterTypes);
-               Object[] frameMethodParameters = reflectionBasedBuilders.next(random, worldFrame, frameMethodParameterTypes);
+               Object[] frameMethodParameters = reflectionBasedBuilder.next(random, worldFrame, frameMethodParameterTypes);
 
                if (frameMethodParameters == null)
                {
@@ -1646,7 +1705,7 @@ public class EuclidFrameAPITester
                   break;
                }
 
-               Object[] framelessMethodParameters = reflectionBasedBuilders.clone(frameMethodParameters);
+               Object[] framelessMethodParameters = reflectionBasedBuilder.clone(frameMethodParameters);
                if (framelessMethodParameters == null)
                {
                   System.err.println("Cloning parameters failed for\n\t" + getMethodSimpleName(frameMethod) + "\n\tparameters: "

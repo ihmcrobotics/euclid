@@ -33,13 +33,21 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 
+/**
+ * Default API tester configuration that includes the types of the {@code euclid-frame} project.
+ * <p>
+ * This interface is part of the API testing framework.
+ * </p>
+ *
+ * @see EuclidFrameAPITester
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameAPIDefaultConfiguration implements EuclidFrameAPITestConfiguration
 {
    @Override
-   public void configure(EuclidFrameAPITester testerToConfigure, ReflectionBasedBuilders buildersToConfigure)
+   public void configure(EuclidFrameAPITester testerToConfigure, ReflectionBasedBuilder builderToConfigure)
    {
-
-      buildersToConfigure.registerRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class, EuclidFrameRandomTools.class);
+      builderToConfigure.registerRandomGeneratorClasses(EuclidCoreRandomTools.class, EuclidGeometryRandomTools.class, EuclidFrameRandomTools.class);
 
       testerToConfigure.registerExceptionsToIgnore(BoundingBoxException.class, IllegalArgumentException.class, RuntimeException.class);
       testerToConfigure.registerFrameTypesSmart(FrameTuple2DBasics.class, FrameVector2DBasics.class, FramePoint2DBasics.class);
