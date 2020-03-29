@@ -63,6 +63,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
     */
    private GJKSimplex3D simplex = null;
    /**
+    * Flag to indicate whether the initial support direction has been provided by the user or not.
+    */
+   private boolean isInitialSupportDirectionProvided = false;
+   /**
     * The support direction to used for the first iteration. Can be used to reduce the number of
     * iterations.
     */
@@ -115,6 +119,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
       if (!shapeA.isPrimitive() || !shapeB.isPrimitive())
       { // If any of the 2 shapes is not a primitive, doing any copy or transform would probably be expensive. Using the generic approach.
+         guessInitialSupportDirection(shapeA, shapeB);
          areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
       }
       else if (shapeA.isDefinedByPose())
@@ -124,6 +129,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          localShapeA.getPose().setToZero();
          Shape3DBasics localShapeB = shapeB.copy();
          localShapeB.applyInverseTransform(poseA);
+         guessInitialSupportDirection(localShapeA, localShapeB);
          areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
          resultToPack.applyTransform(poseA);
       }
@@ -134,17 +140,27 @@ public class GilbertJohnsonKeerthiCollisionDetector
          localShapeA.applyInverseTransform(poseB);
          Shape3DBasics localShapeB = shapeB.copy();
          localShapeB.getPose().setToZero();
+         guessInitialSupportDirection(localShapeA, localShapeB);
          areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
          resultToPack.applyTransform(poseB);
       }
       else
       { // None of the 2 shapes is defined with a pose, using the generic algorithm.
+         guessInitialSupportDirection(shapeA, shapeB);
          areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
       }
 
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
       return areColliding;
+   }
+
+   private void guessInitialSupportDirection(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   {
+      if (isInitialSupportDirectionProvided)
+         return;
+
+      initialSupportDirection.sub(shapeB.getCentroid(), shapeA.getCentroid());
    }
 
    /**
@@ -309,8 +325,14 @@ public class GilbertJohnsonKeerthiCollisionDetector
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
 
+      isInitialSupportDirectionProvided = false;
+      initialSupportDirection.set(Axis.Y);
+
       return areColliding;
    }
+
+   static int numberOfEvaluations = 0;
+   static double averageNumberOfIterations = 0.0;
 
    /**
     * Sets the support direction to use for the first iteration of future evaluations.
@@ -324,6 +346,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     */
    public void setInitialSupportDirection(Vector3DReadOnly initialSupportDirection)
    {
+      isInitialSupportDirectionProvided = true;
       this.initialSupportDirection.set(initialSupportDirection);
    }
 
