@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.List;
 import java.util.Random;
 
+import us.ihmc.euclid.referenceFrame.FixedFrameShape3DPose;
 import us.ihmc.euclid.referenceFrame.FrameBox3D;
 import us.ihmc.euclid.referenceFrame.FrameCapsule3D;
 import us.ihmc.euclid.referenceFrame.FrameCylinder3D;
@@ -13,6 +14,7 @@ import us.ihmc.euclid.referenceFrame.FrameShape3DPose;
 import us.ihmc.euclid.referenceFrame.FrameSphere3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
 import us.ihmc.euclid.referenceFrame.polytope.FrameFace3D;
 import us.ihmc.euclid.referenceFrame.polytope.FrameVertex3D;
@@ -33,6 +35,16 @@ public class EuclidFrameShapeRandomTools
    public static FrameShape3DPose nextFrameShape3DPose(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameShape3DPose(referenceFrame, EuclidShapeRandomTools.nextShape3DPose(random));
+   }
+
+   public static FixedFrameShape3DPose nextFixedFrameShape3DPose(Random random, ReferenceFrame referenceFrame)
+   {
+      return nextFixedFrameShape3DPose(random, () -> referenceFrame);
+   }
+
+   public static FixedFrameShape3DPose nextFixedFrameShape3DPose(Random random, ReferenceFrameHolder referenceFrameHolder)
+   {
+      return new FixedFrameShape3DPose(referenceFrameHolder, EuclidShapeRandomTools.nextShape3DPose(random));
    }
 
    /**
