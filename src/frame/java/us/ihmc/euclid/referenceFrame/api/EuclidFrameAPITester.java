@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -766,9 +767,21 @@ public class EuclidFrameAPITester
                            vertices.forEach(v -> v.changeFrame(frameB));
                            localSetterMethodParameters[paramIndex] = FrameVertex3DSupplier.asFrameVertex3DSupplier(vertices);
                         }
-                        else
+                        else if (setterMethodParameter instanceof FrameChangeable)
                         {
                            ((FrameChangeable) setterMethodParameter).changeFrame(frameB);
+                        }
+                        else if (setterMethodParameter instanceof Transformable)
+                        {
+                           frameA.transformFromThisToDesiredFrame(frameB, (Transformable) setterMethodParameter);
+                           Object parameterTransformed = setterMethodParameter;
+                           setterMethodParameter = reflectionBasedBuilder.next(random, frameB, setterMethodParameter.getClass());
+                           Method framelessSetter = findFramelessSetter(setterMethodParameter.getClass());
+                           invokeMethod(setterMethodParameter, framelessSetter, parameterTransformed);
+                        }
+                        else
+                        {
+                           throw new IllegalStateException("Unhandled type " + setterMethodParameter.getClass().getSimpleName());
                         }
                      }
                      setterMethodReturnObject = invokeMethod(setterObject, setterMethod, localSetterMethodParameters);
@@ -776,7 +789,23 @@ public class EuclidFrameAPITester
                   else
                   {
                      setterMethodReturnObject = invokeMethod(setterObject, setterMethod, setterMethodParameters);
-                     ((FrameChangeable) setterObject).changeFrame(frameB);
+
+                     if (setterObject instanceof FrameChangeable)
+                     {
+                        ((FrameChangeable) setterObject).changeFrame(frameB);
+                     }
+                     else if (setterObject instanceof Transformable)
+                     {
+                        setterObject.getReferenceFrame().transformFromThisToDesiredFrame(frameB, (Transformable) setterObject);
+                        Object objectTransformed = setterObject;
+                        setterObject = (ReferenceFrameHolder) reflectionBasedBuilder.next(random, frameB, setterObject.getClass());
+                        Method framelessSetter = findFramelessSetter(setterObject.getClass());
+                        invokeMethod(setterObject, framelessSetter, objectTransformed);
+                     }
+                     else
+                     {
+                        throw new IllegalStateException("Unhandled type " + setterObject.getClass().getSimpleName());
+                     }
                   }
                }
                catch (Throwable e)
@@ -829,6 +858,13 @@ public class EuclidFrameAPITester
             throw e;
          }
       }
+   }
+
+   private Method findFramelessSetter(Class<?> frameTypeToSearchFrameSetter)
+   {
+      Predicate<Method> filter = m -> m.getName().equals("set") && m.getParameterCount() == 1 && isFramelessType(m.getParameterTypes()[0])
+            && m.getParameterTypes()[0].isAssignableFrom(frameTypeToSearchFrameSetter);
+      return Stream.of(frameTypeToSearchFrameSetter.getMethods()).filter(filter).findFirst().orElse(null);
    }
 
    /**
@@ -2114,6 +2150,13 @@ public class EuclidFrameAPITester
          if (framelessType.isAssignableFrom(type))
             return true;
       }
+
+      for (Class<?> framelessType : framelessTypesWithoutFrameEquivalent)
+      {
+         if (framelessType.isAssignableFrom(type))
+            return true;
+      }
+
       return false;
    }
 
