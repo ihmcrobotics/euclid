@@ -2,8 +2,14 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.function.DoubleSupplier;
 
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Orientation2D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox2DBasics;
@@ -30,10 +36,20 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 
 /**
  * This class provides a varieties of factories to create Euclid frame types.
@@ -453,32 +469,35 @@ public class EuclidFrameFactories
 
    public static FixedFramePoint2DBasics newFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFramePoint2DBasics(referenceFrameHolder, new Point2D());
+   }
+
+   public static FixedFramePoint2DBasics newLinkedFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder, Point2DBasics originalPoint)
+   {
       return new FixedFramePoint2DBasics()
       {
-         private double x, y;
-
          @Override
          public void setX(double x)
          {
-            this.x = x;
+            originalPoint.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            this.y = y;
+            originalPoint.setY(y);
          }
 
          @Override
          public double getX()
          {
-            return x;
+            return originalPoint.getX();
          }
 
          @Override
          public double getY()
          {
-            return y;
+            return originalPoint.getY();
          }
 
          @Override
@@ -501,8 +520,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y), getReferenceFrame());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(originalPoint, getReferenceFrame());
          }
 
          @Override
@@ -515,32 +533,35 @@ public class EuclidFrameFactories
 
    public static FixedFrameVector2DBasics newFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFrameVector2DBasics(referenceFrameHolder, new Vector2D());
+   }
+
+   public static FixedFrameVector2DBasics newLinkedFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DBasics originalVector)
+   {
       return new FixedFrameVector2DBasics()
       {
-         private double x, y;
-
          @Override
          public void setX(double x)
          {
-            this.x = x;
+            originalVector.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            this.y = y;
+            originalVector.setY(y);
          }
 
          @Override
          public double getX()
          {
-            return x;
+            return originalVector.getX();
          }
 
          @Override
          public double getY()
          {
-            return y;
+            return originalVector.getY();
          }
 
          @Override
@@ -563,8 +584,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y), getReferenceFrame());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(originalVector, getReferenceFrame());
          }
 
          @Override
@@ -577,44 +597,47 @@ public class EuclidFrameFactories
 
    public static FixedFramePoint3DBasics newFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFramePoint3DBasics(referenceFrameHolder, new Point3D());
+   }
+
+   public static FixedFramePoint3DBasics newLinkedFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder, Point3DBasics originalPoint)
+   {
       return new FixedFramePoint3DBasics()
       {
-         private double x, y, z;
-
          @Override
          public void setX(double x)
          {
-            this.x = x;
+            originalPoint.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            this.y = y;
+            originalPoint.setY(y);
          }
 
          @Override
          public void setZ(double z)
          {
-            this.z = z;
+            originalPoint.setZ(z);
          }
 
          @Override
          public double getX()
          {
-            return x;
+            return originalPoint.getX();
          }
 
          @Override
          public double getY()
          {
-            return y;
+            return originalPoint.getY();
          }
 
          @Override
          public double getZ()
          {
-            return z;
+            return originalPoint.getZ();
          }
 
          @Override
@@ -637,8 +660,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y, z), getReferenceFrame());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(originalPoint, getReferenceFrame());
          }
 
          @Override
@@ -651,44 +673,47 @@ public class EuclidFrameFactories
 
    public static FixedFrameVector3DBasics newFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFrameVector3DBasics(referenceFrameHolder, new Vector3D());
+   }
+
+   public static FixedFrameVector3DBasics newLinkedFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DBasics originalVector)
+   {
       return new FixedFrameVector3DBasics()
       {
-         private double x, y, z;
-
          @Override
          public void setX(double x)
          {
-            this.x = x;
+            originalVector.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            this.y = y;
+            originalVector.setY(y);
          }
 
          @Override
          public void setZ(double z)
          {
-            this.z = z;
+            originalVector.setZ(z);
          }
 
          @Override
          public double getX()
          {
-            return x;
+            return originalVector.getX();
          }
 
          @Override
          public double getY()
          {
-            return y;
+            return originalVector.getY();
          }
 
          @Override
          public double getZ()
          {
-            return z;
+            return originalVector.getZ();
          }
 
          @Override
@@ -711,8 +736,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(x, y, z), getReferenceFrame());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(originalVector, getReferenceFrame());
          }
 
          @Override
@@ -725,14 +749,18 @@ public class EuclidFrameFactories
 
    public static FixedFrameOrientation2DBasics newFixedFrameOrientation2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFrameOrientation2DBasics(referenceFrameHolder, new Orientation2D());
+   }
+
+   public static FixedFrameOrientation2DBasics newLinkedFixedFrameOrientation2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                      Orientation2DBasics originalOrientation)
+   {
       return new FixedFrameOrientation2DBasics()
       {
-         private final Orientation2D orientation2D = new Orientation2D();
-
          @Override
          public void setYaw(double yaw)
          {
-            orientation2D.setYaw(yaw);
+            originalOrientation.setYaw(yaw);
          }
 
          @Override
@@ -744,19 +772,19 @@ public class EuclidFrameFactories
          @Override
          public double getYaw()
          {
-            return orientation2D.getYaw();
+            return originalOrientation.getYaw();
          }
 
          @Override
          public void applyTransform(Transform transform)
          {
-            orientation2D.applyTransform(transform);
+            originalOrientation.applyTransform(transform);
          }
 
          @Override
          public void applyInverseTransform(Transform transform)
          {
-            orientation2D.applyInverseTransform(transform);
+            originalOrientation.applyInverseTransform(transform);
          }
 
          @Override
@@ -773,7 +801,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(orientation2D, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(originalOrientation, getReferenceFrame());
          }
 
          @Override
@@ -786,17 +814,17 @@ public class EuclidFrameFactories
 
    public static FixedFrameQuaternionBasics newFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFrameQuaternionBasics(referenceFrameHolder, new Quaternion());
+   }
+
+   public static FixedFrameQuaternionBasics newLinkedFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder, QuaternionBasics originalQuaternion)
+   {
       return new FixedFrameQuaternionBasics()
       {
-         private double x, y, z, s;
-
          @Override
          public void setUnsafe(double qx, double qy, double qz, double qs)
          {
-            x = qx;
-            y = qy;
-            z = qz;
-            s = qs;
+            originalQuaternion.setUnsafe(qx, qy, qz, qs);
          }
 
          @Override
@@ -808,25 +836,25 @@ public class EuclidFrameFactories
          @Override
          public double getX()
          {
-            return x;
+            return originalQuaternion.getX();
          }
 
          @Override
          public double getY()
          {
-            return y;
+            return originalQuaternion.getY();
          }
 
          @Override
          public double getZ()
          {
-            return z;
+            return originalQuaternion.getZ();
          }
 
          @Override
          public double getS()
          {
-            return s;
+            return originalQuaternion.getS();
          }
 
          @Override
@@ -843,9 +871,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = EuclidHashCodeTools.toLongHashCode(x, y, z, s);
-            bits = EuclidHashCodeTools.addToHashCode(bits, getReferenceFrame());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(originalQuaternion, getReferenceFrame());
          }
 
          @Override
@@ -858,50 +884,54 @@ public class EuclidFrameFactories
 
    public static FixedFrameRotationMatrixBasics newFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFrameRotationMatrixBasics(referenceFrameHolder, new RotationMatrix());
+   }
+
+   public static FixedFrameRotationMatrixBasics newLinkedFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                        RotationMatrixBasics originalRotationMatrix)
+   {
       return new FixedFrameRotationMatrixBasics()
       {
-         private final RotationMatrix rotationMatrix = new RotationMatrix();
-
          @Override
          public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
          {
-            rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+            originalRotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
          }
 
          @Override
          public void set(RotationMatrixReadOnly other)
          {
-            rotationMatrix.set(other);
+            originalRotationMatrix.set(other);
          }
 
          @Override
          public void setIdentity()
          {
-            rotationMatrix.setIdentity();
+            originalRotationMatrix.setIdentity();
          }
 
          @Override
          public void setToNaN()
          {
-            rotationMatrix.setToNaN();
+            originalRotationMatrix.setToNaN();
          }
 
          @Override
          public void normalize()
          {
-            rotationMatrix.normalize();
+            originalRotationMatrix.normalize();
          }
 
          @Override
          public boolean isIdentity()
          {
-            return rotationMatrix.isIdentity();
+            return originalRotationMatrix.isIdentity();
          }
 
          @Override
          public void transpose()
          {
-            rotationMatrix.transpose();
+            originalRotationMatrix.transpose();
          }
 
          @Override
@@ -913,70 +943,70 @@ public class EuclidFrameFactories
          @Override
          public boolean isDirty()
          {
-            return rotationMatrix.isDirty();
+            return originalRotationMatrix.isDirty();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM00()
          {
-            return rotationMatrix.getM00();
+            return originalRotationMatrix.getM00();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM01()
          {
-            return rotationMatrix.getM01();
+            return originalRotationMatrix.getM01();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM02()
          {
-            return rotationMatrix.getM02();
+            return originalRotationMatrix.getM02();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM10()
          {
-            return rotationMatrix.getM10();
+            return originalRotationMatrix.getM10();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM11()
          {
-            return rotationMatrix.getM11();
+            return originalRotationMatrix.getM11();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM12()
          {
-            return rotationMatrix.getM12();
+            return originalRotationMatrix.getM12();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM20()
          {
-            return rotationMatrix.getM20();
+            return originalRotationMatrix.getM20();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM21()
          {
-            return rotationMatrix.getM21();
+            return originalRotationMatrix.getM21();
          }
 
          /** {@inheritDoc} */
          @Override
          public double getM22()
          {
-            return rotationMatrix.getM22();
+            return originalRotationMatrix.getM22();
          }
 
          @Override
@@ -993,7 +1023,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(rotationMatrix, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(originalRotationMatrix, getReferenceFrame());
          }
 
          @Override
@@ -1006,10 +1036,16 @@ public class EuclidFrameFactories
 
    public static FixedFrameBoundingBox2DBasics newFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFrameBoundingBox2DBasics(referenceFrameHolder, new BoundingBox2D());
+   }
+
+   public static FixedFrameBoundingBox2DBasics newLinkedFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                      BoundingBox2DBasics originalBoundingBox2D)
+   {
       FixedFrameBoundingBox2DBasics fixedFrameBoundingBox2DBasics = new FixedFrameBoundingBox2DBasics()
       {
-         private final FixedFramePoint2DBasics minPoint = EuclidFrameFactories.newFixedFramePoint2DBasics(referenceFrameHolder);
-         private final FixedFramePoint2DBasics maxPoint = EuclidFrameFactories.newFixedFramePoint2DBasics(referenceFrameHolder);
+         private final FixedFramePoint2DBasics minPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox2D.getMinPoint());
+         private final FixedFramePoint2DBasics maxPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox2D.getMaxPoint());
 
          @Override
          public ReferenceFrame getReferenceFrame()
@@ -1058,10 +1094,16 @@ public class EuclidFrameFactories
 
    public static FixedFrameBoundingBox3DBasics newFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
+      return newLinkedFixedFrameBoundingBox3DBasics(referenceFrameHolder, new BoundingBox3D());
+   }
+
+   public static FixedFrameBoundingBox3DBasics newLinkedFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                      BoundingBox3DBasics originalBoundingBox3D)
+   {
       FixedFrameBoundingBox3DBasics fixedFrameBoundingBox3DBasics = new FixedFrameBoundingBox3DBasics()
       {
-         private final FixedFramePoint3DBasics minPoint = EuclidFrameFactories.newFixedFramePoint3DBasics(referenceFrameHolder);
-         private final FixedFramePoint3DBasics maxPoint = EuclidFrameFactories.newFixedFramePoint3DBasics(referenceFrameHolder);
+         private final FixedFramePoint3DBasics minPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox3D.getMinPoint());
+         private final FixedFramePoint3DBasics maxPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox3D.getMaxPoint());
 
          @Override
          public ReferenceFrame getReferenceFrame()
