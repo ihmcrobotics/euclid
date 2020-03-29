@@ -9,9 +9,12 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
  * The frame objects created using this builder should be initialized using the given reference
  * frame and frameless object.
  * </p>
+ * <p>
+ * This interface is part of the API testing framework.
+ * </p>
  *
+ * @see EuclidFrameAPITester
  * @author Sylvain Bertrand
- * @param <T> the type this builder can instantiate.
  */
 public interface FrameTypeCopier
 {

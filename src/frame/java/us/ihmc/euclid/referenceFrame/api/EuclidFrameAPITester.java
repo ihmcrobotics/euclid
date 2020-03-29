@@ -95,15 +95,15 @@ import us.ihmc.euclid.transform.interfaces.Transform;
  */
 public class EuclidFrameAPITester
 {
-   private static final String READ_ONLY = "ReadOnly";
-   private static final String BASICS = "Basics";
-   private static final String FRAME = "Frame";
-   private static final String FIXED_FRAME = "FixedFrame";
+   public static final String READ_ONLY = "ReadOnly";
+   public static final String BASICS = "Basics";
+   public static final String FRAME = "Frame";
+   public static final String FIXED_FRAME = "FixedFrame";
 
-   private static final String MATCHING_FRAME = "MatchingFrame";
-   private static final String INCLUDING_FRAME = "IncludingFrame";
-   private static final String SET_MATCHING_FRAME = "set" + MATCHING_FRAME;
-   private static final String SET_INCLUDING_FRAME = "set" + INCLUDING_FRAME;
+   public static final String MATCHING_FRAME = "MatchingFrame";
+   public static final String INCLUDING_FRAME = "IncludingFrame";
+   public static final String SET_MATCHING_FRAME = "set" + MATCHING_FRAME;
+   public static final String SET_INCLUDING_FRAME = "set" + INCLUDING_FRAME;
 
    private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
    private static final boolean DEBUG = false;

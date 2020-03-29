@@ -11,7 +11,11 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
  * The frame objects created using this builder should contain random values changing from one
  * object to the next.
  * </p>
+ * <p>
+ * This interface is part of the API testing framework.
+ * </p>
  *
+ * @see EuclidFrameAPITester
  * @author Sylvain Bertrand
  */
 public interface RandomFrameTypeBuilder
@@ -23,6 +27,7 @@ public interface RandomFrameTypeBuilder
     * object to the next.
     * </p>
     *
+    * @param random         the random generator to use for creating the next object.
     * @param referenceFrame the reference frame in which the returned frame object should be expressed
     *                       in.
     * @return the next random frame object.

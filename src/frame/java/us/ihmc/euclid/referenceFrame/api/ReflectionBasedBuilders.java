@@ -15,12 +15,29 @@ import java.util.stream.Stream;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.RandomMatrices;
 
+import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
+import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 
+/**
+ * The class provides tools for generating random objects and cloning them.
+ * <p>
+ * Random generators are separated into 2 categories: frame and frameless type builders. Frame types
+ * represent geometries that defined with a {@link ReferenceFrame}, for instance
+ * {@link FramePoint3D} or {@link FrameConvexPolygon2D}, while frameless types represent all other
+ * types.
+ * </p>
+ * <p>
+ * This interface is part of the API testing framework.
+ * </p>
+ *
+ * @see EuclidFrameAPITester
+ * @author Sylvain Bertrand
+ */
 public class ReflectionBasedBuilders
 {
    private final static Map<Class<?>, RandomFrameTypeBuilder> frameTypeBuilders = new HashMap<>();
