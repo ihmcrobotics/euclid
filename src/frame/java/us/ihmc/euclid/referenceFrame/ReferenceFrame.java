@@ -1045,12 +1045,6 @@ public abstract class ReferenceFrame
       }
    }
 
-   private boolean hasChildWithName(String childName)
-   {
-      updateChildren();
-      return children.stream().map(WeakReference::get).filter(child -> child != null).anyMatch(child -> child.getName().equals(childName));
-   }
-
    /**
     * Removes and disables all the children of {@code this}.
     *
