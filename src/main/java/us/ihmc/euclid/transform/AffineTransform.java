@@ -1517,8 +1517,8 @@ public class AffineTransform
     */
    public void getRigidBodyTransform(RigidBodyTransformBasics rigidBodyTransformToPack)
    {
-      rigidBodyTransformToPack.setRotation(rotationScaleMatrix.getRotationMatrix());
-      rigidBodyTransformToPack.setTranslation(translationVector);
+      rigidBodyTransformToPack.getRotation().set(rotationScaleMatrix.getRotationMatrix());
+      rigidBodyTransformToPack.getTranslation().set(translationVector);
    }
 
    /**

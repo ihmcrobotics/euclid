@@ -451,8 +451,8 @@ public class EuclidShapeRandomTools
                                                                                                           numberOfVertices);
       List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
       RigidBodyTransform transform = new RigidBodyTransform();
-      transform.setTranslationZ(EuclidCoreRandomTools.nextDouble(random, centerMinMax));
-      transform.setRotation(EuclidGeometryTools.axisAngleFromZUpToVector3D(planeNormal));
+      transform.getTranslation().setZ(EuclidCoreRandomTools.nextDouble(random, centerMinMax));
+      transform.getRotation().set(EuclidGeometryTools.axisAngleFromZUpToVector3D(planeNormal));
       circleBasedConvexPolygon3D.forEach(transform::transform);
       return circleBasedConvexPolygon3D;
    }
@@ -599,7 +599,7 @@ public class EuclidShapeRandomTools
                                                                            EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
                                                                            random.nextInt(divisionsMax - divisionsMin + 1) + divisionsMin);
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       coneVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(coneVertices));
    }
@@ -642,7 +642,7 @@ public class EuclidShapeRandomTools
    {
       List<Point3D> cubeVertices = EuclidPolytopeFactories.newCubeVertices(EuclidCoreRandomTools.nextDouble(random, edgeLengthMin, edgeLengthMax));
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       cubeVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cubeVertices));
    }
@@ -692,7 +692,7 @@ public class EuclidShapeRandomTools
                                                                                    EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
                                                                                    random.nextInt(divisionsMax - divisionsMin + 1) + divisionsMin);
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       cylinderVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cylinderVertices));
    }
@@ -904,7 +904,7 @@ public class EuclidShapeRandomTools
                                                                                  EuclidCoreRandomTools.nextDouble(random, baseLengthMin, baseLengthMax),
                                                                                  EuclidCoreRandomTools.nextDouble(random, baseWidthMin, baseWidthMax));
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       pyramidVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(pyramidVertices));
    }

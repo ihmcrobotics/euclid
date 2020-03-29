@@ -73,8 +73,8 @@ public interface Pose2DReadOnly
     */
    default void get(RigidBodyTransformBasics transformToPack)
    {
-      transformToPack.setTranslation(getX(), getY(), 0.0);
-      transformToPack.setRotationYaw(getYaw());
+      transformToPack.getTranslation().set(getX(), getY(), 0.0);
+      transformToPack.getRotation().setToYawOrientation(getYaw());
    }
 
    /**

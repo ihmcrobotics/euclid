@@ -547,8 +547,8 @@ public class EuclidCoreRandomTools
    public static RigidBodyTransform nextRigidBodyTransform2D(Random random)
    {
       RigidBodyTransform rigidBodyTransform = new RigidBodyTransform();
-      rigidBodyTransform.setTranslation(nextPoint3D(random));
-      rigidBodyTransform.setRotationYaw(nextDouble(random, Math.PI));
+      rigidBodyTransform.getTranslation().set(nextPoint3D(random));
+      rigidBodyTransform.getRotation().setToYawOrientation(nextDouble(random, Math.PI));
       return rigidBodyTransform;
    }
 
