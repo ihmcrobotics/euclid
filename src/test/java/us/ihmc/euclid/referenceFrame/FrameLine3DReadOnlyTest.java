@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
 
@@ -29,15 +30,15 @@ public abstract class FrameLine3DReadOnlyTest<T extends FrameLine3DReadOnly>
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameLine3DReadOnly.class, Line3DReadOnly.class, true, 1);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameLine3DReadOnly.class, Line3DReadOnly.class, true, 1);
    }
 
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameLine,
-                                                                                  methodFilter,
-                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameLine, methodFilter, EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 }

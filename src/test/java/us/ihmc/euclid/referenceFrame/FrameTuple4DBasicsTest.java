@@ -13,6 +13,7 @@ import org.ejml.ops.RandomMatrices;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
 import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
@@ -447,9 +448,10 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
    public void testReferenceFrameChecks() throws Throwable
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple,
-                                                                                  methodFilter,
-                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameTuple,
+                                                                    methodFilter,
+                                                                    EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test
@@ -458,17 +460,19 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
       FrameTypeCopier frameTypeBuilder = (frame, tuple) -> createTuple(frame, (Tuple4DReadOnly) tuple);
       RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessTuple;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
-                                                                                framelessTypeBuilber,
-                                                                                methodFilter,
-                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  framelessTypeBuilber,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameTuple4DBasics.class, Tuple4DBasics.class, true, 1);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameTuple4DBasics.class, Tuple4DBasics.class, true, 1);
    }
 
    @Test

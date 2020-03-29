@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
@@ -124,8 +125,8 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    @Test
    public void testSetMatchingFrame() throws Exception
    {
-      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector3D,
-                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector3D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
       Random random = new Random(544354);
 
@@ -167,8 +168,8 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
    @Test
    public void testSetIncludingFrame()
    {
-      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector3D,
-                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector3D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test
@@ -273,6 +274,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Vector3D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameVector3D.class, Vector3D.class, true, 1, methodFilter);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameVector3D.class, Vector3D.class, true, 1, methodFilter);
    }
 }

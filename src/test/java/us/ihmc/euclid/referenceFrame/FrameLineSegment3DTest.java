@@ -15,6 +15,7 @@ import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
@@ -39,10 +40,11 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
       FrameTypeCopier frameTypeBuilder = (frame, quaternion) -> createFrameLineSegment(frame, (LineSegment3DReadOnly) quaternion);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLineSegment3D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
-                                                                                framelessTypeBuilder,
-                                                                                methodFilter,
-                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  framelessTypeBuilder,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override
@@ -57,14 +59,15 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", LineSegment3D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameLineSegment3D.class, LineSegment3D.class, true, 1, methodFilter);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameLineSegment3D.class, LineSegment3D.class, true, 1, methodFilter);
    }
 
    @Test
    public void testSetMatchingFrame() throws Exception
    {
-      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLineSegment3D,
-                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLineSegment3D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
       Random random = new Random(544354);
 
@@ -88,7 +91,8 @@ public class FrameLineSegment3DTest extends FrameLineSegment3DReadOnlyTest<Frame
    @Test
    public void testSetIncludingFrame()
    {
-      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLineSegment3D,
-                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLineSegment3D,
+                                                          EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

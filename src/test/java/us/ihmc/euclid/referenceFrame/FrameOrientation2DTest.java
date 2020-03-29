@@ -15,6 +15,7 @@ import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
@@ -39,10 +40,11 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
       FrameTypeCopier frameTypeBuilder = (frame, pose) -> createFrameOrientation(frame, (Orientation2DReadOnly) pose);
       RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextOrientation2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
-                                                                                framelessTypeBuilder,
-                                                                                methodFilter,
-                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  framelessTypeBuilder,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override
@@ -57,14 +59,15 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Orientation2D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
 
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameOrientation2D.class, Orientation2D.class, true, 1, methodFilter);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameOrientation2D.class, Orientation2D.class, true, 1, methodFilter);
    }
 
    @Test
    public void testSetMatchingFrame() throws Exception
    {
-      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameOrientation2D,
-                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameOrientation2D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
       Random random = new Random(544354);
 
@@ -91,8 +94,9 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
       signaturesToIgnore.add(new MethodSignature("setIncludingFrame", ReferenceFrame.class, double.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
-      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameOrientation2D,
-                                                                        methodFilter,
-                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameOrientation2D,
+                                                          methodFilter,
+                                                          EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

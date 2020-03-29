@@ -18,6 +18,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
@@ -54,21 +55,22 @@ public class EuclidFrameToolsTest
       signaturesToIgnore.add(new MethodSignature("axisAngleFromZUpToVector3D", Vector3DReadOnly.class, AxisAngleBasics.class));
 
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodFilter);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(EuclidFrameTools.class, EuclidGeometryTools.class, false, 2, methodFilter);
    }
 
    @Test
    public void testReferenceFrameChecked() throws Throwable
    {
-      EuclidFrameAPITester.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertStaticMethodsCheckReferenceFrame(EuclidFrameTools.class, EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test
    public void testConservedFunctionality() throws Exception
    {
-      EuclidFrameAPITester.assertStaticMethodsPreserveFunctionality(EuclidFrameTools.class,
-                                                                    EuclidGeometryTools.class,
-                                                                    EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertStaticMethodsPreserveFunctionality(EuclidFrameTools.class, EuclidGeometryTools.class, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test

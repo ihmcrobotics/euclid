@@ -40,10 +40,10 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
  */
 public class ReflectionBasedBuilders
 {
-   private final static Map<Class<?>, RandomFrameTypeBuilder> frameTypeBuilders = new HashMap<>();
-   private final static Map<Class<?>, RandomFramelessTypeBuilder> framelessTypeBuilders = new HashMap<>();
+   private final Map<Class<?>, RandomFrameTypeBuilder> frameTypeBuilders = new HashMap<>();
+   private final Map<Class<?>, RandomFramelessTypeBuilder> framelessTypeBuilders = new HashMap<>();
 
-   static
+   public ReflectionBasedBuilders()
    {
       framelessTypeBuilders.put(double.class, random -> EuclidCoreRandomTools.nextDouble(random, 10.0));
       framelessTypeBuilders.put(float.class, random -> (float) EuclidCoreRandomTools.nextDouble(random, 10.0));
@@ -64,23 +64,23 @@ public class ReflectionBasedBuilders
       framelessTypeBuilders.put(DenseMatrix64F.class, random -> RandomMatrices.createRandom(20, 20, random));
    }
 
-   public static void registerFrameTypeBuilder(RandomFrameTypeBuilder frameTypeBuilder)
+   public void registerFrameTypeBuilder(RandomFrameTypeBuilder frameTypeBuilder)
    {
       frameTypeBuilders.put(frameTypeBuilder.newInstance(new Random(), ReferenceFrame.getWorldFrame()).getClass(), frameTypeBuilder);
    }
 
-   public static void registerFramelessTypeBuilder(RandomFramelessTypeBuilder framelessTypeBuilder)
+   public void registerFramelessTypeBuilder(RandomFramelessTypeBuilder framelessTypeBuilder)
    {
       framelessTypeBuilders.put(framelessTypeBuilder.newInstance(new Random()).getClass(), framelessTypeBuilder);
    }
 
-   public static void registerRandomGeneratorClasses(Class<?>... classes)
+   public void registerRandomGeneratorClasses(Class<?>... classes)
    {
       for (Class<?> clazz : classes)
          registerRandomGeneratorsFromClass(clazz);
    }
 
-   private static void registerRandomGeneratorsFromClass(Class<?> classDeclaringRandomGenerators)
+   private void registerRandomGeneratorsFromClass(Class<?> classDeclaringRandomGenerators)
    {
       List<Method> frameTypeRandomGenerators = Stream.of(classDeclaringRandomGenerators.getMethods()).filter(method -> isFrameRandomGenerator(method))
                                                      .collect(Collectors.toList());
@@ -119,12 +119,12 @@ public class ReflectionBasedBuilders
       }
    }
 
-   private static boolean isFramelessRandomGenerator(Method method)
+   private boolean isFramelessRandomGenerator(Method method)
    {
       return method.getParameterCount() == 1 && method.getParameterTypes()[0] == Random.class;
    }
 
-   private static boolean isFrameRandomGenerator(Method method)
+   private boolean isFrameRandomGenerator(Method method)
    {
       if (method.getParameterCount() != 2)
          return false;
@@ -133,7 +133,7 @@ public class ReflectionBasedBuilders
       return ReferenceFrameHolder.class.isAssignableFrom(method.getReturnType());
    }
 
-   static Object next(Random random, ReferenceFrame frame, Class<?> type)
+   Object next(Random random, ReferenceFrame frame, Class<?> type)
    {
       if (Object.class.equals(type))
          return null;
@@ -154,7 +154,7 @@ public class ReflectionBasedBuilders
             + ".registerRandomGeneratorClasses(Class<?>...).");
    }
 
-   static Object[] next(Random random, ReferenceFrame frame, Class<?>[] types)
+   Object[] next(Random random, ReferenceFrame frame, Class<?>[] types)
    {
       Object[] instances = new Object[types.length];
 
@@ -186,7 +186,7 @@ public class ReflectionBasedBuilders
       return instances;
    }
 
-   static Object[] clone(Object[] parametersToClone)
+   Object[] clone(Object[] parametersToClone)
    {
       Object[] clone = (Object[]) Array.newInstance(parametersToClone.getClass().getComponentType(), parametersToClone.length);
 
@@ -257,7 +257,7 @@ public class ReflectionBasedBuilders
       return clone;
    }
 
-   private static Object nextFramelessType(Random random, Class<?> type)
+   private Object nextFramelessType(Random random, Class<?> type)
    {
       List<RandomFramelessTypeBuilder> matchingBuilders = framelessTypeBuilders.entrySet().stream().filter(entry -> type.isAssignableFrom(entry.getKey()))
                                                                                .map(Entry::getValue).collect(Collectors.toList());
@@ -268,7 +268,7 @@ public class ReflectionBasedBuilders
          return matchingBuilders.get(random.nextInt(matchingBuilders.size())).newInstance(random);
    }
 
-   private static Object nextFrameType(Random random, Class<?> type, ReferenceFrame referenceFrame)
+   private Object nextFrameType(Random random, Class<?> type, ReferenceFrame referenceFrame)
    {
       List<RandomFrameTypeBuilder> matchingBuilders = frameTypeBuilders.entrySet().stream().filter(entry -> type.isAssignableFrom(entry.getKey()))
                                                                        .map(Entry::getValue).collect(Collectors.toList());

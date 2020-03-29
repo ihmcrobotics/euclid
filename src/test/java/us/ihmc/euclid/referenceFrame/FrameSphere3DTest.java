@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameShapeAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameSphere3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
@@ -20,20 +21,21 @@ import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
-public class FrameSphere3DTest extends FrameShapeSetupTest
+public class FrameSphere3DTest
 {
    @Test
    public void testAPIOverloading()
    {
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameSphere3DReadOnly.class, Sphere3DReadOnly.class, false);
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FixedFrameSphere3DBasics.class, Sphere3DBasics.class, false);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameSphere3DReadOnly.class, Sphere3DReadOnly.class, false);
+      tester.assertOverloadingWithFrameObjects(FixedFrameSphere3DBasics.class, Sphere3DBasics.class, false);
 
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
       signaturesToIgnore.add(new MethodSignature("set", Sphere3D.class));
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Sphere3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Sphere3D.class, Double.TYPE));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
-      EuclidFrameAPITester.assertOverloadingWithFrameObjects(FrameSphere3D.class, Sphere3D.class, false, 1, methodFilter);
+      tester.assertOverloadingWithFrameObjects(FrameSphere3D.class, Sphere3D.class, false, 1, methodFilter);
    }
 
    @Test
@@ -43,32 +45,35 @@ public class FrameSphere3DTest extends FrameShapeSetupTest
       methodFilter = methodFilter.and(m -> !m.getName().equals("epsilonEquals"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("getBoundingBox")
             || !Arrays.equals(m.getParameterTypes(), new Class<?>[] {ReferenceFrame.class, FrameBoundingBox3DBasics.class}));
-      EuclidFrameAPITester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameSphere3D,
-                                                                                  methodFilter,
-                                                                                  EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
+      tester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameSphere3D,
+                                                                    methodFilter,
+                                                                    EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test
    public void testConsistencyWithSphere3D()
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, sphere) -> new FrameSphere3D(frame, (Sphere3D) sphere),
-                                                                                EuclidShapeRandomTools::nextSphere3D,
-                                                                                methodFilter,
-                                                                                EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, sphere) -> new FrameSphere3D(frame, (Sphere3D) sphere),
+                                                                  EuclidShapeRandomTools::nextSphere3D,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test
    public void testSetMatchingFrame()
    {
-      EuclidFrameAPITester.assertSetMatchingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFrameSphere3D,
-                                                                       EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFrameSphere3D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test
    public void testSetIncludingFrame()
    {
-      EuclidFrameAPITester.assertSetIncludingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFrameSphere3D,
-                                                                        EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameShapeRandomTools::nextFrameSphere3D,
+                                                          EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }
