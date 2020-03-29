@@ -40,6 +40,12 @@ public class ExpandingPolytopeAlgorithm
    /** The default value for the tolerance used to trigger the terminal condition. */
    public static final double DEFAULT_TERMINAL_CONDITION_EPSILON = 1.0e-12;
 
+   /**
+    * When a component of the support direction is exactly zero, this is used to wiggle around zero to
+    * force edge-cases to trigger.
+    */
+   private static final double SUPPORT_DIRECTION_ZERO_COMPONENT = 1.234e-16;
+
    private double epsilon = DEFAULT_TERMINAL_CONDITION_EPSILON;
    /** The limit to the number of iterations in case the algorithm does not succeed to converge. */
    private int maxIterations = 1000;
@@ -92,26 +98,6 @@ public class ExpandingPolytopeAlgorithm
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
    public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
-   {
-      boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
-      if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
-         areShapesColliding = evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
-      return areShapesColliding;
-   }
-
-   /**
-    * Evaluates the collision state between the two given shapes given the simplex to start from.
-    * <p>
-    * This algorithm does not evaluate the surface normals.
-    * </p>
-    *
-    * @param shapeA       the first shape to evaluate. Not modified.
-    * @param shapeB       the second shape to evaluate. Not modified.
-    * @param simplex      the simplex used to start the expansion from. Not modified.
-    * @param resultToPack the object in which the collision result is stored. Modified.
-    * @return {@code true} if the shapes are colliding, {@code false} otherwise.
-    */
-   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, GJKVertex3D[] simplex, EuclidShape3DCollisionResultBasics resultToPack)
    {
       boolean areColliding;
 
@@ -213,7 +199,7 @@ public class ExpandingPolytopeAlgorithm
       }
       else
       {
-         initialPolytope.stream().forEach(queue::add);
+         initialPolytope.forEach(queue::add);
          Vector3D supportDirection = new Vector3D();
          numberOfIterations = 0;
 
@@ -251,6 +237,13 @@ public class ExpandingPolytopeAlgorithm
             else
                supportDirection.set(entry.getNormal());
 
+            if (supportDirection.getX() == 0.0)
+               supportDirection.setX(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getY() == 0.0)
+               supportDirection.setY(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getZ() == 0.0)
+               supportDirection.setZ(SUPPORT_DIRECTION_ZERO_COMPONENT);
+
             Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
             supportDirection.negate();
             Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
@@ -259,6 +252,13 @@ public class ExpandingPolytopeAlgorithm
 
             if (entry.contains(newVertex))
             {
+               if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+                  supportDirection.setX(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+               else if (supportDirection.getY() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+                  supportDirection.setY(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+               else if (supportDirection.getZ() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+                  supportDirection.setZ(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+
                if (VERBOSE)
                   System.out.println("New vertex equals to a vertex of entry, terminating.");
                break;
