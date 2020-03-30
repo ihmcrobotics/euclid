@@ -193,6 +193,11 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
          return false;
    }
 
+   /**
+    * Calculates and returns a hash code value from the min and max coordinates of this bounding box.
+    *
+    * @return the hash code value for this bounding box.
+    */
    @Override
    public int hashCode()
    {
@@ -200,8 +205,11 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Provides a {@code String} representation of this bounding box 2D as follows:<br>
-    * Bounding Box 2D: min = (x, y), max = (x, y)
+    * Provides a {@code String} representation of this bounding box 2D as follows:
+    *
+    * <pre>
+    * Bounding Box 2D: min = ( 0.174,  0.732 ), max = (-0.558, -0.380 )
+    * </pre>
     *
     * @return the {@code String} representing this bounding box 2D.
     */

@@ -912,7 +912,8 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random bounding box from random center location and random size.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
     * @return the random bounding box.
     */
    public static FrameBoundingBox2D nextFrameBoundingBox2D(Random random, ReferenceFrame referenceFrame)
@@ -923,9 +924,10 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random bounding box from random center location and random size.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
-    * @param sizeMax      the maximum size along each axis for the bounding box.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax        the maximum size along each axis for the bounding box.
     * @return the random bounding box.
     * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
     */
@@ -937,7 +939,8 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random bounding box from random center location and random size.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
     * @return the random bounding box.
     */
    public static FrameBoundingBox3D nextFrameBoundingBox3D(Random random, ReferenceFrame referenceFrame)
@@ -948,9 +951,10 @@ public class EuclidFrameRandomTools
    /**
     * Generates a random bounding box from random center location and random size.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the bounding box center.
-    * @param sizeMax      the maximum size along each axis for the bounding box.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax        the maximum size along each axis for the bounding box.
     * @return the random bounding box.
     * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
     */

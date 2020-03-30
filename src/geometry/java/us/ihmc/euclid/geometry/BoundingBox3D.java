@@ -64,7 +64,8 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Creates a new bounding box initialized with both its minimum and maximum coordinates to ({@code Double.NaN}, {@code Double.NaN}, {@code Double.NaN}).
+    * Creates a new bounding box initialized with both its minimum and maximum coordinates to
+    * ({@code Double.NaN}, {@code Double.NaN}, {@code Double.NaN}).
     */
    public BoundingBox3D()
    {
@@ -198,6 +199,11 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
          return false;
    }
 
+   /**
+    * Calculates and returns a hash code value from the min and max coordinates of this bounding box.
+    *
+    * @return the hash code value for this bounding box.
+    */
    @Override
    public int hashCode()
    {
@@ -205,8 +211,11 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Provides a {@code String} representation of this bounding box 3D as follows:<br>
-    * Bounding Box 3D: min = (x, y, z), max = (x, y, z)
+    * Provides a {@code String} representation of this bounding box 3D as follows:
+    *
+    * <pre>
+    * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 )
+    * </pre>
     *
     * @return the {@code String} representing this bounding box 3D.
     */

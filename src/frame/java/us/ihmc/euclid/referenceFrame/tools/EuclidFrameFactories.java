@@ -467,11 +467,28 @@ public class EuclidFrameFactories
       return newLinkedFrameVector3DReadOnly(EuclidCoreFactories.newNegativeLinkedVector3D(originalVector), originalVector);
    }
 
+   /**
+    * Creates a new frame point which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @return the new linked frame point.
+    */
    public static FixedFramePoint2DBasics newFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFramePoint2DBasics(referenceFrameHolder, new Point2D());
    }
 
+   /**
+    * Creates a new frame point which reference frame is linked to the given frameless point and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @param originalPoint        the point to link to the new frame point. Modifications on either the
+    *                             {@code originalPoint} or the new frame point will be propagated to
+    *                             the other.
+    * @return the new linked frame point.
+    */
    public static FixedFramePoint2DBasics newLinkedFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder, Point2DBasics originalPoint)
    {
       return new FixedFramePoint2DBasics()
@@ -531,11 +548,28 @@ public class EuclidFrameFactories
       };
    }
 
+   /**
+    * Creates a new frame vector which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @return the new linked frame vector.
+    */
    public static FixedFrameVector2DBasics newFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFrameVector2DBasics(referenceFrameHolder, new Vector2D());
    }
 
+   /**
+    * Creates a new frame vector which reference frame is linked to the given frameless vector and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param originalVector       the vector to link to the new frame vector. Modifications on either
+    *                             the {@code originalVector} or the new frame vector will be propagated
+    *                             to the other.
+    * @return the new linked frame vector.
+    */
    public static FixedFrameVector2DBasics newLinkedFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DBasics originalVector)
    {
       return new FixedFrameVector2DBasics()
@@ -595,11 +629,28 @@ public class EuclidFrameFactories
       };
    }
 
+   /**
+    * Creates a new frame point which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @return the new linked frame point.
+    */
    public static FixedFramePoint3DBasics newFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFramePoint3DBasics(referenceFrameHolder, new Point3D());
    }
 
+   /**
+    * Creates a new frame point which reference frame is linked to the given frameless point and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @param originalPoint        the point to link to the new frame point. Modifications on either the
+    *                             {@code originalPoint} or the new frame point will be propagated to
+    *                             the other.
+    * @return the new linked frame point.
+    */
    public static FixedFramePoint3DBasics newLinkedFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder, Point3DBasics originalPoint)
    {
       return new FixedFramePoint3DBasics()
@@ -671,11 +722,28 @@ public class EuclidFrameFactories
       };
    }
 
+   /**
+    * Creates a new frame vector which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @return the new linked frame vector.
+    */
    public static FixedFrameVector3DBasics newFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFrameVector3DBasics(referenceFrameHolder, new Vector3D());
    }
 
+   /**
+    * Creates a new frame vector which reference frame is linked to the given frameless vector and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param originalVector       the vector to link to the new frame vector. Modifications on either
+    *                             the {@code originalVector} or the new frame vector will be propagated
+    *                             to the other.
+    * @return the new linked frame vector.
+    */
    public static FixedFrameVector3DBasics newLinkedFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DBasics originalVector)
    {
       return new FixedFrameVector3DBasics()
@@ -747,11 +815,28 @@ public class EuclidFrameFactories
       };
    }
 
+   /**
+    * Creates a new frame orientation which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
+    * @return the new linked frame orientation.
+    */
    public static FixedFrameOrientation2DBasics newFixedFrameOrientation2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFrameOrientation2DBasics(referenceFrameHolder, new Orientation2D());
    }
 
+   /**
+    * Creates a new frame orientation which reference frame is linked to the given frameless
+    * orientation and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
+    * @param originalOrientation  the orientation to link to the new frame orientation. Modifications
+    *                             on either the {@code originalOriginal} or the new frame vector will
+    *                             be propagated to the other.
+    * @return the new linked frame vector.
+    */
    public static FixedFrameOrientation2DBasics newLinkedFixedFrameOrientation2DBasics(ReferenceFrameHolder referenceFrameHolder,
                                                                                       Orientation2DBasics originalOrientation)
    {
@@ -812,11 +897,28 @@ public class EuclidFrameFactories
       };
    }
 
+   /**
+    * Creates a new frame quaternion which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
+    * @return the new linked frame quaternion.
+    */
    public static FixedFrameQuaternionBasics newFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFrameQuaternionBasics(referenceFrameHolder, new Quaternion());
    }
 
+   /**
+    * Creates a new frame quaternion which reference frame is linked to the given frameless quaternion
+    * and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
+    * @param originalQuaternion   the quaternion to link to the new frame quaternion. Modifications on
+    *                             either the {@code originalQuaternion} or the new frame quaternion
+    *                             will be propagated to the other.
+    * @return the new linked frame quaternion.
+    */
    public static FixedFrameQuaternionBasics newLinkedFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder, QuaternionBasics originalQuaternion)
    {
       return new FixedFrameQuaternionBasics()
@@ -882,11 +984,29 @@ public class EuclidFrameFactories
       };
    }
 
+   /**
+    * Creates a new frame rotation matrix which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame rotation matrix.
+    * @return the new linked frame rotation matrix.
+    */
    public static FixedFrameRotationMatrixBasics newFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFrameRotationMatrixBasics(referenceFrameHolder, new RotationMatrix());
    }
 
+   /**
+    * Creates a new frame rotation matrix which reference frame is linked to the given frameless
+    * rotation matrix and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder   the reference frame holder to link to the new frame rotation
+    *                               matrix.
+    * @param originalRotationMatrix the rotation matrix to link to the new frame rotation matrix.
+    *                               Modifications on either the {@code originalRotationMatrix} or the
+    *                               new frame rotation matrix will be propagated to the other.
+    * @return the new linked frame rotation matrix.
+    */
    public static FixedFrameRotationMatrixBasics newLinkedFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder,
                                                                                         RotationMatrixBasics originalRotationMatrix)
    {
@@ -1034,18 +1154,35 @@ public class EuclidFrameFactories
       };
    }
 
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @return the new linked frame bounding box.
+    */
    public static FixedFrameBoundingBox2DBasics newFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFrameBoundingBox2DBasics(referenceFrameHolder, new BoundingBox2D());
    }
 
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
+    * box and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
+    *                             on either the {@code originalBoundingBox} or the new frame bounding
+    *                             box will be propagated to the other.
+    * @return the new linked frame bounding box.
+    */
    public static FixedFrameBoundingBox2DBasics newLinkedFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder,
-                                                                                      BoundingBox2DBasics originalBoundingBox2D)
+                                                                                      BoundingBox2DBasics originalBoundingBox)
    {
       FixedFrameBoundingBox2DBasics fixedFrameBoundingBox2DBasics = new FixedFrameBoundingBox2DBasics()
       {
-         private final FixedFramePoint2DBasics minPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox2D.getMinPoint());
-         private final FixedFramePoint2DBasics maxPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox2D.getMaxPoint());
+         private final FixedFramePoint2DBasics minPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox.getMinPoint());
+         private final FixedFramePoint2DBasics maxPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox.getMaxPoint());
 
          @Override
          public ReferenceFrame getReferenceFrame()
@@ -1092,18 +1229,35 @@ public class EuclidFrameFactories
       return fixedFrameBoundingBox2DBasics;
    }
 
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @return the new linked frame bounding box.
+    */
    public static FixedFrameBoundingBox3DBasics newFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newLinkedFixedFrameBoundingBox3DBasics(referenceFrameHolder, new BoundingBox3D());
    }
 
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
+    * box and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
+    *                             on either the {@code originalBoundingBox} or the new frame bounding
+    *                             box will be propagated to the other.
+    * @return the new linked frame bounding box.
+    */
    public static FixedFrameBoundingBox3DBasics newLinkedFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder,
-                                                                                      BoundingBox3DBasics originalBoundingBox3D)
+                                                                                      BoundingBox3DBasics originalBoundingBox)
    {
       FixedFrameBoundingBox3DBasics fixedFrameBoundingBox3DBasics = new FixedFrameBoundingBox3DBasics()
       {
-         private final FixedFramePoint3DBasics minPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox3D.getMinPoint());
-         private final FixedFramePoint3DBasics maxPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox3D.getMaxPoint());
+         private final FixedFramePoint3DBasics minPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox.getMinPoint());
+         private final FixedFramePoint3DBasics maxPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox.getMaxPoint());
 
          @Override
          public ReferenceFrame getReferenceFrame()
