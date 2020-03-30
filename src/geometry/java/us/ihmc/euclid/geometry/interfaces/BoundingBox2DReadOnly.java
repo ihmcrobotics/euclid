@@ -367,6 +367,18 @@ public interface BoundingBox2DReadOnly
    /**
     * Tests if this the given line 2D intersects this bounding box.
     *
+    * @param line2D the query. Not modified.
+    * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
+    */
+   default boolean doesIntersectWithLine2D(Line2DReadOnly line2D)
+   {
+      return doesIntersectWithLine2D(line2D.getPoint(), line2D.getDirection());
+   }
+
+   /**
+    * Tests if this the given line 2D intersects this bounding box.
+    *
     * @param pointOnLine   a point located on the infinitely long line. Not modified.
     * @param lineDirection the line direction. Not modified.
     * @return {@code true} if the line and this bounding box intersect, {@code false} otherwise.
@@ -375,6 +387,19 @@ public interface BoundingBox2DReadOnly
    default boolean doesIntersectWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
       return intersectionWithLine2D(pointOnLine, lineDirection, null, null) > 0;
+   }
+
+   /**
+    * Tests if this the given line segment 2D intersects this bounding box.
+    *
+    * @param lineSegment2D the query. Not modified.
+    * @return {@code true} if the line segment and this bounding box intersect, {@code false}
+    *         otherwise.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
+    */
+   default boolean doesIntersectWithLineSegment2D(LineSegment2DReadOnly lineSegment2D)
+   {
+      return doesIntersectWithLineSegment2D(lineSegment2D.getFirstEndpoint(), lineSegment2D.getSecondEndpoint());
    }
 
    /**
@@ -412,6 +437,28 @@ public interface BoundingBox2DReadOnly
     * {@link Double#NaN}.
     * </p>
     *
+    * @param line2D                   the query. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line and this bounding box. It is either equal to
+    *         0 or 2.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
+    */
+   default int intersectionWithLine2D(Line2DReadOnly line2D, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionWithLine2D(line2D.getPoint(), line2D.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line and this bounding box.
+    * <p>
+    * In the case the line and the bounding box do not intersect, this method returns {@code 0} and
+    * {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    *
     * @param pointOnLine              a point located on the infinitely long line. Not modified.
     * @param lineDirection            the line direction. Not modified.
     * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
@@ -432,6 +479,40 @@ public interface BoundingBox2DReadOnly
                                                        lineDirection,
                                                        firstIntersectionToPack,
                                                        secondIntersectionToPack);
+   }
+
+   /**
+    * Computes the coordinates of the two intersections between a line segment and this bounding box.
+    * <p>
+    * Intersection(s) between the line segment and this bounding box can only exist between the
+    * endpoints of the line segment.
+    * </p>
+    * <p>
+    * In the case the line segment and this bounding box do not intersect, this method returns
+    * {@code 0} and {@code firstIntersectionToPack} and {@code secondIntersectionToPack} are set to
+    * {@link Double#NaN}.
+    * </p>
+    * <p>
+    * In the case only one intersection exists between the line segment and the bounding box,
+    * {@code firstIntersectionToPack} will contain the coordinate of the intersection and
+    * {@code secondIntersectionToPack} will be set to contain only {@link Double#NaN}.
+    * </p>
+    *
+    * @param lineSegment2D            the query. Not modified.
+    * @param firstIntersectionToPack  the coordinate of the first intersection. Can be {@code null}.
+    *                                 Modified.
+    * @param secondIntersectionToPack the coordinate of the second intersection. Can be {@code null}.
+    *                                 Modified.
+    * @return the number of intersections between the line segment and this bounding box. It is either
+    *         equal to 0, 1, or 2.
+    * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
+    */
+   default int intersectionWithLineSegment2D(LineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack, Point2DBasics secondIntersectionToPack)
+   {
+      return intersectionWithLineSegment2D(lineSegment2D.getFirstEndpoint(),
+                                           lineSegment2D.getSecondEndpoint(),
+                                           firstIntersectionToPack,
+                                           secondIntersectionToPack);
    }
 
    /**
@@ -507,23 +588,6 @@ public interface BoundingBox2DReadOnly
    }
 
    /**
-    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
-    *
-    * @param other the other bounding box 2D to compare against this. Not modified.
-    * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(BoundingBox2DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
-   }
-
-   /**
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
@@ -549,5 +613,22 @@ public interface BoundingBox2DReadOnly
    default boolean geometricallyEquals(BoundingBox2DReadOnly other, double epsilon)
    {
       return getMinPoint().geometricallyEquals(other.getMinPoint(), epsilon) && getMaxPoint().geometricallyEquals(other.getMaxPoint(), epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
+    *
+    * @param other the other bounding box 2D to compare against this. Not modified.
+    * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(BoundingBox2DReadOnly other)
+   {
+      if (other == this)
+         return true;
+      else if (other == null)
+         return false;
+      else
+         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
    }
 }

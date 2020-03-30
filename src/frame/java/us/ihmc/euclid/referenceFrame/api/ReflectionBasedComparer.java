@@ -20,7 +20,7 @@ class ReflectionBasedComparer
    {
       if (!m.getName().equals(EPSILON_EQUALS) || m.getParameterCount() != 2)
          return false;
-      return (m.getParameterTypes()[1] == double.class || m.getParameterTypes()[1] == float.class);
+      return m.getParameterTypes()[1] == double.class || m.getParameterTypes()[1] == float.class;
    };
 
    static <T> boolean epsilonEquals(Object framelessParameter, Object frameParameter, double epsilon)

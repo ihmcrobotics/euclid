@@ -166,6 +166,8 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
     * If the argument implements {@link RotationMatrixReadOnly}, a redirection
     * {@link #set(RotationMatrixReadOnly)} is done.
     * </p>
+    * 
+    * @throws NotARotationMatrixException if the argument is not a rotation matrix.
     */
    @Override
    default void set(Matrix3DReadOnly other)
@@ -193,10 +195,10 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags for the other
+    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
     * matrix.
     * 
-    * @param other the other rotation matrix to copy.
+    * @param other the other rotation matrix to copy. Not modified.
     */
    void set(RotationMatrixReadOnly other);
 
@@ -374,6 +376,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
       RotationMatrixTools.multiplyTransposeRight(this, other, this);
    }
 
+   /** {@inheritDoc} */
    @Override
    default void appendInvertOther(Orientation3DReadOnly orientation)
    {
@@ -489,6 +492,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
       RotationMatrixTools.multiplyTransposeLeft(other, this, this);
    }
 
+   /** {@inheritDoc} */
    @Override
    default void prependInvertOther(Orientation3DReadOnly orientation)
    {

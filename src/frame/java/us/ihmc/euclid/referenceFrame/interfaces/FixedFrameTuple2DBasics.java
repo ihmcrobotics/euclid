@@ -17,7 +17,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * </p>
  * <p>
  * When using this interface, the reference frame of this tuple is assumed to be immutable, i.e. the
- * tuple is always expressed in the same reference frame.
+ * reference frame of this object cannot be changed via this interface.
  * </p>
  * <p>
  * Because a {@code FixedFrameTuple2DBasics} extends {@code Tuple2DBasics}, it is compatible with

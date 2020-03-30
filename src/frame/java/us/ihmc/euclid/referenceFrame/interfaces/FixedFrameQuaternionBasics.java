@@ -6,8 +6,8 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
- * Write and read interface for a quaternion expressed in a constant reference frame, i.e. this
- * quaternion is always expressed in the same reference frame.
+ * Write and read interface for a quaternion expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to
  * a {@code FixedFrameQuaternionBasics}. This allows, for instance, to enforce, at runtime, that

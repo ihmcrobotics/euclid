@@ -13,7 +13,7 @@ public interface EuclidFrameAPITestConfiguration
 {
    /**
     * Configure the API tester and its builder.
-    * 
+    *
     * @param testerToConfigure  the API tester to configure. This includes registering frame types,
     *                           frameless types, and exception types to ignore during testing.
     * @param builderToConfigure the builder to configure. This includes registering random frame type

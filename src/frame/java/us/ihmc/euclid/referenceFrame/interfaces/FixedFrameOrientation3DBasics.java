@@ -4,10 +4,11 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * Write and read interface for a 3D orientation expressed in a constant reference frame, i.e. this
- * orientation is always expressed in the same reference frame.
+ * Write and read interface for a 3D orientation expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * Even though the representation used is unknown at this level of abstraction, this interface
  * allows to enforce a minimum set of features that all representations of an orientation should
@@ -55,6 +56,27 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     * Sets this frame orientation to {@code orientation}.
     * <p>
     * If {@code orientation} is expressed in the frame as {@code this}, then this method is equivalent
+    * to {@link #set(ReferenceFrame, Orientation3DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code orientation} is expressed in a different frame than {@code this}, then {@code this} is
+    * set to {@code orientation} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the argument is expressed.
+    * @param orientation    the other orientation to copy the values from. Not modified.
+    */
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation)
+   {
+      set(orientation);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
+   }
+
+   /**
+    * Sets this frame orientation to {@code orientation}.
+    * <p>
+    * If {@code orientation} is expressed in the frame as {@code this}, then this method is equivalent
     * to {@link #set(FrameOrientation3DReadOnly)}.
     * </p>
     * <p>
@@ -67,8 +89,26 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     */
    default void setMatchingFrame(FrameOrientation3DReadOnly orientation)
    {
-      set((Orientation3DReadOnly) orientation);
-      orientation.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+      setMatchingFrame(orientation.getReferenceFrame(), orientation);
+   }
+
+   /**
+    * Sets this orientation to represent the same orientation as the given {@code rotationVector}.
+    * <p>
+    * WARNING: a rotation vector is different from a yaw-pitch-roll or Euler angles representation. A
+    * rotation vector is equivalent to the axis of an axis-angle that is multiplied by the angle of the
+    * same axis-angle.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the argument is expressed.
+    * @param rotationVector the rotation vector to set this orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if argument is not expressed in the same reference frame
+    *                                         as {@code this}.
+    */
+   default void setRotationVector(ReferenceFrame referenceFrame, Vector3DReadOnly rotationVector)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      Orientation3DBasics.super.setRotationVector(rotationVector);
    }
 
    /**
@@ -85,8 +125,27 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     */
    default void setRotationVector(FrameVector3DReadOnly rotationVector)
    {
-      checkReferenceFrameMatch(rotationVector);
-      Orientation3DBasics.super.setRotationVector(rotationVector);
+      setRotationVector(rotationVector.getReferenceFrame(), rotationVector);
+   }
+
+   /**
+    * Sets this orientation to represent the same orientation as the given Euler angles
+    * {@code eulerAngles}.
+    * <p>
+    * This is equivalent to {@link #setYawPitchRoll(double, double, double)} with
+    * {@code yaw = eulerAngles.getZ()}, {@code pitch = eulerAngles.getY()}, and
+    * {@code roll = eulerAngles.getX()}.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the argument is expressed.
+    * @param eulerAngles    the Euler angles to copy the orientation from. Not modified.
+    * @throws ReferenceFrameMismatchException if argument is not expressed in the same reference frame
+    *                                         as {@code this}.
+    */
+   default void setEuler(ReferenceFrame referenceFrame, Vector3DReadOnly eulerAngles)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      Orientation3DBasics.super.setEuler(eulerAngles);
    }
 
    /**
@@ -104,8 +163,22 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     */
    default void setEuler(FrameVector3DReadOnly eulerAngles)
    {
-      checkReferenceFrameMatch(eulerAngles);
-      Orientation3DBasics.super.setEuler(eulerAngles);
+      setEuler(eulerAngles.getReferenceFrame(), eulerAngles);
+   }
+
+   /**
+    * Converts, if necessary, and sets this orientation to represents the same orientation as
+    * {@code orientation}.
+    *
+    * @param referenceFrame the reference frame in which the argument is expressed.
+    * @param orientation    the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if argument is not expressed in the same reference frame
+    *                                         as {@code this}.
+    */
+   default void set(ReferenceFrame referenceFrame, FrameOrientation3DReadOnly orientation)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set((Orientation3DReadOnly) orientation);
    }
 
    /**
@@ -118,8 +191,7 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
     */
    default void set(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      set((Orientation3DReadOnly) orientation);
+      set(orientation.getReferenceFrame(), orientation);
    }
 
    /**

@@ -301,7 +301,7 @@ public class FrameMatrix3D implements FrameMatrix3DBasics, GeometryObject<FrameM
 
    /**
     * Provides a {@code String} representation of this matrix as follows:
-    * 
+    *
     * <pre>
     * /m00, m01, m02 \
     * |m10, m11, m12 |

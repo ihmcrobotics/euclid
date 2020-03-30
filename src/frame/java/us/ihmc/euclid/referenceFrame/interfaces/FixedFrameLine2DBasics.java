@@ -13,8 +13,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * Write and read interface for a line 2D expressed in a constant reference frame, i.e. this line is
- * always expressed in the same reference frame.
+ * Write and read interface for a line 2D expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * A line 2D represents an infinitely long line in the XY-plane and defined by a point and a
  * direction.

@@ -12,6 +12,10 @@ public interface FrameChangeable extends ReferenceFrameHolder, Transformable
 {
    /**
     * Sets the reference frame of this object.
+    * <p>
+    * Note that the typical implementation for this method is to only set reference frame without
+    * performing any transformation on the geometry.
+    * </p>
     *
     * @param referenceFrame the new reference frame.
     */

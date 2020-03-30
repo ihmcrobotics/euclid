@@ -7,7 +7,8 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 
 /**
- * Write and read interface for a 2D orientation that is expressed in a immutable reference frame.
+ * Write and read interface for a 2D orientation that is expressed in a constant reference frame,
+ * i.e. the reference frame of this object cannot be changed via this interface.
  * <p>
  * A 2D orientation is in the XY-plane, i.e. the yaw angle about the z-axis.
  * </p>

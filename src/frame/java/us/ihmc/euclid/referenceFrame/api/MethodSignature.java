@@ -38,7 +38,7 @@ public class MethodSignature
 
    /**
     * Creates a new signature and initialize it with the given name and parameter types.
-    * 
+    *
     * @param name           the method's name.
     * @param parameterTypes the method's parameter types.
     */
@@ -50,7 +50,7 @@ public class MethodSignature
 
    /**
     * Copy constructor.
-    * 
+    *
     * @param other the original signature to copy. Not modified.
     */
    public MethodSignature(MethodSignature other)
@@ -60,7 +60,7 @@ public class MethodSignature
 
    /**
     * Creates a new signature and initializes it from the given method.
-    * 
+    *
     * @param method the method to get the signature from.
     */
    public MethodSignature(Method method)
@@ -70,7 +70,7 @@ public class MethodSignature
 
    /**
     * Setter that performs a deep copy of the given signature.
-    * 
+    *
     * @param other the signature to copy. Not modified.
     */
    public void set(MethodSignature other)
@@ -82,7 +82,7 @@ public class MethodSignature
 
    /**
     * Sets this signature from the given method.
-    * 
+    *
     * @param method the method to get the signature from.
     */
    public void set(Method method)
@@ -94,7 +94,7 @@ public class MethodSignature
 
    /**
     * Sets the method's name.
-    * 
+    *
     * @param name the name of the method.
     */
    public void setName(String name)
@@ -104,7 +104,7 @@ public class MethodSignature
 
    /**
     * Returns the number of parameters from this signature.
-    * 
+    *
     * @return the number of parameters.
     */
    public int getParameterCount()
@@ -114,7 +114,7 @@ public class MethodSignature
 
    /**
     * Sets this signature's parameter types.
-    * 
+    *
     * @param parameterTypes the parameter types for this signature.
     */
    public void setParameterTypes(Class<?>... parameterTypes)
@@ -127,7 +127,7 @@ public class MethodSignature
     * <p>
     * The subsequent parameter types are shifted.
     * </p>
-    * 
+    *
     * @param index         the insertion point of the new parameter type.
     * @param parameterType the parameter type to be added to this signature.
     */
@@ -138,7 +138,7 @@ public class MethodSignature
 
    /**
     * Removes the parameter type at the given position from this signature.
-    * 
+    *
     * @param index position of the parameter type to be removed.
     * @return the parameter type that was removed.
     */
@@ -149,7 +149,7 @@ public class MethodSignature
 
    /**
     * Replaces the parameter type at the given position.
-    * 
+    *
     * @param index         position of the parameter type to be replaced.
     * @param parameterType the new parameter type.
     * @return the parameter type that was removed.
@@ -161,7 +161,7 @@ public class MethodSignature
 
    /**
     * Sets the return type of this signature.
-    * 
+    *
     * @param returnType the new return type.
     * @return the previous return type.
     */
@@ -174,7 +174,7 @@ public class MethodSignature
 
    /**
     * Returns the method's name.
-    * 
+    *
     * @return the name of the method.
     */
    public String getName()
@@ -184,7 +184,7 @@ public class MethodSignature
 
    /**
     * Gets the parameter types of this signature as an array.
-    * 
+    *
     * @return the array of this signature's parameter types.
     */
    public Class<?>[] toParameterTypeArray()
@@ -194,7 +194,7 @@ public class MethodSignature
 
    /**
     * Returns the internal list of parameter types of this signature.
-    * 
+    *
     * @return the list of parameter types.
     */
    public List<Class<?>> getParameterTypes()
@@ -204,7 +204,7 @@ public class MethodSignature
 
    /**
     * Gets the parameter type at the given position.
-    * 
+    *
     * @param index position of the parameter type to get.
     * @return the parameter type.
     */
@@ -215,7 +215,7 @@ public class MethodSignature
 
    /**
     * Gets the return type of this signature.
-    * 
+    *
     * @return this signature's return type.
     */
    public Class<?> getReturnType()
@@ -225,7 +225,7 @@ public class MethodSignature
 
    /**
     * Returns a string representation of this signature, using the types' simple name.
-    * 
+    *
     * @return the string representation of this signature.
     */
    public String getMethodSimpleName()
@@ -235,7 +235,7 @@ public class MethodSignature
 
    /**
     * Creates a string representation of the given method using the parameter types' simple name.
-    * 
+    *
     * @param method the method to get the string representation of.
     * @return the string representation of the method.
     */
@@ -247,7 +247,7 @@ public class MethodSignature
    /**
     * Creates a string representation for the given method signature using the return and parameter
     * types' simple name.
-    * 
+    *
     * @param returnType     the return type of the method.
     * @param methodName     the name of the method.
     * @param parameterTypes the parameter types of the method.
@@ -261,7 +261,7 @@ public class MethodSignature
    /**
     * Creates a string representation for the given method signature using the return and parameter
     * types' simple name.
-    * 
+    *
     * @param returnType     the return type of the method.
     * @param methodName     the name of the method.
     * @param parameterTypes the parameter types of the method.

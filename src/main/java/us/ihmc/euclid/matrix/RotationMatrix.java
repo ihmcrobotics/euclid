@@ -160,6 +160,19 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
       setRotationVector(rotationVector);
    }
 
+   /**
+    * Creates a new rotation matrix and initializes such that it represents the same orientation as the
+    * given yaw-pitch-roll {@code yaw}, {@code pitch}, and {@code roll}.
+    *
+    * @param yaw   the angle to rotate about the z-axis.
+    * @param pitch the angle to rotate about the y-axis.
+    * @param roll  the angle to rotate about the x-axis.
+    */
+   public RotationMatrix(double yaw, double pitch, double roll)
+   {
+      setYawPitchRoll(yaw, pitch, roll);
+   }
+
    @Override
    public void setIdentity()
    {
@@ -446,10 +459,13 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
    }
 
    /**
-    * Provides a {@code String} representation of this matrix as follows: <br>
-    * m00, m01, m02 <br>
-    * m10, m11, m12 <br>
-    * m20, m21, m22
+    * Provides a {@code String} representation of this matrix as follows:
+    * 
+    * <pre>
+    * /-0.576, -0.784,  0.949 \
+    * | 0.649, -0.542, -0.941 |
+    * \-0.486, -0.502, -0.619 /
+    * </pre>
     *
     * @return the {@code String} representing this matrix.
     */

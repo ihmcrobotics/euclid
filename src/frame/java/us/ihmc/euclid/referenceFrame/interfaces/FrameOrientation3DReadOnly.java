@@ -87,15 +87,29 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       get((YawPitchRollBasics) yawPitchRollToPack);
    }
 
-   default void get(FrameRotationMatrixBasics rotationMatrixToPack)
-   {
-      rotationMatrixToPack.setReferenceFrame(getReferenceFrame());
-      get((RotationMatrixBasics) rotationMatrixToPack);
-   }
-
+   /**
+    * Converts, if necessary, and packs this orientation in a rotation matrix.
+    *
+    * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
+    *                             Modified.
+    * @throws ReferenceFrameMismatchException if {@code frameYawPitchRollToPack} is not expressed in
+    *                                         the same frame as this.
+    */
    default void get(FixedFrameRotationMatrixBasics rotationMatrixToPack)
    {
       checkReferenceFrameMatch(rotationMatrixToPack);
+      get((RotationMatrixBasics) rotationMatrixToPack);
+   }
+
+   /**
+    * Converts, if necessary, and packs this orientation in a rotation matrix.
+    *
+    * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
+    *                             Modified.
+    */
+   default void get(FrameRotationMatrixBasics rotationMatrixToPack)
+   {
+      rotationMatrixToPack.setReferenceFrame(getReferenceFrame());
       get((RotationMatrixBasics) rotationMatrixToPack);
    }
 
@@ -202,7 +216,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      transform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      transform((Tuple3DReadOnly) tupleOriginal, tupleTransformed);
    }
 
    /**
@@ -222,7 +236,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      transform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      transform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -240,7 +254,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      transform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      transform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -320,7 +334,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void addTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      addTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      addTransform((Tuple3DReadOnly) tupleOriginal, tupleTransformed);
    }
 
    /**
@@ -340,7 +354,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void addTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      addTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      addTransform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -358,7 +372,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void addTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      addTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      addTransform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -438,7 +452,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void subTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      subTransform((Tuple3DReadOnly) tupleOriginal, tupleTransformed);
    }
 
    /**
@@ -458,7 +472,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void subTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      subTransform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -476,7 +490,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void subTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      subTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      subTransform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -561,7 +575,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      transform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed);
+      transform((Tuple2DReadOnly) tupleOriginal, tupleTransformed);
    }
 
    /**
@@ -583,7 +597,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      transform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed);
+      transform(tupleOriginal, (Tuple2DBasics) tupleTransformed);
    }
 
    /**
@@ -603,7 +617,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      transform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed);
+      transform(tupleOriginal, (Tuple2DBasics) tupleTransformed);
    }
 
    /**
@@ -697,7 +711,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      transform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
+      transform((Tuple2DReadOnly) tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
    /**
@@ -723,7 +737,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      transform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
+      transform(tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
    }
 
    /**
@@ -748,7 +762,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      transform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
+      transform(tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
    }
 
    /**
@@ -838,7 +852,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(FrameMatrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal);
-      transform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+      transform((Matrix3DReadOnly) matrixOriginal, matrixTransformed);
    }
 
    /**
@@ -856,7 +870,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Matrix3DReadOnly matrixOriginal, FrameMatrix3DBasics matrixTransformed)
    {
       matrixTransformed.setReferenceFrame(getReferenceFrame());
-      transform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+      transform(matrixOriginal, (Matrix3DBasics) matrixTransformed);
    }
 
    /**
@@ -876,7 +890,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Matrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixTransformed);
-      transform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+      transform(matrixOriginal, (Matrix3DBasics) matrixTransformed);
    }
 
    /**
@@ -960,7 +974,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
       checkReferenceFrameMatch(vectorOriginal);
-      transform((Vector4DReadOnly) vectorOriginal, (Vector4DBasics) vectorTransformed);
+      transform((Vector4DReadOnly) vectorOriginal, vectorTransformed);
    }
 
    /**
@@ -983,7 +997,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
       checkReferenceFrameMatch(vectorTransformed);
-      transform((Vector4DReadOnly) vectorOriginal, (Vector4DBasics) vectorTransformed);
+      transform(vectorOriginal, (Vector4DBasics) vectorTransformed);
    }
 
    /**
@@ -1004,7 +1018,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Vector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
       vectorTransformed.setReferenceFrame(getReferenceFrame());
-      transform((Vector4DReadOnly) vectorOriginal, (Vector4DBasics) vectorTransformed);
+      transform(vectorOriginal, (Vector4DBasics) vectorTransformed);
    }
 
    /**
@@ -1090,7 +1104,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(FrameOrientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
    {
       checkReferenceFrameMatch(orientationOriginal);
-      transform((Orientation3DReadOnly) orientationOriginal, (Orientation3DBasics) orientationTransformed);
+      transform((Orientation3DReadOnly) orientationOriginal, orientationTransformed);
    }
 
    /**
@@ -1111,7 +1125,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Orientation3DReadOnly orientationOriginal, FixedFrameOrientation3DBasics orientationTransformed)
    {
       checkReferenceFrameMatch(orientationTransformed);
-      transform((Orientation3DReadOnly) orientationOriginal, (Orientation3DBasics) orientationTransformed);
+      transform(orientationOriginal, (Orientation3DBasics) orientationTransformed);
    }
 
    /**
@@ -1130,7 +1144,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void transform(Orientation3DReadOnly orientationOriginal, FrameOrientation3DBasics orientationTransformed)
    {
       orientationTransformed.setReferenceFrame(getReferenceFrame());
-      transform((Orientation3DReadOnly) orientationOriginal, (Orientation3DBasics) orientationTransformed);
+      transform(orientationOriginal, (Orientation3DBasics) orientationTransformed);
    }
 
    /**
@@ -1177,36 +1191,104 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       transform((Orientation3DReadOnly) orientationOriginal, (Orientation3DBasics) orientationTransformed);
    }
 
+   /**
+    * Transforms the given rotation matrix by this orientation.
+    * <p>
+    * The operation is equivalent to prepend this orientation to the given rotation matrix.
+    * </p>
+    *
+    * @param matrixToTransform the rotation matrix to be transformed. Modified.
+    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
    default void transform(FixedFrameRotationMatrixBasics matrixToTransform)
    {
       checkReferenceFrameMatch(matrixToTransform);
       transform((RotationMatrixBasics) matrixToTransform);
    }
 
+   /**
+    * Transforms the given {@code matrixOriginal} and stores the result in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend this orientation to the {@code matrixOriginal} and store
+    * the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if the frame argument is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
    default void transform(FrameRotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal);
-      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+      transform((RotationMatrixReadOnly) matrixOriginal, matrixTransformed);
    }
 
+   /**
+    * Transforms the given {@code matrixOriginal} and stores the result in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend this orientation to the {@code matrixOriginal} and store
+    * the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    */
    default void transform(RotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
    {
       matrixTransformed.setReferenceFrame(getReferenceFrame());
-      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+      transform(matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
+   /**
+    * Transforms the given {@code matrixOriginal} and stores the result in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend this orientation to the {@code matrixOriginal} and store
+    * the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if the frame argument is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
    default void transform(RotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixTransformed);
-      transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+      transform(matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
+   /**
+    * Transforms the given {@code matrixOriginal} and stores the result in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend this orientation to the {@code matrixOriginal} and store
+    * the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
    default void transform(FrameRotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal, matrixTransformed);
       transform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
+   /**
+    * Transforms the given {@code matrixOriginal} and stores the result in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend this orientation to the {@code matrixOriginal} and store
+    * the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
    default void transform(FrameRotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal);
@@ -1249,7 +1331,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      inverseTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      inverseTransform((Tuple3DReadOnly) tupleOriginal, tupleTransformed);
    }
 
    /**
@@ -1269,7 +1351,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      inverseTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      inverseTransform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -1287,7 +1369,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Tuple3DReadOnly tupleOriginal, FrameTuple3DBasics tupleTransformed)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      inverseTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
+      inverseTransform(tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
    /**
@@ -1371,7 +1453,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      inverseTransform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed);
+      inverseTransform((Tuple2DReadOnly) tupleOriginal, tupleTransformed);
    }
 
    /**
@@ -1439,7 +1521,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      inverseTransform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed);
+      inverseTransform(tupleOriginal, (Tuple2DBasics) tupleTransformed);
    }
 
    /**
@@ -1459,7 +1541,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      inverseTransform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed);
+      inverseTransform(tupleOriginal, (Tuple2DBasics) tupleTransformed);
    }
 
    /**
@@ -1507,7 +1589,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleTransformed);
-      inverseTransform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
+      inverseTransform(tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
    }
 
    /**
@@ -1529,7 +1611,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Tuple2DReadOnly tupleOriginal, FrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       tupleTransformed.setReferenceFrame(getReferenceFrame());
-      inverseTransform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
+      inverseTransform(tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
    }
 
    /**
@@ -1606,7 +1688,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
       checkReferenceFrameMatch(tupleOriginal);
-      inverseTransform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
+      inverseTransform((Tuple2DReadOnly) tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
    /**
@@ -1644,7 +1726,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(FrameMatrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal);
-      inverseTransform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+      inverseTransform((Matrix3DReadOnly) matrixOriginal, matrixTransformed);
    }
 
    /**
@@ -1664,7 +1746,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, FrameMatrix3DBasics matrixTransformed)
    {
       matrixTransformed.setReferenceFrame(getReferenceFrame());
-      inverseTransform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+      inverseTransform(matrixOriginal, (Matrix3DBasics) matrixTransformed);
    }
 
    /**
@@ -1684,7 +1766,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixTransformed);
-      inverseTransform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
+      inverseTransform(matrixOriginal, (Matrix3DBasics) matrixTransformed);
    }
 
    /**
@@ -1770,7 +1852,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(FrameVector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
       checkReferenceFrameMatch(vectorOriginal);
-      inverseTransform((Vector4DReadOnly) vectorOriginal, (Vector4DBasics) vectorTransformed);
+      inverseTransform((Vector4DReadOnly) vectorOriginal, vectorTransformed);
    }
 
    /**
@@ -1794,7 +1876,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Vector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
       checkReferenceFrameMatch(vectorTransformed);
-      inverseTransform((Vector4DReadOnly) vectorOriginal, (Vector4DBasics) vectorTransformed);
+      inverseTransform(vectorOriginal, (Vector4DBasics) vectorTransformed);
    }
 
    /**
@@ -1816,7 +1898,7 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
    default void inverseTransform(Vector4DReadOnly vectorOriginal, FrameVector4DBasics vectorTransformed)
    {
       vectorTransformed.setReferenceFrame(getReferenceFrame());
-      inverseTransform((Vector4DReadOnly) vectorOriginal, (Vector4DBasics) vectorTransformed);
+      inverseTransform(vectorOriginal, (Vector4DBasics) vectorTransformed);
    }
 
    /**
@@ -1990,36 +2072,110 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       Orientation3DReadOnly.super.inverseTransform(orientationOriginal, orientationTransformed);
    }
 
+   /**
+    * Performs the inverse of the transform to the given rotation matrix by this orientation.
+    * <p>
+    * The operation is equivalent to prepend the inverse of this orientation to the given rotation
+    * matrix.
+    * </p>
+    *
+    * @param matrixToTransform the rotation matrix to be transformed. Modified.
+    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
    default void inverseTransform(FixedFrameRotationMatrixBasics matrixToTransform)
    {
       checkReferenceFrameMatch(matrixToTransform);
       inverseTransform((RotationMatrixBasics) matrixToTransform);
    }
 
+   /**
+    * Performs the inverse of the transform to the given {@code matrixOriginal} and stores the result
+    * in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend the inverse of this orientation to the
+    * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if the frame argument is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
    default void inverseTransform(FrameRotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal);
-      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+      inverseTransform((RotationMatrixReadOnly) matrixOriginal, matrixTransformed);
    }
 
+   /**
+    * Performs the inverse of the transform to the given {@code matrixOriginal} and stores the result
+    * in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend the inverse of this orientation to the
+    * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    */
    default void inverseTransform(RotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
    {
       matrixTransformed.setReferenceFrame(getReferenceFrame());
-      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+      inverseTransform(matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
+   /**
+    * Performs the inverse of the transform to the given {@code matrixOriginal} and stores the result
+    * in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend the inverse of this orientation to the
+    * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if the frame argument is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
    default void inverseTransform(RotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixTransformed);
-      inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+      inverseTransform(matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
+   /**
+    * Performs the inverse of the transform to the given {@code matrixOriginal} and stores the result
+    * in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend the inverse of this orientation to the
+    * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
+    *                                         same reference frame as {@code this}.
+    */
    default void inverseTransform(FrameRotationMatrixReadOnly matrixOriginal, FixedFrameRotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal, matrixTransformed);
       inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
    }
 
+   /**
+    * Performs the inverse of the transform to the given {@code matrixOriginal} and stores the result
+    * in {@code matrixTransformed}.
+    * <p>
+    * The operation is equivalent to prepend the inverse of this orientation to the
+    * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
+    * </p>
+    *
+    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
+    * @param matrixTransformed the result of the original matrix after transformation. Modified.
+    * @throws ReferenceFrameMismatchException if {@code matrixOriginal} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
    default void inverseTransform(FrameRotationMatrixReadOnly matrixOriginal, FrameRotationMatrixBasics matrixTransformed)
    {
       checkReferenceFrameMatch(matrixOriginal);

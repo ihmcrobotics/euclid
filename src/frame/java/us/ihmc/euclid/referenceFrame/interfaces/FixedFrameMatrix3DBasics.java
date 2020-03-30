@@ -9,8 +9,8 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tools.Matrix3DTools;
 
 /**
- * Write and read interface for generic matrix 3D expressed in a constant reference frame, i.e. this
- * matrix is always expressed in the same reference frame.
+ * Write and read interface for generic matrix 3D expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link Matrix3DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FixedFrameMatrix3DBasics}. This allows, for instance, to enforce, at runtime, that
@@ -57,6 +57,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     * @throws ReferenceFrameMismatchException if the matrix is not expressed in the same reference
     *                                         frame as {@code this}.
     */
+   @Override
    default void set(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);

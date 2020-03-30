@@ -68,7 +68,7 @@ public class ReflectionBasedBuilder
 
    /**
     * Registers a new random generator that can generate random frame object to this builder.
-    * 
+    *
     * @param frameTypeBuilder the generator to register.
     */
    public void registerFrameTypeBuilder(RandomFrameTypeBuilder frameTypeBuilder)
@@ -78,7 +78,7 @@ public class ReflectionBasedBuilder
 
    /**
     * Registers a new random generator that can generate random frameless object to this builder.
-    * 
+    *
     * @param framelessTypeBuilder the generator to register.
     */
    public void registerFramelessTypeBuilder(RandomFramelessTypeBuilder framelessTypeBuilder)
@@ -97,7 +97,7 @@ public class ReflectionBasedBuilder
     * order {@link Random} and {@link ReferenceFrame} is extracted into a random frame type generator.
     * </ul>
     * </p>
-    * 
+    *
     * @param classes the classes from which to extract random generators.
     */
    public void registerRandomGeneratorClasses(Class<?>... classes)

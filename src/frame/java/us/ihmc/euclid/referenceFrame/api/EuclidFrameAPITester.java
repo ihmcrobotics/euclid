@@ -118,7 +118,7 @@ public class EuclidFrameAPITester
     * <p>
     * The new tester and the internal reflection-based builders need to be configured.
     * </p>
-    * 
+    *
     * @see #getReflectionBasedBuilder()
     */
    public EuclidFrameAPITester()
@@ -127,7 +127,7 @@ public class EuclidFrameAPITester
 
    /**
     * Creates a new API tester given a {@code configuration} that is ready for use.
-    * 
+    *
     * @param configuration the configuration used to specify the frame types, frameless types,
     *                      exception types to ignore, and random generators to use during the test.
     */
@@ -139,7 +139,7 @@ public class EuclidFrameAPITester
    /**
     * Registers exception types that are to be ignored if thrown by a method when invoked during the
     * test.
-    * 
+    *
     * @param exceptionTypes the types of exception to be ignored during the test.
     */
    public void registerExceptionsToIgnore(Class<?>... exceptionTypes)
@@ -155,7 +155,7 @@ public class EuclidFrameAPITester
     * <p>
     * This is needed for preventing false assertion errors.
     * </p>
-    * 
+    *
     * @param framelessMutableTypes the mutable API of the frameless geometry types to be registered.
     * @see #registerFramelessTypeSmart(Class)
     */
@@ -173,7 +173,7 @@ public class EuclidFrameAPITester
     * <p>
     * The read-only equivalent type is retrieved by using naming convention and registered.
     * </p>
-    * 
+    *
     * @param framelessMutableType the mutable API of the frameless geometry type to be registered.
     */
    public void registerFramelessTypeSmart(Class<?> framelessMutableType)
@@ -191,7 +191,7 @@ public class EuclidFrameAPITester
     * <p>
     * This is needed for preventing false assertion errors.
     * </p>
-    * 
+    *
     * @param framelessMutableType  the mutable API of the frameless geometry type.
     * @param framelessReadOnlyType the read-only API of the frameless geometry type.
     */
@@ -202,7 +202,7 @@ public class EuclidFrameAPITester
 
    /**
     * Registers the given types as frame geometries which values and frame can be modified.
-    * 
+    *
     * @param mutableFrameMutableTypes the types to be registered.
     * @see #registerFramelessTypeSmart(Class)
     */
@@ -222,7 +222,7 @@ public class EuclidFrameAPITester
     * and registered.
     * </ul>
     * </p>
-    * 
+    *
     * @param mutableFrameMutableType the geometry with: mutable values and mutable frame to be
     *                                registered.
     */
@@ -255,7 +255,7 @@ public class EuclidFrameAPITester
     * <p>
     * This tester requires all needed types to be registered before performing assertions.
     * </p>
-    * 
+    *
     * @param mutableFrameMutableType the geometry with: mutable values and mutable frame.
     * @param fixedFrameMutableType   the geometry with: mutable values and immutable frame.
     * @param frameReadOnlyType       the geometry with: immutable values and immutable frame.
@@ -286,7 +286,7 @@ public class EuclidFrameAPITester
 
    /**
     * Registers frame types that only declares read-only API.
-    * 
+    *
     * @param frameReadOnlyTypes the read-only frame types to be registered.
     * @see #registerReadOnlyFrameTypeSmart(Class)
     */
@@ -301,7 +301,7 @@ public class EuclidFrameAPITester
     * <p>
     * The read-only frameless equivalent type is retrieved by using naming convention and registered.
     * </p>
-    * 
+    *
     * @param frameReadOnlyType the read-only frame type to be registered.
     */
    public void registerReadOnlyFrameTypeSmart(Class<?> frameReadOnlyType)
@@ -318,7 +318,7 @@ public class EuclidFrameAPITester
     * <p>
     * This method can be used to access and configure the builders.
     * </p>
-    * 
+    *
     * @return the internal reflection-based builders used during the tests.
     */
    public ReflectionBasedBuilder getReflectionBasedBuilder()
@@ -382,7 +382,7 @@ public class EuclidFrameAPITester
    /**
     * Creates a filter that can be used to ignore the collection of methods as defined by the given
     * signatures.
-    * 
+    *
     * @param signaturesToIgnore the signatures of the methods to be ignored.
     * @return the filter.
     */
@@ -394,7 +394,7 @@ public class EuclidFrameAPITester
 
    /**
     * Creates a filter that can be used to ignore the method as defined by the given signature.
-    * 
+    *
     * @param signatureToIgnore the signature of the method to be ignored.
     * @return the filter.
     */
@@ -600,29 +600,29 @@ public class EuclidFrameAPITester
     * When the arguments are expressed in a different reference frame than the geometry on which the
     * method is called, a transformation as to be performed such that
     * {@code frameGeometry.setMatchingFrame(frameArgument)} is equivalent to either:
-    * 
+    *
     * <pre>
     * ReferenceFrame originalFrame = frameGeometry.getReferenceFrame();
     * frameGeometry.setReferenceFrame(frameArgument.getReferenceFrame());
     * frameGeometry.set(frameArgument);
     * frameGeometry.changeFrame(originalFrame);
     * </pre>
-    * 
+    *
     * or:
-    * 
+    *
     * <pre>
     * ReferenceFrame originalFrame = frameArgument.getReferenceFrame();
     * frameArgument.changeFrame(frameGeometry.getReferenceFrame());
     * frameGeometry.set(frameArgument);
     * frameArgument.changeFrame(originalFrame);
     * </pre>
-    * 
+    *
     * without modifying the arguments. Most of the time, the operation should be equivalent to the
     * first example, but for instance when {@code frameGeometry} is a 2D geometry and that
     * {@code frameArgument} is a 3D geometry, then the second option is expected as transforming the 2D
     * geometry would result in loss of information pre-transformation.
     * </p>
-    * 
+    *
     * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
     * @param numberOfIterations number of iterations to perform for each method.
     */
@@ -638,29 +638,29 @@ public class EuclidFrameAPITester
     * When the arguments are expressed in a different reference frame than the geometry on which the
     * method is called, a transformation as to be performed such that
     * {@code frameGeometry.setMatchingFrame(frameArgument)} is equivalent to either:
-    * 
+    *
     * <pre>
     * ReferenceFrame originalFrame = frameGeometry.getReferenceFrame();
     * frameGeometry.setReferenceFrame(frameArgument.getReferenceFrame());
     * frameGeometry.set(frameArgument);
     * frameGeometry.changeFrame(originalFrame);
     * </pre>
-    * 
+    *
     * or:
-    * 
+    *
     * <pre>
     * ReferenceFrame originalFrame = frameArgument.getReferenceFrame();
     * frameArgument.changeFrame(frameGeometry.getReferenceFrame());
     * frameGeometry.set(frameArgument);
     * frameArgument.changeFrame(originalFrame);
     * </pre>
-    * 
+    *
     * without modifying the arguments. Most of the time, the operation should be equivalent to the
     * first example, but for instance when {@code frameGeometry} is a 2D geometry and that
     * {@code frameArgument} is a 3D geometry, then the second option is expected as transforming the 2D
     * geometry would result in loss of information pre-transformation.
     * </p>
-    * 
+    *
     * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
     * @param methodFilter       custom filter used on the methods. The assertions are performed on the
     *                           methods for which {@code methodFilter.test(method)} returns
@@ -874,7 +874,7 @@ public class EuclidFrameAPITester
     * While "set" does not modify the frame of the holder, "setIncludingFrame" set the values AND the
     * frame of the holder.
     * </p>
-    * 
+    *
     * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
     * @param numberOfIterations number of iterations to perform for each method.
     */
@@ -890,7 +890,7 @@ public class EuclidFrameAPITester
     * While "set" does not modify the frame of the holder, "setIncludingFrame" set the values AND the
     * frame of the holder.
     * </p>
-    * 
+    *
     * @param frameTypeBuilder   the builder for creating instances of the frame object to test.
     * @param methodFilter       custom filter used on the methods. The assertions are performed on the
     *                           methods for which {@code methodFilter.test(method)} returns

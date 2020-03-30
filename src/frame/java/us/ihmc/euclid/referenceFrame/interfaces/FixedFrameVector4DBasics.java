@@ -6,8 +6,8 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
 /**
- * Write and read interface for a 4D vector expressed in a constant reference frame, i.e. this
- * vector is always expressed in the same reference frame.
+ * Write and read interface for a 4D vector expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link Vector4DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FixedFrameVector4DBasics}. This allows, for instance, to enforce, at runtime, that

@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * <p>
  * In this interface, the matrix is assumed to be generic purpose. Therefore, the algorithms used
  * here are limited to generic applications without violating potential constraints of more specific
- * matrices such a rotation matrix.
+ * matrices such as a rotation matrix.
  * </p>
  *
  * @author Sylvain Bertrand
