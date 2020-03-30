@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.collision.gjk;
 
-import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.collision.EuclidFrameShape3DCollisionResult;
@@ -17,8 +16,10 @@ import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameGilbertJohnsonKeerthiCollisionDetector
@@ -33,7 +34,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     * Flag to indicate whether the initial support direction has been provided by the user or not.
     */
    private boolean isInitialSupportDirectionProvided = false;
-   private final FrameVector3D initialSupportDirection = new FrameVector3D(null, Axis.Y);
+   private final FrameVector3D initialSupportDirection = new FrameVector3D();
+   private final Point3D centroid = new Point3D();
 
    public FrameGilbertJohnsonKeerthiCollisionDetector()
    {
@@ -99,7 +101,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
                transform.preMultiplyInvertOther(shapeB.getPose());
                FixedFrameShape3DBasics localShapeB = shapeB.copy();
                localShapeB.getPose().setToZero();
-               guessInitialSupportDirection((Shape3DReadOnly) shapeA, (Shape3DReadOnly) shapeB);
+               centroid.applyInverseTransform(transform);
+               guessInitialSupportDirection(centroid, localShapeB.getCentroid());
                areColliding = evaluateCollision(shapeB.getReferenceFrame(), (Shape3DReadOnly) shapeA, (Shape3DReadOnly) localShapeB, transform, resultToPack);
                resultToPack.applyTransform(shapeB.getPose());
             }
@@ -129,7 +132,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
             transform.preMultiplyInvertOther(shapeA.getPose());
             FixedFrameShape3DBasics localShapeA = shapeA.copy();
             localShapeA.getPose().setToZero();
-            guessInitialSupportDirection((Shape3DReadOnly) shapeB, (Shape3DReadOnly) localShapeA);
+            centroid.set(shapeB.getCentroid());
+            centroid.applyInverseTransform(transform);
+            guessInitialSupportDirection(centroid, localShapeA.getCentroid());
             areColliding = evaluateCollision(shapeA.getReferenceFrame(), shapeB, localShapeA, transform, resultToPack);
             resultToPack.swapShapes();
             resultToPack.applyTransform(shapeA.getPose());
@@ -206,7 +211,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
    {
       if (isInitialSupportDirectionProvided)
          return;
-      
+
       initialSupportDirection.setReferenceFrame(shapeB.getReferenceFrame());
       initialSupportDirection.setMatchingFrame(shapeA.getCentroid());
       initialSupportDirection.negate();
@@ -216,11 +221,16 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
 
    private void guessInitialSupportDirection(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
    {
+      guessInitialSupportDirection(shapeA.getCentroid(), shapeB.getCentroid());
+   }
+
+   private void guessInitialSupportDirection(Point3DReadOnly centroidA, Point3DReadOnly centroidB)
+   {
       if (isInitialSupportDirectionProvided)
          return;
 
       initialSupportDirection.setReferenceFrame(null);
-      initialSupportDirection.sub(shapeB.getCentroid(), shapeA.getCentroid());
+      initialSupportDirection.sub(centroidB, centroidA);
       isInitialSupportDirectionProvided = true;
    }
 
@@ -297,7 +307,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
          if (initialSupportDirection.getReferenceFrame() != null)
             initialSupportDirection.changeFrame(detectorFrame);
          gjkCollisionDetector.setInitialSupportDirection(initialSupportDirection);
-         initialSupportDirection.setReferenceFrame(null);
+         initialSupportDirection.setToNaN(null);
          isInitialSupportDirectionProvided = false;
       }
    }

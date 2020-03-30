@@ -29,8 +29,8 @@ public class FrameExpandingPolytopeAlgorithmTest
    private static final double LARGE_DISTANCE_EPSILON = 1.0e-6;
    private static final double LARGE_POINT_TANGENTIAL_EPSILON = 1.0e-4;
 
-   private static final double DISTANCE_AVERAGE_EPSILON = 1.0e-10;
-   private static final double POINT_NORMAL_ERROR_AVERAGE_EPSILON = 1.0e-10;
+   private static final double DISTANCE_AVERAGE_EPSILON = 1.0e-8;
+   private static final double POINT_NORMAL_ERROR_AVERAGE_EPSILON = 1.0e-8;
    private static final double POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON = 1.0e-7;
 
    @Test

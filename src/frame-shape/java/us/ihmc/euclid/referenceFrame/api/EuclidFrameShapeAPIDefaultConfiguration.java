@@ -28,6 +28,16 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 
+/**
+ * Default API tester configuration that includes the types of both the {@code euclid-frame} project
+ * and the {@code euclid-frame-shape} project.
+ * <p>
+ * This interface is part of the API testing framework.
+ * </p>
+ *
+ * @see EuclidFrameAPITester
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameShapeAPIDefaultConfiguration extends EuclidFrameAPIDefaultConfiguration
 {
    @Override

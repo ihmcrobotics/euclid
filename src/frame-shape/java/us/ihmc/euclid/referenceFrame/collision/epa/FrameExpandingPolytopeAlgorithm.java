@@ -1,6 +1,5 @@
 package us.ihmc.euclid.referenceFrame.collision.epa;
 
-import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.collision.EuclidFrameShape3DCollisionResult;
@@ -16,24 +15,74 @@ import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
 import us.ihmc.euclid.shape.collision.gjk.GJKSimplex3D;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Implementation of the Expanding Polytope algorithm used for collision detection.
+ * <p>
+ * This class is an extension of {@link ExpandingPolytopeAlgorithm} to handle frame shapes,
+ * especially when the shapes are expressed in different reference frames.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public class FrameExpandingPolytopeAlgorithm
 {
-   private final SupportingVertexTransformer supportingVertexTransformer = new SupportingVertexTransformer();
-   private final ExpandingPolytopeAlgorithm epaAlgorithm = new ExpandingPolytopeAlgorithm();
-   private final RigidBodyTransform transform = new RigidBodyTransform();
+   /** The reference frame in which the last result was evaluated. */
    private ReferenceFrame detectorFrame;
-   private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(epaAlgorithm.getGJKCollisionDetector()
-                                                                                                                          .getSupportDirection(),
-                                                                                                              () -> detectorFrame);
-   private final FrameVector3D gjkInitialSupportDirection = new FrameVector3D(null, Axis.Y);
+   /** Wrapper around a {@link SupportingVertexHolder} allowing to transform the original object. */
+   private final SupportingVertexTransformer supportingVertexTransformer = new SupportingVertexTransformer();
+   /** Calculator implementing the actual EPA algorithm. */
+   private final ExpandingPolytopeAlgorithm epaAlgorithm = new ExpandingPolytopeAlgorithm();
+   /**
+    * Wrapper around the GJK last support direction used.
+    * <p>
+    * The vector's reference frame is linked to {@link #detectorFrame}.
+    * </p>
+    * <p>
+    * The calculator implementing the GJK algorithm is declared as a field of {@link #epaAlgorithm}.
+    * </p>
+    */
+   private final FrameVector3DReadOnly gjkSupportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(epaAlgorithm.getGJKCollisionDetector()
+                                                                                                                             .getSupportDirection(),
+                                                                                                                 () -> detectorFrame);
+   /**
+    * Flag to indicate whether the initial support direction has been provided by the user or not.
+    */
+   private boolean isInitialSupportDirectionProvided = false;
+   /**
+    * Duplicate of the GJK initial support direction vector to support frame operations.
+    */
+   private final FrameVector3D gjkInitialSupportDirection = new FrameVector3D();
+   /** Intermediate variable to reduce garbage creation. */
+   private final RigidBodyTransform transform = new RigidBodyTransform();
+   private final Point3D centroid = new Point3D();
 
+   /**
+    * Creates a new collision detector that can be used right away to evaluate collisions.
+    */
    public FrameExpandingPolytopeAlgorithm()
    {
+      gjkInitialSupportDirection.setToNaN();
    }
 
+   /**
+    * Evaluates the collision state between the two given shapes.
+    * <p>
+    * This algorithm does not evaluate the surface normals.
+    * </p>
+    * <p>
+    * This algorithm handles the case when the two shapes are expressed in difference reference frames.
+    * </p>
+    *
+    * @param shapeA the first shape to evaluate. Not modified.
+    * @param shapeB the second shape to evaluate. Not modified.
+    * @return the collision result.
+    */
    public EuclidFrameShape3DCollisionResult evaluateCollision(FrameShape3DReadOnly shapeA, FrameShape3DReadOnly shapeB)
    {
       EuclidFrameShape3DCollisionResult result = new EuclidFrameShape3DCollisionResult();
@@ -45,6 +94,9 @@ public class FrameExpandingPolytopeAlgorithm
     * Evaluates the collision state between the two given shapes.
     * <p>
     * This algorithm does not evaluate the surface normals.
+    * </p>
+    * <p>
+    * This algorithm handles the case when the two shapes are expressed in difference reference frames.
     * </p>
     *
     * @param shapeA       the first shape to evaluate. Not modified.
@@ -65,6 +117,7 @@ public class FrameExpandingPolytopeAlgorithm
       {
          if (!shapeB.isPrimitive())
          { // None of the two shapes is a primitive, using the generic approach.
+            guessInitialSupportDirection(shapeA, shapeB);
             areColliding = evaluateCollision((SupportingFrameVertexHolder) shapeA, (SupportingFrameVertexHolder) shapeB, resultToPack);
          }
          else
@@ -79,8 +132,10 @@ public class FrameExpandingPolytopeAlgorithm
                transform.preMultiplyInvertOther(shapeB.getPose());
                FixedFrameShape3DBasics localShapeB = shapeB.copy();
                localShapeB.getPose().setToZero();
-               initializeGJK(shapeB.getReferenceFrame());
-               areColliding = evaluateCollision(shapeA, localShapeB, transform, resultToPack);
+               centroid.set(shapeA.getCentroid());
+               centroid.applyInverseTransform(transform);
+               guessInitialSupportDirection(centroid, localShapeB.getCentroid());
+               areColliding = evaluateCollision(shapeB.getReferenceFrame(), shapeA, localShapeB, transform, resultToPack);
                resultToPack.applyTransform(shapeB.getPose());
             }
             else
@@ -92,8 +147,8 @@ public class FrameExpandingPolytopeAlgorithm
                shapeB.getReferenceFrame().getTransformToDesiredFrame(transform, shapeA.getReferenceFrame());
                FixedFrameShape3DBasics localShapeB = shapeB.copy();
                localShapeB.applyTransform(transform);
-               initializeGJK(shapeA.getReferenceFrame());
-               areColliding = epaAlgorithm.evaluateCollision(shapeA, localShapeB, resultToPack);
+               guessInitialSupportDirection((Shape3DReadOnly) shapeA, (Shape3DReadOnly) localShapeB);
+               areColliding = evaluateCollision(shapeA.getReferenceFrame(), shapeA, localShapeB, resultToPack);
             }
          }
       }
@@ -109,8 +164,10 @@ public class FrameExpandingPolytopeAlgorithm
             transform.preMultiplyInvertOther(shapeA.getPose());
             FixedFrameShape3DBasics localShapeA = shapeA.copy();
             localShapeA.getPose().setToZero();
-            initializeGJK(shapeA.getReferenceFrame());
-            areColliding = evaluateCollision(shapeB, localShapeA, transform, resultToPack);
+            centroid.set(shapeB.getCentroid());
+            centroid.applyInverseTransform(transform);
+            guessInitialSupportDirection(centroid, localShapeA.getCentroid());
+            areColliding = evaluateCollision(shapeA.getReferenceFrame(), shapeB, localShapeA, transform, resultToPack);
             resultToPack.swapShapes();
             resultToPack.applyTransform(shapeA.getPose());
          }
@@ -123,8 +180,8 @@ public class FrameExpandingPolytopeAlgorithm
             shapeA.getReferenceFrame().getTransformToDesiredFrame(transform, shapeB.getReferenceFrame());
             FixedFrameShape3DBasics localShapeA = shapeA.copy();
             localShapeA.applyTransform(transform);
-            initializeGJK(shapeB.getReferenceFrame());
-            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) shapeB, (SupportingVertexHolder) localShapeA, resultToPack);
+            guessInitialSupportDirection((Shape3DReadOnly) shapeB, (Shape3DReadOnly) localShapeA);
+            areColliding = evaluateCollision(shapeB.getReferenceFrame(), (SupportingVertexHolder) shapeB, (SupportingVertexHolder) localShapeA, resultToPack);
             resultToPack.swapShapes();
          }
       }
@@ -138,8 +195,11 @@ public class FrameExpandingPolytopeAlgorithm
             localShapeA.getPose().setToZero();
             FixedFrameShape3DBasics localShapeB = shapeB.copy();
             localShapeB.applyInverseTransform(transform);
-            initializeGJK(shapeA.getReferenceFrame());
-            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+            guessInitialSupportDirection((Shape3DReadOnly) localShapeA, (Shape3DReadOnly) localShapeB);
+            areColliding = evaluateCollision(shapeA.getReferenceFrame(),
+                                             (SupportingVertexHolder) localShapeA,
+                                             (SupportingVertexHolder) localShapeB,
+                                             resultToPack);
             resultToPack.applyTransform(shapeA.getPose());
          }
          else if (shapeB.isDefinedByPose())
@@ -150,8 +210,11 @@ public class FrameExpandingPolytopeAlgorithm
             localShapeA.applyInverseTransform(transform);
             FixedFrameShape3DBasics localShapeB = shapeB.copy();
             localShapeB.getPose().setToZero();
-            initializeGJK(shapeB.getReferenceFrame());
-            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+            guessInitialSupportDirection((Shape3DReadOnly) localShapeA, (Shape3DReadOnly) localShapeB);
+            areColliding = evaluateCollision(shapeB.getReferenceFrame(),
+                                             (SupportingVertexHolder) localShapeA,
+                                             (SupportingVertexHolder) localShapeB,
+                                             resultToPack);
             resultToPack.applyTransform(shapeB.getPose());
          }
          else
@@ -160,8 +223,11 @@ public class FrameExpandingPolytopeAlgorithm
             FixedFrameShape3DBasics localShapeA = shapeA.copy();
             localShapeA.applyInverseTransform(transform);
             FixedFrameShape3DBasics localShapeB = shapeB.copy();
-            initializeGJK(shapeB.getReferenceFrame());
-            areColliding = epaAlgorithm.evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+            guessInitialSupportDirection(localShapeA, localShapeB);
+            areColliding = evaluateCollision(shapeB.getReferenceFrame(),
+                                             (SupportingVertexHolder) localShapeA,
+                                             (SupportingVertexHolder) localShapeB,
+                                             resultToPack);
          }
       }
 
@@ -175,10 +241,40 @@ public class FrameExpandingPolytopeAlgorithm
       return areColliding;
    }
 
+   private void guessInitialSupportDirection(FrameShape3DReadOnly shapeA, FrameShape3DReadOnly shapeB)
+   {
+      if (isInitialSupportDirectionProvided)
+         return;
+
+      gjkInitialSupportDirection.setReferenceFrame(shapeB.getReferenceFrame());
+      gjkInitialSupportDirection.setMatchingFrame(shapeA.getCentroid());
+      gjkInitialSupportDirection.negate();
+      gjkInitialSupportDirection.add(shapeB.getCentroid());
+      isInitialSupportDirectionProvided = true;
+   }
+
+   private void guessInitialSupportDirection(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   {
+      guessInitialSupportDirection(shapeA.getCentroid(), shapeB.getCentroid());
+   }
+
+   private void guessInitialSupportDirection(Point3DReadOnly centroidA, Point3DReadOnly centroidB)
+   {
+      if (isInitialSupportDirectionProvided)
+         return;
+
+      gjkInitialSupportDirection.setReferenceFrame(null);
+      gjkInitialSupportDirection.sub(centroidB, centroidA);
+      isInitialSupportDirectionProvided = true;
+   }
+
    /**
     * Evaluates the collision state between the two given shapes.
     * <p>
     * This algorithm does not evaluate the surface normals.
+    * </p>
+    * <p>
+    * This algorithm handles the case when the two shapes are expressed in difference reference frames.
     * </p>
     *
     * @param shapeA the first shape to evaluate. Not modified.
@@ -197,6 +293,9 @@ public class FrameExpandingPolytopeAlgorithm
     * <p>
     * This algorithm does not evaluate the surface normals.
     * </p>
+    * <p>
+    * This algorithm handles the case when the two shapes are expressed in difference reference frames.
+    * </p>
     *
     * @param shapeA       the first shape to evaluate. Not modified.
     * @param shapeB       the second shape to evaluate. Not modified.
@@ -207,8 +306,7 @@ public class FrameExpandingPolytopeAlgorithm
                                     EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
       shapeA.getReferenceFrame().getTransformToDesiredFrame(transform, shapeB.getReferenceFrame());
-      initializeGJK(shapeB.getReferenceFrame());
-      boolean areColliding = evaluateCollision(shapeA, shapeB, transform, resultToPack);
+      boolean areColliding = evaluateCollision(shapeB.getReferenceFrame(), shapeA, shapeB, transform, resultToPack);
       resultToPack.getPointOnA().setReferenceFrame(detectorFrame);
       resultToPack.getPointOnB().setReferenceFrame(detectorFrame);
       resultToPack.getNormalOnA().setReferenceFrame(detectorFrame);
@@ -216,23 +314,39 @@ public class FrameExpandingPolytopeAlgorithm
       return areColliding;
    }
 
+   private boolean evaluateCollision(ReferenceFrame detectorFrame, SupportingVertexHolder shapeA, SupportingVertexHolder shapeB,
+                                     RigidBodyTransformReadOnly transformFromAToB, EuclidFrameShape3DCollisionResultBasics resultToPack)
+   {
+      supportingVertexTransformer.initialize(shapeA, transformFromAToB);
+      return evaluateCollision(detectorFrame, supportingVertexTransformer, shapeB, resultToPack);
+   }
+
+   private boolean evaluateCollision(ReferenceFrame detectorFrame, SupportingVertexHolder shapeA, SupportingVertexHolder shapeB,
+                                     EuclidFrameShape3DCollisionResultBasics resultToPack)
+   {
+      initializeGJK(detectorFrame);
+      return epaAlgorithm.evaluateCollision(shapeA, shapeB, resultToPack);
+   }
+
+   private boolean evaluateCollision(ReferenceFrame detectorFrame, Shape3DReadOnly shapeA, Shape3DReadOnly shapeB,
+                                     EuclidFrameShape3DCollisionResultBasics resultToPack)
+   {
+      initializeGJK(detectorFrame);
+      return epaAlgorithm.evaluateCollision(shapeA, shapeB, resultToPack);
+   }
+
    private void initializeGJK(ReferenceFrame detectorFrame)
    {
       this.detectorFrame = detectorFrame;
 
-      if (gjkInitialSupportDirection.getReferenceFrame() != null)
+      if (isInitialSupportDirectionProvided)
       {
-         gjkInitialSupportDirection.changeFrame(detectorFrame);
+         if (gjkInitialSupportDirection.getReferenceFrame() != null)
+            gjkInitialSupportDirection.changeFrame(detectorFrame);
          epaAlgorithm.getGJKCollisionDetector().setInitialSupportDirection(gjkInitialSupportDirection);
-         gjkInitialSupportDirection.setReferenceFrame(null);
+         gjkInitialSupportDirection.setToNaN(null);
+         isInitialSupportDirectionProvided = false;
       }
-   }
-
-   private boolean evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, RigidBodyTransformReadOnly transformFromAToB,
-                                     EuclidFrameShape3DCollisionResultBasics resultToPack)
-   {
-      supportingVertexTransformer.initialize(shapeA, transformFromAToB);
-      return epaAlgorithm.evaluateCollision(supportingVertexTransformer, shapeB, resultToPack);
    }
 
    /**
@@ -301,6 +415,7 @@ public class FrameExpandingPolytopeAlgorithm
     */
    public void setGJKInitialSupportDirection(FrameVector3DReadOnly initialSupportDirection)
    {
+      isInitialSupportDirectionProvided = true;
       this.gjkInitialSupportDirection.setIncludingFrame(initialSupportDirection);
    }
 
@@ -394,7 +509,7 @@ public class FrameExpandingPolytopeAlgorithm
     */
    public FrameVector3DReadOnly getGJKSupportDirection()
    {
-      return supportDirection;
+      return gjkSupportDirection;
    }
 
    public ReferenceFrame getDetectorFrame()
