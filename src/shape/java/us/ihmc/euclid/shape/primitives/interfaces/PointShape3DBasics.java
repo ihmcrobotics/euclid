@@ -19,6 +19,9 @@ public interface PointShape3DBasics extends PointShape3DReadOnly, Shape3DBasics,
       return PointShape3DReadOnly.super.containsNaN();
    }
 
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
    @Override
    default Shape3DPoseBasics getPose()
    {

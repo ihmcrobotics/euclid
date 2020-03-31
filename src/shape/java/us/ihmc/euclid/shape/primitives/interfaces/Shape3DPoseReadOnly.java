@@ -7,6 +7,12 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Read-only interface for representing the pose of a shape 3D.
+ * <p>
+ * While the main use-case of a {@code Shape3DReadOnly} is to describe the pose of a shape 3D, it is
+ * also used to represent the transform from the shape local coordinate system to the world
+ * coordinates, such that it can be used to transform geometry back and forth between the two
+ * coordinate systems.
+ * </p>
  *
  * @author Sylvain Bertrand
  */
@@ -69,22 +75,6 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    Vector3DReadOnly getZAxis();
 
    /**
-    * Tests on a per component basis, if this shape pose 3D is exactly equal to {@code other}.
-    *
-    * @param other the other shape pose 3D to compare against this. Not modified.
-    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
-    */
-   default boolean equals(Shape3DPoseReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
-   }
-
-   /**
     * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
     *
@@ -112,5 +102,21 @@ public interface Shape3DPoseReadOnly extends RigidBodyTransformReadOnly
    {
       return getShapePosition().geometricallyEquals(other.getShapePosition(), epsilon)
             && getShapeOrientation().geometricallyEquals(other.getShapeOrientation(), epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this shape pose 3D is exactly equal to {@code other}.
+    *
+    * @param other the other shape pose 3D to compare against this. Not modified.
+    * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
+    */
+   default boolean equals(Shape3DPoseReadOnly other)
+   {
+      if (other == this)
+         return true;
+      else if (other == null)
+         return false;
+      else
+         return getShapePosition().equals(other.getShapePosition()) && getShapeOrientation().equals(other.getShapeOrientation());
    }
 }

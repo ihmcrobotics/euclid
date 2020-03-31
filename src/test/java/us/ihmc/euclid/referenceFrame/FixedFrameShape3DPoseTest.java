@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameShapeAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
@@ -24,6 +26,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public class FixedFrameShape3DPoseTest
 {
@@ -33,6 +36,12 @@ public class FixedFrameShape3DPoseTest
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
       signaturesToIgnore.add(new MethodSignature("get", RotationScaleMatrix.class, Tuple3DBasics.class));
+      // Deprecated methods in RigidBodyTransformReadOnly
+      signaturesToIgnore.add(new MethodSignature("getRotation", Orientation3DBasics.class));
+      signaturesToIgnore.add(new MethodSignature("getRotation", RotationMatrixBasics.class));
+      signaturesToIgnore.add(new MethodSignature("getRotation", Vector3DBasics.class));
+      signaturesToIgnore.add(new MethodSignature("getRotationEuler", Vector3DBasics.class));
+      signaturesToIgnore.add(new MethodSignature("getTranslation", Tuple3DBasics.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameShape3DPoseReadOnly.class, Shape3DPoseReadOnly.class, false, 1, methodFilter);
 

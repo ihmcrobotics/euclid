@@ -195,6 +195,9 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
       return false;
    }
 
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
    @Override
    default Shape3DPoseReadOnly getPose()
    {

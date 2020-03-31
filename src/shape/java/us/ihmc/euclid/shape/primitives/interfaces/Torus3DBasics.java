@@ -100,6 +100,9 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
       setRadii(radius, tubeRadius);
    }
 
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
    @Override
    default Shape3DPoseBasics getPose()
    {

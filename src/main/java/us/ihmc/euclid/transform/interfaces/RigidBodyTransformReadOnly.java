@@ -473,12 +473,12 @@ public interface RigidBodyTransformReadOnly extends Transform
    /**
     * Packs the rotation matrix and translation vector of this rigid-body transform.
     *
-    * @param rotationMarixToPack the matrix to set to the rotation of this transform. Modified.
-    * @param translationToPack   the tuple to set to the translation of this transform. Modified.
+    * @param rotationMatrixToPack the matrix to set to the rotation of this transform. Modified.
+    * @param translationToPack    the tuple to set to the translation of this transform. Modified.
     */
-   default void get(RotationMatrixBasics rotationMarixToPack, Tuple3DBasics translationToPack)
+   default void get(RotationMatrixBasics rotationMatrixToPack, Tuple3DBasics translationToPack)
    {
-      rotationMarixToPack.set(getRotation());
+      rotationMatrixToPack.set(getRotation());
       translationToPack.set(getTranslation());
    }
 

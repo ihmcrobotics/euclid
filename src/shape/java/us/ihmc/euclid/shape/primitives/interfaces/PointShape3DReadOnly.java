@@ -110,6 +110,9 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
       return false;
    }
 
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
    @Override
    default Shape3DPoseReadOnly getPose()
    {

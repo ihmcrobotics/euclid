@@ -130,6 +130,9 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
       setSize(length, radius);
    }
 
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
    @Override
    default Shape3DPoseBasics getPose()
    {
