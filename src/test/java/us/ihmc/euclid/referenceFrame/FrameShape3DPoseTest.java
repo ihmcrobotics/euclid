@@ -11,8 +11,10 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameShapeAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
@@ -27,6 +29,7 @@ import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameShape3DPoseTest
 {
@@ -46,6 +49,12 @@ public class FrameShape3DPoseTest
       tester.assertOverloadingWithFrameObjects(FrameShape3DPoseReadOnly.class, Shape3DPoseReadOnly.class, false, 1, methodFilter);
 
       signaturesToIgnore.add(new MethodSignature("set", RotationScaleMatrixReadOnly.class, Tuple3DReadOnly.class));
+      // Deprecated methods in RigidBodyTransformBasics
+      signaturesToIgnore.add(new MethodSignature("setRotation", Vector3DReadOnly.class));
+      signaturesToIgnore.add(new MethodSignature("setRotation", RotationMatrixReadOnly.class));
+      signaturesToIgnore.add(new MethodSignature("setRotation", Orientation3DReadOnly.class));
+      signaturesToIgnore.add(new MethodSignature("setRotationEuler", Vector3DReadOnly.class));
+      signaturesToIgnore.add(new MethodSignature("setTranslation", Tuple3DReadOnly.class));
       methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FixedFrameShape3DPoseBasics.class, Shape3DPoseBasics.class, false, 1, methodFilter);
 

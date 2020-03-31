@@ -68,30 +68,6 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
       Shape3DPoseBasics.super.setAndInvert(other);
    }
 
-   default void setRotation(FrameOrientation3DReadOnly orientation)
-   {
-      checkReferenceFrameMatch(orientation);
-      Shape3DPoseBasics.super.setRotation(orientation);
-   }
-
-   default void setRotation(FrameRotationMatrixReadOnly rotationMatrix)
-   {
-      checkReferenceFrameMatch(rotationMatrix);
-      Shape3DPoseBasics.super.setRotation(rotationMatrix);
-   }
-
-   default void setRotation(FrameVector3DReadOnly rotationVector)
-   {
-      checkReferenceFrameMatch(rotationVector);
-      Shape3DPoseBasics.super.setRotation(rotationVector);
-   }
-
-   default void setRotationEuler(FrameVector3DReadOnly eulerAngles)
-   {
-      checkReferenceFrameMatch(eulerAngles);
-      Shape3DPoseBasics.super.setRotationEuler(eulerAngles);
-   }
-
    default void setRotationAndZeroTranslation(FrameOrientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
@@ -114,12 +90,6 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
    {
       checkReferenceFrameMatch(eulerAngles);
       Shape3DPoseBasics.super.setRotationEulerAndZeroTranslation(eulerAngles);
-   }
-
-   default void setTranslation(FrameTuple3DReadOnly translation)
-   {
-      checkReferenceFrameMatch(translation);
-      Shape3DPoseBasics.super.setTranslation(translation);
    }
 
    default void setTranslationAndIdentityRotation(FrameTuple3DReadOnly translation)
