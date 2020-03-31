@@ -31,6 +31,19 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Implementation of a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ *
+ * @author Apoorv Shrivastava
+ * @author Sylvain Bertrand
+ * @param <Vertex> the final type used for representing a vertex.
+ * @param <Edge>   the final type used for representing a half-edge.
+ * @param <Face>   the final type used for representing a face.
+ */
 public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>>
       implements ConvexPolytope3DReadOnly, Shape3DBasics, Transformable, Clearable
 {
@@ -47,9 +60,11 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
     * including for instance whether or not a face should be extended.
     */
    private final double constructionEpsilon;
-
+   /** Factory used to create vertices of the proper type. */
    private Vertex3DFactory<Vertex> vertexFactory;
+   /** Factory used to create half-edges of the proper type. */
    private HalfEdge3DFactory<Vertex, Edge> edgeFactory;
+   /** Factory used to create faces of the proper type. */
    private Face3DFactory<Face> faceFactory;
 
    /**
@@ -71,6 +86,16 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
       this.constructionEpsilon = constructionEpsilon;
    }
 
+   /**
+    * Sets the factories to use with the implementation.
+    * <p>
+    * Factories have to be provided before initializing this polytope.
+    * </p>
+    * 
+    * @param vertexFactory the factory to use for creating new vertices when expanding this polytope.
+    * @param edgeFactory   the factory to use for creating new half-edges when expanding this polytope.
+    * @param faceFactory   the factory to use for creating new faces when expanding this polytope.
+    */
    protected void setFactories(Vertex3DFactory<Vertex> vertexFactory, HalfEdge3DFactory<Vertex, Edge> edgeFactory, Face3DFactory<Face> faceFactory)
    {
       this.vertexFactory = vertexFactory;
@@ -78,11 +103,28 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
       this.faceFactory = faceFactory;
    }
 
+   /**
+    * Initializes this empty polytope.
+    * <p>
+    * The polytope must be initialized for the implementation's constructor.
+    * </p>
+    */
    protected void initialize()
    {
       getBoundingBox().setToNaN();
    }
 
+   /**
+    * Initializes this polytope with the given pre-computed faces.
+    * <p>
+    * The polytope must be initialized for the implementation's constructor.
+    * </p>
+    * <p>
+    * This method updates twin of every half-edge if not done beforehand.
+    * </p>
+    * 
+    * @param faces this polytope faces.
+    */
    protected void initialize(List<Face> faces)
    {
       this.faces.addAll(faces);

@@ -6,6 +6,19 @@ import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
+/**
+ * Base implementation of a half-edge 3D that belongs to a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ *
+ * @author Apoorv Shrivastava
+ * @author Sylvain Bertrand
+ * @param <Vertex> the final type used for representing a vertex.
+ * @param <Edge>   the final type used for representing a half-edge.
+ * @param <Face>   the final type used for representing a face.
+ */
 public abstract class AbstractHalfEdge3D<Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>>
       implements HalfEdge3DReadOnly, LineSegment3DBasics
 {

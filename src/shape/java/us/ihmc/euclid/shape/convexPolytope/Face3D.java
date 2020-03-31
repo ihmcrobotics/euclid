@@ -9,7 +9,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * Read-only interface for a face 3D that belongs to a convex polytope 3D.
+ * Implementation of a face 3D that belongs to a convex polytope 3D.
  * <p>
  * This is part of a Doubly Connected Edge List data structure
  * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.

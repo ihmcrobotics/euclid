@@ -17,26 +17,49 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Implementation of the Gilbert-Johnson-Keerthi algorithm used for collision detection.
+ * <p>
+ * This class is an extension of {@link GilbertJohnsonKeerthiCollisionDetector} to handle frame
+ * shapes, especially when the shapes are expressed in different reference frames.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public class FrameGilbertJohnsonKeerthiCollisionDetector
 {
-   private final SupportingVertexTransformer supportingVertexTransformer = new SupportingVertexTransformer();
-   private final GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
-   private final RigidBodyTransform transform = new RigidBodyTransform();
+   /** The reference frame in which the last result was evaluated. */
    private ReferenceFrame detectorFrame;
+   /** Wrapper around a {@link SupportingVertexHolder} allowing to transform the original object. */
+   private final SupportingVertexTransformer supportingVertexTransformer = new SupportingVertexTransformer();
+   /** Calculator implementing the actual GJK algorithm. */
+   private final GilbertJohnsonKeerthiCollisionDetector gjkCollisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
+   /**
+    * Wrapper around the last support direction used.
+    * <p>
+    * The vector's reference frame is linked to {@link #detectorFrame}.
+    * </p>
+    */
    private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(gjkCollisionDetector.getSupportDirection(),
                                                                                                               () -> detectorFrame);
    /**
     * Flag to indicate whether the initial support direction has been provided by the user or not.
     */
    private boolean isInitialSupportDirectionProvided = false;
+   /**
+    * Duplicate of the GJK initial support direction vector to support frame operations.
+    */
    private final FrameVector3D initialSupportDirection = new FrameVector3D();
+   /** Intermediate variable to reduce garbage creation. */
+   private final RigidBodyTransform transform = new RigidBodyTransform();
+   /** Intermediate variable to reduce garbage creation. */
    private final Point3D centroid = new Point3D();
 
+   /**
+    * Creates a new collision detector that can be used right away to evaluate collisions.
+    */
    public FrameGilbertJohnsonKeerthiCollisionDetector()
    {
       initialSupportDirection.setToNaN();
@@ -312,29 +335,6 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
       }
    }
 
-   public static class SupportingVertexTransformer implements SupportingVertexHolder
-   {
-      private final Vector3D localSupportDirection = new Vector3D();
-      private SupportingVertexHolder original;
-      private RigidBodyTransformReadOnly transform;
-
-      public void initialize(SupportingVertexHolder original, RigidBodyTransformReadOnly transform)
-      {
-         this.original = original;
-         this.transform = transform;
-      }
-
-      @Override
-      public boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
-      {
-         transform.inverseTransform(supportDirection, localSupportDirection);
-         boolean success = original.getSupportingVertex(localSupportDirection, supportingVertexToPack);
-         if (success)
-            transform.transform(supportingVertexToPack);
-         return success;
-      }
-   }
-
    /**
     * Sets the support direction to use for the first iteration of future evaluations.
     * <p>
@@ -444,6 +444,11 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
       return supportDirection;
    }
 
+   /**
+    * Returns the reference frame in which the last result was computed.
+    * 
+    * @return the most recent result's frame.
+    */
    public ReferenceFrame getDetectorFrame()
    {
       return detectorFrame;

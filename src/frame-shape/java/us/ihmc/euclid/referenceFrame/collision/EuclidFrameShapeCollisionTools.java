@@ -2,6 +2,8 @@ package us.ihmc.euclid.referenceFrame.collision;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.collision.epa.FrameExpandingPolytopeAlgorithm;
+import us.ihmc.euclid.referenceFrame.collision.gjk.FrameGilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
@@ -13,11 +15,34 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameSphere3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
+import us.ihmc.euclid.shape.collision.EuclidShapeCollisionTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 
+/**
+ * This class is an extension of {@link EuclidShapeCollisionTools} to support queries with shapes
+ * expressed in different reference frames.
+ * <p>
+ * Note that all the methods in this tool class implement an analytical evaluation of a collision.
+ * Meaning that it is much faster than using {@link FrameGilbertJohnsonKeerthiCollisionDetector} or
+ * {@link FrameExpandingPolytopeAlgorithm}.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameShapeCollisionTools
 {
+   private EuclidFrameShapeCollisionTools()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
+   /**
+    * Evaluates the collision state between a point shape and a box.
+    *
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the box. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluatePointShape3DBox3DCollision(FramePointShape3DReadOnly shapeA, FrameBox3DReadOnly shapeB,
                                                          EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -26,6 +51,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setFrameShapeB(shapeB);
    }
 
+   /**
+    * Evaluates the collision state between a sphere and a box.
+    *
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the box. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluateSphere3DBox3DCollision(FrameSphere3DReadOnly shapeA, FrameBox3DReadOnly shapeB,
                                                      EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -72,6 +104,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
+   /**
+    * Evaluates the collision state between a point shape and a capsule.
+    *
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the capsule. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluatePointShape3DCapsule3DCollision(FramePointShape3DReadOnly shapeA, FrameCapsule3DReadOnly shapeB,
                                                              EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -80,6 +119,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setFrameShapeB(shapeB);
    }
 
+   /**
+    * Evaluates the collision state between two capsules.
+    *
+    * @param shapeA       the first capsule. Not modified.
+    * @param shapeB       the second capsule. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluateCapsule3DCapsule3DCollision(FrameCapsule3DReadOnly shapeA, FrameCapsule3DReadOnly shapeB,
                                                           EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -142,6 +188,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setFrameShapeB(shapeB);
    }
 
+   /**
+    * Evaluates the collision state between a sphere and a capsule.
+    *
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the capsule. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluateSphere3DCapsule3DCollision(FrameSphere3DReadOnly shapeA, FrameCapsule3DReadOnly shapeB,
                                                          EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -185,6 +238,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
+   /**
+    * Evaluates the collision state between a point shape and a cylinder.
+    *
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the cylinder. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluatePointShape3DCylinder3DCollision(FramePointShape3DReadOnly shapeA, FrameCylinder3DReadOnly shapeB,
                                                               EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -193,6 +253,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setFrameShapeB(shapeB);
    }
 
+   /**
+    * Evaluates the collision state between a sphere and a cylinder.
+    *
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the cylinder. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluateSphere3DCylinder3DCollision(FrameSphere3DReadOnly shapeA, FrameCylinder3DReadOnly shapeB,
                                                           EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -236,6 +303,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
+   /**
+    * Evaluates the collision state between a point shape and an ellipsoid.
+    *
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the ellipsoid. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluatePointShape3DEllipsoid3DCollision(FramePointShape3DReadOnly shapeA, FrameEllipsoid3DReadOnly shapeB,
                                                                EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -244,6 +318,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setFrameShapeB(shapeB);
    }
 
+   /**
+    * Evaluates the collision state between a point shape and an ellipsoid.
+    *
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the ellipsoid. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluateSphere3DEllipsoid3DCollision(FrameSphere3DReadOnly shapeA, FrameEllipsoid3DReadOnly shapeB,
                                                            EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -290,6 +371,16 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
+   /**
+    * Evaluates the collision state between two point shapes.
+    * <p>
+    * Note that the two shapes never collide.
+    * </p>
+    * 
+    * @param shapeA       the first point shape. Not modified.
+    * @param shapeB       the second point shape. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluatePointShape3DPointShape3DCollision(FramePointShape3DReadOnly shapeA, FramePointShape3DReadOnly shapeB,
                                                                 EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -314,6 +405,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
+   /**
+    * Evaluates the collision state between a point shape and a ramp.
+    *
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the ramp. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluatePointShape3DRamp3DCollision(FramePointShape3DReadOnly shapeA, FrameRamp3DReadOnly shapeB,
                                                           EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -322,6 +420,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setFrameShapeB(shapeB);
    }
 
+   /**
+    * Evaluates the collision state between a sphere and a ramp.
+    *
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the ramp. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluateSphere3DRamp3DCollision(FrameSphere3DReadOnly shapeA, FrameRamp3DReadOnly shapeB,
                                                       EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -367,6 +472,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
+   /**
+    * Evaluates the collision state between a point shape and a sphere.
+    *
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the sphere. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluatePointShape3DSphere3DCollision(FramePointShape3DReadOnly shapeA, FrameSphere3DReadOnly shapeB,
                                                             EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
@@ -391,6 +503,13 @@ public class EuclidFrameShapeCollisionTools
       resultToPack.setFrameShapeB(shapeB);
    }
 
+   /**
+    * Evaluates the collision state between two spheres.
+    *
+    * @param shapeA       the first sphere. Not modified.
+    * @param shapeB       the second sphere. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
    public static void evaluateSphere3DSphere3DCollision(FrameSphere3DReadOnly shapeA, FrameSphere3DReadOnly shapeB,
                                                         EuclidFrameShape3DCollisionResultBasics resultToPack)
    {

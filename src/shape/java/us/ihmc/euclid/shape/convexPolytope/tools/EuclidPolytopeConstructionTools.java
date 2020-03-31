@@ -60,7 +60,8 @@ public class EuclidPolytopeConstructionTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    *
+    * 
+    * @param faceFactory     factory needed to create faces of the proper type.
     * @param vertex          faces are modified and/or created to include this vertex.
     * @param silhouetteEdges the contour visible from the vertex. Each edge is expected to be
     *                        associated with either a hidden face or an in-plane face.
@@ -69,6 +70,9 @@ public class EuclidPolytopeConstructionTools
     * @param epsilon         tolerance used for testing edge-cases such as equivalent vertices, vertex
     *                        lying on a line, etc.
     * @return the list of new faces that were created in the the process.
+    * @param <Vertex> the final type used for representing a vertex.
+    * @param <Edge>   the final type used for representing a half-edge.
+    * @param <Face>   the final type used for representing a face.
     */
    public static <Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>> List<Face> computeVertexNeighborFaces(Face3DFactory<Face> faceFactory,
                                                                                                                                                                                                                    Vertex vertex,
@@ -424,10 +428,14 @@ public class EuclidPolytopeConstructionTools
     * <li>the new face's normal can be computed using the direction of the given twin-edge.
     * </ul>
     *
-    * @param vertex   a vertex of the new face.
-    * @param twinEdge the edge which twin's associated face is the new face.
-    * @param epsilon  tolerance used when testing if a vertex should be added or not.
+    * @param faceFactory factory needed to create faces of the proper type.
+    * @param vertex      a vertex of the new face.
+    * @param twinEdge    the edge which twin's associated face is the new face.
+    * @param epsilon     tolerance used when testing if a vertex should be added or not.
     * @return the new face.
+    * @param <Vertex> the final type used for representing a vertex.
+    * @param <Edge>   the final type used for representing a half-edge.
+    * @param <Face>   the final type used for representing a face.
     */
    public static <Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>> Face newFace3DFromVertexAndTwinEdge(Face3DFactory<Face> faceFactory,
                                                                                                                                                                                                                  Vertex vertex,

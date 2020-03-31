@@ -222,5 +222,10 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     */
    Shape3DPoseReadOnly getPose();
 
+   /**
+    * Creates and returns a deep copy of this shape.
+    * 
+    * @return a copy of this shape.
+    */
    Shape3DBasics copy();
 }

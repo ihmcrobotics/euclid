@@ -3,7 +3,7 @@ package us.ihmc.euclid.referenceFrame.collision.epa;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.collision.EuclidFrameShape3DCollisionResult;
-import us.ihmc.euclid.referenceFrame.collision.gjk.FrameGilbertJohnsonKeerthiCollisionDetector.SupportingVertexTransformer;
+import us.ihmc.euclid.referenceFrame.collision.gjk.SupportingVertexTransformer;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
@@ -60,6 +60,7 @@ public class FrameExpandingPolytopeAlgorithm
    private final FrameVector3D gjkInitialSupportDirection = new FrameVector3D();
    /** Intermediate variable to reduce garbage creation. */
    private final RigidBodyTransform transform = new RigidBodyTransform();
+   /** Intermediate variable to reduce garbage creation. */
    private final Point3D centroid = new Point3D();
 
    /**
@@ -512,6 +513,11 @@ public class FrameExpandingPolytopeAlgorithm
       return gjkSupportDirection;
    }
 
+   /**
+    * Returns the reference frame in which the last result was computed.
+    * 
+    * @return the most recent result's frame.
+    */
    public ReferenceFrame getDetectorFrame()
    {
       return detectorFrame;

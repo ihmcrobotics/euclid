@@ -30,6 +30,11 @@ public interface EuclidFrameShape3DCollisionResultBasics extends EuclidFrameShap
    @Override
    FrameVector3DBasics getNormalOnB();
 
+   /**
+    * {@inheritDoc}
+    * 
+    * @throws IllegalArgumentException if the argument does not implement {@link FrameShape3DReadOnly}
+    */
    @Override
    default void setShapeA(Shape3DReadOnly shapeA)
    {
@@ -39,6 +44,11 @@ public interface EuclidFrameShape3DCollisionResultBasics extends EuclidFrameShap
          throw new IllegalArgumentException("This collision result only supports frame shapes.");
    }
 
+   /**
+    * {@inheritDoc}
+    * 
+    * @throws IllegalArgumentException if the argument does not implement {@link FrameShape3DReadOnly}
+    */
    @Override
    default void setShapeB(Shape3DReadOnly shapeB)
    {

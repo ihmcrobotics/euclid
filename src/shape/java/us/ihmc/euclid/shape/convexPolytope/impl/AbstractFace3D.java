@@ -25,6 +25,19 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Base implementation of a face 3D that belongs to a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ *
+ * @author Apoorv Shrivastava
+ * @author Sylvain Bertrand
+ * @param <Vertex> the final type used for representing a vertex.
+ * @param <Edge>   the final type used for representing a half-edge.
+ * @param <Face>   the final type used for representing a face.
+ */
 public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>>
       implements Face3DReadOnly, Clearable, Transformable
 {
@@ -46,13 +59,13 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
    private final DenseMatrix64F verticesCovariance = new DenseMatrix64F(3, 3);
    /** Eigen decomposition solver used to compute this face normal. */
    private final EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(3, true, true);
-
+   /** Factory used to create half-edges of the proper type. */
    private final HalfEdge3DFactory<Vertex, Edge> edgeFactory;
 
    /**
     * Creates a new empty face.
     *
-    * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
+    * @param edgeFactory the factory to use for creating new edges when expanding this face.
     */
    public AbstractFace3D(HalfEdge3DFactory<Vertex, Edge> edgeFactory)
    {
@@ -62,6 +75,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
    /**
     * Creates a new empty face.
     *
+    * @param edgeFactory         the factory to use for creating new edges when expanding this face.
     * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
     *                            edge-cases.
     */
@@ -72,6 +86,11 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
    }
 
    /**
+    * Initializes internal memory for this empty face.
+    * <p>
+    * This is be invoked from the implementation's constructor.
+    * </p>
+    * 
     * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
     */
    protected void initialize(Vector3DReadOnly initialGuessNormal)
@@ -80,6 +99,15 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
       getBoundingBox().setToNaN();
    }
 
+   /**
+    * Initializes this face with the given edges and normal.
+    * <p>
+    * This is be invoked from the implementation's constructor.
+    * </p>
+    * 
+    * @param faceEdges the edges that are to be used to setup this face.
+    * @param normal    the pre-computed normal for this face.
+    */
    protected void initialize(Collection<Edge> faceEdges, Vector3DReadOnly normal)
    {
       getBoundingBox().setToNaN();

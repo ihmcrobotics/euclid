@@ -9,6 +9,19 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Base implementation for a vertex 3D that belongs to a convex polytope 3D.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ *
+ * @author Apoorv Shrivastava
+ * @author Sylvain Bertrand
+ * @param <Vertex> the final type used for representing a vertex.
+ * @param <Edge>   the final type used for representing a half-edge.
+ * @param <Face>   the final type used for representing a face.
+ */
 public abstract class AbstractVertex3D<Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>>
       implements Vertex3DReadOnly, Point3DBasics
 {
@@ -17,11 +30,23 @@ public abstract class AbstractVertex3D<Vertex extends AbstractVertex3D<Vertex, E
    /** List of edges that start at this vertex. */
    private final List<Edge> associatedEdges = new ArrayList<>();
 
+   /**
+    * Creates a new vertex and initializes its coordinates.
+    *
+    * @param x the x-coordinate of this vertex.
+    * @param y the y-coordinate of this vertex.
+    * @param z the z-coordinate of this vertex.
+    */
    public AbstractVertex3D(double x, double y, double z)
    {
       set(x, y, z);
    }
 
+   /**
+    * Creates a new vertex and initializes its coordinates.
+    *
+    * @param position the initial position for this vertex. Not modified.
+    */
    public AbstractVertex3D(Point3DReadOnly position)
    {
       set(position);

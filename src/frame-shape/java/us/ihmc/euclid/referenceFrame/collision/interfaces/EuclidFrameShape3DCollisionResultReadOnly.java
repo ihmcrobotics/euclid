@@ -30,9 +30,11 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
    @Override
    FrameVector3DReadOnly getNormalOnB();
 
+   /** {@inheritDoc} */
    @Override
    FrameShape3DReadOnly getShapeA();
 
+   /** {@inheritDoc} */
    @Override
    FrameShape3DReadOnly getShapeB();
 

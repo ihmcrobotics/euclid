@@ -51,6 +51,12 @@ public class EuclidShapeRandomTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   /**
+    * Generates a random pose using {@link EuclidCoreRandomTools#nextRigidBodyTransform(Random)}.
+    * 
+    * @param random the random generator to use.
+    * @return the random pose.
+    */
    public static Shape3DPose nextShape3DPose(Random random)
    {
       return new Shape3DPose(EuclidCoreRandomTools.nextRigidBodyTransform(random));

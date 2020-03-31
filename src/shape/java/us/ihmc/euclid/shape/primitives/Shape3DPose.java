@@ -9,8 +9,8 @@ import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -162,12 +162,20 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
       return zAxis;
    }
 
+   /**
+    * Notifies the listeners registered that this pose has changed.
+    */
    public void notifyChangeListeners()
    {
       for (int i = 0; i < changeListeners.size(); i++)
          changeListeners.get(i).changed();
    }
 
+   /**
+    * Registers a list of listeners to be notified when this pose changes.
+    * 
+    * @param listeners the listeners to register.
+    */
    public void addChangeListeners(List<Shape3DChangeListener> listeners)
    {
       for (int i = 0; i < listeners.size(); i++)
@@ -176,11 +184,26 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
       }
    }
 
+   /**
+    * Registers a listener to be notified when this pose changes.
+    * 
+    * @param listener the listener to register.
+    */
    public void addChangeListener(Shape3DChangeListener listener)
    {
       changeListeners.add(listener);
    }
 
+   /**
+    * Removes a previously registered listener.
+    * <p>
+    * This listener will no longer be notified of changes from this pose.
+    * </p>
+    * 
+    * @param listener the listener to remove.
+    * @return {@code true} if the listener was removed successful, {@code false} if the listener could
+    *         not be found.
+    */
    public boolean removeChangeListener(Shape3DChangeListener listener)
    {
       return changeListeners.remove(listener);

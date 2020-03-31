@@ -260,6 +260,9 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       return centroid;
    }
 
+   /**
+    * Notifies the internal listeners that this shape has changed.
+    */
    public void notifyChangeListeners()
    {
       for (int i = 0; i < changeListeners.size(); i++)

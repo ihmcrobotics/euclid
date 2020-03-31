@@ -419,6 +419,23 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
       return getSupportingVertex(null, supportDirection);
    }
 
+   /**
+    * Finds the supporting vertex in the given direction given a starting vertex for the search.
+    * <p>
+    * The supporting vertex is the point or vertex on this shape that is the farthest along a given
+    * direction.
+    * </p>
+    * 
+    * @param seed                   the starting point for the search, the closer it is to the
+    *                               supporting vertex, the faster the search will converge. Can be
+    *                               {@code null}.
+    * @param supportDirection       the direction to search for the farthest point on this shape. Not
+    *                               modified.
+    * @param supportingVertexToPack point used to store the supporting vertex coordinates. Modified.
+    * @return {@code true} when the method succeeded and packed the supporting vertex coordinates,
+    *         {@code false} when the method failed in which case {@code supportingVertexToPack} remains
+    *         unchanged.
+    */
    default Vertex3DReadOnly getSupportingVertex(Vertex3DReadOnly seed, Vector3DReadOnly supportDirection)
    {
       if (isEmpty())
