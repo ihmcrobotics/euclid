@@ -9,7 +9,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 /**
  * Write and read interface for representing the pose of a shape 3D.
- *
+ * <p>
+ * While the main use-case of a {@code Shape3DPoseBasics} is to describe the pose of a shape 3D,
+ * it is also used to represent the transform from the shape local coordinate system to the world
+ * coordinates, such that it can be used to transform geometry back and forth between the two
+ * coordinate systems.
+ * </p>
+ * 
  * @author Sylvain Bertrand
  */
 public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransformBasics, Transformable

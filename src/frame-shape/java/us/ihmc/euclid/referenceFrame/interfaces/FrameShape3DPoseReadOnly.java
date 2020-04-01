@@ -7,10 +7,10 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 /**
  * Read-only interface for representing the pose of a shape 3D expressed in a given reference frame.
  * <p>
- * While the main use-case of a {@code Shape3DReadOnly} is to describe the pose of a shape 3D, it is
- * also used to represent the transform from the shape local coordinate system to the reference
- * frame coordinates, such that it can be used to transform geometry back and forth between the two
- * coordinate systems.
+ * While the main use-case of a {@code FrameShape3DPoseReadOnly} is to describe the pose of a shape
+ * 3D, it is also used to represent the transform from the shape local coordinate system to the
+ * reference frame coordinates, such that it can be used to transform geometry back and forth
+ * between the two coordinate systems.
  * </p>
  *
  * @author Sylvain Bertrand
