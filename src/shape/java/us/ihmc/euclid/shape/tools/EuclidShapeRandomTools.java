@@ -943,7 +943,7 @@ public class EuclidShapeRandomTools
     *
     * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the edge's center.
-    * @param minMax       the range of the egde in the three directions.
+    * @param minMax       the range of the edge in the three directions.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextSingleEdgeConvexPolytope3D(Random random, double centerMinMax, double minMax)

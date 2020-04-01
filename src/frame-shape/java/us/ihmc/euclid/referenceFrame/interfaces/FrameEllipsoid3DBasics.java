@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -66,7 +67,9 @@ public interface FrameEllipsoid3DBasics extends FixedFrameEllipsoid3DBasics, Fra
     * @param radiusX     radius of the ellipsoid along the x-axis.
     * @param radiusY     radius of the ellipsoid along the y-axis.
     * @param radiusZ     radius of the ellipsoid along the z-axis.
-    * @throws IllegalArgumentException if any of the three radii is negative.
+    * @throws IllegalArgumentException        if any of the three radii is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
     */
    default void setIncludingFrame(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
    {

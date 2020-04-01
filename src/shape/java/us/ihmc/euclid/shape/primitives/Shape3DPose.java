@@ -25,8 +25,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPose>
 {
+   /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
-
    /** The orientation part. */
    private final RotationMatrix shapeOrientation = new RotationMatrix()
    {
@@ -209,18 +209,44 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
       return changeListeners.remove(listener);
    }
 
+   /**
+    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
+    * {@code epsilon}.
+    *
+    * @param other   the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
+    */
    @Override
    public boolean epsilonEquals(Shape3DPose other, double epsilon)
    {
       return Shape3DPoseBasics.super.epsilonEquals(other, epsilon);
    }
 
+   /**
+    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
+    * </p>
+    *
+    * @param other   the shape pose to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
+    */
    @Override
    public boolean geometricallyEquals(Shape3DPose other, double epsilon)
    {
       return Shape3DPoseBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Shape3DPoseReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
    @Override
    public boolean equals(Object object)
    {
@@ -230,12 +256,26 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
          return false;
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of each component of this pose 3D.
+    *
+    * @return the hash code value for this pose 3D.
+    */
    @Override
    public int hashCode()
    {
       return EuclidHashCodeTools.toIntHashCode(shapePosition, shapeOrientation);
    }
 
+   /**
+    * Provides a {@code String} representation of this pose 3D as follows:
+    *
+    * <pre>
+    * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
+    * </pre>
+    *
+    * @return the {@code String} representing this pose 3D.
+    */
    @Override
    public String toString()
    {

@@ -231,9 +231,11 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    }
 
    /**
-    * Provides a {@code String} representation of this capsule 3D as follows:<br>
-    * Capsule 3D: [position: (-0.362, -0.617, 0.066 ), axis: ( 0.634, -0.551, -0.543 ), length: 0.170,
-    * radius: 0.906]
+    * Provides a {@code String} representation of this capsule 3D as follows:
+    *
+    * <pre>
+    * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
+    * </pre>
     *
     * @return the {@code String} representing this capsule 3D.
     */

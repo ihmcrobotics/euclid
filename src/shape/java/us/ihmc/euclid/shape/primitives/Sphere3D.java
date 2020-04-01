@@ -13,8 +13,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  */
 public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
 {
+   /** The position of the center of this sphere. */
    private final Point3D position = new Point3D();
-
    /** The radius of this sphere. */
    private double radius;
 
@@ -178,8 +178,11 @@ public class Sphere3D implements Sphere3DBasics, GeometryObject<Sphere3D>
    }
 
    /**
-    * Provides a {@code String} representation of this sphere 3D as follows:<br>
-    * Sphere 3D: [position: (-0.362, -0.617, 0.066 ), radius: 0.906]
+    * Provides a {@code String} representation of this sphere 3D as follows:
+    *
+    * <pre>
+    * Sphere 3D: [position: (-0.362, -0.617,  0.066 ), radius:  0.906]
+    * </pre>
     *
     * @return the {@code String} representing this sphere 3D.
     */

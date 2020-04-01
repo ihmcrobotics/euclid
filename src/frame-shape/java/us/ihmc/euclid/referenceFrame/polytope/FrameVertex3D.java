@@ -9,16 +9,33 @@ import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Implementation of a vertex 3D that belongs to a convex polytope 3D expressed in a given reference
+ * frame.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ *
+ * @author Apoorv Shrivastava
+ * @author Sylvain Bertrand
+ */
 public class FrameVertex3D extends AbstractVertex3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D> implements FrameVertex3DReadOnly, FixedFramePoint3DBasics
 {
+   /**
+    * This object does not manage its reference frame, this field is the owner of this vertex and
+    * manages the current reference frame.
+    */
    private final ReferenceFrameHolder referenceFrameHolder;
 
    /**
     * Creates a new vertex and initializes its coordinates.
     *
-    * @param x the x-coordinate of this vertex.
-    * @param y the y-coordinate of this vertex.
-    * @param z the z-coordinate of this vertex.
+    * @param referenceFrameHolder the owner of this vertex which manages its reference frame. Reference
+    *                             saved.
+    * @param x                    the x-coordinate of this vertex.
+    * @param y                    the y-coordinate of this vertex.
+    * @param z                    the z-coordinate of this vertex.
     */
    public FrameVertex3D(ReferenceFrameHolder referenceFrameHolder, double x, double y, double z)
    {
@@ -29,7 +46,9 @@ public class FrameVertex3D extends AbstractVertex3D<FrameVertex3D, FrameHalfEdge
    /**
     * Creates a new vertex and initializes its coordinates.
     *
-    * @param position the initial position for this vertex. Not modified.
+    * @param referenceFrameHolder the owner of this vertex which manages its reference frame. Reference
+    *                             saved.
+    * @param position             the initial position for this vertex. Not modified.
     */
    public FrameVertex3D(ReferenceFrameHolder referenceFrameHolder, Point3DReadOnly position)
    {
@@ -44,6 +63,7 @@ public class FrameVertex3D extends AbstractVertex3D<FrameVertex3D, FrameHalfEdge
       return (FrameHalfEdge3D) FrameVertex3DReadOnly.super.getEdgeTo(destination);
    }
 
+   /** {@inheritDoc} */
    @Override
    public ReferenceFrame getReferenceFrame()
    {
@@ -53,9 +73,13 @@ public class FrameVertex3D extends AbstractVertex3D<FrameVertex3D, FrameHalfEdge
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameVertex3DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two faces have different frames, this method returns {@code false}.
+    * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    * @return {@code true} if {@code object} and this are exactly equal and are expressed in the same
+    *         reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)

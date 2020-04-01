@@ -19,7 +19,18 @@ import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 
+/**
+ * {@code EuclidFrameShapeIOTools}, as {@link EuclidCoreIOTools}, is intended to gather the input &
+ * output tools for printing, saving, and loading geometry objects.
+ * <p>
+ * At this time, only a few print tools are offered, additional features will come in future
+ * releases.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameShapeIOTools
 {
    private EuclidFrameShapeIOTools()

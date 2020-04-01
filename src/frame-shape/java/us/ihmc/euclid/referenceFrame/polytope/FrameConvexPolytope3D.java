@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.polytope;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
@@ -23,22 +24,40 @@ import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeConstructionTools
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Implementation of a convex polytope 3D expressed in a given reference frame.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D>
       implements FrameConvexPolytope3DReadOnly, FrameShape3DBasics, FrameChangeable, GeometryObject<FrameConvexPolytope3D>
 {
+   /** The reference frame in which this polytope is expressed. */
    private ReferenceFrame referenceFrame;
+   /** The centroid of this convex polytope. */
    private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
+   /** The tightest bounding box entirely containing this face. */
    private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newFixedFrameBoundingBox3DBasics(this);
    /** Variable to store intermediate results for garbage-free operations. */
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
+   /**
+    * Creates a new empty convex polytope initializes its reference frame to
+    * {@link ReferenceFrame#getWorldFrame()}.
+    */
    public FrameConvexPolytope3D()
    {
       this(ReferenceFrame.getWorldFrame());
    }
 
    /**
-    * Creates a new empty convex polytope.
+    * Creates a new empty convex polytope and initializes its reference frame.
+    * 
+    * @param referenceFrame this polytope initial frame.
     */
    public FrameConvexPolytope3D(ReferenceFrame referenceFrame)
    {
@@ -48,6 +67,7 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    /**
     * Creates a new empty convex polytope.
     *
+    * @param referenceFrame      this polytope initial frame.
     * @param constructionEpsilon tolerance used when adding vertices to a convex polytope to trigger a
     *                            series of edge-cases.
     */
@@ -62,6 +82,7 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    /**
     * Creates a new convex polytope and adds vertices provided by the given supplier.
     *
+    * @param referenceFrame   this polytope initial frame.
     * @param vertex3DSupplier the vertex supplier to get the vertices to add to this convex polytope.
     */
    public FrameConvexPolytope3D(ReferenceFrame referenceFrame, Vertex3DSupplier vertex3DSupplier)
@@ -70,7 +91,8 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    }
 
    /**
-    * Creates a new convex polytope and adds vertices provided by the given supplier.
+    * Creates a new convex polytope, adds vertices provided by the given supplier, its reference frame
+    * is initialized to match the reference frame of the vertex supplier.
     *
     * @param vertex3DSupplier the vertex supplier to get the vertices to add to this convex polytope.
     */
@@ -80,8 +102,9 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    }
 
    /**
-    * Creates a new convex polytope and adds vertices provided by the given supplier.
+    * Creates a new convex polytope, adds vertices provided by the given supplier.
     *
+    * @param referenceFrame      this polytope initial frame.
     * @param vertex3DSupplier    the vertex supplier to get the vertices to add to this convex
     *                            polytope.
     * @param constructionEpsilon tolerance used when adding vertices to a convex polytope to trigger a
@@ -94,7 +117,8 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    }
 
    /**
-    * Creates a new convex polytope and adds vertices provided by the given supplier.
+    * Creates a new convex polytope, adds vertices provided by the given supplier, its reference frame
+    * is initialized to match the reference frame of the vertex supplier.
     *
     * @param vertex3DSupplier    the vertex supplier to get the vertices to add to this convex
     *                            polytope.
@@ -109,7 +133,8 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
    /**
     * Creates a new convex polytope identical to {@code other}.
     *
-    * @param other the other convex polytope to copy. Not modified.
+    * @param referenceFrame this polytope initial frame.
+    * @param other          the other convex polytope to copy. Not modified.
     */
    public FrameConvexPolytope3D(ReferenceFrame referenceFrame, ConvexPolytope3DReadOnly other)
    {
@@ -154,24 +179,44 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
       this.set((FrameConvexPolytope3DReadOnly) other);
    }
 
+   /**
+    * Sets this convex polytope to be identical to {@code other}.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @param other the other polytope to copy. Not modified.
+    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
+    *                                         frame {@code this}.
+    */
    public void set(FrameConvexPolytope3DReadOnly other)
    {
       checkReferenceFrameMatch(other);
       super.set(other);
    }
 
+   /**
+    * Sets this convex polytope to be identical to {@code other}.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    * 
+    * @param other the other polytope to copy. Not modified.
+    */
    public void setIncludingFrame(FrameConvexPolytope3DReadOnly other)
    {
       setReferenceFrame(other.getReferenceFrame());
       super.set(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void changeFrame(ReferenceFrame desiredFrame)
    {
@@ -184,36 +229,42 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
       referenceFrame = desiredFrame;
    }
 
+   /** {@inheritDoc} */
    @Override
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrame;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFramePoint3DBasics getCentroid()
    {
       return centroid;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFrameBoundingBox3DBasics getBoundingBox()
    {
       return boundingBox;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FrameVertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
       return (FrameVertex3DReadOnly) super.getSupportingVertex(supportDirection);
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFrameShape3DPoseBasics getPose()
    {
       return null;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FrameConvexPolytope3D copy()
    {
@@ -222,11 +273,14 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
 
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
+    * <p>
+    * If the two polytopes have different frames, this method returns {@code false}.
+    * </p>
     *
     * @param other   the other convex polytope to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two convex polytopes are equal component-wise, {@code false}
-    *         otherwise.
+    * @return {@code true} if the two convex polytopes are equal component-wise and are expressed in
+    *         the same reference frame, {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(FrameConvexPolytope3D other, double epsilon)
@@ -242,6 +296,8 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two convex polytope represent the same geometry, {@code false}
     *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *                                         the same reference frame.
     */
    @Override
    public boolean geometricallyEquals(FrameConvexPolytope3D other, double epsilon)
@@ -251,10 +307,14 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(ConvexPolytope3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(FrameConvexPolytope3DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two polytopes have different frames, this method returns {@code false}.
+    * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    * @return {@code true} if {@code object} and this are exactly equal and are expressed in the same
+    *         reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)

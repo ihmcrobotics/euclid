@@ -17,8 +17,22 @@ import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DFactory;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Implementation of a face 3D that belongs to a convex polytope 3D expressed in a given reference
+ * frame.
+ * <p>
+ * This is part of a Doubly Connected Edge List data structure
+ * <a href="https://en.wikipedia.org/wiki/Doubly_connected_edge_list"> link</a>.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, FrameFace3D> implements FrameFace3DReadOnly, Clearable, Transformable
 {
+   /**
+    * This object does not manage its reference frame, this field is the owner of this face and manages
+    * the current reference frame.
+    */
    private final ReferenceFrameHolder referenceFrameHolder;
    /** The normal vector of the support plane of this face. */
    private final FixedFrameVector3DBasics normal = EuclidFrameFactories.newFixedFrameVector3DBasics(this);
@@ -30,7 +44,9 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
    /**
     * Creates a new empty face.
     *
-    * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
+    * @param referenceFrameHolder the owner of this face which manages its reference frame. Reference
+    *                             saved.
+    * @param initialGuessNormal   initial guess for what this face's normal should be. Not modified.
     */
    public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialGuessNormal)
    {
@@ -42,9 +58,11 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
    /**
     * Creates a new empty face.
     *
-    * @param initialGuessNormal  initial guess for what this face's normal should be. Not modified.
-    * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
-    *                            edge-cases.
+    * @param referenceFrameHolder the owner of this face which manages its reference frame. Reference
+    *                             save.
+    * @param initialGuessNormal   initial guess for what this face's normal should be. Not modified.
+    * @param constructionEpsilon  tolerance used when adding vertices to a face to trigger a series of
+    *                             edge-cases.
     */
    public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialGuessNormal, double constructionEpsilon)
    {
@@ -56,11 +74,13 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
    /**
     * Creates a new face given its edges.
     *
-    * @param faceEdges           the edges composing the new face. Not modified, reference to the edges
-    *                            saved.
-    * @param normal              the face's normal. Not modified.
-    * @param constructionEpsilon tolerance used when adding vertices to a face to trigger a series of
-    *                            edge-cases.
+    * @param referenceFrameHolder the owner of this face which manages its reference frame. Reference
+    *                             save.
+    * @param faceEdges            the edges composing the new face. Not modified, reference to the
+    *                             edges saved.
+    * @param normal               the face's normal. Not modified.
+    * @param constructionEpsilon  tolerance used when adding vertices to a face to trigger a series of
+    *                             edge-cases.
     */
    public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, Collection<FrameHalfEdge3D> faceEdges, FrameVector3DReadOnly normal,
                       double constructionEpsilon)
@@ -75,24 +95,28 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
       return (origin, destination) -> new FrameHalfEdge3D(referenceFrameHolder, origin, destination);
    }
 
+   /** {@inheritDoc} */
    @Override
    public ReferenceFrame getReferenceFrame()
    {
       return referenceFrameHolder.getReferenceFrame();
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFramePoint3DBasics getCentroid()
    {
       return centroid;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFrameVector3DBasics getNormal()
    {
       return normal;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FixedFrameBoundingBox3DBasics getBoundingBox()
    {
@@ -102,9 +126,13 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(FrameFace3DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two faces have different frames, this method returns {@code false}.
+    * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    * @return {@code true} if {@code object} and this are exactly equal and are expressed in the same
+    *         reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)

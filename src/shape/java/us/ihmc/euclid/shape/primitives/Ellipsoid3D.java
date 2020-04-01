@@ -169,6 +169,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
       Ellipsoid3DBasics.super.set(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public Ellipsoid3D copy()
    {
@@ -231,9 +232,11 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    }
 
    /**
-    * Provides a {@code String} representation of this ellipsoid 3D as follows:<br>
-    * Ellipsoid 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136),
-    * radii: ( 0.191, 0.719, 0.479 )]
+    * Provides a {@code String} representation of this ellipsoid 3D as follows:
+    *
+    * <pre>
+    * Ellipsoid 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), radii: ( 0.191,  0.719,  0.479 )]
+    * </pre>
     *
     * @return the {@code String} representing this ellipsoid 3D.
     */

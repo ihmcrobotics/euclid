@@ -235,9 +235,11 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    }
 
    /**
-    * Provides a {@code String} representation of this box 3D as follows:<br>
-    * Box 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: (
-    * 0.191, 0.719, 0.479 )]
+    * Provides a {@code String} representation of this box 3D as follows:
+    *
+    * <pre>
+    * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
+    * </pre>
     *
     * @return the {@code String} representing this box 3D.
     */

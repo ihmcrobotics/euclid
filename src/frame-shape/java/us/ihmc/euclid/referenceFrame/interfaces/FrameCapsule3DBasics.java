@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -62,7 +63,9 @@ public interface FrameCapsule3DBasics extends FixedFrameCapsule3DBasics, FrameSh
     * @param axis     the axis of revolution of this capsule. Not modified.
     * @param length   the new length.
     * @param radius   the new radius.
-    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
+    * @throws IllegalArgumentException        if {@code length} or {@code radius} is negative.
+    * @throws ReferenceFrameMismatchException if the frame argument are not expressed in the same
+    *                                         reference frame.
     */
    default void setIncludingFrame(FramePoint3DReadOnly position, FrameVector3DReadOnly axis, double length, double radius)
    {

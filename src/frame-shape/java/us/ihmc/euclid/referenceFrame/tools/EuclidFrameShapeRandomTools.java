@@ -25,6 +25,14 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class provides random generators to generate random frame shapes.
+ * <p>
+ * The main application is for writing JUnit Tests.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameShapeRandomTools
 {
    private EuclidFrameShapeRandomTools()
@@ -32,19 +40,28 @@ public class EuclidFrameShapeRandomTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
 
+   /**
+    * Generates a random pose using {@link EuclidShapeRandomTools#nextShape3DPose(Random)}.
+    * 
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame pose's reference frame.
+    * @return the random pose.
+    */
    public static FrameShape3DPose nextFrameShape3DPose(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameShape3DPose(referenceFrame, EuclidShapeRandomTools.nextShape3DPose(random));
    }
 
+   /**
+    * Generates a random pose using {@link EuclidShapeRandomTools#nextShape3DPose(Random)}.
+    * 
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame pose's reference frame.
+    * @return the random pose.
+    */
    public static FixedFrameShape3DPose nextFixedFrameShape3DPose(Random random, ReferenceFrame referenceFrame)
    {
-      return nextFixedFrameShape3DPose(random, () -> referenceFrame);
-   }
-
-   public static FixedFrameShape3DPose nextFixedFrameShape3DPose(Random random, ReferenceFrameHolder referenceFrameHolder)
-   {
-      return new FixedFrameShape3DPose(referenceFrameHolder, EuclidShapeRandomTools.nextShape3DPose(random));
+      return new FixedFrameShape3DPose((ReferenceFrameHolder) () -> referenceFrame, EuclidShapeRandomTools.nextShape3DPose(random));
    }
 
    /**
@@ -319,7 +336,8 @@ public class EuclidFrameShapeRandomTools
     * Generates a random face 3D by defining a random circle onto which the vertices are randomly
     * positioned.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame face's reference frame.
     * @return the random face.
     */
    public static FrameFace3D nextCircleBasedFrameFace3D(Random random, ReferenceFrame referenceFrame)
@@ -331,8 +349,9 @@ public class EuclidFrameShapeRandomTools
     * Generates a random face 3D by defining a random circle onto which the vertices are randomly
     * positioned.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinates of the circle's center.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame face's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinates of the circle's center.
     * @return the random face.
     */
    public static FrameFace3D nextCircleBasedFrameFace3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -345,6 +364,7 @@ public class EuclidFrameShapeRandomTools
     * positioned.
     *
     * @param random           the random generator to use.
+    * @param referenceFrame   the random frame face's reference frame.
     * @param centerMinMax     the maximum absolute value for each coordinates of the circle's center.
     * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
     *                         the random circle.
@@ -367,6 +387,7 @@ public class EuclidFrameShapeRandomTools
     * positioned.
     *
     * @param random           the random generator to use.
+    * @param referenceFrame   the random frame face's reference frame.
     * @param centerMinMax     the maximum absolute value for each coordinates of the circle's center.
     * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
     *                         the random circle.
@@ -399,7 +420,8 @@ public class EuclidFrameShapeRandomTools
     * </ul>
     * </p>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -409,7 +431,8 @@ public class EuclidFrameShapeRandomTools
 
    /**
     * Generates a random convex polytope 3D in the same way as
-    * {@link #nextConeFrameConvexPolytope3D(Random)} and in addition allows the generation of:
+    * {@link #nextConeFrameConvexPolytope3D(Random, ReferenceFrame)} and in addition allows the
+    * generation of:
     * <ul>
     * <li>empty convex polytope.
     * <li>convex polytope with a single vertex.
@@ -417,7 +440,8 @@ public class EuclidFrameShapeRandomTools
     * <li>convex polytope with a single face.
     * </ul>
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextFrameConvexPolytope3DWithEdgeCases(Random random, ReferenceFrame referenceFrame)
@@ -428,7 +452,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope by discretizing a randomly generated cone 3D.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextConeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -439,8 +464,9 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope by discretizing a randomly generated cone 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the cone's base center.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the cone's base center.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextConeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -451,14 +477,15 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope by discretizing a randomly generated cone 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the cone's base center.
-    * @param heightMin    the minimum value for the height of the cone.
-    * @param heightMax    the maximum value for the height of the cone.
-    * @param radiusMin    the minimum value for the radius of the cone base.
-    * @param radiusMax    the maximum value for the radius of the cone base.
-    * @param divisionsMin the minimum number of divisions for discretizing the cone.
-    * @param divisionsMax the maximum number of divisions for discretizing the cone.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the cone's base center.
+    * @param heightMin      the minimum value for the height of the cone.
+    * @param heightMax      the maximum value for the height of the cone.
+    * @param radiusMin      the minimum value for the radius of the cone base.
+    * @param radiusMax      the maximum value for the radius of the cone base.
+    * @param divisionsMin   the minimum number of divisions for discretizing the cone.
+    * @param divisionsMax   the maximum number of divisions for discretizing the cone.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextConeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double heightMin,
@@ -478,7 +505,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cube 3D.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextCubeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -489,9 +517,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cube 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextCubeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -502,11 +531,12 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cube 3D.
     *
-    * @param random        the random generator to use.
-    * @param centerMinMax  the maximum absolute value for each coordinate for the convex polytope's
-    *                      centroid.
-    * @param edgeLengthMin the minimum value for the cube's edge length.
-    * @param edgeLengthMax the maximum value for the cube's edge length.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
+    * @param edgeLengthMin  the minimum value for the cube's edge length.
+    * @param edgeLengthMax  the maximum value for the cube's edge length.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextCubeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double edgeLengthMin,
@@ -518,7 +548,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cylinder 3D.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextCylinderFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -529,9 +560,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cylinder 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextCylinderFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -542,15 +574,16 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated cylinder 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
-    * @param lengthMin    the minimum value for the length of the cylinder.
-    * @param lengthMax    the maximum value for the length of the cylinder.
-    * @param radiusMin    the minimum value for the radius of the cylinder.
-    * @param radiusMax    the maximum value for the radius of the cylinder.
-    * @param divisionsMin the minimum number of divisions for discretizing the cylinder.
-    * @param divisionsMax the maximum number of divisions for discretizing the cylinder.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
+    * @param lengthMin      the minimum value for the length of the cylinder.
+    * @param lengthMax      the maximum value for the length of the cylinder.
+    * @param radiusMin      the minimum value for the radius of the cylinder.
+    * @param radiusMax      the maximum value for the radius of the cylinder.
+    * @param divisionsMin   the minimum number of divisions for discretizing the cylinder.
+    * @param divisionsMax   the maximum number of divisions for discretizing the cylinder.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextCylinderFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double lengthMin,
@@ -571,7 +604,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated icosahedron 3D.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextIcosahedronBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -582,9 +616,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated icosahedron 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextIcosahedronBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -595,13 +630,14 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated icosahedron 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
-    * @param radiusMin    the minimum value for the radius of the circumscribed sphere of the
-    *                     icosahedron.
-    * @param radiusMax    the maximum value for the radius of the circumscribed sphere of the
-    *                     icosahedron.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
+    * @param radiusMin      the minimum value for the radius of the circumscribed sphere of the
+    *                       icosahedron.
+    * @param radiusMax      the maximum value for the radius of the circumscribed sphere of the
+    *                       icosahedron.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextIcosahedronBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax,
@@ -613,7 +649,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated ico-sphere 3D.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
@@ -625,9 +662,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated ico-sphere 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
@@ -639,11 +677,12 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated ico-sphere 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
-    * @param radiusMin    the minimum value for the radius of the ico-sphere.
-    * @param radiusMax    the maximum value for the radius of the ico-sphere.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
+    * @param radiusMin      the minimum value for the radius of the ico-sphere.
+    * @param radiusMax      the maximum value for the radius of the ico-sphere.
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
@@ -657,6 +696,7 @@ public class EuclidFrameShapeRandomTools
     * Generates a convex polytope from a randomly generated ico-sphere 3D.
     *
     * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
     *                       centroid.
     * @param recursionLevel the recursion level that defines the resolution of the ico-sphere.
@@ -675,7 +715,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pointcloud 3D.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextPointCloudBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -686,9 +727,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pointcloud 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextPointCloudBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -699,10 +741,11 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pointcloud 3D.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate for the convex polytope's
-    *                     centroid.
-    * @param minMax       the range of the point cloud in the three directions.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate for the convex polytope's
+    *                       centroid.
+    * @param minMax         the range of the point cloud in the three directions.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextPointCloudBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax,
@@ -715,6 +758,7 @@ public class EuclidFrameShapeRandomTools
     * Generates a convex polytope from a randomly generated pointcloud 3D.
     *
     * @param random                 the random generator to use.
+    * @param referenceFrame         the random frame convex polytope's reference frame.
     * @param centerMinMax           the maximum absolute value for each coordinate for the convex
     *                               polytope's centroid.
     * @param minMax                 the range of the point cloud in the three directions.
@@ -733,7 +777,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pyramid.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextPyramidFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -744,8 +789,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pyramid.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the pyramid's base center.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the pyramid's base
+    *                       center.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextPyramidFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -756,14 +803,16 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated pyramid.
     *
-    * @param random        the random generator to use.
-    * @param centerMinMax  the maximum absolute value for each coordinate of the pyramid's base center.
-    * @param heightMin     the minimum value for the height of the pyramid.
-    * @param heightMax     the maximum value for the height of the pyramid.
-    * @param baseLengthMin the minimum value for the length of the pyramid's base.
-    * @param baseLengthMax the maximum value for the length of the pyramid's base.
-    * @param baseWidthMin  the minimum value for the width of the pyramid's base.
-    * @param baseWidthMax  the maximum value for the width of the pyramid's base.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the pyramid's base
+    *                       center.
+    * @param heightMin      the minimum value for the height of the pyramid.
+    * @param heightMax      the maximum value for the height of the pyramid.
+    * @param baseLengthMin  the minimum value for the length of the pyramid's base.
+    * @param baseLengthMax  the maximum value for the length of the pyramid's base.
+    * @param baseWidthMin   the minimum value for the width of the pyramid's base.
+    * @param baseWidthMax   the maximum value for the width of the pyramid's base.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextPyramidFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double heightMin,
@@ -784,7 +833,8 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a single randomly generated edge.
     *
-    * @param random the random generator to use.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextSingleEdgeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame)
@@ -795,8 +845,9 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a single randomly generated edge.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the edge's center.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the edge's center.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextSingleEdgeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax)
@@ -807,9 +858,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a single randomly generated edge.
     *
-    * @param random       the random generator to use.
-    * @param centerMinMax the maximum absolute value for each coordinate of the edge's center.
-    * @param minMax       the range of the egde in the three directions.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the edge's center.
+    * @param minMax         the range of the edge in the three directions.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextSingleEdgeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double minMax)
@@ -820,8 +872,9 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated tetrahedron that contains the given point.
     *
-    * @param random the random generator to use.
-    * @param point  the point the tetrahedron must contain. Not modified.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param point          the point the tetrahedron must contain. Not modified.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextFrameTetrahedronContainingPoint3D(Random random, ReferenceFrame referenceFrame, Point3DReadOnly point)
@@ -832,9 +885,10 @@ public class EuclidFrameShapeRandomTools
    /**
     * Generates a convex polytope from a randomly generated tetrahedron that contains the given point.
     *
-    * @param random the random generator to use.
-    * @param point  the point the tetrahedron must contain. Not modified.
-    * @param minMax the range of the tetrahedron in the three directions.
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame convex polytope's reference frame.
+    * @param point          the point the tetrahedron must contain. Not modified.
+    * @param minMax         the range of the tetrahedron in the three directions.
     * @return the random convex polytope 3D.
     */
    public static FrameConvexPolytope3D nextFrameTetrahedronContainingPoint3D(Random random, ReferenceFrame referenceFrame, Point3DReadOnly point, double minMax)

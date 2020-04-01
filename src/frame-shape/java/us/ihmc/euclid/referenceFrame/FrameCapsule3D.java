@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DBasics;
@@ -14,8 +15,18 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * Implementation of a capsule 3D expressed in a given reference frame.
+ * <p>
+ * A capsule 3D is represented by its length, i.e. the distance separating the center of the two
+ * half-spheres, its radius, the position of its center, and its axis of revolution.
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<FrameCapsule3D>
 {
+   /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
    /** Position of this capsule's center. */
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
@@ -39,48 +50,100 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
                                                                                                         () -> -halfLength * axis.getZ() + position.getZ(),
                                                                                                         this);
 
+   /**
+    * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5 and
+    * initializes its reference frame to {@link ReferenceFrame#getWorldFrame()}.
+    */
    public FrameCapsule3D()
    {
       this(ReferenceFrame.getWorldFrame());
    }
 
+   /**
+    * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5 and
+    * initializes its reference frame.
+    * 
+    * @param referenceFrame this shape initial reference frame.
+    */
    public FrameCapsule3D(ReferenceFrame referenceFrame)
    {
       this(referenceFrame, 1.0, 0.5);
    }
 
+   /**
+    * Creates a new capsule which axis is along the z-axis and initializes its size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param length         the length of this capsule.
+    * @param radius         the radius of this capsule.
+    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
+    */
    public FrameCapsule3D(ReferenceFrame referenceFrame, double length, double radius)
    {
       setReferenceFrame(referenceFrame);
       setSize(length, radius);
    }
 
+   /**
+    * Creates a new capsule 3D and initializes its pose and size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param position       the position of the center. Not modified.
+    * @param axis           the axis of revolution. Not modified.
+    * @param length         the length of this capsule.
+    * @param radius         the radius of this capsule.
+    * @throws IllegalArgumentException if {@code length} or {@code radius} is negative.
+    */
    public FrameCapsule3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
       setIncludingFrame(referenceFrame, position, axis, length, radius);
    }
 
+   /**
+    * Creates a new capsule 3D and initializes its pose and size.
+    *
+    * @param position the position of the center. Not modified.
+    * @param axis     the axis of revolution. Not modified.
+    * @param length   the length of this capsule.
+    * @param radius   the radius of this capsule.
+    * @throws IllegalArgumentException        if {@code length} or {@code radius} is negative.
+    * @throws ReferenceFrameMismatchException if the frame argument are not expressed in the same
+    *                                         reference frame.
+    */
    public FrameCapsule3D(FramePoint3DReadOnly position, FrameVector3DReadOnly axis, double length, double radius)
    {
       setIncludingFrame(position, axis, length, radius);
    }
 
+   /**
+    * Creates a new capsule 3D identical to {@code other}.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param other          the other capsule to copy. Not modified.
+    */
    public FrameCapsule3D(ReferenceFrame referenceFrame, Capsule3DReadOnly other)
    {
       setIncludingFrame(referenceFrame, other);
    }
 
+   /**
+    * Creates a new capsule 3D identical to {@code other}.
+    *
+    * @param other the other capsule to copy. Not modified.
+    */
    public FrameCapsule3D(FrameCapsule3DReadOnly other)
    {
       setIncludingFrame(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(FrameCapsule3D other)
    {
       FrameCapsule3DBasics.super.set(other);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
@@ -106,6 +169,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
       halfLength = 0.5 * length;
    }
 
+   /** {@inheritDoc} */
    @Override
    public ReferenceFrame getReferenceFrame()
    {
@@ -161,6 +225,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
       return bottomCenter;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FrameCapsule3D copy()
    {
@@ -169,10 +234,14 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
 
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
+    * <p>
+    * If the two capsules have different frames, this method returns {@code false}.
+    * </p>
     *
     * @param other   the other capsule to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two capsules are equal component-wise, {@code false} otherwise.
+    * @return {@code true} if the two capsules are equal component-wise and are expressed in the same
+    *         reference frame, {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(FrameCapsule3D other, double epsilon)
@@ -187,6 +256,8 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
     * @param other   the capsule to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the capsules represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *                                         the same reference frame.
     */
    @Override
    public boolean geometricallyEquals(FrameCapsule3D other, double epsilon)
@@ -196,10 +267,14 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Capsule3DReadOnly)}, it returns {@code false} otherwise.
+    * {@link #equals(FrameCapsule3DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two capsules have different frames, this method returns {@code false}.
+    * </p>
     *
     * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    * @return {@code true} if {@code object} and this are exactly equal and are expressed in the same
+    *         reference frame, {@code false} otherwise.
     */
    @Override
    public boolean equals(Object object)
@@ -225,9 +300,11 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    }
 
    /**
-    * Provides a {@code String} representation of this capsule 3D as follows:<br>
-    * Capsule 3D: [position: (-0.362, -0.617, 0.066 ), axis: ( 0.634, -0.551, -0.543 ), length: 0.170,
-    * radius: 0.906]
+    * Provides a {@code String} representation of this capsule 3D as follows:
+    *
+    * <pre>
+    * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906] - worldFrame
+    * </pre>
     *
     * @return the {@code String} representing this capsule 3D.
     */

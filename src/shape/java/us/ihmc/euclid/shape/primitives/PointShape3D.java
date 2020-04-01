@@ -105,22 +105,6 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
-    *
-    * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean equals(Object object)
-   {
-      if (object instanceof PointShape3DReadOnly)
-         return PointShape3DBasics.super.equals((PointShape3DReadOnly) object);
-      else
-         return false;
-   }
-
-   /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
     * @param other   the other point shape to compare against this. Not modified.
@@ -148,6 +132,22 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    }
 
    /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof PointShape3DReadOnly)
+         return PointShape3DBasics.super.equals((PointShape3DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
     * Calculates and returns a hash code value from the value of each component of this point shape 3D.
     *
     * @return the hash code value for this point shape 3D.
@@ -159,8 +159,11 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    }
 
    /**
-    * Provides a {@code String} representation of this point shape 3D as follows:<br>
-    * Point shape 3D: (-0.362, -0.617, 0.066 )
+    * Provides a {@code String} representation of this point shape 3D as follows:
+    *
+    * <pre>
+    * Point shape 3D: (-0.362, -0.617,  0.066 )
+    * </pre>
     *
     * @return the {@code String} representing this point shape 3D.
     */

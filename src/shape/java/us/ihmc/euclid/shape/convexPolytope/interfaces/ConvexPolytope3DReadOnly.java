@@ -427,7 +427,8 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     * </p>
     * 
     * @param seed                   the starting point for the search, the closer it is to the
-    *                               supporting vertex, the faster the search will converge. Can be
+    *                               supporting vertex, the faster the search will converge. The seed
+    *                               has to be a vertex that belongs to this polytope. Can be
     *                               {@code null}.
     * @param supportDirection       the direction to search for the farthest point on this shape. Not
     *                               modified.

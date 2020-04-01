@@ -6,6 +6,7 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
@@ -27,9 +28,27 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
+/**
+ * Implementation of a ramp 3D expressed in a given reference frame.
+ * <p>
+ * A ramp represents a 3D shape with a triangular section in the XZ-plane. Shape description:
+ * <ul>
+ * <li>The slope face starts from {@code x=0.0}, {@code z=0.0} to end at {@code x=size.getX()},
+ * {@code z=size.getZ()}.
+ * <li>The bottom face is horizontal (XY-plane) at {@code z=0.0}.
+ * <li>The rear face is vertical (YZ-plane) at {@code x=size.getX()}.
+ * <li>The left face is vertical (XZ-plane) at {@code y=-size.getY()/2.0}.
+ * <li>The right face is vertical (XZ-plane) at {@code y=size.getY()/2.0}.
+ * </ul>
+ * </p>
+ *
+ * @author Sylvain Bertrand
+ */
 public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3D>
 {
+   /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
+   /** Pose of this ramp. */
    private final FixedFrameShape3DPose pose = new FixedFrameShape3DPose(this);
    /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
@@ -111,16 +130,36 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
 
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
 
+   /**
+    * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0} and
+    * initializes its reference frame to {@link ReferenceFrame#getWorldFrame()}.
+    */
    public FrameRamp3D()
    {
       this(ReferenceFrame.getWorldFrame());
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0} and
+    * initializes its reference frame.
+    * 
+    * @param referenceFrame this shape initial reference frame.
+    */
    public FrameRamp3D(ReferenceFrame referenceFrame)
    {
       this(referenceFrame, 1.0, 1.0, 1.0);
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param sizeX          the size of this ramp along the x-axis.
+    * @param sizeY          the size of this ramp along the y-axis.
+    * @param sizeZ          the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
+    *                                  negative.
+    */
    public FrameRamp3D(ReferenceFrame referenceFrame, double sizeX, double sizeY, double sizeZ)
    {
       setReferenceFrame(referenceFrame);
@@ -128,48 +167,126 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param position       the position of this ramp. Not modified.
+    * @param orientation    the orientation of this ramp. Not modified.
+    * @param sizeX          the size of this ramp along the x-axis.
+    * @param sizeY          the size of this ramp along the y-axis.
+    * @param sizeZ          the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
+    *                                  negative.
+    */
    public FrameRamp3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(referenceFrame, position, orientation, sizeX, sizeY, sizeZ);
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param position    the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param sizeX       the size of this ramp along the x-axis.
+    * @param sizeY       the size of this ramp along the y-axis.
+    * @param sizeZ       the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException        if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ}
+    *                                         is negative.
+    * @throws ReferenceFrameMismatchException if any of the frame arguments are not expressed in the
+    *                                         same reference frame.
+    */
    public FrameRamp3D(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(position, orientation, sizeX, sizeY, sizeZ);
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation for this ramp. Not modified.
+    * @param sizeX          the size of this ramp along the x-axis.
+    * @param sizeY          the size of this ramp along the y-axis.
+    * @param sizeZ          the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
+    *                                  negative.
+    */
    public FrameRamp3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(referenceFrame, pose, sizeX, sizeY, sizeZ);
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose  the position and orientation for this ramp. Not modified.
+    * @param sizeX the size of this ramp along the x-axis.
+    * @param sizeY the size of this ramp along the y-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
+    *                                  negative.
+    */
    public FrameRamp3D(FramePose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(pose, sizeX, sizeY, sizeZ);
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation for this ramp. Not modified.
+    * @param sizeX          the size of this ramp along the x-axis.
+    * @param sizeY          the size of this ramp along the y-axis.
+    * @param sizeZ          the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
+    *                                  negative.
+    */
    public FrameRamp3D(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(referenceFrame, pose, sizeX, sizeY, sizeZ);
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose  the position and orientation for this ramp. Not modified.
+    * @param sizeX the size of this ramp along the x-axis.
+    * @param sizeY the size of this ramp along the y-axis.
+    * @param sizeZ the size of this ramp along the z-axis.
+    * @throws IllegalArgumentException if any of {@code sizeX}, {@code sizeY}, or {@code sizeZ} is
+    *                                  negative.
+    */
    public FrameRamp3D(FrameShape3DPoseReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(pose, sizeX, sizeY, sizeZ);
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D identical to {@code other}.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param other          the other ramp to copy. Not modified.
+    */
    public FrameRamp3D(ReferenceFrame referenceFrame, Ramp3DReadOnly other)
    {
       setIncludingFrame(referenceFrame, other);
       setupListeners();
    }
 
+   /**
+    * Creates a new ramp 3D identical to {@code other}.
+    *
+    * @param other the other ramp to copy. Not modified.
+    */
    public FrameRamp3D(FrameRamp3DReadOnly other)
    {
       setIncludingFrame(other);
@@ -202,12 +319,14 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       centroidDirty = false;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setReferenceFrame(ReferenceFrame referenceFrame)
    {
       this.referenceFrame = referenceFrame;
    }
 
+   /** {@inheritDoc} */
    @Override
    public ReferenceFrame getReferenceFrame()
    {
@@ -234,6 +353,9 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       return centroid;
    }
 
+   /**
+    * Notifies the internal listeners that this shape has changed.
+    */
    public void notifyChangeListeners()
    {
       for (int i = 0; i < changeListeners.size(); i++)
@@ -256,6 +378,7 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       supplier = newSupplier;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(FrameRamp3D other)
    {
@@ -293,24 +416,58 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       return angleOfRampIncline;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FrameRamp3D copy()
    {
       return new FrameRamp3D(this);
    }
 
+   /**
+    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
+    * <p>
+    * If the two ramp have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param other   the other ramp to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the two ramps are equal component-wise and are expressed in the same
+    *         reference frame, {@code false} otherwise.
+    */
    @Override
    public boolean epsilonEquals(FrameRamp3D other, double epsilon)
    {
       return FrameRamp3DBasics.super.epsilonEquals(other, epsilon);
    }
 
+   /**
+    * Compares {@code this} and {@code other} to determine if the two ramps are geometrically similar,
+    * i.e. the difference between their size are less than or equal to {@code epsilon} and their poses
+    * are geometrically similar given {@code epsilon}.
+    *
+    * @param other   the ramp to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the ramps represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *                                         the same reference frame.
+    */
    @Override
    public boolean geometricallyEquals(FrameRamp3D other, double epsilon)
    {
       return FrameRamp3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(FrameRamp3DReadOnly)}, it returns {@code false} otherwise.
+    * <p>
+    * If the two ramp have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal and are expressed in the same
+    *         reference frame, {@code false} otherwise.
+    */
    @Override
    public boolean equals(Object object)
    {
@@ -320,6 +477,11 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
          return false;
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of each component of this ramp 3D.
+    *
+    * @return the hash code value for this ramp 3D.
+    */
    @Override
    public int hashCode()
    {

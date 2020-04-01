@@ -30,6 +30,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
+/**
+ * This class provides a variety of tools for performing operations with frame shapes.
+ *
+ * @author Sylvain Bertrand
+ */
 public class EuclidFrameShapeTools
 {
    private static final double EPSILON = 1.0e-12;
@@ -47,11 +52,26 @@ public class EuclidFrameShapeTools
                               BoundingBox3DBasics boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given box 3D.
+    *
+    * @param box3D             the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxBox3D(FrameBox3DReadOnly box3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxBox3D(box3D.getReferenceFrame(), box3D, boundingBoxFrame, boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given box 3D.
+    *
+    * @param box3DFrame        the reference frame in which the shape is expressed.
+    * @param box3D             the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxBox3D(ReferenceFrame box3DFrame, Box3DReadOnly box3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       box3DFrame.verifySameRoots(boundingBoxFrame);
@@ -131,11 +151,26 @@ public class EuclidFrameShapeTools
       }
    };
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given capsule 3D.
+    *
+    * @param capsule3D         the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxCapsule3D(FrameCapsule3DReadOnly capsule3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxCapsule3D(capsule3D.getReferenceFrame(), capsule3D, boundingBoxFrame, boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given capsule 3D.
+    *
+    * @param capsule3DFrame    the reference frame in which the shape is expressed.
+    * @param capsule3D         the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxCapsule3D(ReferenceFrame capsule3DFrame, Capsule3DReadOnly capsule3D, ReferenceFrame boundingBoxFrame,
                                            BoundingBox3DBasics boundingBoxToPack)
    {
@@ -216,11 +251,26 @@ public class EuclidFrameShapeTools
       }
    };
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given cylinder 3D.
+    *
+    * @param cylinder3D        the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxCylinder3D(FrameCylinder3DReadOnly cylinder3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxCylinder3D(cylinder3D.getReferenceFrame(), cylinder3D, boundingBoxFrame, boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given cylinder 3D.
+    *
+    * @param cylinder3DFrame   the reference frame in which the shape is expressed.
+    * @param cylinder3D        the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxCylinder3D(ReferenceFrame cylinder3DFrame, Cylinder3DReadOnly cylinder3D, ReferenceFrame boundingBoxFrame,
                                             BoundingBox3DBasics boundingBoxToPack)
    {
@@ -316,11 +366,26 @@ public class EuclidFrameShapeTools
       }
    };
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given ellipsoid 3D.
+    *
+    * @param ellipsoid3D       the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxEllipsoid3D(FrameEllipsoid3DReadOnly ellipsoid3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxEllipsoid3D(ellipsoid3D.getReferenceFrame(), ellipsoid3D, boundingBoxFrame, boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given ellipsoid 3D.
+    *
+    * @param ellipsoid3DFrame  the reference frame in which the shape is expressed.
+    * @param ellipsoid3D       the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxEllipsoid3D(ReferenceFrame ellipsoid3DFrame, Ellipsoid3DReadOnly ellipsoid3D, ReferenceFrame boundingBoxFrame,
                                              BoundingBox3DBasics boundingBoxToPack)
    {
@@ -401,11 +466,26 @@ public class EuclidFrameShapeTools
       }
    };
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given ramp 3D.
+    *
+    * @param ramp3D            the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxRamp3D(FrameRamp3DReadOnly ramp3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxRamp3D(ramp3D.getReferenceFrame(), ramp3D, boundingBoxFrame, boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given ramp 3D.
+    *
+    * @param ramp3DFrame       the reference frame in which the shape is expressed.
+    * @param ramp3D            the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxRamp3D(ReferenceFrame ramp3DFrame, Ramp3DReadOnly ramp3D, ReferenceFrame boundingBoxFrame,
                                         BoundingBox3DBasics boundingBoxToPack)
    {
@@ -507,11 +587,26 @@ public class EuclidFrameShapeTools
       }
    };
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given sphere 3D.
+    *
+    * @param sphere3D          the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxSphere3D(FrameSphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxSphere3D(sphere3D.getReferenceFrame(), sphere3D, boundingBoxFrame, boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given sphere 3D.
+    *
+    * @param sphere3DFrame     the reference frame in which the shape is expressed.
+    * @param sphere3D          the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxSphere3D(ReferenceFrame sphere3DFrame, Sphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame,
                                           BoundingBox3DBasics boundingBoxToPack)
    {
@@ -562,12 +657,27 @@ public class EuclidFrameShapeTools
       }
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given convex polytope 3D.
+    *
+    * @param convexPolytope3D  the frame shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxConvexPolytope3D(FrameConvexPolytope3DReadOnly convexPolytope3D, ReferenceFrame boundingBoxFrame,
                                                   BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxConvexPolytope3D(convexPolytope3D.getReferenceFrame(), convexPolytope3D, boundingBoxFrame, boundingBoxToPack);
    }
 
+   /**
+    * Computes the tightest 3D axis-aligned bounding box that contains a given convex polytope 3D.
+    *
+    * @param convexPolytope3DFrame the reference frame in which the shape is expressed.
+    * @param convexPolytope3D      the shape to evaluate the bounding box of. Not modified.
+    * @param boundingBoxFrame      the reference frame in which the bounding box is to be evaluated.
+    * @param boundingBoxToPack     the bounding box in which the result is stored. Modified.
+    */
    public static void boundingBoxConvexPolytope3D(ReferenceFrame convexPolytope3DFrame, ConvexPolytope3DReadOnly convexPolytope3D,
                                                   ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
    {

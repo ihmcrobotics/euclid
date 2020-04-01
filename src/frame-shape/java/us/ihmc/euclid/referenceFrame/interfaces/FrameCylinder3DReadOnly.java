@@ -368,6 +368,8 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * @param other   the cylinder to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the cylinders represent the same geometry, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
+    *                                         the same reference frame.
     */
    default boolean geometricallyEquals(FrameCylinder3DReadOnly other, double epsilon)
    {
