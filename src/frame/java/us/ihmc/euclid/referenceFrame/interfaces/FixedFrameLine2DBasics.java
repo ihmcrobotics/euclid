@@ -250,8 +250,8 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
    /**
     * Sets this line to be the same as the given line expressed in the reference frame of this.
     * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(FrameLine2DReadOnly)}.
+    * If {@code other} is expressed in the same frame as {@code this}, then this method is equivalent
+    * to {@link #set(FrameLine2DReadOnly)}.
     * </p>
     * <p>
     * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
