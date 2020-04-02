@@ -28,6 +28,64 @@ public interface ReferenceFrameHolder
    }
 
    /**
+    * Checks if the frames held by {@code this}, {@code otherA}, and {@code otherB} all match.
+    * 
+    * @param otherA the first other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @param otherB the second other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @throws ReferenceFrameMismatchException if all the reference frames do not match.
+    */
+   default void checkReferenceFrameMatch(ReferenceFrameHolder otherA, ReferenceFrameHolder otherB) throws ReferenceFrameMismatchException
+   {
+      checkReferenceFrameMatch(otherA);
+      checkReferenceFrameMatch(otherB);
+   }
+
+   /**
+    * Checks if the frames held by {@code this}, {@code otherA}, {@code otherB}, and {@code otherC} all
+    * match.
+    * 
+    * @param otherA the first other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @param otherB the second other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @param otherC the third other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @throws ReferenceFrameMismatchException if all the reference frames do not match.
+    */
+   default void checkReferenceFrameMatch(ReferenceFrameHolder otherA, ReferenceFrameHolder otherB, ReferenceFrameHolder otherC)
+         throws ReferenceFrameMismatchException
+   {
+      checkReferenceFrameMatch(otherA);
+      checkReferenceFrameMatch(otherB);
+      checkReferenceFrameMatch(otherC);
+   }
+
+   /**
+    * Checks if the frames held by {@code this}, {@code otherA}, {@code otherB}, {@code otherC}, and
+    * {@code otherD} all match.
+    * 
+    * @param otherA the first other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @param otherB the second other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @param otherC the third other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @param otherD the third other object holding onto the reference frame to compare against the
+    *               reference frame held by {@code this}. Not modified.
+    * @throws ReferenceFrameMismatchException if all the reference frames do not match.
+    */
+   default void checkReferenceFrameMatch(ReferenceFrameHolder otherA, ReferenceFrameHolder otherB, ReferenceFrameHolder otherC, ReferenceFrameHolder otherD)
+         throws ReferenceFrameMismatchException
+   {
+      checkReferenceFrameMatch(otherA);
+      checkReferenceFrameMatch(otherB);
+      checkReferenceFrameMatch(otherC);
+      checkReferenceFrameMatch(otherD);
+   }
+
+   /**
     * Checks if the frame held by {@code this} matches the query {@code referenceFrame}.
     *
     * @param referenceFrame the query to compare against the reference frame held by {@code this}. Not

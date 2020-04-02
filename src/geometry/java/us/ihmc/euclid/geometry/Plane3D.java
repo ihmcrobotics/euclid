@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -214,7 +215,9 @@ public class Plane3D implements GeometryObject<Plane3D>
     */
    public boolean equals(Plane3D other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return point.equals(other.point) && normal.equals(other.normal);
@@ -230,14 +233,10 @@ public class Plane3D implements GeometryObject<Plane3D>
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof Plane3D)
          return equals((Plane3D) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**
@@ -924,18 +923,6 @@ public class Plane3D implements GeometryObject<Plane3D>
    }
 
    /**
-    * Provides a {@code String} representation of this plane 3D as follows:<br>
-    * Plane 3D: point = (x, y, z), normal = (x, y, z)
-    *
-    * @return the {@code String} representing this plane 3D.
-    */
-   @Override
-   public String toString()
-   {
-      return EuclidGeometryIOTools.getPlane3DString(this);
-   }
-
-   /**
     * Compares {@code this} to {@code other} to determine if the two planes are geometrically similar.
     * <p>
     * Two planes are considered geometrically equal if they are coincident. Two planes that are
@@ -950,5 +937,23 @@ public class Plane3D implements GeometryObject<Plane3D>
    public boolean geometricallyEquals(Plane3D other, double epsilon)
    {
       return isCoincident(other, epsilon, epsilon);
+   }
+
+   @Override
+   public int hashCode()
+   {
+      return EuclidHashCodeTools.toIntHashCode(point, normal);
+   }
+
+   /**
+    * Provides a {@code String} representation of this plane 3D as follows:<br>
+    * Plane 3D: point = (x, y, z), normal = (x, y, z)
+    *
+    * @return the {@code String} representing this plane 3D.
+    */
+   @Override
+   public String toString()
+   {
+      return EuclidGeometryIOTools.getPlane3DString(this);
    }
 }

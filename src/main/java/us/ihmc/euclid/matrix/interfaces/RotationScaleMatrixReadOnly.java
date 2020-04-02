@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import org.ejml.data.DenseMatrix64F;
 
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -366,7 +365,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     *
     * @param matrixToTransform the rotation matrix to transform. Modified.
     */
-   default void transform(RotationMatrix matrixToTransform)
+   default void transform(RotationMatrixBasics matrixToTransform)
    {
       transform(matrixToTransform, matrixToTransform);
    }
@@ -381,7 +380,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * @param matrixOriginal    the rotation matrix to transform. Not modified.
     * @param matrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       getRotationMatrix().transform(matrixOriginal, matrixTransformed);
    }
@@ -473,7 +472,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     *
     * @param matrixToTransform the rotation matrix to transform. Modified.
     */
-   default void inverseTransform(RotationMatrix matrixToTransform)
+   default void inverseTransform(RotationMatrixBasics matrixToTransform)
    {
       inverseTransform(matrixToTransform, matrixToTransform);
    }
@@ -493,7 +492,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
     * @param matrixOriginal    the rotation matrix to transform. Not modified.
     * @param matrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       getRotationMatrix().inverseTransform(matrixOriginal, matrixTransformed);
    }

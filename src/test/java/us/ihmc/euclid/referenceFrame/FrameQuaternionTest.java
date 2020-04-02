@@ -1,32 +1,31 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
 import org.ejml.data.DenseMatrix64F;
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBuilder;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
@@ -256,6 +255,9 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameQuaternion, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(3225);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -291,6 +293,15 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testSetIncludingFrame() throws Exception
    {
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("setIncludingFrame", FrameVector3DReadOnly.class));
+      signaturesToIgnore.add(new MethodSignature("setIncludingFrame", ReferenceFrame.class, Vector3DReadOnly.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameQuaternion,
+                                                          methodFilter,
+                                                          EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(2342);
 
       ReferenceFrame initialFrame = ReferenceFrame.getWorldFrame();
@@ -408,15 +419,20 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testConsistencyWithQuaternion()
    {
-      Random random = new Random(234235L);
-
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, quaternion) -> createFrameTuple(frame, (QuaternionReadOnly) quaternion);
-      GenericTypeBuilder framelessTypeBuilder = () -> EuclidCoreRandomTools.nextQuaternion(random);
+      FrameTypeCopier frameTypeBuilder = (frame, quaternion) -> createFrameTuple(frame, (QuaternionReadOnly) quaternion);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextQuaternion;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  framelessTypeBuilder,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
-      GenericTypeBuilder frameless2DTypeBuilder = () -> new Quaternion(createRandom2DFrameTuple(random, ReferenceFrame.getWorldFrame()));
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
+      RandomFramelessTypeBuilder frameless2DTypeBuilder = (random) -> new Quaternion(createRandom2DFrameTuple(random, ReferenceFrame.getWorldFrame()));
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  frameless2DTypeBuilder,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override
@@ -424,11 +440,14 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {Quaternion.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Quaternion.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Quaternion.class, Double.TYPE});
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameQuaternion.class, Quaternion.class, true, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", Quaternion.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", Quaternion.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Quaternion.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameQuaternion.class, Quaternion.class, true, 1, methodFilter);
    }
 
    @Test
@@ -560,14 +579,50 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
    @Test
    public void testHashCode() throws Exception
    {
-      Random random = new Random(763);
+      Random random = new Random(621541L);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random, 100);
+
+      FrameQuaternion q = EuclidFrameRandomTools.nextFrameQuaternion(random, frames[random.nextInt(frames.length)]);
+
+      int newHashCode, previousHashCode;
+      newHashCode = q.hashCode();
+      assertEquals(newHashCode, q.hashCode());
+
+      previousHashCode = q.hashCode();
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Quaternion expected = EuclidCoreRandomTools.nextQuaternion(random);
-         FrameQuaternion actual = new FrameQuaternion(worldFrame, expected);
+         double qx = q.getX();
+         double qy = q.getY();
+         double qz = q.getZ();
+         double qs = q.getS();
+         switch (random.nextInt(4))
+         {
+            case 0:
+               qx = random.nextDouble();
+               break;
+            case 1:
+               qy = random.nextDouble();
+               break;
+            case 2:
+               qz = random.nextDouble();
+               break;
+            case 3:
+               qs = random.nextDouble();
+               break;
+         }
+         q.setUnsafe(qx, qy, qz, qs);
+         newHashCode = q.hashCode();
+         assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
 
-         assertEquals(expected.hashCode(), actual.hashCode());
+         ReferenceFrame oldFrame = q.getReferenceFrame();
+         ReferenceFrame newFrame = frames[random.nextInt(frames.length)];
+         q.setReferenceFrame(newFrame);
+         newHashCode = q.hashCode();
+         if (oldFrame != newFrame)
+            assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
       }
    }
 

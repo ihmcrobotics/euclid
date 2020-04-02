@@ -8,6 +8,7 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -260,11 +261,6 @@ public class AxisAngle implements AxisAngleBasics, EpsilonComparable<AxisAngle>,
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = 31L * bits + Double.doubleToLongBits(x);
-      bits = 31L * bits + Double.doubleToLongBits(y);
-      bits = 31L * bits + Double.doubleToLongBits(z);
-      bits = 31L * bits + Double.doubleToLongBits(angle);
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(x, y, z, angle);
    }
 }

@@ -3,7 +3,11 @@ package us.ihmc.euclid.shape.convexPolytope.tools;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
@@ -11,16 +15,23 @@ import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
-import us.ihmc.euclid.shape.convexPolytope.Face3D;
-import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
-import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
+import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DFactory;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * This class a set of tools for building a {@link ConvexPolytope3D}.
@@ -49,7 +60,8 @@ public class EuclidPolytopeConstructionTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    *
+    * 
+    * @param faceFactory     factory needed to create faces of the proper type.
     * @param vertex          faces are modified and/or created to include this vertex.
     * @param silhouetteEdges the contour visible from the vertex. Each edge is expected to be
     *                        associated with either a hidden face or an in-plane face.
@@ -58,8 +70,15 @@ public class EuclidPolytopeConstructionTools
     * @param epsilon         tolerance used for testing edge-cases such as equivalent vertices, vertex
     *                        lying on a line, etc.
     * @return the list of new faces that were created in the the process.
+    * @param <Vertex> the final type used for representing a vertex.
+    * @param <Edge>   the final type used for representing a half-edge.
+    * @param <Face>   the final type used for representing a face.
     */
-   public static List<Face3D> computeVertexNeighborFaces(Vertex3D vertex, List<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
+   public static <Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>> List<Face> computeVertexNeighborFaces(Face3DFactory<Face> faceFactory,
+                                                                                                                                                                                                                   Vertex vertex,
+                                                                                                                                                                                                                   List<Edge> silhouetteEdges,
+                                                                                                                                                                                                                   Collection<Face> inPlaneFaces,
+                                                                                                                                                                                                                   double epsilon)
    {
       if (EuclidPolytopeTools.distanceToClosestHalfEdge3D(vertex, silhouetteEdges) <= epsilon)
          return null;
@@ -70,9 +89,9 @@ public class EuclidPolytopeConstructionTools
 
       Vector3D towardOutside = new Vector3D();
 
-      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+      for (Edge silhouetteEdge : silhouetteEdges)
       {
-         Face3D face = silhouetteEdge.getFace();
+         Face face = silhouetteEdge.getFace();
 
          if (!inPlaneFaces.contains(face))
          { // A new face will be created.
@@ -96,7 +115,7 @@ public class EuclidPolytopeConstructionTools
          }
       }
 
-      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+      for (Edge silhouetteEdge : silhouetteEdges)
       { // We first destroy the faces that are to be removed so they remove their edges from the vertices associated edges.
          destroyTwinFace(silhouetteEdge);
       }
@@ -109,8 +128,8 @@ public class EuclidPolytopeConstructionTools
 
          for (int i = 0; i < silhouetteEdges.size() && !inPlaneFaces.isEmpty(); i++)
          {
-            HalfEdge3D silhouetteEdge = silhouetteEdges.get(i);
-            Face3D faceToExtend = silhouetteEdge.getFace();
+            Edge silhouetteEdge = silhouetteEdges.get(i);
+            Face faceToExtend = silhouetteEdge.getFace();
 
             if (!inPlaneFaces.remove(faceToExtend))
                continue;
@@ -123,7 +142,7 @@ public class EuclidPolytopeConstructionTools
          }
       }
 
-      List<Face3D> newFaces = new ArrayList<>();
+      List<Face> newFaces = new ArrayList<>();
       // Markers used to skip edges that were already processed.
       int forloopStart = 0;
       int forloopEnd = silhouetteEdges.size() - 1;
@@ -137,13 +156,13 @@ public class EuclidPolytopeConstructionTools
           * silhouette and see if the new face can be extended to include any of them, if so we need to make
           * sure the processed edges are skipped in the for-loop.
           */
-         HalfEdge3D firstSilhouetteEdge = silhouetteEdges.get(0);
+         Edge firstSilhouetteEdge = silhouetteEdges.get(0);
 
-         Face3D newFace = newFace3DFromVertexAndTwinEdge(vertex, firstSilhouetteEdge, epsilon);
+         Face newFace = newFace3DFromVertexAndTwinEdge(faceFactory, vertex, firstSilhouetteEdge, epsilon);
          forloopStart = 1;
 
-         HalfEdge3D nextSilhouetteEdge;
-         HalfEdge3D previousSilhouetteEdge = firstSilhouetteEdge;
+         Edge nextSilhouetteEdge;
+         Edge previousSilhouetteEdge = firstSilhouetteEdge;
 
          for (int i = 1; i < silhouetteEdges.size(); i++)
          { // Perform forward search along the silhouette
@@ -170,7 +189,7 @@ public class EuclidPolytopeConstructionTools
                break;
             }
 
-            HalfEdge3D newEdge = nextSilhouetteEdge.getDestination().getEdgeTo(nextSilhouetteEdge.getOrigin());
+            Edge newEdge = nextSilhouetteEdge.getDestination().getEdgeTo(nextSilhouetteEdge.getOrigin());
             nextSilhouetteEdge.setTwin(newEdge);
             newEdge.setTwin(nextSilhouetteEdge);
             forloopStart = i + 1;
@@ -204,7 +223,7 @@ public class EuclidPolytopeConstructionTools
                break;
             }
 
-            HalfEdge3D newEdge = previousSilhouetteEdge.getDestination().getEdgeTo(previousSilhouetteEdge.getOrigin());
+            Edge newEdge = previousSilhouetteEdge.getDestination().getEdgeTo(previousSilhouetteEdge.getOrigin());
             previousSilhouetteEdge.setTwin(newEdge);
             newEdge.setTwin(previousSilhouetteEdge);
             forloopEnd = i - 1;
@@ -216,13 +235,13 @@ public class EuclidPolytopeConstructionTools
 
       for (int i = forloopStart; i <= forloopEnd; i++)
       {
-         HalfEdge3D silhouetteEdge = silhouetteEdges.get(i);
+         Edge silhouetteEdge = silhouetteEdges.get(i);
 
          // Creating a new face.
-         Face3D newFace = newFace3DFromVertexAndTwinEdge(vertex, silhouetteEdge, epsilon);
+         Face newFace = newFace3DFromVertexAndTwinEdge(faceFactory, vertex, silhouetteEdge, epsilon);
 
-         HalfEdge3D nextSilhouetteEdge;
-         HalfEdge3D previousSilhouetteEdge = silhouetteEdge;
+         Edge nextSilhouetteEdge;
+         Edge previousSilhouetteEdge = silhouetteEdge;
 
          for (int j = i + 1; j < forloopEnd; j++)
          {
@@ -248,7 +267,7 @@ public class EuclidPolytopeConstructionTools
             { // Extending the face to include would result in removing the vertex we're currently trying to add.
                break;
             }
-            HalfEdge3D newEdge = nextSilhouetteEdge.getDestination().getEdgeTo(nextSilhouetteEdge.getOrigin());
+            Edge newEdge = nextSilhouetteEdge.getDestination().getEdgeTo(nextSilhouetteEdge.getOrigin());
             nextSilhouetteEdge.setTwin(newEdge);
             newEdge.setTwin(nextSilhouetteEdge);
             i = j;
@@ -257,9 +276,9 @@ public class EuclidPolytopeConstructionTools
          newFaces.add(newFace);
       }
 
-      for (HalfEdge3D startingFrom : vertex.getAssociatedEdges())
+      for (Edge startingFrom : vertex.getAssociatedEdges())
       { // Going through the new edges and associating the twins.
-         HalfEdge3D endingTo = startingFrom.getDestination().getEdgeTo(vertex);
+         Edge endingTo = startingFrom.getDestination().getEdgeTo(vertex);
 
          startingFrom.setTwin(endingTo);
          endingTo.setTwin(startingFrom);
@@ -268,23 +287,24 @@ public class EuclidPolytopeConstructionTools
       return newFaces;
    }
 
-   private static boolean filterInPlaneFaces(Vertex3D vertex, List<HalfEdge3D> silhouetteEdges, Collection<Face3D> inPlaneFaces, double epsilon)
+   private static boolean filterInPlaneFaces(Vertex3DReadOnly vertex, List<? extends HalfEdge3DReadOnly> silhouetteEdges,
+                                             Collection<? extends Face3DReadOnly> inPlaneFaces, double epsilon)
    {
       if (inPlaneFaces.isEmpty())
          return true;
 
       boolean hasInPlaneFacesBeenModified = false;
 
-      Set<HalfEdge3D> edgesToSkip = new HashSet<>();
+      Set<HalfEdge3DReadOnly> edgesToSkip = new HashSet<>();
 
       // Last filter before actually modifying the polytope
-      for (HalfEdge3D silhouetteEdge : silhouetteEdges)
+      for (HalfEdge3DReadOnly silhouetteEdge : silhouetteEdges)
       { // Modify/Create the faces that are to contain the new vertex. The faces will take care of updating the edges.
 
          if (edgesToSkip.contains(silhouetteEdge))
             continue; // We already tested it.
 
-         Face3D face = silhouetteEdge.getFace();
+         Face3DReadOnly face = silhouetteEdge.getFace();
 
          if (inPlaneFaces.contains(face))
          { // The face has to be extended to include the new vertex
@@ -292,7 +312,7 @@ public class EuclidPolytopeConstructionTools
              * The following check is redundant with the internal logic of Face3D.addVertex(...) and is also
              * probably expensive, but it has to be done before we actually start modifying the polytope.
              */
-            List<HalfEdge3D> lineOfSight = face.lineOfSight(vertex);
+            List<? extends HalfEdge3DReadOnly> lineOfSight = face.lineOfSight(vertex);
 
             if (lineOfSight.isEmpty())
             {
@@ -308,7 +328,7 @@ public class EuclidPolytopeConstructionTools
                return false;
             }
 
-            for (HalfEdge3D lineOfSightEdge : lineOfSight)
+            for (HalfEdge3DReadOnly lineOfSightEdge : lineOfSight)
             {
                if (lineOfSightEdge == silhouetteEdge)
                   continue; // The single visible edge is the silhouetteEdge, this is a safe context.
@@ -353,8 +373,8 @@ public class EuclidPolytopeConstructionTools
                 * be part of the inPlaneFaces, if not we remove the face from the list which will force the
                 * creation of a new face.
                 */
-               HalfEdge3D edgeBeforeLineOfSight = lineOfSight.get(0).getPrevious();
-               HalfEdge3D edgeAfterLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
+               HalfEdge3DReadOnly edgeBeforeLineOfSight = lineOfSight.get(0).getPrevious();
+               HalfEdge3DReadOnly edgeAfterLineOfSight = lineOfSight.get(lineOfSight.size() - 1).getNext();
 
                if (!silhouetteEdges.contains(edgeBeforeLineOfSight) && (edgeBeforeLineOfSight.distanceFromSupportLine(vertex) < epsilon
                      || EuclidGeometryTools.distanceFromPoint3DToLine3D(edgeBeforeLineOfSight.getDestination(),
@@ -389,12 +409,12 @@ public class EuclidPolytopeConstructionTools
          return true;
    }
 
-   private static void destroyTwinFace(HalfEdge3D edge)
+   private static void destroyTwinFace(AbstractHalfEdge3D<?, ?, ?> edge)
    {
-      HalfEdge3D twin = edge.getTwin();
+      AbstractHalfEdge3D<?, ?, ?> twin = edge.getTwin();
       if (twin == null)
          return;
-      Face3D face = twin.getFace();
+      AbstractFace3D<?, ?, ?> face = twin.getFace();
       if (face == null)
          return;
       face.destroy();
@@ -408,23 +428,30 @@ public class EuclidPolytopeConstructionTools
     * <li>the new face's normal can be computed using the direction of the given twin-edge.
     * </ul>
     *
-    * @param vertex   a vertex of the new face.
-    * @param twinEdge the edge which twin's associated face is the new face.
-    * @param epsilon  tolerance used when testing if a vertex should be added or not.
+    * @param faceFactory factory needed to create faces of the proper type.
+    * @param vertex      a vertex of the new face.
+    * @param twinEdge    the edge which twin's associated face is the new face.
+    * @param epsilon     tolerance used when testing if a vertex should be added or not.
     * @return the new face.
+    * @param <Vertex> the final type used for representing a vertex.
+    * @param <Edge>   the final type used for representing a half-edge.
+    * @param <Face>   the final type used for representing a face.
     */
-   public static Face3D newFace3DFromVertexAndTwinEdge(Vertex3D vertex, HalfEdge3D twinEdge, double epsilon)
+   public static <Vertex extends AbstractVertex3D<Vertex, Edge, Face>, Edge extends AbstractHalfEdge3D<Vertex, Edge, Face>, Face extends AbstractFace3D<Vertex, Edge, Face>> Face newFace3DFromVertexAndTwinEdge(Face3DFactory<Face> faceFactory,
+                                                                                                                                                                                                                 Vertex vertex,
+                                                                                                                                                                                                                 Edge twinEdge,
+                                                                                                                                                                                                                 double epsilon)
    {
-      Vertex3D v1 = twinEdge.getDestination();
-      Vertex3D v2 = twinEdge.getOrigin();
-      Vertex3D v3 = vertex;
+      Vertex v1 = twinEdge.getDestination();
+      Vertex v2 = twinEdge.getOrigin();
+      Vertex v3 = vertex;
 
       // Estimate the face's normal based on its vertices and knowing the expecting ordering based on the twin-edge: v1, v2, then v3.
       Vector3D initialNormal = EuclidPolytopeTools.crossProductOfLineSegment3Ds(v1, v2, v2, v3);
       // As the vertices are clock-wise ordered the cross-product of 2 successive edges should be negated to obtain the face's normal.
       initialNormal.negate();
 
-      Face3D face = new Face3D(initialNormal, epsilon);
+      Face face = faceFactory.newInstance(initialNormal, epsilon);
 
       boolean wasModified = face.addVertex(v1);
       assert wasModified;
@@ -432,23 +459,23 @@ public class EuclidPolytopeConstructionTools
       assert wasModified;
 
       // Associate the first edge so the next operation on the face won't modify it.
-      HalfEdge3D faceFirstEdge = face.getEdge(0);
+      Edge faceFirstEdge = face.getEdge(0);
       twinEdge.setTwin(faceFirstEdge);
       faceFirstEdge.setTwin(twinEdge);
 
       wasModified = face.addVertex(v3, null, true);
       assert wasModified;
 
-      HalfEdge3D vertexToOrigin = vertex.getEdgeTo(twinEdge.getOrigin());
-      HalfEdge3D originToVertex = twinEdge.getOrigin().getEdgeTo(vertex);
+      Edge vertexToOrigin = vertex.getEdgeTo(twinEdge.getOrigin());
+      Edge originToVertex = twinEdge.getOrigin().getEdgeTo(vertex);
 
       if (vertexToOrigin != null)
          vertexToOrigin.setTwin(originToVertex);
       if (originToVertex != null)
          originToVertex.setTwin(vertexToOrigin);
 
-      HalfEdge3D vertexToDestination = vertex.getEdgeTo(twinEdge.getDestination());
-      HalfEdge3D destinationToVertex = twinEdge.getDestination().getEdgeTo(vertex);
+      Edge vertexToDestination = vertex.getEdgeTo(twinEdge.getDestination());
+      Edge destinationToVertex = twinEdge.getDestination().getEdgeTo(vertex);
 
       if (vertexToDestination != null)
          vertexToDestination.setTwin(destinationToVertex);

@@ -10,4 +10,6 @@ import us.ihmc.euclid.interfaces.Transformable;
  */
 public interface Shape3DBasics extends Shape3DReadOnly, Clearable, Transformable
 {
+   @Override
+   Shape3DPoseBasics getPose();
 }

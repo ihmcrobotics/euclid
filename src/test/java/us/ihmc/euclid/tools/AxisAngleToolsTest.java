@@ -3,9 +3,7 @@ package us.ihmc.euclid.tools;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextAxisAngle;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
 import java.util.Random;
 

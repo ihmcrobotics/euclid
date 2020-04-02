@@ -117,7 +117,7 @@ public class ReferenceFrameTools
                                                                                   Tuple3DReadOnly translationOffsetFromParent)
    {
       RigidBodyTransform transformToParent = new RigidBodyTransform();
-      transformToParent.setTranslation(translationOffsetFromParent);
+      transformToParent.getTranslation().set(translationOffsetFromParent);
 
       return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
    }

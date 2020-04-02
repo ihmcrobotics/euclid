@@ -1,8 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -88,50 +86,6 @@ public interface BoundingBox3DReadOnly
    default double getMaxZ()
    {
       return getMaxPoint().getZ();
-   }
-
-   /**
-    * Gets the minimum coordinate of this bounding box and stores it in the given {@code minToPack}.
-    *
-    * @param minToPack point 3D in which the minimum coordinate of this bounding box is stored.
-    *                  Modified.
-    */
-   default void getMinPoint(Point3DBasics minToPack)
-   {
-      minToPack.set(getMinPoint());
-   }
-
-   /**
-    * Gets the maximum coordinate of this bounding box and stores it in the given {@code maxToPack}.
-    *
-    * @param maxToPack point 3D in which the maximum coordinate of this bounding box is stored.
-    *                  Modified.
-    */
-   default void getMaxPoint(Point3DBasics maxToPack)
-   {
-      maxToPack.set(getMaxPoint());
-   }
-
-   /**
-    * Gets the minimum coordinate of this bounding box and stores it in the given array
-    * {@code maxToPack}.
-    *
-    * @param minToPack array in which the minimum coordinate of this bounding box is stored. Modified.
-    */
-   default void getMinPoint(double[] minToPack)
-   {
-      getMinPoint().get(minToPack);
-   }
-
-   /**
-    * Gets the maximum coordinate of this bounding box and stores it in the given array
-    * {@code maxToPack}.
-    *
-    * @param maxToPack array in which the maximum coordinate of this bounding box is stored. Modified.
-    */
-   default void getMaxPoint(double[] maxToPack)
-   {
-      getMaxPoint().get(maxToPack);
    }
 
    /**
@@ -874,23 +828,6 @@ public interface BoundingBox3DReadOnly
    }
 
    /**
-    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
-    *
-    * @param other the other bounding box 2D to compare against this. Not modified.
-    * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(BoundingBox3DReadOnly other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
-   }
-
-   /**
     * Tests on a per-component basis on the minimum and maximum coordinates if this bounding box is
     * equal to {@code other} with the tolerance {@code epsilon}.
     *
@@ -916,5 +853,22 @@ public interface BoundingBox3DReadOnly
    default boolean geometricallyEquals(BoundingBox3DReadOnly other, double epsilon)
    {
       return getMinPoint().geometricallyEquals(other.getMinPoint(), epsilon) && getMaxPoint().geometricallyEquals(other.getMaxPoint(), epsilon);
+   }
+
+   /**
+    * Tests on a per component basis, if this bounding box 2D is exactly equal to {@code other}.
+    *
+    * @param other the other bounding box 2D to compare against this. Not modified.
+    * @return {@code true} if the two bounding boxes are exactly equal component-wise, {@code false}
+    *         otherwise.
+    */
+   default boolean equals(BoundingBox3DReadOnly other)
+   {
+      if (other == this)
+         return true;
+      else if (other == null)
+         return false;
+      else
+         return getMinPoint().equals(other.getMinPoint()) && getMaxPoint().equals(other.getMaxPoint());
    }
 }

@@ -1,11 +1,24 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.Line3D;
-import us.ihmc.euclid.geometry.interfaces.*;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -28,98 +41,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
-   /** The line. */
-   private final Line3D line = new Line3D();
-
-   private final FixedFramePoint3DBasics point = new FixedFramePoint3DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         line.getPoint().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         line.getPoint().setY(y);
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         line.getPoint().setZ(z);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return line.getPointX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return line.getPointY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return line.getPointZ();
-      }
-   };
-
-   private final FixedFrameVector3DBasics direction = new FixedFrameVector3DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         line.getDirection().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         line.getDirection().setY(y);
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         line.getDirection().setZ(z);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return line.getDirectionX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return line.getDirectionY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return line.getDirectionZ();
-      }
-   };
+   private final FixedFramePoint3DBasics point = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
+   private final FixedFrameVector3DBasics direction = EuclidFrameFactories.newFixedFrameVector3DBasics(this);
 
    /**
     * Default constructor that initializes both {@link #point} and {@link #direction} to zero and the
@@ -431,7 +354,7 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLine3DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameLine3DString(this);
    }
 
    /**
@@ -442,6 +365,6 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    @Override
    public int hashCode()
    {
-      return line.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(point, direction);
    }
 }

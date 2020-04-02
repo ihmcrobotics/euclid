@@ -17,7 +17,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  * </p>
  * <p>
  * When using this interface, the reference frame of this tuple is assumed to be immutable, i.e. the
- * tuple is always expressed in the same reference frame.
+ * reference frame of this object cannot be changed via this interface.
  * </p>
  * <p>
  * Because a {@code FixedFrameTuple4DBasics} extends {@code Tuple4DBasics}, it is compatible with

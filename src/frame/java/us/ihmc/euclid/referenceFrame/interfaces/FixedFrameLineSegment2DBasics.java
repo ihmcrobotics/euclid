@@ -9,8 +9,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * Write and read interface for a line segment 2D expressed in a constant reference frame, i.e. this
- * line segment is always expressed in the same reference frame.
+ * Write and read interface for a line segment 2D expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * A line segment 2D is a finite-length line defined in the XY-plane by its two 2D endpoints.
  * </p>

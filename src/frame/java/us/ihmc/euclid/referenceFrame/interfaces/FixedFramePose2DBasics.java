@@ -9,8 +9,8 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
- * Write and read interface for a 2D pose expressed in a constant reference frame, i.e. this pose is
- * always expressed in the same reference frame.
+ * Write and read interface for a 2D pose expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link Pose2DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FixedFramePose2DBasics}. This allows, for instance, to enforce, at runtime, that
@@ -225,8 +225,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     */
    default void set(FrameTuple2DReadOnly position, FrameOrientation2DReadOnly orientation)
    {
-      checkReferenceFrameMatch(position);
-      checkReferenceFrameMatch(orientation);
+      checkReferenceFrameMatch(position, orientation);
       Pose2DBasics.super.set(position, orientation);
    }
 
@@ -381,8 +380,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     */
    default void interpolate(FramePose2DReadOnly pose1, FramePose2DReadOnly pose2, double alpha)
    {
-      checkReferenceFrameMatch(pose1);
-      checkReferenceFrameMatch(pose2);
+      checkReferenceFrameMatch(pose1, pose2);
       Pose2DBasics.super.interpolate(pose1, pose2, alpha);
    }
 }

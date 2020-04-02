@@ -9,6 +9,8 @@ import us.ihmc.euclid.shape.collision.gjk.GJKVertex3D;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
@@ -37,6 +39,11 @@ public class ExpandingPolytopeAlgorithm
    private static final boolean VERBOSE = false;
    /** The default value for the tolerance used to trigger the terminal condition. */
    public static final double DEFAULT_TERMINAL_CONDITION_EPSILON = 1.0e-12;
+   /**
+    * When a component of the support direction is exactly zero, this is used to wiggle around zero to
+    * force edge-cases to trigger.
+    */
+   private static final double SUPPORT_DIRECTION_ZERO_COMPONENT = 1.234e-16;
 
    private double epsilon = DEFAULT_TERMINAL_CONDITION_EPSILON;
    /** The limit to the number of iterations in case the algorithm does not succeed to converge. */
@@ -91,30 +98,40 @@ public class ExpandingPolytopeAlgorithm
     */
    public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      boolean areShapesColliding = gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
-      if (areShapesColliding && gjkCollisionDetector.getSimplex() != null)
-         areShapesColliding = evaluateCollision(shapeA, shapeB, gjkCollisionDetector.getSimplex().getVertices(), resultToPack);
-      return areShapesColliding;
-   }
+      boolean areColliding;
 
-   /**
-    * Evaluates the collision state between the two given shapes given the simplex to start from.
-    * <p>
-    * This algorithm does not evaluate the surface normals.
-    * </p>
-    *
-    * @param shapeA       the first shape to evaluate. Not modified.
-    * @param shapeB       the second shape to evaluate. Not modified.
-    * @param simplex      the simplex used to start the expansion from. Not modified.
-    * @param resultToPack the object in which the collision result is stored. Modified.
-    * @return {@code true} if the shapes are colliding, {@code false} otherwise.
-    */
-   public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, GJKVertex3D[] simplex, EuclidShape3DCollisionResultBasics resultToPack)
-   {
-      boolean areShapesColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, simplex, resultToPack);
+      if (!shapeA.isPrimitive() || !shapeB.isPrimitive())
+      { // If any of the 2 shapes is not a primitive, doing any copy or transform would probably be expensive. Using the generic approach.
+         areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      }
+      else if (shapeA.isDefinedByPose())
+      { // Transforming shapeB to be in the local frame of shapeA would save transformations.
+         Shape3DPoseReadOnly poseA = shapeA.getPose();
+         Shape3DBasics localShapeA = shapeA.copy();
+         localShapeA.getPose().setToZero();
+         Shape3DBasics localShapeB = shapeB.copy();
+         localShapeB.applyInverseTransform(poseA);
+         areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+         resultToPack.applyTransform(poseA);
+      }
+      else if (shapeB.isDefinedByPose())
+      { // Transforming shapeA to be in the local frame of shapeB would save transformations.
+         Shape3DPoseReadOnly poseB = shapeB.getPose();
+         Shape3DBasics localShapeA = shapeA.copy();
+         localShapeA.applyInverseTransform(poseB);
+         Shape3DBasics localShapeB = shapeB.copy();
+         localShapeB.getPose().setToZero();
+         areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+         resultToPack.applyTransform(poseB);
+      }
+      else
+      { // None of the 2 shapes is defined with a pose, using the generic algorithm.
+         areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      }
+
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
-      return areShapesColliding;
+      return areColliding;
    }
 
    /**
@@ -181,7 +198,7 @@ public class ExpandingPolytopeAlgorithm
       }
       else
       {
-         initialPolytope.stream().forEach(queue::add);
+         initialPolytope.forEach(queue::add);
          Vector3D supportDirection = new Vector3D();
          numberOfIterations = 0;
 
@@ -219,6 +236,13 @@ public class ExpandingPolytopeAlgorithm
             else
                supportDirection.set(entry.getNormal());
 
+            if (supportDirection.getX() == 0.0)
+               supportDirection.setX(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getY() == 0.0)
+               supportDirection.setY(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getZ() == 0.0)
+               supportDirection.setZ(SUPPORT_DIRECTION_ZERO_COMPONENT);
+
             Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
             supportDirection.negate();
             Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
@@ -227,6 +251,22 @@ public class ExpandingPolytopeAlgorithm
 
             if (entry.contains(newVertex))
             {
+               if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setX(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+               else if (supportDirection.getY() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setY(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+               else if (supportDirection.getZ() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setZ(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+
                if (VERBOSE)
                   System.out.println("New vertex equals to a vertex of entry, terminating.");
                break;

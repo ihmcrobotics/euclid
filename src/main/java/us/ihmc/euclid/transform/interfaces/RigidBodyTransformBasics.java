@@ -216,6 +216,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param orientation the orientation used to set the rotation part of this transform. Not modified.
+    * @deprecated Use {@code this.getRotation().set(orientation)} instead.
     */
    default void setRotation(Orientation3DReadOnly orientation)
    {
@@ -235,6 +236,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param rotationVector the rotation vector used to set the rotation part of this transform. Not
     *                       modified.
+    * @deprecated Use {@code this.getRotation().setRotationVector(rotationVector)} instead.
     */
    default void setRotation(Vector3DReadOnly rotationVector)
    {
@@ -249,6 +251,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
     */
    default void setRotation(RotationMatrixReadOnly rotationMatrix)
    {
@@ -269,6 +272,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param yaw the angle to rotate about the z-axis.
+    * @deprecated Use {@code this.getRotation().setToYawOrientation(yaw)} instead.
     */
    default void setRotationYaw(double yaw)
    {
@@ -289,6 +293,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param pitch the angle to rotate about the y-axis.
+    * @deprecated Use {@code this.getRotation().setRotationPitch(pitch)} instead.
     */
    default void setRotationPitch(double pitch)
    {
@@ -309,6 +314,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param roll the angle to rotate about the x-axis.
+    * @deprecated Use {@code this.getRotation().setRotationRoll(roll)} instead.
     */
    default void setRotationRoll(double roll)
    {
@@ -334,7 +340,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    @Deprecated
    default void setRotationYawPitchRoll(double[] yawPitchRoll)
    {
-      setRotationYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
+      getRotation().setYawPitchRoll(yawPitchRoll);
    }
 
    /**
@@ -353,6 +359,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll  the angle to rotate about the x-axis.
+    * @deprecated Use {@code this.getRotation().setRotationYawPitchRoll(yaw, pitch, roll)} instead.
     */
    default void setRotationYawPitchRoll(double yaw, double pitch, double roll)
    {
@@ -377,10 +384,11 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param eulerAngles the Euler angles to copy the orientation from. Not modified.
+    * @deprecated Use {@code this.getRotation().setEuler(eulerAngles)} instead.
     */
    default void setRotationEuler(Vector3DReadOnly eulerAngles)
    {
-      setRotationEuler(eulerAngles.getX(), eulerAngles.getY(), eulerAngles.getZ());
+      getRotation().setEuler(eulerAngles);
    }
 
    /**
@@ -402,6 +410,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * @param rotX the angle to rotate about the x-axis.
     * @param rotY the angle to rotate about the y-axis.
     * @param rotZ the angle to rotate about the z-axis.
+    * @deprecated Use {@code this.getRotation().setEuler(rotX, rotY, rotZ)} instead.
     */
    default void setRotationEuler(double rotX, double rotY, double rotZ)
    {
@@ -416,7 +425,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationAndZeroTranslation(Orientation3DReadOnly orientation)
    {
-      setRotation(orientation);
+      getRotation().set(orientation);
       setTranslationToZero();
    }
 
@@ -429,7 +438,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationAndZeroTranslation(RotationMatrixReadOnly rotationMatrix)
    {
-      setRotation(rotationMatrix);
+      getRotation().set(rotationMatrix);
       setTranslationToZero();
    }
 
@@ -447,7 +456,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationAndZeroTranslation(Vector3DReadOnly rotationVector)
    {
-      setRotation(rotationVector);
+      getRotation().setRotationVector(rotationVector);
       setTranslationToZero();
    }
 
@@ -465,7 +474,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationYawAndZeroTranslation(double yaw)
    {
-      setRotationYaw(yaw);
+      getRotation().setToYawOrientation(yaw);
       setTranslationToZero();
    }
 
@@ -483,7 +492,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationPitchAndZeroTranslation(double pitch)
    {
-      setRotationPitch(pitch);
+      getRotation().setToPitchOrientation(pitch);
       setTranslationToZero();
    }
 
@@ -501,7 +510,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationRollAndZeroTranslation(double roll)
    {
-      setRotationRoll(roll);
+      getRotation().setToRollOrientation(roll);
       setTranslationToZero();
    }
 
@@ -523,7 +532,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    @Deprecated
    default void setRotationYawPitchRollAndZeroTranslation(double[] yawPitchRoll)
    {
-      setRotationYawPitchRoll(yawPitchRoll);
+      getRotation().setYawPitchRoll(yawPitchRoll);
       setTranslationToZero();
    }
 
@@ -544,7 +553,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationYawPitchRollAndZeroTranslation(double yaw, double pitch, double roll)
    {
-      setRotationYawPitchRoll(yaw, pitch, roll);
+      getRotation().setYawPitchRoll(yaw, pitch, roll);
       setTranslationToZero();
    }
 
@@ -566,7 +575,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationEulerAndZeroTranslation(Vector3DReadOnly eulerAngles)
    {
-      setRotationEuler(eulerAngles);
+      getRotation().setEuler(eulerAngles);
       setTranslationToZero();
    }
 
@@ -589,7 +598,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setRotationEulerAndZeroTranslation(double rotX, double rotY, double rotZ)
    {
-      setRotationEuler(rotX, rotY, rotZ);
+      getRotation().setEuler(rotX, rotY, rotZ);
       setTranslationToZero();
    }
 
@@ -600,6 +609,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param x the x-component of the translation part.
+    * @deprecated Use {@code this.getTranslation().setX(x)} instead.
     */
    default void setTranslationX(double x)
    {
@@ -613,6 +623,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param y the y-component of the translation part.
+    * @deprecated Use {@code this.getTranslation().setY(y)} instead.
     */
    default void setTranslationY(double y)
    {
@@ -626,6 +637,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param z the z-component of the translation part.
+    * @deprecated Use {@code this.getTranslation().setZ(z)} instead.
     */
    default void setTranslationZ(double z)
    {
@@ -641,6 +653,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * @param x the x-component of the translation part.
     * @param y the y-component of the translation part.
     * @param z the z-component of the translation part.
+    * @deprecated Use {@code this.getTranslation().set(x, y, z)} instead.
     */
    default void setTranslation(double x, double y, double z)
    {
@@ -654,6 +667,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * </p>
     *
     * @param translation tuple used to set the translation part of this transform. Not modified.
+    * @deprecated Use {@code this.getTranslation().set(translation)} instead.
     */
    default void setTranslation(Tuple3DReadOnly translation)
    {
@@ -669,7 +683,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setTranslationAndIdentityRotation(double x, double y, double z)
    {
-      setTranslation(x, y, z);
+      getTranslation().set(x, y, z);
       setRotationToZero();
    }
 
@@ -680,7 +694,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void setTranslationAndIdentityRotation(Tuple3DReadOnly translation)
    {
-      setTranslation(translation);
+      getTranslation().set(translation);
       setRotationToZero();
    }
 

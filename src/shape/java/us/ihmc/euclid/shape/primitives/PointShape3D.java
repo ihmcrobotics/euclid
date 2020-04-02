@@ -30,6 +30,18 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    /**
     * Creates a new point shape and initializes its position.
     *
+    * @param x the value for the x-coordinate of this shape.
+    * @param y the value for the y-coordinate of this shape.
+    * @param z the value for the z-coordinate of this shape.
+    */
+   public PointShape3D(double x, double y, double z)
+   {
+      set(x, y, z);
+   }
+
+   /**
+    * Creates a new point shape and initializes its position.
+    *
     * @param tuple3DReadOnly the position of the point shape. Not modified.
     */
    public PointShape3D(Tuple3DReadOnly tuple3DReadOnly)
@@ -86,20 +98,10 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
       return z;
    }
 
-   /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(PointShape3DReadOnly)}, it returns {@code false} otherwise.
-    *
-    * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
    @Override
-   public boolean equals(Object object)
+   public PointShape3D copy()
    {
-      if (object instanceof PointShape3DReadOnly)
-         return PointShape3DBasics.super.equals((PointShape3DReadOnly) object);
-      else
-         return false;
+      return new PointShape3D(this);
    }
 
    /**
@@ -130,6 +132,22 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    }
 
    /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Tuple3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof PointShape3DReadOnly)
+         return PointShape3DBasics.super.equals((PointShape3DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
     * Calculates and returns a hash code value from the value of each component of this point shape 3D.
     *
     * @return the hash code value for this point shape 3D.
@@ -137,16 +155,15 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = EuclidHashCodeTools.addToHashCode(bits, x);
-      bits = EuclidHashCodeTools.addToHashCode(bits, y);
-      bits = EuclidHashCodeTools.addToHashCode(bits, z);
-      return EuclidHashCodeTools.toIntHashCode(bits);
+      return EuclidHashCodeTools.toIntHashCode(x, y, z);
    }
 
    /**
-    * Provides a {@code String} representation of this point shape 3D as follows:<br>
-    * Point shape 3D: (-0.362, -0.617, 0.066 )
+    * Provides a {@code String} representation of this point shape 3D as follows:
+    *
+    * <pre>
+    * Point shape 3D: (-0.362, -0.617,  0.066 )
+    * </pre>
     *
     * @return the {@code String} representing this point shape 3D.
     */

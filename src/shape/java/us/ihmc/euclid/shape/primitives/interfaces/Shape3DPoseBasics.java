@@ -2,14 +2,20 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 
 /**
  * Write and read interface for representing the pose of a shape 3D.
- *
+ * <p>
+ * While the main use-case of a {@code Shape3DPoseBasics} is to describe the pose of a shape 3D,
+ * it is also used to represent the transform from the shape local coordinate system to the world
+ * coordinates, such that it can be used to transform geometry back and forth between the two
+ * coordinate systems.
+ * </p>
+ * 
  * @author Sylvain Bertrand
  */
 public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransformBasics, Transformable
@@ -20,7 +26,7 @@ public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransfo
     * @return the orientation part.
     */
    @Override
-   RotationMatrix getShapeOrientation();
+   RotationMatrixBasics getShapeOrientation();
 
    /**
     * Gets the reference to the position part of this pose.
@@ -32,7 +38,7 @@ public interface Shape3DPoseBasics extends Shape3DPoseReadOnly, RigidBodyTransfo
 
    /** {@inheritDoc} */
    @Override
-   default RotationMatrix getRotation()
+   default RotationMatrixBasics getRotation()
    {
       return getShapeOrientation();
    }

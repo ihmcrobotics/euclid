@@ -1,14 +1,15 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.LineSegment3D;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 
 /**
  * {@code FrameLineSegment3D} is a 3D line segment expressed in a given reference frame.
@@ -30,98 +31,8 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
-   /** The line segment. */
-   private final LineSegment3D lineSegment = new LineSegment3D();
-
-   private final FixedFramePoint3DBasics firstEndpoint = new FixedFramePoint3DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         lineSegment.getFirstEndpoint().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         lineSegment.getFirstEndpoint().setY(y);
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         lineSegment.getFirstEndpoint().setZ(z);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return lineSegment.getFirstEndpointX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return lineSegment.getFirstEndpointY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return lineSegment.getFirstEndpointZ();
-      }
-   };
-
-   private final FixedFramePoint3DBasics secondEndpoint = new FixedFramePoint3DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         lineSegment.getSecondEndpoint().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         lineSegment.getSecondEndpoint().setY(y);
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         lineSegment.getSecondEndpoint().setZ(z);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return lineSegment.getSecondEndpointX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return lineSegment.getSecondEndpointY();
-      }
-
-      @Override
-      public double getZ()
-      {
-         return lineSegment.getSecondEndpointZ();
-      }
-   };
+   private final FixedFramePoint3DBasics firstEndpoint = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
+   private final FixedFramePoint3DBasics secondEndpoint = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
 
    /**
     * Default constructor that initializes both endpoints of this line segment to zero and its
@@ -279,7 +190,7 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLineSegment3DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameLineSegment3DString(this);
    }
 
    /**
@@ -291,6 +202,6 @@ public class FrameLineSegment3D implements FrameLineSegment3DBasics, GeometryObj
    @Override
    public int hashCode()
    {
-      return lineSegment.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(firstEndpoint, secondEndpoint);
    }
 }

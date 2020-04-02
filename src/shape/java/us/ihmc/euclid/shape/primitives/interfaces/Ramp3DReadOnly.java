@@ -41,6 +41,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @return the pose of this ramp.
     */
+   @Override
    Shape3DPoseReadOnly getPose();
 
    /**
@@ -102,14 +103,21 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
-      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
+      if (getOrientation().isIdentity())
+      {
+         EuclidShapeTools.supportingVectexRamp3D(supportDirection, getSize(), supportingVertexToPack);
+         supportingVertexToPack.add(getPosition());
+      }
+      else
+      {
+         Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+         getPose().inverseTransform(supportDirection, supportDirectionInLocal);
 
-      EuclidShapeTools.supportingVectexRamp3D(supportDirectionInLocal, getSize(), supportingVertexToPack);
+         EuclidShapeTools.supportingVectexRamp3D(supportDirectionInLocal, getSize(), supportingVertexToPack);
+         transformToWorld(supportingVertexToPack);
 
-      transformToWorld(supportingVertexToPack);
-
-      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+         getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+      }
 
       return true;
    }
@@ -224,7 +232,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @return the surface normal of the slope.
     */
-   default Vector3D getRampSurfaceNormal()
+   default Vector3DBasics getRampSurfaceNormal()
    {
       Vector3D surfaceNormal = new Vector3D();
       getRampSurfaceNormal(surfaceNormal);
@@ -332,6 +340,23 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    {
       return true;
    }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
+   {
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return true;
+   }
+
+   @Override
+   Ramp3DBasics copy();
 
    /**
     * Tests separately and on a per component basis if the pose and the size of this ramp and

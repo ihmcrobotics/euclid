@@ -167,6 +167,12 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
       return bottomCenter;
    }
 
+   @Override
+   public Capsule3D copy()
+   {
+      return new Capsule3D(this);
+   }
+
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
@@ -219,17 +225,17 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    public int hashCode()
    {
       long hash = 1L;
-      hash = EuclidHashCodeTools.addToHashCode(hash, length);
-      hash = EuclidHashCodeTools.addToHashCode(hash, radius);
-      hash = EuclidHashCodeTools.combineHashCode(hash, position.hashCode());
-      hash = EuclidHashCodeTools.combineHashCode(hash, axis.hashCode());
+      hash = EuclidHashCodeTools.toLongHashCode(length, radius);
+      hash = EuclidHashCodeTools.combineHashCode(hash, EuclidHashCodeTools.toLongHashCode(position, axis));
       return EuclidHashCodeTools.toIntHashCode(hash);
    }
 
    /**
-    * Provides a {@code String} representation of this capsule 3D as follows:<br>
-    * Capsule 3D: [position: (-0.362, -0.617, 0.066 ), axis: ( 0.634, -0.551, -0.543 ), length: 0.170,
-    * radius: 0.906]
+    * Provides a {@code String} representation of this capsule 3D as follows:
+    *
+    * <pre>
+    * Capsule 3D: [position: (-0.362, -0.617,  0.066 ), axis: ( 0.634, -0.551, -0.543 ), length:  0.170, radius:  0.906]
+    * </pre>
     *
     * @return the {@code String} representing this capsule 3D.
     */

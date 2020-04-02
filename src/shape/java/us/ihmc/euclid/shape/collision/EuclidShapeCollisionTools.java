@@ -1,8 +1,17 @@
 package us.ihmc.euclid.shape.collision;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
+import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
-import us.ihmc.euclid.shape.primitives.interfaces.*;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -10,6 +19,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * This class provides tools to evaluate collision between primitive shapes.
+ * <p>
+ * Note that all the methods in this tool class implement an analytical evaluation of a collision.
+ * Meaning that it is much faster than using {@link GilbertJohnsonKeerthiCollisionDetector} or
+ * {@link ExpandingPolytopeAlgorithm}.
+ * </p>
  *
  * @author Sylvain Bertrand
  */
@@ -23,34 +37,33 @@ public class EuclidShapeCollisionTools
    /**
     * Evaluates the collision state between a point shape and a box.
     *
-    * @param pointShape3D the point shape. Not modified.
-    * @param box3D        the box. Not modified.
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the box. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DBox3DCollision(PointShape3DReadOnly pointShape3D, Box3DReadOnly box3D,
-                                                         EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluatePointShape3DBox3DCollision(PointShape3DReadOnly shapeA, Box3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DBox3DCollision(pointShape3D, box3D, resultToPack);
-      resultToPack.setShapeA(pointShape3D);
-      resultToPack.setShapeB(box3D);
+      evaluatePoint3DBox3DCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between a sphere and a box.
     *
-    * @param sphere3D     the sphere. Not modified.
-    * @param box3D        the box. Not modified.
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the box. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateSphere3DBox3DCollision(Sphere3DReadOnly sphere3D, Box3DReadOnly box3D, EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateSphere3DBox3DCollision(Sphere3DReadOnly shapeA, Box3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DBox3DCollision(sphere3D.getPosition(), box3D, resultToPack);
-      resultToPack.setShapeA(sphere3D);
-      resultToPack.setShapeB(box3D);
+      evaluatePoint3DBox3DCollision(shapeA.getPosition(), shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
-      resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
+      resultToPack.getPointOnA().scaleAdd(shapeA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      double distance = resultToPack.getSignedDistance() - sphere3D.getRadius();
+      double distance = resultToPack.getSignedDistance() - shapeA.getRadius();
       resultToPack.setSignedDistance(distance);
       resultToPack.setShapesAreColliding(distance < 0.0);
    }
@@ -74,34 +87,33 @@ public class EuclidShapeCollisionTools
    /**
     * Evaluates the collision state between a point shape and a capsule.
     *
-    * @param pointShape3D the point shape. Not modified.
-    * @param capsule3D    the capsule. Not modified.
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the capsule. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DCapsule3DCollision(PointShape3DReadOnly pointShape3D, Capsule3DReadOnly capsule3D,
+   public static void evaluatePointShape3DCapsule3DCollision(PointShape3DReadOnly shapeA, Capsule3DReadOnly shapeB,
                                                              EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DCapsule3DCollision(pointShape3D, capsule3D, resultToPack);
-      resultToPack.setShapeA(pointShape3D);
-      resultToPack.setShapeB(capsule3D);
+      evaluatePoint3DCapsule3DCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between two capsules.
     *
-    * @param capsule3DA   the first capsule. Not modified.
-    * @param capsule3DB   the second capsule. Not modified.
+    * @param shapeA       the first capsule. Not modified.
+    * @param shapeB       the second capsule. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateCapsule3DCapsule3DCollision(Capsule3DReadOnly capsule3DA, Capsule3DReadOnly capsule3DB,
-                                                          EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateCapsule3DCapsule3DCollision(Capsule3DReadOnly shapeA, Capsule3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
       Point3DBasics pointOnA = resultToPack.getPointOnA();
       Point3DBasics pointOnB = resultToPack.getPointOnB();
-      double distanceBetweenAxes = EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(capsule3DA.getTopCenter(),
-                                                                                               capsule3DA.getBottomCenter(),
-                                                                                               capsule3DB.getTopCenter(),
-                                                                                               capsule3DB.getBottomCenter(),
+      double distanceBetweenAxes = EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(shapeA.getTopCenter(),
+                                                                                               shapeA.getBottomCenter(),
+                                                                                               shapeB.getTopCenter(),
+                                                                                               shapeB.getBottomCenter(),
                                                                                                pointOnA,
                                                                                                pointOnB);
 
@@ -111,34 +123,33 @@ public class EuclidShapeCollisionTools
       normalOnA.scale(1.0 / distanceBetweenAxes);
       normalOnB.setAndNegate(normalOnA);
 
-      pointOnA.scaleAdd(capsule3DA.getRadius(), normalOnA, pointOnA);
-      pointOnB.scaleAdd(capsule3DB.getRadius(), normalOnB, pointOnB);
+      pointOnA.scaleAdd(shapeA.getRadius(), normalOnA, pointOnA);
+      pointOnB.scaleAdd(shapeB.getRadius(), normalOnB, pointOnB);
 
-      double distance = distanceBetweenAxes - capsule3DA.getRadius() - capsule3DB.getRadius();
+      double distance = distanceBetweenAxes - shapeA.getRadius() - shapeB.getRadius();
       resultToPack.setShapesAreColliding(distance < 0.0);
       resultToPack.setSignedDistance(distance);
 
-      resultToPack.setShapeA(capsule3DA);
-      resultToPack.setShapeB(capsule3DB);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between a sphere and a capsule.
     *
-    * @param sphere3D     the sphere. Not modified.
-    * @param capsule3D    the capsule. Not modified.
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the capsule. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateSphere3DCapsule3DCollision(Sphere3DReadOnly sphere3D, Capsule3DReadOnly capsule3D,
-                                                         EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateSphere3DCapsule3DCollision(Sphere3DReadOnly shapeA, Capsule3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DCapsule3DCollision(sphere3D.getPosition(), capsule3D, resultToPack);
-      resultToPack.setShapeA(sphere3D);
-      resultToPack.setShapeB(capsule3D);
+      evaluatePoint3DCapsule3DCollision(shapeA.getPosition(), shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
-      resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
+      resultToPack.getPointOnA().scaleAdd(shapeA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      double distance = resultToPack.getSignedDistance() - sphere3D.getRadius();
+      double distance = resultToPack.getSignedDistance() - shapeA.getRadius();
       resultToPack.setShapesAreColliding(distance < 0.0);
       resultToPack.setSignedDistance(distance);
    }
@@ -164,35 +175,34 @@ public class EuclidShapeCollisionTools
    /**
     * Evaluates the collision state between a point shape and a cylinder.
     *
-    * @param pointShape3D the point shape. Not modified.
-    * @param cylinder3D   the cylinder. Not modified.
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the cylinder. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DCylinder3DCollision(PointShape3DReadOnly pointShape3D, Cylinder3DReadOnly cylinder3D,
+   public static void evaluatePointShape3DCylinder3DCollision(PointShape3DReadOnly shapeA, Cylinder3DReadOnly shapeB,
                                                               EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DCylinder3DCollision(pointShape3D, cylinder3D, resultToPack);
-      resultToPack.setShapeA(pointShape3D);
-      resultToPack.setShapeB(cylinder3D);
+      evaluatePoint3DCylinder3DCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between a sphere and a cylinder.
     *
-    * @param sphere3D     the sphere. Not modified.
-    * @param cylinder3D   the cylinder. Not modified.
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the cylinder. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateSphere3DCylinder3DCollision(Sphere3DReadOnly sphere3D, Cylinder3DReadOnly cylinder3D,
-                                                          EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateSphere3DCylinder3DCollision(Sphere3DReadOnly shapeA, Cylinder3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DCylinder3DCollision(sphere3D.getPosition(), cylinder3D, resultToPack);
-      resultToPack.setShapeA(sphere3D);
-      resultToPack.setShapeB(cylinder3D);
+      evaluatePoint3DCylinder3DCollision(shapeA.getPosition(), shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
-      resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
+      resultToPack.getPointOnA().scaleAdd(shapeA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      double distance = resultToPack.getSignedDistance() - sphere3D.getRadius();
+      double distance = resultToPack.getSignedDistance() - shapeA.getRadius();
       resultToPack.setShapesAreColliding(distance < 0.0);
       resultToPack.setSignedDistance(distance);
    }
@@ -219,35 +229,34 @@ public class EuclidShapeCollisionTools
    /**
     * Evaluates the collision state between a point shape and an ellipsoid.
     *
-    * @param pointShape3D the point shape. Not modified.
-    * @param ellipsoid3D  the ellipsoid. Not modified.
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the ellipsoid. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DEllipsoid3DCollision(PointShape3DReadOnly pointShape3D, Ellipsoid3DReadOnly ellipsoid3D,
+   public static void evaluatePointShape3DEllipsoid3DCollision(PointShape3DReadOnly shapeA, Ellipsoid3DReadOnly shapeB,
                                                                EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DEllipsoid3DCollision(pointShape3D, ellipsoid3D, resultToPack);
-      resultToPack.setShapeA(pointShape3D);
-      resultToPack.setShapeB(ellipsoid3D);
+      evaluatePoint3DEllipsoid3DCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between a point shape and an ellipsoid.
     *
-    * @param sphere3D     the sphere. Not modified.
-    * @param ellipsoid3D  the ellipsoid. Not modified.
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the ellipsoid. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateSphere3DEllipsoid3DCollision(Sphere3DReadOnly sphere3D, Ellipsoid3DReadOnly ellipsoid3D,
-                                                           EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateSphere3DEllipsoid3DCollision(Sphere3DReadOnly shapeA, Ellipsoid3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DEllipsoid3DCollision(sphere3D.getPosition(), ellipsoid3D, resultToPack);
-      resultToPack.setShapeA(sphere3D);
-      resultToPack.setShapeB(ellipsoid3D);
+      evaluatePoint3DEllipsoid3DCollision(shapeA.getPosition(), shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
-      resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
+      resultToPack.getPointOnA().scaleAdd(shapeA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      double distance = resultToPack.getSignedDistance() - sphere3D.getRadius();
+      double distance = resultToPack.getSignedDistance() - shapeA.getRadius();
       resultToPack.setShapesAreColliding(distance < 0.0);
       resultToPack.setSignedDistance(distance);
    }
@@ -272,36 +281,66 @@ public class EuclidShapeCollisionTools
    }
 
    /**
-    * Evaluates the collision state between a point shape and a ramp.
-    *
-    * @param pointShape3D the point shape. Not modified.
-    * @param ramp3D       the ramp. Not modified.
+    * Evaluates the collision state between two point shapes.
+    * <p>
+    * Note that the two shapes never collide.
+    * </p>
+    * 
+    * @param shapeA       the first point shape. Not modified.
+    * @param shapeB       the second point shape. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DRamp3DCollision(PointShape3DReadOnly pointShape3D, Ramp3DReadOnly ramp3D,
-                                                          EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluatePointShape3DPointShape3DCollision(PointShape3DReadOnly shapeA, PointShape3DReadOnly shapeB,
+                                                                EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DRamp3DCollision(pointShape3D, ramp3D, resultToPack);
-      resultToPack.setShapeA(pointShape3D);
-      resultToPack.setShapeB(ramp3D);
+      Point3DBasics pointOnA = resultToPack.getPointOnA();
+      Point3DBasics pointOnB = resultToPack.getPointOnB();
+      Vector3DBasics normalOnA = resultToPack.getNormalOnA();
+      Vector3DBasics normalOnB = resultToPack.getNormalOnB();
+
+      pointOnA.set(shapeA);
+      pointOnB.set(shapeB);
+      double distance = pointOnA.distance(pointOnB);
+      normalOnA.sub(pointOnB, pointOnA);
+      normalOnA.scale(1.0 / distance);
+      normalOnB.setAndNegate(normalOnA);
+
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
+      resultToPack.setShapesAreColliding(false);
+      resultToPack.setSignedDistance(distance);
+   }
+
+   /**
+    * Evaluates the collision state between a point shape and a ramp.
+    *
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the ramp. Not modified.
+    * @param resultToPack the object in which the collision result is stored. Modified.
+    */
+   public static void evaluatePointShape3DRamp3DCollision(PointShape3DReadOnly shapeA, Ramp3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
+   {
+      evaluatePoint3DRamp3DCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between a sphere and a ramp.
     *
-    * @param sphere3D     the sphere. Not modified.
-    * @param ramp3D       the ramp. Not modified.
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the ramp. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateSphere3DRamp3DCollision(Sphere3DReadOnly sphere3D, Ramp3DReadOnly ramp3D, EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateSphere3DRamp3DCollision(Sphere3DReadOnly shapeA, Ramp3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DRamp3DCollision(sphere3D.getPosition(), ramp3D, resultToPack);
-      resultToPack.setShapeA(sphere3D);
-      resultToPack.setShapeB(ramp3D);
+      evaluatePoint3DRamp3DCollision(shapeA.getPosition(), shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
-      resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
+      resultToPack.getPointOnA().scaleAdd(shapeA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      double distance = resultToPack.getSignedDistance() - sphere3D.getRadius();
+      double distance = resultToPack.getSignedDistance() - shapeA.getRadius();
       resultToPack.setShapesAreColliding(distance < 0.0);
       resultToPack.setSignedDistance(distance);
    }
@@ -326,35 +365,35 @@ public class EuclidShapeCollisionTools
    /**
     * Evaluates the collision state between a point shape and a sphere.
     *
-    * @param pointShape3D the point shape. Not modified.
-    * @param sphere3D     the sphere. Not modified.
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the sphere. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DSphere3DCollision(PointShape3DReadOnly pointShape3D, Sphere3DReadOnly sphere3D,
+   public static void evaluatePointShape3DSphere3DCollision(PointShape3DReadOnly shapeA, Sphere3DReadOnly shapeB,
                                                             EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DSphere3DCollision(pointShape3D, sphere3D.getPosition(), sphere3D.getRadius(), resultToPack);
-      resultToPack.setShapeA(pointShape3D);
-      resultToPack.setShapeB(sphere3D);
+      evaluatePoint3DSphere3DCollision(shapeA, shapeB.getPosition(), shapeB.getRadius(), resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between two spheres.
     *
-    * @param sphere3DA    the first sphere. Not modified.
-    * @param sphere3DB    the second sphere. Not modified.
+    * @param shapeA       the first sphere. Not modified.
+    * @param shapeB       the second sphere. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateSphere3DSphere3DCollision(Sphere3DReadOnly sphere3DA, Sphere3DReadOnly sphere3DB, EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateSphere3DSphere3DCollision(Sphere3DReadOnly shapeA, Sphere3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DSphere3DCollision(sphere3DA.getPosition(), sphere3DB.getPosition(), sphere3DB.getRadius(), resultToPack);
-      resultToPack.setShapeA(sphere3DA);
-      resultToPack.setShapeB(sphere3DB);
+      evaluatePoint3DSphere3DCollision(shapeA.getPosition(), shapeB.getPosition(), shapeB.getRadius(), resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
-      resultToPack.getPointOnA().scaleAdd(sphere3DA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
+      resultToPack.getPointOnA().scaleAdd(shapeA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
       double distance = resultToPack.getSignedDistance();
-      distance -= sphere3DA.getRadius();
+      distance -= shapeA.getRadius();
       resultToPack.setShapesAreColliding(distance < 0.0);
       resultToPack.setSignedDistance(distance);
    }
@@ -379,34 +418,33 @@ public class EuclidShapeCollisionTools
    /**
     * Evaluates the collision state between a point shape and a torus.
     *
-    * @param pointShape3D the point shape. Not modified.
-    * @param torus3D      the torus. Not modified.
+    * @param shapeA       the point shape. Not modified.
+    * @param shapeB       the torus. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DTorus3DCollision(PointShape3DReadOnly pointShape3D, Torus3DReadOnly torus3D,
-                                                           EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluatePointShape3DTorus3DCollision(PointShape3DReadOnly shapeA, Torus3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DTorus3DCollision(pointShape3D, torus3D, resultToPack);
-      resultToPack.setShapeA(pointShape3D);
-      resultToPack.setShapeB(torus3D);
+      evaluatePoint3DTorus3DCollision(shapeA, shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
    }
 
    /**
     * Evaluates the collision state between a point shape and a torus.
     *
-    * @param sphere3D     the sphere. Not modified.
-    * @param torus3D      the torus. Not modified.
+    * @param shapeA       the sphere. Not modified.
+    * @param shapeB       the torus. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluateSphere3DTorus3DCollision(Sphere3DReadOnly sphere3D, Torus3DReadOnly torus3D, EuclidShape3DCollisionResultBasics resultToPack)
+   public static void evaluateSphere3DTorus3DCollision(Sphere3DReadOnly shapeA, Torus3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      evaluatePoint3DTorus3DCollision(sphere3D.getPosition(), torus3D, resultToPack);
-      resultToPack.setShapeA(sphere3D);
-      resultToPack.setShapeB(torus3D);
+      evaluatePoint3DTorus3DCollision(shapeA.getPosition(), shapeB, resultToPack);
+      resultToPack.setShapeA(shapeA);
+      resultToPack.setShapeB(shapeB);
 
-      resultToPack.getPointOnA().scaleAdd(sphere3D.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
+      resultToPack.getPointOnA().scaleAdd(shapeA.getRadius(), resultToPack.getNormalOnA(), resultToPack.getPointOnA());
 
-      double distance = resultToPack.getSignedDistance() - sphere3D.getRadius();
+      double distance = resultToPack.getSignedDistance() - shapeA.getRadius();
       resultToPack.setShapesAreColliding(distance < 0.0);
       resultToPack.setSignedDistance(distance);
    }

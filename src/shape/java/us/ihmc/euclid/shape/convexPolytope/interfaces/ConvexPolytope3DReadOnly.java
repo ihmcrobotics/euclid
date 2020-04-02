@@ -7,6 +7,8 @@ import java.util.List;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -146,6 +148,7 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
     *
     * @return this polytope centroid location.
     */
+   @Override
    Point3DReadOnly getCentroid();
 
    /**
@@ -413,12 +416,35 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    @Override
    default Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)
    {
+      return getSupportingVertex(null, supportDirection);
+   }
+
+   /**
+    * Finds the supporting vertex in the given direction given a starting vertex for the search.
+    * <p>
+    * The supporting vertex is the point or vertex on this shape that is the farthest along a given
+    * direction.
+    * </p>
+    * 
+    * @param seed                   the starting point for the search, the closer it is to the
+    *                               supporting vertex, the faster the search will converge. The seed
+    *                               has to be a vertex that belongs to this polytope. Can be
+    *                               {@code null}.
+    * @param supportDirection       the direction to search for the farthest point on this shape. Not
+    *                               modified.
+    * @param supportingVertexToPack point used to store the supporting vertex coordinates. Modified.
+    * @return {@code true} when the method succeeded and packed the supporting vertex coordinates,
+    *         {@code false} when the method failed in which case {@code supportingVertexToPack} remains
+    *         unchanged.
+    */
+   default Vertex3DReadOnly getSupportingVertex(Vertex3DReadOnly seed, Vector3DReadOnly supportDirection)
+   {
       if (isEmpty())
          return null;
       if (getNumberOfFaces() == 1)
          return getFace(0).getSupportingVertex(supportDirection);
 
-      Vertex3DReadOnly bestVertex = getFace(0).getEdge(0).getOrigin();
+      Vertex3DReadOnly bestVertex = seed != null ? seed : getFace(0).getEdge(0).getOrigin();
 
       if (getNumberOfVertices() == 1)
          return bestVertex;
@@ -474,6 +500,29 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    {
       return true;
    }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
+   {
+      return false;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return false;
+   }
+
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
+   Shape3DBasics copy();
 
    /**
     * Tests on a per component basis if this convex polytope and {@code other} are equal to an

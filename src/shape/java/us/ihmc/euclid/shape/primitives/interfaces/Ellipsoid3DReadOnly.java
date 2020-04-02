@@ -8,7 +8,10 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidEllipsoid3DTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Read-only interface for ellipsoid 3D.
@@ -35,6 +38,7 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     *
     * @return the pose of this ellipsoid.
     */
+   @Override
    Shape3DPoseReadOnly getPose();
 
    /**
@@ -55,6 +59,18 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    default Point3DReadOnly getPosition()
    {
       return getPose().getShapePosition();
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this ellipsoid.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return getPosition();
    }
 
    /**
@@ -95,14 +111,21 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
-      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
+      if (getOrientation().isIdentity())
+      {
+         EuclidShapeTools.supportingVertexEllipsoid3D(supportDirection, getRadii(), supportingVertexToPack);
+         supportingVertexToPack.add(getPosition());
+      }
+      else
+      {
+         Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+         getPose().inverseTransform(supportDirection, supportDirectionInLocal);
 
-      EuclidShapeTools.supportingVertexEllipsoid3D(supportDirectionInLocal, getRadii(), supportingVertexToPack);
+         EuclidShapeTools.supportingVertexEllipsoid3D(supportDirectionInLocal, getRadii(), supportingVertexToPack);
+         transformToWorld(supportingVertexToPack);
 
-      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
-
-      transformToWorld(supportingVertexToPack);
+         getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+      }
 
       return true;
    }
@@ -235,14 +258,18 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
-   /**
-    * Packs the 3 radii of this ellipsoid in the given tuple.
-    *
-    * @param radiiToPack the tuple in which the radii are stored. Modified.
-    */
-   default void getRadii(Tuple3DBasics radiiToPack)
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
    {
-      radiiToPack.set(getRadii());
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return true;
    }
 
    /**
@@ -274,6 +301,9 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    {
       return getRadii().getZ();
    }
+
+   @Override
+   Ellipsoid3DBasics copy();
 
    /**
     * Tests separately and on a per component basis if the pose and the radii of this ellipsoid and

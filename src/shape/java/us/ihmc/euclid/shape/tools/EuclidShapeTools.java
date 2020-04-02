@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -1269,7 +1270,7 @@ public class EuclidShapeTools
     */
    public static double computeRamp3DIncline(Vector3DReadOnly ramp3DSize)
    {
-      return computeRanp3DIncline(ramp3DSize.getX(), ramp3DSize.getZ());
+      return computeRamp3DIncline(ramp3DSize.getX(), ramp3DSize.getZ());
    }
 
    /**
@@ -1279,9 +1280,53 @@ public class EuclidShapeTools
     * @param ramp3DSizeZ the z-component of the ramp.
     * @return the slope angle.
     */
-   public static double computeRanp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
+   public static double computeRamp3DIncline(double ramp3DSizeX, double ramp3DSizeZ)
    {
       return EuclidCoreTools.atan(ramp3DSizeZ / ramp3DSizeX);
+   }
+
+   /**
+    * Computes the centroid of a ramp of the given size.
+    * 
+    * @param ramp3DPose     the pose of the ramp. Not modified.
+    * @param size           the ramp's size. Not modified.
+    * @param centroidToPack the object used to store the result. Modified.
+    */
+   public static void computeRamp3DCentroid(Shape3DPoseReadOnly ramp3DPose, Vector3DReadOnly size, Point3DBasics centroidToPack)
+   {
+      double xLocal = 2.0 / 3.0 * size.getX();
+      double yLocal = 0.0;
+      double zLocal = 1.0 / 3.0 * size.getZ();
+
+      if (ramp3DPose == null)
+      {
+         centroidToPack.set(xLocal, yLocal, zLocal);
+      }
+      else
+      {
+         double xWorld, yWorld, zWorld;
+
+         if (ramp3DPose.hasRotation())
+         {
+            RotationMatrixReadOnly ramp3DRotation = ramp3DPose.getRotation();
+
+            xWorld = ramp3DRotation.getM00() * xLocal + ramp3DRotation.getM02() * zLocal;
+            yWorld = ramp3DRotation.getM10() * xLocal + ramp3DRotation.getM12() * zLocal;
+            zWorld = ramp3DRotation.getM20() * xLocal + ramp3DRotation.getM22() * zLocal;
+         }
+         else
+         {
+            xWorld = xLocal;
+            yWorld = yLocal;
+            zWorld = zLocal;
+         }
+
+         xWorld += ramp3DPose.getTranslationX();
+         yWorld += ramp3DPose.getTranslationY();
+         zWorld += ramp3DPose.getTranslationZ();
+
+         centroidToPack.set(xWorld, yWorld, zWorld);
+      }
    }
 
    /**
@@ -2225,5 +2270,80 @@ public class EuclidShapeTools
    public static double icosahedronRadius(double edgeLength)
    {
       return edgeLength * EuclidCoreTools.sin(0.4 * Math.PI);
+   }
+
+   /**
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * compare the two points by independently measuring the error along and orthogonal to a given
+    * normal vector.
+    * 
+    * @param expected          the expected value. Not modified.
+    * @param actual            the actual value. Not modified.
+    * @param normal            the normal vector used to measure the normal error and the tangential
+    *                          error. Not modified.
+    * @param normalEpsilon     the tolerance for the error along the normal vector.
+    * @param tangentialEpsilon the tolerance for the error orthogonal to the normal vector.
+    * @return {@code true} if the two points are considered to represent the same geometry,
+    *         {@code false} otherwise.
+    */
+   public static boolean geometricallyEquals(Point3DReadOnly expected, Point3DReadOnly actual, Vector3DReadOnly normal, double normalEpsilon,
+                                             double tangentialEpsilon)
+   {
+      double normalX = normal.getX();
+      double normalY = normal.getY();
+      double normalZ = normal.getZ();
+      return geometricallyEquals(expected, actual, normalX, normalY, normalZ, normalEpsilon, tangentialEpsilon);
+   }
+
+   /**
+    * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
+    * compare the two points by independently measuring the error along and orthogonal to a given
+    * normal vector.
+    * 
+    * @param expected          the expected value. Not modified.
+    * @param actual            the actual value. Not modified.
+    * @param normalX           the x-component of the normal vector used to measure the normal error
+    *                          and the tangential error. Not modified.
+    * @param normalY           the y-component of the normal vector used to measure the normal error
+    *                          and the tangential error. Not modified.
+    * @param normalZ           the z-component of the normal vector used to measure the normal error
+    *                          and the tangential error. Not modified.
+    * @param normalEpsilon     the tolerance for the error along the normal vector.
+    * @param tangentialEpsilon the tolerance for the error orthogonal to the normal vector.
+    * @return {@code true} if the two points are considered to represent the same geometry,
+    *         {@code false} otherwise.
+    */
+   public static boolean geometricallyEquals(Point3DReadOnly expected, Point3DReadOnly actual, double normalX, double normalY, double normalZ,
+                                             double normalEpsilon, double tangentialEpsilon)
+   {
+      double normalLengthSquared = EuclidCoreTools.normSquared(normalX, normalY, normalZ);
+
+      if (!EuclidCoreTools.epsilonEquals(1.0, normalLengthSquared, 1.0e-12))
+      {
+         double normalLengthInverse = 1.0 / EuclidCoreTools.fastSquareRoot(normalLengthSquared);
+         normalX *= normalLengthInverse;
+         normalY *= normalLengthInverse;
+         normalZ *= normalLengthInverse;
+      }
+
+      double errorX = expected.getX() - actual.getX();
+      double errorY = expected.getY() - actual.getY();
+      double errorZ = expected.getZ() - actual.getZ();
+
+      double errorNormal = errorX * normalX + errorY * normalY + errorZ * normalZ;
+
+      if (!EuclidCoreTools.isZero(errorNormal, normalEpsilon))
+         return false;
+
+      double errorNormalX = errorNormal * normalX;
+      double errorNormalY = errorNormal * normalY;
+      double errorNormalZ = errorNormal * normalZ;
+
+      double errorTangentialX = errorX - errorNormalX;
+      double errorTangentialY = errorY - errorNormalY;
+      double errorTangentialZ = errorZ - errorNormalZ;
+      double errorTangential = EuclidCoreTools.norm(errorTangentialX, errorTangentialY, errorTangentialZ);
+
+      return EuclidCoreTools.isZero(errorTangential, tangentialEpsilon);
    }
 }

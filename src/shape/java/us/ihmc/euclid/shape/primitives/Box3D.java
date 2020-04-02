@@ -77,7 +77,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(double sizeX, double sizeY, double sizeZ)
    {
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -123,8 +123,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      getPose().set(pose);
-      setSize(sizeX, sizeY, sizeZ);
+      set(pose, sizeX, sizeY, sizeZ);
    }
 
    /**
@@ -174,6 +173,12 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    public void set(Box3D other)
    {
       Box3DBasics.super.set(other);
+   }
+
+   @Override
+   public Box3D copy()
+   {
+      return new Box3D(this);
    }
 
    /**
@@ -226,14 +231,15 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    @Override
    public int hashCode()
    {
-      long hash = EuclidHashCodeTools.combineHashCode(pose.hashCode(), size.hashCode());
-      return EuclidHashCodeTools.toIntHashCode(hash);
+      return EuclidHashCodeTools.toIntHashCode(pose, size);
    }
 
    /**
-    * Provides a {@code String} representation of this box 3D as follows:<br>
-    * Box 3D: [position: ( 0.540, 0.110, 0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: (
-    * 0.191, 0.719, 0.479 )]
+    * Provides a {@code String} representation of this box 3D as follows:
+    *
+    * <pre>
+    * Box 3D: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136), size: ( 0.191,  0.719,  0.479 )]
+    * </pre>
     *
     * @return the {@code String} representing this box 3D.
     */

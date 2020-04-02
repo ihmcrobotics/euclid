@@ -7,7 +7,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * Write and read interface for a yaw-pitch-roll object expressed in a constant reference frame,
- * i.e. this quaternion is always expressed in the same reference frame.
+ * i.e. the reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link YawPitchRollBasics}, a {@link ReferenceFrame} is associated
  * to a {@code FixedFrameYawPitchRollBasics}. This allows, for instance, to enforce, at runtime,
@@ -75,7 +75,7 @@ public interface FixedFrameYawPitchRollBasics extends FrameYawPitchRollReadOnly,
     */
    default void set(FrameYawPitchRollReadOnly other)
    {
-      set(other.getReferenceFrame(), other);
+      set(other.getReferenceFrame(), (YawPitchRollReadOnly) other);
    }
 
    /**

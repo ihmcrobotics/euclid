@@ -10,8 +10,9 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple3D.Tuple3DReadOnlyTest;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -160,6 +161,7 @@ public abstract class FrameTuple3DReadOnlyTest<F extends FrameTuple3DReadOnly>
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameTuple3DReadOnly.class, Tuple3DReadOnly.class, true);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameTuple3DReadOnly.class, Tuple3DReadOnly.class, true);
    }
 }

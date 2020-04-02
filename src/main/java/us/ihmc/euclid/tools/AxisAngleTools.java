@@ -4,9 +4,9 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -503,7 +503,7 @@ public class AxisAngleTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void transform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(axisAngle, false, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }
@@ -513,7 +513,7 @@ public class AxisAngleTools
     * {@code axisAngle} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(AxisAngleReadOnly, RotationMatrixReadOnly, RotationMatrix)} with an axis-angle
+    * {@link #transform(AxisAngleReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with an axis-angle
     * that has an angle of opposite value compared to the given one.
     * </p>
     * <p>
@@ -533,7 +533,7 @@ public class AxisAngleTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void inverseTransform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(axisAngle, true, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }

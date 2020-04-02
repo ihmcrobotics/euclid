@@ -1,7 +1,7 @@
 package us.ihmc.euclid.rotationConversion;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
-import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.YawPitchRollTools;
@@ -45,7 +45,7 @@ public abstract class RotationMatrixConversion
     * @param yaw          the angle to rotate about the z-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void computeYawMatrix(double yaw, RotationMatrix matrixToPack)
+   public static void computeYawMatrix(double yaw, RotationMatrixBasics matrixToPack)
    {
       if (EuclidCoreTools.isAngleZero(yaw, EPS))
       {
@@ -72,7 +72,7 @@ public abstract class RotationMatrixConversion
     * @param pitch        the angle to rotate about the y-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void computePitchMatrix(double pitch, RotationMatrix matrixToPack)
+   public static void computePitchMatrix(double pitch, RotationMatrixBasics matrixToPack)
    {
       if (EuclidCoreTools.isAngleZero(pitch, EPS))
       {
@@ -99,7 +99,7 @@ public abstract class RotationMatrixConversion
     * @param roll         the angle to rotate about the x-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void computeRollMatrix(double roll, RotationMatrix matrixToPack)
+   public static void computeRollMatrix(double roll, RotationMatrixBasics matrixToPack)
    {
       if (EuclidCoreTools.isAngleZero(roll, EPS))
       {
@@ -130,7 +130,7 @@ public abstract class RotationMatrixConversion
     * @param axisAngle    the axis-angle to use for the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertAxisAngleToMatrix(AxisAngleReadOnly axisAngle, RotationMatrix matrixToPack)
+   public static void convertAxisAngleToMatrix(AxisAngleReadOnly axisAngle, RotationMatrixBasics matrixToPack)
    {
       convertAxisAngleToMatrix(axisAngle.getX(), axisAngle.getY(), axisAngle.getZ(), axisAngle.getAngle(), matrixToPack);
    }
@@ -155,7 +155,7 @@ public abstract class RotationMatrixConversion
     * @param angle        the angle of the axis-angle to use for the conversion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertAxisAngleToMatrix(double ux, double uy, double uz, double angle, RotationMatrix matrixToPack)
+   public static void convertAxisAngleToMatrix(double ux, double uy, double uz, double angle, RotationMatrixBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
       {
@@ -220,7 +220,7 @@ public abstract class RotationMatrixConversion
     * @param quaternion   the quaternion to use for the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertQuaternionToMatrix(QuaternionReadOnly quaternion, RotationMatrix matrixToPack)
+   public static void convertQuaternionToMatrix(QuaternionReadOnly quaternion, RotationMatrixBasics matrixToPack)
    {
       double qx = quaternion.getX();
       double qy = quaternion.getY();
@@ -250,7 +250,7 @@ public abstract class RotationMatrixConversion
     * @param qs           the s-component of the quaternion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertQuaternionToMatrix(double qx, double qy, double qz, double qs, RotationMatrix matrixToPack)
+   public static void convertQuaternionToMatrix(double qx, double qy, double qz, double qs, RotationMatrixBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(qx, qy, qz, qs))
       {
@@ -331,11 +331,11 @@ public abstract class RotationMatrixConversion
     *
     * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
-    * @deprecated Use {@link #convertYawPitchRollToMatrix(YawPitchRollReadOnly, RotationMatrix)}
+    * @deprecated Use {@link #convertYawPitchRollToMatrix(YawPitchRollReadOnly, RotationMatrixBasics)}
     *             instead.
     */
    @Deprecated
-   public static void convertYawPitchRollToMatrix(double[] yawPitchRoll, RotationMatrix matrixToPack)
+   public static void convertYawPitchRollToMatrix(double[] yawPitchRoll, RotationMatrixBasics matrixToPack)
    {
       convertYawPitchRollToMatrix(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], matrixToPack);
    }
@@ -372,7 +372,7 @@ public abstract class RotationMatrixConversion
     * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertYawPitchRollToMatrix(YawPitchRollReadOnly yawPitchRoll, RotationMatrix matrixToPack)
+   public static void convertYawPitchRollToMatrix(YawPitchRollReadOnly yawPitchRoll, RotationMatrixBasics matrixToPack)
    {
       convertYawPitchRollToMatrix(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), matrixToPack);
    }
@@ -411,7 +411,7 @@ public abstract class RotationMatrixConversion
     * @param roll         the angle to rotate about the x-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertYawPitchRollToMatrix(double yaw, double pitch, double roll, RotationMatrix matrixToPack)
+   public static void convertYawPitchRollToMatrix(double yaw, double pitch, double roll, RotationMatrixBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
       {
@@ -469,7 +469,7 @@ public abstract class RotationMatrixConversion
     * @param rotationVector the rotation vector to use in the conversion. Not modified.
     * @param matrixToPack   the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertRotationVectorToMatrix(Vector3DReadOnly rotationVector, RotationMatrix matrixToPack)
+   public static void convertRotationVectorToMatrix(Vector3DReadOnly rotationVector, RotationMatrixBasics matrixToPack)
    {
       convertRotationVectorToMatrix(rotationVector.getX(), rotationVector.getY(), rotationVector.getZ(), matrixToPack);
    }
@@ -498,7 +498,7 @@ public abstract class RotationMatrixConversion
     * @param rz           the z-component of the rotation vector to use in the conversion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertRotationVectorToMatrix(double rx, double ry, double rz, RotationMatrix matrixToPack)
+   public static void convertRotationVectorToMatrix(double rx, double ry, double rz, RotationMatrixBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(rx, ry, rz))
       {

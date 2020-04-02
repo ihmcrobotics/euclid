@@ -1268,7 +1268,7 @@ public class EuclidCoreTestTools
 
       if (!matrixToAssert.isMatrixSkewSymmetric(epsilon))
       {
-         String errorMessage = "The matrix is not skew-symmetric:\n" + getMatrixString(DEFAULT_FORMAT, matrixToAssert);
+         String errorMessage = "The matrix is not skew-symmetric:\n" + getMatrix3DString(DEFAULT_FORMAT, matrixToAssert);
          throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
       }
    }
@@ -1342,7 +1342,7 @@ public class EuclidCoreTestTools
 
       if (!matrixToAssert.isRotationMatrix(epsilon))
       {
-         String errorMessage = "This is not a rotation matrix:\n" + getMatrixString(format, matrixToAssert);
+         String errorMessage = "This is not a rotation matrix:\n" + getMatrix3DString(format, matrixToAssert);
          throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
       }
    }
@@ -1389,7 +1389,7 @@ public class EuclidCoreTestTools
 
       if (!matrixToAssert.isIdentity(epsilon))
       {
-         String errorMessage = "The matrix is not identity:\n" + getMatrixString(DEFAULT_FORMAT, matrixToAssert);
+         String errorMessage = "The matrix is not identity:\n" + getMatrix3DString(DEFAULT_FORMAT, matrixToAssert);
          throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
       }
    }
@@ -1425,7 +1425,7 @@ public class EuclidCoreTestTools
          {
             if (!Double.isNaN(matrixToAssert.getElement(row, column)))
             {
-               String errorMessage = "The matrix does not contain only NaN:\n" + getMatrixString(DEFAULT_FORMAT, matrixToAssert);
+               String errorMessage = "The matrix does not contain only NaN:\n" + getMatrix3DString(DEFAULT_FORMAT, matrixToAssert);
                throw new AssertionError(addPrefixToMessage(messagePrefix, errorMessage));
             }
          }
@@ -2689,15 +2689,15 @@ public class EuclidCoreTestTools
 
    private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String format)
    {
-      String expectedAsString = getMatrixString(format, expected);
-      String actualAsString = getMatrixString(format, actual);
+      String expectedAsString = getMatrix3DString(format, expected);
+      String actualAsString = getMatrix3DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, double difference, String format)
    {
-      String expectedAsString = getMatrixString(format, expected);
-      String actualAsString = getMatrixString(format, actual);
+      String expectedAsString = getMatrix3DString(format, expected);
+      String actualAsString = getMatrix3DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
    }
 

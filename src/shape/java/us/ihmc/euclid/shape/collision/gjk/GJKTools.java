@@ -161,8 +161,13 @@ public class GJKTools
          double d = Double.POSITIVE_INFINITY;
          GJKSimplex3D output = null;
 
+         double zeroTestEpsilon = 1.0e-13;
+
          if (compareSigns(detM, -C42))
          {
+            if (EuclidCoreTools.isZero(detM, zeroTestEpsilon) && EuclidCoreTools.isZero(C42, zeroTestEpsilon))
+               return null;
+
             GJKSimplex3D candidateOutput = simplexClosestToOriginFrom2Simplex(s1, s3, s4);
             if (candidateOutput != null)
             {
@@ -177,6 +182,9 @@ public class GJKTools
 
          if (compareSigns(detM, -C43))
          {
+            if (EuclidCoreTools.isZero(detM, zeroTestEpsilon) && EuclidCoreTools.isZero(C43, zeroTestEpsilon))
+               return null;
+
             GJKSimplex3D candidateOutput = simplexClosestToOriginFrom2Simplex(s1, s2, s4);
             if (candidateOutput != null)
             {
@@ -191,6 +199,9 @@ public class GJKTools
 
          if (compareSigns(detM, -C44))
          {
+            if (EuclidCoreTools.isZero(detM, zeroTestEpsilon) && EuclidCoreTools.isZero(C44, zeroTestEpsilon))
+               return null;
+
             GJKSimplex3D candidateOutput = simplexClosestToOriginFrom2Simplex(s1, s2, s3);
             if (candidateOutput != null)
             {
@@ -296,6 +307,9 @@ public class GJKTools
 
       if (compareSigns(muMax, C1) && compareSigns(muMax, C2) && compareSigns(muMax, C3))
       { // The projection p0 is inside the face. Computing the barycentric coordinates.
+         if (Math.abs(C1) < 1.0e-16 && Math.abs(C2) < 1.0e-16 && Math.abs(C3) < 1.0e-16)
+            return null;
+
          double[] lambdas = {C1 / muMax, C2 / muMax, C3 / muMax};
          GJKVertex3D[] supportingVerices = {s1, s2, s3};
          return new GJKSimplex3D(supportingVerices, lambdas);

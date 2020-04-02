@@ -1,6 +1,7 @@
 package us.ihmc.euclid.shape.collision.interfaces;
 
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -162,10 +163,31 @@ public interface EuclidShape3DCollisionResultReadOnly
     */
    default boolean geometricallyEquals(EuclidShape3DCollisionResultReadOnly other, double epsilon)
    {
+      return geometricallyEquals(other, epsilon, epsilon, epsilon);
+   }
+
+   /**
+    * Tests each feature of {@code this} against {@code other} for geometric similarity.
+    *
+    * @param other                  the other collision result to compare against this. Not modified.
+    * @param distanceEpsilon        tolerance to use when comparing the distance feature.
+    * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
+    *                               {@code pointOnB} in the plane perpendicular to the collision
+    *                               vector, i.e. {@code collisionVector = pointOnA - pointOnB}. The
+    *                               {@code distanceEpsilon} is used for comparing the points along the
+    *                               collision vector.
+    * @param normalEpsilon          tolerance to use when comparing {@code normalOnA} and
+    *                               {@code normalOnB}.
+    * @return {@code true} if the two collision results are considered geometrically similar,
+    *         {@code false} otherwise.
+    */
+   default boolean geometricallyEquals(EuclidShape3DCollisionResultReadOnly other, double distanceEpsilon, double pointTangentialEpsilon, double normalEpsilon)
+   {
       if (areShapesColliding() != other.areShapesColliding())
          return false;
 
-      if (!EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
+      if (Double.isNaN(getSignedDistance()) ? !Double.isNaN(other.getSignedDistance())
+            : !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), distanceEpsilon))
          return false;
 
       boolean swap;
@@ -173,7 +195,7 @@ public interface EuclidShape3DCollisionResultReadOnly
       if (getShapeA() != null || getShapeB() != null || other.getShapeA() != null || other.getShapeB() != null)
          swap = getShapeA() != other.getShapeA();
       else
-         swap = !getPointOnA().geometricallyEquals(other.getPointOnA(), epsilon);
+         swap = !getPointOnA().geometricallyEquals(other.getPointOnA(), pointTangentialEpsilon);
 
       Shape3DReadOnly otherShapeA = swap ? other.getShapeB() : other.getShapeA();
       Shape3DReadOnly otherShapeB = swap ? other.getShapeA() : other.getShapeB();
@@ -187,16 +209,42 @@ public interface EuclidShape3DCollisionResultReadOnly
       if (getShapeB() != otherShapeB)
          return false;
 
-      if (getPointOnA().containsNaN() ? !otherPointOnA.containsNaN() : !getPointOnA().geometricallyEquals(otherPointOnA, epsilon))
+      if (getPointOnA().containsNaN() || getPointOnB().containsNaN() || distanceEpsilon == pointTangentialEpsilon)
+      {
+         if (getPointOnA().containsNaN() ? !otherPointOnA.containsNaN() : !getPointOnA().geometricallyEquals(otherPointOnA, distanceEpsilon))
+            return false;
+
+         if (getPointOnB().containsNaN() ? !otherPointOnB.containsNaN() : !getPointOnB().geometricallyEquals(otherPointOnB, distanceEpsilon))
+            return false;
+      }
+      else
+      {
+         double collisionVectorX = (getPointOnA().getX() - getPointOnB().getX()) / getDistance();
+         double collisionVectorY = (getPointOnA().getY() - getPointOnB().getY()) / getDistance();
+         double collisionVectorZ = (getPointOnA().getZ() - getPointOnB().getZ()) / getDistance();
+
+         if (!EuclidShapeTools.geometricallyEquals(getPointOnA(),
+                                                   otherPointOnA,
+                                                   collisionVectorX,
+                                                   collisionVectorY,
+                                                   collisionVectorZ,
+                                                   distanceEpsilon,
+                                                   pointTangentialEpsilon))
+            return false;
+         if (!EuclidShapeTools.geometricallyEquals(getPointOnB(),
+                                                   otherPointOnB,
+                                                   collisionVectorX,
+                                                   collisionVectorY,
+                                                   collisionVectorZ,
+                                                   distanceEpsilon,
+                                                   pointTangentialEpsilon))
+            return false;
+      }
+
+      if (getNormalOnA().containsNaN() ? !otherNormalOnA.containsNaN() : !getNormalOnA().geometricallyEquals(otherNormalOnA, normalEpsilon))
          return false;
 
-      if (getPointOnB().containsNaN() ? !otherPointOnB.containsNaN() : !getPointOnB().geometricallyEquals(otherPointOnB, epsilon))
-         return false;
-
-      if (getNormalOnA().containsNaN() ? !otherNormalOnA.containsNaN() : !getNormalOnA().geometricallyEquals(otherNormalOnA, epsilon))
-         return false;
-
-      if (getNormalOnB().containsNaN() ? !otherNormalOnB.containsNaN() : !getNormalOnB().geometricallyEquals(otherNormalOnB, epsilon))
+      if (getNormalOnB().containsNaN() ? !otherNormalOnB.containsNaN() : !getNormalOnB().geometricallyEquals(otherNormalOnB, normalEpsilon))
          return false;
 
       return true;

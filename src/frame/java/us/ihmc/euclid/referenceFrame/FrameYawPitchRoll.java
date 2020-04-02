@@ -6,7 +6,8 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameChangeable;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
@@ -266,7 +267,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getYawPitchRollString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameYawPitchRollString(this);
    }
 
    /**
@@ -278,10 +279,7 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics, GeometryObjec
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = 31L * bits + Double.doubleToLongBits(yaw);
-      bits = 31L * bits + Double.doubleToLongBits(pitch);
-      bits = 31L * bits + Double.doubleToLongBits(roll);
-      return (int) (bits ^ bits >> 32);
+      long bits = EuclidHashCodeTools.addToHashCode(EuclidHashCodeTools.toLongHashCode(yaw, pitch, roll), referenceFrame);
+      return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }

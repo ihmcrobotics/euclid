@@ -66,7 +66,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    }
 
    /**
-    * Sets this cylinder axis of revolution.
+    * Sets this cylinder axis of revolution and normalizes it.
     *
     * @param axis the new axis. Not modified.
     */
@@ -128,6 +128,15 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
       getAxis().set(axis);
       getAxis().normalize();
       setSize(length, radius);
+   }
+
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
+   @Override
+   default Shape3DPoseBasics getPose()
+   {
+      return null;
    }
 
    /** {@inheritDoc} */

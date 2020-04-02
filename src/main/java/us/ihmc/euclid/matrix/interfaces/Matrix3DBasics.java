@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -169,25 +168,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
       setM20(m20);
       setM21(m21);
       setM22(m22);
-   }
-
-   /**
-    * Sets all the coefficients of this matrix to zero.
-    */
-   @Override
-   default void setToZero()
-   {
-      setM00(0.0);
-      setM01(0.0);
-      setM02(0.0);
-
-      setM10(0.0);
-      setM11(0.0);
-      setM12(0.0);
-
-      setM20(0.0);
-      setM21(0.0);
-      setM22(0.0);
    }
 
    /**
@@ -1159,7 +1139,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * </p>
     * <p>
     * Note: the transformation of a {@code Matrix3D} strongly differs from the transformation of a
-    * {@link RotationMatrix}.
+    * {@link RotationMatrixBasics}.
     * </p>
     */
    @Override
@@ -1176,7 +1156,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * </p>
     * <p>
     * Note: the transformation of a {@code Matrix3D} strongly differs from the transformation of a
-    * {@link RotationMatrix}.
+    * {@link RotationMatrixBasics}.
     * </p>
     */
    @Override

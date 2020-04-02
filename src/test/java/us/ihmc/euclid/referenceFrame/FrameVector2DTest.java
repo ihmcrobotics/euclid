@@ -1,19 +1,21 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
@@ -119,6 +121,9 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
    @Test
    public void testSetMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector2D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(544354);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -136,6 +141,13 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
 
          EuclidFrameTestTools.assertFrameTuple2DEquals(expected, actual, EPSILON);
       }
+   }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameVector2D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test
@@ -218,14 +230,35 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
    @Test
    public void testHashCode() throws Exception
    {
-      Random random = new Random(763);
+      Random random = new Random(621541L);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random, 100);
+
+      FrameVector2D tuple = new FrameVector2D();
+
+      tuple.setX(random.nextDouble());
+      tuple.setY(random.nextDouble());
+      tuple.setReferenceFrame(frames[random.nextInt(frames.length)]);
+
+      int newHashCode, previousHashCode;
+      newHashCode = tuple.hashCode();
+      assertEquals(newHashCode, tuple.hashCode());
+
+      previousHashCode = tuple.hashCode();
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector2D expected = EuclidCoreRandomTools.nextVector2D(random, -1.0e15, 1.0e15);
-         FrameVector2D actual = new FrameVector2D(worldFrame, expected);
+         tuple.setElement(i % 2, random.nextDouble());
+         newHashCode = tuple.hashCode();
+         assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
 
-         assertEquals(expected.hashCode(), actual.hashCode());
+         ReferenceFrame oldFrame = tuple.getReferenceFrame();
+         ReferenceFrame newFrame = frames[random.nextInt(frames.length)];
+         tuple.setReferenceFrame(newFrame);
+         newHashCode = tuple.hashCode();
+         if (oldFrame != newFrame)
+            assertNotEquals(newHashCode, previousHashCode);
+         previousHashCode = newHashCode;
       }
    }
 
@@ -233,10 +266,13 @@ public class FrameVector2DTest extends FrameTuple2DBasicsTest<FrameVector2D>
    public void testOverloading() throws Exception
    {
       super.testOverloading();
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {Vector2D.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {Vector2D.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {Vector2D.class, Double.TYPE});
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameVector2D.class, Vector2D.class, true, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", Vector2D.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", Vector2D.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Vector2D.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameVector2D.class, Vector2D.class, true, 1, methodFilter);
    }
 }

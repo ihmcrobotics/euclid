@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tools;
 
-import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
@@ -35,7 +35,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiply(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrix matrixToPack)
+   public static void multiply(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
    {
       multiplyImpl(m1, false, m2, false, matrixToPack);
    }
@@ -51,7 +51,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiplyTransposeBoth(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrix matrixToPack)
+   public static void multiplyTransposeBoth(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
    {
       multiplyImpl(m1, true, m2, true, matrixToPack);
    }
@@ -67,7 +67,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiplyTransposeLeft(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrix matrixToPack)
+   public static void multiplyTransposeLeft(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
    {
       multiplyImpl(m1, true, m2, false, matrixToPack);
    }
@@ -83,7 +83,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiplyTransposeRight(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrix matrixToPack)
+   public static void multiplyTransposeRight(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
    {
       multiplyImpl(m1, false, m2, true, matrixToPack);
    }
@@ -106,7 +106,7 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
-                               RotationMatrix matrixToPack)
+                               RotationMatrixBasics matrixToPack)
    {
       if (orientation1 instanceof RotationMatrixReadOnly)
       {
@@ -195,7 +195,7 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, RotationMatrixReadOnly orientation2, boolean inverse2,
-                               RotationMatrix matrixToPack)
+                               RotationMatrixBasics matrixToPack)
    {
       if (orientation1 instanceof RotationMatrixReadOnly)
       {
@@ -266,7 +266,7 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void multiply(RotationMatrixReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
-                               RotationMatrix matrixToPack)
+                               RotationMatrixBasics matrixToPack)
    {
       if (orientation2 instanceof RotationMatrixReadOnly)
       {
@@ -332,7 +332,7 @@ public class RotationMatrixTools
     * @param transposeB   whether the second matrix should be transposed in the multiplication.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB, RotationMatrix matrixToPack)
+   private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB, RotationMatrixBasics matrixToPack)
    {
       if (a.isZeroOrientation())
       {
@@ -380,7 +380,7 @@ public class RotationMatrixTools
 
    private static void multiplyImpl(double a00, double a01, double a02, double a10, double a11, double a12, double a20, double a21, double a22,
                                     boolean transposeA, double b00, double b01, double b02, double b10, double b11, double b12, double b20, double b21,
-                                    double b22, boolean transposeB, RotationMatrix matrixToPack)
+                                    double b22, boolean transposeB, RotationMatrixBasics matrixToPack)
    {
       double c00, c01, c02, c10, c11, c12, c20, c21, c22;
 
@@ -459,7 +459,7 @@ public class RotationMatrixTools
     * @param matrixOriginal the matrix on which the yaw rotation is appended. Not modified.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void prependYawRotation(double yaw, RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixToPack)
+   public static void prependYawRotation(double yaw, RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixToPack)
    {
       if (matrixOriginal.isZeroOrientation())
       {
@@ -479,6 +479,7 @@ public class RotationMatrixTools
       double m20 = matrixOriginal.getM20();
       double m21 = matrixOriginal.getM21();
       double m22 = matrixOriginal.getM22();
+      // TODO Should we switch to setUnsafe?
       matrixToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
@@ -499,7 +500,7 @@ public class RotationMatrixTools
     * @param yaw            the angle to rotate about the z-axis.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void appendYawRotation(RotationMatrixReadOnly matrixOriginal, double yaw, RotationMatrix matrixToPack)
+   public static void appendYawRotation(RotationMatrixReadOnly matrixOriginal, double yaw, RotationMatrixBasics matrixToPack)
    {
       if (matrixOriginal.isZeroOrientation())
       {
@@ -539,7 +540,7 @@ public class RotationMatrixTools
     * @param matrixOriginal the matrix on which the pitch rotation is appended. Not modified.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void prependPitchRotation(double pitch, RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixToPack)
+   public static void prependPitchRotation(double pitch, RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixToPack)
    {
       if (matrixOriginal.isZeroOrientation())
       {
@@ -579,7 +580,7 @@ public class RotationMatrixTools
     * @param pitch          the angle to rotate about the y-axis.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void appendPitchRotation(RotationMatrixReadOnly matrixOriginal, double pitch, RotationMatrix matrixToPack)
+   public static void appendPitchRotation(RotationMatrixReadOnly matrixOriginal, double pitch, RotationMatrixBasics matrixToPack)
    {
       if (matrixOriginal.isZeroOrientation())
       {
@@ -619,7 +620,7 @@ public class RotationMatrixTools
     * @param matrixOriginal the matrix on which the roll rotation is appended. Not modified.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void prependRollRotation(double roll, RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixToPack)
+   public static void prependRollRotation(double roll, RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixToPack)
    {
       if (matrixOriginal.isZeroOrientation())
       {
@@ -659,7 +660,7 @@ public class RotationMatrixTools
     * @param roll           the angle to rotate about the x-axis.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void appendRollRotation(RotationMatrixReadOnly matrixOriginal, double roll, RotationMatrix matrixToPack)
+   public static void appendRollRotation(RotationMatrixReadOnly matrixOriginal, double roll, RotationMatrixBasics matrixToPack)
    {
       if (matrixOriginal.isZeroOrientation())
       {
@@ -809,7 +810,7 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result of the interpolation is stored.
     *                     Modified.
     */
-   public static void interpolate(RotationMatrixReadOnly r0, RotationMatrixReadOnly rf, double alpha, RotationMatrix matrixToPack)
+   public static void interpolate(RotationMatrixReadOnly r0, RotationMatrixReadOnly rf, double alpha, RotationMatrixBasics matrixToPack)
    {
       if (r0.isZeroOrientation() && rf.isZeroOrientation())
       {

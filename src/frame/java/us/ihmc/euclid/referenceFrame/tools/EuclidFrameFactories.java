@@ -2,15 +2,54 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.function.DoubleSupplier;
 
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Orientation2D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.transform.interfaces.Transform;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 
 /**
  * This class provides a varieties of factories to create Euclid frame types.
@@ -191,10 +230,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(point, getReferenceFrame());
          }
 
          @Override
@@ -209,7 +245,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
          }
       };
    }
@@ -247,10 +283,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
          }
 
          @Override
@@ -265,7 +298,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
          }
       };
    }
@@ -309,11 +342,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getZ());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(point, getReferenceFrame());
          }
 
          @Override
@@ -328,7 +357,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
          }
       };
    }
@@ -372,11 +401,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            long bits = 1L;
-            bits = EuclidHashCodeTools.addToHashCode(bits, getX());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getY());
-            bits = EuclidHashCodeTools.addToHashCode(bits, getZ());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
          }
 
          @Override
@@ -391,7 +416,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple3DString(this) + "-" + getReferenceFrame();
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
          }
       };
    }
@@ -440,5 +465,842 @@ public class EuclidFrameFactories
    public static FrameVector3DReadOnly newNegativeLinkedFrameVector3D(FrameVector3DReadOnly originalVector)
    {
       return newLinkedFrameVector3DReadOnly(EuclidCoreFactories.newNegativeLinkedVector3D(originalVector), originalVector);
+   }
+
+   /**
+    * Creates a new frame point which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @return the new linked frame point.
+    */
+   public static FixedFramePoint2DBasics newFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFramePoint2DBasics(referenceFrameHolder, new Point2D());
+   }
+
+   /**
+    * Creates a new frame point which reference frame is linked to the given frameless point and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @param originalPoint        the point to link to the new frame point. Modifications on either the
+    *                             {@code originalPoint} or the new frame point will be propagated to
+    *                             the other.
+    * @return the new linked frame point.
+    */
+   public static FixedFramePoint2DBasics newLinkedFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder, Point2DBasics originalPoint)
+   {
+      return new FixedFramePoint2DBasics()
+      {
+         @Override
+         public void setX(double x)
+         {
+            originalPoint.setX(x);
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            originalPoint.setY(y);
+         }
+
+         @Override
+         public double getX()
+         {
+            return originalPoint.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return originalPoint.getY();
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FramePoint2DReadOnly)
+               return FixedFramePoint2DBasics.super.equals((FramePoint2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(originalPoint, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new frame vector which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @return the new linked frame vector.
+    */
+   public static FixedFrameVector2DBasics newFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFrameVector2DBasics(referenceFrameHolder, new Vector2D());
+   }
+
+   /**
+    * Creates a new frame vector which reference frame is linked to the given frameless vector and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param originalVector       the vector to link to the new frame vector. Modifications on either
+    *                             the {@code originalVector} or the new frame vector will be propagated
+    *                             to the other.
+    * @return the new linked frame vector.
+    */
+   public static FixedFrameVector2DBasics newLinkedFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DBasics originalVector)
+   {
+      return new FixedFrameVector2DBasics()
+      {
+         @Override
+         public void setX(double x)
+         {
+            originalVector.setX(x);
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            originalVector.setY(y);
+         }
+
+         @Override
+         public double getX()
+         {
+            return originalVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return originalVector.getY();
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameVector2DReadOnly)
+               return FixedFrameVector2DBasics.super.equals((FrameVector2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(originalVector, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new frame point which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @return the new linked frame point.
+    */
+   public static FixedFramePoint3DBasics newFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFramePoint3DBasics(referenceFrameHolder, new Point3D());
+   }
+
+   /**
+    * Creates a new frame point which reference frame is linked to the given frameless point and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame point.
+    * @param originalPoint        the point to link to the new frame point. Modifications on either the
+    *                             {@code originalPoint} or the new frame point will be propagated to
+    *                             the other.
+    * @return the new linked frame point.
+    */
+   public static FixedFramePoint3DBasics newLinkedFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder, Point3DBasics originalPoint)
+   {
+      return new FixedFramePoint3DBasics()
+      {
+         @Override
+         public void setX(double x)
+         {
+            originalPoint.setX(x);
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            originalPoint.setY(y);
+         }
+
+         @Override
+         public void setZ(double z)
+         {
+            originalPoint.setZ(z);
+         }
+
+         @Override
+         public double getX()
+         {
+            return originalPoint.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return originalPoint.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return originalPoint.getZ();
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FramePoint3DReadOnly)
+               return FixedFramePoint3DBasics.super.equals((FramePoint3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(originalPoint, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new frame vector which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @return the new linked frame vector.
+    */
+   public static FixedFrameVector3DBasics newFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFrameVector3DBasics(referenceFrameHolder, new Vector3D());
+   }
+
+   /**
+    * Creates a new frame vector which reference frame is linked to the given frameless vector and
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param originalVector       the vector to link to the new frame vector. Modifications on either
+    *                             the {@code originalVector} or the new frame vector will be propagated
+    *                             to the other.
+    * @return the new linked frame vector.
+    */
+   public static FixedFrameVector3DBasics newLinkedFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DBasics originalVector)
+   {
+      return new FixedFrameVector3DBasics()
+      {
+         @Override
+         public void setX(double x)
+         {
+            originalVector.setX(x);
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            originalVector.setY(y);
+         }
+
+         @Override
+         public void setZ(double z)
+         {
+            originalVector.setZ(z);
+         }
+
+         @Override
+         public double getX()
+         {
+            return originalVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return originalVector.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return originalVector.getZ();
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameVector3DReadOnly)
+               return FixedFrameVector3DBasics.super.equals((FrameVector3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(originalVector, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new frame orientation which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
+    * @return the new linked frame orientation.
+    */
+   public static FixedFrameOrientation2DBasics newFixedFrameOrientation2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFrameOrientation2DBasics(referenceFrameHolder, new Orientation2D());
+   }
+
+   /**
+    * Creates a new frame orientation which reference frame is linked to the given frameless
+    * orientation and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
+    * @param originalOrientation  the orientation to link to the new frame orientation. Modifications
+    *                             on either the {@code originalOriginal} or the new frame vector will
+    *                             be propagated to the other.
+    * @return the new linked frame vector.
+    */
+   public static FixedFrameOrientation2DBasics newLinkedFixedFrameOrientation2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                      Orientation2DBasics originalOrientation)
+   {
+      return new FixedFrameOrientation2DBasics()
+      {
+         @Override
+         public void setYaw(double yaw)
+         {
+            originalOrientation.setYaw(yaw);
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getYaw()
+         {
+            return originalOrientation.getYaw();
+         }
+
+         @Override
+         public void applyTransform(Transform transform)
+         {
+            originalOrientation.applyTransform(transform);
+         }
+
+         @Override
+         public void applyInverseTransform(Transform transform)
+         {
+            originalOrientation.applyInverseTransform(transform);
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameOrientation2DReadOnly)
+               return FixedFrameOrientation2DBasics.super.equals((FrameOrientation2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(originalOrientation, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameOrientation2DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new frame quaternion which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
+    * @return the new linked frame quaternion.
+    */
+   public static FixedFrameQuaternionBasics newFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFrameQuaternionBasics(referenceFrameHolder, new Quaternion());
+   }
+
+   /**
+    * Creates a new frame quaternion which reference frame is linked to the given frameless quaternion
+    * and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
+    * @param originalQuaternion   the quaternion to link to the new frame quaternion. Modifications on
+    *                             either the {@code originalQuaternion} or the new frame quaternion
+    *                             will be propagated to the other.
+    * @return the new linked frame quaternion.
+    */
+   public static FixedFrameQuaternionBasics newLinkedFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder, QuaternionBasics originalQuaternion)
+   {
+      return new FixedFrameQuaternionBasics()
+      {
+         @Override
+         public void setUnsafe(double qx, double qy, double qz, double qs)
+         {
+            originalQuaternion.setUnsafe(qx, qy, qz, qs);
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getX()
+         {
+            return originalQuaternion.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return originalQuaternion.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return originalQuaternion.getZ();
+         }
+
+         @Override
+         public double getS()
+         {
+            return originalQuaternion.getS();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameQuaternionReadOnly)
+               return FixedFrameQuaternionBasics.super.equals((FrameQuaternionReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(originalQuaternion, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple4DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new frame rotation matrix which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame rotation matrix.
+    * @return the new linked frame rotation matrix.
+    */
+   public static FixedFrameRotationMatrixBasics newFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFrameRotationMatrixBasics(referenceFrameHolder, new RotationMatrix());
+   }
+
+   /**
+    * Creates a new frame rotation matrix which reference frame is linked to the given frameless
+    * rotation matrix and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder   the reference frame holder to link to the new frame rotation
+    *                               matrix.
+    * @param originalRotationMatrix the rotation matrix to link to the new frame rotation matrix.
+    *                               Modifications on either the {@code originalRotationMatrix} or the
+    *                               new frame rotation matrix will be propagated to the other.
+    * @return the new linked frame rotation matrix.
+    */
+   public static FixedFrameRotationMatrixBasics newLinkedFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                        RotationMatrixBasics originalRotationMatrix)
+   {
+      return new FixedFrameRotationMatrixBasics()
+      {
+         @Override
+         public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+         {
+            originalRotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         }
+
+         @Override
+         public void set(RotationMatrixReadOnly other)
+         {
+            originalRotationMatrix.set(other);
+         }
+
+         @Override
+         public void setIdentity()
+         {
+            originalRotationMatrix.setIdentity();
+         }
+
+         @Override
+         public void setToNaN()
+         {
+            originalRotationMatrix.setToNaN();
+         }
+
+         @Override
+         public void normalize()
+         {
+            originalRotationMatrix.normalize();
+         }
+
+         @Override
+         public boolean isIdentity()
+         {
+            return originalRotationMatrix.isIdentity();
+         }
+
+         @Override
+         public void transpose()
+         {
+            originalRotationMatrix.transpose();
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return originalRotationMatrix.isDirty();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM00()
+         {
+            return originalRotationMatrix.getM00();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM01()
+         {
+            return originalRotationMatrix.getM01();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM02()
+         {
+            return originalRotationMatrix.getM02();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM10()
+         {
+            return originalRotationMatrix.getM10();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM11()
+         {
+            return originalRotationMatrix.getM11();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM12()
+         {
+            return originalRotationMatrix.getM12();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM20()
+         {
+            return originalRotationMatrix.getM20();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM21()
+         {
+            return originalRotationMatrix.getM21();
+         }
+
+         /** {@inheritDoc} */
+         @Override
+         public double getM22()
+         {
+            return originalRotationMatrix.getM22();
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object == this)
+               return true;
+            else if (object instanceof FrameRotationMatrixReadOnly)
+               return FixedFrameRotationMatrixBasics.super.equals((FrameRotationMatrixReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(originalRotationMatrix, getReferenceFrame());
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameMatrix3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @return the new linked frame bounding box.
+    */
+   public static FixedFrameBoundingBox2DBasics newFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFrameBoundingBox2DBasics(referenceFrameHolder, new BoundingBox2D());
+   }
+
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
+    * box and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
+    *                             on either the {@code originalBoundingBox} or the new frame bounding
+    *                             box will be propagated to the other.
+    * @return the new linked frame bounding box.
+    */
+   public static FixedFrameBoundingBox2DBasics newLinkedFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                      BoundingBox2DBasics originalBoundingBox)
+   {
+      FixedFrameBoundingBox2DBasics fixedFrameBoundingBox2DBasics = new FixedFrameBoundingBox2DBasics()
+      {
+         private final FixedFramePoint2DBasics minPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox.getMinPoint());
+         private final FixedFramePoint2DBasics maxPoint = newLinkedFixedFramePoint2DBasics(referenceFrameHolder, originalBoundingBox.getMaxPoint());
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public FixedFramePoint2DBasics getMinPoint()
+         {
+            return minPoint;
+         }
+
+         @Override
+         public FixedFramePoint2DBasics getMaxPoint()
+         {
+            return maxPoint;
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameBoundingBox2DReadOnly)
+               return FixedFrameBoundingBox2DBasics.super.equals((FrameBoundingBox2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameBoundingBox2DString(this);
+         }
+      };
+
+      fixedFrameBoundingBox2DBasics.setToNaN();
+
+      return fixedFrameBoundingBox2DBasics;
+   }
+
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given
+    * {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @return the new linked frame bounding box.
+    */
+   public static FixedFrameBoundingBox3DBasics newFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newLinkedFixedFrameBoundingBox3DBasics(referenceFrameHolder, new BoundingBox3D());
+   }
+
+   /**
+    * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
+    * box and {@code referenceFrameHolder}.
+    * 
+    * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
+    * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
+    *                             on either the {@code originalBoundingBox} or the new frame bounding
+    *                             box will be propagated to the other.
+    * @return the new linked frame bounding box.
+    */
+   public static FixedFrameBoundingBox3DBasics newLinkedFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                      BoundingBox3DBasics originalBoundingBox)
+   {
+      FixedFrameBoundingBox3DBasics fixedFrameBoundingBox3DBasics = new FixedFrameBoundingBox3DBasics()
+      {
+         private final FixedFramePoint3DBasics minPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox.getMinPoint());
+         private final FixedFramePoint3DBasics maxPoint = newLinkedFixedFramePoint3DBasics(referenceFrameHolder, originalBoundingBox.getMaxPoint());
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public FixedFramePoint3DBasics getMinPoint()
+         {
+            return minPoint;
+         }
+
+         @Override
+         public FixedFramePoint3DBasics getMaxPoint()
+         {
+            return maxPoint;
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameBoundingBox3DReadOnly)
+               return FixedFrameBoundingBox3DBasics.super.equals((FrameBoundingBox3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameBoundingBox3DString(this);
+         }
+      };
+
+      fixedFrameBoundingBox3DBasics.setToNaN();
+
+      return fixedFrameBoundingBox3DBasics;
    }
 }

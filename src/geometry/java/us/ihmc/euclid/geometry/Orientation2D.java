@@ -5,6 +5,7 @@ import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Vector2D;
 
@@ -122,14 +123,10 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof Orientation2DReadOnly)
          return equals((Orientation2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**
@@ -186,8 +183,6 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = 31L * bits + Double.doubleToLongBits(yaw);
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(yaw);
    }
 }

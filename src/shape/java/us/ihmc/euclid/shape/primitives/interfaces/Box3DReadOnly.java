@@ -39,6 +39,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     *
     * @return the pose of this box.
     */
+   @Override
    Shape3DPoseReadOnly getPose();
 
    /**
@@ -59,6 +60,18 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    default Point3DReadOnly getPosition()
    {
       return getPose().getShapePosition();
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this box.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return getPosition();
    }
 
    /**
@@ -96,13 +109,20 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    @Override
    default boolean getSupportingVertex(Vector3DReadOnly supportDirection, Point3DBasics supportingVertexToPack)
    {
-      Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
-      getPose().inverseTransform(supportDirection, supportDirectionInLocal);
+      if (getOrientation().isIdentity())
+      {
+         EuclidShapeTools.supportingVertexBox3D(supportDirection, getSize(), supportingVertexToPack);
+         supportingVertexToPack.add(getPosition());
+      }
+      else
+      {
+         Vector3DBasics supportDirectionInLocal = getIntermediateVariableSupplier().requestVector3D();
+         getPose().inverseTransform(supportDirection, supportDirectionInLocal);
 
-      EuclidShapeTools.supportingVertexBox3D(supportDirectionInLocal, getSize(), supportingVertexToPack);
-
-      transformToWorld(supportingVertexToPack);
-      getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+         EuclidShapeTools.supportingVertexBox3D(supportDirectionInLocal, getSize(), supportingVertexToPack);
+         transformToWorld(supportingVertexToPack);
+         getIntermediateVariableSupplier().releaseVector3D(supportDirectionInLocal);
+      }
       return true;
    }
 
@@ -245,6 +265,20 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return true;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
+   {
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return true;
+   }
+
    /**
     * Gets this box size along the x-axis.
     *
@@ -359,6 +393,9 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       vertexToPack.scale(0.5);
       transformToWorld(vertexToPack);
    }
+
+   @Override
+   Box3DBasics copy();
 
    /**
     * Tests separately and on a per component basis if the pose and the size of this box and

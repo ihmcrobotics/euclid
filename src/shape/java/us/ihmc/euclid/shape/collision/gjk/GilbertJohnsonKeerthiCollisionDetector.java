@@ -7,6 +7,8 @@ import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;
 import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -37,6 +39,11 @@ public class GilbertJohnsonKeerthiCollisionDetector
    /** The default value for the tolerance used to trigger the terminal condition. */
    public static final double DEFAULT_TERMINAL_CONDITION_EPSILON = 1.0e-16;
    /**
+    * When a component of the support direction is exactly zero, this is used to wiggle around zero to
+    * force edge-cases to trigger.
+    */
+   private static final double SUPPORT_DIRECTION_ZERO_COMPONENT = 1.234e-16;
+   /**
     * The default value for the tolerance used to switch method for obtaining the next support
     * direction.
     */
@@ -55,6 +62,10 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * evaluation.
     */
    private GJKSimplex3D simplex = null;
+   /**
+    * Flag to indicate whether the initial support direction has been provided by the user or not.
+    */
+   private boolean isInitialSupportDirectionProvided = false;
    /**
     * The support direction to used for the first iteration. Can be used to reduce the number of
     * iterations.
@@ -104,10 +115,52 @@ public class GilbertJohnsonKeerthiCollisionDetector
     */
    public boolean evaluateCollision(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB, EuclidShape3DCollisionResultBasics resultToPack)
    {
-      boolean areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      boolean areColliding;
+
+      if (!shapeA.isPrimitive() || !shapeB.isPrimitive())
+      { // If any of the 2 shapes is not a primitive, doing any copy or transform would probably be expensive. Using the generic approach.
+         guessInitialSupportDirection(shapeA, shapeB);
+         areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      }
+      else if (shapeA.isDefinedByPose())
+      { // Transforming shapeB to be in the local frame of shapeA would save transformations.
+         Shape3DPoseReadOnly poseA = shapeA.getPose();
+         Shape3DBasics localShapeA = shapeA.copy();
+         localShapeA.getPose().setToZero();
+         Shape3DBasics localShapeB = shapeB.copy();
+         localShapeB.applyInverseTransform(poseA);
+         guessInitialSupportDirection(localShapeA, localShapeB);
+         areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+         resultToPack.applyTransform(poseA);
+      }
+      else if (shapeB.isDefinedByPose())
+      { // Transforming shapeA to be in the local frame of shapeB would save transformations.
+         Shape3DPoseReadOnly poseB = shapeB.getPose();
+         Shape3DBasics localShapeA = shapeA.copy();
+         localShapeA.applyInverseTransform(poseB);
+         Shape3DBasics localShapeB = shapeB.copy();
+         localShapeB.getPose().setToZero();
+         guessInitialSupportDirection(localShapeA, localShapeB);
+         areColliding = evaluateCollision((SupportingVertexHolder) localShapeA, (SupportingVertexHolder) localShapeB, resultToPack);
+         resultToPack.applyTransform(poseB);
+      }
+      else
+      { // None of the 2 shapes is defined with a pose, using the generic algorithm.
+         guessInitialSupportDirection(shapeA, shapeB);
+         areColliding = evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB, resultToPack);
+      }
+
       resultToPack.setShapeA(shapeA);
       resultToPack.setShapeB(shapeB);
       return areColliding;
+   }
+
+   private void guessInitialSupportDirection(Shape3DReadOnly shapeA, Shape3DReadOnly shapeB)
+   {
+      if (isInitialSupportDirectionProvided)
+         return;
+
+      initialSupportDirection.sub(shapeB.getCentroid(), shapeA.getCentroid());
    }
 
    /**
@@ -169,6 +222,22 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
             if (previousOutput.contains(newVertex))
             {
+               if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setX(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+               else if (supportDirection.getY() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setY(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+               else if (supportDirection.getZ() == SUPPORT_DIRECTION_ZERO_COMPONENT)
+               {
+                  supportDirection.setZ(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  continue;
+               }
+
                simplex = previousOutput;
                areColliding = false;
                if (VERBOSE)
@@ -220,6 +289,14 @@ public class GilbertJohnsonKeerthiCollisionDetector
                supportDirection.set(output.getTriangleNormal());
             else
                supportDirection.setAndNegate(output.getClosestPointToOrigin());
+
+            if (supportDirection.getX() == 0.0)
+               supportDirection.setX(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getY() == 0.0)
+               supportDirection.setY(SUPPORT_DIRECTION_ZERO_COMPONENT);
+            else if (supportDirection.getZ() == 0.0)
+               supportDirection.setZ(SUPPORT_DIRECTION_ZERO_COMPONENT);
+
             vertexA = shapeA.getSupportingVertex(supportDirection);
             supportDirection.negate();
             vertexB = shapeB.getSupportingVertex(supportDirection);
@@ -248,6 +325,9 @@ public class GilbertJohnsonKeerthiCollisionDetector
       if (VERBOSE)
          System.out.println("Number of iterations: " + numberOfIterations);
 
+      isInitialSupportDirectionProvided = false;
+      initialSupportDirection.set(Axis.Y);
+
       return areColliding;
    }
 
@@ -263,6 +343,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     */
    public void setInitialSupportDirection(Vector3DReadOnly initialSupportDirection)
    {
+      isInitialSupportDirectionProvided = true;
       this.initialSupportDirection.set(initialSupportDirection);
    }
 

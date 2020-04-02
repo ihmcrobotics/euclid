@@ -260,15 +260,15 @@ public class Ellipsoid3DTest
          assertFalse(EuclidCoreTools.epsilonEquals(radiusX, ellipsoid3D.getRadiusX(), EPSILON));
          assertFalse(EuclidCoreTools.epsilonEquals(radiusY, ellipsoid3D.getRadiusY(), EPSILON));
          assertFalse(EuclidCoreTools.epsilonEquals(radiusZ, ellipsoid3D.getRadiusZ(), EPSILON));
-         ellipsoid3D.setRadii(radiusX, radiusY, radiusZ);
+         ellipsoid3D.getRadii().set(radiusX, radiusY, radiusZ);
          assertEquals(radiusX, ellipsoid3D.getRadiusX(), EPSILON);
          assertEquals(radiusY, ellipsoid3D.getRadiusY(), EPSILON);
          assertEquals(radiusZ, ellipsoid3D.getRadiusZ(), EPSILON);
       }
 
-      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().setRadii(-0.1, 1.0, 1.0));
-      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().setRadii(1.0, -0.1, 1.0));
-      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().setRadii(1.0, 1.0, -0.1));
+      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().getRadii().set(-0.1, 1.0, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().getRadii().set(1.0, -0.1, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Ellipsoid3D().getRadii().set(1.0, 1.0, -0.1));
    }
 
    @Test
@@ -789,19 +789,19 @@ public class Ellipsoid3DTest
          Ellipsoid3D ellipsoid2 = new Ellipsoid3D(pose2, radius, radius, radius);
          assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
-         ellipsoid2.setRadii(radius + 0.99 * EPSILON, radius + 0.99 * EPSILON, radius + 0.99 * EPSILON);
+         ellipsoid2.getRadii().set(radius + 0.99 * EPSILON, radius + 0.99 * EPSILON, radius + 0.99 * EPSILON);
          assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
-         ellipsoid2.setRadii(radius + 1.19 * EPSILON, radius + 0.99 * EPSILON, radius + 0.79 * EPSILON);
+         ellipsoid2.getRadii().set(radius + 1.19 * EPSILON, radius + 0.99 * EPSILON, radius + 0.79 * EPSILON);
          assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
-         ellipsoid2.setRadii(radius + 0.99 * EPSILON, radius + 1.19 * EPSILON, radius + 0.79 * EPSILON);
+         ellipsoid2.getRadii().set(radius + 0.99 * EPSILON, radius + 1.19 * EPSILON, radius + 0.79 * EPSILON);
          assertTrue(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
-         ellipsoid2.setRadii(radius + 1.01 * EPSILON, radius + 1.01 * EPSILON, radius + 1.01 * EPSILON);
+         ellipsoid2.getRadii().set(radius + 1.01 * EPSILON, radius + 1.01 * EPSILON, radius + 1.01 * EPSILON);
          assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
 
-         ellipsoid2.setRadii(radius + 1.11 * EPSILON, radius + 1.01 * EPSILON, radius + 0.91 * EPSILON);
+         ellipsoid2.getRadii().set(radius + 1.11 * EPSILON, radius + 1.01 * EPSILON, radius + 0.91 * EPSILON);
          assertFalse(ellipsoid1.geometricallyEquals(ellipsoid2, EPSILON), "Iteration: " + i);
       }
 

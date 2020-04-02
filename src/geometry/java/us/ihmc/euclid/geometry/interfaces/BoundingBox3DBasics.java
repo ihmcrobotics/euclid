@@ -295,6 +295,18 @@ public interface BoundingBox3DBasics extends BoundingBox3DReadOnly, Clearable
    }
 
    /**
+    * Updates this bounding box to be the smallest bounding box that includes this and the supplied
+    * points.
+    *
+    * @param vertex3DSupplier the supply of points.
+    */
+   default void updateToIncludePoints(Vertex3DSupplier vertex3DSupplier)
+   {
+      for (int index = 0; index < vertex3DSupplier.getNumberOfVertices(); index++)
+         updateToIncludePoint(vertex3DSupplier.getVertex(index));
+   }
+
+   /**
     * Updates this bounding box to be the smallest bounding box that includes this and the given point.
     *
     * @param point the point to be included in this bounding box. Not modified.

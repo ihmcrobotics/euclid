@@ -268,11 +268,6 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = EuclidHashCodeTools.addToHashCode(bits, x);
-      bits = EuclidHashCodeTools.addToHashCode(bits, y);
-      bits = EuclidHashCodeTools.addToHashCode(bits, z);
-      bits = EuclidHashCodeTools.addToHashCode(bits, s);
-      return EuclidHashCodeTools.toIntHashCode(bits);
+      return EuclidHashCodeTools.toIntHashCode(x, y, z, s);
    }
 }

@@ -477,6 +477,9 @@ public interface Face3DReadOnly extends SupportingVertexHolder
 
    /**
     * Finds, if it exists, the common edge between {@code this} and the given {@code neighbor}.
+    * <p>
+    * It is assumed that {@code neighbor} is part of the same convex polytope as this face.
+    * </p>
     *
     * @param neighbor the face to find to common edge to. Not modified.
     * @return the edge common to both faces.
@@ -650,6 +653,8 @@ public interface Face3DReadOnly extends SupportingVertexHolder
    }
 
    /**
+    * Computes the orthogonal projection of a point on this face.
+    *
     * @param pointToProject the point to compute the projection of. Not modified.
     * @return the projection of the point onto this face or {@code null} if the method failed.
     */

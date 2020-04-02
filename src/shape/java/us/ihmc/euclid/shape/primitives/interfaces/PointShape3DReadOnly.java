@@ -16,6 +16,18 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
 {
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this point shape.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return this;
+   }
+
    /** {@inheritDoc} */
    @Override
    default double distance(Point3DReadOnly point)
@@ -84,15 +96,29 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
       return true;
    }
 
-   /**
-    * Tests on a per component basis, if this point shape 3D is exactly equal to {@code other}.
-    *
-    * @param other the other point shape 3D to compare against this. Not modified.
-    * @return {@code true} if the two point shapes are exactly equal component-wise, {@code false}
-    *         otherwise.
-    */
-   default boolean equals(PointShape3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
    {
-      return Point3DReadOnly.super.equals(other);
+      return true;
    }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return false;
+   }
+
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
+   PointShape3DBasics copy();
 }

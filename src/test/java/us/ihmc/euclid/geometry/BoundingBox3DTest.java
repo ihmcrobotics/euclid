@@ -1,9 +1,6 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
@@ -34,8 +31,8 @@ public class BoundingBox3DTest
       Point3D min = new Point3D();
       Point3D max = new Point3D();
       BoundingBox3D boundingBox = new BoundingBox3D();
-      EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(boundingBox.getMinPoint());
+      EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(boundingBox.getMaxPoint());
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
@@ -213,6 +210,7 @@ public class BoundingBox3DTest
       EuclidCoreTestTools.assertTuple3DEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       // Check exceptions
+      boundingBox.setToZero();
       try
       {
          boundingBox.setMin(new double[] {1.0, 0.0, 0.0});
@@ -322,6 +320,7 @@ public class BoundingBox3DTest
       EuclidCoreTestTools.assertTuple3DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Check exceptions
+      boundingBox.setToZero();
       try
       {
          boundingBox.setMax(new double[] {-1.0, 0.0, 0.0});
@@ -1895,24 +1894,6 @@ public class BoundingBox3DTest
       BoundingBox3D boundingBox3D = EuclidGeometryRandomTools.nextBoundingBox3D(random, 10.0, 10.0);
       Point3DReadOnly min = boundingBox3D.getMinPoint();
       Point3DReadOnly max = boundingBox3D.getMaxPoint();
-
-      {
-         Point3D actualMin = new Point3D();
-         Point3D actualMax = new Point3D();
-         boundingBox3D.getMinPoint(actualMin);
-         boundingBox3D.getMaxPoint(actualMax);
-         assertEquals(min, actualMin);
-         assertEquals(max, actualMax);
-      }
-
-      {
-         double[] actualMin = new double[3];
-         double[] actualMax = new double[3];
-         boundingBox3D.getMinPoint(actualMin);
-         boundingBox3D.getMaxPoint(actualMax);
-         assertEquals(min, new Point3D(actualMin));
-         assertEquals(max, new Point3D(actualMax));
-      }
 
       {
          assertTrue(min.getX() == boundingBox3D.getMinX());

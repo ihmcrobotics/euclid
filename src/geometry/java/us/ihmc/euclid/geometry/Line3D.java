@@ -1,8 +1,13 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -168,20 +173,16 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Line3DReadOnly)}, it returns {@code false} otherwise.
     *
-    * @param obj the object to compare against this. Not modified.
+    * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
-      try
-      {
-         return equals((Line3DReadOnly) obj);
-      }
-      catch (ClassCastException e)
-      {
+      if (object instanceof Line3DReadOnly)
+         return equals((Line3DReadOnly) object);
+      else
          return false;
-      }
    }
 
    /**
@@ -204,7 +205,6 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    @Override
    public int hashCode()
    {
-      long bits = 31L * point.hashCode() + direction.hashCode();
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(point, direction);
    }
 }

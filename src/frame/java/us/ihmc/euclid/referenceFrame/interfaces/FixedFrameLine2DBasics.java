@@ -1,6 +1,10 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -9,8 +13,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * Write and read interface for a line 2D expressed in a constant reference frame, i.e. this line is
- * always expressed in the same reference frame.
+ * Write and read interface for a line 2D expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * A line 2D represents an infinitely long line in the XY-plane and defined by a point and a
  * direction.
@@ -246,8 +250,8 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
    /**
     * Sets this line to be the same as the given line expressed in the reference frame of this.
     * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(FrameLine2DReadOnly)}.
+    * If {@code other} is expressed in the same frame as {@code this}, then this method is equivalent
+    * to {@link #set(FrameLine2DReadOnly)}.
     * </p>
     * <p>
     * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to

@@ -2,11 +2,27 @@ package us.ihmc.euclid.geometry.tools;
 
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.ihmc.euclid.geometry.*;
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.ConvexPolygon2D;
+import us.ihmc.euclid.geometry.Line2D;
+import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment1D;
+import us.ihmc.euclid.geometry.LineSegment2D;
+import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Orientation2D;
+import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -433,6 +449,19 @@ public class EuclidGeometryRandomTools
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     *
+    * @param random the random generator to use.
+    * @return the random convex polygon.
+    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
+    */
+   public static ConvexPolygon2D nextConvexPolygon2D(Random random)
+   {
+      return nextConvexPolygon2D(random, 1.0, 10);
+   }
+
+   /**
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
+    *
     * @param random                 the random generator to use.
     * @param maxAbsoluteXY          the maximum absolute value for each coordinate of the vertices.
     * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
@@ -644,6 +673,17 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a fixed-size supplier of random vertex 2D.
     *
+    * @param random the random generator to use.
+    * @return the random supplier.
+    */
+   public static Vertex2DSupplier nextVertex2DSupplier(Random random)
+   {
+      return nextVertex2DSupplier(random, 20);
+   }
+
+   /**
+    * Generates a fixed-size supplier of random vertex 2D.
+    *
     * @param random           the random generator to use.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
@@ -652,6 +692,17 @@ public class EuclidGeometryRandomTools
    {
       List<Point2D> vertices = IntStream.range(0, numberOfVertices).mapToObj(i -> nextPoint2D(random)).collect(Collectors.toList());
       return Vertex2DSupplier.asVertex2DSupplier(vertices);
+   }
+
+   /**
+    * Generates a fixed-size supplier of random vertex 3D.
+    *
+    * @param random the random generator to use.
+    * @return the random supplier.
+    */
+   public static Vertex3DSupplier nextVertex3DSupplier(Random random)
+   {
+      return nextVertex3DSupplier(random, 20);
    }
 
    /**

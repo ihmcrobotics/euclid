@@ -125,8 +125,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     */
    default void get(FixedFramePoint2DBasics firstEndpointToPack, FixedFramePoint2DBasics secondEndpointToPack)
    {
-      checkReferenceFrameMatch(firstEndpointToPack);
-      checkReferenceFrameMatch(secondEndpointToPack);
+      checkReferenceFrameMatch(firstEndpointToPack, secondEndpointToPack);
       LineSegment2DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
    }
 
@@ -552,8 +551,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
    {
-      checkReferenceFrameMatch(pointToProject);
-      checkReferenceFrameMatch(projectionToPack);
+      checkReferenceFrameMatch(pointToProject, projectionToPack);
       return LineSegment2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -729,8 +727,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     */
    default boolean intersectionWith(FrameLine2DReadOnly line, FixedFramePoint2DBasics intersectionToPack)
    {
-      checkReferenceFrameMatch(line);
-      checkReferenceFrameMatch(intersectionToPack);
+      checkReferenceFrameMatch(line, intersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(line, intersectionToPack);
    }
 
@@ -973,8 +970,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     */
    default boolean intersectionWith(FrameLineSegment2DReadOnly other, FixedFramePoint2DBasics intersectionToPack)
    {
-      checkReferenceFrameMatch(other);
-      checkReferenceFrameMatch(intersectionToPack);
+      checkReferenceFrameMatch(other, intersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(other, intersectionToPack);
    }
 
@@ -1115,8 +1111,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 Point2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(convexPolygon);
-      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(convexPolygon, firstIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1197,8 +1192,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(convexPolygon);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(convexPolygon, secondIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1259,8 +1253,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1283,9 +1276,7 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
    default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(convexPolygon);
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
       return LineSegment2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
