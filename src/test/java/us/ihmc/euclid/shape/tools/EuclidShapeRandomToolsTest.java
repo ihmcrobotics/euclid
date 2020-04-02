@@ -10,11 +10,14 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple3D.Point3D;
 
 class EuclidShapeRandomToolsTest
 {
@@ -77,6 +80,20 @@ class EuclidShapeRandomToolsTest
          assertEquals(0.5 * expectedDistanceToAnyVertex, averageDistanceToA, 1.0e-3);
          assertEquals(0.5 * expectedDistanceToAnyVertex, averageDistanceToB, 1.0e-3);
          assertEquals(0.5 * expectedDistanceToAnyVertex, averageDistanceToC, 1.0e-3);
+      }
+   }
+
+   @Test
+   public void testNextConvexShape()
+   {
+      Random random = new Random(4367);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test that nextConvexShape3D(Random, Tuple3DReadOnly) generates a shape with the desired centroid.
+         Point3D shapeCentroid = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Shape3DBasics next = EuclidShapeRandomTools.nextConvexShape3D(random, shapeCentroid);
+
+         EuclidCoreTestTools.assertTuple3DEquals(shapeCentroid, next.getCentroid(), EPSILON);
       }
    }
 
