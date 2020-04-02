@@ -21,20 +21,20 @@ import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 
 public class FrameExpandingPolytopeAlgorithmTest
 {
-   private static final int ITERATIONS = 5000;
+   private static final int ITERATIONS = 10000;
 
    private static final double DISTANCE_EPSILON = 0.0;
    private static final double POINT_TANGENTIAL_EPSILON = 0.0;
 
-   private static final double LARGE_DISTANCE_EPSILON = 1.0e-6;
-   private static final double LARGE_POINT_TANGENTIAL_EPSILON = 1.0e-4;
+   private static final double LARGE_DISTANCE_EPSILON = 5.0e-4;
+   private static final double LARGE_POINT_TANGENTIAL_EPSILON = 1.0e-2;
 
    private static final double DISTANCE_AVERAGE_EPSILON = 1.0e-8;
    private static final double POINT_NORMAL_ERROR_AVERAGE_EPSILON = 1.0e-8;
-   private static final double POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON = 1.0e-7;
+   private static final double POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON = 1.0e-5;
 
    @Test
-   public void testCompareAgainstFramelessGJK()
+   public void testCompareAgainstFramelessEPA()
    {
       Random random = new Random(3406);
       EuclidShape3DCollisionResult expectedResult = new EuclidShape3DCollisionResult();
@@ -61,7 +61,8 @@ public class FrameExpandingPolytopeAlgorithmTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: " + average);
+         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+               + average);
       }
 
       {
@@ -86,7 +87,8 @@ public class FrameExpandingPolytopeAlgorithmTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: " + average);
+         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+               + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -112,7 +114,8 @@ public class FrameExpandingPolytopeAlgorithmTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: " + average);
+         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+               + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -138,7 +141,8 @@ public class FrameExpandingPolytopeAlgorithmTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: " + average);
+         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+               + average);
       }
 
       { // Frames differ, results may occasionally differ due to numerical errors triggering different edge-cases.
@@ -164,7 +168,8 @@ public class FrameExpandingPolytopeAlgorithmTest
          assertEquals(0.0, average.pointNormalError, POINT_NORMAL_ERROR_AVERAGE_EPSILON, "average point normal error too large: ");
          assertEquals(0.0, average.pointTangentialError, POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON, "average point tangential error too large: ");
 
-         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: " + average);
+         System.out.println(getClass().getSimpleName() + ": Two shapes in worldFrame:\n\tmax error: " + ComparisonError.max(errors) + "\n\tavg error: "
+               + average);
       }
    }
 

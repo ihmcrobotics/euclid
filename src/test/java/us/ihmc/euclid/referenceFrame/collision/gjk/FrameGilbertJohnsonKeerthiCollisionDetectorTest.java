@@ -25,17 +25,17 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
 {
-   private static final int ITERATIONS = 5000;
+   private static final int ITERATIONS = 10000;
 
    private static final double DISTANCE_EPSILON = 0.0;
    private static final double POINT_TANGENTIAL_EPSILON = 0.0;
 
-   private static final double LARGE_DISTANCE_EPSILON = 3.0e-2;
-   private static final double LARGE_POINT_TANGENTIAL_EPSILON = 4.0e-2;
+   private static final double LARGE_DISTANCE_EPSILON = 1.0e-7;
+   private static final double LARGE_POINT_TANGENTIAL_EPSILON = 1.0e-4;
 
-   private static final double DISTANCE_AVERAGE_EPSILON = 1.0e-6;
+   private static final double DISTANCE_AVERAGE_EPSILON = 1.0e-10;
    private static final double POINT_NORMAL_ERROR_AVERAGE_EPSILON = 1.0e-10;
-   private static final double POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON = 1.0e-5;
+   private static final double POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON = 1.0e-7;
 
    @Test
    public void testCompareAgainstFramelessGJK()

@@ -724,8 +724,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMaxEpsilon = 1.0e-7;
       double positionMaxEpsilon = 1.0e-5;
 
-      double distanceMeanEpsilon = 1.0e-11;
-      double positionMeanEpsilon = 1.0e-7;
+      double distanceMeanEpsilon = 1.0e-10;
+      double positionMeanEpsilon = 1.0e-6;
 
       AnalyticalShapeCollisionDetection<Capsule3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() ->
       {
@@ -918,11 +918,11 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
    void testShapeTransformOptimization()
    { // Comparing the method with the Shape3DReadOnly arguments against the one with SupportingVertexHolder argument to validate the transformation optimization done in the first one.
       Random random = new Random(3466);
-      double distanceEpsilon = 5.0e-6;
+      double distanceEpsilon = 1.0e-4;
       // When 2 "flat-ish" shapes are closest on their part with low curvature, the closest points can shift along the surface.
       double pointTangentialEpsilon = 1.0e-2;
 
-      for (int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < 10 * ITERATIONS; i++)
       {
          Shape3DBasics shapeA = EuclidShapeRandomTools.nextConvexShape3D(random);
          Shape3DBasics shapeB = EuclidShapeRandomTools.nextConvexShape3D(random);

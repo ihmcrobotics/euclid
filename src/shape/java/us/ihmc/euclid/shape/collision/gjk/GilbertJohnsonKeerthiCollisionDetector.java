@@ -331,9 +331,6 @@ public class GilbertJohnsonKeerthiCollisionDetector
       return areColliding;
    }
 
-   static int numberOfEvaluations = 0;
-   static double averageNumberOfIterations = 0.0;
-
    /**
     * Sets the support direction to use for the first iteration of future evaluations.
     * <p>
