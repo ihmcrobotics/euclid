@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -12,6 +11,7 @@ import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameShapeAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.MethodSignature;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameEllipsoid3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameEllipsoid3DReadOnly;
@@ -41,10 +41,12 @@ public class FrameEllipsoid3DTest
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Predicate<Method> methodFilter = m -> !m.getName().equals("equals");
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("getBoundingBox", FixedFrameBoundingBox3DBasics.class));
+      signaturesToIgnore.add(new MethodSignature("getBoundingBox", ReferenceFrame.class, FrameBoundingBox3DBasics.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      methodFilter = methodFilter.and(m -> !m.getName().equals("equals"));
       methodFilter = methodFilter.and(m -> !m.getName().equals("epsilonEquals"));
-      methodFilter = methodFilter.and(m -> !m.getName().equals("getBoundingBox")
-            || !Arrays.equals(m.getParameterTypes(), new Class<?>[] {ReferenceFrame.class, FrameBoundingBox3DBasics.class}));
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(EuclidFrameShapeRandomTools::nextFrameEllipsoid3D,
                                                                     methodFilter,
