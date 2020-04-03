@@ -312,9 +312,9 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       if (vertexIndex < 0 || vertexIndex >= 6)
          throw new IndexOutOfBoundsException("The vertex index has to be in [0, 5], was: " + vertexIndex);
 
-      vertexToPack.setX((vertexIndex & 2) == 0 ? getSizeX() : 0.0);
-      vertexToPack.setY((vertexIndex & 1) == 0 ? 0.5 * getSizeY() : -0.5 * getSizeY());
-      vertexToPack.setZ((vertexIndex & 4) == 0 ? 0.0 : getSizeZ());
+      vertexToPack.set((vertexIndex & 2) == 0 ? getSizeX() : 0.0,
+                       (vertexIndex & 1) == 0 ? 0.5 * getSizeY() : -0.5 * getSizeY(),
+                       (vertexIndex & 4) == 0 ? 0.0 : getSizeZ());
       transformToWorld(vertexToPack);
    }
 

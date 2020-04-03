@@ -403,9 +403,9 @@ public class YawPitchRollConversion
     */
    public static void convertMatrixToYawPitchRoll(RotationMatrixReadOnly rotationMatrix, Tuple3DBasics eulerAnglesToPack)
    {
-      eulerAnglesToPack.setX(computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22()));
-      eulerAnglesToPack.setY(computePitchImpl(rotationMatrix.getM20()));
-      eulerAnglesToPack.setZ(computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10()));
+      eulerAnglesToPack.set(computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22()),
+                            computePitchImpl(rotationMatrix.getM20()),
+                            computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10()));
    }
 
    /**
@@ -688,9 +688,9 @@ public class YawPitchRollConversion
       qz *= norm;
       qs *= norm;
 
-      eulerAnglesToPack.setZ(computeYawFromQuaternionImpl(qx, qy, qz, qs));
-      eulerAnglesToPack.setY(computePitchFromQuaternionImpl(qx, qy, qz, qs));
-      eulerAnglesToPack.setX(computeRollFromQuaternionImpl(qx, qy, qz, qs));
+      eulerAnglesToPack.set(computeRollFromQuaternionImpl(qx, qy, qz, qs),
+                            computePitchFromQuaternionImpl(qx, qy, qz, qs),
+                            computeYawFromQuaternionImpl(qx, qy, qz, qs));
    }
 
    /**
@@ -1017,9 +1017,7 @@ public class YawPitchRollConversion
       double m21 = t * uy * uz + sinTheta * ux;
       double m22 = t * uz * uz + cosTheta;
 
-      eulerAnglesToPack.setZ(computeYawImpl(m00, m10));
-      eulerAnglesToPack.setY(computePitchImpl(m20));
-      eulerAnglesToPack.setX(computeRollImpl(m21, m22));
+      eulerAnglesToPack.set(computeRollImpl(m21, m22), computePitchImpl(m20), computeYawImpl(m00, m10));
    }
 
    /**

@@ -149,9 +149,9 @@ public interface BoundingBox3DReadOnly
     */
    default void getPointGivenParameters(double xParameter, double yParameter, double zParameter, Point3DBasics pointToPack)
    {
-      pointToPack.setX(getMinX() + xParameter * (getMaxX() - getMinX()));
-      pointToPack.setY(getMinY() + yParameter * (getMaxY() - getMinY()));
-      pointToPack.setZ(getMinZ() + zParameter * (getMaxZ() - getMinZ()));
+      pointToPack.set(getMinX() + xParameter * (getMaxX() - getMinX()),
+                      getMinY() + yParameter * (getMaxY() - getMinY()),
+                      getMinZ() + zParameter * (getMaxZ() - getMinZ()));
    }
 
    /**

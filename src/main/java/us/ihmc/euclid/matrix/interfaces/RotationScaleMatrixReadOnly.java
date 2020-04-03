@@ -272,9 +272,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    @Override
    default void transform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      tupleTransformed.setX(getScaleX() * tupleOriginal.getX());
-      tupleTransformed.setY(getScaleY() * tupleOriginal.getY());
-      tupleTransformed.setZ(getScaleZ() * tupleOriginal.getZ());
+      tupleTransformed.set(getScaleX() * tupleOriginal.getX(), getScaleY() * tupleOriginal.getY(), getScaleZ() * tupleOriginal.getZ());
 
       getRotationMatrix().transform(tupleTransformed, tupleTransformed);
    }
@@ -294,8 +292,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    @Override
    default void transform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
-      tupleTransformed.setX(getScaleX() * tupleOriginal.getX());
-      tupleTransformed.setY(getScaleY() * tupleOriginal.getY());
+      tupleTransformed.set(getScaleX() * tupleOriginal.getX(), getScaleY() * tupleOriginal.getY());
 
       getRotationMatrix().transform(tupleTransformed, tupleTransformed, checkIfTransformInXYPlane);
    }
@@ -332,10 +329,10 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    @Override
    default void transform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
-      vectorTransformed.setX(getScaleX() * vectorOriginal.getX());
-      vectorTransformed.setY(getScaleY() * vectorOriginal.getY());
-      vectorTransformed.setZ(getScaleZ() * vectorOriginal.getZ());
-      vectorTransformed.setS(vectorOriginal.getS());
+      vectorTransformed.set(getScaleX() * vectorOriginal.getX(),
+                            getScaleY() * vectorOriginal.getY(),
+                            getScaleZ() * vectorOriginal.getZ(),
+                            vectorOriginal.getS());
 
       getRotationMatrix().transform(vectorTransformed, vectorTransformed);
    }
@@ -386,9 +383,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    {
       getRotationMatrix().inverseTransform(tupleOriginal, tupleTransformed);
 
-      tupleTransformed.setX(tupleTransformed.getX() / getScaleX());
-      tupleTransformed.setY(tupleTransformed.getY() / getScaleY());
-      tupleTransformed.setZ(tupleTransformed.getZ() / getScaleZ());
+      tupleTransformed.set(tupleTransformed.getX() / getScaleX(), tupleTransformed.getY() / getScaleY(), tupleTransformed.getZ() / getScaleZ());
    }
 
    /** {@inheritDoc} */
@@ -397,8 +392,7 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    {
       getRotationMatrix().inverseTransform(tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
 
-      tupleTransformed.setX(tupleTransformed.getX() / getScaleX());
-      tupleTransformed.setY(tupleTransformed.getY() / getScaleY());
+      tupleTransformed.set(tupleTransformed.getX() / getScaleX(), tupleTransformed.getY() / getScaleY());
    }
 
    /**
@@ -436,9 +430,10 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    {
       getRotationMatrix().inverseTransform(vectorOriginal, vectorTransformed);
 
-      vectorTransformed.setX(vectorTransformed.getX() / getScaleX());
-      vectorTransformed.setY(vectorTransformed.getY() / getScaleY());
-      vectorTransformed.setZ(vectorTransformed.getZ() / getScaleZ());
+      vectorTransformed.set(vectorTransformed.getX() / getScaleX(),
+                            vectorTransformed.getY() / getScaleY(),
+                            vectorTransformed.getZ() / getScaleZ(),
+                            vectorTransformed.getS());
    }
 
    /**

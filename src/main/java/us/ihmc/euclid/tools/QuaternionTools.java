@@ -586,9 +586,7 @@ public class QuaternionTools
       double crossCrossY = qz * crossX - qx * crossZ;
       double crossCrossZ = qx * crossY - qy * crossX;
 
-      tupleTransformed.setX(x + qs * crossX + crossCrossX);
-      tupleTransformed.setY(y + qs * crossY + crossCrossY);
-      tupleTransformed.setZ(z + qs * crossZ + crossCrossZ);
+      tupleTransformed.set(x + qs * crossX + crossCrossX, y + qs * crossY + crossCrossY, z + qs * crossZ + crossCrossZ);
    }
 
    /**
@@ -1177,8 +1175,8 @@ public class QuaternionTools
     * {@code quaternion} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(QuaternionReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with the inverse
-    * of the given quaternion.
+    * {@link #transform(QuaternionReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with the
+    * inverse of the given quaternion.
     * </p>
     * <p>
     * Both rotation matrices can be the same object for performing in place transformation.
@@ -1197,7 +1195,8 @@ public class QuaternionTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
+   public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal,
+                                       RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(quaternion, true, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }

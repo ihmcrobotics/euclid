@@ -3532,15 +3532,11 @@ public class EuclidGeometryTools
             {
                if (isIntersectingAtTmin)
                {
-                  firstIntersectionToPack.setX(tmin * dx + startX);
-                  firstIntersectionToPack.setY(tmin * dy + startY);
-                  firstIntersectionToPack.setZ(tmin * dz + startZ);
+                  firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
                }
                else
                {
-                  firstIntersectionToPack.setX(tmax * dx + startX);
-                  firstIntersectionToPack.setY(tmax * dy + startY);
-                  firstIntersectionToPack.setZ(tmax * dz + startZ);
+                  firstIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
                }
             }
             if (secondIntersectionToPack != null)
@@ -3549,16 +3545,12 @@ public class EuclidGeometryTools
          case 2:
             if (firstIntersectionToPack != null)
             {
-               firstIntersectionToPack.setX(tmin * dx + startX);
-               firstIntersectionToPack.setY(tmin * dy + startY);
-               firstIntersectionToPack.setZ(tmin * dz + startZ);
+               firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY, tmin * dz + startZ);
             }
 
             if (secondIntersectionToPack != null)
             {
-               secondIntersectionToPack.setX(tmax * dx + startX);
-               secondIntersectionToPack.setY(tmax * dy + startY);
-               secondIntersectionToPack.setZ(tmax * dz + startZ);
+               secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY, tmax * dz + startZ);
             }
 
             return 2;
@@ -5512,9 +5504,9 @@ public class EuclidGeometryTools
             + intersectionDirectionToPack.getZ() * pointOnPlane2.getZ();
       double d3 = 0.5 * (normal3DotPoint1 + normal3DotPoint2);
 
-      pointOnIntersectionToPack.setX(d1 * normal3Cross2X + d2 * normal1Cross3X + d3 * normal2Cross1X);
-      pointOnIntersectionToPack.setY(d1 * normal3Cross2Y + d2 * normal1Cross3Y + d3 * normal2Cross1Y);
-      pointOnIntersectionToPack.setZ(d1 * normal3Cross2Z + d2 * normal1Cross3Z + d3 * normal2Cross1Z);
+      pointOnIntersectionToPack.set(d1 * normal3Cross2X + d2 * normal1Cross3X + d3 * normal2Cross1X,
+                                    d1 * normal3Cross2Y + d2 * normal1Cross3Y + d3 * normal2Cross1Y,
+                                    d1 * normal3Cross2Z + d2 * normal1Cross3Z + d3 * normal2Cross1Z);
       pointOnIntersectionToPack.scale(-1.0 / det);
 
       return true;
@@ -6440,9 +6432,7 @@ public class EuclidGeometryTools
       double v2_y = thirdPointOnPlane.getY() - firstPointOnPlane.getY();
       double v2_z = thirdPointOnPlane.getZ() - firstPointOnPlane.getZ();
 
-      normalToPack.setX(v1_y * v2_z - v1_z * v2_y);
-      normalToPack.setY(v2_x * v1_z - v2_z * v1_x);
-      normalToPack.setZ(v1_x * v2_y - v1_y * v2_x);
+      normalToPack.set(v1_y * v2_z - v1_z * v2_y, v2_x * v1_z - v2_z * v1_x, v1_x * v2_y - v1_y * v2_x);
 
       double normalLength = normalToPack.length();
       if (normalLength < ONE_TRILLIONTH)
@@ -6647,10 +6637,7 @@ public class EuclidGeometryTools
 
       double alpha = dot / directionLengthSquared;
 
-      projectionToPack.setX(pointOnLineX + alpha * lineDirectionX);
-      projectionToPack.setY(pointOnLineY + alpha * lineDirectionY);
-      projectionToPack.setZ(pointOnLineZ + alpha * lineDirectionZ);
-
+      projectionToPack.set(pointOnLineX + alpha * lineDirectionX, pointOnLineY + alpha * lineDirectionY, pointOnLineZ + alpha * lineDirectionZ);
       return true;
    }
 
@@ -6945,9 +6932,9 @@ public class EuclidGeometryTools
       else if (percentage < 0.0)
          percentage = 0.0;
 
-      projectionToPack.setX((1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX);
-      projectionToPack.setY((1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY);
-      projectionToPack.setZ((1.0 - percentage) * lineSegmentStartZ + percentage * lineSegmentEndZ);
+      projectionToPack.set((1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX,
+                           (1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY,
+                           (1.0 - percentage) * lineSegmentStartZ + percentage * lineSegmentEndZ);
 
       /*
        * This method never fails with the current implementation but the method still returns a boolean in
@@ -7112,10 +7099,7 @@ public class EuclidGeometryTools
             + projectionToPack.getZ() * planeNormal.getZ();
       signedDistance /= normalMagnitude * normalMagnitude;
 
-      projectionToPack.setX(x - signedDistance * planeNormal.getX());
-      projectionToPack.setY(y - signedDistance * planeNormal.getY());
-      projectionToPack.setZ(z - signedDistance * planeNormal.getZ());
-
+      projectionToPack.set(x - signedDistance * planeNormal.getX(), y - signedDistance * planeNormal.getY(), z - signedDistance * planeNormal.getZ());
       return true;
    }
 
@@ -8246,9 +8230,9 @@ public class EuclidGeometryTools
       perpendicularBisectorZ *= scale;
 
       topVertexBToPack.interpolate(baseVertexA, baseVertexC, 0.5);
-      topVertexBToPack.setX(topVertexBToPack.getX() + perpendicularBisectorX);
-      topVertexBToPack.setY(topVertexBToPack.getY() + perpendicularBisectorY);
-      topVertexBToPack.setZ(topVertexBToPack.getZ() + perpendicularBisectorZ);
+      topVertexBToPack.set(topVertexBToPack.getX() + perpendicularBisectorX,
+                           topVertexBToPack.getY() + perpendicularBisectorY,
+                           topVertexBToPack.getZ() + perpendicularBisectorZ);
    }
 
    /**
@@ -8384,6 +8368,7 @@ public class EuclidGeometryTools
       if (Math.abs(angleBetweenAAndB) > Math.PI)
          throw new RuntimeException("angleBetweenAAndB " + angleBetweenAAndB + " does not define a triangle.");
 
-      return EuclidCoreTools.squareRoot(lengthSideA * lengthSideA + lengthSideB * lengthSideB - 2.0 * lengthSideA * lengthSideB * EuclidCoreTools.cos(angleBetweenAAndB));
+      return EuclidCoreTools.squareRoot(lengthSideA * lengthSideA + lengthSideB * lengthSideB
+            - 2.0 * lengthSideA * lengthSideB * EuclidCoreTools.cos(angleBetweenAAndB));
    }
 }

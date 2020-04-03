@@ -163,9 +163,9 @@ public class EuclidShapeTools
     */
    public static void supportingVertexBox3D(Vector3DReadOnly supportDirection, Vector3DReadOnly box3DSize, Point3DBasics supportingVertexToPack)
    {
-      supportingVertexToPack.setX(supportDirection.getX() > 0.0 ? box3DSize.getX() : -box3DSize.getX());
-      supportingVertexToPack.setY(supportDirection.getY() > 0.0 ? box3DSize.getY() : -box3DSize.getY());
-      supportingVertexToPack.setZ(supportDirection.getZ() > 0.0 ? box3DSize.getZ() : -box3DSize.getZ());
+      supportingVertexToPack.set(supportDirection.getX() > 0.0 ? box3DSize.getX() : -box3DSize.getX(),
+                                 supportDirection.getY() > 0.0 ? box3DSize.getY() : -box3DSize.getY(),
+                                 supportDirection.getZ() > 0.0 ? box3DSize.getZ() : -box3DSize.getZ());
       supportingVertexToPack.scale(0.5);
    }
 

@@ -97,9 +97,7 @@ public class RotationVectorConversion
       if (uNorm > EPS)
       {
          uNorm = 1.0 / uNorm;
-         rotationVectorToPack.setX(ux * uNorm * angle);
-         rotationVectorToPack.setY(uy * uNorm * angle);
-         rotationVectorToPack.setZ(uz * uNorm * angle);
+         rotationVectorToPack.set(ux * uNorm * angle, uy * uNorm * angle, uz * uNorm * angle);
       }
       else
       {
@@ -142,18 +140,14 @@ public class RotationVectorConversion
       if (uNorm > EPS)
       {
          double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
-         rotationVectorToPack.setX(qx * angle);
-         rotationVectorToPack.setY(qy * angle);
-         rotationVectorToPack.setZ(qz * angle);
+         rotationVectorToPack.set(qx * angle, qy * angle, qz * angle);
       }
       else
       {
          // Small angle approximation
          // "A Primer on the Differential Calculus of 3D Orientations" M. Bloesh et al
          double sign = Math.signum(qs);
-         rotationVectorToPack.setX(sign * qx);
-         rotationVectorToPack.setY(sign * qy);
-         rotationVectorToPack.setZ(sign * qz);
+         rotationVectorToPack.set(sign * qx, sign * qy, sign * qz);
       }
    }
 
@@ -313,9 +307,7 @@ public class RotationVectorConversion
          }
       }
 
-      rotationVectorToPack.setX(x * angle);
-      rotationVectorToPack.setY(y * angle);
-      rotationVectorToPack.setZ(z * angle);
+      rotationVectorToPack.set(x * angle, y * angle, z * angle);
    }
 
    /**
@@ -403,9 +395,7 @@ public class RotationVectorConversion
       if (uNorm > EPS)
       {
          double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
-         rotationVectorToPack.setX(qx * angle);
-         rotationVectorToPack.setY(qy * angle);
-         rotationVectorToPack.setZ(qz * angle);
+         rotationVectorToPack.set(qx * angle, qy * angle, qz * angle);
       }
       else
       {

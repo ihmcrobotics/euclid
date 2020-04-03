@@ -183,8 +183,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly tuple2DReadOnly)
    {
-      setX(tuple2DReadOnly.getX());
-      setY(tuple2DReadOnly.getY());
+      set(tuple2DReadOnly.getX(), tuple2DReadOnly.getY(), getZ());
    }
 
    /**
@@ -196,9 +195,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly tuple2DReadOnly, double z)
    {
-      setX(tuple2DReadOnly.getX());
-      setY(tuple2DReadOnly.getY());
-      setZ(z);
+      set(tuple2DReadOnly.getX(), tuple2DReadOnly.getY(), z);
    }
 
    /**
