@@ -14,6 +14,7 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
 {
@@ -146,11 +147,11 @@ public class AxisAngle32Test extends AxisAngleBasicsTest<AxisAngle32>
       { // Test AxisAngle(double yaw, double pitch, double roll)
          for (int i = 0; i < ITERATIONS; i++)
          {
-            double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+            YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
 
-            axisAngle = new AxisAngle32(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
+            axisAngle = new AxisAngle32(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll());
             AxisAngle32 expectedAxisAngle = new AxisAngle32();
-            AxisAngleConversion.convertYawPitchRollToAxisAngle(yawPitchRoll, expectedAxisAngle);
+            AxisAngleConversion.convertYawPitchRollToAxisAngle(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), expectedAxisAngle);
 
             EuclidCoreTestTools.assertAxisAngleEquals(axisAngle, expectedAxisAngle, EPS);
          }

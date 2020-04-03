@@ -33,6 +33,8 @@ import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public class EuclidCoreTestToolsTest
 {
@@ -45,35 +47,35 @@ public class EuclidCoreTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertYawPitchRollEquals";
-      Class<double[]> argumentsClass = double[].class;
+      Class<YawPitchRollReadOnly> argumentsClass = YawPitchRollReadOnly.class;
 
       {
-         double[] expected = null;
-         double[] actual = null;
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = null;
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = null;
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = expected.clone();
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = new YawPitchRoll(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }
@@ -83,35 +85,35 @@ public class EuclidCoreTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertYawPitchRollGeometricallyEquals";
-      Class<double[]> argumentsClass = double[].class;
+      Class<YawPitchRollReadOnly> argumentsClass = YawPitchRollReadOnly.class;
 
       {
-         double[] expected = null;
-         double[] actual = null;
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = null;
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = null;
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = expected.clone();
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = new YawPitchRoll(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }

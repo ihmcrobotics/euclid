@@ -15,6 +15,7 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class YawPitchRollConversionTest
 {
@@ -26,7 +27,7 @@ public class YawPitchRollConversionTest
    public void testMatrixToYawPitchRoll() throws Exception
    {
       RotationMatrix matrix = new RotationMatrix();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       double deltaAngle = 0.05 * Math.PI;
@@ -58,9 +59,9 @@ public class YawPitchRollConversionTest
                assertEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualYawPitchRoll);
-               assertEquals(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
-               assertEquals(roll, actualYawPitchRoll[2], EPSILON);
+               assertEquals(yaw, actualYawPitchRoll.getYaw(), EPSILON);
+               assertEquals(pitch, actualYawPitchRoll.getPitch(), EPSILON);
+               assertEquals(roll, actualYawPitchRoll.getRoll(), EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualEulerAngles);
                assertEquals(yaw, actualEulerAngles.getZ(), EPSILON);
@@ -95,7 +96,7 @@ public class YawPitchRollConversionTest
    {
       Random random = new Random(23423L);
       RotationScaleMatrix matrix = new RotationScaleMatrix();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       double deltaAngle = 0.05 * Math.PI;
@@ -119,9 +120,9 @@ public class YawPitchRollConversionTest
                assertEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualYawPitchRoll);
-               assertEquals(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
-               assertEquals(roll, actualYawPitchRoll[2], EPSILON);
+               assertEquals(yaw, actualYawPitchRoll.getYaw(), EPSILON);
+               assertEquals(pitch, actualYawPitchRoll.getPitch(), EPSILON);
+               assertEquals(roll, actualYawPitchRoll.getRoll(), EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualEulerAngles);
                assertEquals(yaw, actualEulerAngles.getZ(), EPSILON);
@@ -155,7 +156,7 @@ public class YawPitchRollConversionTest
    public void testQuaternionToYawPitchRoll() throws Exception
    {
       Quaternion quaternion = new Quaternion();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       double deltaAngle = 0.05 * Math.PI;
@@ -212,9 +213,9 @@ public class YawPitchRollConversionTest
                EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
-               EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
-               EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], EPSILON);
+               EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll.getYaw(), EPSILON);
+               assertEquals(pitch, actualYawPitchRoll.getPitch(), EPSILON);
+               EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll.getRoll(), EPSILON);
 
                YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
                EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), EPSILON);
@@ -237,9 +238,9 @@ public class YawPitchRollConversionTest
       assertTrue(actualRoll == 0.0);
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
-      assertTrue(actualYawPitchRoll[0] == 0.0);
-      assertTrue(actualYawPitchRoll[1] == 0.0);
-      assertTrue(actualYawPitchRoll[2] == 0.0);
+      assertTrue(actualYawPitchRoll.getYaw() == 0.0);
+      assertTrue(actualYawPitchRoll.getPitch() == 0.0);
+      assertTrue(actualYawPitchRoll.getRoll() == 0.0);
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DIsSetToZero(actualEulerAngles);
@@ -257,9 +258,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -276,9 +277,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -295,9 +296,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -314,9 +315,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -325,7 +326,7 @@ public class YawPitchRollConversionTest
    public void assertQuaternionToYawPitchRoll(double yaw, double pitch, double roll, double epsilon)
    {
       Quaternion quaternion = new Quaternion();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       QuaternionConversion.convertYawPitchRollToQuaternion(yaw, pitch, roll, quaternion);
@@ -354,9 +355,9 @@ public class YawPitchRollConversionTest
       EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, epsilon);
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualYawPitchRoll);
-      EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], epsilon);
-      assertEquals(pitch, actualYawPitchRoll[1], epsilon);
-      EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], epsilon);
+      EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll.getYaw(), epsilon);
+      assertEquals(pitch, actualYawPitchRoll.getPitch(), epsilon);
+      EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll.getRoll(), epsilon);
 
       YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, actualEulerAngles);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), epsilon);
@@ -368,7 +369,7 @@ public class YawPitchRollConversionTest
    public void testAxisAngleToYawPitchRoll() throws Exception
    {
       AxisAngle axisAngle = new AxisAngle();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       double deltaAngle = 0.05 * Math.PI;
@@ -424,9 +425,9 @@ public class YawPitchRollConversionTest
                EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-               EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], EPSILON);
-               assertEquals(pitch, actualYawPitchRoll[1], EPSILON);
-               EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], EPSILON);
+               EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll.getYaw(), EPSILON);
+               assertEquals(pitch, actualYawPitchRoll.getPitch(), EPSILON);
+               EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll.getRoll(), EPSILON);
 
                YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
                EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), EPSILON);
@@ -448,9 +449,9 @@ public class YawPitchRollConversionTest
       assertTrue(actualRoll == 0.0);
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-      assertTrue(actualYawPitchRoll[0] == 0.0);
-      assertTrue(actualYawPitchRoll[1] == 0.0);
-      assertTrue(actualYawPitchRoll[2] == 0.0);
+      assertTrue(actualYawPitchRoll.getYaw() == 0.0);
+      assertTrue(actualYawPitchRoll.getPitch() == 0.0);
+      assertTrue(actualYawPitchRoll.getRoll() == 0.0);
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DIsSetToZero(actualEulerAngles);
@@ -468,9 +469,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -487,9 +488,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -506,9 +507,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -525,9 +526,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -536,7 +537,7 @@ public class YawPitchRollConversionTest
    public void assertAxisAngleToYawPitchRoll(double yaw, double pitch, double roll, double epsilon)
    {
       AxisAngle axisAngle = new AxisAngle();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       AxisAngleConversion.convertYawPitchRollToAxisAngle(yaw, pitch, roll, axisAngle);
@@ -565,9 +566,9 @@ public class YawPitchRollConversionTest
       EuclidCoreTestTools.assertAngleEquals(roll, actualRoll, epsilon);
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-      EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], epsilon);
-      assertEquals(pitch, actualYawPitchRoll[1], epsilon);
-      EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], epsilon);
+      EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll.getYaw(), epsilon);
+      assertEquals(pitch, actualYawPitchRoll.getPitch(), epsilon);
+      EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll.getRoll(), epsilon);
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
       EuclidCoreTestTools.assertAngleEquals(yaw, actualEulerAngles.getZ(), epsilon);
@@ -579,7 +580,7 @@ public class YawPitchRollConversionTest
    public void testRotationVectorToYawPitchRoll() throws Exception
    {
       Vector3D rotationVector = new Vector3D();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       double deltaAngle = 0.05 * Math.PI;
@@ -625,9 +626,9 @@ public class YawPitchRollConversionTest
       assertTrue(actualRoll == 0.0);
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualYawPitchRoll);
-      assertTrue(actualYawPitchRoll[0] == 0.0);
-      assertTrue(actualYawPitchRoll[1] == 0.0);
-      assertTrue(actualYawPitchRoll[2] == 0.0);
+      assertTrue(actualYawPitchRoll.getYaw() == 0.0);
+      assertTrue(actualYawPitchRoll.getPitch() == 0.0);
+      assertTrue(actualYawPitchRoll.getRoll() == 0.0);
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DIsSetToZero(actualEulerAngles);
@@ -645,9 +646,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -664,9 +665,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -683,9 +684,9 @@ public class YawPitchRollConversionTest
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualYawPitchRoll);
-      assertTrue(Double.isNaN(actualYawPitchRoll[0]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[1]));
-      assertTrue(Double.isNaN(actualYawPitchRoll[2]));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getYaw()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getPitch()));
+      assertTrue(Double.isNaN(actualYawPitchRoll.getRoll()));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualEulerAngles);
       EuclidCoreTestTools.assertTuple3DContainsOnlyNaN(actualEulerAngles);
@@ -695,7 +696,7 @@ public class YawPitchRollConversionTest
    {
       Vector3D rotationVector = new Vector3D();
       Vector3D rotationVectorCopy = new Vector3D();
-      double[] actualYawPitchRoll = new double[3];
+      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
       Vector3D actualEulerAngles = new Vector3D();
 
       RotationVectorConversion.convertYawPitchRollToRotationVector(yaw, pitch, roll, rotationVector);
@@ -714,9 +715,9 @@ public class YawPitchRollConversionTest
       assertTrue(rotationVector.equals(rotationVectorCopy));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualYawPitchRoll);
-      EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll[0], epsilon);
-      assertEquals(pitch, actualYawPitchRoll[1], epsilon);
-      EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll[2], epsilon);
+      EuclidCoreTestTools.assertAngleEquals(yaw, actualYawPitchRoll.getYaw(), epsilon);
+      assertEquals(pitch, actualYawPitchRoll.getPitch(), epsilon);
+      EuclidCoreTestTools.assertAngleEquals(roll, actualYawPitchRoll.getRoll(), epsilon);
       assertTrue(rotationVector.equals(rotationVectorCopy));
 
       YawPitchRollConversion.convertRotationVectorToYawPitchRoll(rotationVector, actualEulerAngles);
