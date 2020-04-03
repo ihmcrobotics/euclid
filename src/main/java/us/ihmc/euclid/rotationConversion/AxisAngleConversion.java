@@ -31,6 +31,11 @@ public class AxisAngleConversion
     */
    public static final double EPS = 1.0e-12;
 
+   private AxisAngleConversion()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
+
    /**
     * Converts the rotation part of the given rotation-scale matrix into an axis-angle.
     * <p>

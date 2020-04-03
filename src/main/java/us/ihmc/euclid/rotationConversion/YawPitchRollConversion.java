@@ -51,7 +51,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public abstract class YawPitchRollConversion
+public class YawPitchRollConversion
 {
    /**
     * Represents the safety margin that
@@ -71,6 +71,11 @@ public abstract class YawPitchRollConversion
    public static final double MIN_SAFE_PITCH_ANGLE = -MAX_SAFE_PITCH_ANGLE;
 
    private static final double EPS = 1.0e-12;
+
+   private YawPitchRollConversion()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Computes the yaw from a rotation matrix.

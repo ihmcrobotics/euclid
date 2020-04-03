@@ -29,13 +29,18 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class RotationVectorConversion
+public class RotationVectorConversion
 {
    /**
     * Tolerance used to identify various edge cases, such as to identify when an axis-angle represents
     * a zero orientation.
     */
    public static final double EPS = 1.0e-12;
+
+   private RotationVectorConversion()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Converts the given axis-angle into a rotation vector.

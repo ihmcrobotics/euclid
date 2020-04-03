@@ -24,13 +24,18 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class RotationMatrixConversion
+public class RotationMatrixConversion
 {
    /**
     * Tolerance used to identify various edge cases, such as to identify when an axis-angle represents
     * a zero orientation.
     */
    public static final double EPS = 1.0e-12;
+
+   private RotationMatrixConversion()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Sets the given rotation matrix to represent a counter clockwise rotation around the z-axis of an

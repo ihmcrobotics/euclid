@@ -22,13 +22,18 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class QuaternionConversion
+public class QuaternionConversion
 {
    /**
     * Tolerance used to identify various edge cases, such as to identify when an axis-angle represents
     * a zero orientation.
     */
    public static final double EPS = 1.0e-7;
+
+   private QuaternionConversion()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Sets the given quaternion to represent a counter clockwise rotation around the z-axis of an angle
