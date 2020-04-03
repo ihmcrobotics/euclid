@@ -105,20 +105,6 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    }
 
    /**
-    * Sets this frame quaternion to the inverse of {@code other}.
-    *
-    * @param other the other frame quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    * @deprecated Use {@link #setAndInvert(FrameOrientation3DReadOnly)} instead
-    */
-   @Deprecated
-   default void setAndInverse(FrameQuaternionReadOnly other)
-   {
-      setAndInvert(other);
-   }
-
-   /**
     * Sets this frame quaternion to {@code other} and then calls {@link #normalize()}.
     *
     * @param other the other frame quaternion to copy the values from. Not modified.
