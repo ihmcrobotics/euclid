@@ -493,7 +493,7 @@ public class ReferenceFrameTest
          // good
       }
 
-      ReferenceFrameTools.removeFrame(someFrame);
+      someFrame.remove();
       someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
 
       someFrame.remove();

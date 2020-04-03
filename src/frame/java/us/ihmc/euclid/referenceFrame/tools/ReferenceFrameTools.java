@@ -174,51 +174,15 @@ public class ReferenceFrameTools
    }
 
    /**
-    * Will remove the provided frame from the frame tree.
-    * <p>
-    * This recursively disables all children of this frame also. If the provided frame is a root frame
-    * this method will do nothing.
-    * </p>
-    *
-    * @param frame is the {@link ReferenceFrame} that will be removed from the tree.
-    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
-    *             exists.
-    * @since 0.9.4
-    */
-   @Deprecated
-   public static void removeFrame(ReferenceFrame frame)
-   {
-      frame.remove();
-   }
-
-   /**
-    * Will remove all provided frames from the frame tree.
-    *
-    * @param frames to be removed and disabled.
-    * @see ReferenceFrameTools#removeFrame(ReferenceFrame)
-    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
-    *             exists.
-    * @since 0.9.4
-    */
-   @Deprecated
-   public static void removeFrames(ReferenceFrame[] frames)
-   {
-      for (int frameIdx = 0; frameIdx < frames.length; frameIdx++)
-      {
-         removeFrame(frames[frameIdx]);
-      }
-   }
-
-   /**
     * Will clear the entire frame tree that this frame is part of leaving only the root frame enabled.
     * All other frames in the tree will be removed and disabled.
+    * <p>
+    * Note that reference frames are automatically disposed of by the GC when no external reference
+    * exists.
+    * </p>
     *
     * @param frame in the frame tree that will be cleared.
-    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
-    *             exists.
-    * @since 0.9.4
     */
-   @Deprecated
    public static void clearFrameTree(ReferenceFrame frame)
    {
       frame.getRootFrame().clearChildren();
@@ -226,12 +190,11 @@ public class ReferenceFrameTools
 
    /**
     * Will clear the entire frame tree of the {@link ReferenceFrameTools#worldFrame} tree.
-    *
-    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
-    *             exists.
-    * @since 0.9.4
+    * <p>
+    * Note that reference frames are automatically disposed of by the GC when no external reference
+    * exists.
+    * </p>
     */
-   @Deprecated
    public static void clearWorldFrameTree()
    {
       worldFrame.clearChildren();
