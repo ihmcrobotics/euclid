@@ -115,7 +115,6 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
    {
       transform.inverseTransform(getPosition());
       transform.inverseTransform(getAxis());
-      getAxis().normalize();
    }
 
    /** {@inheritDoc} */
@@ -124,6 +123,5 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
    {
       transform.transform(getPosition());
       transform.transform(getAxis());
-      getAxis().normalize();
    }
 }

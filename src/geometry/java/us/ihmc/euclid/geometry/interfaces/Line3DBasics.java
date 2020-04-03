@@ -72,7 +72,10 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Flips this line's direction.
+    *
+    * @deprecated Use {@code this.getDirection().negate()} instead.
     */
+   @Deprecated
    default void negateDirection()
    {
       getDirection().negate();
@@ -84,7 +87,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
     * @param pointOnLineZ the new z-coordinate of the point on this line.
+    * @deprecated Use {@code this.getPoint().set(pointOnLineX, pointOnLineY, pointOnLineZ)} instead.
     */
+   @Deprecated
    default void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ)
    {
       getPoint().set(pointOnLineX, pointOnLineY, pointOnLineZ);
@@ -94,7 +99,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(Point3DReadOnly pointOnLine)
    {
       getPoint().set(pointOnLine);
@@ -106,22 +113,25 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     * @param lineDirectionZ the new z-component of the direction of this line.
+    * @deprecated Use {@code this.getDirection().set(lineDirectionX, lineDirectionY, lineDirectionZ)}
+    *             instead.
     */
+   @Deprecated
    default void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
       getDirection().set(lineDirectionX, lineDirectionY, lineDirectionZ);
-      getDirection().normalize();
    }
 
    /**
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(Vector3DReadOnly lineDirection)
    {
       getDirection().set(lineDirection);
-      getDirection().normalize();
    }
 
    /**
@@ -207,10 +217,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
       }
 
       getPoint().set(firstPointOnLine, 0.0);
-      getDirection().set(secondPointOnLine, 0.0);
-      getDirection().subX(firstPointOnLine.getX());
-      getDirection().subY(firstPointOnLine.getY());
-      getDirection().normalize();
+      getDirection().set(secondPointOnLine.getX() - firstPointOnLine.getX(), secondPointOnLine.getY() - firstPointOnLine.getY(), 0.0);
    }
 
    /**
@@ -230,7 +237,6 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
       setPoint(firstPointOnLine);
       getDirection().sub(secondPointOnLine, firstPointOnLine);
-      getDirection().normalize();
    }
 
    /**
