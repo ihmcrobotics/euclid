@@ -348,37 +348,6 @@ public class AxisAngleConversion
     *
     * @param yawPitchRoll    the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
-    * @deprecated Use {@link #convertYawPitchRollToAxisAngle(YawPitchRollReadOnly, AxisAngleBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertYawPitchRollToAxisAngle(double[] yawPitchRoll, AxisAngleBasics axisAngleToPack)
-   {
-      convertYawPitchRollToAxisAngle(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], axisAngleToPack);
-   }
-
-   /**
-    * Converts the given yaw-pitch-roll angles into an axis-angle.
-    * <p>
-    * After calling this method, the yaw-pitch-roll and the axis-angle represent the same orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if either of the yaw, pitch, or roll angle is {@link Double#NaN}, the axis-angle is set to
-    * {@link Double#NaN}.
-    * </ul>
-    * </p>
-    * <p>
-    * Note: the yaw-pitch-roll representation, also called Euler angles, corresponds to the
-    * representation of an orientation by decomposing it by three successive rotations around the three
-    * axes: Z (yaw), Y (pitch), and X (roll). The equivalent rotation matrix of such representation is:
-    * <br>
-    * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
-    * </p>
-    *
-    * @param yawPitchRoll    the yaw-pitch-roll angles to use in the conversion. Not modified.
-    * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
    public static void convertYawPitchRollToAxisAngle(YawPitchRollReadOnly yawPitchRoll, AxisAngleBasics axisAngleToPack)
    {

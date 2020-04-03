@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
@@ -206,12 +208,6 @@ public class Pose3DTest
          YawPitchRoll ypr = EuclidCoreRandomTools.nextYawPitchRoll(random);
          toCopy = new Pose3D();
          toCopy.setPosition(x, y, z);
-         toCopy.setOrientationYawPitchRoll(new double[] {ypr.getYaw(), ypr.getPitch(), ypr.getRoll()});
-
-         assertEquals(ypr.getYaw()  , toCopy.getYaw()  , EPSILON);
-         assertEquals(ypr.getPitch(), toCopy.getPitch(), EPSILON);
-         assertEquals(ypr.getRoll() , toCopy.getRoll() , EPSILON);
-
          toCopy.setOrientationYawPitchRoll(ypr.getYaw(), ypr.getPitch(), ypr.getRoll());
 
          assertEquals(ypr.getYaw()  , toCopy.getYaw(), EPSILON);

@@ -1,6 +1,9 @@
 package us.ihmc.euclid.axisAngle;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
@@ -386,16 +389,6 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       for (int i = 0; i < ITERATIONS; i++)
       {
          axisAngle = createRandomAxisAngle(random);
-
-         { // Test getYawPitchRoll(double[] yawPitchRollToPack)
-            double[] yawPitchRoll = new double[4];
-            axisAngle.getYawPitchRoll(yawPitchRoll);
-            double[] expectedYawPitchRoll = new double[4];
-            YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, expectedYawPitchRoll);
-
-            for (int j = 0; j < yawPitchRoll.length; j++)
-               assertEquals(yawPitchRoll[j], expectedYawPitchRoll[j], getEpsilon());
-         }
 
          { // Test getYaw()
             double yaw = axisAngle.getYaw();

@@ -1,6 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
@@ -354,19 +358,6 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
          assertEquals(initialFrame, frameQuaternion.getReferenceFrame());
          frameQuaternion.setRotationVectorIncludingFrame(rotationVector);
          quaternion.setRotationVector(rotationVector);
-         assertEquals(newFrame, frameQuaternion.getReferenceFrame());
-         EuclidCoreTestTools.assertTuple4DEquals(quaternion, frameQuaternion, EPSILON);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Tests setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double[] yawPitchRoll)
-         double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
-         FrameQuaternion frameQuaternion = createRandomFrameTuple(random, initialFrame);
-         Quaternion quaternion = new Quaternion();
-         assertEquals(initialFrame, frameQuaternion.getReferenceFrame());
-         frameQuaternion.setYawPitchRollIncludingFrame(newFrame, yawPitchRoll);
-         quaternion.setYawPitchRoll(yawPitchRoll);
          assertEquals(newFrame, frameQuaternion.getReferenceFrame());
          EuclidCoreTestTools.assertTuple4DEquals(quaternion, frameQuaternion, EPSILON);
       }

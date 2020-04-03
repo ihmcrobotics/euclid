@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Write and read interface for a 3D orientation expressed in a changeable reference frame, i.e. the
@@ -118,22 +117,6 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
    {
       setReferenceFrame(rotationVector.getReferenceFrame());
       setRotationVector((Vector3DReadOnly) rotationVector);
-   }
-
-   /**
-    * Sets this orientation to represent the same orientation as the given yaw-pitch-roll
-    * {@code yawPitchRoll} and sets the frame to the given {@code referenceFrame}.
-    *
-    * @param referenceFrame the reference frame in which the Euler angles are expressed.
-    * @param yawPitchRoll   the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(ReferenceFrame, Orientation3DReadOnly)} using
-    *             {@link YawPitchRoll} for instance.
-    */
-   @Deprecated
-   default void setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double[] yawPitchRoll)
-   {
-      setReferenceFrame(referenceFrame);
-      setYawPitchRoll(yawPitchRoll);
    }
 
    /**

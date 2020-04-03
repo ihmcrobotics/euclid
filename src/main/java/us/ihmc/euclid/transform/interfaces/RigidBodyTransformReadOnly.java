@@ -22,7 +22,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Read-only interface for a rigid-body transform.
@@ -362,23 +361,6 @@ public interface RigidBodyTransformReadOnly extends Transform
    default void getRotation(Vector3DBasics rotationVectorToPack)
    {
       getRotation().getRotationVector(rotationVectorToPack);
-   }
-
-   /**
-    * Computes and packs the orientation described by the rotation part of this transform as the
-    * yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #getRotation(Orientation3DBasics)}.
-    */
-   @Deprecated
-   default void getRotationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      getRotation().getYawPitchRoll(yawPitchRollToPack);
    }
 
    /**

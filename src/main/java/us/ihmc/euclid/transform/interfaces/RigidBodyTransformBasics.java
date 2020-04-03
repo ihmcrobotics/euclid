@@ -13,7 +13,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Write and read interface for a rigid-body transform.
@@ -334,28 +333,6 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     * This method does not affect the translation part of this transform.
     * </p>
     *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #setRotation(Orientation3DReadOnly)}.
-    */
-   @Deprecated
-   default void setRotationYawPitchRoll(double[] yawPitchRoll)
-   {
-      getRotation().setYawPitchRoll(yawPitchRoll);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
     * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll  the angle to rotate about the x-axis.
@@ -511,28 +488,6 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    default void setRotationRollAndZeroTranslation(double roll)
    {
       getRotation().setToRollOrientation(roll);
-      setTranslationToZero();
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll} and sets the translation part
-    * to zero.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link YawPitchRoll} with
-    *             {@link #setRotationAndZeroTranslation(Orientation3DReadOnly)}.
-    */
-   @Deprecated
-   default void setRotationYawPitchRollAndZeroTranslation(double[] yawPitchRoll)
-   {
-      getRotation().setYawPitchRoll(yawPitchRoll);
       setTranslationToZero();
    }
 

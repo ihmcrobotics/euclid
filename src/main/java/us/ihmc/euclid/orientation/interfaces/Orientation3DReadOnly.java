@@ -185,37 +185,6 @@ public interface Orientation3DReadOnly
    void getRotationVector(Vector3DBasics rotationVectorToPack);
 
    /**
-    * Converts and packs this orientation in a yaw-pitch-roll representation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    * <p>
-    * The yaw-pitch-roll representation describes a 3D orientation as a succession of three rotations
-    * around three axes:
-    * <ol>
-    * <li>yaw: rotation around the z-axis,
-    * <li>pitch: rotation around the y-axis,
-    * <li>roll: rotation around the x-axis.
-    * </ol>
-    * </p>
-    * <p>
-    * As an example, a rotation matrix can be computed from a yaw-pitch-roll representation as follows:
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link #get(YawPitchRollBasics)} instead.
-    */
-   @Deprecated
-   void getYawPitchRoll(double[] yawPitchRollToPack);
-
-   /**
     * Computes and packs the orientation described by this orientation as the Euler angles.
     * <p>
     * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is

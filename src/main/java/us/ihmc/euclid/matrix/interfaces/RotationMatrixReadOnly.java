@@ -149,14 +149,6 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    }
 
    /** {@inheritDoc} */
-   @Deprecated
-   @Override
-   default void getYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      YawPitchRollConversion.convertMatrixToYawPitchRoll(this, yawPitchRollToPack);
-   }
-
-   /** {@inheritDoc} */
    @Override
    default double getYaw()
    {

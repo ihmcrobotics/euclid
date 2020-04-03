@@ -48,53 +48,6 @@ public class EuclidCoreRandomTools
    }
 
    /**
-    * Generates random yaw-pitch-roll angles and returns it in an array.
-    * <p>
-    * <ul>
-    * <li>yaw &in; [-<i>pi</i>; <i>pi</i>],
-    * <li>pitch &in; [-<i>pi</i>/2.0; <i>pi</i>/2.0],
-    * <li>roll &in; [-<i>pi</i>; <i>pi</i>],
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @return an array containing the random yaw-pitch-roll angles.
-    */
-   public static double[] nextYawPitchRollArray(Random random)
-   {
-      return nextYawPitchRollArray(random, Math.PI, YawPitchRollConversion.MAX_SAFE_PITCH_ANGLE, Math.PI);
-   }
-
-   /**
-    * Generates random yaw-pitch-roll angles and returns it in an array.
-    * <p>
-    * <ul>
-    * <li>yaw &in; [-{@code minMaxYaw}; {@code minMaxYaw}],
-    * <li>pitch &in; [-{@code minMaxPitch}; {@code minMaxPitch}],
-    * <li>roll &in; [-{@code minMaxRoll}; {@code minMaxRoll}],
-    * </ul>
-    * </p>
-    *
-    * @param random      the random generator to use.
-    * @param minMaxYaw   the maximum absolute angle for the generated yaw angle.
-    * @param minMaxPitch the maximum absolute angle for the generated pitch angle.
-    * @param minMaxRoll  the maximum absolute angle for the generated roll angle.
-    * @return an array containing the random yaw-pitch-roll angles.
-    * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *                          {@code minMaxRoll < 0}.
-    * @deprecated Use {@link #nextYawPitchRoll(Random, double, double, double)} instead.
-    */
-   @Deprecated
-   public static double[] nextYawPitchRollArray(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
-   {
-      double yaw = nextDouble(random, minMaxYaw);
-      double pitch = nextDouble(random, minMaxPitch);
-      double roll = nextDouble(random, minMaxRoll);
-      double[] yawPitchRoll = {yaw, pitch, roll};
-      return yawPitchRoll;
-   }
-
-   /**
     * Generates random a yaw-pitch-roll orientation.
     * <p>
     * <ul>

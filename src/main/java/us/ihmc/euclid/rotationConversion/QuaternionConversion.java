@@ -383,37 +383,6 @@ public class QuaternionConversion
     *
     * @param yawPitchRoll     the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param quaternionToPack the quaternion in which the result is stored.
-    * @deprecated Use {@link #convertYawPitchRollToQuaternion(YawPitchRollReadOnly, QuaternionBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertYawPitchRollToQuaternion(double[] yawPitchRoll, QuaternionBasics quaternionToPack)
-   {
-      convertYawPitchRollToQuaternion(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], quaternionToPack);
-   }
-
-   /**
-    * Converts the given yaw-pitch-roll angles into a quaternion.
-    * <p>
-    * After calling this method, the yaw-pitch-roll and the quaternion represent the same orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if either of the yaw, pitch, or roll angle is {@link Double#NaN}, the quaternion is set to
-    * {@link Double#NaN}.
-    * </ul>
-    * </p>
-    * <p>
-    * Note: the yaw-pitch-roll representation, also called Euler angles, corresponds to the
-    * representation of an orientation by decomposing it by three successive rotations around the three
-    * axes: Z (yaw), Y (pitch), and X (roll). The equivalent rotation matrix of such representation is:
-    * <br>
-    * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
-    * </p>
-    *
-    * @param yawPitchRoll     the yaw-pitch-roll angles to use in the conversion. Not modified.
-    * @param quaternionToPack the quaternion in which the result is stored.
     */
    public static void convertYawPitchRollToQuaternion(YawPitchRollReadOnly yawPitchRoll, QuaternionBasics quaternionToPack)
    {

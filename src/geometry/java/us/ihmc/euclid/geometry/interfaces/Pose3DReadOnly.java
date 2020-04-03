@@ -6,7 +6,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Read-only interface for pose 3D.
@@ -113,23 +112,6 @@ public interface Pose3DReadOnly
    default boolean containsNaN()
    {
       return getOrientation().containsNaN() || getPosition().containsNaN();
-   }
-
-   /**
-    * Computes and packs the orientation described by the orientation part of this pose 3D as the
-    * yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use a {@link YawPitchRoll} that can be set to {@link #getOrientation()}.
-    */
-   @Deprecated
-   default void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      getOrientation().getYawPitchRoll(yawPitchRollToPack);
    }
 
    /**

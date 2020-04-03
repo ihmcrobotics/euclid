@@ -1,8 +1,16 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAffineTransformString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAxisAngleString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getMatrix3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getQuaternionBasedTransformString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getRigidBodyTransformString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,112 +99,6 @@ public class EuclidCoreTestTools
    }
 
    /**
-    * Asserts on a per component basis that the two sets of yaw-pitch-roll angles are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected set of yaw-pitch-roll angles. Not modified.
-    * @param actual   the actual set of yaw-pitch-roll angles. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two sets of yaw-pitch-roll angles are not equal. If only one of the
-    *                        arguments is equal to {@code null}. If at least one of the arguments has a
-    *                        length different than 3.
-    * @deprecated Use
-    *             {@link #assertYawPitchRollEquals(YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
-    *             instead.
-    */
-   @Deprecated
-   public static void assertYawPitchRollEquals(double[] expected, double[] actual, double epsilon)
-   {
-      assertYawPitchRollEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two sets of yaw-pitch-roll angles are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected set of yaw-pitch-roll angles. Not modified.
-    * @param actual        the actual set of yaw-pitch-roll angles. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two sets of yaw-pitch-roll angles are not equal. If only one of the
-    *                        arguments is equal to {@code null}. If at least one of the arguments has a
-    *                        length different than 3.
-    * @deprecated Use
-    *             {@link #assertYawPitchRollEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
-    *             instead.
-    */
-   @Deprecated
-   public static void assertYawPitchRollEquals(String messagePrefix, double[] expected, double[] actual, double epsilon)
-   {
-      assertYawPitchRollEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two sets of yaw-pitch-roll angles are equal to an
-    * {@code epsilon}.
-    * <p>
-    * The method returns {@code true} for angles such as:
-    * {@code actualAngle = expectedAngle +/- 2.0 * Math.PI}.
-    * </p>
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected set of yaw-pitch-roll angles. Not modified.
-    * @param actual        the actual set of yaw-pitch-roll angles. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two sets of yaw-pitch-roll angles are not equal. If only one of the
-    *                        arguments is equal to {@code null}. If at least one of the arguments has a
-    *                        length different than 3.
-    * @deprecated Use
-    *             {@link #assertYawPitchRollEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double, String)}
-    *             instead.
-    */
-   @Deprecated
-   public static void assertYawPitchRollEquals(String messagePrefix, double[] expected, double[] actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, Arrays.toString(expected), Arrays.toString(actual));
-
-      if (expected.length != 3)
-         throw new AssertionError(addPrefixToMessage(messagePrefix, "Unexpected size for the expected argument: " + expected.length));
-
-      if (actual.length != 3)
-         throw new AssertionError(addPrefixToMessage(messagePrefix, "Unexpected size for the actual argument: " + actual.length));
-
-      try
-      {
-         assertAngleEquals(expected[0], actual[0], epsilon);
-         assertAngleEquals(expected[1], actual[1], epsilon);
-         assertAngleEquals(expected[2], actual[2], epsilon);
-      }
-      catch (AssertionError e)
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
-   }
-
-   /**
     * Asserts on a per component basis that the yaw-pitch-roll orientations are equal to an
     * {@code epsilon}.
     * <p>
@@ -272,105 +174,6 @@ public class EuclidCoreTestTools
       if (!expected.epsilonEquals(actual, epsilon))
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
-   }
-
-   /**
-    * Asserts on a per component basis that the two sets of yaw-pitch-roll angles represent the same
-    * geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param expected the expected set of yaw-pitch-roll angles. Not modified.
-    * @param actual   the actual set of yaw-pitch-roll angles. Not modified.
-    * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two sets of yaw-pitch-roll angles do not represent the same
-    *                        geometry. If only one of the arguments is equal to {@code null}. If at
-    *                        least one of the arguments has a length different than 3.
-    * @deprecated Use
-    *             {@link #assertYawPitchRollGeometricallyEquals(YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
-    *             instead.
-    */
-   @Deprecated
-   public static void assertYawPitchRollGeometricallyEquals(double[] expected, double[] actual, double epsilon)
-   {
-      assertYawPitchRollGeometricallyEquals(null, expected, actual, epsilon);
-   }
-
-   /**
-    * Asserts on a per component basis that the two sets of yaw-pitch-roll angles represent the same
-    * geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected set of yaw-pitch-roll angles. Not modified.
-    * @param actual        the actual set of yaw-pitch-roll angles. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two sets of yaw-pitch-roll angles do not represent the same
-    *                        geometry. If only one of the arguments is equal to {@code null}. If at
-    *                        least one of the arguments has a length different than 3.
-    * @deprecated Use
-    *             {@link #assertYawPitchRollGeometricallyEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double)}
-    *             instead.
-    */
-   @Deprecated
-   public static void assertYawPitchRollGeometricallyEquals(String messagePrefix, double[] expected, double[] actual, double epsilon)
-   {
-      assertYawPitchRollGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
-   }
-
-   /**
-    * Asserts on a per component basis that the two sets of yaw-pitch-roll angles represent the same
-    * geometry to an {@code epsilon}.
-    * <p>
-    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
-    * </p>
-    *
-    * @param messagePrefix prefix to add to the error message.
-    * @param expected      the expected set of yaw-pitch-roll angles. Not modified.
-    * @param actual        the actual set of yaw-pitch-roll angles. Not modified.
-    * @param epsilon       the tolerance to use.
-    * @param format        the format to use for printing each component when an {@code AssertionError}
-    *                      is thrown.
-    * @throws AssertionError if the two sets of yaw-pitch-roll angles do not represent the same
-    *                        geometry. If only one of the arguments is equal to {@code null}. If at
-    *                        least one of the arguments has a length different than 3.
-    * @deprecated Use
-    *             {@link #assertYawPitchRollGeometricallyEquals(String, YawPitchRollReadOnly, YawPitchRollReadOnly, double, String)}
-    *             instead.
-    */
-   @Deprecated
-   public static void assertYawPitchRollGeometricallyEquals(String messagePrefix, double[] expected, double[] actual, double epsilon, String format)
-   {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, Arrays.toString(expected), Arrays.toString(actual));
-
-      if (expected.length != 3)
-         throw new AssertionError(addPrefixToMessage(messagePrefix, "Unexpected size for the expected argument: " + expected.length));
-
-      if (actual.length != 3)
-         throw new AssertionError(addPrefixToMessage(messagePrefix, "Unexpected size for the actual argument: " + actual.length));
-
-      Quaternion expectedQuaternion = new Quaternion();
-      Quaternion actualQuaternion = new Quaternion();
-      expectedQuaternion.setYawPitchRoll(expected);
-      actualQuaternion.setYawPitchRoll(actual);
-
-      try
-      {
-         assertQuaternionGeometricallyEquals(messagePrefix, expectedQuaternion, actualQuaternion, epsilon, format);
-      }
-      catch (AssertionError e)
-      {
-         double difference = expectedQuaternion.distance(actualQuaternion);
-         difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
       }
    }
 
@@ -2720,20 +2523,6 @@ public class EuclidCoreTestTools
       String expectedAsString = getQuaternionBasedTransformString(format, expected);
       String actualAsString = getQuaternionBasedTransformString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, double[] expected, double[] actual, String format)
-   {
-      String expectedAsString = getStringOf("[", "]", ",", format, expected);
-      String actualAsString = getStringOf("[", "]", ",", format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, double[] expected, double[] actual, double difference, String format)
-   {
-      String expectedAsString = getStringOf("[", "]", ",", format, expected);
-      String actualAsString = getStringOf("[", "]", ",", format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
    }
 
    /**

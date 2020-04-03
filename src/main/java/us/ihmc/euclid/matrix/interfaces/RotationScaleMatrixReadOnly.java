@@ -13,7 +13,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Read interface for 3-by-3 rotation-scale matrices.
@@ -215,22 +214,6 @@ public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
    default void getRotationEuler(Tuple3DBasics eulerAnglesToPack)
    {
       getRotationMatrix().getEuler(eulerAnglesToPack);
-   }
-
-   /**
-    * Packs the orientation described by the rotation part as the yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #getRotationMatrix()}.
-    */
-   @Deprecated
-   default void getRotationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      getRotationMatrix().getYawPitchRoll(yawPitchRollToPack);
    }
 
    /**

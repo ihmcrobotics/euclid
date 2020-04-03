@@ -204,14 +204,6 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    }
 
    /** {@inheritDoc} */
-   @Deprecated
-   @Override
-   default void getYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      YawPitchRollConversion.convertQuaternionToYawPitchRoll(this, yawPitchRollToPack);
-   }
-
-   /** {@inheritDoc} */
    @Override
    default void getEuler(Tuple3DBasics eulerAnglesToPack)
    {

@@ -164,13 +164,4 @@ public class QuaternionTest extends QuaternionBasicsTest<Quaternion>
    {
       return 1.0e-14;
    }
-
-   @Test
-   public void testSingularitiesYawPitchRoll() throws Exception
-   {
-      Quaternion quaternion = new Quaternion();
-      quaternion.setYawPitchRoll(0.5 * Math.PI, 0.0, 1e-9 - 0.5 * Math.PI);
-      double[] yawPitchRoll = new double[3];
-      quaternion.getYawPitchRoll(yawPitchRoll);
-   }
 }

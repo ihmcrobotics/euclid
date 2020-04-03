@@ -1,6 +1,10 @@
 package us.ihmc.euclid.matrix;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,6 +45,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 {
@@ -684,33 +689,16 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       RotationMatrix rotationMatrix, rotationMatrixCopy = new RotationMatrix();
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test setYawPitchRoll (double[] yawPitchRoll)
-         rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         rotationMatrixCopy.set(rotationMatrix);
-
-         double[] yawPitchRoll, yawPitchRollCopy;
-         yawPitchRoll = yawPitchRollCopy = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble()};
-
-         rotationMatrix.setYawPitchRoll(yawPitchRoll);
-         RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, rotationMatrixCopy);
-
-         EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
-         assertTrue(yawPitchRoll == yawPitchRollCopy);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
       { // Test setYawPitchRoll(double yaw, double pitch, double roll)
          rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          rotationMatrixCopy.set(rotationMatrix);
 
-         double[] yawPitchRoll, yawPitchRollCopy;
-         yawPitchRoll = yawPitchRollCopy = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble()};
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
 
-         rotationMatrix.setYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
+         rotationMatrix.setYawPitchRoll(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll());
          RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, rotationMatrixCopy);
 
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, rotationMatrixCopy, EPS);
-         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
    }
 
@@ -850,28 +838,6 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
 
             EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
          }
-      }
-   }
-
-   @Test
-   public void testGetYawPitchRoll()
-   {
-      Random random = new Random(35454L);
-      RotationMatrix rotationMatrix = new RotationMatrix(), expectedMatrix = new RotationMatrix();
-      double[] yawPitchRoll, yawPitchRollCopy = new double[3];
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         expectedMatrix.set(rotationMatrix);
-         yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         yawPitchRollCopy = yawPitchRoll;
-
-         rotationMatrix.getYawPitchRoll(yawPitchRoll);
-         RotationMatrixConversion.convertYawPitchRollToMatrix(yawPitchRoll, expectedMatrix);
-
-         EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrix, expectedMatrix, EPS);
-         assertTrue(yawPitchRoll == yawPitchRollCopy);
       }
    }
 

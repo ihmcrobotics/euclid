@@ -208,14 +208,6 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /** {@inheritDoc} */
-   @Deprecated
-   @Override
-   default void getYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      YawPitchRollConversion.convertAxisAngleToYawPitchRoll(this, yawPitchRollToPack);
-   }
-
-   /** {@inheritDoc} */
    @Override
    default void getEuler(Tuple3DBasics eulerAnglesToPack)
    {

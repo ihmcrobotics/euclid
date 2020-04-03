@@ -7,7 +7,6 @@ import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Write and read interface for a 3D orientation.
@@ -125,40 +124,6 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
     * @param roll  the angle to rotate about the x-axis.
     */
    void setYawPitchRoll(double yaw, double pitch, double roll);
-
-   /**
-    * Sets this orientation to represents the same orientation as a yaw-pitch-roll representation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    * <p>
-    * The yaw-pitch-roll representation describes a 3D orientation as a succession of three rotations
-    * around three axes:
-    * <ol>
-    * <li>yaw: rotation around the z-axis,
-    * <li>pitch: rotation around the y-axis,
-    * <li>roll: rotation around the x-axis.
-    * </ol>
-    * </p>
-    * <p>
-    * As an example, a rotation matrix can be computed from a yaw-pitch-roll representation as follows:
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * </p>
-    *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link #set(Orientation3DReadOnly)} with {@link YawPitchRoll} instead.
-    */
-   @Deprecated
-   default void setYawPitchRoll(double[] yawPitchRoll)
-   {
-      setYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
-   }
 
    /**
     * Sets this orientation to represent the same orientation as the given {@code rotationVector}.

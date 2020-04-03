@@ -381,16 +381,6 @@ public abstract class AxisAngleBasicsTest<T extends AxisAngleBasics> extends Axi
          }
       }
 
-      { // Test setYawPitchRoll(double[] yawPitchRoll)
-         for (int i = 0; i < EuclidTestConstants.ITERATIONS; i++)
-         {
-            double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-            actualAxisAngle.setYawPitchRoll(yawPitchRoll);
-            AxisAngleConversion.convertYawPitchRollToAxisAngle(yawPitchRoll, expectedAxisAngle);
-            EuclidCoreTestTools.assertAxisAngleEquals(expectedAxisAngle, actualAxisAngle, getEpsilon());
-         }
-      }
-
       { // Test setYawPitchRoll(double yaw, double pitch, double roll)
          for (int i = 0; i < EuclidTestConstants.ITERATIONS; i++)
          {

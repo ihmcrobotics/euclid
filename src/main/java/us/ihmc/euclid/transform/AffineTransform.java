@@ -39,7 +39,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
@@ -693,29 +692,6 @@ public class AffineTransform
    public void setRotationRoll(double roll)
    {
       rotationScaleMatrix.setRotationRoll(roll);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the scale part nor the translation part of this transform.
-    * </p>
-    *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} instead using
-    *             {@link YawPitchRollReadOnly}.
-    */
-   @Deprecated
-   public void setRotationYawPitchRoll(double[] yawPitchRoll)
-   {
-      rotationScaleMatrix.setRotationYawPitchRoll(yawPitchRoll);
    }
 
    /**
@@ -1730,22 +1706,6 @@ public class AffineTransform
    public void getRotationEuler(Tuple3DBasics eulerAnglesToPack)
    {
       rotationScaleMatrix.getRotationEuler(eulerAnglesToPack);
-   }
-
-   /**
-    * Packs the orientation described by the rotation part as the yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #getRotation(Orientation3DBasics)}.
-    */
-   @Deprecated
-   public void getRotationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      rotationScaleMatrix.getRotationYawPitchRoll(yawPitchRollToPack);
    }
 
    /**

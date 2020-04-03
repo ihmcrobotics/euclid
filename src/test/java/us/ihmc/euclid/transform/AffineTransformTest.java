@@ -1,6 +1,10 @@
 package us.ihmc.euclid.transform;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
@@ -749,17 +753,6 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          transform.getRotationScale(expectedRotationScale);
          expectedRotationScale.setRotationYawPitchRoll(yaw, pitch, roll);
          transform.setRotationYawPitchRoll(yaw, pitch, roll);
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationScale, actualRotationScale, EPS);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTranslation, EPS);
-      }
-
-      { // Test setRotationYawPitchRoll(double[] yawPitchRoll)
-         double yaw = EuclidCoreRandomTools.nextDouble(random);
-         double pitch = EuclidCoreRandomTools.nextDouble(random);
-         double roll = EuclidCoreRandomTools.nextDouble(random);
-         transform.getRotationScale(expectedRotationScale);
-         expectedRotationScale.setRotationYawPitchRoll(yaw, pitch, roll);
-         transform.setRotationYawPitchRoll(new double[] {yaw, pitch, roll});
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationScale, actualRotationScale, EPS);
          EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTranslation, EPS);
       }
@@ -2040,16 +2033,6 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          Vector3D eulerAngles = new Vector3D();
          transform.getRotationEuler(eulerAngles);
          rotationMatrix.setEuler(eulerAngles);
-         for (int row = 0; row < 3; row++)
-            for (int column = 0; column < 3; column++)
-               assertEquals(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);
-      }
-
-      { // Test getRotationYawPitchRoll(double[] yawPitchRollToPack)
-         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
-         double[] yawPitchRoll = new double[3];
-         transform.getRotationYawPitchRoll(yawPitchRoll);
-         rotationMatrix.setYawPitchRoll(yawPitchRoll);
          for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
                assertEquals(rotationMatrix.getElement(row, column), transform.getRotationMatrix().getElement(row, column), EPS);

@@ -341,39 +341,6 @@ public class RotationVectorConversion
     *
     * @param yawPitchRoll         the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param rotationVectorToPack the vector in which the result is stored. Modified.
-    * @deprecated Use
-    *             {@link #convertYawPitchRollToRotationVector(YawPitchRollReadOnly, Vector3DBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertYawPitchRollToRotationVector(double[] yawPitchRoll, Vector3DBasics rotationVectorToPack)
-   {
-      convertYawPitchRollToRotationVector(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], rotationVectorToPack);
-   }
-
-   /**
-    * Converts the given yaw-pitch-roll angles into a rotation vector.
-    * <p>
-    * After calling this method, the yaw-pitch-roll and the rotation vector represent the same
-    * orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if either of the yaw, pitch, or roll angle is {@link Double#NaN}, the rotation vector is set
-    * to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    * <p>
-    * Note: the yaw-pitch-roll representation, also called Euler angles, corresponds to the
-    * representation of an orientation by decomposing it by three successive rotations around the three
-    * axes: Z (yaw), Y (pitch), and X (roll). The equivalent rotation matrix of such representation is:
-    * <br>
-    * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
-    * </p>
-    *
-    * @param yawPitchRoll         the yaw-pitch-roll angles to use in the conversion. Not modified.
-    * @param rotationVectorToPack the vector in which the result is stored. Modified.
     */
    public static void convertYawPitchRollToRotationVector(YawPitchRollReadOnly yawPitchRoll, Vector3DBasics rotationVectorToPack)
    {

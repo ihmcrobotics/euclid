@@ -12,7 +12,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Write and read interface for pose 3D.
@@ -190,22 +189,6 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
    default void setOrientation(Orientation3DReadOnly orientation)
    {
       getOrientation().set(orientation);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given yaw, pitch, and roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link #setOrientation(Orientation3DReadOnly)} with {@link YawPitchRoll} instead.
-    */
-   @Deprecated
-   default void setOrientationYawPitchRoll(double[] yawPitchRoll)
-   {
-      getOrientation().setYawPitchRoll(yawPitchRoll);
    }
 
    /**
