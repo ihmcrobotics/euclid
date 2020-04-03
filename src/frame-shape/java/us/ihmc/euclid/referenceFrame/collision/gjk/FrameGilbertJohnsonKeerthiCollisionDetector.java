@@ -42,8 +42,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     * The vector's reference frame is linked to {@link #detectorFrame}.
     * </p>
     */
-   private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(gjkCollisionDetector.getSupportDirection(),
-                                                                                                              () -> detectorFrame);
+   private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(() -> detectorFrame,
+                                                                                                              gjkCollisionDetector.getSupportDirection());
    /**
     * Flag to indicate whether the initial support direction has been provided by the user or not.
     */

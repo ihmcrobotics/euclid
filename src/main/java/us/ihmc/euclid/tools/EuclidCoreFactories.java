@@ -478,7 +478,7 @@ public class EuclidCoreFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
+            return EuclidHashCodeTools.toIntHashCode(x, y);
          }
 
          @Override
@@ -633,7 +633,7 @@ public class EuclidCoreFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
+            return EuclidHashCodeTools.toIntHashCode(x, y, z);
          }
 
          @Override

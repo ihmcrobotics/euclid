@@ -12,8 +12,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -33,7 +33,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    /** Position of this capsule's center. */
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    /** Axis of revolution of this capsule. */
-   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newLinkedFixedFrameVector3DBasics(this, EuclidCoreFactories.newUnitaryVector3D(Axis.Z));
+   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newUnitaryFixedFrameVector3DBasics(this, Axis.Z);
    /** This capsule radius. */
    private double radius;
    /** This capsule length. */
@@ -42,15 +42,17 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    private double halfLength;
 
    /** Position of the top half-sphere center linked to this capsule properties. */
-   private final FramePoint3DReadOnly topCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(() -> halfLength * axis.getX() + position.getX(),
+   private final FramePoint3DReadOnly topCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(this,
+                                                                                                     () -> halfLength * axis.getX() + position.getX(),
                                                                                                      () -> halfLength * axis.getY() + position.getY(),
-                                                                                                     () -> halfLength * axis.getZ() + position.getZ(),
-                                                                                                     this);
+                                                                                                     () -> halfLength * axis.getZ() + position.getZ());
    /** Position of the bottom half-sphere center linked to this capsule properties. */
-   private final FramePoint3DReadOnly bottomCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(() -> -halfLength * axis.getX() + position.getX(),
+   private final FramePoint3DReadOnly bottomCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(this,
+                                                                                                        () -> -halfLength * axis.getX() + position.getX(),
                                                                                                         () -> -halfLength * axis.getY() + position.getY(),
-                                                                                                        () -> -halfLength * axis.getZ() + position.getZ(),
-                                                                                                        this);
+                                                                                                        () -> -halfLength * axis.getZ() + position.getZ());
+
+   private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    /**
     * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5 and
@@ -169,6 +171,13 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
          throw new IllegalArgumentException("The length of a Capsule3D cannot be negative: " + length);
       this.length = length;
       halfLength = 0.5 * length;
+   }
+
+   @Override
+   public void changeFrame(ReferenceFrame desiredFrame)
+   {
+      referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
+      applyTransform(transformToDesiredFrame);
    }
 
    /** {@inheritDoc} */

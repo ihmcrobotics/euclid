@@ -18,7 +18,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -43,7 +42,7 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint3DBasics point = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
-   private final FixedFrameVector3DBasics direction = EuclidFrameFactories.newLinkedFixedFrameVector3DBasics(this, EuclidCoreFactories.newUnitaryVector3D());
+   private final FixedFrameVector3DBasics direction = EuclidFrameFactories.newUnitaryFixedFrameVector3DBasics(this);
 
    /**
     * Default constructor that initializes both {@link #point} and {@link #direction} to zero and the

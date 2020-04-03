@@ -47,9 +47,9 @@ public class FrameExpandingPolytopeAlgorithm
     * The calculator implementing the GJK algorithm is declared as a field of {@link #epaAlgorithm}.
     * </p>
     */
-   private final FrameVector3DReadOnly gjkSupportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(epaAlgorithm.getGJKCollisionDetector()
-                                                                                                                             .getSupportDirection(),
-                                                                                                                 () -> detectorFrame);
+   private final FrameVector3DReadOnly gjkSupportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(() -> detectorFrame,
+                                                                                                                 epaAlgorithm.getGJKCollisionDetector()
+                                                                                                                                                                                                                                         .getSupportDirection());
    /**
     * Flag to indicate whether the initial support direction has been provided by the user or not.
     */

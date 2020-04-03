@@ -74,7 +74,6 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
    default void setAxis(Vector3DReadOnly axis)
    {
       getAxis().set(axis);
-      getAxis().normalize();
    }
 
    /** {@inheritDoc} */
@@ -145,7 +144,6 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
    {
       transform.inverseTransform(getPosition());
       transform.inverseTransform(getAxis());
-      getAxis().normalize();
    }
 
    /** {@inheritDoc} */
@@ -154,6 +152,5 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
    {
       transform.transform(getPosition());
       transform.transform(getAxis());
-      getAxis().normalize();
    }
 }

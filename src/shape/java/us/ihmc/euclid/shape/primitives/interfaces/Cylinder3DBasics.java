@@ -73,7 +73,6 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    default void setAxis(Vector3DReadOnly axis)
    {
       getAxis().set(axis);
-      getAxis().normalize();
    }
 
    /** {@inheritDoc} */
@@ -126,7 +125,6 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    {
       getPosition().set(position);
       getAxis().set(axis);
-      getAxis().normalize();
       setSize(length, radius);
    }
 
@@ -145,7 +143,6 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    {
       transform.inverseTransform(getPosition());
       transform.inverseTransform(getAxis());
-      getAxis().normalize();
    }
 
    /** {@inheritDoc} */
@@ -154,6 +151,5 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    {
       transform.transform(getPosition());
       transform.transform(getAxis());
-      getAxis().normalize();
    }
 }

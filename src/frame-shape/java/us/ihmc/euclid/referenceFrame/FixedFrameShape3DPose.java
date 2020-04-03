@@ -117,9 +117,9 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
          };
       });
 
-      xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20, this);
-      yAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM01, shapeOrientation::getM11, shapeOrientation::getM21, this);
-      zAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM02, shapeOrientation::getM12, shapeOrientation::getM22, this);
+      xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this, shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20);
+      yAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this, shapeOrientation::getM01, shapeOrientation::getM11, shapeOrientation::getM21);
+      zAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this, shapeOrientation::getM02, shapeOrientation::getM12, shapeOrientation::getM22);
    }
 
    /**

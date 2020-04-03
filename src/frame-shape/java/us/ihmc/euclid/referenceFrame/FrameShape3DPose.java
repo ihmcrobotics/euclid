@@ -91,20 +91,20 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    });
 
    /** Vector linked to the components of the x-axis unit-vector. */
-   private final FrameVector3DReadOnly xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM00,
+   private final FrameVector3DReadOnly xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this,
+                                                                                                   shapeOrientation::getM00,
                                                                                                    shapeOrientation::getM10,
-                                                                                                   shapeOrientation::getM20,
-                                                                                                   this);
+                                                                                                   shapeOrientation::getM20);
    /** Vector linked to the components of the y-axis unit-vector. */
-   private final FrameVector3DReadOnly yAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM01,
+   private final FrameVector3DReadOnly yAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this,
+                                                                                                   shapeOrientation::getM01,
                                                                                                    shapeOrientation::getM11,
-                                                                                                   shapeOrientation::getM21,
-                                                                                                   this);
+                                                                                                   shapeOrientation::getM21);
    /** Vector linked to the components of the z-axis unit-vector. */
-   private final FrameVector3DReadOnly zAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM02,
+   private final FrameVector3DReadOnly zAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this,
+                                                                                                   shapeOrientation::getM02,
                                                                                                    shapeOrientation::getM12,
-                                                                                                   shapeOrientation::getM22,
-                                                                                                   this);
+                                                                                                   shapeOrientation::getM22);
 
    /**
     * Creates a new shape pose which both position and orientation are initialized to zero and
