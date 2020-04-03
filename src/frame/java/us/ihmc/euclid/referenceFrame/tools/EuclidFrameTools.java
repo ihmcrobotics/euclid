@@ -5,7 +5,6 @@ import java.util.List;
 
 import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
@@ -368,47 +367,6 @@ public class EuclidFrameTools
       average.scale(0.5);
 
       return average;
-   }
-
-   /**
-    * Computes the complete minimum rotation from {@code firstVector} to the {@code secondVector} and
-    * packs it into an {@link AxisAngleBasics}.
-    * <p>
-    * The rotation angle is computed as the angle from the {@code firstVector} to the
-    * {@code secondVector}: <br>
-    * {@code rotationAngle = firstVector.angle(secondVector)}. </br>
-    * Note: the vectors do not need to be unit length.
-    * </p>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>the vectors are the same: the rotation angle is equal to {@code 0.0} and the rotation axis is
-    * set to: (1, 0, 0).
-    * <li>the vectors are parallel pointing opposite directions: the rotation angle is equal to
-    * {@code Math.PI} and the rotation axis is set to: (1, 0, 0).
-    * <li>if the length of either normal is below {@code 1.0E-7}: the rotation angle is equal to
-    * {@code 0.0} and the rotation axis is set to: (1, 0, 0).
-    * </ul>
-    * </p>
-    * <p>
-    * Note: The calculation becomes less accurate as the two vectors are more parallel.
-    * </p>
-    *
-    * @param firstVector    the first vector. Not modified.
-    * @param secondVector   the second vector that is rotated with respect to the first vector. Not
-    *                       modified.
-    * @param rotationToPack the minimum rotation from {@code firstVector} to the {@code secondVector}.
-    *                       Modified.
-    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
-    *                                         reference frame.
-    * @deprecated Use
-    *             {@link #orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly,FrameVector3DReadOnly,Orientation3DBasics)}
-    *             instead
-    */
-   @Deprecated
-   public static void axisAngleFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector, AxisAngleBasics rotationToPack)
-   {
-      orientation3DFromFirstToSecondVector3D(firstVector, secondVector, rotationToPack);
    }
 
    /**
