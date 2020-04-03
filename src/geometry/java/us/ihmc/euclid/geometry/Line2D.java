@@ -5,9 +5,9 @@ import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
@@ -21,7 +21,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    /** Coordinates of a point located on this line. */
    private final Point2D point = new Point2D();
    /** Normalized direction of this line. */
-   private final Vector2D direction = new Vector2D();
+   private final Vector2DBasics direction = EuclidCoreFactories.newUnitaryVector2D();
 
    /**
     * Default constructor that initializes both {@code point} and {@code direction} to zero.

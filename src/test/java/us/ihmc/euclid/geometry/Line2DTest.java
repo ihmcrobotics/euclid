@@ -150,7 +150,7 @@ public class Line2DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getDirection());
+         EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(1.0, 0.0), line2D.getDirection(), 0.0);
       }
       catch (RuntimeException e)
       {

@@ -8,8 +8,9 @@ import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -26,7 +27,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    /** Position of this cylinder's center. */
    private final Point3D position = new Point3D();
    /** Axis of revolution of this cylinder. */
-   private final Vector3D axis = new Vector3D(Axis.Z);
+   private final Vector3DBasics axis = EuclidCoreFactories.newUnitaryVector3D(Axis.Z);
 
    /** Radius of the cylinder part. */
    private double radius;
@@ -162,14 +163,14 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
 
    /** {@inheritDoc} */
    @Override
-   public Point3D getPosition()
+   public Point3DBasics getPosition()
    {
       return position;
    }
 
    /** {@inheritDoc} */
    @Override
-   public Vector3D getAxis()
+   public Vector3DBasics getAxis()
    {
       return axis;
    }
