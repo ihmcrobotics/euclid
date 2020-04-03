@@ -2738,13 +2738,11 @@ public class EuclidGeometryTools
             {
                if (isIntersectingAtTmin)
                {
-                  firstIntersectionToPack.setX(tmin * dx + startX);
-                  firstIntersectionToPack.setY(tmin * dy + startY);
+                  firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY);
                }
                else
                {
-                  firstIntersectionToPack.setX(tmax * dx + startX);
-                  firstIntersectionToPack.setY(tmax * dy + startY);
+                  firstIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY);
                }
             }
             if (secondIntersectionToPack != null)
@@ -2753,14 +2751,12 @@ public class EuclidGeometryTools
          case 2:
             if (firstIntersectionToPack != null)
             {
-               firstIntersectionToPack.setX(tmin * dx + startX);
-               firstIntersectionToPack.setY(tmin * dy + startY);
+               firstIntersectionToPack.set(tmin * dx + startX, tmin * dy + startY);
             }
 
             if (secondIntersectionToPack != null)
             {
-               secondIntersectionToPack.setX(tmax * dx + startX);
-               secondIntersectionToPack.setY(tmax * dy + startY);
+               secondIntersectionToPack.set(tmax * dx + startX, tmax * dy + startY);
             }
             return 2;
          default:
@@ -2820,8 +2816,8 @@ public class EuclidGeometryTools
 
       if (intersectionToPack != null)
       {
-         intersectionToPack.setX(EuclidCoreTools.interpolate(lineSegmentStartX, lineSegmentEndX, percentage));
-         intersectionToPack.setY(EuclidCoreTools.interpolate(lineSegmentStartY, lineSegmentEndY, percentage));
+         intersectionToPack.set(EuclidCoreTools.interpolate(lineSegmentStartX, lineSegmentEndX, percentage),
+                                EuclidCoreTools.interpolate(lineSegmentStartY, lineSegmentEndY, percentage));
       }
       return true;
    }
@@ -2999,8 +2995,7 @@ public class EuclidGeometryTools
       {
          if (areIntersecting)
          {
-            intersectionToPack.setX(start1x + alpha * direction1x);
-            intersectionToPack.setY(start1y + alpha * direction1y);
+            intersectionToPack.set(start1x + alpha * direction1x, start1y + alpha * direction1y);
          }
          else
          {
@@ -5180,8 +5175,7 @@ public class EuclidGeometryTools
 
       if (intersectionToPack != null)
       {
-         intersectionToPack.setX(pointOnLine1x + alpha * lineDirection1x);
-         intersectionToPack.setY(pointOnLine1y + alpha * lineDirection1y);
+         intersectionToPack.set(pointOnLine1x + alpha * lineDirection1x, pointOnLine1y + alpha * lineDirection1y);
       }
       return true;
    }
@@ -6478,8 +6472,7 @@ public class EuclidGeometryTools
 
       double alpha = dot / directionLengthSquared;
 
-      projectionToPack.setX(pointOnLineX + alpha * lineDirectionX);
-      projectionToPack.setY(pointOnLineY + alpha * lineDirectionY);
+      projectionToPack.set(pointOnLineX + alpha * lineDirectionX, pointOnLineY + alpha * lineDirectionY);
 
       return true;
    }
@@ -6741,8 +6734,8 @@ public class EuclidGeometryTools
       else if (percentage < 0.0)
          percentage = 0.0;
 
-      projectionToPack.setX((1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX);
-      projectionToPack.setY((1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY);
+      projectionToPack.set((1.0 - percentage) * lineSegmentStartX + percentage * lineSegmentEndX,
+                           (1.0 - percentage) * lineSegmentStartY + percentage * lineSegmentEndY);
 
       /*
        * This method never fails with the current implementation but the method still returns a boolean in
@@ -7834,10 +7827,8 @@ public class EuclidGeometryTools
       double midPointX = 0.5 * (lineSegmentStart.getX() + lineSegmentEnd.getX());
       double midPointY = 0.5 * (lineSegmentStart.getY() + lineSegmentEnd.getY());
 
-      bisectorSegmentStartToPack.setX(midPointX + bisectorDirectionX * bisectorSegmentHalfLength);
-      bisectorSegmentStartToPack.setY(midPointY + bisectorDirectionY * bisectorSegmentHalfLength);
-      bisectorSegmentEndToPack.setX(midPointX - bisectorDirectionX * bisectorSegmentHalfLength);
-      bisectorSegmentEndToPack.setY(midPointY - bisectorDirectionY * bisectorSegmentHalfLength);
+      bisectorSegmentStartToPack.set(midPointX + bisectorDirectionX * bisectorSegmentHalfLength, midPointY + bisectorDirectionY * bisectorSegmentHalfLength);
+      bisectorSegmentEndToPack.set(midPointX - bisectorDirectionX * bisectorSegmentHalfLength, midPointY - bisectorDirectionY * bisectorSegmentHalfLength);
 
       return true;
    }

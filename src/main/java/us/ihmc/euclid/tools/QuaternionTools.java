@@ -813,8 +813,7 @@ public class QuaternionTools
       double crossCrossX = -qz * crossY;
       double crossCrossY = qz * crossX;
 
-      tupleTransformed.setX(x + qs * crossX + crossCrossX);
-      tupleTransformed.setY(y + qs * crossY + crossCrossY);
+      tupleTransformed.set(x + qs * crossX + crossCrossX, y + qs * crossY + crossCrossY);
    }
 
    /**
@@ -974,10 +973,7 @@ public class QuaternionTools
       double crossCrossY = qz * crossX - qx * crossZ;
       double crossCrossZ = qx * crossY - qy * crossX;
 
-      vectorTransformed.setX(x + qs * crossX + crossCrossX);
-      vectorTransformed.setY(y + qs * crossY + crossCrossY);
-      vectorTransformed.setZ(z + qs * crossZ + crossCrossZ);
-      vectorTransformed.setS(vectorOriginal.getS());
+      vectorTransformed.set(x + qs * crossX + crossCrossX, y + qs * crossY + crossCrossY, z + qs * crossZ + crossCrossZ, vectorOriginal.getS());
    }
 
    /**

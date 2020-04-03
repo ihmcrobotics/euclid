@@ -127,8 +127,7 @@ public interface BoundingBox2DReadOnly
    default void getPointGivenParameters(double xParameter, double yParameter, Point2DBasics pointToPack)
    {
       checkBounds();
-      pointToPack.setX(getMinX() + xParameter * (getMaxX() - getMinX()));
-      pointToPack.setY(getMinY() + yParameter * (getMaxY() - getMinY()));
+      pointToPack.set(getMinX() + xParameter * (getMaxX() - getMinX()), getMinY() + yParameter * (getMaxY() - getMinY()));
    }
 
    /**
