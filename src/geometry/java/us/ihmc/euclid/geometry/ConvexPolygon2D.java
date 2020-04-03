@@ -3,7 +3,6 @@ package us.ihmc.euclid.geometry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import us.ihmc.euclid.geometry.exceptions.EmptyPolygonException;
 import us.ihmc.euclid.geometry.exceptions.OutdatedPolygonException;
@@ -13,7 +12,6 @@ import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -150,27 +148,6 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    public ConvexPolygon2D(Vertex2DSupplier firstVertex2DSupplier, Vertex2DSupplier secondVertex2DSupplier)
    {
       set(firstVertex2DSupplier, secondVertex2DSupplier);
-   }
-
-   /**
-    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
-    * the size of the point cloud from which it is generated.
-    *
-    * @deprecated Use {@link EuclidGeometryRandomTools#nextConvexPolygon2D(Random, double, int)}
-    *             instead.
-    * @param random                 the random generator to use.
-    * @param maxAbsoluteXY          the maximum absolute value for each coordinate of the vertices.
-    * @param numberOfPossiblePoints the size of the point cloud to generate that is used for computing
-    *                               the random convex polygon. The size of the resulting convex polygon
-    *                               will be less than {@code numberOfPossiblePoints}.
-    * @return the random convex polygon.
-    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
-    */
-   @Deprecated
-   public static ConvexPolygon2D generateRandomConvexPolygon2d(Random random, double maxAbsoluteXY, int numberOfPossiblePoints)
-   {
-      List<Point2D> vertices = EuclidGeometryRandomTools.nextPointCloud2D(random, 0.0, maxAbsoluteXY, numberOfPossiblePoints);
-      return new ConvexPolygon2D(Vertex2DSupplier.asVertex2DSupplier(vertices));
    }
 
    @Override
