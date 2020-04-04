@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
@@ -877,7 +877,7 @@ public class EuclidGeometryTools
     */
    public static void orientation3DFromZUpToVector3D(Vector3DReadOnly vector, Orientation3DBasics rotationToPack)
    {
-      orientation3DFromFirstToSecondVector3D(Axis.Z, vector, rotationToPack);
+      orientation3DFromFirstToSecondVector3D(Axis3D.Z, vector, rotationToPack);
    }
 
    /**

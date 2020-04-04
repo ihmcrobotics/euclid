@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
@@ -1528,37 +1528,37 @@ public class ConvexPolytope3DTest
          Vector3D supportDirection = new Vector3D();
 
          // Trivial case #1: supportingVector = +X
-         supportDirection.set(Axis.X);
+         supportDirection.set(Axis3D.X);
          expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v2.getX(), v1.getX())).findFirst().get();
          actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
          assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
 
          // Trivial case #2: supportingVector = -X
-         supportDirection.setAndNegate(Axis.X);
+         supportDirection.setAndNegate(Axis3D.X);
          expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getX(), v2.getX())).findFirst().get();
          actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
          assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
 
          // Trivial case #1: supportingVector = +Y
-         supportDirection.set(Axis.Y);
+         supportDirection.set(Axis3D.Y);
          expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v2.getY(), v1.getY())).findFirst().get();
          actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
          assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
 
          // Trivial case #2: supportingVector = -Y
-         supportDirection.setAndNegate(Axis.Y);
+         supportDirection.setAndNegate(Axis3D.Y);
          expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getY(), v2.getY())).findFirst().get();
          actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
          assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
 
          // Trivial case #1: supportingVector = +Z
-         supportDirection.set(Axis.Z);
+         supportDirection.set(Axis3D.Z);
          expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v2.getZ(), v1.getZ())).findFirst().get();
          actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
          assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);
 
          // Trivial case #2: supportingVector = -Z
-         supportDirection.setAndNegate(Axis.Z);
+         supportDirection.setAndNegate(Axis3D.Z);
          expectedSupportVertex = convexPolytope3D.getVertices().stream().sorted((v1, v2) -> Double.compare(v1.getZ(), v2.getZ())).findFirst().get();
          actualSupportVertex = convexPolytope3D.getSupportingVertex(supportDirection);
          assertTrue(expectedSupportVertex == actualSupportVertex, "iteration #" + i + " expected:\n" + expectedSupportVertex + "was:\n" + actualSupportVertex);

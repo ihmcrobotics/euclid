@@ -2,7 +2,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.function.DoubleSupplier;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Orientation2D;
@@ -973,7 +973,7 @@ public class EuclidFrameFactories
     */
    public static FixedFrameVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
-      return newFixedFrameUnitVector3DBasics(referenceFrameHolder, Axis.X);
+      return newFixedFrameUnitVector3DBasics(referenceFrameHolder, Axis3D.X);
    }
 
    /**

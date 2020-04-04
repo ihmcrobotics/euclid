@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public class AxisTest
+public class Axis3DTest
 {
    private double allowedDelta = 1e-7;
-   private Axis xAxis = Axis.X, yAxis = Axis.Y, zAxis = Axis.Z;
+   private Axis3D xAxis = Axis3D.X, yAxis = Axis3D.Y, zAxis = Axis3D.Z;
    private boolean touchedX, touchedY, touchedZ;
    private Random random = new Random(12345);
    private Vector3D randomVector = new Vector3D(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -29,13 +29,13 @@ public class AxisTest
    @Test
    public void testAxisValuesGetter()
    {
-      assertEquals(3, Axis.values().length);
+      assertEquals(3, Axis3D.values().length);
 
       touchedX = false;
       touchedY = false;
       touchedZ = false;
 
-      for (Axis axis : Axis.values())
+      for (Axis3D axis : Axis3D.values())
       {
          switch (axis)
          {
@@ -64,13 +64,13 @@ public class AxisTest
    @Test
    public void testAxisValuesField()
    {
-      assertEquals(3, Axis.values.length);
+      assertEquals(3, Axis3D.values.length);
 
       touchedX = false;
       touchedY = false;
       touchedZ = false;
 
-      for (Axis axis : Axis.values)
+      for (Axis3D axis : Axis3D.values)
       {
          switch (axis)
          {
@@ -123,9 +123,9 @@ public class AxisTest
    {
       double newXValue = random.nextDouble(), newYValue = random.nextDouble(), newZValue = random.nextDouble();
 
-      Axis.set(randomVector, Axis.X, newXValue);
-      Axis.set(randomVector, Axis.Y, newYValue);
-      Axis.set(randomVector, Axis.Z, newZValue);
+      Axis3D.set(randomVector, Axis3D.X, newXValue);
+      Axis3D.set(randomVector, Axis3D.Y, newYValue);
+      Axis3D.set(randomVector, Axis3D.Z, newZValue);
 
       assertEquals(newXValue, randomVector.getX(), allowedDelta);
       assertEquals(newYValue, randomVector.getY(), allowedDelta);
@@ -135,19 +135,19 @@ public class AxisTest
    @Test
    public void testAxisGetterWorks()
    {
-      assertEquals(randomVector.getX(), Axis.get(randomVector, Axis.X), allowedDelta);
-      assertEquals(randomVector.getY(), Axis.get(randomVector, Axis.Y), allowedDelta);
-      assertEquals(randomVector.getZ(), Axis.get(randomVector, Axis.Z), allowedDelta);
+      assertEquals(randomVector.getX(), Axis3D.get(randomVector, Axis3D.X), allowedDelta);
+      assertEquals(randomVector.getY(), Axis3D.get(randomVector, Axis3D.Y), allowedDelta);
+      assertEquals(randomVector.getZ(), Axis3D.get(randomVector, Axis3D.Z), allowedDelta);
    }
 
    @Test
    public void testClockwiseAxisGetters()
    {
-      assertEquals(Axis.Z, Axis.X.getNextClockwiseAxis());
-      assertEquals(Axis.X, Axis.Y.getNextClockwiseAxis());
-      assertEquals(Axis.Y, Axis.Z.getNextClockwiseAxis());
-      assertEquals(Axis.Y, Axis.X.getNextCounterClockwiseAxis());
-      assertEquals(Axis.Z, Axis.Y.getNextCounterClockwiseAxis());
-      assertEquals(Axis.X, Axis.Z.getNextCounterClockwiseAxis());
+      assertEquals(Axis3D.Z, Axis3D.X.getNextClockwiseAxis());
+      assertEquals(Axis3D.X, Axis3D.Y.getNextClockwiseAxis());
+      assertEquals(Axis3D.Y, Axis3D.Z.getNextClockwiseAxis());
+      assertEquals(Axis3D.Y, Axis3D.X.getNextCounterClockwiseAxis());
+      assertEquals(Axis3D.Z, Axis3D.Y.getNextCounterClockwiseAxis());
+      assertEquals(Axis3D.X, Axis3D.Z.getNextCounterClockwiseAxis());
    }
 }

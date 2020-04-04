@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -32,7 +32,7 @@ public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<Fr
    /** Position of this cylinder's center. */
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    /** Axis of revolution of this cylinder. */
-   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis.Z);
+   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis3D.Z);
    /** This cylinder radius. */
    private double radius;
    /** This cylinder length. */

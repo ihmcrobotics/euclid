@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.interfaces.Clearable;
@@ -375,7 +375,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    private boolean handleNoFaceCase(Vertex vertexToAdd)
    {
       // Polytope is empty. Creating face and adding the vertex
-      Face newFace = faceFactory.newInstance(Axis.Z, constructionEpsilon);
+      Face newFace = faceFactory.newInstance(Axis3D.Z, constructionEpsilon);
       newFace.addVertex(vertexToAdd);
       return faces.add(newFace);
    }

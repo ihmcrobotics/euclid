@@ -8,7 +8,7 @@ import java.util.Random;
 import org.ejml.data.DenseMatrix64F;
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -1024,7 +1024,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
 
       vector2.set(vector1);
       assertTrue(vector1.epsilonEquals(vector2, epsilon));
-      AxisAngle axisAngle = new AxisAngle(Axis.Z, 0.0);
+      AxisAngle axisAngle = new AxisAngle(Axis3D.Z, 0.0);
       axisAngle.setAngle(0.999 * epsilon);
       axisAngle.transform(vector1, vector2);
       assertTrue(vector1.epsilonEquals(vector2, epsilon));

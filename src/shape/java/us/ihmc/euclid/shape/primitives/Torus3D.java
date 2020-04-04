@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
@@ -27,7 +27,7 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    /** Position of this torus' center. */
    private final Point3D position = new Point3D();
    /** Axis of revolution of this torus. */
-   private final UnitVector3D axis = new UnitVector3D(Axis.Z);
+   private final UnitVector3D axis = new UnitVector3D(Axis3D.Z);
 
    /** It is the radius for the center of the torus to the center of the tube. */
    private double radius;

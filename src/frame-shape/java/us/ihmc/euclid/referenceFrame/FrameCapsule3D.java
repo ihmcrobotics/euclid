@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -32,7 +32,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    /** Position of this capsule's center. */
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    /** Axis of revolution of this capsule. */
-   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis.Z);
+   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis3D.Z);
    /** This capsule radius. */
    private double radius;
    /** This capsule length. */

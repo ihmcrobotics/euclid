@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
@@ -28,7 +28,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    /** Position of this capsule's center. */
    private final Point3D position = new Point3D();
    /** Axis of revolution of this capsule. */
-   private final UnitVector3D axis = new UnitVector3D(Axis.Z);
+   private final UnitVector3D axis = new UnitVector3D(Axis3D.Z);
 
    /** This capsule radius. */
    private double radius;

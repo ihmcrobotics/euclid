@@ -1,6 +1,6 @@
 package us.ihmc.euclid.axisAngle.interfaces;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -314,21 +314,21 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    @Override
    default void setToYawOrientation(double yaw)
    {
-      getAxis().set(Axis.Z);
+      getAxis().set(Axis3D.Z);
       setAngle(yaw);
    }
 
    @Override
    default void setToPitchOrientation(double pitch)
    {
-      getAxis().set(Axis.Y);
+      getAxis().set(Axis3D.Y);
       setAngle(pitch);
    }
 
    @Override
    default void setToRollOrientation(double roll)
    {
-      getAxis().set(Axis.X);
+      getAxis().set(Axis3D.X);
       setAngle(roll);
    }
 

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -98,7 +98,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    default void setToZero()
    {
       getPosition().setToZero();
-      getAxis().set(Axis.Z);
+      getAxis().set(Axis3D.Z);
       setSize(0.0, 0.0);
    }
 

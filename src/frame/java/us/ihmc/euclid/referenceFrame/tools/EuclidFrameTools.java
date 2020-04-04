@@ -3,7 +3,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.Collection;
 import java.util.List;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -559,7 +559,7 @@ public class EuclidFrameTools
    public static void orientation3DFromZUpToVector3D(FrameVector3DReadOnly vector, FixedFrameOrientation3DBasics rotationToPack)
    {
       rotationToPack.checkReferenceFrameMatch(vector.getReferenceFrame());
-      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis.Z, vector, rotationToPack);
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis3D.Z, vector, rotationToPack);
    }
 
    /**
@@ -592,7 +592,7 @@ public class EuclidFrameTools
    public static void orientation3DFromZUpToVector3D(FrameVector3DReadOnly vector, FrameOrientation3DBasics rotationToPack)
    {
       rotationToPack.setReferenceFrame(vector.getReferenceFrame());
-      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis.Z, vector, rotationToPack);
+      EuclidGeometryTools.orientation3DFromFirstToSecondVector3D(Axis3D.Z, vector, rotationToPack);
    }
 
    /**

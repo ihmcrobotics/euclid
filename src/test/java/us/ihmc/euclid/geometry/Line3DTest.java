@@ -7,7 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -132,7 +132,7 @@ public class Line3DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple3DEquals(Axis.X, line3D.getDirection(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.X, line3D.getDirection(), EPSILON);
       }
       catch (RuntimeException e)
       {

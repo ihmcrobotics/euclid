@@ -7,7 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
@@ -35,7 +35,7 @@ public class Torus3DTest
          Torus3D torus3D = new Torus3D();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(torus3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, torus3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, torus3D.getAxis(), EPSILON);
          assertEquals(1.0, torus3D.getRadius());
          assertEquals(0.1, torus3D.getTubeRadius());
       }
@@ -48,7 +48,7 @@ public class Torus3DTest
             Torus3D torus3D = new Torus3D(radius, tubeRadius);
 
             EuclidCoreTestTools.assertTuple3DIsSetToZero(torus3D.getPosition());
-            EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, torus3D.getAxis(), EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, torus3D.getAxis(), EPSILON);
             assertEquals(radius, torus3D.getRadius());
             assertEquals(tubeRadius, torus3D.getTubeRadius());
          }
@@ -73,8 +73,8 @@ public class Torus3DTest
             assertEquals(tubeRadius, torus3D.getTubeRadius());
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Torus3D(new Point3D(), Axis.Z, -0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Torus3D(new Point3D(), Axis.Z, 1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Torus3D(new Point3D(), Axis3D.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Torus3D(new Point3D(), Axis3D.Z, 1.0, -0.1));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -128,7 +128,7 @@ public class Torus3DTest
          torus3D.setToZero();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(torus3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, torus3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, torus3D.getAxis(), EPSILON);
          assertEquals(0.0, torus3D.getRadius());
          assertEquals(0.0, torus3D.getTubeRadius());
       }
@@ -167,8 +167,8 @@ public class Torus3DTest
             EuclidShapeTestTools.assertTorus3DEquals(expected, actual, EPSILON);
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Torus3D().set(new Point3D(), Axis.Z, -0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Torus3D().set(new Point3D(), Axis.Z, 1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Torus3D().set(new Point3D(), Axis3D.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Torus3D().set(new Point3D(), Axis3D.Z, 1.0, -0.1));
       }
    }
 

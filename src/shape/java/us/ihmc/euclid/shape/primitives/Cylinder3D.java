@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.primitives;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
@@ -28,7 +28,7 @@ public class Cylinder3D implements Cylinder3DBasics, GeometryObject<Cylinder3D>
    /** Position of this cylinder's center. */
    private final Point3D position = new Point3D();
    /** Axis of revolution of this cylinder. */
-   private final UnitVector3D axis = new UnitVector3D(Axis.Z);
+   private final UnitVector3D axis = new UnitVector3D(Axis3D.Z);
 
    /** Radius of the cylinder part. */
    private double radius;

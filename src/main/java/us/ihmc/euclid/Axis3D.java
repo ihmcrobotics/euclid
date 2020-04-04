@@ -7,7 +7,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  * {@code Axis} can be used to provide a simple and readable way to refer the three main axes of a
  * coordinate system.
  */
-public enum Axis implements UnitVector3DReadOnly
+public enum Axis3D implements UnitVector3DReadOnly
 {
    /** The x-axis is usually associated with the forward direction. */
    X(1.0, 0.0, 0.0),
@@ -26,11 +26,11 @@ public enum Axis implements UnitVector3DReadOnly
     * Static final field holding the return from {@link #values()}. This field should be used in place
     * of calling values() for garbage-free operations.
     */
-   public static final Axis[] values = values();
+   public static final Axis3D[] values = values();
 
    private final double x, y, z;
 
-   Axis(double x, double y, double z)
+   Axis3D(double x, double y, double z)
    {
       this.x = x;
       this.y = y;
@@ -114,10 +114,10 @@ public enum Axis implements UnitVector3DReadOnly
     * Gets the value of the tuple for the given axis.
     *
     * @param tuple the tuple to get value from. Not modified.
-    * @param axis  the {@link Axis} to get value for. Not modified.
+    * @param axis  the {@link Axis3D} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}.
     */
-   public static double get(Tuple3DBasics tuple, Axis axis)
+   public static double get(Tuple3DBasics tuple, Axis3D axis)
    {
       switch (axis)
       {
@@ -139,10 +139,10 @@ public enum Axis implements UnitVector3DReadOnly
     * Sets the value of the given tuple for the given axis to the given value.
     *
     * @param tupleToModify the tuple to set value of. Modified.
-    * @param axis          the {@link Axis} to set value for. Not modified.
+    * @param axis          the {@link Axis3D} to set value for. Not modified.
     * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
     */
-   public static void set(Tuple3DBasics tupleToModify, Axis axis, double value)
+   public static void set(Tuple3DBasics tupleToModify, Axis3D axis, double value)
    {
       switch (axis)
       {
@@ -168,7 +168,7 @@ public enum Axis implements UnitVector3DReadOnly
     *
     * @return next clockwise axis
     */
-   public Axis getNextClockwiseAxis()
+   public Axis3D getNextClockwiseAxis()
    {
       switch (this)
       {
@@ -186,7 +186,7 @@ public enum Axis implements UnitVector3DReadOnly
     *
     * @return next counterclockwise axis
     */
-   public Axis getNextCounterClockwiseAxis()
+   public Axis3D getNextCounterClockwiseAxis()
    {
       switch (this)
       {
