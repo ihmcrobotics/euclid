@@ -129,13 +129,6 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
 
    /** {@inheritDoc} */
    @Override
-   public void setToZero()
-   {
-      vector.setToZero();
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void absolute()
    {
       vector.absolute();

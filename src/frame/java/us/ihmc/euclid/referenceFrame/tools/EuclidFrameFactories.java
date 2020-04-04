@@ -868,12 +868,6 @@ public class EuclidFrameFactories
          private final UnitVector2D vector = new UnitVector2D();
 
          @Override
-         public void setToZero()
-         {
-            vector.setToZero();
-         }
-
-         @Override
          public void absolute()
          {
             vector.absolute();
@@ -1006,12 +1000,6 @@ public class EuclidFrameFactories
       return new FixedFrameUnitVector3DBasics()
       {
          private final UnitVector3D vector = new UnitVector3D(initialX, initialY, initialZ);
-
-         @Override
-         public void setToZero()
-         {
-            vector.setToZero();
-         }
 
          @Override
          public void absolute()

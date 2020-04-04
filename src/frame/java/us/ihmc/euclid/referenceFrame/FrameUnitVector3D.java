@@ -127,13 +127,6 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObjec
 
    /** {@inheritDoc} */
    @Override
-   public void setToZero()
-   {
-      vector.setToZero();
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void absolute()
    {
       vector.absolute();

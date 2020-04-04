@@ -87,16 +87,6 @@ public class UnitVector3D implements UnitVector3DBasics, GeometryObject<UnitVect
 
    /** {@inheritDoc} */
    @Override
-   public void setToZero()
-   {
-      x = 1.0;
-      y = 0.0;
-      z = 0.0;
-      dirty = false;
-   }
-
-   /** {@inheritDoc} */
-   @Override
    public void absolute()
    {
       x = Math.abs(x);

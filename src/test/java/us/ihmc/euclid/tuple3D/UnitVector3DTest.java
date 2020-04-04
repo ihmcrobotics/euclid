@@ -575,7 +575,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          double y = random.nextDouble();
          double z = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.addX(x);
          expected.addX(x);
@@ -601,7 +600,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          double y = random.nextDouble();
          double z = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.add(x, y, z);
          expected.add(x, y, z);
@@ -615,7 +613,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DReadOnly tupleToAdd = EuclidCoreRandomTools.nextPoint3D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.add(tupleToAdd);
          expected.add(tupleToAdd);
@@ -630,7 +627,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly tupleToAdd1 = EuclidCoreRandomTools.nextPoint3D(random);
          Tuple3DReadOnly tupleToAdd2 = EuclidCoreRandomTools.nextPoint3D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.add(tupleToAdd1, tupleToAdd2);
          expected.add(tupleToAdd1, tupleToAdd2);
@@ -653,7 +649,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          double y = random.nextDouble();
          double z = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.subX(x);
          expected.subX(x);
@@ -679,7 +674,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          double y = random.nextDouble();
          double z = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.sub(x, y, z);
          expected.sub(x, y, z);
@@ -693,7 +687,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          Tuple3DReadOnly tupleToSub = EuclidCoreRandomTools.nextPoint3D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.sub(tupleToSub);
          expected.sub(tupleToSub);
@@ -708,7 +701,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly tupleToSub1 = EuclidCoreRandomTools.nextPoint3D(random);
          Tuple3DReadOnly tupleToSub2 = EuclidCoreRandomTools.nextPoint3D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.sub(tupleToSub1, tupleToSub2);
          expected.sub(tupleToSub1, tupleToSub2);
@@ -817,7 +809,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       { // Test scale(double scalarX, double scalarY)
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scale(scale);
@@ -830,7 +821,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
       { // Test scale(double scalarX, double scalarY)
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scaleX = random.nextDouble();
          double scaleY = random.nextDouble();
          double scaleZ = random.nextDouble();
@@ -846,7 +836,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly other = EuclidCoreRandomTools.nextPoint3D(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.setAndScale(scale, other);
@@ -860,7 +849,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly other = EuclidCoreRandomTools.nextPoint3D(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleAdd(scale, other); // the scale is applied to unit vector which cannot be scaled.
@@ -875,7 +863,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly other2 = EuclidCoreRandomTools.nextPoint3D(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleAdd(scale, other1, other2);
@@ -889,7 +876,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly other = EuclidCoreRandomTools.nextPoint3D(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleAdd(scale, other, actual);
@@ -903,7 +889,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly other = EuclidCoreRandomTools.nextPoint3D(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleSub(scale, other); // the scale is applied to unit vector which cannot be scaled.
@@ -918,7 +903,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly other2 = EuclidCoreRandomTools.nextPoint3D(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleSub(scale, other1, other2);
@@ -932,7 +916,6 @@ public class UnitVector3DTest extends Vector3DBasicsTest<UnitVector3D>
          Tuple3DReadOnly other = EuclidCoreRandomTools.nextPoint3D(random);
          Vector3D expected = EuclidCoreRandomTools.nextVector3D(random);
          UnitVector3D actual = new UnitVector3D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleSub(scale, other, actual);

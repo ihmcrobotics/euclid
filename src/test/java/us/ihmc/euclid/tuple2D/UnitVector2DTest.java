@@ -528,7 +528,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          double x = random.nextDouble();
          double y = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.addX(x);
          expected.addX(x);
@@ -548,7 +547,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          double x = random.nextDouble();
          double y = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.add(x, y);
          expected.add(x, y);
@@ -562,7 +560,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DReadOnly tupleToAdd = EuclidCoreRandomTools.nextPoint2D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.add(tupleToAdd);
          expected.add(tupleToAdd);
@@ -577,7 +574,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly tupleToAdd1 = EuclidCoreRandomTools.nextPoint2D(random);
          Tuple2DReadOnly tupleToAdd2 = EuclidCoreRandomTools.nextPoint2D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.add(tupleToAdd1, tupleToAdd2);
          expected.add(tupleToAdd1, tupleToAdd2);
@@ -599,7 +595,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          double x = random.nextDouble();
          double y = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.subX(x);
          expected.subX(x);
@@ -619,7 +614,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          double x = random.nextDouble();
          double y = random.nextDouble();
          actual.set(expected);
-         expected.normalize();
 
          actual.sub(x, y);
          expected.sub(x, y);
@@ -633,7 +627,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          Tuple2DReadOnly tupleToSub = EuclidCoreRandomTools.nextPoint2D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.sub(tupleToSub);
          expected.sub(tupleToSub);
@@ -648,7 +641,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly tupleToSub1 = EuclidCoreRandomTools.nextPoint2D(random);
          Tuple2DReadOnly tupleToSub2 = EuclidCoreRandomTools.nextPoint2D(random);
          actual.set(expected);
-         expected.normalize();
 
          actual.sub(tupleToSub1, tupleToSub2);
          expected.sub(tupleToSub1, tupleToSub2);
@@ -757,7 +749,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       { // Test scale(double scalar)
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scale(scale);
@@ -770,7 +761,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       { // Test scale(double scalarX, double scalarY)
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scaleX = random.nextDouble();
          double scaleY = random.nextDouble();
 
@@ -785,7 +775,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly other = EuclidCoreRandomTools.nextPoint2D(random);
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.setAndScale(scale, other);
@@ -799,7 +788,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly other = EuclidCoreRandomTools.nextPoint2D(random);
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleAdd(scale, other); // the scale is applied to unit vector which cannot be scaled.
@@ -814,7 +802,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly other2 = EuclidCoreRandomTools.nextPoint2D(random);
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleAdd(scale, other1, other2);
@@ -828,7 +815,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly other = EuclidCoreRandomTools.nextPoint2D(random);
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleAdd(scale, other, actual);
@@ -842,7 +828,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly other = EuclidCoreRandomTools.nextPoint2D(random);
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleSub(scale, other); // the scale is applied to unit vector which cannot be scaled.
@@ -857,7 +842,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly other2 = EuclidCoreRandomTools.nextPoint2D(random);
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleSub(scale, other1, other2);
@@ -871,7 +855,6 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
          Tuple2DReadOnly other = EuclidCoreRandomTools.nextPoint2D(random);
          Vector2D expected = EuclidCoreRandomTools.nextVector2D(random);
          UnitVector2D actual = new UnitVector2D(expected);
-         expected.normalize();
          double scale = random.nextDouble();
 
          actual.scaleSub(scale, other, actual);
