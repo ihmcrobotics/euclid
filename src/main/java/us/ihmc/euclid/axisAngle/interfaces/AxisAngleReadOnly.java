@@ -13,6 +13,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
@@ -42,6 +43,13 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
+    * Gets the reference to the axis part of this axis-angle.
+    * 
+    * @return the reference to the axis vector.
+    */
+   Vector3DReadOnly getAxis();
+
+   /**
     * Returns the angle of this axis-angle, usually expressed in radians.
     *
     * @return the angle.
@@ -63,7 +71,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @return the x-component of the unitary axis.
     */
-   double getX();
+   default double getX()
+   {
+      return getAxis().getX();
+   }
 
    /**
     * Returns the x-component of the unitary axis of this axis-angle.
@@ -80,7 +91,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @return the y-component of the unitary axis.
     */
-   double getY();
+   default double getY()
+   {
+      return getAxis().getY();
+   }
 
    /**
     * Returns the y-component of the unitary axis of this axis-angle.
@@ -97,7 +111,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @return the z-component of the unitary axis.
     */
-   double getZ();
+   default double getZ()
+   {
+      return getAxis().getZ();
+   }
 
    /**
     * Returns the z-component of the unitary axis of this axis-angle.
@@ -130,7 +147,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     */
    default double axisNorm()
    {
-      return EuclidCoreTools.fastNorm(getX(), getY(), getZ());
+      return getAxis().length();
    }
 
    /**

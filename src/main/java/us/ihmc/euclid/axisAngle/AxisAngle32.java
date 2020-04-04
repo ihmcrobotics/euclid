@@ -9,6 +9,8 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.tuple3D.UnitVector3D32;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -22,12 +24,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, EpsilonComparable<AxisAngle32>, GeometricallyComparable<AxisAngle32>
 {
-   /** The x-component of the unitary axis. */
-   private float x;
-   /** The y-component of the unitary axis. */
-   private float y;
-   /** The z-component of the unitary axis. */
-   private float z;
+   /** The axis part of this axis-angle. */
+   private final UnitVector3D32 axis = new UnitVector3D32();
    /** The angle component of this axis-angle. */
    private float angle;
 
@@ -139,31 +137,15 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
     */
    public final void set(float x, float y, float z, float angle)
    {
-      this.x = x;
-      this.y = y;
-      this.z = z;
+      axis.set(x, y, z);
       this.angle = angle;
    }
 
    /** {@inheritDoc} */
    @Override
-   public final void setX(double x)
+   public Vector3DBasics getAxis()
    {
-      this.x = (float) x;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setY(double y)
-   {
-      this.y = (float) y;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setZ(double z)
-   {
-      this.z = (float) z;
+      return axis;
    }
 
    /** {@inheritDoc} */
@@ -171,27 +153,6 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    public final void setAngle(double angle)
    {
       this.angle = (float) angle;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getX()
-   {
-      return x;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getY()
-   {
-      return y;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getZ()
-   {
-      return z;
    }
 
    /** {@inheritDoc} */
@@ -212,21 +173,21 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    @Override
    public final float getX32()
    {
-      return x;
+      return axis.getX32();
    }
 
    /** {@inheritDoc} */
    @Override
    public final float getY32()
    {
-      return y;
+      return axis.getY32();
    }
 
    /** {@inheritDoc} */
    @Override
    public final float getZ32()
    {
-      return z;
+      return axis.getZ32();
    }
 
    /**
@@ -300,6 +261,8 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    @Override
    public int hashCode()
    {
-      return EuclidHashCodeTools.toIntHashCode(x, y, z, angle);
+      long bits = EuclidHashCodeTools.addToHashCode(1L, axis);
+      bits = EuclidHashCodeTools.addToHashCode(bits, angle);
+      return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }
