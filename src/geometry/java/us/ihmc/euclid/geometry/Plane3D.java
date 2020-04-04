@@ -8,6 +8,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -27,7 +28,7 @@ public class Plane3D implements GeometryObject<Plane3D>
     * Normal of this plane of unit-length. Its direction indicates which side of the plane is
     * considered to be the 'above' part.
     */
-   private final Vector3D normal = new Vector3D();
+   private final UnitVector3D normal = new UnitVector3D();
 
    private boolean hasPointBeenSet = false;
    private boolean hasNormalBeenSet = false;

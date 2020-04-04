@@ -7,9 +7,9 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -23,7 +23,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    /** Coordinates of a point located on this line. */
    private final Point3D point = new Point3D();
    /** Normalized direction of this line. */
-   private final Vector3DBasics direction = EuclidCoreFactories.newUnitaryVector3D();
+   private final UnitVector3D direction = new UnitVector3D();
 
    /**
     * Default constructor that initializes both {@code point} and {@code direction} to zero.

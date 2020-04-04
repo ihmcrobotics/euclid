@@ -23,8 +23,8 @@ public class FrameExpandingPolytopeAlgorithmTest
 {
    private static final int ITERATIONS = 10000;
 
-   private static final double DISTANCE_EPSILON = 1.0e-8;
-   private static final double POINT_TANGENTIAL_EPSILON = 2.0e-5;
+   private static final double DISTANCE_EPSILON = 0.0;
+   private static final double POINT_TANGENTIAL_EPSILON = 0.0;
 
    private static final double LARGE_DISTANCE_EPSILON = 5.0e-4;
    private static final double LARGE_POINT_TANGENTIAL_EPSILON = 1.0e-2;

@@ -8,6 +8,7 @@ import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -27,7 +28,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
    /** Position of this capsule's center. */
    private final Point3D position = new Point3D();
    /** Axis of revolution of this capsule. */
-   private final Vector3DBasics axis = EuclidCoreFactories.newUnitaryVector3D(Axis.Z);
+   private final UnitVector3D axis = new UnitVector3D(Axis.Z);
 
    /** This capsule radius. */
    private double radius;

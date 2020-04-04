@@ -33,7 +33,7 @@ public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<Fr
    /** Position of this cylinder's center. */
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    /** Axis of revolution of this cylinder. */
-   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newUnitaryFixedFrameVector3DBasics(this, Axis.Z);
+   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis.Z);
    /** This cylinder radius. */
    private double radius;
    /** This cylinder length. */

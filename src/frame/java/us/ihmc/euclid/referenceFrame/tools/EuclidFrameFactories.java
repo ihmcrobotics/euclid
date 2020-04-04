@@ -20,6 +20,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
@@ -36,19 +38,22 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -828,9 +833,9 @@ public class EuclidFrameFactories
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector2DBasics newUnitaryFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   public static FixedFrameVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
-      return newUnitaryFixedFrameVector2DBasics(referenceFrameHolder, 1.0, 0.0);
+      return newFixedFrameUnitVector2DBasics(referenceFrameHolder, 1.0, 0.0);
    }
 
    /**
@@ -841,9 +846,9 @@ public class EuclidFrameFactories
     * @param initialValue         the initial value for the new vector. Not modified.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector2DBasics newUnitaryFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DReadOnly initialValue)
+   public static FixedFrameVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DReadOnly initialValue)
    {
-      return newUnitaryFixedFrameVector2DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY());
+      return newFixedFrameUnitVector2DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY());
    }
 
    /**
@@ -855,32 +860,58 @@ public class EuclidFrameFactories
     * @param initialY             the initial value for the y-component of the new vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector2DBasics newUnitaryFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY)
+   public static FixedFrameVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY)
    {
-      return new FixedFrameVector2DBasics()
+      return new FixedFrameUnitVector2DBasics()
       {
-         private double x = initialX;
-         private double y = initialY;
-         private boolean dirty = true;
+         private final UnitVector2D vector = new UnitVector2D();
+
+         @Override
+         public void absolute()
+         {
+            vector.absolute();
+         }
+
+         @Override
+         public void negate()
+         {
+            vector.negate();
+         }
+
+         @Override
+         public void normalize()
+         {
+            vector.normalize();
+         }
+
+         @Override
+         public void markAsDirty()
+         {
+            vector.markAsDirty();
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return vector.isDirty();
+         }
+
+         @Override
+         public void set(UnitVector2DReadOnly other)
+         {
+            vector.set(other);
+         }
 
          @Override
          public void setX(double x)
          {
-            if (this.x != x)
-            {
-               this.x = x;
-               dirty = true;
-            }
+            vector.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            if (this.y != y)
-            {
-               this.y = y;
-               dirty = true;
-            }
+            vector.setY(y);
          }
 
          @Override
@@ -890,67 +921,28 @@ public class EuclidFrameFactories
          }
 
          @Override
-         public double getX()
+         public double getRawX()
          {
-            normalize();
-            return x;
+            return vector.getRawX();
          }
 
          @Override
-         public double getY()
+         public double getRawY()
          {
-            normalize();
-            return y;
-         }
-
-         @Override
-         public void normalize()
-         {
-            if (dirty)
-            {
-               if (EuclidCoreTools.areAllZero(x, y, 1.0e-16))
-               {
-                  x = 1.0;
-                  y = 0.0;
-               }
-               else
-               {
-                  double lengthInverse = 1.0 / EuclidCoreTools.fastNorm(x, y);
-                  x *= lengthInverse;
-                  y *= lengthInverse;
-               }
-
-               dirty = false;
-            }
-         }
-
-         @Override
-         public double length()
-         {
-            normalize();
-            return 1.0;
-         }
-
-         @Override
-         public double lengthSquared()
-         {
-            normalize();
-            return 1.0;
+            return vector.getRawY();
          }
 
          @Override
          public int hashCode()
          {
-            long bits = EuclidHashCodeTools.toLongHashCode(x, y);
-            bits = EuclidHashCodeTools.addToHashCode(bits, getReferenceFrame());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
             if (object instanceof FrameVector2DReadOnly)
-               return FixedFrameVector2DBasics.super.equals((FrameVector2DReadOnly) object);
+               return FixedFrameUnitVector2DBasics.super.equals((FrameVector2DReadOnly) object);
             else
                return false;
          }
@@ -973,9 +965,9 @@ public class EuclidFrameFactories
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector3DBasics newUnitaryFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   public static FixedFrameVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
-      return newUnitaryFixedFrameVector3DBasics(referenceFrameHolder, Axis.X);
+      return newFixedFrameUnitVector3DBasics(referenceFrameHolder, Axis.X);
    }
 
    /**
@@ -986,9 +978,9 @@ public class EuclidFrameFactories
     * @param initialValue         the initial value for the new vector. Not modified.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector3DBasics newUnitaryFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialValue)
+   public static FixedFrameVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialValue)
    {
-      return newUnitaryFixedFrameVector3DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY(), initialValue.getZ());
+      return newFixedFrameUnitVector3DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY(), initialValue.getZ());
    }
 
    /**
@@ -1001,44 +993,65 @@ public class EuclidFrameFactories
     * @param initialZ             the initial value for the z-component of the new vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector3DBasics newUnitaryFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY,
-                                                                             double initialZ)
+   public static FixedFrameVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY,
+                                                                          double initialZ)
    {
-      return new FixedFrameVector3DBasics()
+      return new FixedFrameUnitVector3DBasics()
       {
-         private double x = initialX;
-         private double y = initialY;
-         private double z = initialZ;
-         private boolean dirty = true;
+         private final UnitVector3D vector = new UnitVector3D(initialX, initialY, initialZ);
+
+         @Override
+         public void absolute()
+         {
+            vector.absolute();
+         }
+
+         @Override
+         public void negate()
+         {
+            vector.negate();
+         }
+
+         @Override
+         public void normalize()
+         {
+            vector.normalize();
+         }
+
+         @Override
+         public void markAsDirty()
+         {
+            vector.markAsDirty();
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return vector.isDirty();
+         }
+
+         @Override
+         public void set(UnitVector3DReadOnly other)
+         {
+            vector.set(other);
+         }
 
          @Override
          public void setX(double x)
          {
-            if (this.x != x)
-            {
-               this.x = x;
-               dirty = true;
-            }
+            vector.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            if (this.y != y)
-            {
-               this.y = y;
-               dirty = true;
-            }
+            vector.setY(y);
          }
 
          @Override
          public void setZ(double z)
          {
-            if (this.z != z)
-            {
-               this.z = z;
-               dirty = true;
-            }
+            vector.setZ(z);
          }
 
          @Override
@@ -1048,76 +1061,34 @@ public class EuclidFrameFactories
          }
 
          @Override
-         public double getX()
+         public double getRawX()
          {
-            normalize();
-            return x;
+            return vector.getRawX();
          }
 
          @Override
-         public double getY()
+         public double getRawY()
          {
-            normalize();
-            return y;
+            return vector.getRawY();
          }
 
          @Override
-         public double getZ()
+         public double getRawZ()
          {
-            normalize();
-            return z;
-         }
-
-         @Override
-         public void normalize()
-         {
-            if (dirty)
-            {
-               if (EuclidCoreTools.areAllZero(x, y, z, 1.0e-16))
-               {
-                  x = 1.0;
-                  y = 0.0;
-                  z = 0.0;
-               }
-               else
-               {
-                  double lengthInverse = 1.0 / EuclidCoreTools.fastNorm(x, y, z);
-                  x *= lengthInverse;
-                  y *= lengthInverse;
-                  z *= lengthInverse;
-               }
-
-               dirty = false;
-            }
-         }
-
-         @Override
-         public double length()
-         {
-            normalize();
-            return 1.0;
-         }
-
-         @Override
-         public double lengthSquared()
-         {
-            normalize();
-            return 1.0;
+            return vector.getRawZ();
          }
 
          @Override
          public int hashCode()
          {
-            long bits = EuclidHashCodeTools.toLongHashCode(x, y, z);
-            bits = EuclidHashCodeTools.addToHashCode(bits, getReferenceFrame());
-            return EuclidHashCodeTools.toIntHashCode(bits);
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
             if (object instanceof FrameVector3DReadOnly)
-               return FixedFrameVector3DBasics.super.equals((FrameVector3DReadOnly) object);
+               return FixedFrameUnitVector3DBasics.super.equals((FrameVector3DReadOnly) object);
             else
                return false;
          }

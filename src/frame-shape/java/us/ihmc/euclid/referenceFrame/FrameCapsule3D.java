@@ -33,7 +33,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    /** Position of this capsule's center. */
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    /** Axis of revolution of this capsule. */
-   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newUnitaryFixedFrameVector3DBasics(this, Axis.Z);
+   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis.Z);
    /** This capsule radius. */
    private double radius;
    /** This capsule length. */

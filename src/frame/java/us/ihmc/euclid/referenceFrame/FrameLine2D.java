@@ -39,7 +39,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint2DBasics point = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
-   private final FixedFrameVector2DBasics direction = EuclidFrameFactories.newUnitaryFixedFrameVector2DBasics(this);
+   private final FixedFrameVector2DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector2DBasics(this);
    /** Rigid-body transform used to perform garbage-free operations. */
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 

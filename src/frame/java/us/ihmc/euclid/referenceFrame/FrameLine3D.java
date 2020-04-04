@@ -42,7 +42,7 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint3DBasics point = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
-   private final FixedFrameVector3DBasics direction = EuclidFrameFactories.newUnitaryFixedFrameVector3DBasics(this);
+   private final FixedFrameVector3DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this);
 
    /**
     * Default constructor that initializes both {@link #point} and {@link #direction} to zero and the
