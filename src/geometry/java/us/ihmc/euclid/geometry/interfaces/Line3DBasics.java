@@ -48,8 +48,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the point and vector of this line to zero. After calling this method, this line becomes
-    * invalid. A new valid point and valid vector will have to be set so this line is again usable.
+    * Sets the point of this plane to zero and its direction to (1.0, 0.0, 0.0).
     */
    @Override
    default void setToZero()

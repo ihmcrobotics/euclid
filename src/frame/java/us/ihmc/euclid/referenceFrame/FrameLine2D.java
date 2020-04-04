@@ -53,8 +53,8 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    }
 
    /**
-    * Creates a new line and initializes both {@link #point} and {@link #direction} to zero and the
-    * reference frame to the given {@code referenceFrame}.
+    * Default constructor that initializes its {@code point} to zero, its {@code direction} to (1.0,
+    * 0.0), and the reference frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the initial reference frame for this line.
     */

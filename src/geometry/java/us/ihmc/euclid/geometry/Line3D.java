@@ -26,7 +26,7 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    private final UnitVector3D direction = new UnitVector3D();
 
    /**
-    * Default constructor that initializes both {@code point} and {@code direction} to zero.
+    * Default constructor that initializes its {@code point} to zero and {@code direction} to (1.0, 0.0, 0.0).
     */
    public Line3D()
    {

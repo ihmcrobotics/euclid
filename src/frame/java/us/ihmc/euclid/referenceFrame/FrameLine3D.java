@@ -45,8 +45,8 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    private final FixedFrameVector3DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this);
 
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero and the
-    * reference frame to {@code ReferenceFrame.getWorldFrame()}.
+    * Default constructor that initializes its {@code point} to zero, its {@code direction} to (1.0,
+    * 0.0, 0.0), and the reference frame to {@code ReferenceFrame.getWorldFrame()}.
     */
    public FrameLine3D()
    {
