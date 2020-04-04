@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
@@ -19,7 +20,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    private double yaw = 0.0;
 
    /** Vector used to transform {@code this} in {@link #applyTransform(Transform)}. */
-   private final Vector2D xVector = new Vector2D(1.0, 0.0);
+   private final Vector2D xVector = new Vector2D(Axis2D.X);
 
    /**
     * Creates a new orientation 2D initialized with its yaw angle to zero.
@@ -89,7 +90,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    @Override
    public void applyTransform(Transform transform)
    {
-      xVector.set(1.0, 0.0);
+      xVector.set(Axis2D.X);
       transform.transform(xVector);
       double deltaYaw = EuclidCoreTools.atan2(xVector.getY(), xVector.getX());
 
@@ -103,7 +104,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    @Override
    public void applyInverseTransform(Transform transform)
    {
-      xVector.set(1.0, 0.0);
+      xVector.set(Axis2D.X);
       transform.inverseTransform(xVector);
       double deltaYaw = EuclidCoreTools.atan2(xVector.getY(), xVector.getX());
 
