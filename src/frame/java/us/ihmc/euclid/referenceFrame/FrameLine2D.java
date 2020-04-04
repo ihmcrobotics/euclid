@@ -6,7 +6,7 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
@@ -39,7 +39,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint2DBasics point = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
-   private final FixedFrameVector2DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector2DBasics(this);
+   private final FixedFrameUnitVector2DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector2DBasics(this);
    /** Rigid-body transform used to perform garbage-free operations. */
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
@@ -204,7 +204,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /** {@inheritDoc} */
    @Override
-   public FixedFrameVector2DBasics getDirection()
+   public FixedFrameUnitVector2DBasics getDirection()
    {
       return direction;
    }

@@ -4,8 +4,8 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Read-only interface for a line 3D.
@@ -28,7 +28,7 @@ public interface Line3DReadOnly
     *
     * @return the reference to the direction.
     */
-   Vector3DReadOnly getDirection();
+   UnitVector3DReadOnly getDirection();
 
    /**
     * Gets the x-component of this line's direction.

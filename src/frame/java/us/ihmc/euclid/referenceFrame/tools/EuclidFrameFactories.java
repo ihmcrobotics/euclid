@@ -834,7 +834,7 @@ public class EuclidFrameFactories
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   public static FixedFrameUnitVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newFixedFrameUnitVector2DBasics(referenceFrameHolder, Axis2D.X);
    }
@@ -847,7 +847,7 @@ public class EuclidFrameFactories
     * @param initialValue         the initial value for the new vector. Not modified.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DReadOnly initialValue)
+   public static FixedFrameUnitVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DReadOnly initialValue)
    {
       return newFixedFrameUnitVector2DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY());
    }
@@ -861,7 +861,7 @@ public class EuclidFrameFactories
     * @param initialY             the initial value for the y-component of the new vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY)
+   public static FixedFrameUnitVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY)
    {
       return new FixedFrameUnitVector2DBasics()
       {
@@ -966,7 +966,7 @@ public class EuclidFrameFactories
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
    {
       return newFixedFrameUnitVector3DBasics(referenceFrameHolder, Axis3D.X);
    }
@@ -979,7 +979,7 @@ public class EuclidFrameFactories
     * @param initialValue         the initial value for the new vector. Not modified.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialValue)
+   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialValue)
    {
       return newFixedFrameUnitVector3DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY(), initialValue.getZ());
    }
@@ -994,8 +994,8 @@ public class EuclidFrameFactories
     * @param initialZ             the initial value for the z-component of the new vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY,
-                                                                          double initialZ)
+   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY,
+                                                                              double initialZ)
    {
       return new FixedFrameUnitVector3DBasics()
       {

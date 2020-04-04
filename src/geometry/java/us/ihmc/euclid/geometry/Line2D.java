@@ -10,7 +10,7 @@ import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
@@ -102,7 +102,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * @return the reference to the direction.
     */
    @Override
-   public Vector2DBasics getDirection()
+   public UnitVector2DBasics getDirection()
    {
       return direction;
    }

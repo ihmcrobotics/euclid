@@ -4,7 +4,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -44,7 +44,7 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
     * @return the axis of this torus.
     */
    @Override
-   Vector3DBasics getAxis();
+   UnitVector3DBasics getAxis();
 
    /** {@inheritDoc} */
    @Override

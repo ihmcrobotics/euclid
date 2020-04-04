@@ -6,6 +6,7 @@ import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -46,7 +47,7 @@ public interface Torus3DReadOnly extends Shape3DReadOnly
     *
     * @return the axis of this torus.
     */
-   Vector3DReadOnly getAxis();
+   UnitVector3DReadOnly getAxis();
 
    /**
     * {@inheritDoc}

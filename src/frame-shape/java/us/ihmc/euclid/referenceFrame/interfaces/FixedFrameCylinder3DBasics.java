@@ -25,7 +25,7 @@ public interface FixedFrameCylinder3DBasics extends Cylinder3DBasics, FrameCylin
 
    /** {@inheritDoc} */
    @Override
-   FixedFrameVector3DBasics getAxis();
+   FixedFrameUnitVector3DBasics getAxis();
 
    /**
     * Copies the {@code other} cylinder data into {@code this}.

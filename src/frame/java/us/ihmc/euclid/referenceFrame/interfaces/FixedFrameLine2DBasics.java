@@ -47,7 +47,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @return the reference to the direction.
     */
    @Override
-   FixedFrameVector2DBasics getDirection();
+   FixedFrameUnitVector2DBasics getDirection();
 
    /**
     * Changes the point through which this line has to go.

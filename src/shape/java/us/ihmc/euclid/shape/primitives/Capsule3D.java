@@ -11,7 +11,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -150,7 +150,7 @@ public class Capsule3D implements Capsule3DBasics, GeometryObject<Capsule3D>
 
    /** {@inheritDoc} */
    @Override
-   public Vector3DBasics getAxis()
+   public UnitVector3DBasics getAxis()
    {
       return axis;
    }

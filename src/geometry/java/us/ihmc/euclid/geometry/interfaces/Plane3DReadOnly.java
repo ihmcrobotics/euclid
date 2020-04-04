@@ -3,6 +3,7 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -23,7 +24,7 @@ public interface Plane3DReadOnly
     *
     * @return the reference to the normal.
     */
-   Vector3DReadOnly getNormal();
+   UnitVector3DReadOnly getNormal();
 
    /**
     * Gets the x-coordinate of a point this plane goes through.

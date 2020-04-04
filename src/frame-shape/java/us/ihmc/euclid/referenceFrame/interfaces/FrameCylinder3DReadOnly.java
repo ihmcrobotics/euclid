@@ -28,7 +28,7 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
 
    /** {@inheritDoc} */
    @Override
-   FrameVector3DReadOnly getAxis();
+   FrameUnitVector3DReadOnly getAxis();
 
    /**
     * {@inheritDoc}

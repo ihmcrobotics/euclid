@@ -25,7 +25,7 @@ public interface FixedFrameCapsule3DBasics extends Capsule3DBasics, FrameCapsule
 
    /** {@inheritDoc} */
    @Override
-   FixedFrameVector3DBasics getAxis();
+   FixedFrameUnitVector3DBasics getAxis();
 
    /**
     * Copies the {@code other} capsule data into {@code this}.

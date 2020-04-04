@@ -7,7 +7,7 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -30,7 +30,7 @@ public interface Plane3DBasics extends Plane3DReadOnly, Clearable, Transformable
     * @return the reference to the normal.
     */
    @Override
-   Vector3DBasics getNormal();
+   UnitVector3DBasics getNormal();
 
    /** {@inheritDoc} */
    @Override

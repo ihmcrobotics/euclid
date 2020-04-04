@@ -10,7 +10,7 @@ import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.UnitVector3D32;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -143,7 +143,7 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
 
    /** {@inheritDoc} */
    @Override
-   public Vector3DBasics getAxis()
+   public UnitVector3DBasics getAxis()
    {
       return axis;
    }

@@ -39,7 +39,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
 
    /** {@inheritDoc} */
    @Override
-   FixedFrameVector3DBasics getDirection();
+   FixedFrameUnitVector3DBasics getDirection();
 
    /**
     * Changes the point through which this line has to go.

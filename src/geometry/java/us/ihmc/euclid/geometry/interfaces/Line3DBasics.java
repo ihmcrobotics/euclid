@@ -8,7 +8,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -34,7 +34,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * @return the reference to the direction.
     */
    @Override
-   Vector3DBasics getDirection();
+   UnitVector3DBasics getDirection();
 
    /**
     * Tests if this line contains {@link Double#NaN}.

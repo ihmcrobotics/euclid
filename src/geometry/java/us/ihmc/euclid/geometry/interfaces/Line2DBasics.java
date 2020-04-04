@@ -8,7 +8,7 @@ import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -36,7 +36,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     * @return the reference to the direction.
     */
    @Override
-   Vector2DBasics getDirection();
+   UnitVector2DBasics getDirection();
 
    /**
     * Tests if this line contains {@link Double#NaN}.

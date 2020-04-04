@@ -11,6 +11,7 @@ import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -89,7 +90,7 @@ public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
     * @return the reference to the normal.
     */
    @Override
-   public Vector3DBasics getNormal()
+   public UnitVector3DBasics getNormal()
    {
       return normal;
    }

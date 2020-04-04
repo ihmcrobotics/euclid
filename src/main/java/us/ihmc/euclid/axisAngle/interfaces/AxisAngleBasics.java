@@ -6,7 +6,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.AxisAngleTools;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -26,7 +26,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     * @return the reference to the axis vector.
     */
    @Override
-   Vector3DBasics getAxis();
+   UnitVector3DBasics getAxis();
 
    /**
     * Sets a new angle to this axis-angle.
