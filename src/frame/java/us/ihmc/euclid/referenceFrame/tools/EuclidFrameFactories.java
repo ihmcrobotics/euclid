@@ -828,7 +828,7 @@ public class EuclidFrameFactories
     * Creates a new vector 2D that is constrained to be a unit-length vector, i.e.
     * {@code vector.length() == 1.0}.
     * <p>
-    * The new vector is initialized to: (1.0, 0.0)
+    * The new vector is initialized to {@link Axis2D#X}.
     * </p>
     * 
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
@@ -960,7 +960,7 @@ public class EuclidFrameFactories
     * Creates a new vector 3D that is constrained to be a unit-length vector, i.e.
     * {@code vector.length() == 1.0}.
     * <p>
-    * The new vector is initialized to: (1.0, 0.0, 0.0)
+    * The new vector is initialized to: {@link Axis3D#X}.
     * </p>
     * 
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.

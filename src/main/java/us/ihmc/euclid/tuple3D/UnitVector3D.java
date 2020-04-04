@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple3D;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -35,7 +36,7 @@ public class UnitVector3D implements UnitVector3DBasics, GeometryObject<UnitVect
    private double z;
 
    /**
-    * Creates a new unit vector and initializes it components to zero.
+    * Creates a new unit vector and initializes it to {@link Axis3D#X}.
     */
    public UnitVector3D()
    {

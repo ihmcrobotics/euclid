@@ -81,7 +81,7 @@ public interface UnitVector2DBasics extends UnitVector2DReadOnly, Vector2DBasics
    void set(UnitVector2DReadOnly other);
 
    /**
-    * Sets this unit vector to (1.0, 0.0).
+    * Sets this unit vector to {@link Axis2D#X}.
     */
    @Override
    default void setToZero()

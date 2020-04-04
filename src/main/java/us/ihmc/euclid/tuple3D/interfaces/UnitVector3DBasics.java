@@ -98,7 +98,7 @@ public interface UnitVector3DBasics extends UnitVector3DReadOnly, Vector3DBasics
    void set(UnitVector3DReadOnly other);
 
    /**
-    * Sets this unit vector to (1.0, 0.0, 0.0).
+    * Sets this unit vector to {@link Axis3D#X}.
     */
    @Override
    default void setToZero()

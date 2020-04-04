@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
@@ -37,7 +38,7 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    /**
-    * Creates a new frame vector and initializes it components to zero and its reference frame to
+    * Creates a new frame unit vector and initializes it to {@link Axis2D#X} and its reference frame to
     * {@link ReferenceFrame#getWorldFrame()}.
     */
    public FrameUnitVector2D()
@@ -46,10 +47,10 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    }
 
    /**
-    * Creates a new frame vector and initializes it components to zero and its reference frame to the
-    * {@code referenceFrame}.
+    * Creates a new frame unit vector and initializes it to {@link Axis2D#X} and its reference frame to
+    * the {@code referenceFrame}.
     *
-    * @param referenceFrame the initial frame for this frame vector.
+    * @param referenceFrame the initial frame for this frame unit vector.
     */
    public FrameUnitVector2D(ReferenceFrame referenceFrame)
    {
@@ -57,10 +58,10 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    }
 
    /**
-    * Creates a new frame vector and initializes it with the given components and the given reference
-    * frame.
+    * Creates a new frame unit vector and initializes it with the given components and the given
+    * reference frame.
     *
-    * @param referenceFrame the initial frame for this frame vector.
+    * @param referenceFrame the initial frame for this frame unit vector.
     * @param x              the x-component.
     * @param y              the y-component.
     */
@@ -70,11 +71,11 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    }
 
    /**
-    * Creates a new frame vector and initializes its component {@code x}, {@code y} in order
-    * from the given array and initializes its reference frame.
+    * Creates a new frame unit vector and initializes its component {@code x}, {@code y} in order from
+    * the given array and initializes its reference frame.
     *
-    * @param referenceFrame the initial frame for this frame vector.
-    * @param vectorArray    the array containing this vector's components. Not modified.
+    * @param referenceFrame the initial frame for this frame unit vector.
+    * @param vectorArray    the array containing this unit vector's components. Not modified.
     */
    public FrameUnitVector2D(ReferenceFrame referenceFrame, double[] vectorArray)
    {
@@ -82,10 +83,10 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    }
 
    /**
-    * Creates a new frame vector and initializes it to {@code tuple2DReadOnly} and to the given
+    * Creates a new frame unit vector and initializes it to {@code tuple2DReadOnly} and to the given
     * reference frame.
     *
-    * @param referenceFrame  the initial frame for this frame vector.
+    * @param referenceFrame  the initial frame for this frame unit vector.
     * @param tuple2DReadOnly the tuple to copy the components from. Not modified.
     */
    public FrameUnitVector2D(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
@@ -94,10 +95,10 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    }
 
    /**
-    * Creates a new frame vector and initializes its x and y coordinate to {@code tuple3DReadOnly} and
-    * to the given reference frame.
+    * Creates a new frame unit vector and initializes its x and y coordinate to {@code tuple3DReadOnly}
+    * and to the given reference frame.
     *
-    * @param referenceFrame  the initial frame for this frame vector.
+    * @param referenceFrame  the initial frame for this frame unit vector.
     * @param tuple3DReadOnly the tuple to copy the coordinates from. Not modified.
     */
    public FrameUnitVector2D(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -106,7 +107,7 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    }
 
    /**
-    * Creates a new frame vector and initializes its reference frame x and y components from
+    * Creates a new frame unit vector and initializes its reference frame x and y components from
     * {@code frameTuple3DReadOnly}.
     *
     * @param frameTuple3DReadOnly the tuple to copy the components and reference frame from. Not
@@ -118,7 +119,7 @@ public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObjec
    }
 
    /**
-    * Creates a new frame vector and initializes it to {@code other}.
+    * Creates a new frame unit vector and initializes it to {@code other}.
     *
     * @param other the tuple to copy the components and reference frame from. Not modified.
     */

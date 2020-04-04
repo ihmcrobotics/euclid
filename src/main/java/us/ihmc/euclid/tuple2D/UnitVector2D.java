@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tuple2D;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -33,7 +34,7 @@ public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVect
    private double y;
 
    /**
-    * Creates a new unit vector and initializes it components to zero.
+    * Creates a new unit vector and initializes it to {@link Axis2D#X}.
     */
    public UnitVector2D()
    {
