@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -42,11 +43,11 @@ public class FrameLine3D implements FrameLine3DBasics, GeometryObject<FrameLine3
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint3DBasics point = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
-   private final FixedFrameUnitVector3DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this);
+   private final FixedFrameUnitVector3DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis3D.X);
 
    /**
-    * Default constructor that initializes its {@code point} to zero, its {@code direction} to (1.0,
-    * 0.0, 0.0), and the reference frame to {@code ReferenceFrame.getWorldFrame()}.
+    * Default constructor that initializes its {@code point} to zero, its {@code direction} to
+    * {@link Axis3D#X} and the reference frame to {@code ReferenceFrame.getWorldFrame()}.
     */
    public FrameLine3D()
    {

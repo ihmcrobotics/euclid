@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
@@ -39,13 +40,13 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
    private final FixedFramePoint2DBasics point = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
-   private final FixedFrameUnitVector2DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector2DBasics(this);
+   private final FixedFrameUnitVector2DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector2DBasics(this, Axis2D.X);
    /** Rigid-body transform used to perform garbage-free operations. */
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero and the
-    * reference frame to {@code ReferenceFrame.getWorldFrame()}.
+    * Default constructor that initializes its {@code point} to zero, its {@code direction} to
+    * {@link Axis2D#X} and the reference frame to {@code ReferenceFrame.getWorldFrame()}.
     */
    public FrameLine2D()
    {

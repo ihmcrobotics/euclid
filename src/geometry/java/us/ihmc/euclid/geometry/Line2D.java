@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
@@ -21,10 +22,11 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    /** Coordinates of a point located on this line. */
    private final Point2D point = new Point2D();
    /** Normalized direction of this line. */
-   private final UnitVector2D direction = new UnitVector2D();
+   private final UnitVector2D direction = new UnitVector2D(Axis2D.X);
 
    /**
-    * Default constructor that initializes its {@code point} to zero and {@code direction} to (1.0, 0.0).
+    * Default constructor that initializes its {@code point} to zero and {@code direction} to
+    * {@link Axis2D#X}.
     */
    public Line2D()
    {

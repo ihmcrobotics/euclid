@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -23,10 +24,11 @@ public class Line3D implements Line3DBasics, GeometryObject<Line3D>
    /** Coordinates of a point located on this line. */
    private final Point3D point = new Point3D();
    /** Normalized direction of this line. */
-   private final UnitVector3D direction = new UnitVector3D();
+   private final UnitVector3D direction = new UnitVector3D(Axis3D.X);
 
    /**
-    * Default constructor that initializes its {@code point} to zero and {@code direction} to (1.0, 0.0, 0.0).
+    * Default constructor that initializes its {@code point} to zero and {@code direction} to
+    * {@link Axis3D#X}.
     */
    public Line3D()
    {
