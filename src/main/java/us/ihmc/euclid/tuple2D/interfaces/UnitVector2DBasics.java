@@ -59,6 +59,12 @@ public interface UnitVector2DBasics extends UnitVector2DReadOnly, Vector2DBasics
     */
    public void markAsDirty();
 
+   /**
+    * Sets this unit vector to (1.0, 0.0).
+    */
+   @Override
+   void setToZero();
+
    /** {@inheritDoc} */
    @Override
    void negate();

@@ -84,6 +84,15 @@ public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVect
 
    /** {@inheritDoc} */
    @Override
+   public void setToZero()
+   {
+      x = 1.0;
+      y = 0.0;
+      dirty = false;
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void absolute()
    {
       x = Math.abs(x);
@@ -106,8 +115,7 @@ public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVect
       {
          if (EuclidCoreTools.areAllZero(x, y, ZERO_TEST_EPSILON))
          {
-            x = 1.0;
-            y = 0.0;
+            setToZero();
          }
          else
          {
