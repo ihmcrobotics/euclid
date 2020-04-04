@@ -67,12 +67,12 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
 
    /**
     * Sets the components of this axis-angle to represent a "zero" rotation. After calling the axis is
-    * equal to (1, 0, 0) and the angle to 0.
+    * equal to {@link Axis3D#X} and the angle to 0.
     */
    @Override
    default void setToZero()
    {
-      getAxis().setToZero();
+      getAxis().set(Axis3D.X);
       setAngle(0.0);
    }
 
