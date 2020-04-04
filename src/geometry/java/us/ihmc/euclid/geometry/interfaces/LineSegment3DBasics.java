@@ -136,8 +136,8 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     */
    default void set(double firstEndpointX, double firstEndpointY, double firstEndpointZ, double secondEndpointX, double secondEndpointY, double secondEndpointZ)
    {
-      setFirstEndpoint(firstEndpointX, firstEndpointY, firstEndpointZ);
-      setSecondEndpoint(secondEndpointX, secondEndpointY, secondEndpointZ);
+      getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ);
+      getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ);
    }
 
    /**
@@ -148,8 +148,8 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     */
    default void set(Point3DReadOnly firstEndpoint, Point3DReadOnly secondEndpoint)
    {
-      setFirstEndpoint(firstEndpoint);
-      setSecondEndpoint(secondEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -175,8 +175,8 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
       double y = getFirstEndpointY();
       double z = getFirstEndpointZ();
 
-      setFirstEndpoint(getSecondEndpoint());
-      setSecondEndpoint(x, y, z);
+      getFirstEndpoint().set(getSecondEndpoint());
+      getSecondEndpoint().set(x, y, z);
    }
 
    /**

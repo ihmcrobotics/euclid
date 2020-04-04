@@ -101,8 +101,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void set(double firstEndpointX, double firstEndpointY, double secondEndpointX, double secondEndpointY)
    {
-      setFirstEndpoint(firstEndpointX, firstEndpointY);
-      setSecondEndpoint(secondEndpointX, secondEndpointY);
+      getFirstEndpoint().set(firstEndpointX, firstEndpointY);
+      getSecondEndpoint().set(secondEndpointX, secondEndpointY);
    }
 
    /**
@@ -125,7 +125,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void setFirstEndpoint(Point2DReadOnly firstEndpoint)
    {
-      setFirstEndpoint(firstEndpoint.getX(), firstEndpoint.getY());
+      getFirstEndpoint().set(firstEndpoint);
    }
 
    /**
@@ -136,7 +136,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
    {
-      setFirstEndpoint(firstEndpoint.getX(), firstEndpoint.getY());
+      getFirstEndpoint().set(firstEndpoint);
    }
 
    /**
@@ -159,7 +159,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void setSecondEndpoint(Point2DReadOnly secondEndpoint)
    {
-      setSecondEndpoint(secondEndpoint.getX(), secondEndpoint.getY());
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -170,7 +170,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
    {
-      setSecondEndpoint(secondEndpoint.getX(), secondEndpoint.getY());
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -181,8 +181,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void set(Point2DReadOnly firstEndpoint, Point2DReadOnly secondEndpoint)
    {
-      setFirstEndpoint(firstEndpoint);
-      setSecondEndpoint(secondEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -193,8 +193,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void set(Point3DReadOnly firstEndpoint, Point3DReadOnly secondEndpoint)
    {
-      setFirstEndpoint(firstEndpoint);
-      setSecondEndpoint(secondEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -221,8 +221,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void set(Point3DReadOnly firstEndpoint, Vector3DReadOnly fromFirstToSecondEndpoint)
    {
-      setFirstEndpoint(firstEndpoint);
-      setSecondEndpoint(firstEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
+      getSecondEndpoint().set(firstEndpoint);
       getSecondEndpoint().add(fromFirstToSecondEndpoint.getX(), fromFirstToSecondEndpoint.getY());
    }
 
@@ -237,8 +237,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     */
    default void translate(double x, double y)
    {
-      setFirstEndpoint(getFirstEndpointX() + x, getFirstEndpointY() + y);
-      setSecondEndpoint(getSecondEndpointX() + x, getSecondEndpointY() + y);
+      getFirstEndpoint().add(x, y);
+      getSecondEndpoint().add(x, y);
    }
 
    /**
@@ -262,8 +262,8 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
       double x = getFirstEndpointX();
       double y = getFirstEndpointY();
 
-      setFirstEndpoint(getSecondEndpoint());
-      setSecondEndpoint(x, y);
+      getFirstEndpoint().set(getSecondEndpoint());
+      getSecondEndpoint().set(x, y);
    }
 
    /**

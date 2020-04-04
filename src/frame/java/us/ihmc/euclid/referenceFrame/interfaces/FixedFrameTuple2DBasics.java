@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * {@code FixedFrameTuple2DBasics} is the base implementation for {@link FramePoint2D} and
@@ -42,6 +43,22 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    {
       checkReferenceFrameMatch(referenceFrame);
       set(tuple2DReadOnly);
+   }
+
+   /**
+    * Set this frame tuple using the x and y coordinate of the given {@code tuple3DReadOnly}. and
+    * checks that its current frame equal {@code referenceFrame}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param tuple3DReadOnly the geometry object used to update the geometry object in {@code this}.
+    *                        Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(tuple3DReadOnly);
    }
 
    /**

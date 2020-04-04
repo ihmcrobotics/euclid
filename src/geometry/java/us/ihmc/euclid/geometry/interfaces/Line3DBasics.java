@@ -194,8 +194,8 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     */
    default void set(double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
-      setPoint(pointOnLineX, pointOnLineY, pointOnLineZ);
-      setDirection(lineDirectionX, lineDirectionY, lineDirectionZ);
+      getPoint().set(pointOnLineX, pointOnLineY, pointOnLineZ);
+      getDirection().set(lineDirectionX, lineDirectionY, lineDirectionZ);
    }
 
    /**
@@ -237,7 +237,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
          throw new RuntimeException("Tried to create a line from two coincidal points");
       }
 
-      setPoint(firstPointOnLine);
+      getPoint().set(firstPointOnLine);
       getDirection().sub(secondPointOnLine, firstPointOnLine);
    }
 
@@ -264,8 +264,8 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     */
    default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
-      setPoint(pointOnLine);
-      setDirection(lineDirection);
+      getPoint().set(pointOnLine);
+      getDirection().set(lineDirection);
    }
 
    /**

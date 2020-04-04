@@ -223,8 +223,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     */
    default void set(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY)
    {
-      setPoint(pointOnLineX, pointOnLineY);
-      setDirection(lineDirectionX, lineDirectionY);
+      getPoint().set(pointOnLineX, pointOnLineY);
+      getDirection().set(lineDirectionX, lineDirectionY);
    }
 
    /**
@@ -241,9 +241,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
          throw new RuntimeException("Tried to create a line from two coincidal points.");
       }
 
-      setPoint(firstPointOnLine);
+      getPoint().set(firstPointOnLine);
       getDirection().sub(secondPointOnLine, firstPointOnLine);
-      getDirection().normalize();
    }
 
    /**
@@ -260,7 +259,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
          throw new RuntimeException("Tried to create a line from two coincidal points.");
       }
 
-      setPoint(firstPointOnLine);
+      getPoint().set(firstPointOnLine);
       getDirection().set(secondPointOnLine);
       getDirection().sub(firstPointOnLine.getX(), firstPointOnLine.getY());
    }
@@ -273,8 +272,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     */
    default void set(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
-      setPoint(pointOnLine);
-      setDirection(lineDirection);
+      getPoint().set(pointOnLine);
+      getDirection().set(lineDirection);
    }
 
    /**
@@ -285,8 +284,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     */
    default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
-      setPoint(pointOnLine);
-      setDirection(lineDirection);
+      getPoint().set(pointOnLine);
+      getDirection().set(lineDirection);
    }
 
    /**

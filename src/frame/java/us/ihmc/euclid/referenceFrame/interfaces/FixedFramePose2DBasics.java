@@ -55,8 +55,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     */
    default void setPosition(FrameTuple2DReadOnly position)
    {
-      checkReferenceFrameMatch(position);
-      Pose2DBasics.super.setPosition(position);
+      getPosition().set(position);
    }
 
    /**
@@ -69,8 +68,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     */
    default void setPosition(FrameTuple3DReadOnly position)
    {
-      checkReferenceFrameMatch(position);
-      Pose2DBasics.super.setPosition(position);
+      getPosition().set(position);
    }
 
    /**
@@ -83,8 +81,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     */
    default void setOrientation(FrameOrientation2DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      Pose2DBasics.super.setOrientation(orientation);
+      getOrientation().set(orientation);
    }
 
    /**
@@ -97,8 +94,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     */
    default void setOrientation(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      Pose2DBasics.super.setOrientation(orientation);
+      getOrientation().set(orientation);
    }
 
    /**

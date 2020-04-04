@@ -59,8 +59,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     */
    default void setPosition(FrameTuple2DReadOnly position)
    {
-      checkReferenceFrameMatch(position);
-      Pose3DBasics.super.setPosition(position);
+      getPosition().set(position);
    }
 
    /**
@@ -74,8 +73,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     */
    default void setPosition(FrameTuple2DReadOnly position, double z)
    {
-      checkReferenceFrameMatch(position);
-      Pose3DBasics.super.setPosition(position, z);
+      getPosition().set(position, z);
    }
 
    /**
@@ -88,8 +86,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     */
    default void setPosition(FrameTuple3DReadOnly position)
    {
-      checkReferenceFrameMatch(position);
-      Pose3DBasics.super.setPosition(position);
+      getPosition().set(position);
    }
 
    /**
@@ -102,8 +99,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     */
    default void setOrientation(FrameOrientation2DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      Pose3DBasics.super.setOrientation(orientation);
+      getOrientation().set(orientation);
    }
 
    /**
@@ -116,8 +112,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     */
    default void setOrientation(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      Pose3DBasics.super.setOrientation(orientation);
+      getOrientation().set(orientation);
    }
 
    /**

@@ -129,7 +129,7 @@ public interface Capsule3DBasics extends Capsule3DReadOnly, Shape3DBasics
    default void set(Point3DReadOnly position, Vector3DReadOnly axis, double length, double radius)
    {
       getPosition().set(position);
-      setAxis(axis);
+      getAxis().set(axis);
       setSize(length, radius);
    }
 

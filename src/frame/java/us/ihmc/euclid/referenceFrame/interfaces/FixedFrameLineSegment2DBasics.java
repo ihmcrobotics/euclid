@@ -55,8 +55,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setFirstEndpoint(ReferenceFrame referenceFrame, double firstEndpointX, double firstEndpointY)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setFirstEndpoint(firstEndpointX, firstEndpointY);
+      getFirstEndpoint().set(referenceFrame, firstEndpointX, firstEndpointY);
    }
 
    /**
@@ -69,8 +68,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setFirstEndpoint(ReferenceFrame referenceFrame, Point2DReadOnly firstEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setFirstEndpoint(firstEndpoint);
+      getFirstEndpoint().set(referenceFrame, firstEndpoint);
    }
 
    /**
@@ -83,8 +81,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setFirstEndpoint(ReferenceFrame referenceFrame, Point3DReadOnly firstEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setFirstEndpoint(firstEndpoint);
+      getFirstEndpoint().set(referenceFrame, firstEndpoint);
    }
 
    /**
@@ -98,8 +95,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setSecondEndpoint(ReferenceFrame referenceFrame, double secondEndpointX, double secondEndpointY)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setSecondEndpoint(secondEndpointX, secondEndpointY);
+      getSecondEndpoint().set(referenceFrame, secondEndpointX, secondEndpointY);
    }
 
    /**
@@ -112,8 +108,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setSecondEndpoint(ReferenceFrame referenceFrame, Point2DReadOnly secondEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setSecondEndpoint(secondEndpoint);
+      getSecondEndpoint().set(referenceFrame, secondEndpoint);
    }
 
    /**
@@ -126,8 +121,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setSecondEndpoint(ReferenceFrame referenceFrame, Point3DReadOnly secondEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setSecondEndpoint(secondEndpoint);
+      getSecondEndpoint().set(referenceFrame, secondEndpoint);
    }
 
    /**
@@ -140,7 +134,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setFirstEndpoint(FramePoint2DReadOnly firstEndpoint)
    {
-      setFirstEndpoint(firstEndpoint.getReferenceFrame(), firstEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
    }
 
    /**
@@ -153,7 +147,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setFirstEndpoint(FramePoint3DReadOnly firstEndpoint)
    {
-      setFirstEndpoint(firstEndpoint.getReferenceFrame(), firstEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
    }
 
    /**
@@ -166,7 +160,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setSecondEndpoint(FramePoint2DReadOnly secondEndpoint)
    {
-      setSecondEndpoint(secondEndpoint.getReferenceFrame(), secondEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -179,7 +173,7 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     */
    default void setSecondEndpoint(FramePoint3DReadOnly secondEndpoint)
    {
-      setSecondEndpoint(secondEndpoint.getReferenceFrame(), secondEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**

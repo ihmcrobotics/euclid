@@ -101,8 +101,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Pose2DReadOnly other)
    {
-      setPosition(other.getPosition());
-      setOrientation(other.getOrientation());
+      getPosition().set(other.getPosition());
+      getOrientation().set(other.getOrientation());
    }
 
    /**
@@ -112,8 +112,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Pose3DReadOnly pose3DReadOnly)
    {
-      setPosition(pose3DReadOnly.getPosition());
-      setOrientation(pose3DReadOnly.getOrientation());
+      getPosition().set(pose3DReadOnly.getPosition());
+      getOrientation().set(pose3DReadOnly.getOrientation());
    }
 
    /**
@@ -192,8 +192,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(double x, double y, double yaw)
    {
-      setPosition(x, y);
-      setOrientation(yaw);
+      getPosition().set(x, y);
+      getOrientation().setYaw(yaw);
    }
 
    /**
@@ -204,8 +204,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly position, double yaw)
    {
-      setPosition(position);
-      setOrientation(yaw);
+      getPosition().set(position);
+      getOrientation().setYaw(yaw);
    }
 
    /**
@@ -216,8 +216,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly position, Orientation2DReadOnly orientation)
    {
-      setPosition(position);
-      setOrientation(orientation);
+      getPosition().set(position);
+      getOrientation().set(orientation);
    }
 
    /**
@@ -249,8 +249,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
       if (checkIsTransform2D)
          rigidBodyTransform.checkIfRotation2D();
 
-      setPosition(rigidBodyTransform.getTranslationX(), rigidBodyTransform.getTranslationY());
-      setOrientation(rigidBodyTransform.getRotation().getYaw());
+      getPosition().set(rigidBodyTransform.getTranslation());
+      getOrientation().set(rigidBodyTransform.getRotation());
    }
 
    /**

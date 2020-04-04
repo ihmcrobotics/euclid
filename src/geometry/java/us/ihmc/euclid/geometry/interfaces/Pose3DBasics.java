@@ -134,8 +134,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(double x, double y, double z, double yaw, double pitch, double roll)
    {
-      setPosition(x, y, z);
-      setOrientationYawPitchRoll(yaw, pitch, roll);
+      getPosition().set(x, y, z);
+      getOrientation().setYawPitchRoll(yaw, pitch, roll);
    }
 
    /**
@@ -145,8 +145,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(Pose2DReadOnly pose2DReadOnly)
    {
-      setPosition(pose2DReadOnly.getPosition(), 0.0);
-      setOrientation(pose2DReadOnly.getOrientation());
+      getPosition().set(pose2DReadOnly.getPosition(), 0.0);
+      getOrientation().set(pose2DReadOnly.getOrientation());
    }
 
    /**
@@ -156,8 +156,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(Pose3DReadOnly other)
    {
-      setPosition(other.getPosition());
-      setOrientation(other.getOrientation());
+      getPosition().set(other.getPosition());
+      getOrientation().set(other.getOrientation());
    }
 
    /**
@@ -223,8 +223,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      setPosition(rigidBodyTransform.getTranslation());
-      setOrientation(rigidBodyTransform.getRotation());
+      getPosition().set(rigidBodyTransform.getTranslation());
+      getOrientation().set(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -235,8 +235,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
-      setOrientation(orientation);
-      setPosition(position);
+      getOrientation().set(orientation);
+      getPosition().set(position);
    }
 
    /** {@inheritDoc} */
@@ -445,7 +445,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
       double thisY = getY();
       double thisZ = getZ();
 
-      setPosition(x, y, z);
+      getPosition().set(x, y, z);
       getOrientation().transform(getPosition());
       getPosition().add(thisX, thisY, thisZ);
    }

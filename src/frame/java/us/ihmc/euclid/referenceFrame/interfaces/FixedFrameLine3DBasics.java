@@ -51,8 +51,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     */
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
-      checkReferenceFrameMatch(pointOnLine);
-      Line3DBasics.super.setPoint(pointOnLine);
+      getPoint().set(pointOnLine);
    }
 
    /**
@@ -65,8 +64,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     */
    default void setDirection(FrameVector3DReadOnly lineDirection)
    {
-      checkReferenceFrameMatch(lineDirection);
-      Line3DBasics.super.setDirection(lineDirection);
+      getDirection().set(lineDirection);
    }
 
    /**
