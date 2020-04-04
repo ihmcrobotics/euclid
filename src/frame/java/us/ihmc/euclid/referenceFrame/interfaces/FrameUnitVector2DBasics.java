@@ -12,7 +12,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
  * When the values of this vector are set to zero, the next time it is normalized it will be reset
  * to (1.0, 0.0).
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameUnitVector2DBasics extends FrameVector2DBasics, FixedFrameUnitVector2DBasics

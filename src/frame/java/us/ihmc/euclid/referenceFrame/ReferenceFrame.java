@@ -170,8 +170,8 @@ public abstract class ReferenceFrame
    /**
     * Creates a new root reference frame.
     * <p>
-    * Please use the method {@link #constructARootFrame(String)} instead. This is to use only when
-    * extending this class.
+    * Please use the method {@link ReferenceFrameTools#constructARootFrame(String)} instead. This is to
+    * use only when extending this class.
     * </p>
     * <p>
     * Most of the time, {@link #getWorldFrame()} is the only root frame from which children reference
@@ -1046,7 +1046,7 @@ public abstract class ReferenceFrame
     * Note that reference frames are automatically disposed of by the GC when no external reference
     * exists.
     * </p>
-    * 
+    *
     * @see #remove()
     */
    public void clearChildren()

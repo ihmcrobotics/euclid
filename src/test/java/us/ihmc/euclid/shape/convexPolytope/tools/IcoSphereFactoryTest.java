@@ -131,7 +131,7 @@ public class IcoSphereFactoryTest
 
    private double round(double value, double precision)
    {
-      return ((long) (value / precision)) * precision;
+      return (long) (value / precision) * precision;
    }
 
    private static void checkTriangleProperties(List<Triangle3D> icoSphereTrianges, int recursionLevel)

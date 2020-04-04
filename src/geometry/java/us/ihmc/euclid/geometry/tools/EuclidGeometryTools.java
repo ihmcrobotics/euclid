@@ -2064,7 +2064,7 @@ public class EuclidGeometryTools
 
       if (isNormalUnitary)
       {
-         return (dx * planeNormalX + dy * planeNormalY + dz * planeNormalZ);
+         return dx * planeNormalX + dy * planeNormalY + dz * planeNormalZ;
       }
       else
       {

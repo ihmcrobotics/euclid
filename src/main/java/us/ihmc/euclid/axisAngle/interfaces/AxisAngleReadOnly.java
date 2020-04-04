@@ -45,7 +45,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
    /**
     * Gets the reference to the axis part of this axis-angle.
-    * 
+    *
     * @return the reference to the axis vector.
     */
    UnitVector3DReadOnly getAxis();
@@ -159,6 +159,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
     * @since 0.13.0
     */
+   @Deprecated
    default boolean isAxisUnitary(double epsilon)
    {
       return Math.abs(1.0 - axisNorm()) < epsilon;

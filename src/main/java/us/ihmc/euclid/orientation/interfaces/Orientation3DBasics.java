@@ -199,7 +199,7 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
    /**
     * Sets this orientation 3D to a z-axis orientation and sets the yaw angle from the given
     * orientation 2D.
-    * 
+    *
     * @param orientation2DReadOnly the new orientation. Not modified.
     */
    default void set(Orientation2DReadOnly orientation2DReadOnly)

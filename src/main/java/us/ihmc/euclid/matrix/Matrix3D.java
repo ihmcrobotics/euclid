@@ -281,7 +281,7 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
 
    /**
     * Provides a {@code String} representation of this matrix as follows:
-    * 
+    *
     * <pre>
     * /m00, m01, m02 \
     * |m10, m11, m12 |

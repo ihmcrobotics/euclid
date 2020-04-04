@@ -468,8 +468,8 @@ public class AxisAngleTools
     * {@code axisAngle} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(AxisAngleReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with an axis-angle
-    * that has an angle of opposite value compared to the given one.
+    * {@link #transform(AxisAngleReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with an
+    * axis-angle that has an angle of opposite value compared to the given one.
     * </p>
     * <p>
     * Both rotation matrices can be the same object for performing in place transformation.
@@ -488,7 +488,8 @@ public class AxisAngleTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
+   public static void inverseTransform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal,
+                                       RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(axisAngle, true, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }

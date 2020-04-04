@@ -58,7 +58,7 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
    /**
     * Create a new rotation matrix and initializes to identity and its reference frame to
     * {@code referenceFrame}.
-    * 
+    *
     * @param referenceFrame the initial frame for this frame rotation matrix.
     */
    public FrameRotationMatrix(ReferenceFrame referenceFrame)
@@ -451,7 +451,7 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
 
    /**
     * Provides a {@code String} representation of this matrix as follows:
-    * 
+    *
     * <pre>
     * /-0.576, -0.784,  0.949 \
     * | 0.649, -0.542, -0.941 |

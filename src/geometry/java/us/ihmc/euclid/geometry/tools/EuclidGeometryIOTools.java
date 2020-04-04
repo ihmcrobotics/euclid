@@ -1,6 +1,10 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringOf;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 
 import java.util.List;
 
@@ -464,6 +468,7 @@ public class EuclidGeometryIOTools
     * @return the representative {@code String}.
     * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(Orientation2DReadOnly)} instead
     */
+   @Deprecated
    public static String getOrientation2DString(Orientation2DReadOnly orientation2D)
    {
       return EuclidCoreIOTools.getOrientation2DString(orientation2D);
@@ -485,6 +490,7 @@ public class EuclidGeometryIOTools
     * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(String,Orientation2DReadOnly)}
     *             instead
     */
+   @Deprecated
    public static String getOrientation2DString(String format, Orientation2DReadOnly orientation2D)
    {
       return EuclidCoreIOTools.getOrientation2DString(format, orientation2D);
@@ -507,6 +513,7 @@ public class EuclidGeometryIOTools
     * @return the representative {@code String}.
     * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(String,double)} instead
     */
+   @Deprecated
    public static String getOrientation2DString(String format, double orientation2DAngle)
    {
       return EuclidCoreIOTools.getOrientation2DString(format, orientation2DAngle);

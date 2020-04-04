@@ -142,7 +142,7 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    /**
     * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0} and
     * initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameRamp3D(ReferenceFrame referenceFrame)

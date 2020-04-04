@@ -34,7 +34,7 @@ public class FramePointShape3D implements FramePointShape3DBasics, GeometryObjec
 
    /**
     * Creates a new point shape located at the origin and initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FramePointShape3D(ReferenceFrame referenceFrame)

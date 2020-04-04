@@ -1287,7 +1287,7 @@ public class EuclidShapeTools
 
    /**
     * Computes the centroid of a ramp of the given size.
-    * 
+    *
     * @param ramp3DPose     the pose of the ramp. Not modified.
     * @param size           the ramp's size. Not modified.
     * @param centroidToPack the object used to store the result. Modified.
@@ -2276,7 +2276,7 @@ public class EuclidShapeTools
     * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
-    * 
+    *
     * @param expected          the expected value. Not modified.
     * @param actual            the actual value. Not modified.
     * @param normal            the normal vector used to measure the normal error and the tangential
@@ -2299,7 +2299,7 @@ public class EuclidShapeTools
     * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
-    * 
+    *
     * @param expected          the expected value. Not modified.
     * @param actual            the actual value. Not modified.
     * @param normalX           the x-component of the normal vector used to measure the normal error

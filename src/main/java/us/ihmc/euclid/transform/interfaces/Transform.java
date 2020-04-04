@@ -663,7 +663,7 @@ public interface Transform
     * transform.
     * </p>
     *
-    * @param pointToTransform        the point to transform. Modified.
+    * @param pointToTransform          the point to transform. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of this
     *                                  transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
@@ -682,8 +682,8 @@ public interface Transform
     * the inverse of this transform.
     * </p>
     *
-    * @param pointOriginal           the point to transform. Not modified.
-    * @param pointTransformed        the point in which the result is stored. Modified.
+    * @param pointOriginal             the point to transform. Not modified.
+    * @param pointTransformed          the point in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of this
     *                                  transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the rotation part
@@ -732,7 +732,7 @@ public interface Transform
     * this transform.
     * </p>
     *
-    * @param vectorToTransform       the vector to transform. Modified.
+    * @param vectorToTransform         the vector to transform. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of this
     *                                  transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if the rotation part of this transform is not a transformation in
@@ -751,8 +751,8 @@ public interface Transform
     * the inverse of this transform.
     * </p>
     *
-    * @param vectorOriginal          the vector to transform. Not modified.
-    * @param vectorTransformed       the vector in which the result is stored. Modified.
+    * @param vectorOriginal            the vector to transform. Not modified.
+    * @param vectorTransformed         the vector in which the result is stored. Modified.
     * @param checkIfTransformInXYPlane whether this method should assert that the rotation part of this
     *                                  transform represents a transformation in the XY plane.
     * @throws NotAMatrix2DException if the rotation part of this transform is not a transformation in
@@ -805,8 +805,8 @@ public interface Transform
     * Performs the inverse of the transform on the given matrix {@code matrixOriginal} and stores the
     * result in {@code matrixTransformed}.
     * <p>
-    * This is equivalent to calling {@link #transform(RotationMatrixReadOnly, RotationMatrixBasics)} with the
-    * inverse of this transform.
+    * This is equivalent to calling {@link #transform(RotationMatrixReadOnly, RotationMatrixBasics)}
+    * with the inverse of this transform.
     * </p>
     *
     * @param matrixOriginal    the rotation matrix to transform. Not modified.

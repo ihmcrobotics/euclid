@@ -89,7 +89,7 @@ public interface FixedFrameBox3DBasics extends Box3DBasics, FrameBox3DReadOnly, 
 
    /**
     * Sets this box properties.
-    * 
+    *
     * @param position    the position of this box center. Not modified.
     * @param orientation the orientation of this box. Not modified.
     * @param sizeX       the size along the x-axis.

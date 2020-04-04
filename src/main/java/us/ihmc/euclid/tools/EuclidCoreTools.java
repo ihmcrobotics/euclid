@@ -894,7 +894,7 @@ public class EuclidCoreTools
    /**
     * Checks that the given {@code matrixToTest} has a minimum size of [{@code minRows},
     * {@code minColumns}].
-    * 
+    *
     * @param minRows      the minimum number of rows that the matrix should have.
     * @param minColumns   the minimum number of columns that the matrix should have.
     * @param matrixToTest the matrix which size is to be tested.

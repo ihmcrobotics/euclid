@@ -54,7 +54,7 @@ public class EuclidShapeRandomTools
 
    /**
     * Generates a random pose using {@link EuclidCoreRandomTools#nextRigidBodyTransform(Random)}.
-    * 
+    *
     * @param random the random generator to use.
     * @return the random pose.
     */
@@ -1145,7 +1145,7 @@ public class EuclidShapeRandomTools
     * This generator differs from {@link #nextShape3D(Random)} by excluding {@link Torus3D} that is a
     * concave shape.
     * </p>
-    * 
+    *
     * @param random        the random generator to use.
     * @param shapeCentroid the position of the shape's centroid. Not modified.
     * @return the random convex shape 3D.

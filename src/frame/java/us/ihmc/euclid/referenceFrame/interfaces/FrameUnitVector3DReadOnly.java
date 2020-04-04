@@ -13,7 +13,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  * When the values of this vector are set to zero, the next time it is normalized it will be reset
  * to (1.0, 0.0, 0.0).
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface FrameUnitVector3DReadOnly extends FrameVector3DReadOnly, UnitVector3DReadOnly

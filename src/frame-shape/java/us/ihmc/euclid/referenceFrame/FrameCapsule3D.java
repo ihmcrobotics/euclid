@@ -63,7 +63,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    /**
     * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5 and
     * initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameCapsule3D(ReferenceFrame referenceFrame)

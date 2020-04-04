@@ -112,6 +112,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * @param firstEndpointY y-coordinate of the new first endpoint.
     * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpointX, firstEndpointY)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(double firstEndpointX, double firstEndpointY)
    {
       getFirstEndpoint().set(firstEndpointX, firstEndpointY);
@@ -123,6 +124,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * @param firstEndpoint new endpoint of this line segment. Not modified.
     * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(Point2DReadOnly firstEndpoint)
    {
       getFirstEndpoint().set(firstEndpoint);
@@ -134,6 +136,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * @param firstEndpoint new endpoint of this line segment. Not modified.
     * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
    {
       getFirstEndpoint().set(firstEndpoint);
@@ -146,6 +149,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * @param secondEndpointY y-coordinate of the new second endpoint.
     * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpointX, secondEndpointY)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(double secondEndpointX, double secondEndpointY)
    {
       getSecondEndpoint().set(secondEndpointX, secondEndpointY);
@@ -157,6 +161,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(Point2DReadOnly secondEndpoint)
    {
       getSecondEndpoint().set(secondEndpoint);
@@ -168,6 +173,7 @@ public interface LineSegment2DBasics extends LineSegment2DReadOnly, Clearable, T
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
    {
       getSecondEndpoint().set(secondEndpoint);

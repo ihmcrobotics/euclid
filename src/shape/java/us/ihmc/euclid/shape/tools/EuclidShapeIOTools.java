@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringAsYawPitchRoll;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
 
 import java.util.Collection;
 

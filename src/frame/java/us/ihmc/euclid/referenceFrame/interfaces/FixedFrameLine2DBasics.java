@@ -57,6 +57,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     *                                         in the same reference frame.
     * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(FramePoint2DReadOnly pointOnLine)
    {
       getPoint().set(pointOnLine);
@@ -70,6 +71,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     *                                         in the same reference frame.
     * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
       getPoint().set(pointOnLine);
@@ -83,6 +85,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     *                                         expressed in the same reference frame.
     * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(FrameVector2DReadOnly lineDirection)
    {
       getDirection().set(lineDirection);
@@ -96,6 +99,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     *                                         expressed in the same reference frame.
     * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(FrameVector3DReadOnly lineDirection)
    {
       getDirection().set(lineDirection);

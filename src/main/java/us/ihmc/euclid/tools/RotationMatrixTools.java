@@ -332,7 +332,8 @@ public class RotationMatrixTools
     * @param transposeB   whether the second matrix should be transposed in the multiplication.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB, RotationMatrixBasics matrixToPack)
+   private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB,
+                                    RotationMatrixBasics matrixToPack)
    {
       if (a.isZeroOrientation())
       {

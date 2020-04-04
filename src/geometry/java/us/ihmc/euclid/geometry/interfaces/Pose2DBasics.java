@@ -123,6 +123,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param y the y-coordinate of the position.
     * @deprecated Use {@code this.getPosition().set(x, y)} instead.
     */
+   @Deprecated
    default void setPosition(double x, double y)
    {
       getPosition().set(x, y);
@@ -134,6 +135,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param position the tuple with the new position coordinates. Not modified.
     * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(Tuple2DReadOnly position)
    {
       getPosition().set(position);
@@ -145,6 +147,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param position the tuple with the new position coordinates. Not modified.
     * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(Tuple3DReadOnly position)
    {
       getPosition().set(position);
@@ -156,6 +159,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param yaw the orientation angle value.
     * @deprecated Use {@code this.getOrientation().setYaw(yaw)} instead.
     */
+   @Deprecated
    default void setOrientation(double yaw)
    {
       getOrientation().setYaw(yaw);
@@ -167,6 +171,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(Orientation2DReadOnly orientation)
    {
       getOrientation().set(orientation);
@@ -178,6 +183,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(Orientation3DReadOnly orientation)
    {
       getOrientation().set(orientation);

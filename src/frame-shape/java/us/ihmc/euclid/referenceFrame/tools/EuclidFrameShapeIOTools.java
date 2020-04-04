@@ -1,7 +1,14 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
 import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools.getFrameTuple3DString;
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getBox3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCylinder3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getEllipsoid3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getRamp3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getShape3DPoseString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getSphere3DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
 
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
@@ -404,10 +411,10 @@ public class EuclidFrameShapeIOTools
       FrameShape3DReadOnly shapeA = euclidShape3DCollisionResult.getShapeA();
       FrameShape3DReadOnly shapeB = euclidShape3DCollisionResult.getShapeB();
 
-      string += "Shape A: " + (shapeA == null ? "null" : (shapeA.getClass().getSimpleName() + " - " + shapeA.getReferenceFrame().getName()));
+      string += "Shape A: " + (shapeA == null ? "null" : shapeA.getClass().getSimpleName() + " - " + shapeA.getReferenceFrame().getName());
       string += ", location: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getPointOnA());
       string += ", normal: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getNormalOnA()) + "\n";
-      string += "Shape B: " + (shapeB == null ? "null" : (shapeB.getClass().getSimpleName() + " - " + shapeB.getReferenceFrame().getName()));
+      string += "Shape B: " + (shapeB == null ? "null" : shapeB.getClass().getSimpleName() + " - " + shapeB.getReferenceFrame().getName());
       string += ", location: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getPointOnB());
       string += ", normal: " + getFrameTuple3DString(format, euclidShape3DCollisionResult.getNormalOnB());
       return string;

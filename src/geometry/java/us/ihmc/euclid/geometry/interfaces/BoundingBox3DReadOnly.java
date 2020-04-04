@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;

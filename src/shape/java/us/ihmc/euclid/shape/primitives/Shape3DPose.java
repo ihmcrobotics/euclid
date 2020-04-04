@@ -173,7 +173,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
 
    /**
     * Registers a list of listeners to be notified when this pose changes.
-    * 
+    *
     * @param listeners the listeners to register.
     */
    public void addChangeListeners(List<Shape3DChangeListener> listeners)
@@ -186,7 +186,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
 
    /**
     * Registers a listener to be notified when this pose changes.
-    * 
+    *
     * @param listener the listener to register.
     */
    public void addChangeListener(Shape3DChangeListener listener)
@@ -199,7 +199,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
     * <p>
     * This listener will no longer be notified of changes from this pose.
     * </p>
-    * 
+    *
     * @param listener the listener to remove.
     * @return {@code true} if the listener was removed successful, {@code false} if the listener could
     *         not be found.

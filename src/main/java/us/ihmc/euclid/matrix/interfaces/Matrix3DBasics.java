@@ -208,6 +208,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * Orthonormalization of this matrix using the
     * <a href="https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process"> Gram-Schmidt method</a>.
     */
+   @Override
    default void normalize()
    {
       Matrix3DTools.normalize(this);
@@ -330,6 +331,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     *
     * @param other the other matrix used to update this matrix. Not modified.
     */
+   @Override
    default void setAndNormalize(Matrix3DReadOnly other)
    {
       set(other);

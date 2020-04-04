@@ -23,7 +23,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  * <p>
  * This version of 3D vector uses single precision fields to save the value of each component.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class UnitVector3D32 implements UnitVector3DBasics, GeometryObject<UnitVector3D32>

@@ -460,7 +460,7 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
 
    /**
     * Provides a {@code String} representation of this matrix as follows:
-    * 
+    *
     * <pre>
     * /-0.576, -0.784,  0.949 \
     * | 0.649, -0.542, -0.941 |

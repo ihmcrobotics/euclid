@@ -72,8 +72,11 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param firstEndpointX x-coordinate of the new first endpoint.
     * @param firstEndpointY y-coordinate of the new first endpoint.
     * @param firstEndpointZ z-coordinate of the new first endpoint.
-    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ)} instead.
+    * @deprecated Use
+    *             {@code this.getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ)}
+    *             instead.
     */
+   @Deprecated
    default void setFirstEndpoint(double firstEndpointX, double firstEndpointY, double firstEndpointZ)
    {
       getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ);
@@ -85,8 +88,11 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param secondEndpointX x-coordinate of the new second endpoint.
     * @param secondEndpointY y-coordinate of the new second endpoint.
     * @param secondEndpointZ z-coordinate of the new second endpoint.
-    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ)} instead.
+    * @deprecated Use
+    *             {@code this.getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ)}
+    *             instead.
     */
+   @Deprecated
    default void setSecondEndpoint(double secondEndpointX, double secondEndpointY, double secondEndpointZ)
    {
       getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ);
@@ -98,6 +104,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param firstEndpoint new endpoint of this line segment. Not modified.
     * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
    {
       getFirstEndpoint().set(firstEndpoint);
@@ -109,6 +116,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
    {
       getSecondEndpoint().set(secondEndpoint);

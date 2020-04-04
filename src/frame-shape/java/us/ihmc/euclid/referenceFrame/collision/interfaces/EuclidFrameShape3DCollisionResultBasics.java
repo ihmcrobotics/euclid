@@ -32,7 +32,7 @@ public interface EuclidFrameShape3DCollisionResultBasics extends EuclidFrameShap
 
    /**
     * {@inheritDoc}
-    * 
+    *
     * @throws IllegalArgumentException if the argument does not implement {@link FrameShape3DReadOnly}
     */
    @Override
@@ -46,7 +46,7 @@ public interface EuclidFrameShape3DCollisionResultBasics extends EuclidFrameShap
 
    /**
     * {@inheritDoc}
-    * 
+    *
     * @throws IllegalArgumentException if the argument does not implement {@link FrameShape3DReadOnly}
     */
    @Override
@@ -74,7 +74,7 @@ public interface EuclidFrameShape3DCollisionResultBasics extends EuclidFrameShap
 
    /**
     * Copies the values from {@code other} into {@code this}.
-    * 
+    *
     * @param other the other object to copy the values from. Not modified.
     */
    default void set(EuclidFrameShape3DCollisionResultReadOnly other)

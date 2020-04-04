@@ -39,7 +39,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 32-bit hash-code.
     */
@@ -50,7 +50,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 32-bit hash-code.
@@ -62,7 +62,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -75,7 +75,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -89,7 +89,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -104,7 +104,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -120,7 +120,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -139,7 +139,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 32-bit hash-code.
     */
@@ -150,7 +150,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 32-bit hash-code.
@@ -162,7 +162,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -175,7 +175,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -189,7 +189,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 32-bit hash-code.
@@ -201,7 +201,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -214,7 +214,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -228,7 +228,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -243,7 +243,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -259,7 +259,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -276,7 +276,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 64-bit hash-code.
     */
@@ -289,7 +289,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 64-bit hash-code.
@@ -304,7 +304,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -321,7 +321,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -340,7 +340,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -361,7 +361,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -384,7 +384,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -413,7 +413,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 64-bit hash-code.
     */
@@ -426,7 +426,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 64-bit hash-code.
@@ -441,7 +441,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -458,7 +458,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -477,7 +477,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -500,7 +500,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 64-bit hash-code.
@@ -515,7 +515,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -532,7 +532,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -551,7 +551,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -572,7 +572,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -595,7 +595,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.

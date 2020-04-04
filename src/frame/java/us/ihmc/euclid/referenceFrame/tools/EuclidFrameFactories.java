@@ -147,7 +147,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new point 2D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
@@ -162,7 +162,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 2D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
@@ -177,7 +177,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new point 3D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
@@ -193,7 +193,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 3D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
@@ -209,7 +209,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new point 2D that is a read-only view of the point expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param point                the point to link. Not modified.
     * @return the new read-only frame point 2D.
@@ -262,7 +262,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 2D that is a read-only view of the vector expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param vector               the vector to link. Not modified.
     * @return the new read-only frame vector 2D.
@@ -315,7 +315,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new point 3D that is a read-only view of the point expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param point                the point to link. Not modified.
     * @return the new read-only frame point 3D.
@@ -374,7 +374,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 3D that is a read-only view of the vector expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param vector               the vector to link. Not modified.
     * @return the new read-only frame vector 3D.
@@ -479,7 +479,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame point which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @return the new linked frame point.
     */
@@ -491,7 +491,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame point which reference frame is linked to the given frameless point and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @param originalPoint        the point to link to the new frame point. Modifications on either the
     *                             {@code originalPoint} or the new frame point will be propagated to
@@ -560,7 +560,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new linked frame vector.
     */
@@ -572,7 +572,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given frameless vector and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param originalVector       the vector to link to the new frame vector. Modifications on either
     *                             the {@code originalVector} or the new frame vector will be propagated
@@ -641,7 +641,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame point which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @return the new linked frame point.
     */
@@ -653,7 +653,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame point which reference frame is linked to the given frameless point and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @param originalPoint        the point to link to the new frame point. Modifications on either the
     *                             {@code originalPoint} or the new frame point will be propagated to
@@ -734,7 +734,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new linked frame vector.
     */
@@ -746,7 +746,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given frameless vector and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param originalVector       the vector to link to the new frame vector. Modifications on either
     *                             the {@code originalVector} or the new frame vector will be propagated
@@ -830,7 +830,7 @@ public class EuclidFrameFactories
     * <p>
     * The new vector is initialized to {@link Axis2D#X}.
     * </p>
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new unitary vector.
     */
@@ -842,7 +842,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 2D that is constrained to be a unit-length vector, i.e.
     * {@code vector.length() == 1.0}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param initialValue         the initial value for the new vector. Not modified.
     * @return the new unitary vector.
@@ -855,7 +855,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 2D that is constrained to be a unit-length vector, i.e.
     * {@code vector.length() == 1.0}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param initialX             the initial value for the x-component of the new vector.
     * @param initialY             the initial value for the y-component of the new vector.
@@ -962,7 +962,7 @@ public class EuclidFrameFactories
     * <p>
     * The new vector is initialized to: {@link Axis3D#X}.
     * </p>
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new unitary vector.
     */
@@ -974,7 +974,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 3D that is constrained to be a unit-length vector, i.e.
     * {@code vector.length() == 1.0}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param initialValue         the initial value for the new vector. Not modified.
     * @return the new unitary vector.
@@ -987,7 +987,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new vector 3D that is constrained to be a unit-length vector, i.e.
     * {@code vector.length() == 1.0}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param initialX             the initial value for the x-component of the new vector.
     * @param initialY             the initial value for the y-component of the new vector.
@@ -1105,7 +1105,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame orientation which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
     * @return the new linked frame orientation.
     */
@@ -1117,7 +1117,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame orientation which reference frame is linked to the given frameless
     * orientation and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
     * @param originalOrientation  the orientation to link to the new frame orientation. Modifications
     *                             on either the {@code originalOriginal} or the new frame vector will
@@ -1187,7 +1187,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame quaternion which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
     * @return the new linked frame quaternion.
     */
@@ -1199,7 +1199,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame quaternion which reference frame is linked to the given frameless quaternion
     * and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
     * @param originalQuaternion   the quaternion to link to the new frame quaternion. Modifications on
     *                             either the {@code originalQuaternion} or the new frame quaternion
@@ -1274,7 +1274,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame rotation matrix which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame rotation matrix.
     * @return the new linked frame rotation matrix.
     */
@@ -1286,7 +1286,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame rotation matrix which reference frame is linked to the given frameless
     * rotation matrix and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder   the reference frame holder to link to the new frame rotation
     *                               matrix.
     * @param originalRotationMatrix the rotation matrix to link to the new frame rotation matrix.
@@ -1444,7 +1444,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @return the new linked frame bounding box.
     */
@@ -1456,7 +1456,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
     * box and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
     *                             on either the {@code originalBoundingBox} or the new frame bounding
@@ -1519,7 +1519,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @return the new linked frame bounding box.
     */
@@ -1531,7 +1531,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
     * box and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
     *                             on either the {@code originalBoundingBox} or the new frame bounding

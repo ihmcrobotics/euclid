@@ -91,7 +91,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
     * <p>
     * Factories have to be provided before initializing this polytope.
     * </p>
-    * 
+    *
     * @param vertexFactory the factory to use for creating new vertices when expanding this polytope.
     * @param edgeFactory   the factory to use for creating new half-edges when expanding this polytope.
     * @param faceFactory   the factory to use for creating new faces when expanding this polytope.
@@ -122,7 +122,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
     * <p>
     * This method updates twin of every half-edge if not done beforehand.
     * </p>
-    * 
+    *
     * @param faces this polytope faces.
     */
    protected void initialize(List<Face> faces)

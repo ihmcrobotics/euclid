@@ -25,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * When the values of this vector are set to zero, the next time it is normalized it will be reset
  * to (1.0, 0.0).
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class FrameUnitVector2D implements FrameUnitVector2DBasics, GeometryObject<FrameUnitVector2D>

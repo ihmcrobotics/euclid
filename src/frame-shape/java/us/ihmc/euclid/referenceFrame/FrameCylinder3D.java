@@ -63,7 +63,7 @@ public class FrameCylinder3D implements FrameCylinder3DBasics, GeometryObject<Fr
    /**
     * Creates a new cylinder which axis is along the z-axis, a length of 1, and radius of 0.5 and
     * initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameCylinder3D(ReferenceFrame referenceFrame)

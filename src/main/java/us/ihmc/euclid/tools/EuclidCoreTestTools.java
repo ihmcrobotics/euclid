@@ -1695,6 +1695,7 @@ public class EuclidCoreTestTools
     * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
     * @since 0.13.0
     */
+   @Deprecated
    public static void assertAxisUnitary(AxisAngleReadOnly axisAngleToAssert, double epsilon)
    {
       assertAxisUnitary(null, axisAngleToAssert, epsilon);
@@ -1710,6 +1711,7 @@ public class EuclidCoreTestTools
     * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
     * @since 0.13.0
     */
+   @Deprecated
    public static void assertAxisUnitary(String messagePrefix, AxisAngleReadOnly axisAngleToAssert, double epsilon)
    {
       assertAxisUnitary(messagePrefix, axisAngleToAssert, epsilon, DEFAULT_FORMAT);
@@ -1727,6 +1729,7 @@ public class EuclidCoreTestTools
     * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
     * @since 0.13.0
     */
+   @Deprecated
    public static void assertAxisUnitary(String messagePrefix, AxisAngleReadOnly axisAngleToAssert, double epsilon, String format)
    {
       if (axisAngleToAssert == null)

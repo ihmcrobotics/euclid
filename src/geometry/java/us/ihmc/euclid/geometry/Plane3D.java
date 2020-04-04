@@ -103,6 +103,7 @@ public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
     *                          Modified.
     * @deprecated Use {@code planeNormalToPack.set(this.getNormal())} instead.
     */
+   @Deprecated
    public void getNormal(Vector3DBasics planeNormalToPack)
    {
       planeNormalToPack.set(normal);

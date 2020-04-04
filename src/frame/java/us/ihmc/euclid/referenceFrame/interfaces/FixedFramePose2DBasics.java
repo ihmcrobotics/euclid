@@ -53,6 +53,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     *                                         the same reference frame.
     * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(FrameTuple2DReadOnly position)
    {
       getPosition().set(position);
@@ -66,6 +67,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     *                                         the same reference frame.
     * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(FrameTuple3DReadOnly position)
    {
       getPosition().set(position);
@@ -79,6 +81,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     *                                         in the same reference frame.
     * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(FrameOrientation2DReadOnly orientation)
    {
       getOrientation().set(orientation);
@@ -92,6 +95,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     *                                         in the same reference frame.
     * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(FrameOrientation3DReadOnly orientation)
    {
       getOrientation().set(orientation);

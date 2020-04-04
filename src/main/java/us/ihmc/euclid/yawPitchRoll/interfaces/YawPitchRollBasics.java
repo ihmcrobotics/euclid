@@ -61,7 +61,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    /**
     * Convenience methods for recomputing the yaw angle of this rotation to be within [ -<i>pi</i>,
     * <i>pi</i> [.
-    * 
+    *
     * @see EuclidCoreTools#trimAngleMinusPiToPi(double)
     */
    default void trimYaw()
@@ -72,7 +72,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    /**
     * Convenience methods for recomputing the pitch angle of this rotation to be within [ -<i>pi</i>,
     * <i>pi</i> [.
-    * 
+    *
     * @see EuclidCoreTools#trimAngleMinusPiToPi(double)
     */
    default void trimPitch()
@@ -83,7 +83,7 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
    /**
     * Convenience methods for recomputing the roll angle of this rotation to be within [ -<i>pi</i>,
     * <i>pi</i> [.
-    * 
+    *
     * @see EuclidCoreTools#trimAngleMinusPiToPi(double)
     */
    default void trimRoll()

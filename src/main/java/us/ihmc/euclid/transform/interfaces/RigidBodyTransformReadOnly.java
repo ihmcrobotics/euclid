@@ -317,6 +317,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                             Modified.
     * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
     */
+   @Deprecated
    default void getRotation(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationMatrixToPack.set(getRotation());
@@ -329,6 +330,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                             The scale part is reset. Modified.
     * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
     */
+   @Deprecated
    default void getRotation(RotationScaleMatrix rotationMatrixToPack)
    {
       rotationMatrixToPack.set(getRotation());
@@ -341,6 +343,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                          Modified.
     * @deprecated Use {@code orientationToPack.set(this.getRotation())} instead.
     */
+   @Deprecated
    default void getRotation(Orientation3DBasics orientationToPack)
    {
       orientationToPack.set(getRotation());
@@ -358,6 +361,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                             transform. Modified.
     * @deprecated Use {@code this.getRotation().getRotationVector(rotationVectorToPack)} instead.
     */
+   @Deprecated
    default void getRotation(Vector3DBasics rotationVectorToPack)
    {
       getRotation().getRotationVector(rotationVectorToPack);
@@ -374,6 +378,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
     * @deprecated Use {@code this.getRotation().getEuler(rotationVectorToPack)} instead.
     */
+   @Deprecated
    default void getRotationEuler(Vector3DBasics eulerAnglesToPack)
    {
       getRotation().getEuler(eulerAnglesToPack);
@@ -381,7 +386,7 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /**
     * Packs the translation part of this rigid-body transform.
-    * 
+    *
     * @param translationToPack the tuple in which the translation part of this transform is stored.
     *                          Modified.
     * @deprecated Use {@code translationToPack.set(this.getTranslation())} instead.

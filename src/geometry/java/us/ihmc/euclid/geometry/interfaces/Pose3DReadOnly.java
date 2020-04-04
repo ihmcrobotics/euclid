@@ -126,6 +126,7 @@ public interface Pose3DReadOnly
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
     * @deprecated Use {@code this.getOrientation().getRotationVector(rotationVectorToPack)} instead.
     */
+   @Deprecated
    default void getRotationVector(Vector3DBasics rotationVectorToPack)
    {
       getOrientation().getRotationVector(rotationVectorToPack);
@@ -138,6 +139,7 @@ public interface Pose3DReadOnly
     * @return the distance between this pose and the given {@code point}.
     * @deprecated Use {@code this.getPosition().distance(point)} instead.
     */
+   @Deprecated
    default double getPositionDistance(Point3DReadOnly point)
    {
       return getPosition().distance(point);
@@ -150,6 +152,7 @@ public interface Pose3DReadOnly
     * @return the distance between the position part of the two poses.
     * @deprecated Use {@code this.getPosition().distance(other.getPosition())} instead.
     */
+   @Deprecated
    default double getPositionDistance(Pose3DReadOnly other)
    {
       return getPosition().distance(other.getPosition());
@@ -164,6 +167,7 @@ public interface Pose3DReadOnly
     *         2<i>pi</i>].
     * @deprecated Use {@code this.getOrientation().distance(orientation)} instead.
     */
+   @Deprecated
    default double getOrientationDistance(QuaternionReadOnly orientation)
    {
       return getOrientation().distance(orientation);
@@ -177,6 +181,7 @@ public interface Pose3DReadOnly
     *         is contained in [0, 2<i>pi</i>].
     * @deprecated Use {@code this.getOrientation().distance(other.getOrientation())} instead.
     */
+   @Deprecated
    default double getOrientationDistance(Pose3DReadOnly other)
    {
       return getOrientation().distance(other.getOrientation());

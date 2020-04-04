@@ -209,7 +209,7 @@ public class EuclidPolytopeConstructionToolsTest
 
       CommonOps.multInner(datasetMatrix, covariance);
 
-      CommonOps.scale(1.0 / (double) n, covariance);
+      CommonOps.scale(1.0 / n, covariance);
 
       return new Matrix3D(covariance);
    }

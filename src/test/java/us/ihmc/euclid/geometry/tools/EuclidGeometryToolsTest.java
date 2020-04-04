@@ -1,8 +1,15 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
 
 import java.util.ArrayList;
 import java.util.Arrays;

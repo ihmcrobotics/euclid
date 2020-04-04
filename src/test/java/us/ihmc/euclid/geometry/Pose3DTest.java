@@ -210,18 +210,18 @@ public class Pose3DTest
          toCopy.setPosition(x, y, z);
          toCopy.setOrientationYawPitchRoll(ypr.getYaw(), ypr.getPitch(), ypr.getRoll());
 
-         assertEquals(ypr.getYaw()  , toCopy.getYaw(), EPSILON);
+         assertEquals(ypr.getYaw(), toCopy.getYaw(), EPSILON);
          assertEquals(ypr.getPitch(), toCopy.getPitch(), EPSILON);
-         assertEquals(ypr.getRoll() , toCopy.getRoll(), EPSILON);
+         assertEquals(ypr.getRoll(), toCopy.getRoll(), EPSILON);
 
          toSet.set(toCopy);
 
          assertEquals(x, toSet.getX(), EPSILON);
          assertEquals(y, toSet.getY(), EPSILON);
          assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(ypr.getYaw()  , toSet.getYaw(), EPSILON);
+         assertEquals(ypr.getYaw(), toSet.getYaw(), EPSILON);
          assertEquals(ypr.getPitch(), toSet.getPitch(), EPSILON);
-         assertEquals(ypr.getRoll() , toSet.getRoll(), EPSILON);
+         assertEquals(ypr.getRoll(), toSet.getRoll(), EPSILON);
       }
    }
 

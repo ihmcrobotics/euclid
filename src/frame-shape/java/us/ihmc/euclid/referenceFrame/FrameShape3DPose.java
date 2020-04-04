@@ -118,7 +118,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    /**
     * Creates a new shape pose which both position and orientation are initialized to zero and
     * initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameShape3DPose(ReferenceFrame referenceFrame)
@@ -235,7 +235,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
 
    /**
     * Registers a list of listeners to be notified when this pose changes.
-    * 
+    *
     * @param listeners the listeners to register.
     */
    public void addChangeListeners(List<Shape3DChangeListener> listeners)
@@ -248,7 +248,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
 
    /**
     * Registers a listener to be notified when this pose changes.
-    * 
+    *
     * @param listener the listener to register.
     */
    public void addChangeListener(Shape3DChangeListener listener)
@@ -261,7 +261,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
     * <p>
     * This listener will no longer be notified of changes from this pose.
     * </p>
-    * 
+    *
     * @param listener the listener to remove.
     * @return {@code true} if the listener was removed successful, {@code false} if the listener could
     *         not be found.

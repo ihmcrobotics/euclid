@@ -1359,7 +1359,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
 
       matrixActual.setToNaN();
-      matrixActual.setAndTranspose((Matrix3DReadOnly) randomMatrix);
+      matrixActual.setAndTranspose(randomMatrix);
       EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
    }
 

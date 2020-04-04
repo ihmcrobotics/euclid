@@ -13,7 +13,7 @@ import us.ihmc.euclid.Axis3D;
  * When the values of this vector are set to zero, the next time it is normalized it will be reset
  * to (1.0, 0.0, 0.0).
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface UnitVector3DBasics extends UnitVector3DReadOnly, Vector3DBasics
@@ -92,7 +92,7 @@ public interface UnitVector3DBasics extends UnitVector3DReadOnly, Vector3DBasics
 
    /**
     * Sets this unit vector to {@code other} while keeping track of the dirty flag property.
-    * 
+    *
     * @param other the other unit vector. Not modified.
     */
    void set(UnitVector3DReadOnly other);
@@ -340,7 +340,7 @@ public interface UnitVector3DBasics extends UnitVector3DReadOnly, Vector3DBasics
 
    /**
     * This method does nothing with a unit vector as a unit vector cannot be scaled.
-    * 
+    *
     * @return always {@code false};
     */
    @Override

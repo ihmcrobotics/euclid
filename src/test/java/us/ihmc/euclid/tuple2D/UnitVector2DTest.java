@@ -1,6 +1,10 @@
 package us.ihmc.euclid.tuple2D;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
@@ -951,6 +955,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
    }
 
+   @Override
    @Test
    public void testLength()
    {
@@ -963,6 +968,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
    }
 
+   @Override
    @Test
    public void testClipToMaxLength() throws Exception
    {

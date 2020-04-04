@@ -1,6 +1,16 @@
 package us.ihmc.euclid.shape.tools;
 
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getBox3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getConvexPolytope3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCylinder3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getEllipsoid3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getEuclidShape3DCollisionResultString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getFace3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getRamp3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getSphere3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getTorus3DString;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -1692,7 +1702,7 @@ public class EuclidShapeTestTools
                   if (!edges.contains(edge.getPrevious()))
                      EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                              faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
-                  if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+                  if (edges.indexOf(edge.getNext()) != (edgeIndex + 1) % edges.size())
                      EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                              faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
 
@@ -1743,7 +1753,7 @@ public class EuclidShapeTestTools
                if (!edges.contains(edge.getPrevious()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
-               if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+               if (edges.indexOf(edge.getNext()) != (edgeIndex + 1) % edges.size())
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
 

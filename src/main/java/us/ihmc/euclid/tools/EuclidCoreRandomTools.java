@@ -803,7 +803,7 @@ public class EuclidCoreRandomTools
     * <p>
     * This generator uses {@link #nextVector3D(Random)}.
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random unit vector.
     */
@@ -1040,7 +1040,7 @@ public class EuclidCoreRandomTools
     * <p>
     * This generator uses {@link #nextVector2D(Random)}.
     * </p>
-    * 
+    *
     * @param random the random generator to use.
     * @return the random unit vector.
     */

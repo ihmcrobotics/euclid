@@ -52,7 +52,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
 
    /**
     * Creates a new shape pose which both position and orientation are initialized to zero.
-    * 
+    *
     * @param referenceFrameHolder the owner of this pose which manages its reference frame. Reference
     *                             saved.
     */
@@ -67,21 +67,21 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
          {
             super.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
             notifyChangeListeners();
-         };
+         }
 
          @Override
          public void set(RotationMatrixReadOnly other)
          {
             super.set(other);
             notifyChangeListeners();
-         };
+         }
 
          @Override
          public void transpose()
          {
             super.transpose();
             notifyChangeListeners();
-         };
+         }
       });
 
       shapePosition = EuclidFrameFactories.newLinkedFixedFramePoint3DBasics(this, new Point3D()
@@ -94,7 +94,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
                super.setX(x);
                notifyChangeListeners();
             }
-         };
+         }
 
          @Override
          public void setY(double y)
@@ -104,7 +104,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
                super.setY(y);
                notifyChangeListeners();
             }
-         };
+         }
 
          @Override
          public void setZ(double z)
@@ -114,7 +114,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
                super.setZ(z);
                notifyChangeListeners();
             }
-         };
+         }
       });
 
       xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this, shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20);
@@ -208,7 +208,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
 
    /**
     * Registers a list of listeners to be notified when this pose changes.
-    * 
+    *
     * @param listeners the listeners to register.
     */
    public void addChangeListeners(List<Shape3DChangeListener> listeners)
@@ -221,7 +221,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
 
    /**
     * Registers a listener to be notified when this pose changes.
-    * 
+    *
     * @param listener the listener to register.
     */
    public void addChangeListener(Shape3DChangeListener listener)
@@ -234,7 +234,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
     * <p>
     * This listener will no longer be notified of changes from this pose.
     * </p>
-    * 
+    *
     * @param listener the listener to remove.
     * @return {@code true} if the listener was removed successful, {@code false} if the listener could
     *         not be found.

@@ -113,9 +113,9 @@ public interface HalfEdge3DReadOnly extends LineSegment3DReadOnly
          return true;
       else if (other == null)
          return false;
-      else if ((getOrigin() == null) != (other.getOrigin() == null))
+      else if (getOrigin() == null != (other.getOrigin() == null))
          return false;
-      else if ((getDestination() == null) != (other.getDestination() == null))
+      else if (getDestination() == null != (other.getDestination() == null))
          return false;
       else
          return LineSegment3DReadOnly.super.equals(other);

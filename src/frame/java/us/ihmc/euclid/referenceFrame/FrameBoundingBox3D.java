@@ -42,7 +42,7 @@ public class FrameBoundingBox3D
    /**
     * Creates a new bounding box expressed in {@code referenceFrame} initialized with both its minimum
     * and maximum coordinates to ({@code Double.NaN}, {@code Double.NaN}, {@code Double.NaN}).
-    * 
+    *
     * @param referenceFrame the initial frame for this frame bounding box.
     */
    public FrameBoundingBox3D(ReferenceFrame referenceFrame)
@@ -144,7 +144,7 @@ public class FrameBoundingBox3D
     * <p>
     * If the two bounding boxes have different frames, this method returns {@code false}.
     * </p>
-    * 
+    *
     * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two bounding boxes are equal and are expressed in the same reference

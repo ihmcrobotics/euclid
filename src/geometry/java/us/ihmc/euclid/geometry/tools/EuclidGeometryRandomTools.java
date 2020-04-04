@@ -1,6 +1,13 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextQuaternion;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3DWithFixedLength;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -295,6 +302,7 @@ public class EuclidGeometryRandomTools
     * @return the random orientation 2D.
     * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random)} instead
     */
+   @Deprecated
    public static Orientation2D nextOrientation2D(Random random)
    {
       return EuclidCoreRandomTools.nextOrientation2D(random);
@@ -314,6 +322,7 @@ public class EuclidGeometryRandomTools
     * @throws RuntimeException if {@code pointMinMax < 0}.
     * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random,double)} instead
     */
+   @Deprecated
    public static Orientation2D nextOrientation2D(Random random, double minMax)
    {
       return EuclidCoreRandomTools.nextOrientation2D(random, minMax);

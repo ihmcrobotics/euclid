@@ -1,6 +1,11 @@
 package us.ihmc.euclid.shape.convexPolytope;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.percentageAlongLineSegment3D;
 
 import java.util.ArrayList;
