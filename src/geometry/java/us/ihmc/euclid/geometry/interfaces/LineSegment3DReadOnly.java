@@ -109,6 +109,7 @@ public interface LineSegment3DReadOnly
     *
     * @return {@code true} if {@link #getFirstEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
+    * @deprecated Use {@code this.getFirstEndpoint().containsNaN()} instead.
     */
    default boolean firstEndpointContainsNaN()
    {
@@ -120,6 +121,7 @@ public interface LineSegment3DReadOnly
     *
     * @return {@code true} if {@link #getSecondEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
+    * @deprecated Use {@code this.getSecondEndpoint().containsNaN()} instead.
     */
    default boolean secondEndpointContainsNaN()
    {

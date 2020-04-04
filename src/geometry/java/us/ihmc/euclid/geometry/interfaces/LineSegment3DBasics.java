@@ -72,6 +72,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param firstEndpointX x-coordinate of the new first endpoint.
     * @param firstEndpointY y-coordinate of the new first endpoint.
     * @param firstEndpointZ z-coordinate of the new first endpoint.
+    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ)} instead.
     */
    default void setFirstEndpoint(double firstEndpointX, double firstEndpointY, double firstEndpointZ)
    {
@@ -84,6 +85,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param secondEndpointX x-coordinate of the new second endpoint.
     * @param secondEndpointY y-coordinate of the new second endpoint.
     * @param secondEndpointZ z-coordinate of the new second endpoint.
+    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ)} instead.
     */
    default void setSecondEndpoint(double secondEndpointX, double secondEndpointY, double secondEndpointZ)
    {
@@ -94,6 +96,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * Changes the first endpoint of this line segment.
     *
     * @param firstEndpoint new endpoint of this line segment. Not modified.
+    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
    default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
    {
@@ -104,6 +107,7 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * Changes the second endpoint of this line segment.
     *
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
+    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
    default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
    {

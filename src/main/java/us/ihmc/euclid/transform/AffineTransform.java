@@ -39,7 +39,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * An {@code AffineTransform} represents a 4-by-4 transformation matrix that can scale, rotate, and
@@ -710,10 +709,7 @@ public class AffineTransform
     * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll  the angle to rotate about the x-axis.
-    * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} instead using
-    *             {@link YawPitchRollReadOnly}.
     */
-   @Deprecated
    public void setRotationYawPitchRoll(double yaw, double pitch, double roll)
    {
       rotationScaleMatrix.setRotationYawPitchRoll(yaw, pitch, roll);

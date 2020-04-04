@@ -51,6 +51,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
    default void setPosition(FrameTuple2DReadOnly position)
    {
@@ -64,6 +65,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
    default void setPosition(FrameTuple3DReadOnly position)
    {
@@ -77,6 +79,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(FrameOrientation2DReadOnly orientation)
    {
@@ -90,6 +93,7 @@ public interface FixedFramePose2DBasics extends FramePose2DReadOnly, Pose2DBasic
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(FrameOrientation3DReadOnly orientation)
    {

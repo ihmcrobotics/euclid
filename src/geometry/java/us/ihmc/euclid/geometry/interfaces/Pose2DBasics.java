@@ -119,6 +119,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     *
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
+    * @deprecated Use {@code this.getPosition().set(x, y)} instead.
     */
    default void setPosition(double x, double y)
    {
@@ -129,6 +130,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the position to the given tuple.
     *
     * @param position the tuple with the new position coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
    default void setPosition(Tuple2DReadOnly position)
    {
@@ -139,6 +141,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the position to the given tuple.
     *
     * @param position the tuple with the new position coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
    default void setPosition(Tuple3DReadOnly position)
    {
@@ -149,6 +152,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the orientation angle value.
     *
     * @param yaw the orientation angle value.
+    * @deprecated Use {@code this.getOrientation().setYaw(yaw)} instead.
     */
    default void setOrientation(double yaw)
    {
@@ -159,6 +163,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the orientation from the given orientation 2D.
     *
     * @param orientation the orientation with the new angle value for this. Not modified.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(Orientation2DReadOnly orientation)
    {
@@ -169,6 +174,7 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the orientation from the yaw angle of the given quaternion.
     *
     * @param orientation the orientation with the new angle value for this. Not modified.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(Orientation3DReadOnly orientation)
    {

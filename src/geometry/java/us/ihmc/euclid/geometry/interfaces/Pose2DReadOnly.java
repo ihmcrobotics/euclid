@@ -82,6 +82,7 @@ public interface Pose2DReadOnly
     *
     * @param point the other point used to measure the distance. Not modified.
     * @return the distance between this pose and the given {@code point}.
+    * @deprecated Use {@code this.getPosition().distance(point)} instead.
     */
    default double getPositionDistance(Point2DReadOnly point)
    {
@@ -93,6 +94,7 @@ public interface Pose2DReadOnly
     *
     * @param other the other pose used to measure the distance. Not modified.
     * @return the distance between the position part of the two poses.
+    * @deprecated Use {@code this.getPosition().distance(other.getPosition())} instead.
     */
    default double getPositionDistance(Pose2DReadOnly other)
    {
@@ -105,6 +107,7 @@ public interface Pose2DReadOnly
     *
     * @param other the orientation used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this} and {@code orientation}.
+    * @deprecated Use {@code this.getOrientation().distance(other))} instead.
     */
    default double getOrientationDistance(Orientation2DReadOnly other)
    {
@@ -117,6 +120,7 @@ public interface Pose2DReadOnly
     * @param other the other pose 2D used to compute the orientation distance. Not modified.
     * @return the absolute angle difference between {@code this.orientation} and
     *         {@code other.orientation}.
+    * @deprecated Use {@code this.getOrientation().distance(other.getOrientation())} instead.
     */
    default double getOrientationDistance(Pose2DReadOnly other)
    {

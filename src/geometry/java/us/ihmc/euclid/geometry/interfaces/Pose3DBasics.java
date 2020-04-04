@@ -73,6 +73,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param z the z-coordinate of the position.
+    * @deprecated Use {@code this.getPosition().set(x, y, z)} instead.
     */
    default void setPosition(double x, double y, double z)
    {
@@ -83,6 +84,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the position to the given tuple.
     *
     * @param position the tuple with the new position coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
    default void setPosition(Tuple3DReadOnly position)
    {
@@ -96,6 +98,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * </p>
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position2D)} instead.
     */
    default void setPosition(Tuple2DReadOnly position2D)
    {
@@ -107,6 +110,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
     * @param z          the new z value for this pose's position z-coordinate.
+    * @deprecated Use {@code this.getPosition().set(position2D, z)} instead.
     */
    default void setPosition(Tuple2DReadOnly position2D, double z)
    {
@@ -165,6 +169,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param qy the y-component of the quaternion's vector part.
     * @param qz the z-component of the quaternion's vector part.
     * @param qs the scalar component of the quaternion.
+    * @deprecated Use {@code this.getOrientation().set(qx, qy, qz, qs)} instead.
     */
    default void setOrientation(double qx, double qy, double qz, double qs)
    {
@@ -175,6 +180,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the orientation part of this pose 3D with the given orientation 2D.
     *
     * @param orientation the orientation 2D used to set this pose's orientation. Not modified.
+    * @deprecated Use {@code this.getOrientation().setToYawOrientation(orientation.getYaw())} instead.
     */
    default void setOrientation(Orientation2DReadOnly orientation)
    {
@@ -185,6 +191,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the orientation part of this pose 3D with the given orientation.
     *
     * @param orientation the orientation used to set this pose's orientation. Not modified.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(Orientation3DReadOnly orientation)
    {
@@ -201,6 +208,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll  the angle to rotate about the x-axis.
+    * @deprecated Use {@code this.getOrientation().setYawPitchRoll(yaw, pitch, roll)} instead.
     */
    default void setOrientationYawPitchRoll(double yaw, double pitch, double roll)
    {
@@ -264,6 +272,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
     * </ul>
     * </p>
+    * @deprecated Use {@code this.getOrientation().normalize()} instead.
     */
    default void normalizeQuaternion()
    {
@@ -279,6 +288,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
     * </ul>
     * </p>
+    * @deprecated Use {@code this.getOrientation().normalizeAndLimitToPi()} instead.
     */
    default void normalizeQuaternionAndLimitToPi()
    {

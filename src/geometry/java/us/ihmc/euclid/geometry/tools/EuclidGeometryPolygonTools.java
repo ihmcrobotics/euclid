@@ -367,7 +367,7 @@ public class EuclidGeometryPolygonTools
     * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
     *                                  of the given list of vertices.
     */
-   public static double computeConvexPolyong2DArea(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
+   public static double computeConvexPolygon2DArea(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, boolean clockwiseOrdered,
                                                    Point2DBasics centroidToPack)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);

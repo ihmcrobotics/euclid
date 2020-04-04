@@ -305,7 +305,7 @@ public class FrameConvexPolygon2D implements FrameConvexPolygon2DBasics, Geometr
    @Override
    public void updateCentroidAndArea()
    {
-      area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
+      area = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
    }
 
    /** {@inheritDoc} */

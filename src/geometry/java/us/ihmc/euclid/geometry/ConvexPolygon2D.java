@@ -258,7 +258,7 @@ public class ConvexPolygon2D implements ConvexPolygon2DBasics, GeometryObject<Co
    @Override
    public void updateCentroidAndArea()
    {
-      area = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
+      area = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(vertexBuffer, numberOfVertices, clockwiseOrdered, centroid);
    }
 
    @Override

@@ -55,6 +55,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param pointOnLine new point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
    default void setPoint(FramePoint2DReadOnly pointOnLine)
    {
@@ -68,6 +69,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param pointOnLine new point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
@@ -81,6 +83,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
    default void setDirection(FrameVector2DReadOnly lineDirection)
    {
@@ -94,6 +97,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
    default void setDirection(FrameVector3DReadOnly lineDirection)
    {

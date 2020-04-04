@@ -139,7 +139,7 @@ public class EuclidPolytopeConstructionToolsTest
          List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
 
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D,
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(circleBasedConvexPolygon2D,
                                                                                      circleBasedConvexPolygon2D.size(),
                                                                                      true,
                                                                                      centroid2D);
@@ -160,7 +160,7 @@ public class EuclidPolytopeConstructionToolsTest
       { // Applying a transform when switching to 3D
          List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 20);
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D,
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(circleBasedConvexPolygon2D,
                                                                                      circleBasedConvexPolygon2D.size(),
                                                                                      true,
                                                                                      centroid2D);

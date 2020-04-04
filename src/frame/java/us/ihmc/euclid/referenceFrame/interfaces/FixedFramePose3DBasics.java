@@ -55,6 +55,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
    default void setPosition(FrameTuple2DReadOnly position)
    {
@@ -69,6 +70,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param z        the new z-coordinate.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position, z)} instead.
     */
    default void setPosition(FrameTuple2DReadOnly position, double z)
    {
@@ -82,6 +84,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
    default void setPosition(FrameTuple3DReadOnly position)
    {
