@@ -19,6 +19,7 @@ import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -1510,12 +1511,13 @@ public class AffineTransform
     */
    public void get(DenseMatrix64F matrixToPack)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(4, 4, matrixToPack);
       rotationScaleMatrix.get(matrixToPack);
       translationVector.get(0, 3, matrixToPack);
-      matrixToPack.set(3, 0, 0.0);
-      matrixToPack.set(3, 1, 0.0);
-      matrixToPack.set(3, 2, 0.0);
-      matrixToPack.set(3, 3, 1.0);
+      matrixToPack.unsafe_set(3, 0, 0.0);
+      matrixToPack.unsafe_set(3, 1, 0.0);
+      matrixToPack.unsafe_set(3, 2, 0.0);
+      matrixToPack.unsafe_set(3, 3, 1.0);
    }
 
    /**
@@ -1537,13 +1539,14 @@ public class AffineTransform
     */
    public void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, startColumn + 4, matrixToPack);
       rotationScaleMatrix.get(startRow, startColumn, matrixToPack);
       translationVector.get(startRow, startColumn + 3, matrixToPack);
       startRow += 3;
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn, 1.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn, 1.0);
    }
 
    /**

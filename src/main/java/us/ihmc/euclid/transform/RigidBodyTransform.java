@@ -12,6 +12,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
@@ -677,12 +678,13 @@ public class RigidBodyTransform
     */
    public void get(DenseMatrix64F matrixToPack)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(4, 4, matrixToPack);
       getRotation().get(matrixToPack);
       getTranslation().get(0, 3, matrixToPack);
-      matrixToPack.set(3, 0, 0.0);
-      matrixToPack.set(3, 1, 0.0);
-      matrixToPack.set(3, 2, 0.0);
-      matrixToPack.set(3, 3, 1.0);
+      matrixToPack.unsafe_set(3, 0, 0.0);
+      matrixToPack.unsafe_set(3, 1, 0.0);
+      matrixToPack.unsafe_set(3, 2, 0.0);
+      matrixToPack.unsafe_set(3, 3, 1.0);
    }
 
    /**
@@ -703,13 +705,14 @@ public class RigidBodyTransform
     */
    public void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, startColumn + 4, matrixToPack);
       getRotation().get(startRow, startColumn, matrixToPack);
       getTranslation().get(startRow, startColumn + 3, matrixToPack);
       startRow += 3;
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn, 1.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn, 1.0);
    }
 
    /**

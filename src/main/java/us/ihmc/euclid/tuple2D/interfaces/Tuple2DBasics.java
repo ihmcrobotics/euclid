@@ -235,7 +235,8 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     */
    default void set(DenseMatrix64F matrix)
    {
-      set(matrix.get(0, 0), matrix.get(1, 0));
+      EuclidCoreTools.checkMatrixMinimumSize(2, 1, matrix);
+      set(matrix.unsafe_get(0, 0), matrix.unsafe_get(1, 0));
    }
 
    /**
@@ -248,7 +249,8 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     */
    default void set(int startRow, DenseMatrix64F matrix)
    {
-      set(matrix.get(startRow++, 0), matrix.get(startRow, 0));
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 2, 1, matrix);
+      set(matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow, 0));
    }
 
    /**
@@ -262,7 +264,8 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     */
    default void set(int startRow, int column, DenseMatrix64F matrix)
    {
-      set(matrix.get(startRow++, column), matrix.get(startRow, column));
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 2, column + 1, matrix);
+      set(matrix.unsafe_get(startRow++, column), matrix.unsafe_get(startRow, column));
    }
 
    /**

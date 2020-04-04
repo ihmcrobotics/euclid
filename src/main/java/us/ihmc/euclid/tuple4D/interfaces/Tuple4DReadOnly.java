@@ -254,10 +254,11 @@ public interface Tuple4DReadOnly
     */
    default void get(int startRow, int column, DenseMatrix64F tupleMatrixToPack)
    {
-      tupleMatrixToPack.set(startRow++, column, getX());
-      tupleMatrixToPack.set(startRow++, column, getY());
-      tupleMatrixToPack.set(startRow++, column, getZ());
-      tupleMatrixToPack.set(startRow, column, getS());
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, column + 1, tupleMatrixToPack);
+      tupleMatrixToPack.unsafe_set(startRow++, column, getX());
+      tupleMatrixToPack.unsafe_set(startRow++, column, getY());
+      tupleMatrixToPack.unsafe_set(startRow++, column, getZ());
+      tupleMatrixToPack.unsafe_set(startRow, column, getS());
    }
 
    /**

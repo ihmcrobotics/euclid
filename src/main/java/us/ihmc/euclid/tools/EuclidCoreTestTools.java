@@ -1,6 +1,15 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAffineTransformString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAxisAngleString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getMatrix3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getQuaternionBasedTransformString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getRigidBodyTransformString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +29,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -1682,6 +1692,8 @@ public class EuclidCoreTestTools
     * @param axisAngleToAssert the query. Not modified.
     * @param epsilon           the tolerance to use.
     * @throws AssertionError if the axis is not unitary. If the argument is equal to {@code null}.
+    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
+    * @since 0.13.0
     */
    public static void assertAxisUnitary(AxisAngleReadOnly axisAngleToAssert, double epsilon)
    {
@@ -1695,6 +1707,8 @@ public class EuclidCoreTestTools
     * @param axisAngleToAssert the query. Not modified.
     * @param epsilon           the tolerance to use.
     * @throws AssertionError if the axis is not unitary. If the argument is equal to {@code null}.
+    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
+    * @since 0.13.0
     */
    public static void assertAxisUnitary(String messagePrefix, AxisAngleReadOnly axisAngleToAssert, double epsilon)
    {
@@ -1710,6 +1724,8 @@ public class EuclidCoreTestTools
     * @param format            the format to use for printing each component when an
     *                          {@code AssertionError} is thrown.
     * @throws AssertionError if the axis is not unitary. If the argument is equal to {@code null}.
+    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
+    * @since 0.13.0
     */
    public static void assertAxisUnitary(String messagePrefix, AxisAngleReadOnly axisAngleToAssert, double epsilon, String format)
    {

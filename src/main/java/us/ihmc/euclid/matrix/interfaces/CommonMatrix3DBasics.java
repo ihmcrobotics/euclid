@@ -3,6 +3,7 @@ package us.ihmc.euclid.matrix.interfaces;
 import org.ejml.data.DenseMatrix64F;
 
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -151,15 +152,17 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     */
    default void set(DenseMatrix64F matrix)
    {
-      double m00 = matrix.get(0, 0);
-      double m01 = matrix.get(0, 1);
-      double m02 = matrix.get(0, 2);
-      double m10 = matrix.get(1, 0);
-      double m11 = matrix.get(1, 1);
-      double m12 = matrix.get(1, 2);
-      double m20 = matrix.get(2, 0);
-      double m21 = matrix.get(2, 1);
-      double m22 = matrix.get(2, 2);
+      EuclidCoreTools.checkMatrixMinimumSize(3, 3, matrix);
+
+      double m00 = matrix.unsafe_get(0, 0);
+      double m01 = matrix.unsafe_get(0, 1);
+      double m02 = matrix.unsafe_get(0, 2);
+      double m10 = matrix.unsafe_get(1, 0);
+      double m11 = matrix.unsafe_get(1, 1);
+      double m12 = matrix.unsafe_get(1, 2);
+      double m20 = matrix.unsafe_get(2, 0);
+      double m21 = matrix.unsafe_get(2, 1);
+      double m22 = matrix.unsafe_get(2, 2);
       set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
@@ -173,22 +176,24 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     */
    default void set(int startRow, int startColumn, DenseMatrix64F matrix)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, startColumn + 3, matrix);
+
       int row = startRow;
       int column = startColumn;
 
-      double m00 = matrix.get(row, column++);
-      double m01 = matrix.get(row, column++);
-      double m02 = matrix.get(row, column);
+      double m00 = matrix.unsafe_get(row, column++);
+      double m01 = matrix.unsafe_get(row, column++);
+      double m02 = matrix.unsafe_get(row, column);
       row++;
       column = startColumn;
-      double m10 = matrix.get(row, column++);
-      double m11 = matrix.get(row, column++);
-      double m12 = matrix.get(row, column);
+      double m10 = matrix.unsafe_get(row, column++);
+      double m11 = matrix.unsafe_get(row, column++);
+      double m12 = matrix.unsafe_get(row, column);
       row++;
       column = startColumn;
-      double m20 = matrix.get(row, column++);
-      double m21 = matrix.get(row, column++);
-      double m22 = matrix.get(row, column);
+      double m20 = matrix.unsafe_get(row, column++);
+      double m21 = matrix.unsafe_get(row, column++);
+      double m22 = matrix.unsafe_get(row, column);
       set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
