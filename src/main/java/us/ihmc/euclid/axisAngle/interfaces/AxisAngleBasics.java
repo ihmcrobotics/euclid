@@ -167,7 +167,10 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    @Override
    default void set(Orientation3DReadOnly orientation3DReadOnly)
    {
-      orientation3DReadOnly.get(this);
+      if (orientation3DReadOnly instanceof AxisAngleReadOnly)
+         set((AxisAngleReadOnly) orientation3DReadOnly);
+      else
+         orientation3DReadOnly.get(this);
    }
 
    /**

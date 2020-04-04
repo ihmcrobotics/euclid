@@ -437,35 +437,16 @@ public class YawPitchRollConversionTest
          }
       }
 
-      // Test the checks on the norm
-      axisAngle.set(0.0, 0.0, 0.0, 1.0);
-      double actualYaw = YawPitchRollConversion.computeYaw(axisAngle);
-      assertTrue(actualYaw == 0.0);
-
-      double actualPitch = YawPitchRollConversion.computePitch(axisAngle);
-      assertTrue(actualPitch == 0.0);
-
-      double actualRoll = YawPitchRollConversion.computeRoll(axisAngle);
-      assertTrue(actualRoll == 0.0);
-
-      YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);
-      assertTrue(actualYawPitchRoll.getYaw() == 0.0);
-      assertTrue(actualYawPitchRoll.getPitch() == 0.0);
-      assertTrue(actualYawPitchRoll.getRoll() == 0.0);
-
-      YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualEulerAngles);
-      EuclidCoreTestTools.assertTuple3DIsSetToZero(actualEulerAngles);
-
       // Test the checks on NaNs
       axisAngle.set(Double.NaN, 0.0, 0.0, 1.0);
 
-      actualYaw = YawPitchRollConversion.computeYaw(axisAngle);
+      double actualYaw = YawPitchRollConversion.computeYaw(axisAngle);
       assertTrue(Double.isNaN(actualYaw));
 
-      actualPitch = YawPitchRollConversion.computePitch(axisAngle);
+      double actualPitch = YawPitchRollConversion.computePitch(axisAngle);
       assertTrue(Double.isNaN(actualPitch));
 
-      actualRoll = YawPitchRollConversion.computeRoll(axisAngle);
+      double actualRoll = YawPitchRollConversion.computeRoll(axisAngle);
       assertTrue(Double.isNaN(actualRoll));
 
       YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, actualYawPitchRoll);

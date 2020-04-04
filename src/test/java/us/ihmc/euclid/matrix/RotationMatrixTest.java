@@ -1076,7 +1076,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix unnormalized = new RotationMatrix();
          RotationMatrix normalized = new RotationMatrix();
 
-         for (int i = 0; i < 116000; i++)
+         for (int i = 0; i < 111000; i++)
          {
             Quaternion multiplyWith = EuclidCoreRandomTools.nextQuaternion(random);
             unnormalized.append(multiplyWith);
