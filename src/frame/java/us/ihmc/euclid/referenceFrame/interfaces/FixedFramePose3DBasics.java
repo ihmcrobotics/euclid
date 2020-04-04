@@ -98,6 +98,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(FrameOrientation2DReadOnly orientation)
    {
@@ -111,6 +112,7 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param orientation the orientation to set the orientation part of this frame pose. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(FrameOrientation3DReadOnly orientation)
    {

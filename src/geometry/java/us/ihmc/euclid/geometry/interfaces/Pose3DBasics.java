@@ -181,11 +181,11 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the orientation part of this pose 3D with the given orientation 2D.
     *
     * @param orientation the orientation 2D used to set this pose's orientation. Not modified.
-    * @deprecated Use {@code this.getOrientation().setToYawOrientation(orientation.getYaw())} instead.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
    default void setOrientation(Orientation2DReadOnly orientation)
    {
-      getOrientation().setToYawOrientation(orientation.getYaw());
+      getOrientation().set(orientation);
    }
 
    /**

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -23,6 +24,31 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics, FrameChangeable
 {
+   /**
+    * Sets this orientation 3D to a z-axis orientation, sets the yaw angle from the given orientation
+    * 2D, and sets the frame to the given {@code referenceFrame}.
+    *
+    * @param referenceFrame        the new reference frame for this frame orientation.
+    * @param orientation2DReadOnly the orientation used to set this orientation. Not modified.
+    */
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation2DReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(orientation2DReadOnly);
+   }
+
+   /**
+    * Sets this orientation 3D to a z-axis orientation, sets the yaw angle from the given orientation
+    * 2D, and sets the frame to the given {@code referenceFrame}.
+    *
+    * @param other the other frame orientation to copy the values and reference frame from. Not
+    *              modified.
+    */
+   default void setIncludingFrame(FrameOrientation2DReadOnly other)
+   {
+      setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
    /**
     * Sets this frame orientation to the same orientation described by the given
     * {@code orientation3DReadOnly} and sets the frame to the given {@code referenceFrame}.

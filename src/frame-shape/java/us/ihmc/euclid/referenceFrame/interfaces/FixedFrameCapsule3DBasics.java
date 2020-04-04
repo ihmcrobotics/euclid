@@ -34,6 +34,7 @@ public interface FixedFrameCapsule3DBasics extends Capsule3DBasics, FrameCapsule
     * @param axis           the new axis. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
     *                                         frame as {@code this}.
+    * @deprecated Use {@code this.getAxis().set(referenceFrame, axis)} instead.
     */
    default void setAxis(ReferenceFrame referenceFrame, Vector3DReadOnly axis)
    {
@@ -48,6 +49,7 @@ public interface FixedFrameCapsule3DBasics extends Capsule3DBasics, FrameCapsule
     * @param axis           the new axis. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
     *                                         frame as {@code this}.
+    * @deprecated Use {@code this.getAxis().set(axis)} instead.
     */
    default void setAxis(FrameVector3DReadOnly axis)
    {

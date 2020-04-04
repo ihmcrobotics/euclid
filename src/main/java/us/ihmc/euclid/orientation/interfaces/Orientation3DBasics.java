@@ -197,6 +197,17 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
    void setToRollOrientation(double roll);
 
    /**
+    * Sets this orientation 3D to a z-axis orientation and sets the yaw angle from the given
+    * orientation 2D.
+    * 
+    * @param orientation2DReadOnly the new orientation. Not modified.
+    */
+   default void set(Orientation2DReadOnly orientation2DReadOnly)
+   {
+      setToYawOrientation(orientation2DReadOnly.getYaw());
+   }
+
+   /**
     * Converts, if necessary, and sets this orientation to represents the same orientation as
     * {@code orientation3DReadOnly}.
     *
