@@ -13,7 +13,6 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -51,8 +50,6 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
                                                                                                         () -> -halfLength * axis.getX() + position.getX(),
                                                                                                         () -> -halfLength * axis.getY() + position.getY(),
                                                                                                         () -> -halfLength * axis.getZ() + position.getZ());
-
-   private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
    /**
     * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5 and
@@ -171,13 +168,6 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
          throw new IllegalArgumentException("The length of a Capsule3D cannot be negative: " + length);
       this.length = length;
       halfLength = 0.5 * length;
-   }
-
-   @Override
-   public void changeFrame(ReferenceFrame desiredFrame)
-   {
-      referenceFrame.getTransformToDesiredFrame(transformToDesiredFrame, desiredFrame);
-      applyTransform(transformToDesiredFrame);
    }
 
    /** {@inheritDoc} */
