@@ -56,7 +56,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    default void setToZero()
    {
       getPoint().setToZero();
-      getDirection().setToZero();
+      getDirection().set(1.0, 0.0);
    }
 
    /**

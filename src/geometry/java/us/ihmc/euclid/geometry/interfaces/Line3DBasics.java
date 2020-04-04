@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.Axis;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -54,7 +55,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    default void setToZero()
    {
       getPoint().setToZero();
-      getDirection().setToZero();
+      getDirection().set(Axis.X);
    }
 
    /**

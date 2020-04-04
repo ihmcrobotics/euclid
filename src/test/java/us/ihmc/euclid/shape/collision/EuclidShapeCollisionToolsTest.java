@@ -32,6 +32,7 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -1199,7 +1200,7 @@ public class EuclidShapeCollisionToolsTest
          Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, vertices);
 
          Plane3D closestFace = faces.stream().sorted((a, b) -> Double.compare(a.distance(pointInside), b.distance(pointInside))).findFirst().get();
-         Point3D pointOnSurface = closestFace.orthogonalProjectionCopy(pointInside);
+         Point3DBasics pointOnSurface = closestFace.orthogonalProjectionCopy(pointInside);
          double depth = closestFace.distance(pointInside);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
