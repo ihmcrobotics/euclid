@@ -10,6 +10,7 @@ import us.ihmc.euclid.tools.AxisAngleTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -155,6 +156,8 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @param epsilon tolerance to use in this test.
     * @return {@code true} if the axis is unitary, {@code false} otherwise.
+    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
+    * @since 0.13.0
     */
    default boolean isAxisUnitary(double epsilon)
    {
