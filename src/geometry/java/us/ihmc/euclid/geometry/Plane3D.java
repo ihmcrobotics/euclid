@@ -1,12 +1,10 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Plane3DBasics;
+import us.ihmc.euclid.geometry.interfaces.Plane3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -18,10 +16,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 /**
  * Represents an infinitely wide and long 3D plane defined by a 3D point and a 3D unit-vector.
  */
-public class Plane3D implements GeometryObject<Plane3D>
+public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
 {
-   private final static double minAllowableVectorPart = EuclidCoreTools.squareRoot(Double.MIN_NORMAL);
-
    /** Coordinates of a point located on this plane. */
    private final Point3D point = new Point3D();
    /**
@@ -30,17 +26,12 @@ public class Plane3D implements GeometryObject<Plane3D>
     */
    private final UnitVector3D normal = new UnitVector3D();
 
-   private boolean hasPointBeenSet = false;
-   private boolean hasNormalBeenSet = false;
-
    /**
-    * Default constructor that initializes both {@code point} and {@code normal} to zero. This point
-    * and vector have to be set to valid values to make this plane usable.
+    * Default constructor that initializes its {@code point} to zero and {@code normal} to (1.0, 0.0,
+    * 0.0).
     */
    public Plane3D()
    {
-      hasPointBeenSet = false;
-      hasNormalBeenSet = false;
    }
 
    /**
@@ -52,7 +43,6 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @param planeNormalX  the new x-component of the normal of this plane.
     * @param planeNormalY  the new y-component of the normal of this plane.
     * @param planeNormalZ  the new z-component of the normal of this plane.
-    * @throws RuntimeException if the new normal is unreasonably small.
     */
    public Plane3D(double pointOnPlaneX, double pointOnPlaneY, double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ)
    {
@@ -63,7 +53,6 @@ public class Plane3D implements GeometryObject<Plane3D>
     * Creates a new plane 3D and initializes it to {@code other}.
     *
     * @param other the other plane used to initialize this plane. Not modified.
-    * @throws RuntimeException if the other plane has not been initialized yet.
     */
    public Plane3D(Plane3D other)
    {
@@ -76,8 +65,6 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @param firstPointOnPlane  first point on this plane. Not modified.
     * @param secondPointOnPlane second point on this plane. Not modified.
     * @param thirdPointOnPlane  second point on this plane. Not modified.
-    * @throws RuntimeException if at least two of the given points are exactly equal.
-    * @throws RuntimeException if the plane normal could not be computed from the three given points.
     */
    public Plane3D(Point3DReadOnly firstPointOnPlane, Point3DReadOnly secondPointOnPlane, Point3DReadOnly thirdPointOnPlane)
    {
@@ -89,7 +76,6 @@ public class Plane3D implements GeometryObject<Plane3D>
     *
     * @param pointOnPlane point on this plane. Not modified.
     * @param planeNormal  normal of this plane. Not modified.
-    * @throws RuntimeException if the new normal is unreasonably small.
     */
    public Plane3D(Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
    {
@@ -97,96 +83,145 @@ public class Plane3D implements GeometryObject<Plane3D>
    }
 
    /**
-    * Transforms this plane using the given homogeneous transformation matrix.
+    * Gets the read-only reference to the normal of this plane.
     *
-    * @param transform the transform to apply on this plane's point and normal. Not modified.
-    * @throws RuntimeException if this plane has not been initialized yet.
+    * @return the reference to the normal.
     */
    @Override
-   public void applyTransform(Transform transform)
+   public Vector3DBasics getNormal()
    {
-      checkHasBeenInitialized();
-      point.applyTransform(transform);
-      normal.applyTransform(transform);
+      return normal;
    }
 
    /**
-    * Transforms this plane using the inverse of the given homogeneous transformation matrix.
+    * Gets the direction defining this plane by storing its components in the given argument
+    * {@code planeNormalToPack}.
     *
-    * @param transform the transform to apply on this plane's point and normal. Not modified.
-    * @throws RuntimeException if this plane has not been initialized yet.
+    * @param planeNormalToPack vector in which the components of this plane's normal are stored.
+    *                          Modified.
+    * @deprecated Use {@code planeNormalToPack.set(this.getNormal())} instead.
+    */
+   public void getNormal(Vector3DBasics planeNormalToPack)
+   {
+      planeNormalToPack.set(normal);
+   }
+
+   /**
+    * Returns a copy of this plane's normal.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @return a copy of this plane's normal.
+    * @deprecated Use {@code new Vector3D(this.getNormal())} instead.
+    */
+   @Deprecated
+   public Vector3D getNormalCopy()
+   {
+      return new Vector3D(normal);
+   }
+
+   /**
+    * Gets the read-only reference to the point through which this plane is going.
+    *
+    * @return the reference to the point.
     */
    @Override
-   public void applyInverseTransform(Transform transform)
+   public Point3DBasics getPoint()
    {
-      checkHasBeenInitialized();
-      point.applyInverseTransform(transform);
-      normal.applyInverseTransform(transform);
-   }
-
-   private void checkDistinctPoints(Point3DReadOnly firstPointOnPlane, Point3DReadOnly secondPointOnPlane, Point3DReadOnly thirdPointOnPlane)
-   {
-      if (firstPointOnPlane.equals(secondPointOnPlane) || firstPointOnPlane.equals(thirdPointOnPlane) || secondPointOnPlane.equals(thirdPointOnPlane))
-      {
-         throw new RuntimeException("Tried to create a plane with at least two coincidal points.");
-      }
-   }
-
-   private void checkHasBeenInitialized()
-   {
-      if (!hasPointBeenSet)
-         throw new RuntimeException("The point of this plane has not been initialized.");
-      if (!hasNormalBeenSet)
-         throw new RuntimeException("The normal of this plane has not been initialized.");
-   }
-
-   private void checkReasonableVector(Vector3DReadOnly localVector)
-   {
-      if (Math.abs(localVector.getX()) < minAllowableVectorPart && Math.abs(localVector.getY()) < minAllowableVectorPart
-            && Math.abs(localVector.getZ()) < minAllowableVectorPart)
-      {
-         throw new RuntimeException("Plane's normal length must be greater than zero.");
-      }
+      return point;
    }
 
    /**
-    * Tests if this plane contains {@link Double#NaN}.
+    * Gets the point defining this plane by storing its coordinates in the given argument
+    * {@code pointToPack}.
     *
-    * @return {@code true} if {@code point} and/or {@code normal} contains {@link Double#NaN},
-    *         {@code false} otherwise.
+    * @param pointOnPlaneToPack point in which the coordinates of this plane's point are stored.
+    *                           Modified.
+    * @deprecated Use {@code pointOnPlaneToPack.set(this.getPoint())} instead.
+    */
+   @Deprecated
+   public void getPoint(Point3DBasics pointOnPlaneToPack)
+   {
+      pointOnPlaneToPack.set(point);
+   }
+
+   /**
+    * Returns a copy of the point defining this plane.
+    * <p>
+    * WARNING: This method generates garbage.
+    * </p>
+    *
+    * @return a copy of this plane's point.
+    * @deprecated Use {@code new Point3D(this.getPoint())} instead.
+    */
+   @Deprecated
+   public Point3D getPointCopy()
+   {
+      return new Point3D(point);
+   }
+
+   /**
+    * Sets this plane to be the same as the given plane.
+    *
+    * @param other the other plane to copy. Not modified.
     */
    @Override
-   public boolean containsNaN()
+   public void set(Plane3D other)
    {
-      return point.containsNaN() || normal.containsNaN();
+      Plane3DBasics.super.set(other);
    }
 
    /**
-    * Computes the minimum distance the given 3D point and this plane.
+    * Changes the normal of this plane by setting it to the normalized value of the given vector.
     *
-    * @param pointX the x-coordinate of the point to compute the distance from the plane. Not modified.
-    * @param pointY the y-coordinate of the point to compute the distance from the plane. Not modified.
-    * @param pointZ the z-coordinate of the point to compute the distance from the plane. Not modified.
-    * @return the minimum distance between the 3D point and this 3D plane.
-    * @throws RuntimeException if this plane has not been initialized yet.
+    * @param normalX the new x-component of the normal of this normal.
+    * @param normalY the new y-component of the normal of this normal.
+    * @param normalZ the new z-component of the normal of this normal.
+    * @deprecated Use {@code this.getNormal().set(normalX, normalY, normalZ)} instead.
     */
-   public double distance(double pointX, double pointY, double pointZ)
+   @Deprecated
+   public void setNormal(double normalX, double normalY, double normalZ)
    {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.distanceFromPoint3DToPlane3D(pointX, pointY, pointZ, point, normal);
+      normal.set(normalX, normalY, normalZ);
    }
 
    /**
-    * Computes the minimum distance the given 3D point and this plane.
+    * Changes the direction of this plane by setting it to the normalized value of the given vector.
     *
-    * @param point 3D point to compute the distance from the plane. Not modified.
-    * @return the minimum distance between the 3D point and this 3D plane.
-    * @throws RuntimeException if this plane has not been initialized yet.
+    * @param planeNormal new normal of this plane. Not modified.
+    * @deprecated Use {@code this.getNormal().set(planeNormal)} instead.
     */
-   public double distance(Point3DReadOnly point)
+   @Deprecated
+   public void setNormal(Vector3DReadOnly planeNormal)
    {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.distanceFromPoint3DToPlane3D(point, this.point, normal);
+      setNormal(planeNormal.getX(), planeNormal.getY(), planeNormal.getZ());
+   }
+
+   /**
+    * Changes the point through which this plane has to go.
+    *
+    * @param pointX the new x-coordinate of the point on this plane.
+    * @param pointY the new y-coordinate of the point on this plane.
+    * @param pointZ the new z-coordinate of the point on this plane.
+    * @deprecated Use {@code this.getPoint().set(pointX, pointY, pointZ)} instead.
+    */
+   @Deprecated
+   public void setPoint(double pointX, double pointY, double pointZ)
+   {
+      point.set(pointX, pointY, pointZ);
+   }
+
+   /**
+    * Changes the point through which this plane has to go.
+    *
+    * @param pointOnPlane new point on this plane. Not modified.
+    * @deprecated Use {@code this.getPoint().set(pointOnPlane)} instead.
+    */
+   @Deprecated
+   public void setPoint(Point3DReadOnly pointOnPlane)
+   {
+      setPoint(pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ());
    }
 
    /**
@@ -199,728 +234,11 @@ public class Plane3D implements GeometryObject<Plane3D>
     * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two planes are equal, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
     */
    @Override
    public boolean epsilonEquals(Plane3D other, double epsilon)
    {
-      checkHasBeenInitialized();
-      return other.normal.epsilonEquals(normal, epsilon) && other.point.epsilonEquals(point, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis, if this plane 3D is exactly equal to {@code other}.
-    *
-    * @param other the other plane 3D to compare against this. Not modified.
-    * @return {@code true} if the two planes are exactly equal component-wise, {@code false} otherwise.
-    */
-   public boolean equals(Plane3D other)
-   {
-      if (other == this)
-         return true;
-      else if (other == null)
-         return false;
-      else
-         return point.equals(other.point) && normal.equals(other.normal);
-   }
-
-   /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(Plane3D)}, it returns {@code false} otherwise.
-    *
-    * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean equals(Object object)
-   {
-      if (object instanceof Plane3D)
-         return equals((Plane3D) object);
-      else
-         return false;
-   }
-
-   /**
-    * Gets the read-only reference to the normal of this plane.
-    *
-    * @return the reference to the normal.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public Vector3DReadOnly getNormal()
-   {
-      checkHasBeenInitialized();
-      return normal;
-   }
-
-   /**
-    * Gets the direction defining this plane by storing its components in the given argument
-    * {@code planeNormalToPack}.
-    *
-    * @param planeNormalToPack vector in which the components of this plane's normal are stored.
-    *                          Modified.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public void getNormal(Vector3DBasics planeNormalToPack)
-   {
-      checkHasBeenInitialized();
-      planeNormalToPack.set(normal);
-   }
-
-   /**
-    * Returns a copy of this plane's normal.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return a copy of this plane's normal.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public Vector3D getNormalCopy()
-   {
-      checkHasBeenInitialized();
-      return new Vector3D(normal);
-   }
-
-   /**
-    * Gets the x-component of this plane's normal.
-    *
-    * @return the x-component of this plane's normal.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double getNormalX()
-   {
-      checkHasBeenInitialized();
-      return normal.getX();
-   }
-
-   /**
-    * Gets the y-component of this plane's normal.
-    *
-    * @return the y-component of this plane's normal.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double getNormalY()
-   {
-      checkHasBeenInitialized();
-      return normal.getY();
-   }
-
-   /**
-    * Gets the z-component of this plane's normal.
-    *
-    * @return the z-component of this plane's normal.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double getNormalZ()
-   {
-      checkHasBeenInitialized();
-      return normal.getZ();
-   }
-
-   /**
-    * Gets the read-only reference to the point through which this plane is going.
-    *
-    * @return the reference to the point.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public Point3DReadOnly getPoint()
-   {
-      checkHasBeenInitialized();
-      return point;
-   }
-
-   /**
-    * Gets the point defining this plane by storing its coordinates in the given argument
-    * {@code pointToPack}.
-    *
-    * @param pointOnPlaneToPack point in which the coordinates of this plane's point are stored.
-    *                           Modified.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public void getPoint(Point3DBasics pointOnPlaneToPack)
-   {
-      checkHasBeenInitialized();
-      pointOnPlaneToPack.set(point);
-   }
-
-   /**
-    * Returns a copy of the point defining this plane.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @return a copy of this plane's point.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public Point3D getPointCopy()
-   {
-      checkHasBeenInitialized();
-      return new Point3D(point);
-   }
-
-   /**
-    * Gets the x-coordinate of a point this plane goes through.
-    *
-    * @return the x-coordinate of this plane's point.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double getPointX()
-   {
-      checkHasBeenInitialized();
-      return point.getX();
-   }
-
-   /**
-    * Gets the y-coordinate of a point this plane goes through.
-    *
-    * @return the y-coordinate of this plane's point.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double getPointY()
-   {
-      checkHasBeenInitialized();
-      return point.getY();
-   }
-
-   /**
-    * Gets the z-coordinate of a point this plane goes through.
-    *
-    * @return the z-coordinate of this plane's point.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double getPointZ()
-   {
-      checkHasBeenInitialized();
-      return point.getZ();
-   }
-
-   /**
-    * Computes the z-coordinate such that the point at (x, y, z) is located on this plane.
-    *
-    * @param pointX the x-coordinate of the query.
-    * @param pointY the y-coordinate of the query.
-    * @return the z-coordinate of the plane.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double getZOnPlane(double pointX, double pointY)
-   {
-      checkHasBeenInitialized();
-
-      // The three components of the plane origin
-      double x0 = point.getX();
-      double y0 = point.getY();
-      double z0 = point.getZ();
-      // The three components of the plane normal
-      double a = normal.getX();
-      double b = normal.getY();
-      double c = normal.getZ();
-
-      // Given the plane equation: a*x + b*y + c*z + d = 0, with d = -(a*x0 + b*y0 + c*z0), we find z:
-      double z = a / c * (x0 - pointX) + b / c * (y0 - pointY) + z0;
-      return z;
-   }
-
-   /**
-    * Computes the coordinates of the intersection between this plane and an infinitely long 3D line.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the line is parallel to the plane, this methods fails and returns {@code false}.
-    * </ul>
-    * </p>
-    *
-    * @param line               the line that may intersect this plane. Not modified.
-    * @param intersectionToPack point in which the coordinates of the intersection are stored.
-    * @return {@code true} if the method succeeds, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean intersectionWith(Line3DReadOnly line, Point3DBasics intersectionToPack)
-   {
-      checkHasBeenInitialized();
-      return intersectionWith(intersectionToPack, line.getPoint(), line.getDirection());
-   }
-
-   /**
-    * Computes the coordinates of the intersection between this plane and an infinitely long 3D line.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>If the line is parallel to the plane, this methods fails and returns {@code false}.
-    * </ul>
-    * </p>
-    *
-    * @param pointOnLine        a point located on the line. Not modified.
-    * @param lineDirection      the direction of the line. Not modified.
-    * @param intersectionToPack point in which the coordinates of the intersection are stored.
-    * @return {@code true} if the method succeeds, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean intersectionWith(Point3DBasics intersectionToPack, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
-   {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.intersectionBetweenLine3DAndPlane3D(point, normal, pointOnLine, lineDirection, intersectionToPack);
-   }
-
-   /**
-    * Tests if this plane and the given plane are coincident:
-    * <ul>
-    * <li>{@code this.normal} and {@code otherPlane.normal} are collinear given the tolerance
-    * {@code angleEpsilon}.
-    * <li>the distance of {@code otherPlane.point} from the this plane is less than
-    * {@code distanceEpsilon}.
-    * </ul>
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the length of either normal is below {@code 1.0E-7}, this method fails and returns
-    * {@code false}.
-    * </ul>
-    * </p>
-    *
-    * @param otherPlane      the other plane to do the test with. Not modified.
-    * @param angleEpsilon    tolerance on the angle in radians to determine if the plane normals are
-    *                        collinear.
-    * @param distanceEpsilon tolerance on the distance to determine if {@code otherPlane.point} belongs
-    *                        to this plane.
-    * @return {@code true} if the two planes are coincident, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isCoincident(Plane3D otherPlane, double angleEpsilon, double distanceEpsilon)
-   {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.arePlane3DsCoincident(point, normal, otherPlane.point, otherPlane.normal, angleEpsilon, distanceEpsilon);
-   }
-
-   /**
-    * Tests if the query point is located strictly on or above this plane.
-    * <p>
-    * Above is defined as the side of the plane toward which the normal is pointing.
-    * </p>
-    *
-    * @param x the x-coordinate of the query.
-    * @param y the y-coordinate of the query.
-    * @param z the z-coordinate of the query.
-    * @return {@code true} if the query is strictly on or above this plane, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrAbove(double x, double y, double z)
-   {
-      return isOnOrAbove(x, y, z, 0.0);
-   }
-
-   /**
-    * Tests if the query point is located on or above this plane given the tolerance {@code epsilon}.
-    * <p>
-    * Above is defined as the side of the plane toward which the normal is pointing.
-    * </p>
-    * <p>
-    * <ol>
-    * <li>if {@code epsilon == 0}, the query has to be either exactly on the plane or strictly above
-    * for this method to return {@code true}.
-    * <li>if {@code epsilon > 0}, this method returns {@code true} if the query meets the requirements
-    * of 1., in addition, this method returns also {@code true} if the query is below the plane at a
-    * distance less or equal than {@code epsilon}.
-    * <li>if {@code epsilon < 0}, this method returns {@code true} only if the query is above the plane
-    * and at a distance of at least {@code Math.abs(epsilon)}.
-    * </ol>
-    * </p>
-    *
-    * @param pointX  the x-coordinate of the query.
-    * @param pointY  the y-coordinate of the query.
-    * @param pointZ  the z-coordinate of the query.
-    * @param epsilon the tolerance to use for the test.
-    * @return {@code true} if the query is considered to be on or above this plane, {@code false}
-    *         otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrAbove(double pointX, double pointY, double pointZ, double epsilon)
-   {
-      checkHasBeenInitialized();
-      double dx = (pointX - point.getX()) * normal.getX();
-      double dy = (pointY - point.getY()) * normal.getY();
-      double dz = (pointZ - point.getZ()) * normal.getZ();
-
-      return dx + dy + dz >= -epsilon;
-   }
-
-   /**
-    * Tests if the query point is located strictly on or above this plane.
-    * <p>
-    * Above is defined as the side of the plane toward which the normal is pointing.
-    * </p>
-    *
-    * @param pointToTest the coordinates of the query. Not modified.
-    * @return {@code true} if the query is strictly on or above this plane, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrAbove(Point3DReadOnly pointToTest)
-   {
-      return isOnOrAbove(pointToTest, 0.0);
-   }
-
-   /**
-    * Tests if the query point is located on or above this plane given the tolerance {@code epsilon}.
-    * <p>
-    * Above is defined as the side of the plane toward which the normal is pointing.
-    * </p>
-    * <p>
-    * <ol>
-    * <li>if {@code epsilon == 0}, the query has to be either exactly on the plane or strictly above
-    * for this method to return {@code true}.
-    * <li>if {@code epsilon > 0}, this method returns {@code true} if the query meets the requirements
-    * of 1., in addition, this method returns also {@code true} if the query is below the plane at a
-    * distance less or equal than {@code epsilon}.
-    * <li>if {@code epsilon < 0}, this method returns {@code true} only if the query is above the plane
-    * and at a distance of at least {@code Math.abs(epsilon)}.
-    * </ol>
-    * </p>
-    *
-    * @param pointToTest the coordinates of the query. Not modified.
-    * @param epsilon     the tolerance to use for the test.
-    * @return {@code true} if the query is considered to be on or above this plane, {@code false}
-    *         otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrAbove(Point3DReadOnly pointToTest, double epsilon)
-   {
-      return isOnOrAbove(pointToTest.getX(), pointToTest.getY(), pointToTest.getZ(), epsilon);
-   }
-
-   /**
-    * Tests if the query point is located strictly on or below this plane.
-    * <p>
-    * Below is defined as the side of the plane which the normal is pointing away from.
-    * </p>
-    *
-    * @param pointX the x-coordinate of the query.
-    * @param pointY the y-coordinate of the query.
-    * @param pointZ the z-coordinate of the query.
-    * @return {@code true} if the query is strictly on or below this plane, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrBelow(double pointX, double pointY, double pointZ)
-   {
-      return isOnOrBelow(pointX, pointY, pointZ, 0.0);
-   }
-
-   /**
-    * Tests if the query point is located on or below this plane given the tolerance {@code epsilon}.
-    * <p>
-    * Below is defined as the side of the plane which the normal is pointing away from.
-    * </p>
-    * <p>
-    * <ol>
-    * <li>if {@code epsilon == 0}, the query has to be either exactly on the plane or strictly below
-    * for this method to return {@code true}.
-    * <li>if {@code epsilon > 0}, this method returns {@code true} if the query meets the requirements
-    * of 1., in addition, this method returns also {@code true} if the query is above the plane at a
-    * distance less or equal than {@code epsilon}.
-    * <li>if {@code epsilon < 0}, this method returns {@code true} only if the query is below the plane
-    * and at a distance of at least {@code Math.abs(epsilon)}.
-    * </ol>
-    * </p>
-    *
-    * @param pointX  the x-coordinate of the query.
-    * @param pointY  the y-coordinate of the query.
-    * @param pointZ  the z-coordinate of the query.
-    * @param epsilon the tolerance to use for the test.
-    * @return {@code true} if the query is considered to be on or below this plane, {@code false}
-    *         otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrBelow(double pointX, double pointY, double pointZ, double epsilon)
-   {
-      checkHasBeenInitialized();
-      double dx = (pointX - point.getX()) * normal.getX();
-      double dy = (pointY - point.getY()) * normal.getY();
-      double dz = (pointZ - point.getZ()) * normal.getZ();
-
-      return dx + dy + dz <= epsilon;
-   }
-
-   /**
-    * Tests if the query point is located strictly on or below this plane.
-    * <p>
-    * Below is defined as the side of the plane which the normal is pointing away from.
-    * </p>
-    *
-    * @param pointToTest the coordinates of the query. Not modified.
-    * @return {@code true} if the query is strictly on or below this plane, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrBelow(Point3DReadOnly pointToTest)
-   {
-      return isOnOrBelow(pointToTest, 0.0);
-   }
-
-   /**
-    * Tests if the query point is located on or below this plane given the tolerance {@code epsilon}.
-    * <p>
-    * Below is defined as the side of the plane which the normal is pointing away from.
-    * </p>
-    * <p>
-    * <ol>
-    * <li>if {@code epsilon == 0}, the query has to be either exactly on the plane or strictly below
-    * for this method to return {@code true}.
-    * <li>if {@code epsilon > 0}, this method returns {@code true} if the query meets the requirements
-    * of 1., in addition, this method returns also {@code true} if the query is above the plane at a
-    * distance less or equal than {@code epsilon}.
-    * <li>if {@code epsilon < 0}, this method returns {@code true} only if the query is below the plane
-    * and at a distance of at least {@code Math.abs(epsilon)}.
-    * </ol>
-    * </p>
-    *
-    * @param pointToTest the coordinates of the query. Not modified.
-    * @param epsilon     the tolerance to use for the test.
-    * @return {@code true} if the query is considered to be on or below this plane, {@code false}
-    *         otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isOnOrBelow(Point3DReadOnly pointToTest, double epsilon)
-   {
-      return isOnOrBelow(pointToTest.getX(), pointToTest.getY(), pointToTest.getZ(), epsilon);
-   }
-
-   /**
-    * Tests if the two planes are parallel by testing if their normals are collinear. The latter is
-    * done given a tolerance on the angle between the two normal axes in the range ]0; <i>pi</i>/2[.
-    * <p>
-    * Edge cases:
-    * <ul>
-    * <li>if the length of either normal is below {@code 1.0E-7}, this method fails and returns
-    * {@code false}.
-    * </ul>
-    * </p>
-    *
-    * @param otherPlane   the other plane to do the test with. Not modified.
-    * @param angleEpsilon tolerance on the angle in radians.
-    * @return {@code true} if the two planes are parallel, {@code false} otherwise.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean isParallel(Plane3D otherPlane, double angleEpsilon)
-   {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.areVector3DsParallel(normal, otherPlane.normal, angleEpsilon);
-   }
-
-   /**
-    * Computes the orthogonal projection of the given 3D point on this 3D plane.
-    *
-    * @param pointToProject the point to project on this plane. Modified.
-    * @return whether the method succeeded or not.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean orthogonalProjection(Point3DBasics pointToProject)
-   {
-      checkHasBeenInitialized();
-      return orthogonalProjection(pointToProject, pointToProject);
-   }
-
-   /**
-    * Computes the orthogonal projection of the given 3D point on this 3D plane.
-    *
-    * @param pointX           the x-coordinate of the point to compute the projection of.
-    * @param pointY           the y-coordinate of the point to compute the projection of.
-    * @param pointZ           the z-coordinate of the point to compute the projection of.
-    * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *                         Modified.
-    * @return whether the method succeeded or not.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean orthogonalProjection(double pointX, double pointY, double pointZ, Point3DBasics projectionToPack)
-   {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointX, pointY, pointZ, point, normal, projectionToPack);
-   }
-
-   /**
-    * Computes the orthogonal projection of the given 3D point on this 3D plane.
-    *
-    * @param pointToProject   the point to compute the projection of. Not modified.
-    * @param projectionToPack point in which the projection of the point onto the plane is stored.
-    *                         Modified.
-    * @return whether the method succeeded or not.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public boolean orthogonalProjection(Point3DReadOnly pointToProject, Point3DBasics projectionToPack)
-   {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, point, normal, projectionToPack);
-   }
-
-   /**
-    * Computes the orthogonal projection of the given 3D point on this 3D line.
-    * <p>
-    * WARNING: This method generates garbage.
-    * </p>
-    *
-    * @param pointToProject the point to compute the projection of. Not modified.
-    * @return the projection of the point onto the plane or {@code null} if the method failed.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public Point3D orthogonalProjectionCopy(Point3DReadOnly pointToProject)
-   {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, point, normal);
-   }
-
-   /**
-    * Redefines this plane with a new point and a new normal.
-    *
-    * @param pointOnPlaneX the new x-coordinate of the point on this plane.
-    * @param pointOnPlaneY the new y-coordinate of the point on this plane.
-    * @param pointOnPlaneZ the new z-coordinate of the point on this plane.
-    * @param planeNormalX  the new x-component of the normal of this plane.
-    * @param planeNormalY  the new y-component of the normal of this plane.
-    * @param planeNormalZ  the new z-component of the normal of this plane.
-    * @throws RuntimeException if the new normal is unreasonably small.
-    */
-   public void set(double pointOnPlaneX, double pointOnPlaneY, double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ)
-   {
-      setPoint(pointOnPlaneX, pointOnPlaneY, pointOnPlaneZ);
-      setNormal(planeNormalX, planeNormalY, planeNormalZ);
-   }
-
-   /**
-    * Sets this plane to be the same as the given plane.
-    *
-    * @param other the other plane to copy. Not modified.
-    * @throws RuntimeException if the other plane has not been initialized yet.
-    */
-   @Override
-   public void set(Plane3D other)
-   {
-      point.set(other.getPoint());
-      normal.set(other.getNormal());
-      hasPointBeenSet = true;
-      hasNormalBeenSet = true;
-   }
-
-   /**
-    * Redefines this plane such that it goes through the three given points.
-    *
-    * @param firstPointOnPlane  first point on this plane. Not modified.
-    * @param secondPointOnPlane second point on this plane. Not modified.
-    * @param thirdPointOnPlane  second point on this plane. Not modified.
-    * @throws RuntimeException if at least two of the given points are exactly equal.
-    * @throws RuntimeException if the plane normal could not be computed from the three given points.
-    */
-   public void set(Point3DReadOnly firstPointOnPlane, Point3DReadOnly secondPointOnPlane, Point3DReadOnly thirdPointOnPlane)
-   {
-      checkDistinctPoints(firstPointOnPlane, secondPointOnPlane, thirdPointOnPlane);
-
-      setPoint(firstPointOnPlane);
-      boolean success = EuclidGeometryTools.normal3DFromThreePoint3Ds(firstPointOnPlane, secondPointOnPlane, thirdPointOnPlane, normal);
-
-      if (!success)
-         throw new RuntimeException("Failed to compute the plane normal. Given points: " + firstPointOnPlane + ", " + secondPointOnPlane + ", "
-               + thirdPointOnPlane);
-
-      hasNormalBeenSet = true;
-   }
-
-   /**
-    * Redefines this plane with a new point and a new normal.
-    *
-    * @param pointOnPlane new point on this plane. Not modified.
-    * @param planeNormal  new normal of this plane. Not modified.
-    * @throws RuntimeException if the new normal is unreasonably small.
-    */
-   public void set(Point3DReadOnly pointOnPlane, Vector3DReadOnly planeNormal)
-   {
-      setPoint(pointOnPlane);
-      setNormal(planeNormal);
-   }
-
-   /**
-    * Changes the normal of this plane by setting it to the normalized value of the given vector.
-    *
-    * @param normalX the new x-component of the normal of this normal.
-    * @param normalY the new y-component of the normal of this normal.
-    * @param normalZ the new z-component of the normal of this normal.
-    * @throws RuntimeException if the new normal is unreasonably small.
-    */
-   public void setNormal(double normalX, double normalY, double normalZ)
-   {
-      normal.set(normalX, normalY, normalZ);
-      checkReasonableVector(normal);
-      normal.normalize();
-      hasNormalBeenSet = true;
-   }
-
-   /**
-    * Changes the direction of this plane by setting it to the normalized value of the given vector.
-    *
-    * @param planeNormal new normal of this plane. Not modified.
-    * @throws RuntimeException if the new normal is unreasonably small.
-    */
-   public void setNormal(Vector3DReadOnly planeNormal)
-   {
-      setNormal(planeNormal.getX(), planeNormal.getY(), planeNormal.getZ());
-   }
-
-   /**
-    * Changes the point through which this plane has to go.
-    *
-    * @param pointX the new x-coordinate of the point on this plane.
-    * @param pointY the new y-coordinate of the point on this plane.
-    * @param pointZ the new z-coordinate of the point on this plane.
-    */
-   public void setPoint(double pointX, double pointY, double pointZ)
-   {
-      point.set(pointX, pointY, pointZ);
-      hasPointBeenSet = true;
-   }
-
-   /**
-    * Changes the point through which this plane has to go.
-    *
-    * @param pointOnPlane new point on this plane. Not modified.
-    */
-   public void setPoint(Point3DReadOnly pointOnPlane)
-   {
-      setPoint(pointOnPlane.getX(), pointOnPlane.getY(), pointOnPlane.getZ());
-   }
-
-   /**
-    * Sets the point and normal of this plane to {@link Double#NaN}. After calling this method, this
-    * plane becomes invalid. A new valid point and valid normal will have to be set so this plane is
-    * again usable.
-    */
-   @Override
-   public void setToNaN()
-   {
-      point.setToNaN();
-      normal.setToNaN();
-   }
-
-   /**
-    * Sets the point and vector of this plane to zero. After calling this method, this plane becomes
-    * invalid. A new valid point and valid normal will have to be set so this plane is again usable.
-    */
-   @Override
-   public void setToZero()
-   {
-      point.setToZero();
-      normal.setToZero();
-      hasPointBeenSet = false;
-      hasNormalBeenSet = false;
-   }
-
-   /**
-    * Computes the minimum signed distance the given 3D point and this plane.
-    * <p>
-    * The returned value is negative when the query is located below the plane, positive otherwise.
-    * </p>
-    *
-    * @param point 3D point to compute the distance from the plane. Not modified.
-    * @return the signed distance between the point and this plane.
-    * @throws RuntimeException if this plane has not been initialized yet.
-    */
-   public double signedDistance(Point3DReadOnly point)
-   {
-      checkHasBeenInitialized();
-      return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, this.point, normal);
+      return Plane3DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**
@@ -938,6 +256,22 @@ public class Plane3D implements GeometryObject<Plane3D>
    public boolean geometricallyEquals(Plane3D other, double epsilon)
    {
       return isCoincident(other, epsilon, epsilon);
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Plane3DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof Plane3DReadOnly)
+         return Plane3DBasics.super.equals((Plane3DReadOnly) object);
+      else
+         return false;
    }
 
    @Override
