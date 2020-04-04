@@ -15,12 +15,14 @@ import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -113,8 +115,14 @@ public class EuclidGeometryTools
    public static double angleFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX,
                                                        double secondVectorY, double secondVectorZ)
    {
-      double firstVectorLength = EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
-      double secondVectorLength = EuclidCoreTools.norm(secondVectorX, secondVectorY, secondVectorZ);
+      return angleFromFirstToSecondVector3D(firstVectorX, firstVectorY, firstVectorZ, false, secondVectorX, secondVectorY, secondVectorZ, false);
+   }
+
+   private static double angleFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, boolean isFirstVectorUnitary,
+                                                        double secondVectorX, double secondVectorY, double secondVectorZ, boolean isSecondVectorUnitary)
+   {
+      double firstVectorLength = isFirstVectorUnitary ? 1.0 : EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
+      double secondVectorLength = isSecondVectorUnitary ? 1.0 : EuclidCoreTools.norm(secondVectorX, secondVectorY, secondVectorZ);
 
       double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
       dotProduct /= firstVectorLength * secondVectorLength;
@@ -155,10 +163,34 @@ public class EuclidGeometryTools
    public static boolean areLine2DsCollinear(double pointOnLine1x, double pointOnLine1y, double lineDirection1x, double lineDirection1y, double pointOnLine2x,
                                              double pointOnLine2y, double lineDirection2x, double lineDirection2y, double angleEpsilon, double distanceEpsilon)
    {
-      if (!areVector2DsParallel(lineDirection1x, lineDirection1y, lineDirection2x, lineDirection2y, angleEpsilon))
+      return areLine2DsCollinear(pointOnLine1x,
+                                 pointOnLine1y,
+                                 lineDirection1x,
+                                 lineDirection1y,
+                                 false,
+                                 pointOnLine2x,
+                                 pointOnLine2y,
+                                 lineDirection2x,
+                                 lineDirection2y,
+                                 false,
+                                 angleEpsilon,
+                                 distanceEpsilon);
+   }
+
+   private static boolean areLine2DsCollinear(double pointOnLine1x, double pointOnLine1y, double lineDirection1x, double lineDirection1y,
+                                              boolean isDirection1Unitary, double pointOnLine2x, double pointOnLine2y, double lineDirection2x,
+                                              double lineDirection2y, boolean isDirection2Unitary, double angleEpsilon, double distanceEpsilon)
+   {
+      if (!areVector2DsParallel(lineDirection1x, lineDirection1y, isDirection1Unitary, lineDirection2x, lineDirection2y, isDirection2Unitary, angleEpsilon))
          return false;
 
-      double distance = distanceFromPoint2DToLine2D(pointOnLine2x, pointOnLine2y, pointOnLine1x, pointOnLine1y, lineDirection1x, lineDirection1y);
+      double distance = distanceFromPoint2DToLine2D(pointOnLine2x,
+                                                    pointOnLine2y,
+                                                    pointOnLine1x,
+                                                    pointOnLine1y,
+                                                    lineDirection1x,
+                                                    lineDirection1y,
+                                                    isDirection1Unitary);
       return distance < distanceEpsilon;
    }
 
@@ -238,10 +270,12 @@ public class EuclidGeometryTools
                                  pointOnLine1.getY(),
                                  lineDirection1.getX(),
                                  lineDirection1.getY(),
+                                 lineDirection1 instanceof UnitVector2DReadOnly,
                                  pointOnLine2x,
                                  pointOnLine2y,
                                  lineDirection2x,
                                  lineDirection2y,
+                                 false,
                                  angleEpsilon,
                                  distanceEpsilon);
    }
@@ -315,7 +349,38 @@ public class EuclidGeometryTools
                                              double lineDirection1z, double pointOnLine2x, double pointOnLine2y, double pointOnLine2z, double lineDirection2x,
                                              double lineDirection2y, double lineDirection2z, double angleEpsilon, double distanceEpsilon)
    {
-      if (!areVector3DsParallel(lineDirection1x, lineDirection1y, lineDirection1z, lineDirection2x, lineDirection2y, lineDirection2z, angleEpsilon))
+      return areLine3DsCollinear(pointOnLine1x,
+                                 pointOnLine1y,
+                                 pointOnLine1z,
+                                 lineDirection1x,
+                                 lineDirection1y,
+                                 lineDirection1z,
+                                 false,
+                                 pointOnLine2x,
+                                 pointOnLine2y,
+                                 pointOnLine2z,
+                                 lineDirection2x,
+                                 lineDirection2y,
+                                 lineDirection2z,
+                                 false,
+                                 angleEpsilon,
+                                 distanceEpsilon);
+   }
+
+   private static boolean areLine3DsCollinear(double pointOnLine1x, double pointOnLine1y, double pointOnLine1z, double lineDirection1x, double lineDirection1y,
+                                              double lineDirection1z, boolean isDirection1Unitary, double pointOnLine2x, double pointOnLine2y,
+                                              double pointOnLine2z, double lineDirection2x, double lineDirection2y, double lineDirection2z,
+                                              boolean isDirection2Unitary, double angleEpsilon, double distanceEpsilon)
+   {
+      if (!areVector3DsParallel(lineDirection1x,
+                                lineDirection1y,
+                                lineDirection1z,
+                                isDirection1Unitary,
+                                lineDirection2x,
+                                lineDirection2y,
+                                lineDirection2z,
+                                isDirection2Unitary,
+                                angleEpsilon))
          return false;
 
       double distance = distanceFromPoint3DToLine3D(pointOnLine2x,
@@ -326,7 +391,8 @@ public class EuclidGeometryTools
                                                     pointOnLine1z,
                                                     lineDirection1x,
                                                     lineDirection1y,
-                                                    lineDirection1z);
+                                                    lineDirection1z,
+                                                    isDirection1Unitary);
       return distance < distanceEpsilon;
    }
 
@@ -412,12 +478,14 @@ public class EuclidGeometryTools
                                  lineDirection1.getX(),
                                  lineDirection1.getY(),
                                  lineDirection1.getZ(),
+                                 lineDirection1 instanceof UnitVector3DReadOnly,
                                  pointOnLine2.getX(),
                                  pointOnLine2.getY(),
                                  pointOnLine2.getZ(),
                                  lineDirection2.getX(),
                                  lineDirection2.getY(),
                                  lineDirection2.getZ(),
+                                 lineDirection2 instanceof UnitVector3DReadOnly,
                                  angleEpsilon,
                                  distanceEpsilon);
    }
@@ -478,13 +546,19 @@ public class EuclidGeometryTools
     */
    public static boolean areVector2DsParallel(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY, double angleEpsilon)
    {
+      return areVector2DsParallel(firstVectorX, firstVectorY, false, secondVectorX, secondVectorY, false, angleEpsilon);
+   }
+
+   private static boolean areVector2DsParallel(double firstVectorX, double firstVectorY, boolean isFirstVectorUnitary, double secondVectorX,
+                                               double secondVectorY, boolean isSecondVectorUnitary, double angleEpsilon)
+   {
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
          throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
-      double firstVectorLength = EuclidCoreTools.norm(firstVectorX, firstVectorY);
+      double firstVectorLength = isFirstVectorUnitary ? 1.0 : EuclidCoreTools.norm(firstVectorX, firstVectorY);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
-      double secondVectorLength = EuclidCoreTools.norm(secondVectorX, secondVectorY);
+      double secondVectorLength = isSecondVectorUnitary ? 1.0 : EuclidCoreTools.norm(secondVectorX, secondVectorY);
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
@@ -510,7 +584,13 @@ public class EuclidGeometryTools
     */
    public static boolean areVector2DsParallel(Vector2DReadOnly firstVector, Vector2DReadOnly secondVector, double angleEpsilon)
    {
-      return areVector2DsParallel(firstVector.getX(), firstVector.getY(), secondVector.getX(), secondVector.getY(), angleEpsilon);
+      return areVector2DsParallel(firstVector.getX(),
+                                  firstVector.getY(),
+                                  firstVector instanceof UnitVector2DReadOnly,
+                                  secondVector.getX(),
+                                  secondVector.getY(),
+                                  secondVector instanceof UnitVector2DReadOnly,
+                                  angleEpsilon);
    }
 
    /**
@@ -537,13 +617,20 @@ public class EuclidGeometryTools
    public static boolean areVector3DsParallel(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX, double secondVectorY,
                                               double secondVectorZ, double angleEpsilon)
    {
+      return areVector3DsParallel(firstVectorX, firstVectorY, firstVectorZ, false, secondVectorX, secondVectorY, secondVectorZ, false, angleEpsilon);
+   }
+
+   private static boolean areVector3DsParallel(double firstVectorX, double firstVectorY, double firstVectorZ, boolean isFirstVectorUnitary,
+                                               double secondVectorX, double secondVectorY, double secondVectorZ, boolean isSecondVectorUnitary,
+                                               double angleEpsilon)
+   {
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
          throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
-      double firstVectorLength = EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
+      double firstVectorLength = isFirstVectorUnitary ? 1.0 : EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
          return false;
-      double secondVectorLength = EuclidCoreTools.norm(secondVectorX, secondVectorY, secondVectorZ);
+      double secondVectorLength = isSecondVectorUnitary ? 1.0 : EuclidCoreTools.norm(secondVectorX, secondVectorY, secondVectorZ);
       if (secondVectorLength < ONE_TEN_MILLIONTH)
          return false;
       double dot = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
@@ -572,9 +659,11 @@ public class EuclidGeometryTools
       return areVector3DsParallel(firstVector.getX(),
                                   firstVector.getY(),
                                   firstVector.getZ(),
+                                  firstVector instanceof UnitVector3DReadOnly,
                                   secondVector.getX(),
                                   secondVector.getY(),
                                   secondVector.getZ(),
+                                  secondVector instanceof UnitVector3DReadOnly,
                                   angleEpsilon);
    }
 
@@ -1419,7 +1508,13 @@ public class EuclidGeometryTools
    public static double distanceFromPoint2DToLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
                                                     double lineDirectionY)
    {
-      return Math.abs(signedDistanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY));
+      return distanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, false);
+   }
+
+   private static double distanceFromPoint2DToLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
+                                                     double lineDirectionY, boolean isDirectionUnitary)
+   {
+      return Math.abs(signedDistanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, isDirectionUnitary));
    }
 
    /**
@@ -1467,7 +1562,13 @@ public class EuclidGeometryTools
     */
    public static double distanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
-      return distanceFromPoint2DToLine2D(pointX, pointY, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+      return distanceFromPoint2DToLine2D(pointX,
+                                         pointY,
+                                         pointOnLine.getX(),
+                                         pointOnLine.getY(),
+                                         lineDirection.getX(),
+                                         lineDirection.getY(),
+                                         lineDirection instanceof UnitVector2DReadOnly);
    }
 
    /**
@@ -1610,8 +1711,14 @@ public class EuclidGeometryTools
    public static double distanceFromPoint2DToRay2D(double pointX, double pointY, double rayOriginX, double rayOriginY, double rayDirectionX,
                                                    double rayDirectionY)
    {
+      return distanceFromPoint2DToRay2D(pointX, pointY, rayOriginX, rayOriginY, rayDirectionX, rayDirectionY, false);
+   }
+
+   private static double distanceFromPoint2DToRay2D(double pointX, double pointY, double rayOriginX, double rayOriginY, double rayDirectionX,
+                                                    double rayDirectionY, boolean isDirectionUnitary)
+   {
       if (isPoint2DInFrontOfRay2D(pointX, pointY, rayOriginX, rayOriginY, rayDirectionX, rayDirectionY))
-         return Math.abs(signedDistanceFromPoint2DToLine2D(pointX, pointY, rayOriginX, rayOriginY, rayDirectionX, rayDirectionY));
+         return Math.abs(signedDistanceFromPoint2DToLine2D(pointX, pointY, rayOriginX, rayOriginY, rayDirectionX, rayDirectionY, isDirectionUnitary));
       else
          return distanceBetweenPoint2Ds(pointX, pointY, rayOriginX, rayOriginY);
    }
@@ -1641,7 +1748,13 @@ public class EuclidGeometryTools
     */
    public static double distanceFromPoint2DToRay2D(double pointX, double pointY, Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection)
    {
-      return distanceFromPoint2DToRay2D(pointX, pointY, rayOrigin.getX(), rayOrigin.getY(), rayDirection.getX(), rayDirection.getY());
+      return distanceFromPoint2DToRay2D(pointX,
+                                        pointY,
+                                        rayOrigin.getX(),
+                                        rayOrigin.getY(),
+                                        rayDirection.getX(),
+                                        rayDirection.getY(),
+                                        rayDirection instanceof UnitVector2DReadOnly);
    }
 
    /**
@@ -1700,7 +1813,22 @@ public class EuclidGeometryTools
    public static double distanceFromPoint3DToLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
                                                     double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
-      double directionMagnitude = EuclidCoreTools.fastNorm(lineDirectionX, lineDirectionY, lineDirectionZ);
+      return distanceFromPoint3DToLine3D(pointX,
+                                         pointY,
+                                         pointZ,
+                                         pointOnLineX,
+                                         pointOnLineY,
+                                         pointOnLineZ,
+                                         lineDirectionX,
+                                         lineDirectionY,
+                                         lineDirectionZ,
+                                         false);
+   }
+
+   private static double distanceFromPoint3DToLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
+                                                     double lineDirectionX, double lineDirectionY, double lineDirectionZ, boolean isDirectionUnitary)
+   {
+      double directionMagnitude = isDirectionUnitary ? 1.0 : EuclidCoreTools.fastNorm(lineDirectionX, lineDirectionY, lineDirectionZ);
 
       double dx = pointOnLineX - pointX;
       double dy = pointOnLineY - pointY;
@@ -1914,15 +2042,39 @@ public class EuclidGeometryTools
    public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, double pointOnPlaneX, double pointOnPlaneY,
                                                            double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ)
    {
+      return signedDistanceFromPoint3DToPlane3D(pointX,
+                                                pointY,
+                                                pointZ,
+                                                pointOnPlaneX,
+                                                pointOnPlaneY,
+                                                pointOnPlaneZ,
+                                                planeNormalX,
+                                                planeNormalY,
+                                                planeNormalZ,
+                                                false);
+   }
+
+   private static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, double pointOnPlaneX, double pointOnPlaneY,
+                                                            double pointOnPlaneZ, double planeNormalX, double planeNormalY, double planeNormalZ,
+                                                            boolean isNormalUnitary)
+   {
       double dx = pointX - pointOnPlaneX;
       double dy = pointY - pointOnPlaneY;
       double dz = pointZ - pointOnPlaneZ;
-      double normalMagnitude = EuclidCoreTools.normSquared(planeNormalX, planeNormalY, planeNormalZ);
 
-      if (normalMagnitude < ONE_TRILLIONTH)
-         return EuclidCoreTools.norm(dx, dy, dz);
+      if (isNormalUnitary)
+      {
+         return (dx * planeNormalX + dy * planeNormalY + dz * planeNormalZ);
+      }
       else
-         return (dx * planeNormalX + dy * planeNormalY + dz * planeNormalZ) / EuclidCoreTools.squareRoot(normalMagnitude);
+      {
+         double normalMagnitude = EuclidCoreTools.normSquared(planeNormalX, planeNormalY, planeNormalZ);
+
+         if (normalMagnitude < ONE_TRILLIONTH)
+            return EuclidCoreTools.norm(dx, dy, dz);
+         else
+            return (dx * planeNormalX + dy * planeNormalY + dz * planeNormalZ) / EuclidCoreTools.squareRoot(normalMagnitude);
+      }
    }
 
    /**
@@ -1981,7 +2133,8 @@ public class EuclidGeometryTools
                                                 pointOnPlane.getZ(),
                                                 planeNormal.getX(),
                                                 planeNormal.getY(),
-                                                planeNormal.getZ());
+                                                planeNormal.getZ(),
+                                                planeNormal instanceof UnitVector3DReadOnly);
    }
 
    /**
@@ -3614,6 +3767,7 @@ public class EuclidGeometryTools
                                                         cylinderAxisX,
                                                         cylinderAxisY,
                                                         cylinderAxisZ,
+                                                        false,
                                                         startX,
                                                         startY,
                                                         startZ,
@@ -3682,6 +3836,7 @@ public class EuclidGeometryTools
                                                         cylinderAxisX,
                                                         cylinderAxisY,
                                                         cylinderAxisZ,
+                                                        cylinderAxis instanceof UnitVector3DReadOnly,
                                                         startX,
                                                         startY,
                                                         startZ,
@@ -3750,6 +3905,7 @@ public class EuclidGeometryTools
                                                         cylinderAxisX,
                                                         cylinderAxisY,
                                                         cylinderAxisZ,
+                                                        cylinderAxis instanceof UnitVector3DReadOnly,
                                                         startX,
                                                         startY,
                                                         startZ,
@@ -3799,6 +3955,7 @@ public class EuclidGeometryTools
     * @param cylinderAxisX                   the x-component of the cylinder's axis.
     * @param cylinderAxisY                   the y-component of the cylinder's axis.
     * @param cylinderAxisZ                   the z-component of the cylinder's axis.
+    * @param isAxisUnitary                   whether the cylinder's axis is already normalized.
     * @param startX                          the x-coordinate of a point located on the
     *                                        line/line-segment/ray.
     * @param startY                          the y-coordinate of a point located on the
@@ -3826,7 +3983,7 @@ public class EuclidGeometryTools
     */
    private static int intersectionBetweenLine3DAndCylinder3DImpl(double cylinderLength, double cylinderRadius, double cylinderPositionX,
                                                                  double cylinderPositionY, double cylinderPositionZ, double cylinderAxisX, double cylinderAxisY,
-                                                                 double cylinderAxisZ, double startX, double startY, double startZ,
+                                                                 double cylinderAxisZ, boolean isAxisUnitary, double startX, double startY, double startZ,
                                                                  boolean canIntersectionOccurBeforeStart, double endX, double endY, double endZ,
                                                                  boolean canIntersectionOccurAfterEnd, Point3DBasics firstIntersectionToPack,
                                                                  Point3DBasics secondIntersectionToPack)
@@ -3844,7 +4001,7 @@ public class EuclidGeometryTools
       if (cylinderLength == 0.0 || cylinderRadius == 0.0)
          return 0;
 
-      double axisNormInv = 1.0 / EuclidCoreTools.fastNorm(cylinderAxisX, cylinderAxisY, cylinderAxisZ);
+      double axisNormInv = isAxisUnitary ? 1.0 : 1.0 / EuclidCoreTools.fastNorm(cylinderAxisX, cylinderAxisY, cylinderAxisZ);
       double axisX = cylinderAxisX * axisNormInv;
       double axisY = cylinderAxisY * axisNormInv;
       double axisZ = cylinderAxisZ * axisNormInv;
@@ -4658,6 +4815,7 @@ public class EuclidGeometryTools
                                                         cylinderAxisX,
                                                         cylinderAxisY,
                                                         cylinderAxisZ,
+                                                        cylinderAxis instanceof UnitVector3DReadOnly,
                                                         startX,
                                                         startY,
                                                         startZ,
@@ -5060,6 +5218,7 @@ public class EuclidGeometryTools
                                                         cylinderAxisX,
                                                         cylinderAxisY,
                                                         cylinderAxisZ,
+                                                        cylinderAxis instanceof UnitVector3DReadOnly,
                                                         startX,
                                                         startY,
                                                         startZ,
@@ -8093,7 +8252,13 @@ public class EuclidGeometryTools
     */
    public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
-      return signedDistanceFromPoint2DToLine2D(pointX, pointY, pointOnLine.getX(), pointOnLine.getY(), lineDirection.getX(), lineDirection.getY());
+      return signedDistanceFromPoint2DToLine2D(pointX,
+                                               pointY,
+                                               pointOnLine.getX(),
+                                               pointOnLine.getY(),
+                                               lineDirection.getX(),
+                                               lineDirection.getY(),
+                                               lineDirection instanceof UnitVector2DReadOnly);
    }
 
    /**
@@ -8172,9 +8337,15 @@ public class EuclidGeometryTools
    public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
                                                           double lineDirectionY)
    {
+      return signedDistanceFromPoint2DToLine2D(pointX, pointY, pointOnLineX, pointOnLineY, lineDirectionX, lineDirectionY, false);
+   }
+
+   private static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, double pointOnLineX, double pointOnLineY, double lineDirectionX,
+                                                           double lineDirectionY, boolean isDirectionUnitary)
+   {
       double dx = pointX - pointOnLineX;
       double dy = pointY - pointOnLineY;
-      double directionMagnitude = EuclidCoreTools.fastNorm(lineDirectionX, lineDirectionY);
+      double directionMagnitude = isDirectionUnitary ? 1.0 : EuclidCoreTools.fastNorm(lineDirectionX, lineDirectionY);
 
       if (directionMagnitude < ONE_TRILLIONTH)
       {
