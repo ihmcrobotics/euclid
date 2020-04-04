@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -51,13 +52,13 @@ public interface Plane3DBasics extends Plane3DReadOnly, Clearable, Transformable
    }
 
    /**
-    * Sets the point of this plane to zero and its normal to (1.0, 0.0, 0.0).
+    * Sets the point of this plane to zero and its normal to {@link Axis3D#Z}.
     */
    @Override
    default void setToZero()
    {
       getPoint().setToZero();
-      getNormal().setToZero();
+      getNormal().set(Axis3D.Z);
    }
 
    /**

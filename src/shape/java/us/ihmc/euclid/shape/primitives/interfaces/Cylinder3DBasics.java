@@ -93,7 +93,9 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
       setSize(Double.NaN, Double.NaN);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets the position to zero, the axis to {@link Axis3D#Z}, and the radius and length to zero.
+    */
    @Override
    default void setToZero()
    {

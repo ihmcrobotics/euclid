@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -42,8 +43,8 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
-    * Sets the point and direction parts of this line 3D to zero and sets the current reference frame
-    * to {@code referenceFrame}.
+    * Sets the point of this line to zero, its direction to {@link Axis3D#X}, and sets the current
+    * reference frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame to be associated with this line 3D.
     */

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
@@ -42,8 +43,8 @@ public interface FrameLine2DBasics extends FixedFrameLine2DBasics, FrameChangeab
    void setReferenceFrame(ReferenceFrame referenceFrame);
 
    /**
-    * Sets the point and direction parts of this line 2D to zero and sets the current reference frame
-    * to {@code referenceFrame}.
+    * Sets the point of this line to zero, its direction to {@link Axis2D#X}, and sets the current
+    * reference frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame to be associated with this line 2D.
     */

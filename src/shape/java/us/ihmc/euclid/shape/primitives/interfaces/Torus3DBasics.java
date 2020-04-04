@@ -53,7 +53,9 @@ public interface Torus3DBasics extends Torus3DReadOnly, Shape3DBasics
       return Torus3DReadOnly.super.containsNaN();
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets the position to zero, the axis to {@link Axis3D#Z}, and the radii to zero.
+    */
    @Override
    default void setToZero()
    {

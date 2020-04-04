@@ -51,7 +51,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the point of this plane to zero and its direction to (1.0, 0.0).
+    * Sets the point of this line to zero and its direction to {@link Axis2D#X}.
     */
    @Override
    default void setToZero()

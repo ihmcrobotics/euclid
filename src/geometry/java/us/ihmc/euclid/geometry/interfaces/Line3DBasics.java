@@ -49,7 +49,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the point of this plane to zero and its direction to (1.0, 0.0, 0.0).
+    * Sets the point of this line to zero and its direction to {@link Axis3D#X}.
     */
    @Override
    default void setToZero()

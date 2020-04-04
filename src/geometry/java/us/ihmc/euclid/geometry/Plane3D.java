@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Plane3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Plane3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
@@ -24,11 +25,11 @@ public class Plane3D implements Plane3DBasics, GeometryObject<Plane3D>
     * Normal of this plane of unit-length. Its direction indicates which side of the plane is
     * considered to be the 'above' part.
     */
-   private final UnitVector3D normal = new UnitVector3D();
+   private final UnitVector3D normal = new UnitVector3D(Axis3D.Z);
 
    /**
-    * Default constructor that initializes its {@code point} to zero and {@code normal} to (1.0, 0.0,
-    * 0.0).
+    * Default constructor that initializes its {@code point} to zero and {@code normal} to
+    * {@link Axis3D#Z}.
     */
    public Plane3D()
    {
