@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -56,7 +57,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    default void setToZero()
    {
       getPoint().setToZero();
-      getDirection().set(1.0, 0.0);
+      getDirection().set(Axis2D.X);
    }
 
    /**
