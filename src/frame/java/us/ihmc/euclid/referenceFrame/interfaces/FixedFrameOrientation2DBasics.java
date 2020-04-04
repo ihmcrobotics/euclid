@@ -1,7 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;

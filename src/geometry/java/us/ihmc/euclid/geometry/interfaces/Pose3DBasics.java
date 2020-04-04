@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;

@@ -1,4 +1,4 @@
-package us.ihmc.euclid.geometry.interfaces;
+package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;

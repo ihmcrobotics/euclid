@@ -11,10 +11,8 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
-import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
@@ -23,6 +21,8 @@ import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<FrameOrientation2D>
 {
@@ -38,7 +38,7 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
    public void testConsistencyWithOrientation2D()
    {
       FrameTypeCopier frameTypeBuilder = (frame, pose) -> createFrameOrientation(frame, (Orientation2DReadOnly) pose);
-      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextOrientation2D;
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextOrientation2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
@@ -84,7 +84,7 @@ public class FrameOrientation2DTest extends FrameOrientation2DReadOnlyTest<Frame
          FrameOrientation2D expected = new FrameOrientation2D(source);
          expected.changeFrame(destinationFrame);
 
-         EuclidGeometryTestTools.assertOrientation2DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertOrientation2DEquals(expected, actual, EPSILON);
       }
    }
 

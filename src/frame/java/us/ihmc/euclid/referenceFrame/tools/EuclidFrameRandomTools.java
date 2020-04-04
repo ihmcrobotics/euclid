@@ -804,7 +804,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameOrientation2D nextFrameOrientation2D(Random random, ReferenceFrame referenceFrame)
    {
-      return new FrameOrientation2D(referenceFrame, EuclidGeometryRandomTools.nextOrientation2D(random));
+      return new FrameOrientation2D(referenceFrame, EuclidCoreRandomTools.nextOrientation2D(random));
    }
 
    /**

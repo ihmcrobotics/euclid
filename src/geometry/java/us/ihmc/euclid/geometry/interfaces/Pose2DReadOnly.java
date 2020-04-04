@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 

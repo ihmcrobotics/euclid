@@ -8,6 +8,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
+import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.transform.AffineTransform;
@@ -473,6 +474,40 @@ public class EuclidCoreRandomTools
          default:
             return nextYawPitchRoll(random);
       }
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random orientation 2D.
+    */
+   public static Orientation2D nextOrientation2D(Random random)
+   {
+      return new Orientation2D(nextDouble(random, Math.PI));
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-{@code minMax}; {@code minMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value orientation 2D's angle.
+    * @return the random orientation 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Orientation2D nextOrientation2D(Random random, double minMax)
+   {
+      return new Orientation2D(nextDouble(random, minMax));
    }
 
    /**

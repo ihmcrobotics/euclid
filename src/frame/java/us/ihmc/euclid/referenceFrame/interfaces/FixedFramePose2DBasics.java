@@ -1,9 +1,9 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;

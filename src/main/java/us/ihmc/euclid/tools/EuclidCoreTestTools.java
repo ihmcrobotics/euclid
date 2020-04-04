@@ -1,15 +1,6 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAffineTransformString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAxisAngleString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getMatrix3DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getQuaternionBasedTransformString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getRigidBodyTransformString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +11,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -1487,6 +1479,136 @@ public class EuclidCoreTestTools
    }
 
    /**
+    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual   the actual orientation 2D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
+    *                        equal to {@code null}.
+    */
+   public static void assertOrientation2DEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
+   {
+      assertOrientation2DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
+    *                        equal to {@code null}.
+    */
+   public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
+   {
+      assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two orientation 2Ds are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
+    *                        equal to {@code null}.
+    */
+   public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
+                                                String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.epsilonEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
+    * Asserts that the two orientation 2Ds represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual   the actual orientation 2D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
+    *                        of the arguments is equal to {@code null}.
+    */
+   public static void assertOrientation2DGeometricallyEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
+   {
+      assertOrientation2DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts that the two orientation 2Ds represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
+    *                        of the arguments is equal to {@code null}.
+    */
+   public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
+   {
+      assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two orientation 2Ds represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
+    *                        of the arguments is equal to {@code null}.
+    */
+   public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
+                                                             String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (!expected.geometricallyEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+
+   /**
     * Asserts that the given axis-angle contains only {@link Double#NaN}.
     *
     * @param axisAngleToAssert the query. Not modified.
@@ -2488,6 +2610,13 @@ public class EuclidCoreTestTools
       String expectedAsString = getAxisAngleString(format, expected);
       String actualAsString = getAxisAngleString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, String format)
+   {
+      String expectedAsString = EuclidCoreIOTools.getOrientation2DString(format, expected);
+      String actualAsString = EuclidCoreIOTools.getOrientation2DString(format, actual);
+      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String format)

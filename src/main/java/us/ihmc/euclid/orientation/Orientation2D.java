@@ -1,10 +1,10 @@
-package us.ihmc.euclid.geometry;
+package us.ihmc.euclid.orientation;
 
 import us.ihmc.euclid.Axis2D;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -173,7 +173,7 @@ public class Orientation2D implements Orientation2DBasics, GeometryObject<Orient
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getOrientation2DString(this);
+      return EuclidCoreIOTools.getOrientation2DString(this);
    }
 
    /**

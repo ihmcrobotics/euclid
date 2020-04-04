@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getOrientation2DString;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
