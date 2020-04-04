@@ -261,7 +261,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
       }
 
       setPoint(firstPointOnLine);
-      getDirection().set(secondPointOnLine.getX() - firstPointOnLine.getX(), secondPointOnLine.getY() - firstPointOnLine.getY());
+      getDirection().set(secondPointOnLine);
+      getDirection().sub(firstPointOnLine.getX(), firstPointOnLine.getY());
    }
 
    /**

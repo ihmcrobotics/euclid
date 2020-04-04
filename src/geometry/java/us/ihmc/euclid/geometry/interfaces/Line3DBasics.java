@@ -217,7 +217,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
       }
 
       getPoint().set(firstPointOnLine, 0.0);
-      getDirection().set(secondPointOnLine.getX() - firstPointOnLine.getX(), secondPointOnLine.getY() - firstPointOnLine.getY(), 0.0);
+      getDirection().set(secondPointOnLine, 0.0);
+      getDirection().subX(firstPointOnLine.getX());
+      getDirection().subY(firstPointOnLine.getY());
    }
 
    /**
