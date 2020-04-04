@@ -1,5 +1,6 @@
 package us.ihmc.euclid.axisAngle;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -25,13 +26,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, EpsilonComparable<AxisAngle32>, GeometricallyComparable<AxisAngle32>
 {
    /** The axis part of this axis-angle. */
-   private final UnitVector3D32 axis = new UnitVector3D32();
+   private final UnitVector3D32 axis = new UnitVector3D32(Axis3D.X);
    /** The angle component of this axis-angle. */
    private float angle;
 
    /**
-    * Creates an axis-angle that represents a "zero" rotation. The axis is equal to (1, 0, 0) and the
-    * angle to 0.
+    * Creates an axis-angle that represents a "zero" rotation. The axis is equal to {@link Axis3D#X}
+    * and the angle to 0.
     */
    public AxisAngle32()
    {
