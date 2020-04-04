@@ -1,13 +1,13 @@
 package us.ihmc.euclid;
 
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 
 /**
  * {@code Axis} can be used to provide a simple and readable way to refer the three main axes of a
  * coordinate system.
  */
-public enum Axis implements Vector3DReadOnly
+public enum Axis implements UnitVector3DReadOnly
 {
    /** The x-axis is usually associated with the forward direction. */
    X(1.0, 0.0, 0.0),
@@ -35,6 +35,13 @@ public enum Axis implements Vector3DReadOnly
       this.x = x;
       this.y = y;
       this.z = z;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public boolean isDirty()
+   {
+      return false;
    }
 
    /**
@@ -66,6 +73,39 @@ public enum Axis implements Vector3DReadOnly
     */
    @Override
    public double getZ()
+   {
+      return z;
+   }
+
+   /**
+    * Returns the x-component of this axis.
+    *
+    * @return the x-component.
+    */
+   @Override
+   public double getRawX()
+   {
+      return x;
+   }
+
+   /**
+    * Returns the y-component of this axis.
+    *
+    * @return the y-component.
+    */
+   @Override
+   public double getRawY()
+   {
+      return y;
+   }
+
+   /**
+    * Returns the z-component of this axis.
+    *
+    * @return the z-component.
+    */
+   @Override
+   public double getRawZ()
    {
       return z;
    }
