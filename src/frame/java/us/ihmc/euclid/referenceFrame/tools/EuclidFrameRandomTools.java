@@ -20,6 +20,8 @@ import us.ihmc.euclid.referenceFrame.FramePose2D;
 import us.ihmc.euclid.referenceFrame.FramePose3D;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.referenceFrame.FrameRotationMatrix;
+import us.ihmc.euclid.referenceFrame.FrameUnitVector2D;
+import us.ihmc.euclid.referenceFrame.FrameUnitVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.FrameVector4D;
@@ -353,6 +355,21 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates a random frame unit vector.
+    * <p>
+    * This generator uses {@link EuclidCoreRandomTools#nextVector3D(Random)}.
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame unit vector's reference frame.
+    * @return the random frame unit vector.
+    */
+   public static FrameUnitVector3D nextFrameUnitVector3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameUnitVector3D(referenceFrame, EuclidCoreRandomTools.nextUnitVector3D(random));
+   }
+
+   /**
     * Generates a random frame vector.
     * <p>
     * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
@@ -559,6 +576,21 @@ public class EuclidFrameRandomTools
    public static FrameVector2D nextFrameVector2D(Random random, ReferenceFrame referenceFrame)
    {
       return new FrameVector2D(referenceFrame, EuclidCoreRandomTools.nextVector2D(random));
+   }
+
+   /**
+    * Generates a random frame unit vector.
+    * <p>
+    * This generator uses {@link EuclidCoreRandomTools#nextVector2D(Random)}.
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame unit vector's reference frame.
+    * @return the random frame unit vector.
+    */
+   public static FrameUnitVector2D nextFrameUnitVector2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameUnitVector2D(referenceFrame, EuclidCoreRandomTools.nextUnitVector2D(random));
    }
 
    /**

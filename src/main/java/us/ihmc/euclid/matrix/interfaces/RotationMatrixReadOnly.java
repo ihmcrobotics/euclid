@@ -38,7 +38,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    /**
     * Returns the state of this matrix dirty flag.
     * <p>
-    * This matrix is matrix is marked as dirty to indicate its values have been updated and not yet
+    * This matrix is marked as dirty to indicate its values have been updated and not yet
     * propagated to this matrix features.
     * </p>
     * 

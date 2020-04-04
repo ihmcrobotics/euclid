@@ -15,12 +15,14 @@ import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Point2D32;
+import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.Vector2D32;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Point3D32;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.Vector3D32;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -578,7 +580,7 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random   the random generator to use.
+    * @param random the random generator to use.
     * @return the random rotation-scale matrix.
     * @throws RuntimeException if {@code maxScale < 0}.
     */
@@ -759,6 +761,20 @@ public class EuclidCoreRandomTools
       Vector3D vector = new Vector3D();
       randomizeTuple3D(random, vector);
       return vector;
+   }
+
+   /**
+    * Generates a random unit vector.
+    * <p>
+    * This generator uses {@link #nextVector3D(Random)}.
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random unit vector.
+    */
+   public static UnitVector3D nextUnitVector3D(Random random)
+   {
+      return new UnitVector3D(nextVector3D(random));
    }
 
    /**
@@ -982,6 +998,20 @@ public class EuclidCoreRandomTools
       Vector2D vector = new Vector2D();
       randomizeTuple2D(random, vector);
       return vector;
+   }
+
+   /**
+    * Generates a random unit vector.
+    * <p>
+    * This generator uses {@link #nextVector2D(Random)}.
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random unit vector.
+    */
+   public static UnitVector2D nextUnitVector2D(Random random)
+   {
+      return new UnitVector2D(nextVector2D(random));
    }
 
    /**

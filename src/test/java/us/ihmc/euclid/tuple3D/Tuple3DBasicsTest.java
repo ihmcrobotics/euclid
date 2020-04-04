@@ -348,7 +348,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test clipToMax(double max, TupleBasics other)
+      { // Test clipToMax(double max, Tuple3DReadOnly other)
          double max = random.nextDouble();
          tuple1.setX(random.nextDouble());
          tuple1.setY(random.nextDouble());
@@ -390,7 +390,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test clipToMin(double min, TupleBasics other)
+      { // Test clipToMin(double min, Tuple3DReadOnly other)
          double min = random.nextDouble();
          tuple1.setX(random.nextDouble());
          tuple1.setY(random.nextDouble());
@@ -444,7 +444,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test clipToMinMax(double min, double max, TupleBasics other)
+      { // Test clipToMinMax(double min, double max, Tuple3DReadOnly other)
          double min = random.nextDouble() - 0.5;
          double max = random.nextDouble() + 0.5;
          tuple1.setX(random.nextDouble());
@@ -539,7 +539,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test add(TupleBasics other)
+      { // Test add(Tuple3DReadOnly other)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
          double zOld = random.nextDouble();
@@ -557,7 +557,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test add(TupleBasics other)
+      { // Test add(Tuple3DReadOnly other)
          tuple1.setX(random.nextDouble());
          tuple1.setY(random.nextDouble());
          tuple1.setZ(random.nextDouble());
@@ -628,7 +628,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test sub(TupleBasics other)
+      { // Test sub(Tuple3DReadOnly other)
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
          double zOld = random.nextDouble();
@@ -646,7 +646,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test sub(TupleBasics tuple1, TupleBasics tuple2)
+      { // Test sub(Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2)
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple3.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -697,7 +697,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test scale(double scalar, TupleBasics other)
+      { // Test scale(double scalar, Tuple3DReadOnly other)
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -709,7 +709,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test scaleAdd(double scalar, TupleBasics other)
+      { // Test scaleAdd(double scalar, Tuple3DReadOnly other)
          double scale = random.nextDouble();
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -728,7 +728,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test scaleAdd(double scalar, TupleBasics tuple1, TupleBasics tuple2)
+      { // Test scaleAdd(double scalar, Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2)
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -741,7 +741,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test scaleAdd(double scalar, TupleBasics tuple1, TupleBasics tuple2) with tuple2 == this
+      { // Test scaleAdd(double scalar, Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2) with tuple2 == this
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -754,7 +754,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test scaleSub(double scalar, TupleBasics other)
+      { // Test scaleSub(double scalar, Tuple3DReadOnly other)
          double scale = random.nextDouble();
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -773,7 +773,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test scaleSub(double scalar, TupleBasics tuple1, TupleBasics tuple2)
+      { // Test scaleSub(double scalar, Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2)
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -786,7 +786,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test scaleSub(double scalar, TupleBasics tuple1, TupleBasics tuple2) with tuple2 == this
+      { // Test scaleSub(double scalar, Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2) with tuple2 == this
          double scale = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -808,7 +808,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       T tuple3 = createEmptyTuple();
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test interpolate(TupleBasics other, double alpha)
+      { // Test interpolate(Tuple3DReadOnly other, double alpha)
          double alpha = random.nextDouble();
          double xOld = random.nextDouble();
          double yOld = random.nextDouble();
@@ -827,7 +827,7 @@ public abstract class Tuple3DBasicsTest<T extends Tuple3DBasics> extends Tuple3D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test interpolate(TupleBasics tuple1, TupleBasics tuple2, double alpha)
+      { // Test interpolate(Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2, double alpha)
          double alpha = random.nextDouble();
          tuple1.set(random.nextDouble(), random.nextDouble(), random.nextDouble());
          tuple2.set(random.nextDouble(), random.nextDouble(), random.nextDouble());

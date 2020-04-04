@@ -120,8 +120,7 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     */
    default void clipToMinMax(double min, double max)
    {
-      clipToMax(max);
-      clipToMin(min);
+      setAndClipToMinMax(min, max, this);
    }
 
    /**
@@ -328,8 +327,20 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
     */
    default void setAndClipToMinMax(double min, double max, Tuple2DReadOnly other)
    {
-      set(other);
-      clipToMinMax(min, max);
+      double x = other.getX();
+      double y = other.getY();
+
+      if (x < min)
+         x = min;
+      else if (x > max)
+         x = max;
+
+      if (y < min)
+         y = min;
+      else if (y > max)
+         y = max;
+
+      set(x, y);
    }
 
    /**

@@ -125,8 +125,7 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void clipToMinMax(double min, double max)
    {
-      clipToMax(max);
-      clipToMin(min);
+      setAndClipToMinMax(min, max, this);
    }
 
    /**
@@ -355,8 +354,25 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
     */
    default void setAndClipToMinMax(double min, double max, Tuple3DReadOnly other)
    {
-      set(other);
-      clipToMinMax(min, max);
+      double x = other.getX();
+      double y = other.getY();
+      double z = other.getZ();
+
+      if (x < min)
+         x = min;
+      else if (x > max)
+         x = max;
+
+      if (y < min)
+         y = min;
+      else if (y > max)
+         y = max;
+
+      if (z < min)
+         z = min;
+      else if (z > max)
+         z = max;
+      set(x, y, z);
    }
 
    /**
