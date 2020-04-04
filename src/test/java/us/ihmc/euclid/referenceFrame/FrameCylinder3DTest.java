@@ -20,6 +20,7 @@ import us.ihmc.euclid.shape.primitives.Cylinder3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameCylinder3DTest
 {
@@ -28,13 +29,16 @@ public class FrameCylinder3DTest
    {
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertOverloadingWithFrameObjects(FrameCylinder3DReadOnly.class, Cylinder3DReadOnly.class, false);
-      tester.assertOverloadingWithFrameObjects(FixedFrameCylinder3DBasics.class, Cylinder3DBasics.class, false);
 
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("setAxis", Vector3DReadOnly.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      tester.assertOverloadingWithFrameObjects(FixedFrameCylinder3DBasics.class, Cylinder3DBasics.class, false, 1, methodFilter);
+
       signaturesToIgnore.add(new MethodSignature("set", Cylinder3D.class));
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Cylinder3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Cylinder3D.class, Double.TYPE));
-      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameCylinder3D.class, Cylinder3D.class, false, 1, methodFilter);
    }
 
