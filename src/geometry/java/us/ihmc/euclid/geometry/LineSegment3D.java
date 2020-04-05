@@ -4,6 +4,7 @@ import us.ihmc.euclid.geometry.interfaces.LineSegment3DBasics;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -111,14 +112,10 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof LineSegment3DReadOnly)
          return equals((LineSegment3DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**
@@ -161,7 +158,6 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
    @Override
    public int hashCode()
    {
-      long bits = 31L * firstEndpoint.hashCode() + secondEndpoint.hashCode();
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(firstEndpoint, secondEndpoint);
    }
 }

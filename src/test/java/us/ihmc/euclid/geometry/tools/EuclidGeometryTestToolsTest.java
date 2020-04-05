@@ -4,8 +4,22 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.geometry.*;
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.Line2D;
+import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment1D;
+import us.ihmc.euclid.geometry.LineSegment2D;
+import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestToolsTest;
 
 public class EuclidGeometryTestToolsTest
@@ -540,82 +554,6 @@ public class EuclidGeometryTestToolsTest
       {
          BoundingBox3D expected = EuclidGeometryRandomTools.nextBoundingBox3D(random);
          BoundingBox3D actual = new BoundingBox3D(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertOrientation2DEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertOrientation2DEquals";
-      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
-         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
-         Orientation2D actual = new Orientation2D(expected);
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testAssertOrientation2DGeometricallyEquals() throws Throwable
-   {
-      Random random = new Random(453453);
-      String methodName = "assertOrientation2DGeometricallyEquals";
-      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
-         Orientation2D actual = null;
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = null;
-         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
-         Orientation2D actual = EuclidGeometryRandomTools.nextOrientation2D(random);
-         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
-      }
-
-      {
-         Orientation2D expected = EuclidGeometryRandomTools.nextOrientation2D(random);
-         Orientation2D actual = new Orientation2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }

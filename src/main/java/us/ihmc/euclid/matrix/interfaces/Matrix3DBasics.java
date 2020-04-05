@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -172,25 +171,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    }
 
    /**
-    * Sets all the coefficients of this matrix to zero.
-    */
-   @Override
-   default void setToZero()
-   {
-      setM00(0.0);
-      setM01(0.0);
-      setM02(0.0);
-
-      setM10(0.0);
-      setM11(0.0);
-      setM12(0.0);
-
-      setM20(0.0);
-      setM21(0.0);
-      setM22(0.0);
-   }
-
-   /**
     * Transposes this matrix: m = m<sup>T</sup>.
     */
    default void transpose()
@@ -228,6 +208,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * Orthonormalization of this matrix using the
     * <a href="https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process"> Gram-Schmidt method</a>.
     */
+   @Override
    default void normalize()
    {
       Matrix3DTools.normalize(this);
@@ -350,6 +331,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     *
     * @param other the other matrix used to update this matrix. Not modified.
     */
+   @Override
    default void setAndNormalize(Matrix3DReadOnly other)
    {
       set(other);
@@ -1159,7 +1141,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * </p>
     * <p>
     * Note: the transformation of a {@code Matrix3D} strongly differs from the transformation of a
-    * {@link RotationMatrix}.
+    * {@link RotationMatrixBasics}.
     * </p>
     */
    @Override
@@ -1176,7 +1158,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * </p>
     * <p>
     * Note: the transformation of a {@code Matrix3D} strongly differs from the transformation of a
-    * {@link RotationMatrix}.
+    * {@link RotationMatrixBasics}.
     * </p>
     */
    @Override

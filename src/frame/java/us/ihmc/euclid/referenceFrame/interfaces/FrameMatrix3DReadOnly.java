@@ -153,8 +153,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       Matrix3DReadOnly.super.transform(tupleOriginal, tupleTransformed);
    }
 
@@ -224,8 +223,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void addTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       Matrix3DReadOnly.super.addTransform(tupleOriginal, tupleTransformed);
    }
 
@@ -390,8 +388,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfRotationInXYPlane)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       Matrix3DReadOnly.super.transform(tupleOriginal, tupleTransformed, checkIfRotationInXYPlane);
    }
 
@@ -540,8 +537,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void transform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
-      checkReferenceFrameMatch(vectorOriginal);
-      checkReferenceFrameMatch(vectorTransformed);
+      checkReferenceFrameMatch(vectorOriginal, vectorTransformed);
       Matrix3DReadOnly.super.transform(vectorOriginal, vectorTransformed);
    }
 
@@ -615,8 +611,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       inverseTransform((Tuple3DReadOnly) tupleOriginal, (Tuple3DBasics) tupleTransformed);
    }
 
@@ -789,8 +784,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       inverseTransform((Tuple2DReadOnly) tupleOriginal, (Tuple2DBasics) tupleTransformed, checkIfTransformInXYPlane);
    }
 
@@ -865,8 +859,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void inverseTransform(FrameMatrix3DReadOnly matrixOriginal, FixedFrameMatrix3DBasics matrixTransformed)
    {
-      checkReferenceFrameMatch(matrixOriginal);
-      checkReferenceFrameMatch(matrixTransformed);
+      checkReferenceFrameMatch(matrixOriginal, matrixTransformed);
       inverseTransform((Matrix3DReadOnly) matrixOriginal, (Matrix3DBasics) matrixTransformed);
    }
 
@@ -944,8 +937,7 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
     */
    default void inverseTransform(FrameVector4DReadOnly vectorOriginal, FixedFrameVector4DBasics vectorTransformed)
    {
-      checkReferenceFrameMatch(vectorOriginal);
-      checkReferenceFrameMatch(vectorTransformed);
+      checkReferenceFrameMatch(vectorOriginal, vectorTransformed);
       inverseTransform((Vector4DReadOnly) vectorOriginal, (Vector4DBasics) vectorTransformed);
    }
 

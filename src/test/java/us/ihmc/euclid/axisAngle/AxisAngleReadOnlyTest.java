@@ -25,9 +25,11 @@ import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
@@ -38,6 +40,8 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
 {
    public abstract T createEmptyAxisAngle();
+
+   public abstract T createAxisAngle(Vector3DReadOnly axis, double angle);
 
    public abstract T createAxisAngle(double ux, double uy, double uz, double angle);
 
@@ -56,7 +60,7 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       for (int i = 0; i < ITERATIONS; i++)
       {
          double expectedAngle = random.nextInt(100);
-         axisAngle = createAxisAngle(0.0, 0.0, 0.0, expectedAngle);
+         axisAngle = createAxisAngle(new Vector3D(), expectedAngle);
          double actualAngle = axisAngle.getAngle();
 
          assertTrue(expectedAngle == actualAngle);
@@ -64,114 +68,24 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
    }
 
    @Test
-   public void testGetX()
+   public void testGetters()
    {
       Random random = new Random(564648L);
       T axisAngle;
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         double expectedX = random.nextInt(100);
-         axisAngle = createAxisAngle(expectedX, 0.0, 0.0, 0.0);
-         double actualX = axisAngle.getX();
-
-         assertTrue(expectedX == actualX);
-      }
-   }
-
-   @Test
-   public void testGetY()
-   {
-      Random random = new Random(564648L);
-      T axisAngle;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         double expectedY = random.nextInt(100);
-         axisAngle = createAxisAngle(0.0, expectedY, 0.0, 0.0);
-         double actualY = axisAngle.getY();
-
-         assertTrue(expectedY == actualY);
-      }
-   }
-
-   @Test
-   public void testGetZ()
-   {
-      Random random = new Random(564648L);
-      T axisAngle;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         double expectedZ = random.nextInt(100);
-         axisAngle = createAxisAngle(0.0, 0.0, expectedZ, 0.0);
-         double actualZ = axisAngle.getZ();
-
-         assertTrue(expectedZ == actualZ);
-      }
-   }
-
-   @Test
-   public void testGetAngle32()
-   {
-      Random random = new Random(564648L);
-      T axisAngle;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         float expectedAngle = random.nextInt(100);
-         axisAngle = createAxisAngle(0.0, 0.0, 0.0, expectedAngle);
-         float actualAngle = axisAngle.getAngle32();
-
-         assertTrue(expectedAngle == actualAngle);
-      }
-   }
-
-   @Test
-   public void testGetX32()
-   {
-      Random random = new Random(564648L);
-      T axisAngle;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         float expectedX = random.nextInt(100);
-         axisAngle = createAxisAngle(expectedX, 0.0, 0.0, 0.0);
-         float actualX = axisAngle.getX32();
-
-         assertTrue(expectedX == actualX);
-      }
-   }
-
-   @Test
-   public void testGetY32()
-   {
-      Random random = new Random(564648L);
-      T axisAngle;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         float expectedY = random.nextInt(100);
-         axisAngle = createAxisAngle(0.0, expectedY, 0.0, 0.0);
-         float actualY = axisAngle.getY32();
-
-         assertTrue(expectedY == actualY);
-      }
-   }
-
-   @Test
-   public void testGetZ32()
-   {
-      Random random = new Random(564648L);
-      T axisAngle;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         float expectedZ = random.nextInt(100);
-         axisAngle = createAxisAngle(0.0, 0.0, expectedZ, 0.0);
-         float actualZ = axisAngle.getZ32();
-
-         assertTrue(expectedZ == actualZ);
+         double angle = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         UnitVector3D axis = EuclidCoreRandomTools.nextUnitVector3D(random);
+         axisAngle = createAxisAngle(axis, angle);
+         assertEquals(axis.getX(), axisAngle.getX(), getEpsilon());
+         assertEquals(axis.getY(), axisAngle.getY(), getEpsilon());
+         assertEquals(axis.getZ(), axisAngle.getZ(), getEpsilon());
+         assertEquals(axis.getX32(), axisAngle.getX32(), getEpsilon());
+         assertEquals(axis.getY32(), axisAngle.getY32(), getEpsilon());
+         assertEquals(axis.getZ32(), axisAngle.getZ32(), getEpsilon());
+         assertEquals(angle, axisAngle.getAngle(), getEpsilon());
+         assertEquals((float) angle, axisAngle.getAngle32());
       }
    }
 
@@ -193,6 +107,7 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
    }
 
    @Test
+   @Deprecated
    public void testIsAxisUnitary() throws Exception
    {
       Random random = new Random(51651L);
@@ -217,20 +132,20 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
          assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
 
          axisAngle.set(ux * smallScale, uy, uz, angle);
-         assertFalse(axisAngle.isAxisUnitary(getEpsilon()));
+         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
          axisAngle.set(ux, uy * smallScale, uz, angle);
-         assertFalse(axisAngle.isAxisUnitary(getEpsilon()));
+         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
          axisAngle.set(ux, uy, uz * smallScale, angle);
-         assertFalse(axisAngle.isAxisUnitary(getEpsilon()));
+         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
          axisAngle.set(ux, uy, uz, angle * smallScale);
          assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
 
          axisAngle.set(ux * bigScale, uy, uz, angle);
-         assertFalse(axisAngle.isAxisUnitary(getEpsilon()));
+         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
          axisAngle.set(ux, uy * bigScale, uz, angle);
-         assertFalse(axisAngle.isAxisUnitary(getEpsilon()));
+         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
          axisAngle.set(ux, uy, uz * bigScale, angle);
-         assertFalse(axisAngle.isAxisUnitary(getEpsilon()));
+         assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
          axisAngle.set(ux, uy, uz, angle * bigScale);
          assertTrue(axisAngle.isAxisUnitary(getEpsilon()));
       }
@@ -389,16 +304,6 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       for (int i = 0; i < ITERATIONS; i++)
       {
          axisAngle = createRandomAxisAngle(random);
-
-         { // Test getYawPitchRoll(double[] yawPitchRollToPack)
-            double[] yawPitchRoll = new double[4];
-            axisAngle.getYawPitchRoll(yawPitchRoll);
-            double[] expectedYawPitchRoll = new double[4];
-            YawPitchRollConversion.convertAxisAngleToYawPitchRoll(axisAngle, expectedYawPitchRoll);
-
-            for (int j = 0; j < yawPitchRoll.length; j++)
-               assertEquals(yawPitchRoll[j], expectedYawPitchRoll[j], getEpsilon());
-         }
 
          { // Test getYaw()
             double yaw = axisAngle.getYaw();
@@ -1075,29 +980,30 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
       double z = axisAngle.getZ();
       double angle = axisAngle.getAngle();
 
-      assertTrue(axisAngle.epsilonEquals(createAxisAngle(x + 0.999 * epsilon, y, z, angle), epsilon));
-      assertTrue(axisAngle.epsilonEquals(createAxisAngle(x - 0.999 * epsilon, y, z, angle), epsilon));
-
-      assertTrue(axisAngle.epsilonEquals(createAxisAngle(x, y + 0.999 * epsilon, z, angle), epsilon));
-      assertTrue(axisAngle.epsilonEquals(createAxisAngle(x, y - 0.999 * epsilon, z, angle), epsilon));
-
-      assertTrue(axisAngle.epsilonEquals(createAxisAngle(x, y, z + 0.999 * epsilon, angle), epsilon));
-      assertTrue(axisAngle.epsilonEquals(createAxisAngle(x, y, z - 0.999 * epsilon, angle), epsilon));
-
       assertTrue(axisAngle.epsilonEquals(createAxisAngle(x, y, z, angle + 0.999 * epsilon), epsilon));
       assertTrue(axisAngle.epsilonEquals(createAxisAngle(x, y, z, angle - 0.999 * epsilon), epsilon));
 
-      assertFalse(axisAngle.epsilonEquals(createAxisAngle(x + 1.001 * epsilon, y, z, angle), epsilon));
-      assertFalse(axisAngle.epsilonEquals(createAxisAngle(x - 1.001 * epsilon, y, z, angle), epsilon));
-
-      assertFalse(axisAngle.epsilonEquals(createAxisAngle(x, y + 1.001 * epsilon, z, angle), epsilon));
-      assertFalse(axisAngle.epsilonEquals(createAxisAngle(x, y - 1.001 * epsilon, z, angle), epsilon));
-
-      assertFalse(axisAngle.epsilonEquals(createAxisAngle(x, y, z + 1.001 * epsilon, angle), epsilon));
-      assertFalse(axisAngle.epsilonEquals(createAxisAngle(x, y, z - 1.001 * epsilon, angle), epsilon));
-
       assertFalse(axisAngle.epsilonEquals(createAxisAngle(x, y, z, angle + 1.001 * epsilon), epsilon));
       assertFalse(axisAngle.epsilonEquals(createAxisAngle(x, y, z, angle - 1.001 * epsilon), epsilon));
+
+      UnitVector3D vector1 = EuclidCoreRandomTools.nextUnitVector3D(random);
+      UnitVector3D vector2 = EuclidCoreRandomTools.nextUnitVector3D(random);
+
+      vector2.set(vector1);
+      assertTrue(vector1.epsilonEquals(vector2, epsilon));
+      AxisAngle transform = new AxisAngle(EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector1, true), 0.0);
+      transform.setAngle(0.999 * epsilon);
+      transform.transform(vector1, vector2);
+      assertTrue(createAxisAngle(vector1, angle).epsilonEquals(createAxisAngle(vector2, angle), epsilon));
+      transform.setAngle(-0.999 * epsilon);
+      transform.transform(vector1, vector2);
+      assertTrue(createAxisAngle(vector1, angle).epsilonEquals(createAxisAngle(vector2, angle), epsilon));
+      transform.setAngle(2.0 * epsilon);
+      transform.transform(vector1, vector2);
+      assertFalse(createAxisAngle(vector1, angle).epsilonEquals(createAxisAngle(vector2, angle), epsilon));
+      transform.setAngle(-2.0 * epsilon);
+      transform.transform(vector1, vector2);
+      assertFalse(createAxisAngle(vector1, angle).epsilonEquals(createAxisAngle(vector2, angle), epsilon));
    }
 
    @Test

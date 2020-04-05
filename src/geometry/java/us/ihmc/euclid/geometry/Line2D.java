@@ -1,15 +1,17 @@
 package us.ihmc.euclid.geometry;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 /**
@@ -20,10 +22,11 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    /** Coordinates of a point located on this line. */
    private final Point2D point = new Point2D();
    /** Normalized direction of this line. */
-   private final Vector2D direction = new Vector2D();
+   private final UnitVector2D direction = new UnitVector2D(Axis2D.X);
 
    /**
-    * Default constructor that initializes both {@code point} and {@code direction} to zero.
+    * Default constructor that initializes its {@code point} to zero and {@code direction} to
+    * {@link Axis2D#X}.
     */
    public Line2D()
    {
@@ -101,7 +104,7 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * @return the reference to the direction.
     */
    @Override
-   public Vector2DBasics getDirection()
+   public UnitVector2DBasics getDirection()
    {
       return direction;
    }
@@ -155,20 +158,16 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(Line2DReadOnly)}, it returns {@code false} otherwise.
     *
-    * @param obj the object to compare against this. Not modified.
+    * @param object the object to compare against this. Not modified.
     * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
     */
    @Override
-   public boolean equals(Object obj)
+   public boolean equals(Object object)
    {
-      try
-      {
-         return equals((Line2DReadOnly) obj);
-      }
-      catch (ClassCastException e)
-      {
+      if (object instanceof Line2DReadOnly)
+         return equals((Line2DReadOnly) object);
+      else
          return false;
-      }
    }
 
    /**
@@ -191,7 +190,6 @@ public class Line2D implements Line2DBasics, GeometryObject<Line2D>
    @Override
    public int hashCode()
    {
-      long bits = 31L * point.hashCode() + direction.hashCode();
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(point, direction);
    }
 }

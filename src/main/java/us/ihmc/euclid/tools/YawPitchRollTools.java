@@ -3,9 +3,9 @@ package us.ihmc.euclid.tools;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -693,7 +693,8 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void transform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal,
+                                RotationMatrixBasics rotationMatrixTransformed)
    {
       transformImpl(yaw, pitch, roll, false, rotationMatrixOriginal, rotationMatrixTransformed);
    }
@@ -718,7 +719,8 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void transform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal,
+                                RotationMatrixBasics rotationMatrixTransformed)
    {
       transform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), rotationMatrixOriginal, rotationMatrixTransformed);
    }
@@ -728,7 +730,7 @@ public class YawPitchRollTools
     * {@code yawPitchRoll} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(YawPitchRollReadOnly, RotationMatrixReadOnly, RotationMatrix)} with an
+    * {@link #transform(YawPitchRollReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with an
     * yaw-pitch-roll that has an angle of opposite value compared to the given one.
     * </p>
     * <p>
@@ -750,7 +752,7 @@ public class YawPitchRollTools
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal,
-                                       RotationMatrix rotationMatrixTransformed)
+                                       RotationMatrixBasics rotationMatrixTransformed)
    {
       transformImpl(yaw, pitch, roll, true, rotationMatrixOriginal, rotationMatrixTransformed);
    }
@@ -760,7 +762,7 @@ public class YawPitchRollTools
     * {@code yawPitchRoll} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(YawPitchRollReadOnly, RotationMatrixReadOnly, RotationMatrix)} with an
+    * {@link #transform(YawPitchRollReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with an
     * yaw-pitch-roll that has an angle of opposite value compared to the given one.
     * </p>
     * <p>
@@ -781,13 +783,13 @@ public class YawPitchRollTools
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
    public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal,
-                                       RotationMatrix rotationMatrixTransformed)
+                                       RotationMatrixBasics rotationMatrixTransformed)
    {
       inverseTransform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), rotationMatrixOriginal, rotationMatrixTransformed);
    }
 
    private static void transformImpl(double yaw, double pitch, double roll, boolean inverseTransform, RotationMatrixReadOnly rotationMatrixOriginal,
-                                     RotationMatrix rotationMatrixTransformed)
+                                     RotationMatrixBasics rotationMatrixTransformed)
    {
       if (isZero(yaw, pitch, roll, ZERO_EPS))
       {

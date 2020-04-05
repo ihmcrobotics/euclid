@@ -21,6 +21,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * </p>
  *
  * @author Sylvain Bertrand
+ * @see GilbertJohnsonKeerthiCollisionDetector
+ * @see ExpandingPolytopeAlgorithm
  */
 public interface SupportingVertexHolder
 {

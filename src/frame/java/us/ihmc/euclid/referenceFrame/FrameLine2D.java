@@ -1,13 +1,21 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.Line2D;
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -31,80 +39,14 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 {
    /** The reference frame in which this line is expressed. */
    private ReferenceFrame referenceFrame;
-   /** The line. */
-   private final Line2D line = new Line2D();
+   private final FixedFramePoint2DBasics point = EuclidFrameFactories.newFixedFramePoint2DBasics(this);
+   private final FixedFrameUnitVector2DBasics direction = EuclidFrameFactories.newFixedFrameUnitVector2DBasics(this, Axis2D.X);
    /** Rigid-body transform used to perform garbage-free operations. */
    private final RigidBodyTransform transformToDesiredFrame = new RigidBodyTransform();
 
-   private final FixedFramePoint2DBasics point = new FixedFramePoint2DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         line.getPoint().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         line.getPoint().setY(y);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return line.getPointX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return line.getPointY();
-      }
-   };
-
-   private final FixedFrameVector2DBasics direction = new FixedFrameVector2DBasics()
-   {
-      @Override
-      public void setX(double x)
-      {
-         line.getDirection().setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         line.getDirection().setY(y);
-      }
-
-      @Override
-      public ReferenceFrame getReferenceFrame()
-      {
-         return referenceFrame;
-      }
-
-      @Override
-      public double getX()
-      {
-         return line.getDirectionX();
-      }
-
-      @Override
-      public double getY()
-      {
-         return line.getDirectionY();
-      }
-   };
-
    /**
-    * Default constructor that initializes both {@link #point} and {@link #direction} to zero and the
-    * reference frame to {@code ReferenceFrame.getWorldFrame()}.
+    * Default constructor that initializes its {@code point} to zero, its {@code direction} to
+    * {@link Axis2D#X} and the reference frame to {@code ReferenceFrame.getWorldFrame()}.
     */
    public FrameLine2D()
    {
@@ -112,8 +54,8 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    }
 
    /**
-    * Creates a new line and initializes both {@link #point} and {@link #direction} to zero and the
-    * reference frame to the given {@code referenceFrame}.
+    * Default constructor that initializes its {@code point} to zero, its {@code direction} to (1.0,
+    * 0.0), and the reference frame to the given {@code referenceFrame}.
     *
     * @param referenceFrame the initial reference frame for this line.
     */
@@ -263,7 +205,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
 
    /** {@inheritDoc} */
    @Override
-   public FixedFrameVector2DBasics getDirection()
+   public FixedFrameUnitVector2DBasics getDirection()
    {
       return direction;
    }
@@ -366,7 +308,7 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    @Override
    public String toString()
    {
-      return EuclidGeometryIOTools.getLine2DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameLine2DString(this);
    }
 
    /**
@@ -377,6 +319,6 @@ public class FrameLine2D implements FrameLine2DBasics, GeometryObject<FrameLine2
    @Override
    public int hashCode()
    {
-      return line.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(point, direction);
    }
 }

@@ -9,9 +9,10 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
@@ -19,7 +20,10 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 
 /**
@@ -187,10 +191,12 @@ public class RigidBodyTransform
     * Computes the determinant of the rotation part of this transform.
     *
     * @return the determinant's value.
+    * @deprecated Use {@code this.getRotation().determinant()} instead.
     */
+   @Deprecated
    public double determinantRotationPart()
    {
-      return rotationMatrix.determinant();
+      return getRotation().determinant();
    }
 
    /**
@@ -214,8 +220,8 @@ public class RigidBodyTransform
    public void set(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22,
                    double m23)
    {
-      rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      translationVector.set(m03, m13, m23);
+      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getTranslation().set(m03, m13, m23);
    }
 
    /**
@@ -242,8 +248,8 @@ public class RigidBodyTransform
    public void setUnsafe(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22,
                          double m23)
    {
-      rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      translationVector.set(m03, m13, m23);
+      getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getTranslation().set(m03, m13, m23);
    }
 
    /**
@@ -283,8 +289,8 @@ public class RigidBodyTransform
     */
    public void set(DenseMatrix64F matrix)
    {
-      rotationMatrix.set(matrix);
-      translationVector.set(0, 3, matrix);
+      getRotation().set(matrix);
+      getTranslation().set(0, 3, matrix);
    }
 
    /**
@@ -315,8 +321,8 @@ public class RigidBodyTransform
     */
    public void set(DenseMatrix64F matrix, int startRow, int startColumn)
    {
-      rotationMatrix.set(startRow, startColumn, matrix);
-      translationVector.set(startRow, startColumn + 3, matrix);
+      getRotation().set(startRow, startColumn, matrix);
+      getTranslation().set(startRow, startColumn + 3, matrix);
    }
 
    /**
@@ -359,8 +365,8 @@ public class RigidBodyTransform
       double m22 = transformArray[10];
       double m23 = transformArray[11];
 
-      rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      translationVector.set(m03, m13, m23);
+      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getTranslation().set(m03, m13, m23);
    }
 
    /**
@@ -403,8 +409,8 @@ public class RigidBodyTransform
       double m22 = transformArray[10];
       double m23 = transformArray[14];
 
-      rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      translationVector.set(m03, m13, m23);
+      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getTranslation().set(m03, m13, m23);
    }
 
    /**
@@ -447,8 +453,8 @@ public class RigidBodyTransform
       double m22 = transformArray[10];
       double m23 = transformArray[11];
 
-      rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      translationVector.set(m03, m13, m23);
+      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getTranslation().set(m03, m13, m23);
    }
 
    /**
@@ -491,8 +497,8 @@ public class RigidBodyTransform
       double m22 = transformArray[10];
       double m23 = transformArray[14];
 
-      rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      translationVector.set(m03, m13, m23);
+      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getTranslation().set(m03, m13, m23);
    }
 
    /**
@@ -504,8 +510,8 @@ public class RigidBodyTransform
     */
    public void set(Matrix3DReadOnly rotationMatrix, Tuple3DReadOnly translation)
    {
-      this.rotationMatrix.set(rotationMatrix);
-      translationVector.set(translation);
+      getRotation().set(rotationMatrix);
+      getTranslation().set(translation);
    }
 
    /**
@@ -521,10 +527,13 @@ public class RigidBodyTransform
     * @param m21 the 3rd row 2nd column component of the rotation part of this transform.
     * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
     * @throws NotARotationMatrixException if the resulting matrix does not represent a rotation matrix.
+    * @deprecated Use {@code this.getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22)}
+    *             instead.
     */
+   @Deprecated
    public void setRotation(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
-      rotationMatrix.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    /**
@@ -544,10 +553,13 @@ public class RigidBodyTransform
     * @param m20 the 3rd row 1st column component of the rotation part of this transform.
     * @param m21 the 3rd row 2nd column component of the rotation part of this transform.
     * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
+    * @deprecated Use {@code this.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22)}
+    *             instead.
     */
+   @Deprecated
    public void setRotationUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
-      rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    /**
@@ -558,10 +570,12 @@ public class RigidBodyTransform
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
     */
+   @Deprecated
    public void setRotation(DenseMatrix64F rotationMatrix)
    {
-      this.rotationMatrix.set(rotationMatrix);
+      getRotation().set(rotationMatrix);
    }
 
    /**
@@ -572,10 +586,12 @@ public class RigidBodyTransform
     *
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
+    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
     */
+   @Deprecated
    public void setRotation(Matrix3DReadOnly rotationMatrix)
    {
-      this.rotationMatrix.set(rotationMatrix);
+      getRotation().set(rotationMatrix);
    }
 
    /**
@@ -587,7 +603,7 @@ public class RigidBodyTransform
     */
    public void setRotationAndZeroTranslation(DenseMatrix64F rotationMatrix)
    {
-      setRotation(rotationMatrix);
+      getRotation().set(rotationMatrix);
       setTranslationToZero();
    }
 
@@ -600,7 +616,7 @@ public class RigidBodyTransform
     */
    public void setRotationAndZeroTranslation(Matrix3DReadOnly rotationMatrix)
    {
-      setRotation(rotationMatrix);
+      getRotation().set(rotationMatrix);
       setTranslationToZero();
    }
 
@@ -642,8 +658,8 @@ public class RigidBodyTransform
     */
    public void interpolate(RigidBodyTransform transform1, RigidBodyTransform transform2, double alpha)
    {
-      rotationMatrix.interpolate(transform1.rotationMatrix, transform2.rotationMatrix, alpha);
-      translationVector.interpolate(transform1.translationVector, transform2.translationVector, alpha);
+      getRotation().interpolate(transform1.getRotation(), transform2.getRotation(), alpha);
+      getTranslation().interpolate(transform1.getTranslation(), transform2.getTranslation(), alpha);
    }
 
    /**
@@ -662,12 +678,13 @@ public class RigidBodyTransform
     */
    public void get(DenseMatrix64F matrixToPack)
    {
-      rotationMatrix.get(matrixToPack);
-      translationVector.get(0, 3, matrixToPack);
-      matrixToPack.set(3, 0, 0.0);
-      matrixToPack.set(3, 1, 0.0);
-      matrixToPack.set(3, 2, 0.0);
-      matrixToPack.set(3, 3, 1.0);
+      EuclidCoreTools.checkMatrixMinimumSize(4, 4, matrixToPack);
+      getRotation().get(matrixToPack);
+      getTranslation().get(0, 3, matrixToPack);
+      matrixToPack.unsafe_set(3, 0, 0.0);
+      matrixToPack.unsafe_set(3, 1, 0.0);
+      matrixToPack.unsafe_set(3, 2, 0.0);
+      matrixToPack.unsafe_set(3, 3, 1.0);
    }
 
    /**
@@ -688,13 +705,14 @@ public class RigidBodyTransform
     */
    public void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
    {
-      rotationMatrix.get(startRow, startColumn, matrixToPack);
-      translationVector.get(startRow, startColumn + 3, matrixToPack);
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, startColumn + 4, matrixToPack);
+      getRotation().get(startRow, startColumn, matrixToPack);
+      getTranslation().get(startRow, startColumn + 3, matrixToPack);
       startRow += 3;
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn, 1.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn, 1.0);
    }
 
    /**
@@ -773,24 +791,12 @@ public class RigidBodyTransform
     */
    public void get(CommonMatrix3DBasics rotationMarixToPack, Tuple3DBasics translationToPack)
    {
-      rotationMarixToPack.set(rotationMatrix);
-      translationToPack.set(translationVector);
-   }
-
-   /**
-    * Gets the read-only reference to the rotation part of this transform.
-    *
-    * @return the rotation part of this transform.
-    * @deprecated Use {@link #getRotation()} instead.
-    */
-   @Deprecated
-   public RotationMatrixReadOnly getRotationMatrix()
-   {
-      return getRotation();
+      rotationMarixToPack.set(getRotation());
+      translationToPack.set(getTranslation());
    }
 
    @Override
-   public RotationMatrix getRotation()
+   public RotationMatrixBasics getRotation()
    {
       return rotationMatrix;
    }
@@ -800,10 +806,12 @@ public class RigidBodyTransform
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
     *                             Modified.
+    * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
     */
+   @Deprecated
    public void getRotation(CommonMatrix3DBasics rotationMatrixToPack)
    {
-      rotationMatrixToPack.set(rotationMatrix);
+      rotationMatrixToPack.set(getRotation());
    }
 
    /**
@@ -811,10 +819,12 @@ public class RigidBodyTransform
     *
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
     *                             Modified.
+    * @deprecated Use {@code this.getRotation().get(rotationMatrixToPack)} instead.
     */
+   @Deprecated
    public void getRotation(DenseMatrix64F rotationMatrixToPack)
    {
-      rotationMatrix.get(rotationMatrixToPack);
+      getRotation().get(rotationMatrixToPack);
    }
 
    /**
@@ -822,22 +832,12 @@ public class RigidBodyTransform
     *
     * @param rotationMatrixArrayToPack the array in which the rotation part of this transform is
     *                                  stored. Modified.
-    */
-   public void getRotation(double[] rotationMatrixArrayToPack)
-   {
-      rotationMatrix.get(rotationMatrixArrayToPack);
-   }
-
-   /**
-    * Gets the read-only reference of the translation part of this rigid-body transform.
-    *
-    * @return the translation part of this transform.
-    * @deprecated Use {@link #getTranslation()} instead.
+    * @deprecated Use {@code this.getRotation().get(rotationMatrixToPack)} instead.
     */
    @Deprecated
-   public Vector3DReadOnly getTranslationVector()
+   public void getRotation(double[] rotationMatrixArrayToPack)
    {
-      return getTranslation();
+      getRotation().get(rotationMatrixArrayToPack);
    }
 
    @Override
@@ -861,11 +861,11 @@ public class RigidBodyTransform
       {
          if (column < 3)
          {
-            return rotationMatrix.getElement(row, column);
+            return getRotation().getElement(row, column);
          }
          else if (column < 4)
          {
-            return translationVector.getElement(row);
+            return getTranslation().getElement(row);
          }
          else
          {
@@ -900,7 +900,7 @@ public class RigidBodyTransform
     */
    public double getM00()
    {
-      return rotationMatrix.getM00();
+      return getRotation().getM00();
    }
 
    /**
@@ -910,7 +910,7 @@ public class RigidBodyTransform
     */
    public double getM01()
    {
-      return rotationMatrix.getM01();
+      return getRotation().getM01();
    }
 
    /**
@@ -920,7 +920,7 @@ public class RigidBodyTransform
     */
    public double getM02()
    {
-      return rotationMatrix.getM02();
+      return getRotation().getM02();
    }
 
    /**
@@ -930,7 +930,7 @@ public class RigidBodyTransform
     */
    public double getM03()
    {
-      return translationVector.getX();
+      return getTranslation().getX();
    }
 
    /**
@@ -940,7 +940,7 @@ public class RigidBodyTransform
     */
    public double getM10()
    {
-      return rotationMatrix.getM10();
+      return getRotation().getM10();
    }
 
    /**
@@ -950,7 +950,7 @@ public class RigidBodyTransform
     */
    public double getM11()
    {
-      return rotationMatrix.getM11();
+      return getRotation().getM11();
    }
 
    /**
@@ -960,7 +960,7 @@ public class RigidBodyTransform
     */
    public double getM12()
    {
-      return rotationMatrix.getM12();
+      return getRotation().getM12();
    }
 
    /**
@@ -970,7 +970,7 @@ public class RigidBodyTransform
     */
    public double getM13()
    {
-      return translationVector.getY();
+      return getTranslation().getY();
    }
 
    /**
@@ -980,7 +980,7 @@ public class RigidBodyTransform
     */
    public double getM20()
    {
-      return rotationMatrix.getM20();
+      return getRotation().getM20();
    }
 
    /**
@@ -990,7 +990,7 @@ public class RigidBodyTransform
     */
    public double getM21()
    {
-      return rotationMatrix.getM21();
+      return getRotation().getM21();
    }
 
    /**
@@ -1000,7 +1000,7 @@ public class RigidBodyTransform
     */
    public double getM22()
    {
-      return rotationMatrix.getM22();
+      return getRotation().getM22();
    }
 
    /**
@@ -1010,7 +1010,7 @@ public class RigidBodyTransform
     */
    public double getM23()
    {
-      return translationVector.getZ();
+      return getTranslation().getZ();
    }
 
    /**
@@ -1074,7 +1074,7 @@ public class RigidBodyTransform
    @Override
    public boolean epsilonEquals(RigidBodyTransform other, double epsilon)
    {
-      return rotationMatrix.epsilonEquals(other.rotationMatrix, epsilon) && translationVector.epsilonEquals(other.translationVector, epsilon);
+      return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
    }
 
    /**
@@ -1111,7 +1111,7 @@ public class RigidBodyTransform
       else if (other == null)
          return false;
       else
-         return rotationMatrix.equals(other.rotationMatrix) && translationVector.equals(other.translationVector);
+         return getRotation().equals(other.getRotation()) && getTranslation().equals(other.getTranslation());
    }
 
    /**
@@ -1125,7 +1125,7 @@ public class RigidBodyTransform
    @Override
    public boolean geometricallyEquals(RigidBodyTransform other, double epsilon)
    {
-      return other.rotationMatrix.geometricallyEquals(rotationMatrix, epsilon) && other.translationVector.geometricallyEquals(translationVector, epsilon);
+      return other.getRotation().geometricallyEquals(getRotation(), epsilon) && other.getTranslation().geometricallyEquals(getTranslation(), epsilon);
    }
 
    /**
@@ -1145,7 +1145,7 @@ public class RigidBodyTransform
    @Override
    public int hashCode()
    {
-      long bits = EuclidHashCodeTools.addToHashCode(rotationMatrix.hashCode(), translationVector.hashCode());
+      long bits = EuclidHashCodeTools.addToHashCode(getRotation().hashCode(), getTranslation().hashCode());
       return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }

@@ -41,7 +41,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
 
    /** {@inheritDoc} */
    @Override
-   FrameVector2DReadOnly getDirection();
+   FrameUnitVector2DReadOnly getDirection();
 
    /**
     * Gets the point and direction defining this line by storing their components in the given
@@ -55,8 +55,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default void get(FixedFramePoint2DBasics pointToPack, FixedFrameVector2DBasics directionToPack)
    {
-      checkReferenceFrameMatch(pointToPack);
-      checkReferenceFrameMatch(directionToPack);
+      checkReferenceFrameMatch(pointToPack, directionToPack);
       Line2DReadOnly.super.get(pointToPack, directionToPack);
    }
 
@@ -359,8 +358,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean intersectionWith(FrameLine2DReadOnly secondLine, FixedFramePoint2DBasics intersectionToPack)
    {
-      checkReferenceFrameMatch(secondLine);
-      checkReferenceFrameMatch(intersectionToPack);
+      checkReferenceFrameMatch(secondLine, intersectionToPack);
       return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
    }
 
@@ -585,8 +583,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean intersectionWith(FrameLineSegment2DReadOnly lineSegment, FixedFramePoint2DBasics intersectionToPack)
    {
-      checkReferenceFrameMatch(lineSegment);
-      checkReferenceFrameMatch(intersectionToPack);
+      checkReferenceFrameMatch(lineSegment, intersectionToPack);
       return Line2DReadOnly.super.intersectionWith(lineSegment, intersectionToPack);
    }
 
@@ -689,8 +686,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 Point2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(convexPolygon);
-      checkReferenceFrameMatch(firstIntersectionToPack);
+      checkReferenceFrameMatch(convexPolygon, firstIntersectionToPack);
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -751,8 +747,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -775,9 +770,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(convexPolygon);
-      checkReferenceFrameMatch(firstIntersectionToPack);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -861,8 +854,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
-      checkReferenceFrameMatch(convexPolygon);
-      checkReferenceFrameMatch(secondIntersectionToPack);
+      checkReferenceFrameMatch(convexPolygon, secondIntersectionToPack);
       return Line2DReadOnly.super.intersectionWith(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
    }
 
@@ -1026,8 +1018,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean isPointInFrontOfLine(FrameVector2DReadOnly frontDirection, FramePoint2DReadOnly point)
    {
-      checkReferenceFrameMatch(frontDirection);
-      checkReferenceFrameMatch(point);
+      checkReferenceFrameMatch(frontDirection, point);
       return Line2DReadOnly.super.isPointInFrontOfLine(frontDirection, point);
    }
 
@@ -1144,8 +1135,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean orthogonalProjection(FramePoint2DReadOnly pointToProject, FixedFramePoint2DBasics projectionToPack)
    {
-      checkReferenceFrameMatch(pointToProject);
-      checkReferenceFrameMatch(projectionToPack);
+      checkReferenceFrameMatch(pointToProject, projectionToPack);
       return Line2DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -1365,8 +1355,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default void perpendicularLineThroughPoint(FramePoint2DReadOnly point, FixedFrameLine2DBasics perpendicularLineToPack)
    {
-      checkReferenceFrameMatch(point);
-      checkReferenceFrameMatch(perpendicularLineToPack);
+      checkReferenceFrameMatch(point, perpendicularLineToPack);
       Line2DReadOnly.super.perpendicularLineThroughPoint(point, perpendicularLineToPack);
    }
 
@@ -1479,8 +1468,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default void getTwoPointsOnLine(FixedFramePoint2DBasics firstPointOnLineToPack, FixedFramePoint2DBasics secondPointOnLineToPack)
    {
-      checkReferenceFrameMatch(firstPointOnLineToPack);
-      checkReferenceFrameMatch(secondPointOnLineToPack);
+      checkReferenceFrameMatch(firstPointOnLineToPack, secondPointOnLineToPack);
       Line2DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 
@@ -1730,8 +1718,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean interiorBisector(FrameLine2DReadOnly secondLine, FixedFrameLine2DBasics interiorBisectorToPack)
    {
-      checkReferenceFrameMatch(secondLine);
-      checkReferenceFrameMatch(interiorBisectorToPack);
+      checkReferenceFrameMatch(secondLine, interiorBisectorToPack);
       return Line2DReadOnly.super.interiorBisector(secondLine, interiorBisectorToPack);
    }
 

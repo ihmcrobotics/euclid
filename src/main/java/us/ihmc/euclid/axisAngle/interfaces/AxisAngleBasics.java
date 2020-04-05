@@ -1,10 +1,12 @@
 package us.ihmc.euclid.axisAngle.interfaces;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.AxisAngleTools;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -19,6 +21,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics, Clearable
 {
    /**
+    * Gets the reference to the axis part of this axis-angle.
+    *
+    * @return the reference to the axis vector.
+    */
+   @Override
+   UnitVector3DBasics getAxis();
+
+   /**
     * Sets a new angle to this axis-angle.
     *
     * @param angle the new angle.
@@ -30,30 +40,40 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     *
     * @param x the new axis x-component.
     */
-   void setX(double x);
+   default void setX(double x)
+   {
+      getAxis().setX(x);
+   }
 
    /**
     * Sets a new y-component for the axis of this axis-angle.
     *
     * @param y the new axis y-component.
     */
-   void setY(double y);
+   default void setY(double y)
+   {
+      getAxis().setY(y);
+   }
 
    /**
     * Sets a new z-component for the axis of this axis-angle.
     *
     * @param z the new axis z-component.
     */
-   void setZ(double z);
+   default void setZ(double z)
+   {
+      getAxis().setZ(z);
+   }
 
    /**
     * Sets the components of this axis-angle to represent a "zero" rotation. After calling the axis is
-    * equal to (1, 0, 0) and the angle to 0.
+    * equal to {@link Axis3D#X} and the angle to 0.
     */
    @Override
    default void setToZero()
    {
-      set(1.0, 0.0, 0.0, 0.0);
+      getAxis().set(Axis3D.X);
+      setAngle(0.0);
    }
 
    /**
@@ -62,7 +82,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    @Override
    default void setToNaN()
    {
-      set(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
+      getAxis().setToNaN();
+      setAngle(Double.NaN);
    }
 
    /**
@@ -81,7 +102,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     */
    default void absolute()
    {
-      set(Math.abs(getX()), Math.abs(getY()), Math.abs(getZ()), Math.abs(getAngle()));
+      getAxis().absolute();
+      setAngle(Math.abs(getAngle()));
    }
 
    /**
@@ -89,7 +111,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     */
    default void negate()
    {
-      set(-getX(), -getY(), -getZ(), -getAngle());
+      getAxis().negate();
+      setAngle(-getAngle());
    }
 
    /** {@inheritDoc} */
@@ -112,23 +135,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    @Override
    default void normalize()
    {
-      if (containsNaN())
-         return;
-
-      double invNorm = axisNorm();
-
-      if (invNorm == 0.0)
-      {
-         setToZero();
-         return;
-      }
-
-      invNorm = 1.0 / invNorm;
-      double ux = getX() * invNorm;
-      double uy = getY() * invNorm;
-      double uz = getZ() * invNorm;
-      double angle = getAngle();
-      set(ux, uy, uz, angle);
+      getAxis().normalize();
    }
 
    /**
@@ -152,17 +159,18 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     */
    default void set(double x, double y, double z, double angle)
    {
+      getAxis().set(x, y, z);
       setAngle(angle);
-      setX(x);
-      setY(y);
-      setZ(z);
    }
 
    /** {@inheritDoc} */
    @Override
    default void set(Orientation3DReadOnly orientation3DReadOnly)
    {
-      orientation3DReadOnly.get(this);
+      if (orientation3DReadOnly instanceof AxisAngleReadOnly)
+         set((AxisAngleReadOnly) orientation3DReadOnly);
+      else
+         orientation3DReadOnly.get(this);
    }
 
    /**
@@ -173,7 +181,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     */
    default void set(Vector3DReadOnly axis, double angle)
    {
-      set(axis.getX(), axis.getY(), axis.getZ(), angle);
+      getAxis().set(axis);
+      setAngle(angle);
    }
 
    /**
@@ -183,7 +192,8 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
     */
    default void set(AxisAngleReadOnly other)
    {
-      set(other.getX(), other.getY(), other.getZ(), other.getAngle());
+      getAxis().set(other.getAxis());
+      setAngle(other.getAngle());
    }
 
    /**
@@ -307,19 +317,22 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    @Override
    default void setToYawOrientation(double yaw)
    {
-      set(0.0, 0.0, 1.0, yaw);
+      getAxis().set(Axis3D.Z);
+      setAngle(yaw);
    }
 
    @Override
    default void setToPitchOrientation(double pitch)
    {
-      set(0.0, 1.0, 0.0, pitch);
+      getAxis().set(Axis3D.Y);
+      setAngle(pitch);
    }
 
    @Override
    default void setToRollOrientation(double roll)
    {
-      set(1.0, 0.0, 0.0, roll);
+      getAxis().set(Axis3D.X);
+      setAngle(roll);
    }
 
    /**

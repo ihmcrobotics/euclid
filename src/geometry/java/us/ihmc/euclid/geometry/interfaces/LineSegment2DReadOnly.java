@@ -92,7 +92,9 @@ public interface LineSegment2DReadOnly
     *
     * @return {@code true} if {@link #getFirstEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
+    * @deprecated Use {@code this.getFirstEndpoint().containsNaN()} instead.
     */
+   @Deprecated
    default boolean firstEndpointContainsNaN()
    {
       return getFirstEndpoint().containsNaN();
@@ -103,7 +105,9 @@ public interface LineSegment2DReadOnly
     *
     * @return {@code true} if {@link #getSecondEndpoint()} contains {@link Double#NaN}, {@code false}
     *         otherwise.
+    * @deprecated Use {@code this.getSecondEndpoint().containsNaN()} instead.
     */
+   @Deprecated
    default boolean secondEndpointContainsNaN()
    {
       return getSecondEndpoint().containsNaN();

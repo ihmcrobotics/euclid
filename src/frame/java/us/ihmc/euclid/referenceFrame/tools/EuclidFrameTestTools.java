@@ -7,10 +7,32 @@ import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertPoint2DGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertPoint3DGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertQuaternionGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertRotationVectorGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple2DEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple3DEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple4DEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector2DGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector3DGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector4DGeometricallyEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertYawPitchRollEquals;
+import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertYawPitchRollGeometricallyEquals;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**

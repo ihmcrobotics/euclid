@@ -8,7 +8,7 @@ import static us.ihmc.euclid.shape.collision.gjk.GJKTools.zxTriangleAreaCalculat
 import java.util.ArrayList;
 import java.util.List;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -516,7 +516,7 @@ public class EPATools
          Vector3D d = new Vector3D();
          d.sub(y1, y0);
 
-         Vector3DReadOnly axis = Axis.X;
+         Vector3DReadOnly axis = Axis3D.X;
          double coord = Math.abs(d.getX());
          double yAbs = Math.abs(d.getY());
          double zAbs = Math.abs(d.getZ());
@@ -524,11 +524,11 @@ public class EPATools
          if (yAbs > coord)
          {
             coord = yAbs;
-            axis = Axis.Y;
+            axis = Axis3D.Y;
          }
          if (zAbs > coord)
          {
-            axis = Axis.Z;
+            axis = Axis3D.Z;
          }
 
          Vector3D v1 = new Vector3D();

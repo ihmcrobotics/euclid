@@ -1,5 +1,6 @@
 package us.ihmc.euclid.axisAngle;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -8,6 +9,9 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -22,18 +26,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class AxisAngle implements AxisAngleBasics, EpsilonComparable<AxisAngle>, Settable<AxisAngle>, GeometricallyComparable<AxisAngle>
 {
-   /** The x-component of the unitary axis. */
-   private double x;
-   /** The y-component of the unitary axis. */
-   private double y;
-   /** The z-component of the unitary axis. */
-   private double z;
+   /** The axis part of this axis-angle. */
+   private final UnitVector3D axis = new UnitVector3D(Axis3D.X);
    /** The angle component of this axis-angle. */
    private double angle;
 
    /**
-    * Creates an axis-angle that represents a "zero" rotation. The axis is equal to (1, 0, 0) and the
-    * angle to 0.
+    * Creates an axis-angle that represents a "zero" rotation. The axis is equal to {@link Axis3D#X}
+    * and the angle to 0.
     */
    public AxisAngle()
    {
@@ -135,23 +135,9 @@ public class AxisAngle implements AxisAngleBasics, EpsilonComparable<AxisAngle>,
 
    /** {@inheritDoc} */
    @Override
-   public final void setX(double x)
+   public UnitVector3DBasics getAxis()
    {
-      this.x = x;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setY(double y)
-   {
-      this.y = y;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setZ(double z)
-   {
-      this.z = z;
+      return axis;
    }
 
    /** {@inheritDoc} */
@@ -159,27 +145,6 @@ public class AxisAngle implements AxisAngleBasics, EpsilonComparable<AxisAngle>,
    public final void setAngle(double angle)
    {
       this.angle = angle;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getX()
-   {
-      return x;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getY()
-   {
-      return y;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getZ()
-   {
-      return z;
    }
 
    /** {@inheritDoc} */
@@ -260,11 +225,8 @@ public class AxisAngle implements AxisAngleBasics, EpsilonComparable<AxisAngle>,
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = 31L * bits + Double.doubleToLongBits(x);
-      bits = 31L * bits + Double.doubleToLongBits(y);
-      bits = 31L * bits + Double.doubleToLongBits(z);
-      bits = 31L * bits + Double.doubleToLongBits(angle);
-      return (int) (bits ^ bits >> 32);
+      long bits = EuclidHashCodeTools.addToHashCode(1L, axis);
+      bits = EuclidHashCodeTools.addToHashCode(bits, angle);
+      return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }

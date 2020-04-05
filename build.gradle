@@ -5,7 +5,7 @@ plugins {
 
 ihmc {
    group = "us.ihmc"
-   version = "0.12.2"
+   version = "0.13.0"
    vcsUrl = "https://github.com/ihmcrobotics/euclid"
    openSource = true
 
@@ -31,10 +31,18 @@ shapeDependencies {
     compile ihmc.sourceSetProject("geometry")
 }
 
+frameShapeDependencies {
+    compile ihmc.sourceSetProject("main")
+    compile ihmc.sourceSetProject("geometry")
+    compile ihmc.sourceSetProject("shape")
+    compile ihmc.sourceSetProject("frame")
+}
+
 testDependencies {
     compile ihmc.sourceSetProject("geometry")
     compile ihmc.sourceSetProject("frame")
     compile ihmc.sourceSetProject("shape")
+    compile ihmc.sourceSetProject("frame-shape")
 
     api("org.pitest:pitest:1.4.3")
     api("org.pitest:pitest-command-line:1.4.3")

@@ -5,8 +5,34 @@ import java.util.Random;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.referenceFrame.*;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
+import us.ihmc.euclid.referenceFrame.FrameBoundingBox2D;
+import us.ihmc.euclid.referenceFrame.FrameBoundingBox3D;
+import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
+import us.ihmc.euclid.referenceFrame.FrameLine2D;
+import us.ihmc.euclid.referenceFrame.FrameLine3D;
+import us.ihmc.euclid.referenceFrame.FrameLineSegment2D;
+import us.ihmc.euclid.referenceFrame.FrameLineSegment3D;
+import us.ihmc.euclid.referenceFrame.FrameMatrix3D;
+import us.ihmc.euclid.referenceFrame.FrameOrientation2D;
+import us.ihmc.euclid.referenceFrame.FramePoint2D;
+import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.FramePose2D;
+import us.ihmc.euclid.referenceFrame.FramePose3D;
+import us.ihmc.euclid.referenceFrame.FrameQuaternion;
+import us.ihmc.euclid.referenceFrame.FrameRotationMatrix;
+import us.ihmc.euclid.referenceFrame.FrameUnitVector2D;
+import us.ihmc.euclid.referenceFrame.FrameUnitVector3D;
+import us.ihmc.euclid.referenceFrame.FrameVector2D;
+import us.ihmc.euclid.referenceFrame.FrameVector3D;
+import us.ihmc.euclid.referenceFrame.FrameVector4D;
+import us.ihmc.euclid.referenceFrame.FrameYawPitchRoll;
+import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex2DSupplier;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVertex3DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -329,6 +355,21 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates a random frame unit vector.
+    * <p>
+    * This generator uses {@link EuclidCoreRandomTools#nextVector3D(Random)}.
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame unit vector's reference frame.
+    * @return the random frame unit vector.
+    */
+   public static FrameUnitVector3D nextFrameUnitVector3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameUnitVector3D(referenceFrame, EuclidCoreRandomTools.nextUnitVector3D(random));
+   }
+
+   /**
     * Generates a random frame vector.
     * <p>
     * {@code frameVector}<sub>i</sub> &in; [-{@code minMax}<sub>i</sub>; {@code minMax}<sub>i</sub>].
@@ -538,6 +579,21 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates a random frame unit vector.
+    * <p>
+    * This generator uses {@link EuclidCoreRandomTools#nextVector2D(Random)}.
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame unit vector's reference frame.
+    * @return the random frame unit vector.
+    */
+   public static FrameUnitVector2D nextFrameUnitVector2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameUnitVector2D(referenceFrame, EuclidCoreRandomTools.nextUnitVector2D(random));
+   }
+
+   /**
     * Generates a random frame vector.
     * <p>
     * {@code frameVector}<sub>i</sub> &in; [{@code min}; {@code max}].
@@ -712,10 +768,12 @@ public class EuclidFrameRandomTools
     */
    public static FrameOrientation3DBasics nextFrameOrientation3D(Random random, ReferenceFrame referenceFrame)
    {
-      switch (random.nextInt(2))
+      switch (random.nextInt(3))
       {
          case 0:
             return nextFrameQuaternion(random, referenceFrame);
+         case 1:
+            return nextFrameRotationMatrix(random, referenceFrame);
          default:
             return nextFrameYawPitchRoll(random, referenceFrame);
       }
@@ -746,7 +804,7 @@ public class EuclidFrameRandomTools
     */
    public static FrameOrientation2D nextFrameOrientation2D(Random random, ReferenceFrame referenceFrame)
    {
-      return new FrameOrientation2D(referenceFrame, EuclidGeometryRandomTools.nextOrientation2D(random));
+      return new FrameOrientation2D(referenceFrame, EuclidCoreRandomTools.nextOrientation2D(random));
    }
 
    /**
@@ -884,6 +942,74 @@ public class EuclidFrameRandomTools
    }
 
    /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
+    * @return the random bounding box.
+    */
+   public static FrameBoundingBox2D nextFrameBoundingBox2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameBoundingBox2D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox2D(random));
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax        the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    */
+   public static FrameBoundingBox2D nextFrameBoundingBox2D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double sizeMax)
+   {
+      return new FrameBoundingBox2D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox2D(random, centerMinMax, sizeMax));
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
+    * @return the random bounding box.
+    */
+   public static FrameBoundingBox3D nextFrameBoundingBox3D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameBoundingBox3D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox3D(random));
+   }
+
+   /**
+    * Generates a random bounding box from random center location and random size.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame bounding box's reference frame.
+    * @param centerMinMax   the maximum absolute value for each coordinate of the bounding box center.
+    * @param sizeMax        the maximum size along each axis for the bounding box.
+    * @return the random bounding box.
+    * @throws RuntimeException if {@code centerMinMax < 0} or {@code sizeMax < 0}.
+    */
+   public static FrameBoundingBox3D nextFrameBoundingBox3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double sizeMax)
+   {
+      return new FrameBoundingBox3D(referenceFrame, EuclidGeometryRandomTools.nextBoundingBox3D(random, centerMinMax, sizeMax));
+   }
+
+   /**
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the polygon's reference frame.
+    * @return the random convex polygon.
+    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
+    */
+   public static FrameConvexPolygon2D nextFrameConvexPolygon2D(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameConvexPolygon2D(referenceFrame, EuclidGeometryRandomTools.nextConvexPolygon2D(random, 1.0, 10));
+   }
+
+   /**
     * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
     * the size of the point cloud from which it is generated.
     *
@@ -899,6 +1025,18 @@ public class EuclidFrameRandomTools
    public static FrameConvexPolygon2D nextFrameConvexPolygon2D(Random random, ReferenceFrame referenceFrame, double maxAbsoluteXY, int numberOfPossiblePoints)
    {
       return new FrameConvexPolygon2D(referenceFrame, EuclidGeometryRandomTools.nextConvexPolygon2D(random, maxAbsoluteXY, numberOfPossiblePoints));
+   }
+
+   /**
+    * Generates a fixed-size supplier of random frame vertex 2D.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the reference frame for the vertices.
+    * @return the random supplier.
+    */
+   public static FrameVertex2DSupplier nextFrameVertex2DSupplier(Random random, ReferenceFrame referenceFrame)
+   {
+      return nextFrameVertex2DSupplier(random, referenceFrame, 20);
    }
 
    /**
@@ -927,6 +1065,18 @@ public class EuclidFrameRandomTools
             return new FramePoint2D(referenceFrame, vertex2dSupplier.getVertex(index));
          }
       };
+   }
+
+   /**
+    * Generates a fixed-size supplier of random frame vertex 3D.
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the reference frame for the vertices.
+    * @return the random supplier.
+    */
+   public static FrameVertex3DSupplier nextFrameVertex3DSupplier(Random random, ReferenceFrame referenceFrame)
+   {
+      return nextFrameVertex3DSupplier(random, referenceFrame, 20);
    }
 
    /**
@@ -1005,6 +1155,39 @@ public class EuclidFrameRandomTools
    public static FrameMatrix3D nextFrameMatrix3D(Random random, ReferenceFrame referenceFrame, double minValue, double maxValue)
    {
       return new FrameMatrix3D(referenceFrame, EuclidCoreRandomTools.nextMatrix3D(random, minValue, maxValue));
+   }
+
+   /**
+    * Generates a random frame rotation matrix uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated rotation matrix is in [-<i>pi</i>; <i>pi</i>].
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame rotation matrix reference frame.
+    * @return the random frame rotation matrix.
+    */
+   public static FrameRotationMatrix nextFrameRotationMatrix(Random random, ReferenceFrame referenceFrame)
+   {
+      return new FrameRotationMatrix(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random));
+   }
+
+   /**
+    * Generates a random frame rotation matrix uniformly distributed on the unit-sphere.
+    * <p>
+    * The rotation magnitude described by the generated rotation matrix is in [-{@code minMaxAngle};
+    * {@code minMaxAngle}].
+    * </p>
+    *
+    * @param random         the random generator to use.
+    * @param referenceFrame the random frame rotation matrix's reference frame.
+    * @param minMaxAngle    the maximum absolute angle described by the generated rotation matrix.
+    * @return the random frame rotation matrix.
+    * @throws RuntimeException if {@code minMaxAngle < 0}.
+    */
+   public static FrameRotationMatrix nextFrameRotationMatrix(Random random, ReferenceFrame referenceFrame, double minMaxAngle)
+   {
+      return new FrameRotationMatrix(referenceFrame, EuclidCoreRandomTools.nextQuaternion(random, minMaxAngle));
    }
 
    /**

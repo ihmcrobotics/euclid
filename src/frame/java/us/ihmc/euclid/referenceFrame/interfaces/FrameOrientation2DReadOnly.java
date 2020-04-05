@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -147,8 +147,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     */
    default void transform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       Orientation2DReadOnly.super.transform(tupleOriginal, tupleTransformed);
    }
 
@@ -267,8 +266,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     */
    default void transform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       Orientation2DReadOnly.super.transform(tupleOriginal, tupleTransformed);
    }
 
@@ -392,8 +390,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     */
    default void inverseTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       Orientation2DReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
    }
 
@@ -475,8 +472,7 @@ public interface FrameOrientation2DReadOnly extends Orientation2DReadOnly, Refer
     */
    default void inverseTransform(FrameTuple2DReadOnly tupleOriginal, FixedFrameTuple2DBasics tupleTransformed)
    {
-      checkReferenceFrameMatch(tupleOriginal);
-      checkReferenceFrameMatch(tupleTransformed);
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
       Orientation2DReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
    }
 

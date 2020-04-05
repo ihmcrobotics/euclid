@@ -1,6 +1,10 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
@@ -11,7 +15,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment3D;
@@ -273,15 +277,15 @@ public class Box3DTest
          assertFalse(EuclidCoreTools.epsilonEquals(sizeX, box3D.getSizeX(), EPSILON));
          assertFalse(EuclidCoreTools.epsilonEquals(sizeY, box3D.getSizeY(), EPSILON));
          assertFalse(EuclidCoreTools.epsilonEquals(sizeZ, box3D.getSizeZ(), EPSILON));
-         box3D.setSize(sizeX, sizeY, sizeZ);
+         box3D.getSize().set(sizeX, sizeY, sizeZ);
          assertEquals(sizeX, box3D.getSizeX(), EPSILON);
          assertEquals(sizeY, box3D.getSizeY(), EPSILON);
          assertEquals(sizeZ, box3D.getSizeZ(), EPSILON);
       }
 
-      assertThrows(IllegalArgumentException.class, () -> new Box3D().setSize(-0.1, 1.0, 1.0));
-      assertThrows(IllegalArgumentException.class, () -> new Box3D().setSize(1.0, -0.1, 1.0));
-      assertThrows(IllegalArgumentException.class, () -> new Box3D().setSize(1.0, 1.0, -0.1));
+      assertThrows(IllegalArgumentException.class, () -> new Box3D().getSize().set(-0.1, 1.0, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Box3D().getSize().set(1.0, -0.1, 1.0));
+      assertThrows(IllegalArgumentException.class, () -> new Box3D().getSize().set(1.0, 1.0, -0.1));
    }
 
    @Test
@@ -610,7 +614,7 @@ public class Box3DTest
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
          // Going for a cube setup so it is easier to predict which face is closest.
          double size = EuclidCoreRandomTools.nextDouble(random, 0.2, 10.0);
-         box3D.setSize(size, size, size);
+         box3D.getSize().set(size, size, size);
          double halfSizeX = 0.5 * box3D.getSizeX();
          double halfSizeY = 0.5 * box3D.getSizeY();
          double halfSizeZ = 0.5 * box3D.getSizeZ();
@@ -1228,7 +1232,7 @@ public class Box3DTest
       { // Using a cube making it easier to tests with queries inside
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
          double size = EuclidCoreRandomTools.nextDouble(random, 0.1, 10.0);
-         box3D.setSize(size, size, size);
+         box3D.getSize().set(size, size, size);
          double halfSize = 0.5 * size;
 
          Point3D pointInside = new Point3D();
@@ -1550,15 +1554,15 @@ public class Box3DTest
 
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
-         Vector3D supportDirection = new Vector3D(Axis.X);
+         Vector3D supportDirection = new Vector3D(Axis3D.X);
          expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Y);
+         supportDirection.set(Axis3D.Y);
          expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Z);
+         supportDirection.set(Axis3D.Z);
          expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(box3D.getSupportingVertex(supportDirection));

@@ -10,8 +10,9 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
- * Write and read interface for a convex polygon defined in the XY-plane and that is expressed in an
- * immutable reference frame.
+ * Write and read interface for a convex polygon defined in the XY-plane and that is expressed in a
+ * constant reference frame, i.e. the reference frame of this object cannot be changed via this
+ * interface.
  * <p>
  * This implementation of convex polygon is designed for garbage free operations.
  * </p>

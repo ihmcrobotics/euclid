@@ -3,6 +3,7 @@ package us.ihmc.euclid.yawPitchRoll.interfaces;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.YawPitchRollTools;
 
 /**
@@ -56,6 +57,39 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
     * @param roll the new roll angle.
     */
    void setRoll(double roll);
+
+   /**
+    * Convenience methods for recomputing the yaw angle of this rotation to be within [ -<i>pi</i>,
+    * <i>pi</i> [.
+    *
+    * @see EuclidCoreTools#trimAngleMinusPiToPi(double)
+    */
+   default void trimYaw()
+   {
+      setYaw(EuclidCoreTools.trimAngleMinusPiToPi(getYaw()));
+   }
+
+   /**
+    * Convenience methods for recomputing the pitch angle of this rotation to be within [ -<i>pi</i>,
+    * <i>pi</i> [.
+    *
+    * @see EuclidCoreTools#trimAngleMinusPiToPi(double)
+    */
+   default void trimPitch()
+   {
+      setPitch(EuclidCoreTools.trimAngleMinusPiToPi(getPitch()));
+   }
+
+   /**
+    * Convenience methods for recomputing the roll angle of this rotation to be within [ -<i>pi</i>,
+    * <i>pi</i> [.
+    *
+    * @see EuclidCoreTools#trimAngleMinusPiToPi(double)
+    */
+   default void trimRoll()
+   {
+      setRoll(EuclidCoreTools.trimAngleMinusPiToPi(getRoll()));
+   }
 
    /** {@inheritDoc} */
    @Override
@@ -302,6 +336,48 @@ public interface YawPitchRollBasics extends YawPitchRollReadOnly, Orientation3DB
          default:
             throw new IndexOutOfBoundsException(Integer.toString(index));
       }
+   }
+
+   /**
+    * Adds the given angles to this orientation individual components.
+    *
+    * @param yaw   the value to add.
+    * @param pitch the value to add.
+    * @param roll  the value to add.
+    */
+   default void add(double yaw, double pitch, double roll)
+   {
+      set(yaw + getYaw(), pitch + getPitch(), roll + getRoll());
+   }
+
+   /**
+    * Adds the given {@code yaw} to this orientation yaw-component.
+    *
+    * @param yaw the value to add.
+    */
+   default void addYaw(double yaw)
+   {
+      setYaw(yaw + getYaw());
+   }
+
+   /**
+    * Adds the given {@code pitch} to this orientation pitch-component.
+    *
+    * @param pitch the value to add.
+    */
+   default void addPitch(double pitch)
+   {
+      setPitch(pitch + getPitch());
+   }
+
+   /**
+    * Adds the given {@code roll} to this orientation roll-component.
+    *
+    * @param roll the value to add.
+    */
+   default void addRoll(double roll)
+   {
+      setRoll(roll + getRoll());
    }
 
    /** {@inheritDoc} */

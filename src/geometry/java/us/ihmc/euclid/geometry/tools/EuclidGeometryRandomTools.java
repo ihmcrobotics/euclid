@@ -1,14 +1,38 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextQuaternion;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3DWithFixedLength;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.ihmc.euclid.geometry.*;
+import us.ihmc.euclid.geometry.BoundingBox2D;
+import us.ihmc.euclid.geometry.BoundingBox3D;
+import us.ihmc.euclid.geometry.ConvexPolygon2D;
+import us.ihmc.euclid.geometry.Line2D;
+import us.ihmc.euclid.geometry.Line3D;
+import us.ihmc.euclid.geometry.LineSegment1D;
+import us.ihmc.euclid.geometry.LineSegment2D;
+import us.ihmc.euclid.geometry.LineSegment3D;
+import us.ihmc.euclid.geometry.Plane3D;
+import us.ihmc.euclid.geometry.Pose2D;
+import us.ihmc.euclid.geometry.Pose3D;
+import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -276,10 +300,12 @@ public class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random orientation 2D.
+    * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random)} instead
     */
+   @Deprecated
    public static Orientation2D nextOrientation2D(Random random)
    {
-      return new Orientation2D(nextDouble(random, Math.PI));
+      return EuclidCoreRandomTools.nextOrientation2D(random);
    }
 
    /**
@@ -294,10 +320,12 @@ public class EuclidGeometryRandomTools
     * @param minMax the maximum absolute value orientation 2D's angle.
     * @return the random orientation 2D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
+    * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random,double)} instead
     */
+   @Deprecated
    public static Orientation2D nextOrientation2D(Random random, double minMax)
    {
-      return new Orientation2D(nextDouble(random, minMax));
+      return EuclidCoreRandomTools.nextOrientation2D(random, minMax);
    }
 
    /**
@@ -343,7 +371,7 @@ public class EuclidGeometryRandomTools
     */
    public static Pose2D nextPose2D(Random random)
    {
-      return new Pose2D(nextPoint2D(random), nextOrientation2D(random));
+      return new Pose2D(nextPoint2D(random), EuclidCoreRandomTools.nextOrientation2D(random));
    }
 
    /**
@@ -363,7 +391,7 @@ public class EuclidGeometryRandomTools
     */
    public static Pose2D nextPose2D(Random random, double positionMinMax, double orientationMinMax)
    {
-      return new Pose2D(nextPoint2D(random, positionMinMax), nextOrientation2D(random, orientationMinMax));
+      return new Pose2D(nextPoint2D(random, positionMinMax), EuclidCoreRandomTools.nextOrientation2D(random, orientationMinMax));
    }
 
    /**
@@ -427,6 +455,19 @@ public class EuclidGeometryRandomTools
    public static Pose3D nextPose3D(Random random, double positionMinMax, double orientationMinMax)
    {
       return new Pose3D(nextPoint3D(random, positionMinMax), nextQuaternion(random, orientationMinMax));
+   }
+
+   /**
+    * Generates a random convex polygon given the maximum absolute coordinate value of its vertices and
+    * the size of the point cloud from which it is generated.
+    *
+    * @param random the random generator to use.
+    * @return the random convex polygon.
+    * @throws RuntimeException if {@code maxAbsoluteXY < 0}.
+    */
+   public static ConvexPolygon2D nextConvexPolygon2D(Random random)
+   {
+      return nextConvexPolygon2D(random, 1.0, 10);
    }
 
    /**
@@ -644,6 +685,17 @@ public class EuclidGeometryRandomTools
    /**
     * Generates a fixed-size supplier of random vertex 2D.
     *
+    * @param random the random generator to use.
+    * @return the random supplier.
+    */
+   public static Vertex2DSupplier nextVertex2DSupplier(Random random)
+   {
+      return nextVertex2DSupplier(random, 20);
+   }
+
+   /**
+    * Generates a fixed-size supplier of random vertex 2D.
+    *
     * @param random           the random generator to use.
     * @param numberOfVertices the supplier's size.
     * @return the random supplier.
@@ -652,6 +704,17 @@ public class EuclidGeometryRandomTools
    {
       List<Point2D> vertices = IntStream.range(0, numberOfVertices).mapToObj(i -> nextPoint2D(random)).collect(Collectors.toList());
       return Vertex2DSupplier.asVertex2DSupplier(vertices);
+   }
+
+   /**
+    * Generates a fixed-size supplier of random vertex 3D.
+    *
+    * @param random the random generator to use.
+    * @return the random supplier.
+    */
+   public static Vertex3DSupplier nextVertex3DSupplier(Random random)
+   {
+      return nextVertex3DSupplier(random, 20);
    }
 
    /**

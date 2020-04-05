@@ -6,10 +6,11 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.tools.Matrix3DTools;
 
 /**
- * Write and read interface for generic matrix 3D expressed in a constant reference frame, i.e. this
- * matrix is always expressed in the same reference frame.
+ * Write and read interface for generic matrix 3D expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link Matrix3DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FixedFrameMatrix3DBasics}. This allows, for instance, to enforce, at runtime, that
@@ -24,7 +25,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
  *
  * @author Sylvain Bertrand
  */
-public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3DBasics, Transformable
+public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3DBasics, Transformable, FixedFrameCommonMatrix3DBasics
 {
    /**
     * Sets the 9 coefficients of this matrix to the given ones.
@@ -56,22 +57,11 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     * @throws ReferenceFrameMismatchException if the matrix is not expressed in the same reference
     *                                         frame as {@code this}.
     */
+   @Override
    default void set(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
       set(matrix3DReadOnly);
-   }
-
-   /**
-    * Sets this matrix to {@code other}.
-    *
-    * @param other the other frame matrix to copy the values of. Not modified.
-    * @throws ReferenceFrameMismatchException if the matrix is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void set(FrameMatrix3DReadOnly other)
-   {
-      set(other.getReferenceFrame(), other);
    }
 
    /**
@@ -164,19 +154,6 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    {
       checkReferenceFrameMatch(other);
       Matrix3DBasics.super.setAndInvert(other);
-   }
-
-   /**
-    * Sets this matrix to equal the other matrix and then normalizes this, see {@link #normalize()}.
-    *
-    * @param other the other matrix used to update this matrix. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void setAndNormalize(FrameMatrix3DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      Matrix3DBasics.super.setAndNormalize(other);
    }
 
    /**
@@ -303,8 +280,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     */
    default void add(FrameMatrix3DReadOnly matrix1, FrameMatrix3DReadOnly matrix2)
    {
-      checkReferenceFrameMatch(matrix1);
-      checkReferenceFrameMatch(matrix2);
+      checkReferenceFrameMatch(matrix1, matrix2);
       Matrix3DBasics.super.add(matrix1, matrix2);
    }
 
@@ -371,8 +347,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     */
    default void sub(FrameMatrix3DReadOnly matrix1, FrameMatrix3DReadOnly matrix2)
    {
-      checkReferenceFrameMatch(matrix1);
-      checkReferenceFrameMatch(matrix2);
+      checkReferenceFrameMatch(matrix1, matrix2);
       Matrix3DBasics.super.sub(matrix1, matrix2);
    }
 
@@ -477,6 +452,27 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    /**
     * Performs a matrix multiplication on this.
     * <p>
+    * this = this * other<sup>-1</sup>
+    * </p>
+    * <p>
+    * This operation uses the property: <br>
+    * R<sup>-1</sup> = R<sup>T</sup> </br>
+    * of the rotation matrix preventing to actually compute its inverse.
+    * </p>
+    *
+    * @param other the other matrix to multiply this by. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void multiplyInvertOther(FrameRotationMatrixReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Matrix3DBasics.super.multiplyInvertOther(other);
+   }
+
+   /**
+    * Performs a matrix multiplication on this.
+    * <p>
     * this = other * this
     * </p>
     *
@@ -570,5 +566,26 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    {
       checkReferenceFrameMatch(other);
       Matrix3DBasics.super.preMultiplyInvertOther(other);
+   }
+
+   /**
+    * Performs a matrix multiplication on this.
+    * <p>
+    * this = other<sup>-1</sup> * this
+    * </p>
+    * <p>
+    * This operation uses the property: <br>
+    * R<sup>-1</sup> = R<sup>T</sup> </br>
+    * of the rotation matrix preventing to actually compute its inverse.
+    * </p>
+    *
+    * @param other the other matrix to multiply this by. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void preMultiplyInvertOther(FrameRotationMatrixReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Matrix3DTools.multiplyInvertLeft(other, this, this);
    }
 }

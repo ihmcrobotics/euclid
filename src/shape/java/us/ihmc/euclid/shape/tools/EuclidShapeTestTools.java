@@ -1,6 +1,16 @@
 package us.ihmc.euclid.shape.tools;
 
-import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.*;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getBox3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCapsule3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getConvexPolytope3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getCylinder3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getEllipsoid3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getEuclidShape3DCollisionResultString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getFace3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getPointShape3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getRamp3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getSphere3DString;
+import static us.ihmc.euclid.shape.tools.EuclidShapeIOTools.getTorus3DString;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,7 +24,14 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeTools;
-import us.ihmc.euclid.shape.primitives.interfaces.*;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Capsule3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Cylinder3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Torus3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -1164,6 +1181,32 @@ public class EuclidShapeTestTools
     * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
     * </p>
     *
+    * @param expected               the expected collision result. Not modified.
+    * @param actual                 the actual collision result. Not modified.
+    * @param distanceEpsilon        the tolerance to use when comparing distance.
+    * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
+    *                               {@code pointOnB} in the plane perpendicular to the collision
+    *                               vector, i.e. {@code collisionVector = pointOnA - pointOnB}. The
+    *                               {@code distanceEpsilon} is used for comparing the points along the
+    *                               collision vector.
+    * @param normalEpsilon          the tolerance to use when comparing normals on shapes.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
+                                                                            double pointTangentialEpsilon, double normalEpsilon)
+   {
+      assertEuclidShape3DCollisionResultGeometricallyEquals(null, expected, actual, distanceEpsilon, pointTangentialEpsilon, normalEpsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
     * @param messagePrefix prefix to add to the automated message.
     * @param expected      the expected collision result. Not modified.
     * @param actual        the actual collision result. Not modified.
@@ -1175,6 +1218,39 @@ public class EuclidShapeTestTools
                                                                             EuclidShape3DCollisionResultReadOnly actual, double epsilon)
    {
       assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix          prefix to add to the automated message.
+    * @param expected               the expected collision result. Not modified.
+    * @param actual                 the actual collision result. Not modified.
+    * @param distanceEpsilon        the tolerance to use when comparing distance.
+    * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
+    *                               {@code pointOnB} in the plane perpendicular to the collision
+    *                               vector, i.e. {@code collisionVector = pointOnA - pointOnB}. The
+    *                               {@code distanceEpsilon} is used for comparing the points along the
+    *                               collision vector.
+    * @param normalEpsilon          the tolerance to use when comparing normals on shapes.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
+                                                                            double pointTangentialEpsilon, double normalEpsilon)
+   {
+      assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix,
+                                                            expected,
+                                                            actual,
+                                                            distanceEpsilon,
+                                                            pointTangentialEpsilon,
+                                                            normalEpsilon,
+                                                            DEFAULT_FORMAT);
    }
 
    /**
@@ -1196,14 +1272,62 @@ public class EuclidShapeTestTools
    public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
                                                                             EuclidShape3DCollisionResultReadOnly actual, double epsilon, String format)
    {
+      assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, epsilon, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two collision results represent the same geometry to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix          prefix to add to the automated message.
+    * @param expected               the expected collision result. Not modified.
+    * @param actual                 the actual collision result. Not modified.
+    * @param distanceEpsilon        the tolerance to use when comparing distance.
+    * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
+    *                               {@code pointOnB} in the plane perpendicular to the collision
+    *                               vector, i.e. {@code collisionVector = pointOnA - pointOnB}. The
+    *                               {@code distanceEpsilon} is used for comparing the points along the
+    *                               collision vector.
+    * @param normalEpsilon          the tolerance to use when comparing normals on shapes.
+    * @param format                 the format to use for printing each component when an
+    *                               {@code AssertionError} is thrown.
+    * @throws AssertionError if the two collision results do not represent the same geometry. If only
+    *                        one of the arguments is equal to {@code null}.
+    */
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
+                                                                            double pointTangentialEpsilon, double normalEpsilon, String format)
+   {
       if (expected == null && actual == null)
          return;
 
       if (!(expected != null && actual != null))
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
 
-      if (!expected.geometricallyEquals(actual, epsilon))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      if (!expected.geometricallyEquals(actual, distanceEpsilon, pointTangentialEpsilon, normalEpsilon))
+      {
+         if (expected.areShapesColliding() != actual.areShapesColliding())
+         {
+            throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         }
+         else
+         {
+            Vector3D differenceNormalOnA = new Vector3D();
+            differenceNormalOnA.sub(expected.getNormalOnA(), actual.getNormalOnA());
+            Vector3D differenceNormalOnB = new Vector3D();
+            differenceNormalOnB.sub(expected.getNormalOnB(), actual.getNormalOnB());
+
+            String difference = "[";
+            difference += "distance: " + Math.abs(expected.getSignedDistance() - actual.getSignedDistance());
+            difference += ", pointOnA: " + expected.getPointOnA().distance(actual.getPointOnA()) + ", normalOnA: " + differenceNormalOnA.length();
+            difference += ", pointOnB: " + expected.getPointOnB().distance(actual.getPointOnB()) + ", normalOnB: " + differenceNormalOnB.length();
+            difference += "]";
+            throwNotEqualAssertionError(messagePrefix, expected, actual, format, difference);
+         }
+      }
    }
 
    /**
@@ -1578,7 +1702,7 @@ public class EuclidShapeTestTools
                   if (!edges.contains(edge.getPrevious()))
                      EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                              faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
-                  if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+                  if (edges.indexOf(edge.getNext()) != (edgeIndex + 1) % edges.size())
                      EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                              faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
 
@@ -1629,7 +1753,7 @@ public class EuclidShapeTestTools
                if (!edges.contains(edge.getPrevious()))
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's previous does not belong to this face.");
-               if (edges.indexOf(edge.getNext()) != ((edgeIndex + 1) % edges.size()))
+               if (edges.indexOf(edge.getNext()) != (edgeIndex + 1) % edges.size())
                   EuclidCoreTestTools.throwAssertionError(messagePrefix,
                                                           faceIndex + "th face: the " + edgeIndex + "th edge's next is not at the next index in the list.");
 

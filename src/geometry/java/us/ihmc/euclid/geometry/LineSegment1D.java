@@ -7,6 +7,7 @@ import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -621,7 +622,9 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
     */
    public boolean equals(LineSegment1D other)
    {
-      if (other == null)
+      if (other == this)
+         return true;
+      else if (other == null)
          return false;
       else
          return firstEndpoint == other.firstEndpoint && secondEndpoint == other.secondEndpoint;
@@ -637,14 +640,16 @@ public class LineSegment1D implements Clearable, Settable<LineSegment1D>, Epsilo
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof LineSegment1D)
          return equals((LineSegment1D) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
+   }
+
+   @Override
+   public int hashCode()
+   {
+      return EuclidHashCodeTools.toIntHashCode(firstEndpoint, secondEndpoint);
    }
 
    /**

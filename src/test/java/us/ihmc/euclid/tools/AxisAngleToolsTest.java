@@ -1,7 +1,6 @@
 package us.ihmc.euclid.tools;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextAxisAngle;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
@@ -53,28 +52,6 @@ public class AxisAngleToolsTest
          double expectedDistance = q1.distance(q2);
          assertEquals(expectedDistance, actualDistance, EPSILON);
          assertEquals(0.0, aa1.distance(aa1), EPSILON);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         Vector3D u1 = nextVector3DWithFixedLength(random, nextDouble(random, 0.0, 0.9 * AxisAngleTools.EPS));
-         Vector3D u2 = nextVector3DWithFixedLength(random, nextDouble(random, 0.1, 1.0));
-         AxisAngleReadOnly aa1 = new AxisAngle(u1, nextDouble(random, Math.PI));
-         AxisAngleReadOnly aa2 = new AxisAngle(u2, nextDouble(random, Math.PI));
-
-         double distance = AxisAngleTools.distance(aa1, aa2);
-         assertTrue(Double.isNaN(distance));
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         Vector3D u1 = nextVector3DWithFixedLength(random, nextDouble(random, 0.1, 1.0));
-         Vector3D u2 = nextVector3DWithFixedLength(random, nextDouble(random, 0.0, 0.9 * AxisAngleTools.EPS));
-         AxisAngleReadOnly aa1 = new AxisAngle(u1, nextDouble(random, Math.PI));
-         AxisAngleReadOnly aa2 = new AxisAngle(u2, nextDouble(random, Math.PI));
-
-         double distance = AxisAngleTools.distance(aa1, aa2);
-         assertTrue(Double.isNaN(distance));
       }
    }
 }

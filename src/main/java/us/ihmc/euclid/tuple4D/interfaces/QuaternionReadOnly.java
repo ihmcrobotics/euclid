@@ -1,9 +1,9 @@
 package us.ihmc.euclid.tuple4D.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -170,7 +170,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
 
    /** {@inheritDoc} */
    @Override
-   default void get(RotationMatrix rotationMatrixToPack)
+   default void get(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationMatrixToPack.setQuaternion(getX(), getY(), getZ(), getS());
    }
@@ -201,14 +201,6 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    default void getRotationVector(Vector3DBasics rotationVectorToPack)
    {
       RotationVectorConversion.convertQuaternionToRotationVector(this, rotationVectorToPack);
-   }
-
-   /** {@inheritDoc} */
-   @Deprecated
-   @Override
-   default void getYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      YawPitchRollConversion.convertQuaternionToYawPitchRoll(this, yawPitchRollToPack);
    }
 
    /** {@inheritDoc} */

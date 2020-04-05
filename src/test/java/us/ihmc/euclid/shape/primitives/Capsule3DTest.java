@@ -1,13 +1,18 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
@@ -36,7 +41,7 @@ class Capsule3DTest
          Capsule3D capsule3D = new Capsule3D();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, capsule3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
          assertEquals(1.0, capsule3D.getLength());
          assertEquals(0.5, capsule3D.getHalfLength());
          assertEquals(0.5, capsule3D.getRadius());
@@ -52,7 +57,7 @@ class Capsule3DTest
             Capsule3D capsule3D = new Capsule3D(length, radius);
 
             EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getPosition());
-            EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, capsule3D.getAxis(), EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
             assertEquals(length, capsule3D.getLength());
             assertEquals(0.5 * length, capsule3D.getHalfLength());
             assertEquals(radius, capsule3D.getRadius());
@@ -86,8 +91,8 @@ class Capsule3DTest
             EuclidCoreTestTools.assertTuple3DEquals(expectedBottomCenter, capsule3D.getBottomCenter(), EPSILON);
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(new Point3D(), Axis.Z, -0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(new Point3D(), Axis.Z, 1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(new Point3D(), Axis3D.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D(new Point3D(), Axis3D.Z, 1.0, -0.1));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -150,7 +155,7 @@ class Capsule3DTest
          capsule3D.setToZero();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, capsule3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, capsule3D.getAxis(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getTopCenter());
          EuclidCoreTestTools.assertTuple3DIsSetToZero(capsule3D.getBottomCenter());
          assertEquals(0.0, capsule3D.getLength());
@@ -192,8 +197,8 @@ class Capsule3DTest
             EuclidShapeTestTools.assertCapsule3DEquals(expected, actual, EPSILON);
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Capsule3D().set(new Point3D(), Axis.Z, -0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Capsule3D().set(new Point3D(), Axis.Z, 1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D().set(new Point3D(), Axis3D.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Capsule3D().set(new Point3D(), Axis3D.Z, 1.0, -0.1));
       }
    }
 
@@ -886,15 +891,15 @@ class Capsule3DTest
 
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
-         Vector3D supportDirection = new Vector3D(Axis.X);
+         Vector3D supportDirection = new Vector3D(Axis3D.X);
          expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Y);
+         supportDirection.set(Axis3D.Y);
          expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Z);
+         supportDirection.set(Axis3D.Z);
          expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(capsule3D.getSupportingVertex(supportDirection));

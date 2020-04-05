@@ -3,6 +3,7 @@ package us.ihmc.euclid.yawPitchRoll;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
@@ -219,11 +220,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = 31L * bits + Double.doubleToLongBits(yaw);
-      bits = 31L * bits + Double.doubleToLongBits(pitch);
-      bits = 31L * bits + Double.doubleToLongBits(roll);
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(yaw, pitch, roll);
    }
 
    /**

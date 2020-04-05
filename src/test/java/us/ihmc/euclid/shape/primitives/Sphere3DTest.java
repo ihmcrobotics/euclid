@@ -1,13 +1,18 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
@@ -546,15 +551,15 @@ public class Sphere3DTest
 
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
-         Vector3D supportDirection = new Vector3D(Axis.X);
+         Vector3D supportDirection = new Vector3D(Axis3D.X);
          expectedBoundingBox.updateToIncludePoint(sphere3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(sphere3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Y);
+         supportDirection.set(Axis3D.Y);
          expectedBoundingBox.updateToIncludePoint(sphere3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(sphere3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Z);
+         supportDirection.set(Axis3D.Z);
          expectedBoundingBox.updateToIncludePoint(sphere3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(sphere3D.getSupportingVertex(supportDirection));

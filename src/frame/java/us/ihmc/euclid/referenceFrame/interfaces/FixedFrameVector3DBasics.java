@@ -6,8 +6,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
- * Write and read interface for a 3D vector expressed in a constant reference frame, i.e. this
- * vector is always expressed in the same reference frame.
+ * Write and read interface for a 3D vector expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link Vector3DBasics}, a {@link ReferenceFrame} is associated to a
  * {@code FixedFrameVector3DBasics}. This allows, for instance, to enforce, at runtime, that
@@ -97,8 +97,7 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
     */
    default void cross(FrameTuple3DReadOnly frameTuple1, FrameTuple3DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Vector3DBasics.super.cross(frameTuple1, frameTuple2);
    }
 
@@ -135,5 +134,4 @@ public interface FixedFrameVector3DBasics extends FrameVector3DReadOnly, FixedFr
       checkReferenceFrameMatch(frameTuple2);
       Vector3DBasics.super.cross(tuple1, frameTuple2);
    }
-
 }

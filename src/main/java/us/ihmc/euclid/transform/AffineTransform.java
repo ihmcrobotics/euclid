@@ -10,10 +10,16 @@ import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
-import us.ihmc.euclid.matrix.interfaces.*;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -25,12 +31,15 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
-import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * An {@code AffineTransform} represents a 4-by-4 transformation matrix that can scale, rotate, and
@@ -698,36 +707,10 @@ public class AffineTransform
     * This method does not affect the scale part nor the translation part of this transform.
     * </p>
     *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} instead using
-    *             {@link YawPitchRollReadOnly}.
-    */
-   @Deprecated
-   public void setRotationYawPitchRoll(double[] yawPitchRoll)
-   {
-      rotationScaleMatrix.setRotationYawPitchRoll(yawPitchRoll);
-   }
-
-   /**
-    * Sets the rotation part of this transform to represent the same orientation as the given
-    * yaw-pitch-roll angles {@code yaw}, {@code pitch}, and {@code roll}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * <p>
-    * This method does not affect the scale part nor the translation part of this transform.
-    * </p>
-    *
     * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll  the angle to rotate about the x-axis.
-    * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} instead using
-    *             {@link YawPitchRollReadOnly}.
     */
-   @Deprecated
    public void setRotationYawPitchRoll(double yaw, double pitch, double roll)
    {
       rotationScaleMatrix.setRotationYawPitchRoll(yaw, pitch, roll);
@@ -1507,8 +1490,8 @@ public class AffineTransform
     */
    public void getRigidBodyTransform(RigidBodyTransformBasics rigidBodyTransformToPack)
    {
-      rigidBodyTransformToPack.setRotation(rotationScaleMatrix.getRotationMatrix());
-      rigidBodyTransformToPack.setTranslation(translationVector);
+      rigidBodyTransformToPack.getRotation().set(rotationScaleMatrix.getRotationMatrix());
+      rigidBodyTransformToPack.getTranslation().set(translationVector);
    }
 
    /**
@@ -1528,12 +1511,13 @@ public class AffineTransform
     */
    public void get(DenseMatrix64F matrixToPack)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(4, 4, matrixToPack);
       rotationScaleMatrix.get(matrixToPack);
       translationVector.get(0, 3, matrixToPack);
-      matrixToPack.set(3, 0, 0.0);
-      matrixToPack.set(3, 1, 0.0);
-      matrixToPack.set(3, 2, 0.0);
-      matrixToPack.set(3, 3, 1.0);
+      matrixToPack.unsafe_set(3, 0, 0.0);
+      matrixToPack.unsafe_set(3, 1, 0.0);
+      matrixToPack.unsafe_set(3, 2, 0.0);
+      matrixToPack.unsafe_set(3, 3, 1.0);
    }
 
    /**
@@ -1555,13 +1539,14 @@ public class AffineTransform
     */
    public void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, startColumn + 4, matrixToPack);
       rotationScaleMatrix.get(startRow, startColumn, matrixToPack);
       translationVector.get(startRow, startColumn + 3, matrixToPack);
       startRow += 3;
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn++, 0.0);
-      matrixToPack.set(startRow, startColumn, 1.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn++, 0.0);
+      matrixToPack.unsafe_set(startRow, startColumn, 1.0);
    }
 
    /**
@@ -1654,7 +1639,7 @@ public class AffineTransform
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
     *                             Modified.
     */
-   public void getRotation(RotationMatrix rotationMatrixToPack)
+   public void getRotation(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationScaleMatrix.getRotation(rotationMatrixToPack);
    }
@@ -1720,22 +1705,6 @@ public class AffineTransform
    public void getRotationEuler(Tuple3DBasics eulerAnglesToPack)
    {
       rotationScaleMatrix.getRotationEuler(eulerAnglesToPack);
-   }
-
-   /**
-    * Packs the orientation described by the rotation part as the yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #getRotation(Orientation3DBasics)}.
-    */
-   @Deprecated
-   public void getRotationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      rotationScaleMatrix.getRotationYawPitchRoll(yawPitchRollToPack);
    }
 
    /**

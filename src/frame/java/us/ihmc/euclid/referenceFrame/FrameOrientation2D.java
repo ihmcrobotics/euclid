@@ -1,12 +1,14 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 
 /**
@@ -219,7 +221,7 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    @Override
    public String toString()
    {
-      return orientation.toString() + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameOrientation2DString(this);
    }
 
    /**
@@ -231,6 +233,6 @@ public class FrameOrientation2D implements FrameOrientation2DBasics, GeometryObj
    @Override
    public int hashCode()
    {
-      return orientation.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(orientation, referenceFrame);
    }
 }

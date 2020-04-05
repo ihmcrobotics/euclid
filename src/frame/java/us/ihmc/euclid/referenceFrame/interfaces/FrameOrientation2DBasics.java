@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 
@@ -99,13 +99,13 @@ public interface FrameOrientation2DBasics extends FixedFrameOrientation2DBasics,
    }
 
    /**
-    * Sets this frame orientation 2D to {@code frameQuaternionReadOnly}.
+    * Sets this frame orientation 2D to {@code frameOrientation3DReadOnly}.
     *
-    * @param frameQuaternionReadOnly the frame quaternion to get the yaw angle and reference frame
-    *                                from. Not modified.
+    * @param frameOrientation3DReadOnly the frame orientation to get the yaw angle and reference frame
+    *                                   from. Not modified.
     */
-   default void setIncludingFrame(FrameQuaternionReadOnly frameQuaternionReadOnly)
+   default void setIncludingFrame(FrameOrientation3DReadOnly frameOrientation3DReadOnly)
    {
-      setIncludingFrame(frameQuaternionReadOnly.getReferenceFrame(), frameQuaternionReadOnly);
+      setIncludingFrame(frameOrientation3DReadOnly.getReferenceFrame(), frameOrientation3DReadOnly);
    }
 }

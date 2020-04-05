@@ -33,8 +33,8 @@ public class BoundingBox2DTest
       Point2D min = new Point2D();
       Point2D max = new Point2D();
       BoundingBox2D boundingBox = new BoundingBox2D();
-      EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
-      EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(boundingBox.getMinPoint());
+      EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(boundingBox.getMaxPoint());
 
       // Create the min and max coordinates such that they represent a proper bounding box
       min = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
@@ -185,6 +185,7 @@ public class BoundingBox2DTest
       EuclidCoreTestTools.assertTuple2DEquals(min, boundingBox.getMinPoint(), EPSILON);
 
       // Check exceptions
+      boundingBox.setToZero();
       try
       {
          boundingBox.setMin(new double[] {1.0, 0.0});
@@ -267,6 +268,7 @@ public class BoundingBox2DTest
       EuclidCoreTestTools.assertTuple2DEquals(max, boundingBox.getMaxPoint(), EPSILON);
 
       // Check exceptions
+      boundingBox.setToZero();
       try
       {
          boundingBox.setMax(new double[] {-1.0, 0.0});
@@ -1323,24 +1325,6 @@ public class BoundingBox2DTest
       BoundingBox2D boundingBox2D = EuclidGeometryRandomTools.nextBoundingBox2D(random, 10.0, 10.0);
       Point2DReadOnly min = boundingBox2D.getMinPoint();
       Point2DReadOnly max = boundingBox2D.getMaxPoint();
-
-      {
-         Point2D actualMin = new Point2D();
-         Point2D actualMax = new Point2D();
-         boundingBox2D.getMinPoint(actualMin);
-         boundingBox2D.getMaxPoint(actualMax);
-         assertEquals(min, actualMin);
-         assertEquals(max, actualMax);
-      }
-
-      {
-         double[] actualMin = new double[2];
-         double[] actualMax = new double[2];
-         boundingBox2D.getMinPoint(actualMin);
-         boundingBox2D.getMaxPoint(actualMax);
-         assertEquals(min, new Point2D(actualMin));
-         assertEquals(max, new Point2D(actualMax));
-      }
 
       {
          assertTrue(min.getX() == boundingBox2D.getMinX());

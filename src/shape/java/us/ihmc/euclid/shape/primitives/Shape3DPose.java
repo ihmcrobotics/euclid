@@ -2,9 +2,14 @@ package us.ihmc.euclid.shape.primitives;
 
 import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedVector3DReadOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -20,10 +25,65 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPose>
 {
+   /** The listeners to be notified when this pose changes. */
+   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The orientation part. */
-   private final RotationMatrix shapeOrientation = new RotationMatrix();
+   private final RotationMatrix shapeOrientation = new RotationMatrix()
+   {
+      @Override
+      public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+      {
+         super.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         notifyChangeListeners();
+      };
+
+      @Override
+      public void set(RotationMatrixReadOnly other)
+      {
+         super.set(other);
+         notifyChangeListeners();
+      };
+
+      @Override
+      public void transpose()
+      {
+         super.transpose();
+         notifyChangeListeners();
+      };
+   };
    /** The position part. */
-   private final Point3D shapePosition = new Point3D();
+   private final Point3D shapePosition = new Point3D()
+   {
+      @Override
+      public void setX(double x)
+      {
+         if (x != getX())
+         {
+            super.setX(x);
+            notifyChangeListeners();
+         }
+      };
+
+      @Override
+      public void setY(double y)
+      {
+         if (y != getY())
+         {
+            super.setY(y);
+            notifyChangeListeners();
+         }
+      };
+
+      @Override
+      public void setZ(double z)
+      {
+         if (z != getZ())
+         {
+            super.setZ(z);
+            notifyChangeListeners();
+         }
+      };
+   };
 
    /** Vector linked to the components of the x-axis unit-vector. */
    private final Vector3DReadOnly xAxis = newLinkedVector3DReadOnly(shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20);
@@ -102,18 +162,91 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
       return zAxis;
    }
 
+   /**
+    * Notifies the listeners registered that this pose has changed.
+    */
+   public void notifyChangeListeners()
+   {
+      for (int i = 0; i < changeListeners.size(); i++)
+         changeListeners.get(i).changed();
+   }
+
+   /**
+    * Registers a list of listeners to be notified when this pose changes.
+    *
+    * @param listeners the listeners to register.
+    */
+   public void addChangeListeners(List<Shape3DChangeListener> listeners)
+   {
+      for (int i = 0; i < listeners.size(); i++)
+      {
+         addChangeListener(listeners.get(i));
+      }
+   }
+
+   /**
+    * Registers a listener to be notified when this pose changes.
+    *
+    * @param listener the listener to register.
+    */
+   public void addChangeListener(Shape3DChangeListener listener)
+   {
+      changeListeners.add(listener);
+   }
+
+   /**
+    * Removes a previously registered listener.
+    * <p>
+    * This listener will no longer be notified of changes from this pose.
+    * </p>
+    *
+    * @param listener the listener to remove.
+    * @return {@code true} if the listener was removed successful, {@code false} if the listener could
+    *         not be found.
+    */
+   public boolean removeChangeListener(Shape3DChangeListener listener)
+   {
+      return changeListeners.remove(listener);
+   }
+
+   /**
+    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
+    * {@code epsilon}.
+    *
+    * @param other   the query. Not modified.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
+    */
    @Override
    public boolean epsilonEquals(Shape3DPose other, double epsilon)
    {
       return Shape3DPoseBasics.super.epsilonEquals(other, epsilon);
    }
 
+   /**
+    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
+    * similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
+    * </p>
+    *
+    * @param other   the shape pose to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
+    */
    @Override
    public boolean geometricallyEquals(Shape3DPose other, double epsilon)
    {
       return Shape3DPoseBasics.super.geometricallyEquals(other, epsilon);
    }
 
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(Shape3DPoseReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
    @Override
    public boolean equals(Object object)
    {
@@ -123,14 +256,26 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
          return false;
    }
 
+   /**
+    * Calculates and returns a hash code value from the value of each component of this pose 3D.
+    *
+    * @return the hash code value for this pose 3D.
+    */
    @Override
    public int hashCode()
    {
-      long hashCode = getShapePosition().hashCode();
-      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, getShapeOrientation().hashCode());
-      return EuclidHashCodeTools.toIntHashCode(hashCode);
+      return EuclidHashCodeTools.toIntHashCode(shapePosition, shapeOrientation);
    }
 
+   /**
+    * Provides a {@code String} representation of this pose 3D as follows:
+    *
+    * <pre>
+    * Shape 3D pose: [position: ( 0.540,  0.110,  0.319 ), yaw-pitch-roll: (-2.061, -0.904, -1.136)]
+    * </pre>
+    *
+    * @return the {@code String} representing this pose 3D.
+    */
    @Override
    public String toString()
    {

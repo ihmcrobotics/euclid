@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
@@ -339,6 +340,64 @@ public class EuclidCoreIOTools
    }
 
    /**
+    * Gets a representative {@code String} of {@code orientation2D} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    *
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(Orientation2DReadOnly orientation2D)
+   {
+      return getOrientation2DString(DEFAULT_FORMAT, orientation2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format        the format to use for each number.
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, Orientation2DReadOnly orientation2D)
+   {
+      if (orientation2D == null)
+         return "null";
+      else
+         return getOrientation2DString(format, orientation2D.getYaw());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2DAngle} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format             the format to use for each number.
+    * @param orientation2DAngle the angle of the orientation 2D to get the {@code String} of. Not
+    *                           modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, double orientation2DAngle)
+   {
+      return getStringOf("(", " )", ", ", format, orientation2DAngle);
+   }
+
+   /**
     * Gets a representative {@code String} of {@code matrix} as follows:
     *
     * <pre>
@@ -350,9 +409,9 @@ public class EuclidCoreIOTools
     * @param matrix the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getMatrixString(Matrix3DReadOnly matrix)
+   public static String getMatrix3DString(Matrix3DReadOnly matrix)
    {
-      return getMatrixString(DEFAULT_FORMAT, matrix);
+      return getMatrix3DString(DEFAULT_FORMAT, matrix);
    }
 
    /**
@@ -371,21 +430,21 @@ public class EuclidCoreIOTools
     * @param matrix the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getMatrixString(String format, Matrix3DReadOnly matrix)
+   public static String getMatrix3DString(String format, Matrix3DReadOnly matrix)
    {
       if (matrix == null)
          return "null";
       else
-         return getMatrixString(format,
-                                matrix.getM00(),
-                                matrix.getM01(),
-                                matrix.getM02(),
-                                matrix.getM10(),
-                                matrix.getM11(),
-                                matrix.getM12(),
-                                matrix.getM20(),
-                                matrix.getM21(),
-                                matrix.getM22());
+         return getMatrix3DString(format,
+                                  matrix.getM00(),
+                                  matrix.getM01(),
+                                  matrix.getM02(),
+                                  matrix.getM10(),
+                                  matrix.getM11(),
+                                  matrix.getM12(),
+                                  matrix.getM20(),
+                                  matrix.getM21(),
+                                  matrix.getM22());
    }
 
    /**
@@ -409,9 +468,9 @@ public class EuclidCoreIOTools
     * @param m22 the 3rd row 3rd column coefficient of the matrix.
     * @return the representative {@code String}.
     */
-   public static String getMatrixString(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   public static String getMatrix3DString(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
-      return getMatrixString(DEFAULT_FORMAT, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      return getMatrix3DString(DEFAULT_FORMAT, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    /**
@@ -438,8 +497,8 @@ public class EuclidCoreIOTools
     * @param m22    the 3rd row 3rd column coefficient of the matrix.
     * @return the representative {@code String}.
     */
-   public static String getMatrixString(String format, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21,
-                                        double m22)
+   public static String getMatrix3DString(String format, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21,
+                                          double m22)
    {
       String ret = getStringOf("/", " \\\n", ", ", format, m00, m01, m02);
       ret += getStringOf("|", " |\n", ", ", format, m10, m11, m12);

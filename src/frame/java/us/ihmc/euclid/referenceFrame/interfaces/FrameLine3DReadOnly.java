@@ -35,7 +35,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
 
    /** {@inheritDoc} */
    @Override
-   FrameVector3DReadOnly getDirection();
+   FrameUnitVector3DReadOnly getDirection();
 
    /**
     * Gets the point and direction defining this line by storing their components in the given
@@ -49,8 +49,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     */
    default void get(FixedFramePoint3DBasics pointToPack, FixedFrameVector3DBasics directionToPack)
    {
-      checkReferenceFrameMatch(pointToPack);
-      checkReferenceFrameMatch(directionToPack);
+      checkReferenceFrameMatch(pointToPack, directionToPack);
       Line3DReadOnly.super.get(pointToPack, directionToPack);
    }
 
@@ -272,8 +271,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    default double closestPointsWith(FrameLine3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
                                     Point3DBasics closestPointOnOtherLineToPack)
    {
-      checkReferenceFrameMatch(otherLine);
-      checkReferenceFrameMatch(closestPointOnThisLineToPack);
+      checkReferenceFrameMatch(otherLine, closestPointOnThisLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -316,8 +314,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack,
                                     FixedFramePoint3DBasics closestPointOnOtherLineToPack)
    {
-      checkReferenceFrameMatch(otherLine);
-      checkReferenceFrameMatch(closestPointOnOtherLineToPack);
+      checkReferenceFrameMatch(otherLine, closestPointOnOtherLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -361,9 +358,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    default double closestPointsWith(FrameLine3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
                                     FixedFramePoint3DBasics closestPointOnOtherLineToPack)
    {
-      checkReferenceFrameMatch(otherLine);
-      checkReferenceFrameMatch(closestPointOnThisLineToPack);
-      checkReferenceFrameMatch(closestPointOnOtherLineToPack);
+      checkReferenceFrameMatch(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -408,8 +403,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
    default double closestPointsWith(Line3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
                                     FixedFramePoint3DBasics closestPointOnOtherLineToPack)
    {
-      checkReferenceFrameMatch(closestPointOnThisLineToPack);
-      checkReferenceFrameMatch(closestPointOnOtherLineToPack);
+      checkReferenceFrameMatch(closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
       return Line3DReadOnly.super.closestPointsWith(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
    }
 
@@ -624,8 +618,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     */
    default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, FixedFramePoint3DBasics projectionToPack)
    {
-      checkReferenceFrameMatch(pointToProject);
-      checkReferenceFrameMatch(projectionToPack);
+      checkReferenceFrameMatch(pointToProject, projectionToPack);
       return Line3DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 
@@ -764,8 +757,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     */
    default void getTwoPointsOnLine(FixedFramePoint3DBasics firstPointOnLineToPack, FixedFramePoint3DBasics secondPointOnLineToPack)
    {
-      checkReferenceFrameMatch(firstPointOnLineToPack);
-      checkReferenceFrameMatch(secondPointOnLineToPack);
+      checkReferenceFrameMatch(firstPointOnLineToPack, secondPointOnLineToPack);
       Line3DReadOnly.super.getTwoPointsOnLine(firstPointOnLineToPack, secondPointOnLineToPack);
    }
 

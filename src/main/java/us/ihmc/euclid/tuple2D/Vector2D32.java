@@ -233,9 +233,6 @@ public class Vector2D32 implements Vector2DBasics, GeometryObject<Vector2D32>
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = EuclidHashCodeTools.addToHashCode(bits, x);
-      bits = EuclidHashCodeTools.addToHashCode(bits, y);
-      return EuclidHashCodeTools.toIntHashCode(bits);
+      return EuclidHashCodeTools.toIntHashCode(x, y);
    }
 }

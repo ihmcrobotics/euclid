@@ -1,7 +1,6 @@
 package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -18,7 +17,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
 /**
- * Read interface used for 3-by-3 rotation matrices.
+ * Read-only interface used for 3-by-3 rotation matrices.
  * <p>
  * A rotation matrix is used to represent a 3D orientation through its 9 coefficients. A rotation
  * matrix has to comply to several constraints:
@@ -36,6 +35,17 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  */
 public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DReadOnly
 {
+   /**
+    * Returns the state of this matrix dirty flag.
+    * <p>
+    * This matrix is marked as dirty to indicate its values have been updated and not yet propagated to
+    * this matrix features.
+    * </p>
+    *
+    * @return the current value of the dirty flag.
+    */
+   boolean isDirty();
+
    /** {@inheritDoc} */
    @Override
    default boolean containsNaN()
@@ -98,7 +108,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
 
    /** {@inheritDoc} */
    @Override
-   default void get(RotationMatrix rotationMatrixToPack)
+   default void get(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationMatrixToPack.set(this);
    }
@@ -136,14 +146,6 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    default void getEuler(Tuple3DBasics eulerAnglesToPack)
    {
       YawPitchRollConversion.convertMatrixToYawPitchRoll(this, eulerAnglesToPack);
-   }
-
-   /** {@inheritDoc} */
-   @Deprecated
-   @Override
-   default void getYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      YawPitchRollConversion.convertMatrixToYawPitchRoll(this, yawPitchRollToPack);
    }
 
    /** {@inheritDoc} */

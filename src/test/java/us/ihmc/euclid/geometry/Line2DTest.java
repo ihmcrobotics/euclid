@@ -1,6 +1,11 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
@@ -150,7 +155,7 @@ public class Line2DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple2DIsSetToZero(line2D.getDirection());
+         EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(1.0, 0.0), line2D.getDirection(), 0.0);
       }
       catch (RuntimeException e)
       {

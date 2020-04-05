@@ -1,13 +1,18 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
@@ -39,7 +44,7 @@ public class Cylinder3DTest
          Cylinder3D cylinder3D = new Cylinder3D();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, cylinder3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, cylinder3D.getAxis(), EPSILON);
          assertEquals(1.0, cylinder3D.getLength());
          assertEquals(0.5, cylinder3D.getHalfLength());
          assertEquals(0.5, cylinder3D.getRadius());
@@ -55,7 +60,7 @@ public class Cylinder3DTest
             Cylinder3D cylinder3D = new Cylinder3D(length, radius);
 
             EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getPosition());
-            EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, cylinder3D.getAxis(), EPSILON);
+            EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, cylinder3D.getAxis(), EPSILON);
             assertEquals(length, cylinder3D.getLength());
             assertEquals(0.5 * length, cylinder3D.getHalfLength());
             assertEquals(radius, cylinder3D.getRadius());
@@ -89,8 +94,8 @@ public class Cylinder3DTest
             EuclidCoreTestTools.assertTuple3DEquals(expectedBottomCenter, cylinder3D.getBottomCenter(), EPSILON);
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis.Z, -0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis.Z, 1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis3D.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D(new Point3D(), Axis3D.Z, 1.0, -0.1));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -153,7 +158,7 @@ public class Cylinder3DTest
          cylinder3D.setToZero();
 
          EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getPosition());
-         EuclidCoreTestTools.assertTuple3DEquals(Axis.Z, cylinder3D.getAxis(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.Z, cylinder3D.getAxis(), EPSILON);
          EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getTopCenter());
          EuclidCoreTestTools.assertTuple3DIsSetToZero(cylinder3D.getBottomCenter());
          assertEquals(0.0, cylinder3D.getLength());
@@ -195,8 +200,8 @@ public class Cylinder3DTest
             EuclidShapeTestTools.assertCylinder3DEquals(expected, actual, EPSILON);
          }
 
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().set(new Point3D(), Axis.Z, -0.1, 1.0));
-         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().set(new Point3D(), Axis.Z, 1.0, -0.1));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().set(new Point3D(), Axis3D.Z, -0.1, 1.0));
+         assertThrows(IllegalArgumentException.class, () -> new Cylinder3D().set(new Point3D(), Axis3D.Z, 1.0, -0.1));
       }
    }
 
@@ -985,15 +990,15 @@ public class Cylinder3DTest
 
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
-         Vector3D supportDirection = new Vector3D(Axis.X);
+         Vector3D supportDirection = new Vector3D(Axis3D.X);
          expectedBoundingBox.updateToIncludePoint(cylinder3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(cylinder3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Y);
+         supportDirection.set(Axis3D.Y);
          expectedBoundingBox.updateToIncludePoint(cylinder3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(cylinder3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Z);
+         supportDirection.set(Axis3D.Z);
          expectedBoundingBox.updateToIncludePoint(cylinder3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(cylinder3D.getSupportingVertex(supportDirection));

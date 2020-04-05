@@ -15,8 +15,11 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
 {
@@ -76,11 +79,9 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       { // Test AxisAngle(VectorBasics axis, double angle)
          for (int i = 0; i < ITERATIONS; i++)
          {
-            Vector3D vectorAxis, vectorAxisCopy;
-            vectorAxis = vectorAxisCopy = EuclidCoreRandomTools.nextVector3D(random);
+            UnitVector3D vectorAxis = EuclidCoreRandomTools.nextUnitVector3D(random);
 
-            double angle, angleCopy;
-            angle = angleCopy = random.nextDouble();
+            double angle = random.nextDouble();
 
             axisAngle = new AxisAngle(vectorAxis, angle);
 
@@ -88,9 +89,6 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
             assertTrue(axisAngle.getY() == vectorAxis.getY());
             assertTrue(axisAngle.getZ() == vectorAxis.getZ());
             assertTrue(axisAngle.getAngle() == angle);
-
-            EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(vectorAxis, vectorAxisCopy, EPS);
-            assertTrue(angle == angleCopy);
          }
       }
 
@@ -149,11 +147,11 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
       { // Test AxisAngle(double yaw, double pitch, double roll)
          for (int i = 0; i < ITERATIONS; i++)
          {
-            double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+            YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
 
-            axisAngle = new AxisAngle(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
+            axisAngle = new AxisAngle(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll());
             AxisAngle expectedAxisAngle = new AxisAngle();
-            AxisAngleConversion.convertYawPitchRollToAxisAngle(yawPitchRoll, expectedAxisAngle);
+            AxisAngleConversion.convertYawPitchRollToAxisAngle(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), expectedAxisAngle);
 
             EuclidCoreTestTools.assertAxisAngleEquals(axisAngle, expectedAxisAngle, EPS);
          }
@@ -219,6 +217,12 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
    }
 
    @Override
+   public AxisAngle createAxisAngle(Vector3DReadOnly axis, double angle)
+   {
+      return new AxisAngle(axis, angle);
+   }
+
+   @Override
    public AxisAngle createAxisAngle(double ux, double uy, double uz, double angle)
    {
       return new AxisAngle(ux, uy, uz, angle);
@@ -233,7 +237,7 @@ public class AxisAngleTest extends AxisAngleBasicsTest<AxisAngle>
    @Override
    public double getEpsilon()
    {
-      return 1.0e-14;
+      return 1.0e-12;
    }
 
    @Override

@@ -1,9 +1,9 @@
 package us.ihmc.euclid.tools;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -11,7 +11,11 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.*;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * This gathers common mathematical operations involving quaternions.
@@ -582,9 +586,7 @@ public class QuaternionTools
       double crossCrossY = qz * crossX - qx * crossZ;
       double crossCrossZ = qx * crossY - qy * crossX;
 
-      tupleTransformed.setX(x + qs * crossX + crossCrossX);
-      tupleTransformed.setY(y + qs * crossY + crossCrossY);
-      tupleTransformed.setZ(z + qs * crossZ + crossCrossZ);
+      tupleTransformed.set(x + qs * crossX + crossCrossX, y + qs * crossY + crossCrossY, z + qs * crossZ + crossCrossZ);
    }
 
    /**
@@ -811,8 +813,7 @@ public class QuaternionTools
       double crossCrossX = -qz * crossY;
       double crossCrossY = qz * crossX;
 
-      tupleTransformed.setX(x + qs * crossX + crossCrossX);
-      tupleTransformed.setY(y + qs * crossY + crossCrossY);
+      tupleTransformed.set(x + qs * crossX + crossCrossX, y + qs * crossY + crossCrossY);
    }
 
    /**
@@ -972,10 +973,7 @@ public class QuaternionTools
       double crossCrossY = qz * crossX - qx * crossZ;
       double crossCrossZ = qx * crossY - qy * crossX;
 
-      vectorTransformed.setX(x + qs * crossX + crossCrossX);
-      vectorTransformed.setY(y + qs * crossY + crossCrossY);
-      vectorTransformed.setZ(z + qs * crossZ + crossCrossZ);
-      vectorTransformed.setS(vectorOriginal.getS());
+      vectorTransformed.set(x + qs * crossX + crossCrossX, y + qs * crossY + crossCrossY, z + qs * crossZ + crossCrossZ, vectorOriginal.getS());
    }
 
    /**
@@ -1163,7 +1161,7 @@ public class QuaternionTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void transform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(quaternion, false, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }
@@ -1173,8 +1171,8 @@ public class QuaternionTools
     * {@code quaternion} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(QuaternionReadOnly, RotationMatrixReadOnly, RotationMatrix)} with the inverse
-    * of the given quaternion.
+    * {@link #transform(QuaternionReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with the
+    * inverse of the given quaternion.
     * </p>
     * <p>
     * Both rotation matrices can be the same object for performing in place transformation.
@@ -1193,7 +1191,8 @@ public class QuaternionTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal,
+                                       RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(quaternion, true, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }

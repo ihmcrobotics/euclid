@@ -5,7 +5,8 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -296,7 +297,7 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple3DString(this) + "-" + referenceFrame;
+      return EuclidFrameIOTools.getFrameTuple3DString(this);
    }
 
    /**
@@ -308,6 +309,6 @@ public class FrameVector3D implements FrameVector3DBasics, GeometryObject<FrameV
    @Override
    public int hashCode()
    {
-      return vector.hashCode();
+      return EuclidHashCodeTools.toIntHashCode(vector, referenceFrame);
    }
 }

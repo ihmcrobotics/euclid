@@ -9,12 +9,19 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
-import us.ihmc.euclid.shape.primitives.*;
+import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.Capsule3D;
+import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
+import us.ihmc.euclid.shape.primitives.PointShape3D;
+import us.ihmc.euclid.shape.primitives.Ramp3D;
+import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.Torus3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
@@ -25,6 +32,7 @@ import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -44,7 +52,7 @@ public class EuclidShapeCollisionToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // PointShape outside the Box over one of the faces
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
-         Axis axis = Axis.values[random.nextInt(3)];
+         Axis3D axis = Axis3D.values[random.nextInt(3)];
          Bound bound = Bound.values()[random.nextInt(2)];
          Point3D pointOnAFace = EuclidGeometryRandomTools.nextWeightedAverage(random, getBox3DFaceVertices(axis, bound, box3D));
 
@@ -77,7 +85,7 @@ public class EuclidShapeCollisionToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // PointShape inside the Box with the closest face known
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
-         Axis axis = Axis.values[random.nextInt(3)];
+         Axis3D axis = Axis3D.values[random.nextInt(3)];
          Bound bound = Bound.values()[random.nextInt(2)];
          Plane3D closestFacePlane = getBox3DFacePlane(axis, bound, box3D);
          List<Point3D> faceVerticesAndFarthestIn = new ArrayList<>(Arrays.asList(getBox3DFaceVertices(axis, bound, box3D)));
@@ -160,9 +168,9 @@ public class EuclidShapeCollisionToolsTest
       for (int i = 0; i < ITERATIONS; i++)
       { // PointShape outside the Box closest to a randomly picked edge
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
-         Axis edgeAxis = Axis.values[random.nextInt(3)];
-         Axis otherAxis1 = edgeAxis.getNextClockwiseAxis();
-         Axis otherAxis2 = otherAxis1.getNextClockwiseAxis();
+         Axis3D edgeAxis = Axis3D.values[random.nextInt(3)];
+         Axis3D otherAxis1 = edgeAxis.getNextClockwiseAxis();
+         Axis3D otherAxis2 = otherAxis1.getNextClockwiseAxis();
          double signAxis1 = random.nextBoolean() ? -1.0 : 1.0;
          double signAxis2 = random.nextBoolean() ? -1.0 : 1.0;
          Vector3D direction1 = new Vector3D();
@@ -636,7 +644,7 @@ public class EuclidShapeCollisionToolsTest
       { // Trivial case: point laying on one of the ellipsoid principal axes
          Ellipsoid3D ellipsoid3D = EuclidShapeRandomTools.nextEllipsoid3D(random, 0.01, 1.0);
 
-         Axis localAxis = Axis.values[random.nextInt(3)];
+         Axis3D localAxis = Axis3D.values[random.nextInt(3)];
          double sign = random.nextBoolean() ? -1.0 : 1.0;
          double radius = localAxis.dot(ellipsoid3D.getRadii());
          Vector3D normal = new Vector3D();
@@ -1192,7 +1200,7 @@ public class EuclidShapeCollisionToolsTest
          Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, vertices);
 
          Plane3D closestFace = faces.stream().sorted((a, b) -> Double.compare(a.distance(pointInside), b.distance(pointInside))).findFirst().get();
-         Point3D pointOnSurface = closestFace.orthogonalProjectionCopy(pointInside);
+         Point3DBasics pointOnSurface = closestFace.orthogonalProjectionCopy(pointInside);
          double depth = closestFace.distance(pointInside);
 
          PointShape3D pointShape3D = new PointShape3D(pointInside);
@@ -1406,7 +1414,7 @@ public class EuclidShapeCollisionToolsTest
       }
    }
 
-   public static Vector3DReadOnly getAxis(Axis axis, Shape3DPoseReadOnly shape3DPose)
+   public static Vector3DReadOnly getAxis(Axis3D axis, Shape3DPoseReadOnly shape3DPose)
    {
       switch (axis)
       {
@@ -1434,7 +1442,7 @@ public class EuclidShapeCollisionToolsTest
       return vertex;
    }
 
-   public static Plane3D getBox3DFacePlane(Axis axis, Bound bound, Box3DReadOnly box3D)
+   public static Plane3D getBox3DFacePlane(Axis3D axis, Bound bound, Box3DReadOnly box3D)
    {
       Plane3D facePlane = new Plane3D();
 
@@ -1452,11 +1460,11 @@ public class EuclidShapeCollisionToolsTest
       return facePlane;
    }
 
-   public static Point3D[] getBox3DFaceVertices(Axis axis, Bound bound, Box3DReadOnly box3D)
+   public static Point3D[] getBox3DFaceVertices(Axis3D axis, Bound bound, Box3DReadOnly box3D)
    {
       Point3D[] faceVertices = new Point3D[4];
-      Axis otherAxis1 = axis.getNextClockwiseAxis();
-      Axis otherAxis2 = otherAxis1.getNextClockwiseAxis();
+      Axis3D otherAxis1 = axis.getNextClockwiseAxis();
+      Axis3D otherAxis2 = otherAxis1.getNextClockwiseAxis();
 
       for (int i = 0; i < 4; i++)
       {

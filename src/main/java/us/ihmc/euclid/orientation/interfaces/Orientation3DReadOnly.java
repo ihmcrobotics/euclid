@@ -2,10 +2,10 @@ package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -147,7 +147,7 @@ public interface Orientation3DReadOnly
     * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
     *                             Modified.
     */
-   void get(RotationMatrix rotationMatrixToPack);
+   void get(RotationMatrixBasics rotationMatrixToPack);
 
    /**
     * Converts, if necessary, and packs this orientation into an axis-angle.
@@ -183,37 +183,6 @@ public interface Orientation3DReadOnly
     *                             Modified.
     */
    void getRotationVector(Vector3DBasics rotationVectorToPack);
-
-   /**
-    * Converts and packs this orientation in a yaw-pitch-roll representation.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    * <p>
-    * The yaw-pitch-roll representation describes a 3D orientation as a succession of three rotations
-    * around three axes:
-    * <ol>
-    * <li>yaw: rotation around the z-axis,
-    * <li>pitch: rotation around the y-axis,
-    * <li>roll: rotation around the x-axis.
-    * </ol>
-    * </p>
-    * <p>
-    * As an example, a rotation matrix can be computed from a yaw-pitch-roll representation as follows:
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link #get(YawPitchRollBasics)} instead.
-    */
-   @Deprecated
-   void getYawPitchRoll(double[] yawPitchRollToPack);
 
    /**
     * Computes and packs the orientation described by this orientation as the Euler angles.
@@ -500,7 +469,7 @@ public interface Orientation3DReadOnly
     *
     * @param matrixToTransform the rotation matrix to be transformed. Modified.
     */
-   default void transform(RotationMatrix matrixToTransform)
+   default void transform(RotationMatrixBasics matrixToTransform)
    {
       transform(matrixToTransform, matrixToTransform);
    }
@@ -515,7 +484,7 @@ public interface Orientation3DReadOnly
     * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
-   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void transform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       RotationMatrixTools.multiply(this, false, matrixOriginal, false, matrixTransformed);
    }
@@ -755,7 +724,7 @@ public interface Orientation3DReadOnly
     *
     * @param matrixToTransform the rotation matrix to be transformed. Modified.
     */
-   default void inverseTransform(RotationMatrix matrixToTransform)
+   default void inverseTransform(RotationMatrixBasics matrixToTransform)
    {
       inverseTransform(matrixToTransform, matrixToTransform);
    }
@@ -771,7 +740,7 @@ public interface Orientation3DReadOnly
     * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
     * @param matrixTransformed the result of the original matrix after transformation. Modified.
     */
-   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrix matrixTransformed)
+   default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       RotationMatrixTools.multiply(this, true, matrixOriginal, false, matrixTransformed);
    }

@@ -2,6 +2,7 @@ package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
@@ -12,7 +13,6 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Write and read interface for pose 3D.
@@ -74,7 +74,9 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
     * @param z the z-coordinate of the position.
+    * @deprecated Use {@code this.getPosition().set(x, y, z)} instead.
     */
+   @Deprecated
    default void setPosition(double x, double y, double z)
    {
       getPosition().set(x, y, z);
@@ -84,7 +86,9 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the position to the given tuple.
     *
     * @param position the tuple with the new position coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(Tuple3DReadOnly position)
    {
       setPosition(position.getX(), position.getY(), position.getZ());
@@ -97,7 +101,9 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * </p>
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position2D)} instead.
     */
+   @Deprecated
    default void setPosition(Tuple2DReadOnly position2D)
    {
       getPosition().set(position2D);
@@ -108,7 +114,9 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     *
     * @param position2D the tuple with the new x and y coordinates. Not modified.
     * @param z          the new z value for this pose's position z-coordinate.
+    * @deprecated Use {@code this.getPosition().set(position2D, z)} instead.
     */
+   @Deprecated
    default void setPosition(Tuple2DReadOnly position2D, double z)
    {
       getPosition().set(position2D, z);
@@ -130,8 +138,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(double x, double y, double z, double yaw, double pitch, double roll)
    {
-      setPosition(x, y, z);
-      setOrientationYawPitchRoll(yaw, pitch, roll);
+      getPosition().set(x, y, z);
+      getOrientation().setYawPitchRoll(yaw, pitch, roll);
    }
 
    /**
@@ -141,8 +149,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(Pose2DReadOnly pose2DReadOnly)
    {
-      setPosition(pose2DReadOnly.getPosition(), 0.0);
-      setOrientation(pose2DReadOnly.getOrientation());
+      getPosition().set(pose2DReadOnly.getPosition(), 0.0);
+      getOrientation().set(pose2DReadOnly.getOrientation());
    }
 
    /**
@@ -152,8 +160,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(Pose3DReadOnly other)
    {
-      setPosition(other.getPosition());
-      setOrientation(other.getOrientation());
+      getPosition().set(other.getPosition());
+      getOrientation().set(other.getOrientation());
    }
 
    /**
@@ -166,7 +174,9 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * @param qy the y-component of the quaternion's vector part.
     * @param qz the z-component of the quaternion's vector part.
     * @param qs the scalar component of the quaternion.
+    * @deprecated Use {@code this.getOrientation().set(qx, qy, qz, qs)} instead.
     */
+   @Deprecated
    default void setOrientation(double qx, double qy, double qz, double qs)
    {
       getOrientation().set(qx, qy, qz, qs);
@@ -176,17 +186,21 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * Sets the orientation part of this pose 3D with the given orientation 2D.
     *
     * @param orientation the orientation 2D used to set this pose's orientation. Not modified.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(Orientation2DReadOnly orientation)
    {
-      getOrientation().setToYawOrientation(orientation.getYaw());
+      getOrientation().set(orientation);
    }
 
    /**
     * Sets the orientation part of this pose 3D with the given orientation.
     *
     * @param orientation the orientation used to set this pose's orientation. Not modified.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(Orientation3DReadOnly orientation)
    {
       getOrientation().set(orientation);
@@ -199,26 +213,12 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * sometimes undefined.
     * </p>
     *
-    * @param yawPitchRoll array containing the yaw-pitch-roll angles. Not modified.
-    * @deprecated Use {@link #setOrientation(Orientation3DReadOnly)} with {@link YawPitchRoll} instead.
-    */
-   @Deprecated
-   default void setOrientationYawPitchRoll(double[] yawPitchRoll)
-   {
-      getOrientation().setYawPitchRoll(yawPitchRoll);
-   }
-
-   /**
-    * Sets the orientation part of this pose 3D with the given yaw, pitch, and roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
     * @param yaw   the angle to rotate about the z-axis.
     * @param pitch the angle to rotate about the y-axis.
     * @param roll  the angle to rotate about the x-axis.
+    * @deprecated Use {@code this.getOrientation().setYawPitchRoll(yaw, pitch, roll)} instead.
     */
+   @Deprecated
    default void setOrientationYawPitchRoll(double yaw, double pitch, double roll)
    {
       getOrientation().setYawPitchRoll(yaw, pitch, roll);
@@ -231,8 +231,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      setPosition(rigidBodyTransform.getTranslation());
-      setOrientation(rigidBodyTransform.getRotation());
+      getPosition().set(rigidBodyTransform.getTranslation());
+      getOrientation().set(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -243,8 +243,8 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     */
    default void set(Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
-      setOrientation(orientation);
-      setPosition(position);
+      getOrientation().set(orientation);
+      getPosition().set(position);
    }
 
    /** {@inheritDoc} */
@@ -281,7 +281,10 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
     * </ul>
     * </p>
+    *
+    * @deprecated Use {@code this.getOrientation().normalize()} instead.
     */
+   @Deprecated
    default void normalizeQuaternion()
    {
       getOrientation().normalize();
@@ -296,7 +299,10 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
     * <li>if the quaternion contains {@link Double#NaN}, this method is ineffective.
     * </ul>
     * </p>
+    *
+    * @deprecated Use {@code this.getOrientation().normalizeAndLimitToPi()} instead.
     */
+   @Deprecated
    default void normalizeQuaternionAndLimitToPi()
    {
       getOrientation().normalizeAndLimitToPi();
@@ -451,7 +457,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
       double thisY = getY();
       double thisZ = getZ();
 
-      setPosition(x, y, z);
+      getPosition().set(x, y, z);
       getOrientation().transform(getPosition());
       getPosition().add(thisX, thisY, thisZ);
    }

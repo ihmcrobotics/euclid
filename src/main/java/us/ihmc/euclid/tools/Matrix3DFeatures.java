@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tools;
 
 import org.ejml.data.DenseMatrix64F;
+import org.ejml.ops.MatrixDimensionException;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -75,15 +76,15 @@ public class Matrix3DFeatures
    public static void checkIfRotationMatrix(DenseMatrix64F matrix)
    {
       Matrix3DFeatures.checkMatrixSize(matrix);
-      double m00 = matrix.get(0, 0);
-      double m01 = matrix.get(0, 1);
-      double m02 = matrix.get(0, 2);
-      double m10 = matrix.get(1, 0);
-      double m11 = matrix.get(1, 1);
-      double m12 = matrix.get(1, 2);
-      double m20 = matrix.get(2, 0);
-      double m21 = matrix.get(2, 1);
-      double m22 = matrix.get(2, 2);
+      double m00 = matrix.unsafe_get(0, 0);
+      double m01 = matrix.unsafe_get(0, 1);
+      double m02 = matrix.unsafe_get(0, 2);
+      double m10 = matrix.unsafe_get(1, 0);
+      double m11 = matrix.unsafe_get(1, 1);
+      double m12 = matrix.unsafe_get(1, 2);
+      double m20 = matrix.unsafe_get(2, 0);
+      double m21 = matrix.unsafe_get(2, 1);
+      double m22 = matrix.unsafe_get(2, 2);
       checkIfRotationMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
@@ -155,7 +156,7 @@ public class Matrix3DFeatures
    public static void checkMatrixSize(DenseMatrix64F matrix)
    {
       if (matrix.getNumRows() != 3 || matrix.getNumCols() != 3)
-         throw new RuntimeException("Unexpected matrix size: " + matrix.getNumRows() + "-by-" + matrix.getNumCols() + ". Must be 3-by-3.");
+         throw new MatrixDimensionException("Unexpected matrix size: " + matrix.getNumRows() + "-by-" + matrix.getNumCols() + ". Must be 3-by-3.");
    }
 
    /**
@@ -230,15 +231,16 @@ public class Matrix3DFeatures
     */
    public static boolean isRotationMatrix(DenseMatrix64F matrix)
    {
-      return isRotationMatrix(matrix.get(0, 0),
-                              matrix.get(0, 1),
-                              matrix.get(0, 2),
-                              matrix.get(1, 0),
-                              matrix.get(1, 1),
-                              matrix.get(1, 2),
-                              matrix.get(2, 0),
-                              matrix.get(2, 1),
-                              matrix.get(2, 2));
+      checkMatrixSize(matrix);
+      return isRotationMatrix(matrix.unsafe_get(0, 0),
+                              matrix.unsafe_get(0, 1),
+                              matrix.unsafe_get(0, 2),
+                              matrix.unsafe_get(1, 0),
+                              matrix.unsafe_get(1, 1),
+                              matrix.unsafe_get(1, 2),
+                              matrix.unsafe_get(2, 0),
+                              matrix.unsafe_get(2, 1),
+                              matrix.unsafe_get(2, 2));
    }
 
    /**

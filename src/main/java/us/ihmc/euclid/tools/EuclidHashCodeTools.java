@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tools;
 
+import java.util.Objects;
+
 import us.ihmc.euclid.tuple3D.Point3D;
 
 /**
@@ -14,6 +16,10 @@ public class EuclidHashCodeTools
     * Long used for the multiplication factor in each step of the hash.
     */
    public final static long MULTIPLIER = 31L;
+   /** Smallest prime number used as the base for computing name based hash codes. */
+   public static final long DEFAULT_HASHCODE = 1L;
+   /** Default hash code for any object that is equal to {@code null}. */
+   public static final long NULL_HASHCODE = 0L;
 
    private EuclidHashCodeTools()
    {
@@ -29,6 +35,587 @@ public class EuclidHashCodeTools
    public static int toIntHashCode(long bits)
    {
       return (int) (bits ^ bits >> 32);
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given argument.
+    *
+    * @param a the argument to get the hash-code of.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(double a)
+   {
+      return toIntHashCode(toLongHashCode(a));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(double a0, double a1)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(double a0, double a1, double a2)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(double a0, double a1, double a2, double a3)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(double a0, double a1, double a2, double a3, double a4)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(double a0, double a1, double a2, double a3, double a4, double a5)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4, a5));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @param a6 the argument to use for computing a hash-code.
+    * @param a7 the argument to use for computing a hash-code.
+    * @param a8 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4, a5, a6, a7, a8));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given argument.
+    *
+    * @param a the argument to get the hash-code of.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(float a)
+   {
+      return toIntHashCode(toLongHashCode(a));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(float a0, float a1)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(float a0, float a1, float a2)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(float a0, float a1, float a2, float a3)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(Object a0, Object a1)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(Object a0, Object a1, Object a2)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3, Object a4)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4, a5));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @param a6 the argument to use for computing a hash-code.
+    * @return the 32-bit hash-code.
+    */
+   public static int toIntHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5, Object a6)
+   {
+      return toIntHashCode(toLongHashCode(a0, a1, a2, a3, a4, a5, a6));
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given argument.
+    *
+    * @param a the argument to get the hash-code of.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(double a)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(double a0, double a1)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(double a0, double a1, double a2)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(double a0, double a1, double a2, double a3)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(double a0, double a1, double a2, double a3, double a4)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(double a0, double a1, double a2, double a3, double a4, double a5)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      bits = addToHashCode(bits, a5);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @param a6 the argument to use for computing a hash-code.
+    * @param a7 the argument to use for computing a hash-code.
+    * @param a8 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      bits = addToHashCode(bits, a5);
+      bits = addToHashCode(bits, a6);
+      bits = addToHashCode(bits, a7);
+      bits = addToHashCode(bits, a8);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given argument.
+    *
+    * @param a the argument to get the hash-code of.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(float a)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(float a0, float a1)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(float a0, float a1, float a2)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(float a0, float a1, float a2, float a3)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(float a0, float a1, float a2, float a3, float a4, float a5)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      bits = addToHashCode(bits, a5);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(Object a0, Object a1)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(Object a0, Object a1, Object a2)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      bits = addToHashCode(bits, a5);
+      return bits;
+   }
+
+   /**
+    * Convenience method for computing the hash-code of the given arguments.
+    *
+    * @param a0 the argument to use for computing a hash-code.
+    * @param a1 the argument to use for computing a hash-code.
+    * @param a2 the argument to use for computing a hash-code.
+    * @param a3 the argument to use for computing a hash-code.
+    * @param a4 the argument to use for computing a hash-code.
+    * @param a5 the argument to use for computing a hash-code.
+    * @param a6 the argument to use for computing a hash-code.
+    * @return the 64-bit hash-code.
+    */
+   public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5, Object a6)
+   {
+      long bits = DEFAULT_HASHCODE;
+      bits = addToHashCode(bits, a0);
+      bits = addToHashCode(bits, a1);
+      bits = addToHashCode(bits, a2);
+      bits = addToHashCode(bits, a3);
+      bits = addToHashCode(bits, a4);
+      bits = addToHashCode(bits, a5);
+      bits = addToHashCode(bits, a6);
+      return bits;
    }
 
    /**
@@ -53,6 +640,18 @@ public class EuclidHashCodeTools
    public static long addToHashCode(long hashCode, float value)
    {
       return combineHashCode(hashCode, Float.floatToIntBits(value));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code object}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param object   object value to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, Object object)
+   {
+      return combineHashCode(hashCode, Objects.hashCode(object));
    }
 
    /**

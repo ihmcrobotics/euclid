@@ -6,6 +6,7 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * {@code FixedFrameTuple2DBasics} is the base implementation for {@link FramePoint2D} and
@@ -17,7 +18,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
  * </p>
  * <p>
  * When using this interface, the reference frame of this tuple is assumed to be immutable, i.e. the
- * tuple is always expressed in the same reference frame.
+ * reference frame of this object cannot be changed via this interface.
  * </p>
  * <p>
  * Because a {@code FixedFrameTuple2DBasics} extends {@code Tuple2DBasics}, it is compatible with
@@ -42,6 +43,22 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    {
       checkReferenceFrameMatch(referenceFrame);
       set(tuple2DReadOnly);
+   }
+
+   /**
+    * Set this frame tuple using the x and y coordinate of the given {@code tuple3DReadOnly}. and
+    * checks that its current frame equal {@code referenceFrame}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param tuple3DReadOnly the geometry object used to update the geometry object in {@code this}.
+    *                        Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(tuple3DReadOnly);
    }
 
    /**
@@ -216,8 +233,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void add(FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.add(frameTuple1, frameTuple2);
    }
 
@@ -284,8 +300,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void sub(FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.sub(frameTuple1, frameTuple2);
    }
 
@@ -354,8 +369,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void scaleAdd(double scalar, FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.scaleAdd(scalar, frameTuple1, frameTuple2);
    }
 
@@ -426,8 +440,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void scaleSub(double scalar, FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.scaleSub(scalar, frameTuple1, frameTuple2);
    }
 
@@ -504,8 +517,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void interpolate(FrameTuple2DReadOnly frameTuple1, FrameTuple2DReadOnly frameTuple2, double alpha)
    {
-      checkReferenceFrameMatch(frameTuple1);
-      checkReferenceFrameMatch(frameTuple2);
+      checkReferenceFrameMatch(frameTuple1, frameTuple2);
       Tuple2DBasics.super.interpolate(frameTuple1, frameTuple2, alpha);
    }
 

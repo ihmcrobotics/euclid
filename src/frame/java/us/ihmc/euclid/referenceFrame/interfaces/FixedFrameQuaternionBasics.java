@@ -6,8 +6,8 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
- * Write and read interface for a quaternion expressed in a constant reference frame, i.e. this
- * quaternion is always expressed in the same reference frame.
+ * Write and read interface for a quaternion expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * In addition to representing a {@link QuaternionBasics}, a {@link ReferenceFrame} is associated to
  * a {@code FixedFrameQuaternionBasics}. This allows, for instance, to enforce, at runtime, that
@@ -102,20 +102,6 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
    {
       checkReferenceFrameMatch(other);
       QuaternionBasics.super.setAndConjugate(other);
-   }
-
-   /**
-    * Sets this frame quaternion to the inverse of {@code other}.
-    *
-    * @param other the other frame quaternion to copy the values from. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    * @deprecated Use {@link #setAndInvert(FrameOrientation3DReadOnly)} instead
-    */
-   @Deprecated
-   default void setAndInverse(FrameQuaternionReadOnly other)
-   {
-      setAndInvert(other);
    }
 
    /**
@@ -214,8 +200,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     */
    default void interpolate(FrameQuaternionReadOnly q0, FrameQuaternionReadOnly qf, double alpha)
    {
-      checkReferenceFrameMatch(q0);
-      checkReferenceFrameMatch(qf);
+      checkReferenceFrameMatch(q0, qf);
       QuaternionBasics.super.interpolate(q0, qf, alpha);
    }
 
@@ -282,8 +267,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     */
    default void multiply(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      checkReferenceFrameMatch(q1);
-      checkReferenceFrameMatch(q2);
+      checkReferenceFrameMatch(q1, q2);
       QuaternionBasics.super.multiply(q1, q2);
    }
 
@@ -334,8 +318,7 @@ public interface FixedFrameQuaternionBasics extends FrameQuaternionReadOnly, Fix
     */
    default void difference(FrameQuaternionReadOnly q1, FrameQuaternionReadOnly q2)
    {
-      checkReferenceFrameMatch(q1);
-      checkReferenceFrameMatch(q2);
+      checkReferenceFrameMatch(q1, q2);
       QuaternionBasics.super.difference(q1, q2);
    }
 

@@ -7,13 +7,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Line2DBasics;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -1611,6 +1616,37 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
                foundPoint = true;
          }
          assertTrue(foundPoint, "Did not find point.");
+      }
+   }
+
+   @Test
+   public void testRemoveVertex()
+   {
+      Random random = new Random(6325);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         List<Point2D> vertices = new ArrayList<>();
+         T polygon = createRandomConvexPolygon2D(random);
+         polygon.getPolygonVerticesView().forEach(vertex -> vertices.add(new Point2D(vertex)));
+
+         int numberOfVerticesToRemove = random.nextInt(polygon.getNumberOfVertices());
+
+         for (int j = 0; j < numberOfVerticesToRemove; j++)
+         {
+            int indexToRemove = random.nextInt(polygon.getNumberOfVertices());
+            polygon.removeVertex(indexToRemove);
+
+            Collections.swap(vertices, indexToRemove, vertices.size() - 1);
+            vertices.remove(vertices.size() - 1);
+         }
+
+         assertEquals(polygon.getNumberOfVertices(), vertices.size());
+
+         for (int j = 0; j < vertices.size(); j++)
+         {
+            EuclidCoreTestTools.assertTuple2DEquals(vertices.get(j), polygon.getVertexUnsafe(j), 0.0);
+         }
       }
    }
 }

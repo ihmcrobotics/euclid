@@ -51,7 +51,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public abstract class YawPitchRollConversion
+public class YawPitchRollConversion
 {
    /**
     * Represents the safety margin that
@@ -71,6 +71,11 @@ public abstract class YawPitchRollConversion
    public static final double MIN_SAFE_PITCH_ANGLE = -MAX_SAFE_PITCH_ANGLE;
 
    private static final double EPS = 1.0e-12;
+
+   private YawPitchRollConversion()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Computes the yaw from a rotation matrix.
@@ -289,34 +294,6 @@ public abstract class YawPitchRollConversion
    }
 
    /**
-    * Converts the rotation part of the given rotation-scale matrix into yaw-pitch-roll.
-    * <p>
-    * After calling this method, the rotation part of the rotation-scale matrix and the yaw-pitch-roll
-    * angles represent the same orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, the yaw-pitch-roll angles
-    * are set to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @param yawPitchRollToPack  the array in which the yaw-pitch-roll angles are stored, in the order
-    *                            {@code yaw}, {@code pitch}, then {@code roll}. Modified.
-    * @deprecated Use
-    *             {@link #convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly, YawPitchRollBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly rotationScaleMatrix, double[] yawPitchRollToPack)
-   {
-      convertMatrixToYawPitchRoll(rotationScaleMatrix.getRotationMatrix(), yawPitchRollToPack);
-   }
-
-   /**
     * Converts the rotation matrix into yaw-pitch-roll.
     * <p>
     * After calling this method, the rotation matrix and the yaw-pitch-roll angles represent the same
@@ -383,34 +360,6 @@ public abstract class YawPitchRollConversion
    }
 
    /**
-    * Converts the rotation matrix into yaw-pitch-roll.
-    * <p>
-    * After calling this method, the rotation matrix and the yaw-pitch-roll angles represent the same
-    * orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, the yaw-pitch-roll angles
-    * are set to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationMatrix     a 3-by-3 matrix representing an orientation. Not modified.
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
-    * @deprecated Use {@link #convertMatrixToYawPitchRoll(RotationMatrixReadOnly, YawPitchRollBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertMatrixToYawPitchRoll(RotationMatrixReadOnly rotationMatrix, double[] yawPitchRollToPack)
-   {
-      yawPitchRollToPack[0] = computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10());
-      yawPitchRollToPack[1] = computePitchImpl(rotationMatrix.getM20());
-      yawPitchRollToPack[2] = computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22());
-   }
-
-   /**
     * Converts the rotation part of the given rotation-scale matrix into yaw-pitch-roll.
     * <p>
     * After calling this method, the rotation part of the rotation-scale matrix and the yaw-pitch-roll
@@ -454,9 +403,9 @@ public abstract class YawPitchRollConversion
     */
    public static void convertMatrixToYawPitchRoll(RotationMatrixReadOnly rotationMatrix, Tuple3DBasics eulerAnglesToPack)
    {
-      eulerAnglesToPack.setX(computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22()));
-      eulerAnglesToPack.setY(computePitchImpl(rotationMatrix.getM20()));
-      eulerAnglesToPack.setZ(computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10()));
+      eulerAnglesToPack.set(computeRollImpl(rotationMatrix.getM21(), rotationMatrix.getM22()),
+                            computePitchImpl(rotationMatrix.getM20()),
+                            computeYawImpl(rotationMatrix.getM00(), rotationMatrix.getM10()));
    }
 
    /**
@@ -696,62 +645,6 @@ public abstract class YawPitchRollConversion
    }
 
    /**
-    * Converts the quaternion into yaw-pitch-roll.
-    * <p>
-    * After calling this method, the quaternion and the yaw-pitch-roll angles represent the same
-    * orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the quaternion contains at least one {@link Double#NaN}, the yaw-pitch-roll angles are set
-    * to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param quaternion         the quaternion to use in the conversion. Not modified.
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
-    * @deprecated Use {@link #convertQuaternionToYawPitchRoll(QuaternionReadOnly, YawPitchRollBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertQuaternionToYawPitchRoll(QuaternionReadOnly quaternion, double[] yawPitchRollToPack)
-   {
-      if (quaternion.containsNaN())
-      {
-         yawPitchRollToPack[0] = Double.NaN;
-         yawPitchRollToPack[1] = Double.NaN;
-         yawPitchRollToPack[2] = Double.NaN;
-         return;
-      }
-
-      double qx = quaternion.getX();
-      double qy = quaternion.getY();
-      double qz = quaternion.getZ();
-      double qs = quaternion.getS();
-
-      double norm = quaternion.norm();
-      if (norm < EPS)
-      {
-         yawPitchRollToPack[0] = 0.0;
-         yawPitchRollToPack[1] = 0.0;
-         yawPitchRollToPack[2] = 0.0;
-         return;
-      }
-
-      norm = 1.0 / norm;
-      qx *= norm;
-      qy *= norm;
-      qz *= norm;
-      qs *= norm;
-
-      yawPitchRollToPack[0] = computeYawFromQuaternionImpl(qx, qy, qz, qs);
-      yawPitchRollToPack[1] = computePitchFromQuaternionImpl(qx, qy, qz, qs);
-      yawPitchRollToPack[2] = computeRollFromQuaternionImpl(qx, qy, qz, qs);
-   }
-
-   /**
     * Converts the given quaternion into yaw-pitch-roll.
     * <p>
     * After calling this method, the quaternion and the yaw-pitch-roll angles represent the same
@@ -795,9 +688,9 @@ public abstract class YawPitchRollConversion
       qz *= norm;
       qs *= norm;
 
-      eulerAnglesToPack.setZ(computeYawFromQuaternionImpl(qx, qy, qz, qs));
-      eulerAnglesToPack.setY(computePitchFromQuaternionImpl(qx, qy, qz, qs));
-      eulerAnglesToPack.setX(computeRollFromQuaternionImpl(qx, qy, qz, qs));
+      eulerAnglesToPack.set(computeRollFromQuaternionImpl(qx, qy, qz, qs),
+                            computePitchFromQuaternionImpl(qx, qy, qz, qs),
+                            computeYawFromQuaternionImpl(qx, qy, qz, qs));
    }
 
    /**
@@ -1066,57 +959,6 @@ public abstract class YawPitchRollConversion
     * </ul>
     * </p>
     *
-    * @param axisAngle          the axis-angle to use in the conversion. Not modified.
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
-    * @deprecated Use {@link #convertAxisAngleToYawPitchRoll(AxisAngleReadOnly, YawPitchRollBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertAxisAngleToYawPitchRoll(AxisAngleReadOnly axisAngle, double[] yawPitchRollToPack)
-   {
-      if (axisAngle.containsNaN())
-      {
-         yawPitchRollToPack[0] = Double.NaN;
-         yawPitchRollToPack[1] = Double.NaN;
-         yawPitchRollToPack[2] = Double.NaN;
-         return;
-      }
-
-      double ux = axisAngle.getX();
-      double uy = axisAngle.getY();
-      double uz = axisAngle.getZ();
-      double angle = axisAngle.getAngle();
-      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
-      if (uNorm < EPS)
-      {
-         yawPitchRollToPack[0] = 0.0;
-         yawPitchRollToPack[1] = 0.0;
-         yawPitchRollToPack[2] = 0.0;
-         return;
-      }
-
-      uNorm = 1.0 / uNorm;
-      ux *= uNorm;
-      uy *= uNorm;
-      uz *= uNorm;
-      convertAxisAngleToYawPitchRollImpl(ux, uy, uz, angle, yawPitchRollToPack);
-   }
-
-   /**
-    * Converts the axis-angle into yaw-pitch-roll.
-    * <p>
-    * After calling this method, the axis-angle and the yaw-pitch-roll angles represent the same
-    * orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the axis-angle contains at least one {@link Double#NaN}, the yaw-pitch-roll angles are set
-    * to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
     * @param axisAngle         the axis-angle to use in the conversion. Not modified.
     * @param eulerAnglesToPack the tuple in which the yaw-pitch-roll angles are stored, i.e.
     *                          {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
@@ -1157,43 +999,6 @@ public abstract class YawPitchRollConversion
     * orientation.
     * </p>
     *
-    * @param ux                 the x-component of the axis of the axis-angle to use in the conversion.
-    * @param uy                 the y-component of the axis of the axis-angle to use in the conversion.
-    * @param uz                 the z-component of the axis of the axis-angle to use in the conversion.
-    * @param angle              the angle of the axis-angle to use in the conversion.
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
-    * @deprecated Use
-    *             {@link #convertAxisAngleToYawPitchRollImpl(double, double, double, double, double[])}
-    *             instead.
-    */
-   @Deprecated
-   static void convertAxisAngleToYawPitchRollImpl(double ux, double uy, double uz, double angle, double[] yawPitchRollToPack)
-   {
-      double sinTheta = EuclidCoreTools.sin(angle);
-      double cosTheta = EuclidCoreTools.cos(angle);
-      double t = 1.0 - cosTheta;
-      double m20 = t * ux * uz - sinTheta * uy;
-      double m10 = t * ux * uy + sinTheta * uz;
-      double m00 = t * ux * ux + cosTheta;
-      double m21 = t * uy * uz + sinTheta * ux;
-      double m22 = t * uz * uz + cosTheta;
-
-      yawPitchRollToPack[0] = computeYawImpl(m00, m10);
-      yawPitchRollToPack[1] = computePitchImpl(m20);
-      yawPitchRollToPack[2] = computeRollImpl(m21, m22);
-   }
-
-   /**
-    * Converts the axis-angle into yaw-pitch-roll.
-    * <p>
-    * <b> This method is for internal use. Use {@link #computeYaw(AxisAngleReadOnly)} instead. </b>
-    * </p>
-    * <p>
-    * After calling this method, the axis-angle and the yaw-pitch-roll angles represent the same
-    * orientation.
-    * </p>
-    *
     * @param ux                the x-component of the axis of the axis-angle to use in the conversion.
     * @param uy                the y-component of the axis of the axis-angle to use in the conversion.
     * @param uz                the z-component of the axis of the axis-angle to use in the conversion.
@@ -1212,9 +1017,7 @@ public abstract class YawPitchRollConversion
       double m21 = t * uy * uz + sinTheta * ux;
       double m22 = t * uz * uz + cosTheta;
 
-      eulerAnglesToPack.setZ(computeYawImpl(m00, m10));
-      eulerAnglesToPack.setY(computePitchImpl(m20));
-      eulerAnglesToPack.setX(computeRollImpl(m21, m22));
+      eulerAnglesToPack.set(computeRollImpl(m21, m22), computePitchImpl(m20), computeYawImpl(m00, m10));
    }
 
    /**
@@ -1400,61 +1203,6 @@ public abstract class YawPitchRollConversion
       double roll = computeRollImpl(m21, m22);
 
       yawPitchRollToPack.set(yaw, pitch, roll);
-   }
-
-   /**
-    * Converts the rotation vector into yaw-pitch-roll.
-    * <p>
-    * After calling this method, the rotation vector and the yaw-pitch-roll angles represent the same
-    * orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation vector contains at least one {@link Double#NaN}, the yaw-pitch-roll angles
-    * are set to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationVector     the rotation vector to use in the conversion. Not modified.
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored, in the order
-    *                           {@code yaw}, {@code pitch}, then {@code roll}. Modified.
-    * @deprecated Use
-    *             {@link #convertRotationVectorToYawPitchRoll(Vector3DReadOnly, YawPitchRollBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertRotationVectorToYawPitchRoll(Vector3DReadOnly rotationVector, double[] yawPitchRollToPack)
-   {
-      if (rotationVector.containsNaN())
-      {
-         yawPitchRollToPack[0] = Double.NaN;
-         yawPitchRollToPack[1] = Double.NaN;
-         yawPitchRollToPack[2] = Double.NaN;
-         return;
-      }
-
-      double ux = rotationVector.getX();
-      double uy = rotationVector.getY();
-      double uz = rotationVector.getZ();
-      double angle = 0.0;
-      double uNorm = EuclidCoreTools.norm(ux, uy, uz);
-
-      if (uNorm < EPS)
-      {
-         yawPitchRollToPack[0] = 0.0;
-         yawPitchRollToPack[1] = 0.0;
-         yawPitchRollToPack[2] = 0.0;
-         return;
-      }
-
-      angle = uNorm;
-      uNorm = 1.0 / uNorm;
-      ux *= uNorm;
-      uy *= uNorm;
-      uz *= uNorm;
-
-      convertAxisAngleToYawPitchRollImpl(ux, uy, uz, angle, yawPitchRollToPack);
    }
 
    /**

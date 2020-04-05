@@ -2,7 +2,11 @@ package us.ihmc.euclid.shape.tools;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
-import us.ihmc.euclid.tuple3D.interfaces.*;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of an algorithm for finding the smallest distance between a point and an
@@ -275,7 +279,7 @@ public class EuclidEllipsoid3DTools
       double n0 = r0 * z0;
       double n1 = r1 * z1;
       double s0 = z2 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.norm(n0, n1, z2) - 1.0);
+      double s1 = g < 0.0 ? 0.0 : EuclidCoreTools.norm(n0, n1, z2) - 1.0;
       double s = 0.0;
 
       for (int i = 0; i < maxIterations; i++)
@@ -302,7 +306,7 @@ public class EuclidEllipsoid3DTools
    {
       double n0 = r0 * z0;
       double s0 = z1 - 1.0;
-      double s1 = g < 0.0 ? 0.0 : (EuclidCoreTools.norm(n0, z1) - 1.0);
+      double s1 = g < 0.0 ? 0.0 : EuclidCoreTools.norm(n0, z1) - 1.0;
       double s = 0.0;
 
       for (int i = 0; i < maxIterations; i++)

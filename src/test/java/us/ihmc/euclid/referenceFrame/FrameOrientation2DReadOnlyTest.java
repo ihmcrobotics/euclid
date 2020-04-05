@@ -6,11 +6,13 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.EuclidTestConstants;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 
 public abstract class FrameOrientation2DReadOnlyTest<T extends FrameOrientation2DReadOnly>
 {
@@ -28,21 +30,23 @@ public abstract class FrameOrientation2DReadOnlyTest<T extends FrameOrientation2
 
    public final T createRandomFrameOrientation(Random random, ReferenceFrame referenceFrame)
    {
-      return createFrameOrientation(referenceFrame, EuclidGeometryRandomTools.nextOrientation2D(random));
+      return createFrameOrientation(referenceFrame, EuclidCoreRandomTools.nextOrientation2D(random));
    }
 
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
-            && !m.getName().equals("setMatchingFrame");
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame -> createRandomFrameOrientation(random, frame), methodFilter);
+      Predicate<Method> methodFilter = m -> !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(this::createRandomFrameOrientation,
+                                                                    methodFilter,
+                                                                    EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameOrientation2DReadOnly.class, Orientation2DReadOnly.class, true);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameOrientation2DReadOnly.class, Orientation2DReadOnly.class, true);
    }
 }

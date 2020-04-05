@@ -1,12 +1,28 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringOf;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
 
 import java.util.List;
 
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
+import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -450,10 +466,12 @@ public class EuclidGeometryIOTools
     *
     * @param orientation2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
+    * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(Orientation2DReadOnly)} instead
     */
+   @Deprecated
    public static String getOrientation2DString(Orientation2DReadOnly orientation2D)
    {
-      return getOrientation2DString(DEFAULT_FORMAT, orientation2D);
+      return EuclidCoreIOTools.getOrientation2DString(orientation2D);
    }
 
    /**
@@ -469,13 +487,13 @@ public class EuclidGeometryIOTools
     * @param format        the format to use for each number.
     * @param orientation2D the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
+    * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(String,Orientation2DReadOnly)}
+    *             instead
     */
+   @Deprecated
    public static String getOrientation2DString(String format, Orientation2DReadOnly orientation2D)
    {
-      if (orientation2D == null)
-         return "null";
-      else
-         return getOrientation2DString(format, orientation2D.getYaw());
+      return EuclidCoreIOTools.getOrientation2DString(format, orientation2D);
    }
 
    /**
@@ -493,10 +511,12 @@ public class EuclidGeometryIOTools
     * @param orientation2DAngle the angle of the orientation 2D to get the {@code String} of. Not
     *                           modified.
     * @return the representative {@code String}.
+    * @deprecated Use {@link EuclidCoreIOTools#getOrientation2DString(String,double)} instead
     */
+   @Deprecated
    public static String getOrientation2DString(String format, double orientation2DAngle)
    {
-      return getStringOf("(", " )", ", ", format, orientation2DAngle);
+      return EuclidCoreIOTools.getOrientation2DString(format, orientation2DAngle);
    }
 
    /**

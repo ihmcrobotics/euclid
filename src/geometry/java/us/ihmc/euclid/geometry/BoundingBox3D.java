@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -63,10 +64,12 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Creates a new bounding box initialized with both its minimum and maximum coordinates to (0, 0).
+    * Creates a new bounding box initialized with both its minimum and maximum coordinates to
+    * ({@code Double.NaN}, {@code Double.NaN}, {@code Double.NaN}).
     */
    public BoundingBox3D()
    {
+      setToNaN();
    }
 
    /**
@@ -165,6 +168,22 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    }
 
    /**
+    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
+    * similar, i.e. the distance between their min and max points is less than or equal to
+    * {@code epsilon}.
+    *
+    * @param other   the bounding box to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(BoundingBox3D other, double epsilon)
+   {
+      return BoundingBox3DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(BoundingBox3DReadOnly)}, it returns {@code false} otherwise.
     *
@@ -181,8 +200,22 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Provides a {@code String} representation of this bounding box 3D as follows:<br>
-    * Bounding Box 3D: min = (x, y, z), max = (x, y, z)
+    * Calculates and returns a hash code value from the min and max coordinates of this bounding box.
+    *
+    * @return the hash code value for this bounding box.
+    */
+   @Override
+   public int hashCode()
+   {
+      return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+   }
+
+   /**
+    * Provides a {@code String} representation of this bounding box 3D as follows:
+    *
+    * <pre>
+    * Bounding Box 3D: min = ( 0.174,  0.732, -0.222 ), max = (-0.558, -0.380,  0.130 )
+    * </pre>
     *
     * @return the {@code String} representing this bounding box 3D.
     */
@@ -190,21 +223,5 @@ public class BoundingBox3D implements BoundingBox3DBasics, EpsilonComparable<Bou
    public String toString()
    {
       return EuclidGeometryIOTools.getBoundingBox3DString(this);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
-    * similar, i.e. the distance between their min and max points is less than or equal to
-    * {@code epsilon}.
-    *
-    * @param other   the bounding box to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(BoundingBox3D other, double epsilon)
-   {
-      return BoundingBox3DBasics.super.geometricallyEquals(other, epsilon);
    }
 }

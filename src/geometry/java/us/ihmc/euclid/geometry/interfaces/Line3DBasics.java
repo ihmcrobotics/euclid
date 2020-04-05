@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.transform.interfaces.Transform;
@@ -7,7 +8,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -33,7 +34,7 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * @return the reference to the direction.
     */
    @Override
-   Vector3DBasics getDirection();
+   UnitVector3DBasics getDirection();
 
    /**
     * Tests if this line contains {@link Double#NaN}.
@@ -48,14 +49,13 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the point and vector of this line to zero. After calling this method, this line becomes
-    * invalid. A new valid point and valid vector will have to be set so this line is again usable.
+    * Sets the point of this line to zero and its direction to {@link Axis3D#X}.
     */
    @Override
    default void setToZero()
    {
       getPoint().setToZero();
-      getDirection().setToZero();
+      getDirection().set(Axis3D.X);
    }
 
    /**
@@ -72,7 +72,10 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
 
    /**
     * Flips this line's direction.
+    *
+    * @deprecated Use {@code this.getDirection().negate()} instead.
     */
+   @Deprecated
    default void negateDirection()
    {
       getDirection().negate();
@@ -84,7 +87,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
     * @param pointOnLineZ the new z-coordinate of the point on this line.
+    * @deprecated Use {@code this.getPoint().set(pointOnLineX, pointOnLineY, pointOnLineZ)} instead.
     */
+   @Deprecated
    default void setPoint(double pointOnLineX, double pointOnLineY, double pointOnLineZ)
    {
       getPoint().set(pointOnLineX, pointOnLineY, pointOnLineZ);
@@ -94,7 +99,9 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(Point3DReadOnly pointOnLine)
    {
       getPoint().set(pointOnLine);
@@ -106,22 +113,25 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
     * @param lineDirectionZ the new z-component of the direction of this line.
+    * @deprecated Use {@code this.getDirection().set(lineDirectionX, lineDirectionY, lineDirectionZ)}
+    *             instead.
     */
+   @Deprecated
    default void setDirection(double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
       getDirection().set(lineDirectionX, lineDirectionY, lineDirectionZ);
-      getDirection().normalize();
    }
 
    /**
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(Vector3DReadOnly lineDirection)
    {
       getDirection().set(lineDirection);
-      getDirection().normalize();
    }
 
    /**
@@ -184,8 +194,8 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     */
    default void set(double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX, double lineDirectionY, double lineDirectionZ)
    {
-      setPoint(pointOnLineX, pointOnLineY, pointOnLineZ);
-      setDirection(lineDirectionX, lineDirectionY, lineDirectionZ);
+      getPoint().set(pointOnLineX, pointOnLineY, pointOnLineZ);
+      getDirection().set(lineDirectionX, lineDirectionY, lineDirectionZ);
    }
 
    /**
@@ -210,7 +220,6 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
       getDirection().set(secondPointOnLine, 0.0);
       getDirection().subX(firstPointOnLine.getX());
       getDirection().subY(firstPointOnLine.getY());
-      getDirection().normalize();
    }
 
    /**
@@ -228,9 +237,8 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
          throw new RuntimeException("Tried to create a line from two coincidal points");
       }
 
-      setPoint(firstPointOnLine);
+      getPoint().set(firstPointOnLine);
       getDirection().sub(secondPointOnLine, firstPointOnLine);
-      getDirection().normalize();
    }
 
    /**
@@ -256,8 +264,8 @@ public interface Line3DBasics extends Line3DReadOnly, Transformable, Clearable
     */
    default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
-      setPoint(pointOnLine);
-      setDirection(lineDirection);
+      getPoint().set(pointOnLine);
+      getDirection().set(lineDirection);
    }
 
    /**

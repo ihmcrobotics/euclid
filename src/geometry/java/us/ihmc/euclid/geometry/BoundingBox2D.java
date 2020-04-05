@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -62,10 +63,12 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Creates a new bounding box initialized with both its minimum and maximum coordinates to (0, 0).
+    * Creates a new bounding box initialized with both its minimum and maximum coordinates to
+    * ({@code Double.NaN}, {@code Double.NaN}).
     */
    public BoundingBox2D()
    {
+      setToNaN();
    }
 
    /**
@@ -159,38 +162,6 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    }
 
    /**
-    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
-    * {@link #equals(BoundingBox2DReadOnly)}, it returns {@code false} otherwise.
-    *
-    * @param object the object to compare against this. Not modified.
-    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean equals(Object object)
-   {
-      try
-      {
-         return equals((BoundingBox2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Provides a {@code String} representation of this bounding box 2D as follows:<br>
-    * Bounding Box 2D: min = (x, y), max = (x, y)
-    *
-    * @return the {@code String} representing this bounding box 2D.
-    */
-   @Override
-   public String toString()
-   {
-      return EuclidGeometryIOTools.getBoundingBox2DString(this);
-   }
-
-   /**
     * Compares {@code this} to {@code other} to determine if the two bounding boxes are geometrically
     * similar, i.e. the distance between their min and max points is less than or equal to
     * {@code epsilon}.
@@ -204,5 +175,47 @@ public class BoundingBox2D implements BoundingBox2DBasics, EpsilonComparable<Bou
    public boolean geometricallyEquals(BoundingBox2D other, double epsilon)
    {
       return BoundingBox2DBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Tests if the given {@code object}'s class is the same as this, in which case the method returns
+    * {@link #equals(BoundingBox2DReadOnly)}, it returns {@code false} otherwise.
+    *
+    * @param object the object to compare against this. Not modified.
+    * @return {@code true} if {@code object} and this are exactly equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean equals(Object object)
+   {
+      if (object instanceof BoundingBox2DReadOnly)
+         return BoundingBox2DBasics.super.equals((BoundingBox2DReadOnly) object);
+      else
+         return false;
+   }
+
+   /**
+    * Calculates and returns a hash code value from the min and max coordinates of this bounding box.
+    *
+    * @return the hash code value for this bounding box.
+    */
+   @Override
+   public int hashCode()
+   {
+      return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+   }
+
+   /**
+    * Provides a {@code String} representation of this bounding box 2D as follows:
+    *
+    * <pre>
+    * Bounding Box 2D: min = ( 0.174,  0.732 ), max = (-0.558, -0.380 )
+    * </pre>
+    *
+    * @return the {@code String} representing this bounding box 2D.
+    */
+   @Override
+   public String toString()
+   {
+      return EuclidGeometryIOTools.getBoundingBox2DString(this);
    }
 }

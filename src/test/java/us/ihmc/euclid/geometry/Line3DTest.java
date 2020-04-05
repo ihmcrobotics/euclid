@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -18,7 +19,6 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
 public class Line3DTest
 {
@@ -30,7 +30,7 @@ public class Line3DTest
       Random random = new Random(2342L);
 
       Point3D expectedPoint = new Point3D();
-      Vector3D expectedDirection = new Vector3D();
+      Vector3D expectedDirection = new Vector3D(1.0, 0.0, 0.0);
 
       Line3D line3d = new Line3D();
       try
@@ -134,7 +134,7 @@ public class Line3DTest
       }
       try
       {
-         EuclidCoreTestTools.assertTuple3DIsSetToZero(line3D.getDirection());
+         EuclidCoreTestTools.assertTuple3DEquals(Axis3D.X, line3D.getDirection(), EPSILON);
       }
       catch (RuntimeException e)
       {
@@ -301,20 +301,21 @@ public class Line3DTest
             assertFalse(line1.epsilonEquals(line2, epsilon));
          }
 
-         for (int j = 0; j < 3; j++)
-         {
-            line2.set(line1);
-            assertTrue(line1.epsilonEquals(line2, epsilon));
-            double element = line1.getDirection().getElement(j);
-            ((Tuple3DBasics) line2.getDirection()).setElement(j, element + 0.999 * epsilon);
-            assertTrue(line1.epsilonEquals(line2, epsilon));
-            ((Tuple3DBasics) line2.getDirection()).setElement(j, element - 0.999 * epsilon);
-            assertTrue(line1.epsilonEquals(line2, epsilon));
-            ((Tuple3DBasics) line2.getDirection()).setElement(j, element + 1.001 * epsilon);
-            assertFalse(line1.epsilonEquals(line2, epsilon));
-            ((Tuple3DBasics) line2.getDirection()).setElement(j, element - 1.001 * epsilon);
-            assertFalse(line1.epsilonEquals(line2, epsilon));
-         }
+         line2.set(line1);
+         assertTrue(line1.epsilonEquals(line2, epsilon));
+         AxisAngle axisAngle = new AxisAngle(EuclidCoreRandomTools.nextOrthogonalVector3D(random, line1.getDirection(), true), 0.0);
+         axisAngle.setAngle(0.999 * epsilon);
+         axisAngle.transform(line1.getDirection(), line2.getDirection());
+         assertTrue(line1.epsilonEquals(line2, epsilon));
+         axisAngle.setAngle(-0.999 * epsilon);
+         axisAngle.transform(line1.getDirection(), line2.getDirection());
+         assertTrue(line1.epsilonEquals(line2, epsilon));
+         axisAngle.setAngle(2.0 * epsilon);
+         axisAngle.transform(line1.getDirection(), line2.getDirection());
+         assertFalse(line1.epsilonEquals(line2, epsilon));
+         axisAngle.setAngle(-2.0 * epsilon);
+         axisAngle.transform(line1.getDirection(), line2.getDirection());
+         assertFalse(line1.epsilonEquals(line2, epsilon));
       }
    }
 

@@ -9,24 +9,30 @@ import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.MethodSignature;
+import us.ihmc.euclid.referenceFrame.api.RandomFrameTypeBuilder;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
-import us.ihmc.euclid.referenceFrame.interfaces.*;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.FrameTypeBuilder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.GenericTypeBuilder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools.RandomFrameTypeBuilder;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
@@ -141,6 +147,9 @@ public class FrameYawPitchRollTest
    @Test
    public void testMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameYawPitchRoll, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(3225);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -161,6 +170,15 @@ public class FrameYawPitchRollTest
    @Test
    public void testSetIncludingFrame() throws Exception
    {
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("setIncludingFrame", FrameVector3DReadOnly.class));
+      signaturesToIgnore.add(new MethodSignature("setIncludingFrame", ReferenceFrame.class, Vector3DReadOnly.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameYawPitchRoll,
+                                                          methodFilter,
+                                                          EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(2342);
 
       ReferenceFrame initialFrame = ReferenceFrame.getWorldFrame();
@@ -252,42 +270,48 @@ public class FrameYawPitchRollTest
    @Test
    public void testConsistencyWithYawPitchRoll()
    {
-      Random random = new Random(234235L);
-
-      FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, yawPitchRoll) -> new FrameYawPitchRoll(frame,
-                                                                                                                         (YawPitchRollReadOnly) yawPitchRoll);
-      GenericTypeBuilder framelessTypeBuilder = () -> EuclidCoreRandomTools.nextYawPitchRoll(random);
+      FrameTypeCopier frameTypeBuilder = (frame, yawPitchRoll) -> new FrameYawPitchRoll(frame, (YawPitchRollReadOnly) yawPitchRoll);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidCoreRandomTools::nextYawPitchRoll;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode");
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  framelessTypeBuilder,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
 
-      GenericTypeBuilder frameless2DTypeBuilder = () -> new YawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0.0, 0.0);
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, frameless2DTypeBuilder, methodFilter);
+      RandomFramelessTypeBuilder frameless2DTypeBuilder = (random) -> new YawPitchRoll(EuclidCoreRandomTools.nextDouble(random, Math.PI), 0.0, 0.0);
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  frameless2DTypeBuilder,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Test
    public void testReferenceFrameChecks() throws Throwable
    {
-      Random random = new Random(234);
-      Predicate<Method> methodFilter = m -> !m.getName().contains("IncludingFrame") && !m.getName().contains("MatchingFrame") && !m.getName().equals("equals")
-            && !m.getName().equals("epsilonEquals");
-      RandomFrameTypeBuilder<FrameYawPitchRoll> frameTypeBuilder = frame -> EuclidFrameRandomTools.nextFrameYawPitchRoll(random, frame);
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frameTypeBuilder, methodFilter);
-      RandomFrameTypeBuilder<FrameYawPitchRoll> frame2DTypeBuilder = frame -> new FrameYawPitchRoll(frame, nextDouble(random, Math.PI), 0.0, 0.0);
-      EuclidFrameAPITestTools.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame2DTypeBuilder, methodFilter);
+      Predicate<Method> methodFilter = m -> !m.getName().equals("equals") && !m.getName().equals("epsilonEquals");
+      RandomFrameTypeBuilder frameTypeBuilder = EuclidFrameRandomTools::nextFrameYawPitchRoll;
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frameTypeBuilder, methodFilter, EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
+      RandomFrameTypeBuilder frame2DTypeBuilder = (random, frame) -> new FrameYawPitchRoll(frame, nextDouble(random, Math.PI), 0.0, 0.0);
+      tester.assertMethodsOfReferenceFrameHolderCheckReferenceFrame(frame2DTypeBuilder, methodFilter, EuclidTestConstants.API_FRAME_CHECKS_ITERATIONS);
    }
 
    @Test
    public void testOverloading() throws Exception
    {
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameOrientation3DReadOnly.class, Orientation3DReadOnly.class, true);
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameOrientation3DBasics.class, Orientation3DBasics.class, true);
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameYawPitchRollReadOnly.class, YawPitchRollReadOnly.class, true);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameOrientation3DReadOnly.class, Orientation3DReadOnly.class, true);
+      tester.assertOverloadingWithFrameObjects(FrameOrientation3DBasics.class, Orientation3DBasics.class, true);
+      tester.assertOverloadingWithFrameObjects(FrameYawPitchRollReadOnly.class, YawPitchRollReadOnly.class, true);
 
-      Map<String, Class<?>[]> framelessMethodsToIgnore = new HashMap<>();
-      framelessMethodsToIgnore.put("set", new Class<?>[] {YawPitchRoll.class});
-      framelessMethodsToIgnore.put("epsilonEquals", new Class<?>[] {YawPitchRoll.class, Double.TYPE});
-      framelessMethodsToIgnore.put("geometricallyEquals", new Class<?>[] {YawPitchRoll.class, Double.TYPE});
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameYawPitchRoll.class, YawPitchRoll.class, true, 1, framelessMethodsToIgnore);
+      List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", YawPitchRoll.class));
+      signaturesToIgnore.add(new MethodSignature("epsilonEquals", YawPitchRoll.class, Double.TYPE));
+      signaturesToIgnore.add(new MethodSignature("geometricallyEquals", YawPitchRoll.class, Double.TYPE));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+
+      tester.assertOverloadingWithFrameObjects(FrameYawPitchRoll.class, YawPitchRoll.class, true, 1, methodFilter);
    }
 
    @Test
@@ -426,7 +450,7 @@ public class FrameYawPitchRollTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
-         FrameYawPitchRoll actual = new FrameYawPitchRoll(worldFrame, expected);
+         FrameYawPitchRoll actual = new FrameYawPitchRoll(null, expected);
 
          assertEquals(expected.hashCode(), actual.hashCode());
       }

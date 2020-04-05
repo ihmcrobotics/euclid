@@ -17,6 +17,13 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public interface Shape3DReadOnly extends SupportingVertexHolder
 {
    /**
+    * Gets the position of this shape centroid.
+    *
+    * @return this shape centroid.
+    */
+   Point3DReadOnly getCentroid();
+
+   /**
     * Tests whether this shape contains at least one {@link Double#NaN} or not.
     *
     * @return {@code true} if this shape contains {@link Double#NaN}, {@code false} otherwise.
@@ -176,4 +183,49 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
     * @return {@code true} if this shape's implementation is convex, {@code false} otherwise.
     */
    boolean isConvex();
+
+   /**
+    * Gets whether this shape is a primitive shape or not.
+    * <p>
+    * A primitive shape is a simple geometric shape such as a sphere or a box. Transformation
+    * operations on primitive shapes are cheap.
+    * </p>
+    *
+    * @return {@code true} if this shape's implementation is a primitive, {@code false} otherwise.
+    */
+   boolean isPrimitive();
+
+   /**
+    * Indicates whether this geometry relies on a 3D pose, i.e. position and orientation, to defined in
+    * space.
+    * <p>
+    * For instance, a 3D box is defined by its size and 3D pose, so
+    * {@link Box3DReadOnly#isDefinedByPose()} is {@code true}, while a 3D sphere is defined by its
+    * radius and position, so {@link Sphere3DReadOnly#isDefinedByPose()} is {@code false}.
+    * </p>
+    * <p>
+    * For shapes defined by a pose, performing queries result in extra computation as an additional
+    * transformation is needed. By using this information, algorithms can be adjusted to minimize their
+    * number of operations.
+    * </p>
+    *
+    * @return {@code true} if this geometry uses a 3D pose to position itself in space, {@code false}
+    *         otherwise.
+    */
+   boolean isDefinedByPose();
+
+   /**
+    * Gets the pose defining this shape only if it is part of the geometry definition, i.e.
+    * {@code this.isDefinedByPose() == true}, otherwise this method returns {@code null}.
+    *
+    * @return the pose defining this shape, or {@code null} if this shape is not defined with a pose.
+    */
+   Shape3DPoseReadOnly getPose();
+
+   /**
+    * Creates and returns a deep copy of this shape.
+    *
+    * @return a copy of this shape.
+    */
+   Shape3DBasics copy();
 }

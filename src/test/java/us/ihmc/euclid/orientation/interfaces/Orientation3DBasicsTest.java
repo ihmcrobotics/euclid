@@ -17,6 +17,7 @@ import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public abstract class Orientation3DBasicsTest
 {
@@ -256,11 +257,11 @@ public abstract class Orientation3DBasicsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Orientation3DBasics orientation = createEmptyOrientation3DBasics();
-         double yaw = yawPitchRoll[0];
-         double pitch = yawPitchRoll[1];
-         double roll = yawPitchRoll[2];
+         double yaw = yawPitchRoll.getYaw();
+         double pitch = yawPitchRoll.getPitch();
+         double roll = yawPitchRoll.getRoll();
          orientation.setYawPitchRoll(yaw, pitch, roll);
 
          Vector3D vectorOriginal = EuclidCoreRandomTools.nextVector3D(random);
@@ -277,29 +278,17 @@ public abstract class Orientation3DBasicsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Orientation3DBasics orientation = createEmptyOrientation3DBasics();
-         double yaw = yawPitchRoll[0];
-         double pitch = yawPitchRoll[1];
-         double roll = yawPitchRoll[2];
+         double yaw = yawPitchRoll.getYaw();
+         double pitch = yawPitchRoll.getPitch();
+         double roll = yawPitchRoll.getRoll();
          orientation.setYawPitchRoll(yaw, pitch, roll);
 
          double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(yawPitchRoll[0], orientation.getYaw(), yprEpsilon);
-         assertEquals(yawPitchRoll[1], orientation.getPitch(), yprEpsilon);
-         assertEquals(yawPitchRoll[2], orientation.getRoll(), yprEpsilon);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         double[] yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         Orientation3DBasics orientation = createEmptyOrientation3DBasics();
-         orientation.setYawPitchRoll(yawPitchRoll);
-
-         double yprEpsilon = 10.0 * getEpsilon();
-         assertEquals(yawPitchRoll[0], orientation.getYaw(), yprEpsilon);
-         assertEquals(yawPitchRoll[1], orientation.getPitch(), yprEpsilon);
-         assertEquals(yawPitchRoll[2], orientation.getRoll(), yprEpsilon);
+         assertEquals(yawPitchRoll.getYaw(), orientation.getYaw(), yprEpsilon);
+         assertEquals(yawPitchRoll.getPitch(), orientation.getPitch(), yprEpsilon);
+         assertEquals(yawPitchRoll.getRoll(), orientation.getRoll(), yprEpsilon);
       }
    }
 
@@ -310,7 +299,8 @@ public abstract class Orientation3DBasicsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector3D eulerAngles = new Vector3D(EuclidCoreRandomTools.nextYawPitchRollArray(random));
+         Vector3D eulerAngles = new Vector3D();
+         EuclidCoreRandomTools.nextYawPitchRoll(random).getEuler(eulerAngles);
          Orientation3DBasics orientation = createEmptyOrientation3DBasics();
          double rotX = eulerAngles.getX();
          double rotY = eulerAngles.getY();
@@ -331,7 +321,8 @@ public abstract class Orientation3DBasicsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector3D eulerAngles = new Vector3D(EuclidCoreRandomTools.nextYawPitchRollArray(random));
+         Vector3D eulerAngles = new Vector3D();
+         EuclidCoreRandomTools.nextYawPitchRoll(random).getEuler(eulerAngles);
          Orientation3DBasics orientation = createEmptyOrientation3DBasics();
          double rotX = eulerAngles.getX();
          double rotY = eulerAngles.getY();
@@ -346,7 +337,8 @@ public abstract class Orientation3DBasicsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector3D eulerAngles = new Vector3D(EuclidCoreRandomTools.nextYawPitchRollArray(random));
+         Vector3D eulerAngles = new Vector3D();
+         EuclidCoreRandomTools.nextYawPitchRoll(random).getEuler(eulerAngles);
          Orientation3DBasics orientation = createEmptyOrientation3DBasics();
          orientation.setEuler(eulerAngles);
 

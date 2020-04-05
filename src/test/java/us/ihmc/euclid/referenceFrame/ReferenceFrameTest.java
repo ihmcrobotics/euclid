@@ -8,7 +8,11 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -492,7 +496,7 @@ public class ReferenceFrameTest
          // good
       }
 
-      ReferenceFrameTools.removeFrame(someFrame);
+      someFrame.remove();
       someFrame = ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parent, new RigidBodyTransform());
 
       someFrame.remove();

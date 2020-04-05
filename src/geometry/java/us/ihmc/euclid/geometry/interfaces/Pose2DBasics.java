@@ -3,6 +3,8 @@ package us.ihmc.euclid.geometry.interfaces;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -99,8 +101,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Pose2DReadOnly other)
    {
-      setPosition(other.getPosition());
-      setOrientation(other.getOrientation());
+      getPosition().set(other.getPosition());
+      getOrientation().set(other.getOrientation());
    }
 
    /**
@@ -110,8 +112,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Pose3DReadOnly pose3DReadOnly)
    {
-      setPosition(pose3DReadOnly.getPosition());
-      setOrientation(pose3DReadOnly.getOrientation());
+      getPosition().set(pose3DReadOnly.getPosition());
+      getOrientation().set(pose3DReadOnly.getOrientation());
    }
 
    /**
@@ -119,7 +121,9 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     *
     * @param x the x-coordinate of the position.
     * @param y the y-coordinate of the position.
+    * @deprecated Use {@code this.getPosition().set(x, y)} instead.
     */
+   @Deprecated
    default void setPosition(double x, double y)
    {
       getPosition().set(x, y);
@@ -129,7 +133,9 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the position to the given tuple.
     *
     * @param position the tuple with the new position coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(Tuple2DReadOnly position)
    {
       getPosition().set(position);
@@ -139,7 +145,9 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the position to the given tuple.
     *
     * @param position the tuple with the new position coordinates. Not modified.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(Tuple3DReadOnly position)
    {
       getPosition().set(position);
@@ -149,7 +157,9 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the orientation angle value.
     *
     * @param yaw the orientation angle value.
+    * @deprecated Use {@code this.getOrientation().setYaw(yaw)} instead.
     */
+   @Deprecated
    default void setOrientation(double yaw)
    {
       getOrientation().setYaw(yaw);
@@ -159,7 +169,9 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the orientation from the given orientation 2D.
     *
     * @param orientation the orientation with the new angle value for this. Not modified.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(Orientation2DReadOnly orientation)
    {
       getOrientation().set(orientation);
@@ -169,7 +181,9 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     * Sets the orientation from the yaw angle of the given quaternion.
     *
     * @param orientation the orientation with the new angle value for this. Not modified.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(Orientation3DReadOnly orientation)
    {
       getOrientation().set(orientation);
@@ -184,8 +198,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(double x, double y, double yaw)
    {
-      setPosition(x, y);
-      setOrientation(yaw);
+      getPosition().set(x, y);
+      getOrientation().setYaw(yaw);
    }
 
    /**
@@ -196,8 +210,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly position, double yaw)
    {
-      setPosition(position);
-      setOrientation(yaw);
+      getPosition().set(position);
+      getOrientation().setYaw(yaw);
    }
 
    /**
@@ -208,8 +222,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
     */
    default void set(Tuple2DReadOnly position, Orientation2DReadOnly orientation)
    {
-      setPosition(position);
-      setOrientation(orientation);
+      getPosition().set(position);
+      getOrientation().set(orientation);
    }
 
    /**
@@ -241,8 +255,8 @@ public interface Pose2DBasics extends Pose2DReadOnly, Clearable, Transformable
       if (checkIsTransform2D)
          rigidBodyTransform.checkIfRotation2D();
 
-      setPosition(rigidBodyTransform.getTranslationX(), rigidBodyTransform.getTranslationY());
-      setOrientation(rigidBodyTransform.getRotation().getYaw());
+      getPosition().set(rigidBodyTransform.getTranslation());
+      getOrientation().set(rigidBodyTransform.getRotation());
    }
 
    /**

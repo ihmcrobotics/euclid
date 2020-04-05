@@ -123,8 +123,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     */
    default void get(FixedFramePoint3DBasics firstEndpointToPack, FixedFramePoint3DBasics secondEndpointToPack)
    {
-      checkReferenceFrameMatch(firstEndpointToPack);
-      checkReferenceFrameMatch(secondEndpointToPack);
+      checkReferenceFrameMatch(firstEndpointToPack, secondEndpointToPack);
       LineSegment3DReadOnly.super.get(firstEndpointToPack, secondEndpointToPack);
    }
 
@@ -424,8 +423,7 @@ public interface FrameLineSegment3DReadOnly extends LineSegment3DReadOnly, Refer
     */
    default boolean orthogonalProjection(FramePoint3DReadOnly pointToProject, FixedFramePoint3DBasics projectionToPack)
    {
-      checkReferenceFrameMatch(pointToProject);
-      checkReferenceFrameMatch(projectionToPack);
+      checkReferenceFrameMatch(pointToProject, projectionToPack);
       return LineSegment3DReadOnly.super.orthogonalProjection(pointToProject, projectionToPack);
    }
 

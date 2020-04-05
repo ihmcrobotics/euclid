@@ -17,7 +17,15 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory;
 import us.ihmc.euclid.shape.convexPolytope.tools.IcoSphereFactory.TriangleMesh3D;
-import us.ihmc.euclid.shape.primitives.*;
+import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.Capsule3D;
+import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
+import us.ihmc.euclid.shape.primitives.PointShape3D;
+import us.ihmc.euclid.shape.primitives.Ramp3D;
+import us.ihmc.euclid.shape.primitives.Shape3DPose;
+import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.Torus3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.AffineTransform;
@@ -26,6 +34,7 @@ import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -41,6 +50,17 @@ public class EuclidShapeRandomTools
    private EuclidShapeRandomTools()
    {
       // Suppresses default constructor, ensuring non-instantiability.
+   }
+
+   /**
+    * Generates a random pose using {@link EuclidCoreRandomTools#nextRigidBodyTransform(Random)}.
+    *
+    * @param random the random generator to use.
+    * @return the random pose.
+    */
+   public static Shape3DPose nextShape3DPose(Random random)
+   {
+      return new Shape3DPose(EuclidCoreRandomTools.nextRigidBodyTransform(random));
    }
 
    /**
@@ -438,8 +458,8 @@ public class EuclidShapeRandomTools
                                                                                                           numberOfVertices);
       List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
       RigidBodyTransform transform = new RigidBodyTransform();
-      transform.setTranslationZ(EuclidCoreRandomTools.nextDouble(random, centerMinMax));
-      transform.setRotation(EuclidGeometryTools.axisAngleFromZUpToVector3D(planeNormal));
+      transform.getTranslation().setZ(EuclidCoreRandomTools.nextDouble(random, centerMinMax));
+      transform.getRotation().set(EuclidGeometryTools.axisAngleFromZUpToVector3D(planeNormal));
       circleBasedConvexPolygon3D.forEach(transform::transform);
       return circleBasedConvexPolygon3D;
    }
@@ -586,7 +606,7 @@ public class EuclidShapeRandomTools
                                                                            EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
                                                                            random.nextInt(divisionsMax - divisionsMin + 1) + divisionsMin);
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       coneVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(coneVertices));
    }
@@ -629,7 +649,7 @@ public class EuclidShapeRandomTools
    {
       List<Point3D> cubeVertices = EuclidPolytopeFactories.newCubeVertices(EuclidCoreRandomTools.nextDouble(random, edgeLengthMin, edgeLengthMax));
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       cubeVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cubeVertices));
    }
@@ -679,7 +699,7 @@ public class EuclidShapeRandomTools
                                                                                    EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
                                                                                    random.nextInt(divisionsMax - divisionsMin + 1) + divisionsMin);
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       cylinderVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(cylinderVertices));
    }
@@ -891,7 +911,7 @@ public class EuclidShapeRandomTools
                                                                                  EuclidCoreRandomTools.nextDouble(random, baseLengthMin, baseLengthMax),
                                                                                  EuclidCoreRandomTools.nextDouble(random, baseWidthMin, baseWidthMax));
       RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.getTranslation().set(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
       pyramidVertices.forEach(transform::transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(pyramidVertices));
    }
@@ -924,7 +944,7 @@ public class EuclidShapeRandomTools
     *
     * @param random       the random generator to use.
     * @param centerMinMax the maximum absolute value for each coordinate of the edge's center.
-    * @param minMax       the range of the egde in the three directions.
+    * @param minMax       the range of the edge in the three directions.
     * @return the random convex polytope 3D.
     */
    public static ConvexPolytope3D nextSingleEdgeConvexPolytope3D(Random random, double centerMinMax, double minMax)
@@ -1102,6 +1122,70 @@ public class EuclidShapeRandomTools
       next.getPointOnB().set(EuclidCoreRandomTools.nextPoint3D(random));
       next.getNormalOnA().set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0));
       next.getNormalOnB().set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0));
+      return next;
+   }
+
+   /**
+    * Generates a random convex shape 3D.
+    * <p>
+    * The shape is generated by picking at random one of the following generators:
+    * <ul>
+    * <li>{@link #nextBox3D(Random)}.
+    * <li>{@link #nextCapsule3D(Random)}.
+    * <li>{@link #nextConvexPolytope3D(Random)}.
+    * <li>{@link #nextCylinder3D(Random)}.
+    * <li>{@link #nextEllipsoid3D(Random)}.
+    * <li>In case of {@link PointShape3D}, the resulting shape is not random because fully constrained
+    * by the given position.
+    * <li>{@link #nextRamp3D(Random)}.
+    * <li>{@link #nextSphere3D(Random)}.
+    * </ul>
+    * </p>
+    * <p>
+    * This generator differs from {@link #nextShape3D(Random)} by excluding {@link Torus3D} that is a
+    * concave shape.
+    * </p>
+    *
+    * @param random        the random generator to use.
+    * @param shapeCentroid the position of the shape's centroid. Not modified.
+    * @return the random convex shape 3D.
+    */
+   public static Shape3DBasics nextConvexShape3D(Random random, Tuple3DReadOnly shapeCentroid)
+   {
+      Shape3DBasics next = null;
+
+      switch (random.nextInt(8))
+      {
+         case 0:
+            next = nextBox3D(random);
+            break;
+         case 1:
+            next = nextCapsule3D(random);
+            break;
+         case 2:
+            next = nextConvexPolytope3D(random);
+            break;
+         case 3:
+            next = nextCylinder3D(random);
+            break;
+         case 4:
+            next = nextEllipsoid3D(random);
+            break;
+         case 5:
+            return new PointShape3D(shapeCentroid);
+         case 6:
+            next = nextRamp3D(random);
+            break;
+         case 7:
+            next = nextSphere3D(random);
+            break;
+         default:
+            throw new RuntimeException("Unexpected state.");
+      }
+
+      RigidBodyTransform transform = new RigidBodyTransform();
+      transform.getTranslation().sub(shapeCentroid, next.getCentroid());
+      next.applyTransform(transform);
       return next;
    }
 }

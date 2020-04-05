@@ -2,9 +2,7 @@ package us.ihmc.euclid.referenceFrame;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -13,7 +11,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 /**
  * {@code ReferenceFrame} represents a reference coordinate frame.
@@ -173,8 +170,8 @@ public abstract class ReferenceFrame
    /**
     * Creates a new root reference frame.
     * <p>
-    * Please use the method {@link #constructARootFrame(String)} instead. This is to use only when
-    * extending this class.
+    * Please use the method {@link ReferenceFrameTools#constructARootFrame(String)} instead. This is to
+    * use only when extending this class.
     * </p>
     * <p>
     * Most of the time, {@link #getWorldFrame()} is the only root frame from which children reference
@@ -1000,7 +997,6 @@ public abstract class ReferenceFrame
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
    }
 
-   @Deprecated
    private void checkIfRemoved()
    {
       if (hasBeenRemoved)
@@ -1014,12 +1010,11 @@ public abstract class ReferenceFrame
     * <p>
     * This recursively disables all children of this frame also.
     * </p>
-    *
-    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
-    *             exists.
-    * @since 0.9.4
+    * <p>
+    * Note that reference frames are automatically disposed of by the GC when no external reference
+    * exists.
+    * </p>
     */
-   @Deprecated
    public void remove()
    {
       if (!hasBeenRemoved && parentFrame != null)
@@ -1045,21 +1040,15 @@ public abstract class ReferenceFrame
       }
    }
 
-   private boolean hasChildWithName(String childName)
-   {
-      updateChildren();
-      return children.stream().map(WeakReference::get).filter(child -> child != null).anyMatch(child -> child.getName().equals(childName));
-   }
-
    /**
     * Removes and disables all the children of {@code this}.
+    * <p>
+    * Note that reference frames are automatically disposed of by the GC when no external reference
+    * exists.
+    * </p>
     *
     * @see #remove()
-    * @deprecated Reference frames are automatically disposed of by the GC when no external reference
-    *             exists.
-    * @since 0.9.4
     */
-   @Deprecated
    public void clearChildren()
    {
       checkIfRemoved();
@@ -1067,7 +1056,6 @@ public abstract class ReferenceFrame
       children.clear();
    }
 
-   @Deprecated
    private void disableRecursivly()
    {
       hasBeenRemoved = true;
@@ -1103,19 +1091,6 @@ public abstract class ReferenceFrame
    }
 
    /**
-    * Getter for the read only view of the children of this reference frame.
-    *
-    * @return children frames of this frame.
-    * @deprecated Use {@link #getNumberOfChildren()} and {@link #getChild(int)} instead.
-    */
-   @Deprecated
-   public Collection<ReferenceFrame> getChildren()
-   {
-      checkIfRemoved();
-      return children.stream().map(WeakReference::get).filter(frame -> frame != null).collect(Collectors.toList());
-   }
-
-   /**
     * Getter for the read only view of all reference frames starting with the root frame of this frame
     * tree all the way to this frame.
     *
@@ -1134,48 +1109,5 @@ public abstract class ReferenceFrame
    public static ReferenceFrame getWorldFrame()
    {
       return ReferenceFrameTools.getWorldFrame();
-   }
-
-   /** Use {@link ReferenceFrameTools#constructARootFrame(String)} instead. */
-   @Deprecated
-   public static ReferenceFrame constructARootFrame(String frameName)
-   {
-      return ReferenceFrameTools.constructARootFrame(frameName);
-   }
-
-   /**
-    * Use
-    * {@link ReferenceFrameTools#constructFrameWithUnchangingTransformFromParent(String, ReferenceFrame, RigidBodyTransform)}
-    * instead.
-    */
-   @Deprecated
-   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                RigidBodyTransform transformFromParent)
-   {
-      return ReferenceFrameTools.constructFrameWithUnchangingTransformFromParent(frameName, parentFrame, transformFromParent);
-   }
-
-   /**
-    * Use
-    * {@link ReferenceFrameTools#constructFrameWithUnchangingTranslationFromParent(String, ReferenceFrame, Tuple3DReadOnly)}
-    * instead.
-    */
-   @Deprecated
-   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
-                                                                                  Tuple3DReadOnly translationOffsetFromParent)
-   {
-      return ReferenceFrameTools.constructFrameWithUnchangingTranslationFromParent(frameName, parentFrame, translationOffsetFromParent);
-   }
-
-   /**
-    * Use
-    * {@link ReferenceFrameTools#constructFrameWithUnchangingTransformToParent(String, ReferenceFrame, RigidBodyTransform)}
-    * instead.
-    */
-   @Deprecated
-   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
-                                                                              RigidBodyTransform transformToParent)
-   {
-      return ReferenceFrameTools.constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
    }
 }

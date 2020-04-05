@@ -7,8 +7,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
- * Write and read interface for a line segment 3D expressed in a constant reference frame, i.e. this
- * line segment is always expressed in the same reference frame.
+ * Write and read interface for a line segment 3D expressed in a constant reference frame, i.e. the
+ * reference frame of this object cannot be changed via this interface.
  * <p>
  * A line segment 3D is a finite-length line defined in the XY-plane by its two 3D endpoints.
  * </p>
@@ -48,7 +48,9 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     * @param firstEndpoint new endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(FramePoint3DReadOnly firstEndpoint)
    {
       getFirstEndpoint().set(firstEndpoint);
@@ -60,7 +62,9 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(FramePoint3DReadOnly secondEndpoint)
    {
       getSecondEndpoint().set(secondEndpoint);
@@ -138,8 +142,7 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     */
    default void set(FramePoint3DReadOnly firstEndpoint, FramePoint3DReadOnly secondEndpoint)
    {
-      checkReferenceFrameMatch(firstEndpoint);
-      checkReferenceFrameMatch(secondEndpoint);
+      checkReferenceFrameMatch(firstEndpoint, secondEndpoint);
       LineSegment3DBasics.super.set(firstEndpoint, secondEndpoint);
    }
 
@@ -188,8 +191,7 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     */
    default void set(FramePoint3DReadOnly firstEndpoint, FrameVector3DReadOnly fromFirstToSecondEndpoint)
    {
-      checkReferenceFrameMatch(firstEndpoint);
-      checkReferenceFrameMatch(fromFirstToSecondEndpoint);
+      checkReferenceFrameMatch(firstEndpoint, fromFirstToSecondEndpoint);
       LineSegment3DBasics.super.set(firstEndpoint, fromFirstToSecondEndpoint);
    }
 

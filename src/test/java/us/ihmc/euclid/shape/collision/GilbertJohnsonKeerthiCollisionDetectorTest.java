@@ -1,8 +1,16 @@
 package us.ihmc.euclid.shape.collision;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -14,15 +22,24 @@ import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
+import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.primitives.*;
+import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.Capsule3D;
+import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
+import us.ihmc.euclid.shape.primitives.PointShape3D;
+import us.ihmc.euclid.shape.primitives.Ramp3D;
+import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -624,7 +641,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(sphereA, sphereB);
       }, EuclidShapeCollisionTools::evaluateSphere3DSphere3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -636,7 +653,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double positionMaxEpsilon = 1.0e-13;
 
       double distanceMeanEpsilon = 1.0e-15;
-      double positionMeanEpsilon = 1.0e-16;
+      double positionMeanEpsilon = 1.0e-15;
 
       AnalyticalShapeCollisionDetection<PointShape3D, Box3D> function = new AnalyticalShapeCollisionDetection<>(() ->
       {
@@ -650,7 +667,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluatePointShape3DBox3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -675,7 +692,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluateSphere3DBox3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -700,7 +717,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluatePointShape3DCapsule3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -711,8 +728,8 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double distanceMaxEpsilon = 1.0e-7;
       double positionMaxEpsilon = 1.0e-5;
 
-      double distanceMeanEpsilon = 1.0e-11;
-      double positionMeanEpsilon = 1.0e-7;
+      double distanceMeanEpsilon = 1.0e-10;
+      double positionMeanEpsilon = 1.0e-6;
 
       AnalyticalShapeCollisionDetection<Capsule3D, Capsule3D> function = new AnalyticalShapeCollisionDetection<>(() ->
       {
@@ -721,7 +738,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluateCapsule3DCapsule3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -746,7 +763,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluateSphere3DCapsule3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -771,7 +788,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluatePointShape3DCylinder3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -796,7 +813,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluateSphere3DCylinder3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -822,7 +839,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluatePointShape3DEllipsoid3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -847,7 +864,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluateSphere3DEllipsoid3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -859,7 +876,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       double positionMaxEpsilon = 1.0e-13;
 
       double distanceMeanEpsilon = 1.0e-15;
-      double positionMeanEpsilon = 1.0e-16;
+      double positionMeanEpsilon = 1.0e-15;
 
       AnalyticalShapeCollisionDetection<PointShape3D, Ramp3D> function = new AnalyticalShapeCollisionDetection<>(() ->
       {
@@ -873,7 +890,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluatePointShape3DRamp3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
    @Test
@@ -898,10 +915,35 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          return new Pair<>(shapeA, shapeB);
       }, EuclidShapeCollisionTools::evaluateSphere3DRamp3DCollision);
 
-      assertAgainstAnalyticalFunction(function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
+      assertAgainstAnalyticalFunction(random, function, distanceMaxEpsilon, positionMaxEpsilon, distanceMeanEpsilon, positionMeanEpsilon);
    }
 
-   private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> void assertAgainstAnalyticalFunction(AnalyticalShapeCollisionDetection<A, B> function,
+   @Test
+   void testShapeTransformOptimization()
+   { // Comparing the method with the Shape3DReadOnly arguments against the one with SupportingVertexHolder argument to validate the transformation optimization done in the first one.
+      Random random = new Random(3466);
+      double distanceEpsilon = 1.0e-4;
+      // When 2 "flat-ish" shapes are closest on their part with low curvature, the closest points can shift along the surface.
+      double pointTangentialEpsilon = 1.0e-2;
+
+      for (int i = 0; i < 10 * ITERATIONS; i++)
+      {
+         Shape3DBasics shapeA = EuclidShapeRandomTools.nextConvexShape3D(random);
+         Shape3DBasics shapeB = EuclidShapeRandomTools.nextConvexShape3D(random);
+
+         GilbertJohnsonKeerthiCollisionDetector detector = new GilbertJohnsonKeerthiCollisionDetector();
+         EuclidShape3DCollisionResult expectedResult = detector.evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
+         expectedResult.setShapeA(shapeA);
+         expectedResult.setShapeB(shapeB);
+         EuclidShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
+
+         EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
+               + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+      }
+   }
+
+   private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> void assertAgainstAnalyticalFunction(Random random,
+                                                                                                              AnalyticalShapeCollisionDetection<A, B> function,
                                                                                                               double distanceMaxEpsilon,
                                                                                                               double positionMaxEpsilon,
                                                                                                               double distanceMeanEpsilon,
@@ -927,17 +969,22 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          EuclidShape3DCollisionResult gjkResult = new EuclidShape3DCollisionResult();
 
          GilbertJohnsonKeerthiCollisionDetector gjkDetector = new GilbertJohnsonKeerthiCollisionDetector();
-         gjkDetector.evaluateCollision(shapeA, shapeB, gjkResult);
+         if (random.nextBoolean())
+         {
+            gjkDetector.evaluateCollision(shapeA, shapeB, gjkResult);
+         }
+         else
+         {
+            gjkDetector.evaluateCollision(shapeB, shapeA, gjkResult);
+            gjkResult.swapShapes();
+         }
 
          double distanceError = Math.abs(expectedResult.getSignedDistance() - gjkResult.getSignedDistance());
-         if (verbose && (i % 5000) == 0)
+         if (verbose && i % 5000 == 0)
          {
             System.out.println(iterationPrefix + ", Number of its: " + gjkDetector.getNumberOfIterations() + " Analytical: "
                   + expectedResult.getSignedDistance() + ", GJK: " + gjkResult.getSignedDistance() + ", diff: " + distanceError);
          }
-
-         // Asserts the internal sanity of the collision result
-         //         assertEquals(gjkDetector.getSimplex().getPolytope().signedDistance(new Point3D()) <= 0.0, gjkResult.areShapesColliding(), iterationPrefix);
 
          assertEquals(expectedResult.areShapesColliding(),
                       gjkResult.areShapesColliding(),

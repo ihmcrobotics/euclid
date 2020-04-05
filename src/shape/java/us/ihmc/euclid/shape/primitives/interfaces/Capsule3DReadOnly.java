@@ -7,6 +7,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -58,7 +59,19 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
     *
     * @return the axis of this capsule.
     */
-   Vector3DReadOnly getAxis();
+   UnitVector3DReadOnly getAxis();
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * Note that the centroid is also the position of this capsule.
+    * </p>
+    */
+   @Override
+   default Point3DReadOnly getCentroid()
+   {
+      return getPosition();
+   }
 
    /**
     * Gets the read-only reference to the center of the top half-sphere.
@@ -145,6 +158,32 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
    {
       return true;
    }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isPrimitive()
+   {
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default boolean isDefinedByPose()
+   {
+      return false;
+   }
+
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
+   @Override
+   default Shape3DPoseReadOnly getPose()
+   {
+      return null;
+   }
+
+   @Override
+   Capsule3DBasics copy();
 
    /**
     * Tests on a per component basis if this capsule and {@code other} are equal to an {@code epsilon}.

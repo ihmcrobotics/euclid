@@ -1,6 +1,11 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
@@ -15,7 +20,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -3871,7 +3876,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
 
          Point3D firstPointOnLine = new Point3D(cylinderRadius, 0.0, cylinderTopZ + EuclidCoreRandomTools.nextDouble(random, 0.0001, 1.0));
@@ -3935,7 +3940,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderBottomZ = -0.5 * cylinderLength;
 
          Point3D firstPointOnLine = new Point3D(cylinderRadius, 0.0, cylinderBottomZ - EuclidCoreRandomTools.nextDouble(random, 0.0001, 1.0));
@@ -3999,7 +4004,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -4066,7 +4071,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -4175,7 +4180,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -4295,7 +4300,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -4415,7 +4420,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -5159,7 +5164,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
 
          Point3D lineSegmentStart = new Point3D(cylinderRadius, 0.0, cylinderTopZ + EuclidCoreRandomTools.nextDouble(random, 0.0001, 1.0));
@@ -5209,7 +5214,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderBottomZ = -0.5 * cylinderLength;
 
          Point3D lineSegmentStart = new Point3D(cylinderRadius, 0.0, cylinderBottomZ - EuclidCoreRandomTools.nextDouble(random, 0.0001, 1.0));
@@ -5255,7 +5260,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -5308,7 +5313,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -5578,7 +5583,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -5859,7 +5864,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -6140,7 +6145,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -7747,7 +7752,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
 
          Point3D rayOrigin = new Point3D(cylinderRadius, 0.0, cylinderTopZ + EuclidCoreRandomTools.nextDouble(random, 0.0001, 1.0));
@@ -7797,7 +7802,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderBottomZ = -0.5 * cylinderLength;
 
          Point3D rayOrigin = new Point3D(cylinderRadius, 0.0, cylinderBottomZ - EuclidCoreRandomTools.nextDouble(random, 0.0001, 1.0));
@@ -7847,7 +7852,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -7898,7 +7903,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -7954,7 +7959,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8009,7 +8014,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8064,7 +8069,7 @@ public class EuclidGeometryToolsTest
          double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
          Point3D cylinderPosition = new Point3D();
-         Vector3D cylinderAxis = new Vector3D(Axis.Z);
+         Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
          double cylinderTopZ = 0.5 * cylinderLength;
          double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8145,7 +8150,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8209,7 +8214,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8270,7 +8275,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8334,7 +8339,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8398,7 +8403,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8486,7 +8491,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -8550,7 +8555,7 @@ public class EuclidGeometryToolsTest
             double cylinderLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             double cylinderRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 1.0);
             Point3D cylinderPosition = new Point3D();
-            Vector3D cylinderAxis = new Vector3D(Axis.Z);
+            Vector3D cylinderAxis = new Vector3D(Axis3D.Z);
             double cylinderTopZ = 0.5 * cylinderLength;
             double cylinderBottomZ = -0.5 * cylinderLength;
 
@@ -9633,13 +9638,13 @@ public class EuclidGeometryToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test with query exactly on plane
-         Axis planeNormal = Axis.values[random.nextInt(3)];
+         Axis3D planeNormal = Axis3D.values[random.nextInt(3)];
          Point3D pointOnPlane = EuclidCoreRandomTools.nextPoint3D(random);
 
          performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
 
-         Axis otherAxis1 = planeNormal.getNextClockwiseAxis();
-         Axis otherAxis2 = otherAxis1.getNextClockwiseAxis();
+         Axis3D otherAxis1 = planeNormal.getNextClockwiseAxis();
+         Axis3D otherAxis2 = otherAxis1.getNextClockwiseAxis();
 
          Vector3D orthogonal1 = new Vector3D(otherAxis1);
          Vector3D orthogonal2 = new Vector3D(otherAxis2);

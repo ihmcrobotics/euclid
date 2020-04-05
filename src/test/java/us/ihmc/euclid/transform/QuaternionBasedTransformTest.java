@@ -414,10 +414,6 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expectedTransform, actualTransform, EPS);
 
          actualTransform.setRotationToZero();
-         actualTransform.setRotationYawPitchRoll(new double[] {yaw, pitch, roll});
-         EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expectedTransform, actualTransform, EPS);
-
-         actualTransform.setRotationToZero();
          actualTransform.setRotationEuler(new Vector3D(roll, pitch, yaw));
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expectedTransform, actualTransform, EPS);
 
@@ -572,13 +568,6 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          Vector3D rotationVector = new Vector3D();
          transform.getRotation(rotationVector);
          actualQuaternion.setRotationVector(rotationVector);
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expectedQuaternion, actualQuaternion, EPS);
-      }
-
-      { // Test getRotationYawPitchRoll(double[] yawPitchRollToPack)
-         double[] yawPitchRoll = new double[3];
-         transform.getRotationYawPitchRoll(yawPitchRoll);
-         actualQuaternion.setYawPitchRoll(yawPitchRoll);
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expectedQuaternion, actualQuaternion, EPS);
       }
 

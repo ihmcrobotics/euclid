@@ -6,14 +6,17 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
+import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
+import us.ihmc.euclid.referenceFrame.api.FrameTypeCopier;
+import us.ihmc.euclid.referenceFrame.api.RandomFramelessTypeBuilder;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameAPITestTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 
 public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
@@ -29,13 +32,14 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
    @Test
    public void testConsistencyWithLine2D()
    {
-      Random random = new Random(234235L);
-
-      EuclidFrameAPITestTools.FrameTypeBuilder<? extends ReferenceFrameHolder> frameTypeBuilder = (frame, line) -> createFrameLine(frame,
-                                                                                                                                   (Line2DReadOnly) line);
-      EuclidFrameAPITestTools.GenericTypeBuilder framelessTypeBuilder = () -> EuclidGeometryRandomTools.nextLine2D(random);
+      FrameTypeCopier frameTypeBuilder = (frame, line) -> createFrameLine(frame, (Line2DReadOnly) line);
+      RandomFramelessTypeBuilder framelessTypeBuilder = EuclidGeometryRandomTools::nextLine2D;
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals");
-      EuclidFrameAPITestTools.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder, framelessTypeBuilder, methodFilter);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeBuilder,
+                                                                  framelessTypeBuilder,
+                                                                  methodFilter,
+                                                                  EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 
    @Override
@@ -45,12 +49,16 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
       super.testOverloading();
       Predicate<Method> framelessMethodsToIgnore = m -> !m.getName().equals("set") && !m.getName().equals("equals") && !m.getName().equals("epsilonEquals")
             && !m.getName().equals("geometricallyEquals");
-      EuclidFrameAPITestTools.assertOverloadingWithFrameObjects(FrameLine2D.class, Line2D.class, true, 1, framelessMethodsToIgnore);
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertOverloadingWithFrameObjects(FrameLine2D.class, Line2D.class, true, 1, framelessMethodsToIgnore);
    }
 
    @Test
    public void testSetMatchingFrame() throws Exception
    {
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetMatchingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLine2D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+
       Random random = new Random(544354);
 
       for (int i = 0; i < 1000; i++)
@@ -68,5 +76,12 @@ public class FrameLine2DTest extends FrameLine2DReadOnlyTest<FrameLine2D>
 
          EuclidGeometryTestTools.assertLine2DEquals(expected, actual, EPSILON);
       }
+   }
+
+   @Test
+   public void testSetIncludingFrame()
+   {
+      EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameAPIDefaultConfiguration());
+      tester.assertSetIncludingFramePreserveFunctionality(EuclidFrameRandomTools::nextFrameLine2D, EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
    }
 }

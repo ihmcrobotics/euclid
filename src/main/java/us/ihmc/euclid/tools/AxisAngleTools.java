@@ -4,9 +4,9 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -96,14 +96,6 @@ public class AxisAngleTools
     */
    private static void transformImpl(AxisAngleReadOnly axisAngle, boolean negateAngle, Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
-      double axisNorm = axisAngle.axisNorm();
-
-      if (axisNorm < EPS)
-      {
-         tupleTransformed.set(tupleOriginal);
-         return;
-      }
-
       double angle = axisAngle.getAngle();
 
       if (negateAngle)
@@ -116,11 +108,6 @@ public class AxisAngleTools
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
-
-      axisNorm = 1.0 / axisNorm;
-      ux *= axisNorm;
-      uy *= axisNorm;
-      uz *= axisNorm;
 
       double crossX = uy * tupleOriginal.getZ() - uz * tupleOriginal.getY();
       double crossY = uz * tupleOriginal.getX() - ux * tupleOriginal.getZ();
@@ -226,14 +213,6 @@ public class AxisAngleTools
       if (checkIfTransformInXYPlane)
          axisAngle.checkIfOrientation2D(EPS);
 
-      double axisNorm = axisAngle.axisNorm();
-
-      if (axisNorm < EPS)
-      {
-         tupleTransformed.set(tupleOriginal);
-         return;
-      }
-
       double angle = axisAngle.getAngle();
 
       if (negateAngle)
@@ -244,9 +223,6 @@ public class AxisAngleTools
       double sin = EuclidCoreTools.sin(angle);
 
       double uz = axisAngle.getZ();
-
-      axisNorm = 1.0 / axisNorm;
-      uz *= axisNorm;
 
       double crossX = -uz * tupleOriginal.getY();
       double crossY = uz * tupleOriginal.getX();
@@ -326,16 +302,8 @@ public class AxisAngleTools
     */
    private static void transformImpl(AxisAngleReadOnly axisAngle, boolean negateAngle, Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
-      double axisNorm = axisAngle.axisNorm();
-
-      if (axisNorm < EPS)
-      {
-         matrixTransformed.set(matrixOriginal);
-         return;
-      }
-
       double cos = EuclidCoreTools.cos(0.5 * axisAngle.getAngle());
-      double sin = EuclidCoreTools.sin(0.5 * axisAngle.getAngle()) / axisNorm;
+      double sin = EuclidCoreTools.sin(0.5 * axisAngle.getAngle());
 
       double qx = axisAngle.getX() * sin;
       double qy = axisAngle.getY() * sin;
@@ -444,14 +412,6 @@ public class AxisAngleTools
     */
    private static void transformImpl(AxisAngleReadOnly axisAngle, boolean negateAngle, Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
    {
-      double axisNorm = axisAngle.axisNorm();
-
-      if (axisNorm < EPS)
-      {
-         vectorTransformed.set(vectorOriginal);
-         return;
-      }
-
       double angle = axisAngle.getAngle();
 
       if (negateAngle)
@@ -464,11 +424,6 @@ public class AxisAngleTools
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
-
-      axisNorm = 1.0 / axisNorm;
-      ux *= axisNorm;
-      uy *= axisNorm;
-      uz *= axisNorm;
 
       double crossX = uy * vectorOriginal.getZ() - uz * vectorOriginal.getY();
       double crossY = uz * vectorOriginal.getX() - ux * vectorOriginal.getZ();
@@ -503,7 +458,7 @@ public class AxisAngleTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void transform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(axisAngle, false, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }
@@ -513,8 +468,8 @@ public class AxisAngleTools
     * {@code axisAngle} and stores the result in {@code rotationMatrixTransformed}.
     * <p>
     * This is equivalent to calling
-    * {@link #transform(AxisAngleReadOnly, RotationMatrixReadOnly, RotationMatrix)} with an axis-angle
-    * that has an angle of opposite value compared to the given one.
+    * {@link #transform(AxisAngleReadOnly, RotationMatrixReadOnly, RotationMatrixBasics)} with an
+    * axis-angle that has an angle of opposite value compared to the given one.
     * </p>
     * <p>
     * Both rotation matrices can be the same object for performing in place transformation.
@@ -533,7 +488,8 @@ public class AxisAngleTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrix rotationMatrixTransformed)
+   public static void inverseTransform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal,
+                                       RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(axisAngle, true, rotationMatrixOriginal, false, rotationMatrixTransformed);
    }
@@ -861,16 +817,10 @@ public class AxisAngleTools
     */
    public static void prependYawRotation(double yaw, AxisAngleReadOnly axisAngleOriginal, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm = axisAngleOriginal.axisNorm();
-
-      if (axisNorm < EPS)
-         return;
-      axisNorm = 1.0 / axisNorm;
-
       double beta = axisAngleOriginal.getAngle();
-      double ux = axisAngleOriginal.getX() * axisNorm;
-      double uy = axisAngleOriginal.getY() * axisNorm;
-      double uz = axisAngleOriginal.getZ() * axisNorm;
+      double ux = axisAngleOriginal.getX();
+      double uy = axisAngleOriginal.getY();
+      double uz = axisAngleOriginal.getZ();
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * yaw);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * yaw);
@@ -915,16 +865,10 @@ public class AxisAngleTools
     */
    public static void appendYawRotation(AxisAngleReadOnly axisAngleOriginal, double yaw, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm = axisAngleOriginal.axisNorm();
-
-      if (axisNorm < EPS)
-         return;
-      axisNorm = 1.0 / axisNorm;
-
       double alpha = axisAngleOriginal.getAngle();
-      double ux = axisAngleOriginal.getX() * axisNorm;
-      double uy = axisAngleOriginal.getY() * axisNorm;
-      double uz = axisAngleOriginal.getZ() * axisNorm;
+      double ux = axisAngleOriginal.getX();
+      double uy = axisAngleOriginal.getY();
+      double uz = axisAngleOriginal.getZ();
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
@@ -969,16 +913,10 @@ public class AxisAngleTools
     */
    public static void prependPitchRotation(double pitch, AxisAngleReadOnly axisAngleOriginal, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm = axisAngleOriginal.axisNorm();
-
-      if (axisNorm < EPS)
-         return;
-      axisNorm = 1.0 / axisNorm;
-
       double beta = axisAngleOriginal.getAngle();
-      double ux = axisAngleOriginal.getX() * axisNorm;
-      double uy = axisAngleOriginal.getY() * axisNorm;
-      double uz = axisAngleOriginal.getZ() * axisNorm;
+      double ux = axisAngleOriginal.getX();
+      double uy = axisAngleOriginal.getY();
+      double uz = axisAngleOriginal.getZ();
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * pitch);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * pitch);
@@ -1023,16 +961,10 @@ public class AxisAngleTools
     */
    public static void appendPitchRotation(AxisAngleReadOnly axisAngleOriginal, double pitch, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm = axisAngleOriginal.axisNorm();
-
-      if (axisNorm < EPS)
-         return;
-      axisNorm = 1.0 / axisNorm;
-
       double alpha = axisAngleOriginal.getAngle();
-      double ux = axisAngleOriginal.getX() * axisNorm;
-      double uy = axisAngleOriginal.getY() * axisNorm;
-      double uz = axisAngleOriginal.getZ() * axisNorm;
+      double ux = axisAngleOriginal.getX();
+      double uy = axisAngleOriginal.getY();
+      double uz = axisAngleOriginal.getZ();
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
@@ -1077,16 +1009,10 @@ public class AxisAngleTools
     */
    public static void prependRollRotation(double roll, AxisAngleReadOnly axisAngleOriginal, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm2 = axisAngleOriginal.axisNorm();
-
-      if (axisNorm2 < EPS)
-         return;
-      axisNorm2 = 1.0 / axisNorm2;
-
       double beta = axisAngleOriginal.getAngle();
-      double ux = axisAngleOriginal.getX() * axisNorm2;
-      double uy = axisAngleOriginal.getY() * axisNorm2;
-      double uz = axisAngleOriginal.getZ() * axisNorm2;
+      double ux = axisAngleOriginal.getX();
+      double uy = axisAngleOriginal.getY();
+      double uz = axisAngleOriginal.getZ();
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * roll);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * roll);
@@ -1131,16 +1057,10 @@ public class AxisAngleTools
     */
    public static void appendRollRotation(AxisAngleReadOnly axisAngleOriginal, double roll, AxisAngleBasics axisAngleToPack)
    {
-      double axisNorm1 = axisAngleOriginal.axisNorm();
-
-      if (axisNorm1 < EPS)
-         return;
-      axisNorm1 = 1.0 / axisNorm1;
-
       double alpha = axisAngleOriginal.getAngle();
-      double ux = axisAngleOriginal.getX() * axisNorm1;
-      double uy = axisAngleOriginal.getY() * axisNorm1;
-      double uz = axisAngleOriginal.getZ() * axisNorm1;
+      double ux = axisAngleOriginal.getX();
+      double uy = axisAngleOriginal.getY();
+      double uz = axisAngleOriginal.getZ();
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
@@ -1175,28 +1095,15 @@ public class AxisAngleTools
     */
    public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2)
    {
-
-      double axisNorm1 = aa1.axisNorm();
-
-      if (axisNorm1 < EPS)
-         return Double.NaN;
-      axisNorm1 = 1.0 / axisNorm1;
-
       double alpha = aa1.getAngle();
-      double u1x = aa1.getX() * axisNorm1;
-      double u1y = aa1.getY() * axisNorm1;
-      double u1z = aa1.getZ() * axisNorm1;
-
-      double axisNorm2 = aa2.axisNorm();
-
-      if (axisNorm2 < EPS)
-         return Double.NaN;
-      axisNorm2 = 1.0 / axisNorm2;
+      double u1x = aa1.getX();
+      double u1y = aa1.getY();
+      double u1z = aa1.getZ();
 
       double beta = -aa2.getAngle();
-      double u2x = aa2.getX() * axisNorm2;
-      double u2y = aa2.getY() * axisNorm2;
-      double u2z = aa2.getZ() * axisNorm2;
+      double u2x = aa2.getX();
+      double u2y = aa2.getY();
+      double u2z = aa2.getZ();
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);

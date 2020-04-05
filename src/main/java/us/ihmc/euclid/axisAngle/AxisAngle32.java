@@ -1,5 +1,6 @@
 package us.ihmc.euclid.axisAngle;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -8,6 +9,9 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
+import us.ihmc.euclid.tuple3D.UnitVector3D32;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -21,18 +25,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, EpsilonComparable<AxisAngle32>, GeometricallyComparable<AxisAngle32>
 {
-   /** The x-component of the unitary axis. */
-   private float x;
-   /** The y-component of the unitary axis. */
-   private float y;
-   /** The z-component of the unitary axis. */
-   private float z;
+   /** The axis part of this axis-angle. */
+   private final UnitVector3D32 axis = new UnitVector3D32(Axis3D.X);
    /** The angle component of this axis-angle. */
    private float angle;
 
    /**
-    * Creates an axis-angle that represents a "zero" rotation. The axis is equal to (1, 0, 0) and the
-    * angle to 0.
+    * Creates an axis-angle that represents a "zero" rotation. The axis is equal to {@link Axis3D#X}
+    * and the angle to 0.
     */
    public AxisAngle32()
    {
@@ -138,31 +138,15 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
     */
    public final void set(float x, float y, float z, float angle)
    {
-      this.x = x;
-      this.y = y;
-      this.z = z;
+      axis.set(x, y, z);
       this.angle = angle;
    }
 
    /** {@inheritDoc} */
    @Override
-   public final void setX(double x)
+   public UnitVector3DBasics getAxis()
    {
-      this.x = (float) x;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setY(double y)
-   {
-      this.y = (float) y;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public final void setZ(double z)
-   {
-      this.z = (float) z;
+      return axis;
    }
 
    /** {@inheritDoc} */
@@ -170,27 +154,6 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    public final void setAngle(double angle)
    {
       this.angle = (float) angle;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getX()
-   {
-      return x;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getY()
-   {
-      return y;
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public double getZ()
-   {
-      return z;
    }
 
    /** {@inheritDoc} */
@@ -211,21 +174,21 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    @Override
    public final float getX32()
    {
-      return x;
+      return axis.getX32();
    }
 
    /** {@inheritDoc} */
    @Override
    public final float getY32()
    {
-      return y;
+      return axis.getY32();
    }
 
    /** {@inheritDoc} */
    @Override
    public final float getZ32()
    {
-      return z;
+      return axis.getZ32();
    }
 
    /**
@@ -299,11 +262,8 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
    @Override
    public int hashCode()
    {
-      long bits = 1L;
-      bits = 31L * bits + Float.floatToIntBits(x);
-      bits = 31L * bits + Float.floatToIntBits(y);
-      bits = 31L * bits + Float.floatToIntBits(z);
-      bits = 31L * bits + Float.floatToIntBits(angle);
-      return (int) (bits ^ bits >> 32);
+      long bits = EuclidHashCodeTools.addToHashCode(1L, axis);
+      bits = EuclidHashCodeTools.addToHashCode(bits, angle);
+      return EuclidHashCodeTools.toIntHashCode(bits);
    }
 }

@@ -1,10 +1,10 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -51,7 +51,7 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
     * @return the axis of this cylinder.
     */
    @Override
-   Vector3DBasics getAxis();
+   UnitVector3DBasics getAxis();
 
    /**
     * Sets the size of this cylinder.
@@ -66,14 +66,15 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    }
 
    /**
-    * Sets this cylinder axis of revolution.
+    * Sets this cylinder axis of revolution and normalizes it.
     *
     * @param axis the new axis. Not modified.
+    * @deprecated Use {@code this.getAxis().set(axis)} instead.
     */
+   @Deprecated
    default void setAxis(Vector3DReadOnly axis)
    {
       getAxis().set(axis);
-      getAxis().normalize();
    }
 
    /** {@inheritDoc} */
@@ -92,12 +93,14 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
       setSize(Double.NaN, Double.NaN);
    }
 
-   /** {@inheritDoc} */
+   /**
+    * Sets the position to zero, the axis to {@link Axis3D#Z}, and the radius and length to zero.
+    */
    @Override
    default void setToZero()
    {
       getPosition().setToZero();
-      getAxis().set(Axis.Z);
+      getAxis().set(Axis3D.Z);
       setSize(0.0, 0.0);
    }
 
@@ -126,8 +129,16 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    {
       getPosition().set(position);
       getAxis().set(axis);
-      getAxis().normalize();
       setSize(length, radius);
+   }
+
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
+   @Override
+   default Shape3DPoseBasics getPose()
+   {
+      return null;
    }
 
    /** {@inheritDoc} */
@@ -136,7 +147,6 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    {
       transform.inverseTransform(getPosition());
       transform.inverseTransform(getAxis());
-      getAxis().normalize();
    }
 
    /** {@inheritDoc} */
@@ -145,6 +155,5 @@ public interface Cylinder3DBasics extends Cylinder3DReadOnly, Shape3DBasics
    {
       transform.transform(getPosition());
       transform.transform(getAxis());
-      getAxis().normalize();
    }
 }

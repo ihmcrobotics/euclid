@@ -106,8 +106,7 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
     */
    default void clipToMinMax(double min, double max)
    {
-      clipToMax(max);
-      clipToMin(min);
+      setAndClipToMinMax(min, max, this);
    }
 
    /**
@@ -222,8 +221,31 @@ public interface Vector4DBasics extends Vector4DReadOnly, Tuple4DBasics
     */
    default void setAndClipToMinMax(double min, double max, Tuple4DReadOnly tupleReadOnly)
    {
-      set(tupleReadOnly);
-      clipToMinMax(min, max);
+      double x = tupleReadOnly.getX();
+      double y = tupleReadOnly.getY();
+      double z = tupleReadOnly.getZ();
+      double s = tupleReadOnly.getS();
+
+      if (x < min)
+         x = min;
+      else if (x > max)
+         x = max;
+
+      if (y < min)
+         y = min;
+      else if (y > max)
+         y = max;
+
+      if (z < min)
+         z = min;
+      else if (z > max)
+         z = max;
+
+      if (s < min)
+         s = min;
+      else if (s > max)
+         s = max;
+      set(x, y, z, s);
    }
 
    /**

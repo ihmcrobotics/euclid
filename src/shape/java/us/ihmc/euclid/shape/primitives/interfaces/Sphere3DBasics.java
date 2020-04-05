@@ -92,6 +92,15 @@ public interface Sphere3DBasics extends Sphere3DReadOnly, Shape3DBasics
       setRadius(radius);
    }
 
+   /**
+    * Returns {@code null} as this shape is not defined by a pose.
+    */
+   @Override
+   default Shape3DPoseBasics getPose()
+   {
+      return null;
+   }
+
    /** {@inheritDoc} */
    @Override
    default void applyInverseTransform(Transform transform)

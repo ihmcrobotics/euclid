@@ -133,9 +133,7 @@ public class Triangle3D implements Triangle3DBasics, GeometryObject<Triangle3D>
    @Override
    public int hashCode()
    {
-      long hashCode = EuclidHashCodeTools.combineHashCode(a.hashCode(), b.hashCode());
-      hashCode = EuclidHashCodeTools.combineHashCode(hashCode, c.hashCode());
-      return EuclidHashCodeTools.toIntHashCode(hashCode);
+      return EuclidHashCodeTools.toIntHashCode(a, b, c);
    }
 
    /**

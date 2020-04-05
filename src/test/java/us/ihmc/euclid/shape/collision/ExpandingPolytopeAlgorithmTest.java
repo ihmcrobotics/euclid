@@ -16,15 +16,24 @@ import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest
 import us.ihmc.euclid.shape.collision.GilbertJohnsonKeerthiCollisionDetectorTest.Pair;
 import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
+import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.convexPolytope.HalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.Vertex3D;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.tools.EuclidPolytopeFactories;
-import us.ihmc.euclid.shape.primitives.*;
+import us.ihmc.euclid.shape.primitives.Box3D;
+import us.ihmc.euclid.shape.primitives.Capsule3D;
+import us.ihmc.euclid.shape.primitives.Cylinder3D;
+import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
+import us.ihmc.euclid.shape.primitives.PointShape3D;
+import us.ihmc.euclid.shape.primitives.Ramp3D;
+import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -900,6 +909,30 @@ class ExpandingPolytopeAlgorithmTest
                                       distanceMeanEpsilon,
                                       positionMeanEpsilon,
                                       depthThresholdCollisionDetection);
+   }
+
+   @Test
+   void testShapeTransformOptimization()
+   { // Comparing the method with the Shape3DReadOnly arguments against the one with SupportingVertexHolder argument to validate the transformation optimization done in the first one.
+      Random random = new Random(3466);
+      double distanceEpsilon = 5.0e-5;
+      // When 2 "flat-ish" shapes are closest on their part with low curvature, the closest points can shift along the surface.
+      double pointTangentialEpsilon = 1.0e-2;
+
+      for (int i = 0; i < 10 * ITERATIONS; i++)
+      {
+         Shape3DBasics shapeA = EuclidShapeRandomTools.nextConvexShape3D(random);
+         Shape3DBasics shapeB = EuclidShapeRandomTools.nextConvexShape3D(random);
+
+         ExpandingPolytopeAlgorithm detector = new ExpandingPolytopeAlgorithm();
+         EuclidShape3DCollisionResult expectedResult = detector.evaluateCollision((SupportingVertexHolder) shapeA, (SupportingVertexHolder) shapeB);
+         expectedResult.setShapeA(shapeA);
+         expectedResult.setShapeB(shapeB);
+         EuclidShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
+
+         EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
+               + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+      }
    }
 
    private static <A extends Shape3DReadOnly, B extends Shape3DReadOnly> void assertAgainstAnalyticalFunction(AnalyticalShapeCollisionDetection<A, B> function,

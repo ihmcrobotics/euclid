@@ -1,8 +1,14 @@
 package us.ihmc.euclid.geometry;
 
-import us.ihmc.euclid.geometry.interfaces.*;
+import us.ihmc.euclid.geometry.interfaces.Pose2DBasics;
+import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
+import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.interfaces.GeometryObject;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -113,14 +119,10 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    @Override
    public boolean equals(Object object)
    {
-      try
-      {
+      if (object instanceof Pose2DReadOnly)
          return equals((Pose2DReadOnly) object);
-      }
-      catch (ClassCastException e)
-      {
+      else
          return false;
-      }
    }
 
    /**
@@ -173,7 +175,6 @@ public class Pose2D implements Pose2DBasics, GeometryObject<Pose2D>
    @Override
    public int hashCode()
    {
-      long bits = 31L * position.hashCode() + orientation.hashCode();
-      return (int) (bits ^ bits >> 32);
+      return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
 }

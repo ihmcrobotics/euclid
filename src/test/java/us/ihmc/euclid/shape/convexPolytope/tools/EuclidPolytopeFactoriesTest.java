@@ -7,7 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.Face3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -114,21 +114,21 @@ class EuclidPolytopeFactoriesTest
          {
             if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getX()), EPSILON))
             {
-               Vector3D expectedNormal = new Vector3D(Axis.X);
+               Vector3D expectedNormal = new Vector3D(Axis3D.X);
                if (face.getCentroid().getX() < 0.0)
                   expectedNormal.negate();
                EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
             }
             else if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getY()), EPSILON))
             {
-               Vector3D expectedNormal = new Vector3D(Axis.Y);
+               Vector3D expectedNormal = new Vector3D(Axis3D.Y);
                if (face.getCentroid().getY() < 0.0)
                   expectedNormal.negate();
                EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
             }
             else if (EuclidCoreTools.epsilonEquals(0.5 * edgeLength, Math.abs(face.getCentroid().getZ()), EPSILON))
             {
-               Vector3D expectedNormal = new Vector3D(Axis.Z);
+               Vector3D expectedNormal = new Vector3D(Axis3D.Z);
                if (face.getCentroid().getZ() < 0.0)
                   expectedNormal.negate();
                EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, face.getNormal(), EPSILON);
