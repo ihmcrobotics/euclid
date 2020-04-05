@@ -49,6 +49,114 @@ public class EuclidShapeToolsTest
    }
 
    @Test
+   public void testInnerSupportingVertexTorus3D()
+   {
+      Random random = new Random(78934);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double torus3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         double torus3DTubeRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, torus3DRadius);
+         Point3D torus3DPosition = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D torus3DAxis = EuclidCoreRandomTools.nextVector3D(random);
+         Point3D supportingVertex = new Point3D();
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0); //EuclidCoreRandomTools.nextVector3D(random);
+
+         EuclidShapeTools.innerSupportingVertexTorus3D(supportDirection, torus3DPosition, torus3DAxis, torus3DRadius, torus3DTubeRadius, supportingVertex);
+
+         double signedDistance = EuclidShapeTools.signedDistanceBetweenPoint3DAndTorus3D(supportingVertex,
+                                                                                         torus3DPosition,
+                                                                                         torus3DAxis,
+                                                                                         torus3DRadius,
+                                                                                         torus3DTubeRadius);
+         assertEquals(0.0, signedDistance, EPSILON, "Iteration " + i);
+
+         Vector3D normal = new Vector3D();
+         Point3D closestPoint = new Point3D();
+         EuclidShapeTools.evaluatePoint3DTorus3DCollision(supportingVertex,
+                                                          torus3DPosition,
+                                                          torus3DAxis,
+                                                          torus3DRadius,
+                                                          torus3DTubeRadius,
+                                                          closestPoint,
+                                                          normal);
+
+         EuclidCoreTestTools.assertTuple3DEquals(closestPoint, supportingVertex, EPSILON);
+         // Assert that the normal is pointing towards the axis of the torus, indication that this is the inner part of the torus.
+         Vector3D towardsAxis = new Vector3D();
+         towardsAxis.sub(torus3DPosition, closestPoint);
+         torus3DAxis.normalize();
+         double dot = towardsAxis.dot(torus3DAxis);
+         towardsAxis.scaleAdd(-dot, torus3DAxis, towardsAxis);
+         assertTrue(normal.dot(towardsAxis) > 0.0);
+      }
+   }
+
+   @Test
+   public void testSignedDistanceBetweenPoint3DAndTorus3D()
+   {
+      Random random = new Random(9638966);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double torus3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         double torus3DTubeRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, torus3DRadius);
+         Point3D torus3DPosition = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D torus3DAxis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+
+         double expected = EuclidShapeTools.signedDistanceBetweenPoint3DAndTorus3D(query, torus3DPosition, torus3DAxis, torus3DRadius, torus3DTubeRadius);
+
+         torus3DAxis.scale(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0));
+         double actual = EuclidShapeTools.signedDistanceBetweenPoint3DAndTorus3D(query, torus3DPosition, torus3DAxis, torus3DRadius, torus3DTubeRadius);
+         assertEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testEvaluatePoint3DTorus3DCollision()
+   {
+      Random random = new Random(9638966);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double torus3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         double torus3DTubeRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, torus3DRadius);
+         Point3D torus3DPosition = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Vector3D torus3DAxis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         Point3D query = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+
+         Point3D expectedClosestPointOnSurface = new Point3D();
+         Vector3D expectedNormal = new Vector3D();
+         double expectedSignedDistance = EuclidShapeTools.evaluatePoint3DTorus3DCollision(query,
+                                                                                          torus3DPosition,
+                                                                                          torus3DAxis,
+                                                                                          torus3DRadius,
+                                                                                          torus3DTubeRadius,
+                                                                                          expectedClosestPointOnSurface,
+                                                                                          expectedNormal);
+
+         torus3DAxis.scale(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0));
+
+         Point3D actualClosestPointOnSurface = new Point3D();
+         Vector3D actualNormal = new Vector3D();
+         double actualSignedDistance = EuclidShapeTools.evaluatePoint3DTorus3DCollision(query,
+                                                                                        torus3DPosition,
+                                                                                        torus3DAxis,
+                                                                                        torus3DRadius,
+                                                                                        torus3DTubeRadius,
+                                                                                        actualClosestPointOnSurface,
+                                                                                        actualNormal);
+
+         assertEquals(expectedSignedDistance, actualSignedDistance, EPSILON, "Iteration " + i);
+         EuclidCoreTestTools.assertTuple3DEquals("Iteration " + i, expectedClosestPointOnSurface, actualClosestPointOnSurface, EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals("Iteration " + i, expectedNormal, actualNormal, EPSILON);
+      }
+   }
+
+   @Test
    public void testComputeRamp3DCentroid()
    {
       Random random = new Random(365435);
