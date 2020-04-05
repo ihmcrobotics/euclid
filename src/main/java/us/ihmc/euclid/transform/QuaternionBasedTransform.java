@@ -17,10 +17,8 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * A {@code QuaternionBasedTransform} represents a 4-by-4 transformation matrix that can rotate and
@@ -396,34 +394,10 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
       translationVector.get(4, transformArrayToPack);
    }
 
-   /**
-    * Get the read-only reference to the quaternion of this transform.
-    *
-    * @return the quaternion of this transform.
-    * @deprecated Use {@link #getRotation()} instead.
-    */
-   @Deprecated
-   public QuaternionReadOnly getQuaternion()
-   {
-      return getRotation();
-   }
-
    @Override
    public QuaternionBasics getRotation()
    {
       return quaternion;
-   }
-
-   /**
-    * Gets the read-only reference of the translation part of this affine transform.
-    *
-    * @return the translation part of this transform.
-    * @deprecated Use {@link #getTranslation()} instead.
-    */
-   @Deprecated
-   public Vector3DReadOnly getTranslationVector()
-   {
-      return getTranslation();
    }
 
    @Override

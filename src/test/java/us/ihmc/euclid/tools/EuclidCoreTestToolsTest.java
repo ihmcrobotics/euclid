@@ -15,6 +15,8 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -33,6 +35,8 @@ import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public class EuclidCoreTestToolsTest
 {
@@ -45,35 +49,35 @@ public class EuclidCoreTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertYawPitchRollEquals";
-      Class<double[]> argumentsClass = double[].class;
+      Class<YawPitchRollReadOnly> argumentsClass = YawPitchRollReadOnly.class;
 
       {
-         double[] expected = null;
-         double[] actual = null;
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = null;
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = null;
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = expected.clone();
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = new YawPitchRoll(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }
@@ -83,35 +87,35 @@ public class EuclidCoreTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertYawPitchRollGeometricallyEquals";
-      Class<double[]> argumentsClass = double[].class;
+      Class<YawPitchRollReadOnly> argumentsClass = YawPitchRollReadOnly.class;
 
       {
-         double[] expected = null;
-         double[] actual = null;
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = null;
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = null;
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = null;
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = null;
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = EuclidCoreRandomTools.nextYawPitchRollArray(random);
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = EuclidCoreRandomTools.nextYawPitchRoll(random);
          assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
       }
 
       {
-         double[] expected = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-         double[] actual = expected.clone();
+         YawPitchRoll expected = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         YawPitchRoll actual = new YawPitchRoll(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }
@@ -682,6 +686,82 @@ public class EuclidCoreTestToolsTest
       {
          AxisAngle expected = EuclidCoreRandomTools.nextAxisAngle(random);
          AxisAngle actual = new AxisAngle(expected);
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAssertOrientation2DEquals() throws Throwable
+   {
+      Random random = new Random(453453);
+      String methodName = "assertOrientation2DEquals";
+      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
+
+      {
+         Orientation2D expected = null;
+         Orientation2D actual = null;
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2D actual = null;
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = null;
+         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2D actual = new Orientation2D(expected);
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAssertOrientation2DGeometricallyEquals() throws Throwable
+   {
+      Random random = new Random(453453);
+      String methodName = "assertOrientation2DGeometricallyEquals";
+      Class<Orientation2DReadOnly> argumentsClass = Orientation2DReadOnly.class;
+
+      {
+         Orientation2D expected = null;
+         Orientation2D actual = null;
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2D actual = null;
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = null;
+         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2D actual = EuclidCoreRandomTools.nextOrientation2D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
+         Orientation2D actual = new Orientation2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }

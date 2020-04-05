@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -149,9 +151,9 @@ public interface BoundingBox3DReadOnly
     */
    default void getPointGivenParameters(double xParameter, double yParameter, double zParameter, Point3DBasics pointToPack)
    {
-      pointToPack.setX(getMinX() + xParameter * (getMaxX() - getMinX()));
-      pointToPack.setY(getMinY() + yParameter * (getMaxY() - getMinY()));
-      pointToPack.setZ(getMinZ() + zParameter * (getMaxZ() - getMinZ()));
+      pointToPack.set(getMinX() + xParameter * (getMaxX() - getMinX()),
+                      getMinY() + yParameter * (getMaxY() - getMinY()),
+                      getMinZ() + zParameter * (getMaxZ() - getMinZ()));
    }
 
    /**

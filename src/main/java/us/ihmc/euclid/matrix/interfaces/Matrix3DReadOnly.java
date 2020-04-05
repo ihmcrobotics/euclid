@@ -187,15 +187,17 @@ public interface Matrix3DReadOnly
     */
    default void get(DenseMatrix64F matrixToPack)
    {
-      matrixToPack.set(0, 0, getM00());
-      matrixToPack.set(0, 1, getM01());
-      matrixToPack.set(0, 2, getM02());
-      matrixToPack.set(1, 0, getM10());
-      matrixToPack.set(1, 1, getM11());
-      matrixToPack.set(1, 2, getM12());
-      matrixToPack.set(2, 0, getM20());
-      matrixToPack.set(2, 1, getM21());
-      matrixToPack.set(2, 2, getM22());
+      EuclidCoreTools.checkMatrixMinimumSize(3, 3, matrixToPack);
+
+      matrixToPack.unsafe_set(0, 0, getM00());
+      matrixToPack.unsafe_set(0, 1, getM01());
+      matrixToPack.unsafe_set(0, 2, getM02());
+      matrixToPack.unsafe_set(1, 0, getM10());
+      matrixToPack.unsafe_set(1, 1, getM11());
+      matrixToPack.unsafe_set(1, 2, getM12());
+      matrixToPack.unsafe_set(2, 0, getM20());
+      matrixToPack.unsafe_set(2, 1, getM21());
+      matrixToPack.unsafe_set(2, 2, getM22());
    }
 
    /**
@@ -209,19 +211,21 @@ public interface Matrix3DReadOnly
     */
    default void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
    {
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, startColumn + 3, matrixToPack);
+
       int row = startRow;
       int column = startColumn;
-      matrixToPack.set(row, column++, getM00());
-      matrixToPack.set(row, column++, getM01());
-      matrixToPack.set(row++, column, getM02());
+      matrixToPack.unsafe_set(row, column++, getM00());
+      matrixToPack.unsafe_set(row, column++, getM01());
+      matrixToPack.unsafe_set(row++, column, getM02());
       column = startColumn;
-      matrixToPack.set(row, column++, getM10());
-      matrixToPack.set(row, column++, getM11());
-      matrixToPack.set(row++, column, getM12());
+      matrixToPack.unsafe_set(row, column++, getM10());
+      matrixToPack.unsafe_set(row, column++, getM11());
+      matrixToPack.unsafe_set(row++, column, getM12());
       column = startColumn;
-      matrixToPack.set(row, column++, getM20());
-      matrixToPack.set(row, column++, getM21());
-      matrixToPack.set(row, column, getM22());
+      matrixToPack.unsafe_set(row, column++, getM20());
+      matrixToPack.unsafe_set(row, column++, getM21());
+      matrixToPack.unsafe_set(row, column, getM22());
    }
 
    /**

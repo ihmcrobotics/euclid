@@ -1,7 +1,24 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getBoundingBox2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getBoundingBox3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getConvexPolygon2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLine2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLine3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPose2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPose3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getVertex2DSupplierString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getVertex3DSupplierString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.DEFAULT_FORMAT;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getMatrix3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getOrientation2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringAsYawPitchRoll;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
+import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
 
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;

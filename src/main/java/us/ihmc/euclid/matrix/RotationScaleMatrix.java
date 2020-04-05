@@ -20,7 +20,6 @@ import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * A {@code RotationScaleMatrix} is a 3-by-3 matrix that represents a 3D orientation times a
@@ -401,9 +400,9 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
       if (Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22) <= 0.0)
          throw new NotARotationScaleMatrixException(m00, m01, m02, m10, m11, m12, m20, m21, m22);
 
-      scale.setX(EuclidCoreTools.squareRoot(m00 * m00 + m10 * m10 + m20 * m20));
-      scale.setY(EuclidCoreTools.squareRoot(m01 * m01 + m11 * m11 + m21 * m21));
-      scale.setZ(EuclidCoreTools.squareRoot(m02 * m02 + m12 * m12 + m22 * m22));
+      scale.set(EuclidCoreTools.squareRoot(m00 * m00 + m10 * m10 + m20 * m20),
+                EuclidCoreTools.squareRoot(m01 * m01 + m11 * m11 + m21 * m21),
+                EuclidCoreTools.squareRoot(m02 * m02 + m12 * m12 + m22 * m22));
 
       if (scale.getX() == 0.0 || scale.getY() == 0.0 || scale.getZ() == 0.0)
          throw new NotARotationScaleMatrixException(m00, m01, m02, m10, m11, m12, m20, m21, m22);
@@ -739,25 +738,6 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
 
    /**
     * Sets the rotation part to represent the same orientation as the given yaw-pitch-roll angles
-    * {@code yawPitchRoll}.
-    *
-    * <pre>
-    *     / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * R = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *     \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
-    * @deprecated Use {@link #setRotation(Orientation3DReadOnly)} with {@link YawPitchRoll}.
-    */
-   @Deprecated
-   public void setRotationYawPitchRoll(double[] yawPitchRoll)
-   {
-      setRotationYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
-   }
-
-   /**
-    * Sets the rotation part to represent the same orientation as the given yaw-pitch-roll angles
     * {@code yaw}, {@code pitch}, and {@code roll}.
     *
     * <pre>
@@ -914,25 +894,6 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
    {
       setRotationRoll(roll);
       resetScale();
-   }
-
-   /**
-    * Resets the scale factors and sets the rotation part to represent the same orientation as the
-    * given yaw-pitch-roll angles {@code yawPitchRoll}.
-    *
-    * <pre>
-    *        / cos(yaw) -sin(yaw) 0 \   /  cos(pitch) 0 sin(pitch) \   / 1     0          0     \
-    * this = | sin(yaw)  cos(yaw) 0 | * |      0      1     0      | * | 0 cos(roll) -sin(roll) |
-    *        \    0         0     1 /   \ -sin(pitch) 0 cos(pitch) /   \ 0 sin(roll)  cos(roll) /
-    * </pre>
-    *
-    * @param yawPitchRoll the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
-    * @deprecated Use {@link #set(Orientation3DReadOnly, double)} with {@link YawPitchRoll}.
-    */
-   @Deprecated
-   public void setYawPitchRoll(double[] yawPitchRoll)
-   {
-      setYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
    }
 
    /**

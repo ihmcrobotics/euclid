@@ -38,10 +38,10 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    /**
     * Returns the state of this matrix dirty flag.
     * <p>
-    * This matrix is matrix is marked as dirty to indicate its values have been updated and not yet
-    * propagated to this matrix features.
+    * This matrix is marked as dirty to indicate its values have been updated and not yet propagated to
+    * this matrix features.
     * </p>
-    * 
+    *
     * @return the current value of the dirty flag.
     */
    boolean isDirty();
@@ -146,14 +146,6 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    default void getEuler(Tuple3DBasics eulerAnglesToPack)
    {
       YawPitchRollConversion.convertMatrixToYawPitchRoll(this, eulerAnglesToPack);
-   }
-
-   /** {@inheritDoc} */
-   @Deprecated
-   @Override
-   default void getYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      YawPitchRollConversion.convertMatrixToYawPitchRoll(this, yawPitchRollToPack);
    }
 
    /** {@inheritDoc} */

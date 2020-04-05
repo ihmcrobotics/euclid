@@ -90,7 +90,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
     * <p>
     * This is be invoked from the implementation's constructor.
     * </p>
-    * 
+    *
     * @param initialGuessNormal initial guess for what this face's normal should be. Not modified.
     */
    protected void initialize(Vector3DReadOnly initialGuessNormal)
@@ -104,7 +104,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
     * <p>
     * This is be invoked from the implementation's constructor.
     * </p>
-    * 
+    *
     * @param faceEdges the edges that are to be used to setup this face.
     * @param normal    the pre-computed normal for this face.
     */

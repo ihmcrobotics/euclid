@@ -91,20 +91,20 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    });
 
    /** Vector linked to the components of the x-axis unit-vector. */
-   private final FrameVector3DReadOnly xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM00,
+   private final FrameVector3DReadOnly xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this,
+                                                                                                   shapeOrientation::getM00,
                                                                                                    shapeOrientation::getM10,
-                                                                                                   shapeOrientation::getM20,
-                                                                                                   this);
+                                                                                                   shapeOrientation::getM20);
    /** Vector linked to the components of the y-axis unit-vector. */
-   private final FrameVector3DReadOnly yAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM01,
+   private final FrameVector3DReadOnly yAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this,
+                                                                                                   shapeOrientation::getM01,
                                                                                                    shapeOrientation::getM11,
-                                                                                                   shapeOrientation::getM21,
-                                                                                                   this);
+                                                                                                   shapeOrientation::getM21);
    /** Vector linked to the components of the z-axis unit-vector. */
-   private final FrameVector3DReadOnly zAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(shapeOrientation::getM02,
+   private final FrameVector3DReadOnly zAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this,
+                                                                                                   shapeOrientation::getM02,
                                                                                                    shapeOrientation::getM12,
-                                                                                                   shapeOrientation::getM22,
-                                                                                                   this);
+                                                                                                   shapeOrientation::getM22);
 
    /**
     * Creates a new shape pose which both position and orientation are initialized to zero and
@@ -118,7 +118,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    /**
     * Creates a new shape pose which both position and orientation are initialized to zero and
     * initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameShape3DPose(ReferenceFrame referenceFrame)
@@ -235,7 +235,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
 
    /**
     * Registers a list of listeners to be notified when this pose changes.
-    * 
+    *
     * @param listeners the listeners to register.
     */
    public void addChangeListeners(List<Shape3DChangeListener> listeners)
@@ -248,7 +248,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
 
    /**
     * Registers a listener to be notified when this pose changes.
-    * 
+    *
     * @param listener the listener to register.
     */
    public void addChangeListener(Shape3DChangeListener listener)
@@ -261,7 +261,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
     * <p>
     * This listener will no longer be notified of changes from this pose.
     * </p>
-    * 
+    *
     * @param listener the listener to remove.
     * @return {@code true} if the listener was removed successful, {@code false} if the listener could
     *         not be found.

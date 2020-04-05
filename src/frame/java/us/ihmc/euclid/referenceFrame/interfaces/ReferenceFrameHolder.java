@@ -29,7 +29,7 @@ public interface ReferenceFrameHolder
 
    /**
     * Checks if the frames held by {@code this}, {@code otherA}, and {@code otherB} all match.
-    * 
+    *
     * @param otherA the first other object holding onto the reference frame to compare against the
     *               reference frame held by {@code this}. Not modified.
     * @param otherB the second other object holding onto the reference frame to compare against the
@@ -45,7 +45,7 @@ public interface ReferenceFrameHolder
    /**
     * Checks if the frames held by {@code this}, {@code otherA}, {@code otherB}, and {@code otherC} all
     * match.
-    * 
+    *
     * @param otherA the first other object holding onto the reference frame to compare against the
     *               reference frame held by {@code this}. Not modified.
     * @param otherB the second other object holding onto the reference frame to compare against the
@@ -65,7 +65,7 @@ public interface ReferenceFrameHolder
    /**
     * Checks if the frames held by {@code this}, {@code otherA}, {@code otherB}, {@code otherC}, and
     * {@code otherD} all match.
-    * 
+    *
     * @param otherA the first other object holding onto the reference frame to compare against the
     *               reference frame held by {@code this}. Not modified.
     * @param otherB the second other object holding onto the reference frame to compare against the

@@ -693,7 +693,8 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
+   public static void transform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal,
+                                RotationMatrixBasics rotationMatrixTransformed)
    {
       transformImpl(yaw, pitch, roll, false, rotationMatrixOriginal, rotationMatrixTransformed);
    }
@@ -718,7 +719,8 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal, RotationMatrixBasics rotationMatrixTransformed)
+   public static void transform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal,
+                                RotationMatrixBasics rotationMatrixTransformed)
    {
       transform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), rotationMatrixOriginal, rotationMatrixTransformed);
    }

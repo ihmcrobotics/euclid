@@ -25,7 +25,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * This class is an extension of {@link GilbertJohnsonKeerthiCollisionDetector} to handle frame
  * shapes, especially when the shapes are expressed in different reference frames.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class FrameGilbertJohnsonKeerthiCollisionDetector
@@ -42,8 +42,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     * The vector's reference frame is linked to {@link #detectorFrame}.
     * </p>
     */
-   private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(gjkCollisionDetector.getSupportDirection(),
-                                                                                                              () -> detectorFrame);
+   private final FrameVector3DReadOnly supportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(() -> detectorFrame,
+                                                                                                              gjkCollisionDetector.getSupportDirection());
    /**
     * Flag to indicate whether the initial support direction has been provided by the user or not.
     */
@@ -103,7 +103,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
 
       if (shapeA.getReferenceFrame() == shapeB.getReferenceFrame())
       {
-         areColliding = evaluateCollision(shapeA.getReferenceFrame(), (Shape3DReadOnly) shapeA, (Shape3DReadOnly) shapeB, resultToPack);
+         areColliding = evaluateCollision(shapeA.getReferenceFrame(), shapeA, shapeB, resultToPack);
       }
       else if (!shapeA.isPrimitive())
       {
@@ -126,7 +126,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
                localShapeB.getPose().setToZero();
                centroid.applyInverseTransform(transform);
                guessInitialSupportDirection(centroid, localShapeB.getCentroid());
-               areColliding = evaluateCollision(shapeB.getReferenceFrame(), (Shape3DReadOnly) shapeA, (Shape3DReadOnly) localShapeB, transform, resultToPack);
+               areColliding = evaluateCollision(shapeB.getReferenceFrame(), shapeA, localShapeB, transform, resultToPack);
                resultToPack.applyTransform(shapeB.getPose());
             }
             else
@@ -139,7 +139,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
                FixedFrameShape3DBasics localShapeB = shapeB.copy();
                localShapeB.applyTransform(transform);
                guessInitialSupportDirection((Shape3DReadOnly) shapeA, (Shape3DReadOnly) localShapeB);
-               areColliding = evaluateCollision(shapeA.getReferenceFrame(), (Shape3DReadOnly) shapeA, (Shape3DReadOnly) localShapeB, resultToPack);
+               areColliding = evaluateCollision(shapeA.getReferenceFrame(), shapeA, localShapeB, resultToPack);
             }
          }
       }
@@ -446,7 +446,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
 
    /**
     * Returns the reference frame in which the last result was computed.
-    * 
+    *
     * @return the most recent result's frame.
     */
    public ReferenceFrame getDetectorFrame()

@@ -119,7 +119,7 @@ public interface FixedFrameRotationMatrixBasics
    /**
     * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
     * matrix.
-    * 
+    *
     * @param referenceFrame the reference frame in which the argument is expressed.
     * @param other          the other rotation matrix to copy. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
@@ -134,7 +134,7 @@ public interface FixedFrameRotationMatrixBasics
    /**
     * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
     * matrix.
-    * 
+    *
     * @param other the other rotation matrix to copy. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
     *                                         frame as {@code this}.
@@ -256,7 +256,7 @@ public interface FixedFrameRotationMatrixBasics
     * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
     * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
-    * 
+    *
     * @param referenceFrame the reference frame in which the argument is expressed.
     * @param other          the other rotation matrix to copy. Not modified.
     */
@@ -277,7 +277,7 @@ public interface FixedFrameRotationMatrixBasics
     * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
     * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
-    * 
+    *
     * @param other the other rotation matrix to copy. Not modified.
     */
    default void setMatchingFrame(FrameRotationMatrixReadOnly other)
@@ -299,6 +299,7 @@ public interface FixedFrameRotationMatrixBasics
     *
     * @param orientation the other orientation to copy the values from. Not modified.
     */
+   @Override
    default void setMatchingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation)
    {
       RotationMatrixBasics.super.set(orientation);
@@ -319,6 +320,7 @@ public interface FixedFrameRotationMatrixBasics
     *
     * @param orientation the other orientation to copy the values from. Not modified.
     */
+   @Override
    default void setMatchingFrame(FrameOrientation3DReadOnly orientation)
    {
       set((Orientation3DReadOnly) orientation);

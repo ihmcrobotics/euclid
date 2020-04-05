@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -7,7 +8,7 @@ import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -35,7 +36,7 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     * @return the reference to the direction.
     */
    @Override
-   Vector2DBasics getDirection();
+   UnitVector2DBasics getDirection();
 
    /**
     * Tests if this line contains {@link Double#NaN}.
@@ -50,14 +51,13 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
    }
 
    /**
-    * Sets the point and vector of this line to zero. After calling this method, this line becomes
-    * invalid. A new valid point and valid vector will have to be set so this line is again usable.
+    * Sets the point of this line to zero and its direction to {@link Axis2D#X}.
     */
    @Override
    default void setToZero()
    {
       getPoint().setToZero();
-      getDirection().setToZero();
+      getDirection().set(Axis2D.X);
    }
 
    /**
@@ -77,7 +77,9 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     *
     * @param pointOnLineX the new x-coordinate of the point on this line.
     * @param pointOnLineY the new y-coordinate of the point on this line.
+    * @deprecated Use {@code this.getPoint().set(pointOnLineX, pointOnLineY)} instead.
     */
+   @Deprecated
    default void setPoint(double pointOnLineX, double pointOnLineY)
    {
       getPoint().set(pointOnLineX, pointOnLineY);
@@ -88,16 +90,20 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     *
     * @param lineDirectionX the new x-component of the direction of this line.
     * @param lineDirectionY the new y-component of the direction of this line.
+    * @deprecated Use {@code this.getDirection().set(lineDirectionX, lineDirectionY)} instead.
     */
+   @Deprecated
    default void setDirection(double lineDirectionX, double lineDirectionY)
    {
       getDirection().set(lineDirectionX, lineDirectionY);
-      getDirection().normalize();
    }
 
    /**
     * Flips this line's direction.
+    *
+    * @deprecated Use {@code this.getDirection().negate()} instead.
     */
+   @Deprecated
    default void negateDirection()
    {
       getDirection().negate();
@@ -121,7 +127,9 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(Point2DReadOnly pointOnLine)
    {
       getPoint().set(pointOnLine);
@@ -131,7 +139,9 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     * Changes the point through which this line has to go.
     *
     * @param pointOnLine new point on this line. Not modified.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(Point3DReadOnly pointOnLine)
    {
       getPoint().set(pointOnLine);
@@ -141,21 +151,24 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(Vector2DReadOnly lineDirection)
    {
-      getDirection().setAndNormalize(lineDirection);
+      getDirection().set(lineDirection);
    }
 
    /**
     * Changes the direction of this line by setting it to the normalized value of the given vector.
     *
     * @param lineDirection new direction of this line. Not modified.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(Vector3DReadOnly lineDirection)
    {
       getDirection().set(lineDirection);
-      getDirection().normalize();
    }
 
    /**
@@ -210,8 +223,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     */
    default void set(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY)
    {
-      setPoint(pointOnLineX, pointOnLineY);
-      setDirection(lineDirectionX, lineDirectionY);
+      getPoint().set(pointOnLineX, pointOnLineY);
+      getDirection().set(lineDirectionX, lineDirectionY);
    }
 
    /**
@@ -228,9 +241,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
          throw new RuntimeException("Tried to create a line from two coincidal points.");
       }
 
-      setPoint(firstPointOnLine);
+      getPoint().set(firstPointOnLine);
       getDirection().sub(secondPointOnLine, firstPointOnLine);
-      getDirection().normalize();
    }
 
    /**
@@ -247,10 +259,9 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
          throw new RuntimeException("Tried to create a line from two coincidal points.");
       }
 
-      setPoint(firstPointOnLine);
+      getPoint().set(firstPointOnLine);
       getDirection().set(secondPointOnLine);
       getDirection().sub(firstPointOnLine.getX(), firstPointOnLine.getY());
-      getDirection().normalize();
    }
 
    /**
@@ -261,8 +272,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     */
    default void set(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection)
    {
-      setPoint(pointOnLine);
-      setDirection(lineDirection);
+      getPoint().set(pointOnLine);
+      getDirection().set(lineDirection);
    }
 
    /**
@@ -273,8 +284,8 @@ public interface Line2DBasics extends Line2DReadOnly, Transformable, Clearable
     */
    default void set(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection)
    {
-      setPoint(pointOnLine);
-      setDirection(lineDirection);
+      getPoint().set(pointOnLine);
+      getDirection().set(lineDirection);
    }
 
    /**

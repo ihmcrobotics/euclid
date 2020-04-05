@@ -7,12 +7,12 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
-import us.ihmc.euclid.geometry.Orientation2D;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 
 public abstract class FrameOrientation2DReadOnlyTest<T extends FrameOrientation2DReadOnly>
 {
@@ -30,7 +30,7 @@ public abstract class FrameOrientation2DReadOnlyTest<T extends FrameOrientation2
 
    public final T createRandomFrameOrientation(Random random, ReferenceFrame referenceFrame)
    {
-      return createFrameOrientation(referenceFrame, EuclidGeometryRandomTools.nextOrientation2D(random));
+      return createFrameOrientation(referenceFrame, EuclidCoreRandomTools.nextOrientation2D(random));
    }
 
    @Test

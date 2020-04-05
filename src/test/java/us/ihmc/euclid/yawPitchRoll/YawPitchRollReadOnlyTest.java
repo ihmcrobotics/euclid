@@ -1,6 +1,8 @@
 package us.ihmc.euclid.yawPitchRoll;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertExceptionIsThrown;
 
@@ -281,25 +283,6 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
 
          RotationVectorConversion.convertYawPitchRollToRotationVector(ypr, expected);
          EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(expected, actual, getEpsilon());
-      }
-   }
-
-   @Test
-   public void testGetYawPitchRoll() throws Exception
-   {
-      Random random = new Random(435983);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         double[] expected = new double[3];
-         double[] actual = new double[3];
-
-         T ypr = createRandomYawPitchRoll(random);
-
-         ypr.getYawPitchRoll(actual);
-         ypr.get(expected);
-
-         EuclidCoreTestTools.assertYawPitchRollGeometricallyEquals(expected, actual, getEpsilon());
       }
    }
 

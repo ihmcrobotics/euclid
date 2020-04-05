@@ -6,7 +6,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Read-only interface for pose 3D.
@@ -116,23 +115,6 @@ public interface Pose3DReadOnly
    }
 
    /**
-    * Computes and packs the orientation described by the orientation part of this pose 3D as the
-    * yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use a {@link YawPitchRoll} that can be set to {@link #getOrientation()}.
-    */
-   @Deprecated
-   default void getOrientationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      getOrientation().getYawPitchRoll(yawPitchRollToPack);
-   }
-
-   /**
     * Computes and packs the orientation described by the orientation part of this pose as a rotation
     * vector.
     * <p>
@@ -142,7 +124,9 @@ public interface Pose3DReadOnly
     * </p>
     *
     * @param rotationVectorToPack the vector in which the rotation vector is stored. Modified.
+    * @deprecated Use {@code this.getOrientation().getRotationVector(rotationVectorToPack)} instead.
     */
+   @Deprecated
    default void getRotationVector(Vector3DBasics rotationVectorToPack)
    {
       getOrientation().getRotationVector(rotationVectorToPack);
@@ -153,7 +137,9 @@ public interface Pose3DReadOnly
     *
     * @param point the other point used to measure the distance. Not modified.
     * @return the distance between this pose and the given {@code point}.
+    * @deprecated Use {@code this.getPosition().distance(point)} instead.
     */
+   @Deprecated
    default double getPositionDistance(Point3DReadOnly point)
    {
       return getPosition().distance(point);
@@ -164,7 +150,9 @@ public interface Pose3DReadOnly
     *
     * @param other the other pose used to measure the distance. Not modified.
     * @return the distance between the position part of the two poses.
+    * @deprecated Use {@code this.getPosition().distance(other.getPosition())} instead.
     */
+   @Deprecated
    default double getPositionDistance(Pose3DReadOnly other)
    {
       return getPosition().distance(other.getPosition());
@@ -177,7 +165,9 @@ public interface Pose3DReadOnly
     * @param orientation the orientation used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this} and {@code orientation}, it is contained in [0,
     *         2<i>pi</i>].
+    * @deprecated Use {@code this.getOrientation().distance(orientation)} instead.
     */
+   @Deprecated
    default double getOrientationDistance(QuaternionReadOnly orientation)
    {
       return getOrientation().distance(orientation);
@@ -189,7 +179,9 @@ public interface Pose3DReadOnly
     * @param other the other pose 3D used to compute the orientation distance. Not modified.
     * @return the angle difference between {@code this.orientation} and {@code other.orientation}, it
     *         is contained in [0, 2<i>pi</i>].
+    * @deprecated Use {@code this.getOrientation().distance(other.getOrientation())} instead.
     */
+   @Deprecated
    default double getOrientationDistance(Pose3DReadOnly other)
    {
       return getOrientation().distance(other.getOrientation());

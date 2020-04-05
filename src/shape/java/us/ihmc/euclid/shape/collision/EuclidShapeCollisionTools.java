@@ -285,7 +285,7 @@ public class EuclidShapeCollisionTools
     * <p>
     * Note that the two shapes never collide.
     * </p>
-    * 
+    *
     * @param shapeA       the first point shape. Not modified.
     * @param shapeB       the second point shape. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.

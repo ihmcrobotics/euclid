@@ -4,7 +4,6 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 
 /**
  * @author Sylvain Bertrand
- *
  */
 public interface FrameShape3DBasics extends FixedFrameShape3DBasics, FrameChangeable
 {

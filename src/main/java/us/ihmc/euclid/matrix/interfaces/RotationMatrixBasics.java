@@ -135,6 +135,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
     * @param matrix the matrix to copy the values from. Not modified.
     * @throws NotARotationMatrixException if the normalization failed.
     */
+   @Override
    default void setAndNormalize(Matrix3DReadOnly matrix)
    {
       setAndNormalize(matrix.getM00(),
@@ -166,7 +167,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
     * If the argument implements {@link RotationMatrixReadOnly}, a redirection
     * {@link #set(RotationMatrixReadOnly)} is done.
     * </p>
-    * 
+    *
     * @throws NotARotationMatrixException if the argument is not a rotation matrix.
     */
    @Override
@@ -197,7 +198,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    /**
     * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
     * matrix.
-    * 
+    *
     * @param other the other rotation matrix to copy. Not modified.
     */
    void set(RotationMatrixReadOnly other);

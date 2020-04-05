@@ -29,13 +29,18 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public abstract class RotationVectorConversion
+public class RotationVectorConversion
 {
    /**
     * Tolerance used to identify various edge cases, such as to identify when an axis-angle represents
     * a zero orientation.
     */
    public static final double EPS = 1.0e-12;
+
+   private RotationVectorConversion()
+   {
+      // Suppresses default constructor, ensuring non-instantiability.
+   }
 
    /**
     * Converts the given axis-angle into a rotation vector.
@@ -92,9 +97,7 @@ public abstract class RotationVectorConversion
       if (uNorm > EPS)
       {
          uNorm = 1.0 / uNorm;
-         rotationVectorToPack.setX(ux * uNorm * angle);
-         rotationVectorToPack.setY(uy * uNorm * angle);
-         rotationVectorToPack.setZ(uz * uNorm * angle);
+         rotationVectorToPack.set(ux * uNorm * angle, uy * uNorm * angle, uz * uNorm * angle);
       }
       else
       {
@@ -137,18 +140,14 @@ public abstract class RotationVectorConversion
       if (uNorm > EPS)
       {
          double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
-         rotationVectorToPack.setX(qx * angle);
-         rotationVectorToPack.setY(qy * angle);
-         rotationVectorToPack.setZ(qz * angle);
+         rotationVectorToPack.set(qx * angle, qy * angle, qz * angle);
       }
       else
       {
          // Small angle approximation
          // "A Primer on the Differential Calculus of 3D Orientations" M. Bloesh et al
          double sign = Math.signum(qs);
-         rotationVectorToPack.setX(sign * qx);
-         rotationVectorToPack.setY(sign * qy);
-         rotationVectorToPack.setZ(sign * qz);
+         rotationVectorToPack.set(sign * qx, sign * qy, sign * qz);
       }
    }
 
@@ -308,42 +307,7 @@ public abstract class RotationVectorConversion
          }
       }
 
-      rotationVectorToPack.setX(x * angle);
-      rotationVectorToPack.setY(y * angle);
-      rotationVectorToPack.setZ(z * angle);
-   }
-
-   /**
-    * Converts the given yaw-pitch-roll angles into a rotation vector.
-    * <p>
-    * After calling this method, the yaw-pitch-roll and the rotation vector represent the same
-    * orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if either of the yaw, pitch, or roll angle is {@link Double#NaN}, the rotation vector is set
-    * to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    * <p>
-    * Note: the yaw-pitch-roll representation, also called Euler angles, corresponds to the
-    * representation of an orientation by decomposing it by three successive rotations around the three
-    * axes: Z (yaw), Y (pitch), and X (roll). The equivalent rotation matrix of such representation is:
-    * <br>
-    * R = R<sub>Z</sub>(yaw) * R<sub>Y</sub>(pitch) * R<sub>X</sub>(roll) </br>
-    * </p>
-    *
-    * @param yawPitchRoll         the yaw-pitch-roll angles to use in the conversion. Not modified.
-    * @param rotationVectorToPack the vector in which the result is stored. Modified.
-    * @deprecated Use
-    *             {@link #convertYawPitchRollToRotationVector(YawPitchRollReadOnly, Vector3DBasics)}
-    *             instead.
-    */
-   @Deprecated
-   public static void convertYawPitchRollToRotationVector(double[] yawPitchRoll, Vector3DBasics rotationVectorToPack)
-   {
-      convertYawPitchRollToRotationVector(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2], rotationVectorToPack);
+      rotationVectorToPack.set(x * angle, y * angle, z * angle);
    }
 
    /**
@@ -431,9 +395,7 @@ public abstract class RotationVectorConversion
       if (uNorm > EPS)
       {
          double angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs) / uNorm;
-         rotationVectorToPack.setX(qx * angle);
-         rotationVectorToPack.setY(qy * angle);
-         rotationVectorToPack.setZ(qz * angle);
+         rotationVectorToPack.set(qx * angle, qy * angle, qz * angle);
       }
       else
       {

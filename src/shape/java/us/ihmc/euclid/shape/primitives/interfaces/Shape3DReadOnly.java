@@ -18,7 +18,7 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
 {
    /**
     * Gets the position of this shape centroid.
-    * 
+    *
     * @return this shape centroid.
     */
    Point3DReadOnly getCentroid();
@@ -224,7 +224,7 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
 
    /**
     * Creates and returns a deep copy of this shape.
-    * 
+    *
     * @return a copy of this shape.
     */
    Shape3DBasics copy();

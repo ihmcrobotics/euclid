@@ -1,9 +1,9 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Write and read interface for a 3D orientation expressed in a changeable reference frame, i.e. the
@@ -24,6 +24,31 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  */
 public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics, FrameChangeable
 {
+   /**
+    * Sets this orientation 3D to a z-axis orientation, sets the yaw angle from the given orientation
+    * 2D, and sets the frame to the given {@code referenceFrame}.
+    *
+    * @param referenceFrame        the new reference frame for this frame orientation.
+    * @param orientation2DReadOnly the orientation used to set this orientation. Not modified.
+    */
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation2DReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(orientation2DReadOnly);
+   }
+
+   /**
+    * Sets this orientation 3D to a z-axis orientation, sets the yaw angle from the given orientation
+    * 2D, and sets the frame to the given {@code referenceFrame}.
+    *
+    * @param other the other frame orientation to copy the values and reference frame from. Not
+    *              modified.
+    */
+   default void setIncludingFrame(FrameOrientation2DReadOnly other)
+   {
+      setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
    /**
     * Sets this frame orientation to the same orientation described by the given
     * {@code orientation3DReadOnly} and sets the frame to the given {@code referenceFrame}.
@@ -118,22 +143,6 @@ public interface FrameOrientation3DBasics extends FixedFrameOrientation3DBasics,
    {
       setReferenceFrame(rotationVector.getReferenceFrame());
       setRotationVector((Vector3DReadOnly) rotationVector);
-   }
-
-   /**
-    * Sets this orientation to represent the same orientation as the given yaw-pitch-roll
-    * {@code yawPitchRoll} and sets the frame to the given {@code referenceFrame}.
-    *
-    * @param referenceFrame the reference frame in which the Euler angles are expressed.
-    * @param yawPitchRoll   the yaw-pitch-roll Euler angles to copy the orientation from. Not modified.
-    * @deprecated Use {@link #setIncludingFrame(ReferenceFrame, Orientation3DReadOnly)} using
-    *             {@link YawPitchRoll} for instance.
-    */
-   @Deprecated
-   default void setYawPitchRollIncludingFrame(ReferenceFrame referenceFrame, double[] yawPitchRoll)
-   {
-      setReferenceFrame(referenceFrame);
-      setYawPitchRoll(yawPitchRoll);
    }
 
    /**

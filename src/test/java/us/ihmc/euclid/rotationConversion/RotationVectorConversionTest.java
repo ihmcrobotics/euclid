@@ -18,6 +18,7 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class RotationVectorConversionTest
 {
@@ -460,7 +461,6 @@ public class RotationVectorConversionTest
    {
       Vector3D expectedRotationVector = new Vector3D();
       Vector3D actualRotationVector = new Vector3D();
-      double[] yawPitchRoll = new double[3];
 
       double deltaAngle = 0.1 * Math.PI;
 
@@ -477,12 +477,12 @@ public class RotationVectorConversionTest
                RotationVectorConversion.convertYawPitchRollToRotationVector(yaw, pitch, roll, actualRotationVector);
                EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
 
-               yawPitchRoll = new double[] {yaw, pitch, roll};
+               YawPitchRoll yawPitchRoll = new YawPitchRoll(yaw, pitch, roll);
                RotationVectorConversion.convertYawPitchRollToRotationVector(yawPitchRoll, actualRotationVector);
                EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
-               assertTrue(yawPitchRoll[0] == yaw);
-               assertTrue(yawPitchRoll[1] == pitch);
-               assertTrue(yawPitchRoll[2] == roll);
+               assertTrue(yawPitchRoll.getYaw() == yaw);
+               assertTrue(yawPitchRoll.getPitch() == pitch);
+               assertTrue(yawPitchRoll.getRoll() == roll);
             }
          }
       }

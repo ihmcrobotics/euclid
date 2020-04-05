@@ -48,7 +48,9 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     * @param firstEndpoint new endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(FramePoint3DReadOnly firstEndpoint)
    {
       getFirstEndpoint().set(firstEndpoint);
@@ -60,7 +62,9 @@ public interface FixedFrameLineSegment3DBasics extends FrameLineSegment3DReadOnl
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(FramePoint3DReadOnly secondEndpoint)
    {
       getSecondEndpoint().set(secondEndpoint);

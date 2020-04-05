@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -25,6 +26,21 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  */
 public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnly, Orientation3DBasics
 {
+   /**
+    * Sets this orientation 3D to a z-axis orientation, sets the yaw angle from the given orientation
+    * 2D, and checks that its current frame equals {@code referenceFrame}.
+    *
+    * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
+    *                       expressed.
+    * @param orientation    the orientation to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Orientation2DReadOnly orientation)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(orientation);
+   }
+
    /**
     * Sets this frame quaternion to {@code orientation} and checks that its current frame equals
     * {@code referenceFrame}.
@@ -179,6 +195,19 @@ public interface FixedFrameOrientation3DBasics extends FrameOrientation3DReadOnl
    {
       checkReferenceFrameMatch(referenceFrame);
       set((Orientation3DReadOnly) orientation);
+   }
+
+   /**
+    * Sets this orientation 3D to a z-axis orientation and sets the yaw angle from the given
+    * orientation 2D.
+    *
+    * @param orientation the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
+   default void set(FrameOrientation2DReadOnly orientation)
+   {
+      set(orientation.getReferenceFrame(), orientation);
    }
 
    /**

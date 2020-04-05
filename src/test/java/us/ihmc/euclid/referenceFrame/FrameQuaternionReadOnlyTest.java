@@ -13,7 +13,6 @@ import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPIDefaultConfiguration;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -86,10 +85,10 @@ public abstract class FrameQuaternionReadOnlyTest<F extends FrameQuaternionReadO
       assertFalse(tuple3.epsilonEquals(tuple2, epsilon));
       assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
 
-      assertTrue(tuple1.epsilonEquals((FrameTuple4DReadOnly) tuple2, epsilon));
-      assertFalse(tuple1.epsilonEquals((FrameTuple4DReadOnly) tuple3, epsilon));
-      assertFalse(tuple3.epsilonEquals((FrameTuple4DReadOnly) tuple2, epsilon));
-      assertTrue(tuple3.epsilonEquals((FrameTuple4DReadOnly) tuple4, epsilon));
+      assertTrue(tuple1.epsilonEquals(tuple2, epsilon));
+      assertFalse(tuple1.epsilonEquals(tuple3, epsilon));
+      assertFalse(tuple3.epsilonEquals(tuple2, epsilon));
+      assertTrue(tuple3.epsilonEquals(tuple4, epsilon));
    }
 
    @Override

@@ -2,7 +2,7 @@ package us.ihmc.euclid.shape.collision.gjk;
 
 import static us.ihmc.euclid.shape.collision.gjk.GJKTools.simplexClosestToOrigin;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;
 import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
@@ -70,7 +70,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
     * The support direction to used for the first iteration. Can be used to reduce the number of
     * iterations.
     */
-   private final Vector3D initialSupportDirection = new Vector3D(Axis.Y);
+   private final Vector3D initialSupportDirection = new Vector3D(Axis3D.Y);
    /** The last support direction used in the last evaluation. */
    private final Vector3D supportDirection = new Vector3D();
 
@@ -326,7 +326,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
          System.out.println("Number of iterations: " + numberOfIterations);
 
       isInitialSupportDirectionProvided = false;
-      initialSupportDirection.set(Axis.Y);
+      initialSupportDirection.set(Axis3D.Y);
 
       return areColliding;
    }

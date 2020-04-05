@@ -1,6 +1,10 @@
 package us.ihmc.euclid.shape.collision;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -976,7 +980,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
          }
 
          double distanceError = Math.abs(expectedResult.getSignedDistance() - gjkResult.getSignedDistance());
-         if (verbose && (i % 5000) == 0)
+         if (verbose && i % 5000 == 0)
          {
             System.out.println(iterationPrefix + ", Number of its: " + gjkDetector.getNumberOfIterations() + " Analytical: "
                   + expectedResult.getSignedDistance() + ", GJK: " + gjkResult.getSignedDistance() + ", diff: " + distanceError);

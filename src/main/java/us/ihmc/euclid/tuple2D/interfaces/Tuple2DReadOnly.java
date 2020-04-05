@@ -197,8 +197,9 @@ public interface Tuple2DReadOnly
     */
    default void get(int startRow, int column, DenseMatrix64F tupleMatrixToPack)
    {
-      tupleMatrixToPack.set(startRow++, column, getX());
-      tupleMatrixToPack.set(startRow, column, getY());
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 2, column + 1, tupleMatrixToPack);
+      tupleMatrixToPack.unsafe_set(startRow++, column, getX());
+      tupleMatrixToPack.unsafe_set(startRow, column, getY());
    }
 
    /**

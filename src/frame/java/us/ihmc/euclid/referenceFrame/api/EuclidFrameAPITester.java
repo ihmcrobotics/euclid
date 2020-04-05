@@ -471,7 +471,7 @@ public class EuclidFrameAPITester
          Class<?> overloadingReturnType = overloadingMethod.getReturnType();
 
          { // Assert the return type is proper
-            if ((originalReturnType == null) != (overloadingReturnType == null))
+            if (originalReturnType == null != (overloadingReturnType == null))
             {
                String message = "Inconsistency found in the return type.";
                message += "\nOriginal    method: " + originalSignature.getMethodSimpleName();

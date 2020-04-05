@@ -53,7 +53,7 @@ public class EuclidFrameShapeRandomTools
 
    /**
     * Generates a random pose using {@link EuclidShapeRandomTools#nextShape3DPose(Random)}.
-    * 
+    *
     * @param random         the random generator to use.
     * @param referenceFrame the random frame pose's reference frame.
     * @return the random pose.
@@ -65,7 +65,7 @@ public class EuclidFrameShapeRandomTools
 
    /**
     * Generates a random pose using {@link EuclidShapeRandomTools#nextShape3DPose(Random)}.
-    * 
+    *
     * @param random         the random generator to use.
     * @param referenceFrame the random frame pose's reference frame.
     * @return the random pose.
@@ -1019,7 +1019,7 @@ public class EuclidFrameShapeRandomTools
     * <p>
     * This random generator excludes the possibility of generating concave shapes.
     * </p>
-    * 
+    *
     * @param random         the random generator to use.
     * @param referenceFrame the random frame shape's reference frame.
     * @param shapeCentroid  the position of the shape's centroid. Not modified.

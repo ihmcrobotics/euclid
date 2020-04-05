@@ -13,7 +13,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * This wrapper essentially interpose the a transform between every query and the original
  * supporting vertex holder.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class SupportingVertexTransformer implements SupportingVertexHolder
@@ -24,7 +24,7 @@ public class SupportingVertexTransformer implements SupportingVertexHolder
 
    /**
     * Sets the supporting vertex holder to be wrapped and the transform to use.
-    * 
+    *
     * @param original  the supporting vertex holder to wrap.
     * @param transform the transform to interpose between queries and {@code original}.
     */

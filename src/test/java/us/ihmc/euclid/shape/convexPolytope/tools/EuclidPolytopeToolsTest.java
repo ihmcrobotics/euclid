@@ -1,6 +1,9 @@
 package us.ihmc.euclid.shape.convexPolytope.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +14,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.Line2D;
 import us.ihmc.euclid.geometry.Line3D;
@@ -51,7 +54,7 @@ public class EuclidPolytopeToolsTest
          Point3D query3D = EuclidCoreRandomTools.nextPoint3D(random);
          Point2D query2D = new Point2D(query3D);
 
-         Vector3DReadOnly planeNormal = Axis.Z;
+         Vector3DReadOnly planeNormal = Axis3D.Z;
 
          boolean testForLeftSide = random.nextBoolean();
          boolean expected = EuclidGeometryTools.isPoint2DOnSideOfLine2D(query2D, line2D.getPoint(), line2D.getDirection(), testForLeftSide);

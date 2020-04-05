@@ -78,7 +78,7 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
 
    /**
     * Creates a 1-by-1-by-1 box 3D and initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameBox3D(ReferenceFrame referenceFrame)

@@ -55,11 +55,12 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(FrameTuple2DReadOnly position)
    {
-      checkReferenceFrameMatch(position);
-      Pose3DBasics.super.setPosition(position);
+      getPosition().set(position);
    }
 
    /**
@@ -69,11 +70,12 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param z        the new z-coordinate.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position, z)} instead.
     */
+   @Deprecated
    default void setPosition(FrameTuple2DReadOnly position, double z)
    {
-      checkReferenceFrameMatch(position);
-      Pose3DBasics.super.setPosition(position, z);
+      getPosition().set(position, z);
    }
 
    /**
@@ -82,11 +84,12 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param position the tuple with the new position coordinates. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code position} are not expressed in
     *                                         the same reference frame.
+    * @deprecated Use {@code this.getPosition().set(position)} instead.
     */
+   @Deprecated
    default void setPosition(FrameTuple3DReadOnly position)
    {
-      checkReferenceFrameMatch(position);
-      Pose3DBasics.super.setPosition(position);
+      getPosition().set(position);
    }
 
    /**
@@ -95,11 +98,12 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param orientation the orientation with the new angle value for this. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(FrameOrientation2DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      Pose3DBasics.super.setOrientation(orientation);
+      getOrientation().set(orientation);
    }
 
    /**
@@ -108,11 +112,12 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
     * @param orientation the orientation to set the orientation part of this frame pose. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code orientation} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getOrientation().set(orientation)} instead.
     */
+   @Deprecated
    default void setOrientation(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(orientation);
-      Pose3DBasics.super.setOrientation(orientation);
+      getOrientation().set(orientation);
    }
 
    /**

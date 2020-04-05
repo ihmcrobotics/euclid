@@ -1,6 +1,6 @@
 package us.ihmc.euclid.shape.tools;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -163,9 +163,9 @@ public class EuclidShapeTools
     */
    public static void supportingVertexBox3D(Vector3DReadOnly supportDirection, Vector3DReadOnly box3DSize, Point3DBasics supportingVertexToPack)
    {
-      supportingVertexToPack.setX(supportDirection.getX() > 0.0 ? box3DSize.getX() : -box3DSize.getX());
-      supportingVertexToPack.setY(supportDirection.getY() > 0.0 ? box3DSize.getY() : -box3DSize.getY());
-      supportingVertexToPack.setZ(supportDirection.getZ() > 0.0 ? box3DSize.getZ() : -box3DSize.getZ());
+      supportingVertexToPack.set(supportDirection.getX() > 0.0 ? box3DSize.getX() : -box3DSize.getX(),
+                                 supportDirection.getY() > 0.0 ? box3DSize.getY() : -box3DSize.getY(),
+                                 supportDirection.getZ() > 0.0 ? box3DSize.getZ() : -box3DSize.getZ());
       supportingVertexToPack.scale(0.5);
    }
 
@@ -1287,7 +1287,7 @@ public class EuclidShapeTools
 
    /**
     * Computes the centroid of a ramp of the given size.
-    * 
+    *
     * @param ramp3DPose     the pose of the ramp. Not modified.
     * @param size           the ramp's size. Not modified.
     * @param centroidToPack the object used to store the result. Modified.
@@ -1630,7 +1630,7 @@ public class EuclidShapeTools
 
          if (xClosest == xLocalQuery && yClosest == yLocalQuery)
          {
-            normalToPack.setAndNegate(Axis.Z);
+            normalToPack.setAndNegate(Axis3D.Z);
             return -zLocalQuery;
          }
          else
@@ -1649,7 +1649,7 @@ public class EuclidShapeTools
 
          if (yClosest == yLocalQuery && zClosest == zLocalQuery)
          {
-            normalToPack.set(Axis.X);
+            normalToPack.set(Axis3D.X);
             return xLocalQuery - ramp3DSize.getX();
          }
          else
@@ -1678,9 +1678,9 @@ public class EuclidShapeTools
             closestPointOnSurfaceToPack.set(xClosest, yClosest, zClosest);
 
             if (yLocalQuery >= 0.0)
-               normalToPack.set(Axis.Y);
+               normalToPack.set(Axis3D.Y);
             else
-               normalToPack.setAndNegate(Axis.Y);
+               normalToPack.setAndNegate(Axis3D.Y);
 
             return Math.abs(yLocalQuery) - halfWidth;
          }
@@ -1717,25 +1717,25 @@ public class EuclidShapeTools
          if (isFirstValueMinimum(distanceToRightFace, distanceToLeftFace, distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
          { // Query is closer to the right face
             closestPointOnSurfaceToPack.set(xLocalQuery, -halfWidth, zLocalQuery);
-            normalToPack.setAndNegate(Axis.Y);
+            normalToPack.setAndNegate(Axis3D.Y);
             return -distanceToRightFace;
          }
          else if (isFirstValueMinimum(distanceToLeftFace, distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
          { // Query is closer to the left face
             closestPointOnSurfaceToPack.set(xLocalQuery, halfWidth, zLocalQuery);
-            normalToPack.set(Axis.Y);
+            normalToPack.set(Axis3D.Y);
             return -distanceToLeftFace;
          }
          else if (isFirstValueMinimum(distanceToRearFace, distanceToBottomFace, distanceToSlopeFace))
          { // Query is closer to the rear face
             closestPointOnSurfaceToPack.set(ramp3DSize.getX(), yLocalQuery, zLocalQuery);
-            normalToPack.set(Axis.X);
+            normalToPack.set(Axis3D.X);
             return -distanceToRearFace;
          }
          else if (distanceToBottomFace <= distanceToSlopeFace)
          { // Query is closer to the bottom face
             closestPointOnSurfaceToPack.set(xLocalQuery, yLocalQuery, 0.0);
-            normalToPack.setAndNegate(Axis.Z);
+            normalToPack.setAndNegate(Axis3D.Z);
             return -distanceToBottomFace;
          }
          else
@@ -2276,7 +2276,7 @@ public class EuclidShapeTools
     * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
-    * 
+    *
     * @param expected          the expected value. Not modified.
     * @param actual            the actual value. Not modified.
     * @param normal            the normal vector used to measure the normal error and the tangential
@@ -2299,7 +2299,7 @@ public class EuclidShapeTools
     * Variation of {@link Point3DReadOnly#geometricallyEquals(Point3DReadOnly, double)} allowing to
     * compare the two points by independently measuring the error along and orthogonal to a given
     * normal vector.
-    * 
+    *
     * @param expected          the expected value. Not modified.
     * @param actual            the actual value. Not modified.
     * @param normalX           the x-component of the normal vector used to measure the normal error

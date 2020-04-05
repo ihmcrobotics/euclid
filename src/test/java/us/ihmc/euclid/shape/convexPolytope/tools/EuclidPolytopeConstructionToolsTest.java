@@ -13,7 +13,7 @@ import org.ejml.factory.DecompositionFactory;
 import org.ejml.ops.CommonOps;
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -57,7 +57,7 @@ public class EuclidPolytopeConstructionToolsTest
          Vector3D actualNormal = new Vector3D(1.0, 1.0, 1.0);
          EuclidPolytopeConstructionTools.updateFace3DNormal(actualCovariance, actualNormal);
 
-         Vector3D expectedNormal = new Vector3D(Axis.Z);
+         Vector3D expectedNormal = new Vector3D(Axis3D.Z);
 
          String errorMessage = "Iteration" + i + ", nPoints: " + numberOfPoints + ", angle: " + expectedNormal.angle(actualNormal);
          assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 0.30), errorMessage);
@@ -139,7 +139,7 @@ public class EuclidPolytopeConstructionToolsTest
          List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
 
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D,
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(circleBasedConvexPolygon2D,
                                                                                      circleBasedConvexPolygon2D.size(),
                                                                                      true,
                                                                                      centroid2D);
@@ -147,7 +147,7 @@ public class EuclidPolytopeConstructionToolsTest
 
          Point3D actualCentroid3D = new Point3D();
          double actualArea = EuclidPolytopeConstructionTools.computeConvexPolygon3DArea(circleBasedConvexPolygon3D,
-                                                                                        Axis.Z,
+                                                                                        Axis3D.Z,
                                                                                         circleBasedConvexPolygon3D.size(),
                                                                                         true,
                                                                                         actualCentroid3D);
@@ -160,7 +160,7 @@ public class EuclidPolytopeConstructionToolsTest
       { // Applying a transform when switching to 3D
          List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 5.0, 1.0, 20);
          Point2D centroid2D = new Point2D();
-         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolyong2DArea(circleBasedConvexPolygon2D,
+         double expectedArea = EuclidGeometryPolygonTools.computeConvexPolygon2DArea(circleBasedConvexPolygon2D,
                                                                                      circleBasedConvexPolygon2D.size(),
                                                                                      true,
                                                                                      centroid2D);
@@ -209,7 +209,7 @@ public class EuclidPolytopeConstructionToolsTest
 
       CommonOps.multInner(datasetMatrix, covariance);
 
-      CommonOps.scale(1.0 / (double) n, covariance);
+      CommonOps.scale(1.0 / n, covariance);
 
       return new Matrix3D(covariance);
    }

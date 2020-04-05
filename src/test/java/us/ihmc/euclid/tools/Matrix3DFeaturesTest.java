@@ -1,12 +1,17 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
+import org.ejml.ops.MatrixDimensionException;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
@@ -146,62 +151,10 @@ public class Matrix3DFeaturesTest
       }
 
       // Also test the check on the DenseMatrix64F dimension
-      try
-      {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(2, 3));
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (NotARotationMatrixException e)
-      {
-         // The matrix size check didn't throw the exception
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (RuntimeException e)
-      {
-         // good
-      }
-      try
-      {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 2));
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (NotARotationMatrixException e)
-      {
-         // The matrix size check didn't throw the exception
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (RuntimeException e)
-      {
-         // good
-      }
-      try
-      {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(4, 3));
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (NotARotationMatrixException e)
-      {
-         // The matrix size check didn't throw the exception
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (RuntimeException e)
-      {
-         // good
-      }
-      try
-      {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 4));
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (NotARotationMatrixException e)
-      {
-         // The matrix size check didn't throw the exception
-         fail("Should have got a RuntimeException for providing a matrix with wrong size.");
-      }
-      catch (RuntimeException e)
-      {
-         // good
-      }
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(2, 3)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 2)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(4, 3)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 4)));
    }
 
    private void testAllCheckIfRotationMatrixAndIsRotationMatrixMethods(Matrix3DReadOnly matrix, boolean isRotationMatrix)

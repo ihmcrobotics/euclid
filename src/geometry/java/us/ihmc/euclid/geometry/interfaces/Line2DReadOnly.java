@@ -6,6 +6,7 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
@@ -30,7 +31,7 @@ public interface Line2DReadOnly
     *
     * @return the reference to the direction.
     */
-   Vector2DReadOnly getDirection();
+   UnitVector2DReadOnly getDirection();
 
    /**
     * Gets the x-component of this line's direction.

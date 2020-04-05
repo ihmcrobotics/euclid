@@ -1,6 +1,15 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.*;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getEuclidFrameShape3DCollisionResultString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameBox3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameCapsule3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameConvexPolytope3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameCylinder3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameEllipsoid3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameFace3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFramePointShape3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameRamp3DString;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools.getFrameSphere3DString;
 
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;

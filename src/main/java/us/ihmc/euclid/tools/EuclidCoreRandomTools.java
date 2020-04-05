@@ -8,6 +8,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
+import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.transform.AffineTransform;
@@ -15,12 +16,14 @@ import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Point2D32;
+import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.Vector2D32;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Point3D32;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.Vector3D32;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -45,53 +48,6 @@ public class EuclidCoreRandomTools
    private EuclidCoreRandomTools()
    {
       // Suppresses default constructor, ensuring non-instantiability.
-   }
-
-   /**
-    * Generates random yaw-pitch-roll angles and returns it in an array.
-    * <p>
-    * <ul>
-    * <li>yaw &in; [-<i>pi</i>; <i>pi</i>],
-    * <li>pitch &in; [-<i>pi</i>/2.0; <i>pi</i>/2.0],
-    * <li>roll &in; [-<i>pi</i>; <i>pi</i>],
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @return an array containing the random yaw-pitch-roll angles.
-    */
-   public static double[] nextYawPitchRollArray(Random random)
-   {
-      return nextYawPitchRollArray(random, Math.PI, YawPitchRollConversion.MAX_SAFE_PITCH_ANGLE, Math.PI);
-   }
-
-   /**
-    * Generates random yaw-pitch-roll angles and returns it in an array.
-    * <p>
-    * <ul>
-    * <li>yaw &in; [-{@code minMaxYaw}; {@code minMaxYaw}],
-    * <li>pitch &in; [-{@code minMaxPitch}; {@code minMaxPitch}],
-    * <li>roll &in; [-{@code minMaxRoll}; {@code minMaxRoll}],
-    * </ul>
-    * </p>
-    *
-    * @param random      the random generator to use.
-    * @param minMaxYaw   the maximum absolute angle for the generated yaw angle.
-    * @param minMaxPitch the maximum absolute angle for the generated pitch angle.
-    * @param minMaxRoll  the maximum absolute angle for the generated roll angle.
-    * @return an array containing the random yaw-pitch-roll angles.
-    * @throws RuntimeException if {@code minMaxYaw < 0}, {@code minMaxPitch < 0},
-    *                          {@code minMaxRoll < 0}.
-    * @deprecated Use {@link #nextYawPitchRoll(Random, double, double, double)} instead.
-    */
-   @Deprecated
-   public static double[] nextYawPitchRollArray(Random random, double minMaxYaw, double minMaxPitch, double minMaxRoll)
-   {
-      double yaw = nextDouble(random, minMaxYaw);
-      double pitch = nextDouble(random, minMaxPitch);
-      double roll = nextDouble(random, minMaxRoll);
-      double[] yawPitchRoll = {yaw, pitch, roll};
-      return yawPitchRoll;
    }
 
    /**
@@ -521,6 +477,40 @@ public class EuclidCoreRandomTools
    }
 
    /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-<i>pi</i>; <i>pi</i>].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random orientation 2D.
+    */
+   public static Orientation2D nextOrientation2D(Random random)
+   {
+      return new Orientation2D(nextDouble(random, Math.PI));
+   }
+
+   /**
+    * Generates a random orientation 2D.
+    * <p>
+    * <ul>
+    * <li>{@code yaw} &in; [-{@code minMax}; {@code minMax}].
+    * </ul>
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value orientation 2D's angle.
+    * @return the random orientation 2D.
+    * @throws RuntimeException if {@code pointMinMax < 0}.
+    */
+   public static Orientation2D nextOrientation2D(Random random, double minMax)
+   {
+      return new Orientation2D(nextDouble(random, minMax));
+   }
+
+   /**
     * Generates a random rigid-body transform.
     * <p>
     * <ul>
@@ -625,7 +615,7 @@ public class EuclidCoreRandomTools
     * </ul>
     * </p>
     *
-    * @param random   the random generator to use.
+    * @param random the random generator to use.
     * @return the random rotation-scale matrix.
     * @throws RuntimeException if {@code maxScale < 0}.
     */
@@ -806,6 +796,20 @@ public class EuclidCoreRandomTools
       Vector3D vector = new Vector3D();
       randomizeTuple3D(random, vector);
       return vector;
+   }
+
+   /**
+    * Generates a random unit vector.
+    * <p>
+    * This generator uses {@link #nextVector3D(Random)}.
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random unit vector.
+    */
+   public static UnitVector3D nextUnitVector3D(Random random)
+   {
+      return new UnitVector3D(nextVector3D(random));
    }
 
    /**
@@ -1029,6 +1033,20 @@ public class EuclidCoreRandomTools
       Vector2D vector = new Vector2D();
       randomizeTuple2D(random, vector);
       return vector;
+   }
+
+   /**
+    * Generates a random unit vector.
+    * <p>
+    * This generator uses {@link #nextVector2D(Random)}.
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @return the random unit vector.
+    */
+   public static UnitVector2D nextUnitVector2D(Random random)
+   {
+      return new UnitVector2D(nextVector2D(random));
    }
 
    /**

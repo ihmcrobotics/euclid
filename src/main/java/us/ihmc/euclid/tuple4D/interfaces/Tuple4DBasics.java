@@ -4,6 +4,7 @@ import org.ejml.data.DenseMatrix64F;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 
 /**
  * Write and read interface for a 4 dimensional tuple.
@@ -155,7 +156,8 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
     */
    default void set(DenseMatrix64F matrix)
    {
-      set(matrix.get(0, 0), matrix.get(1, 0), matrix.get(2, 0), matrix.get(3, 0));
+      EuclidCoreTools.checkMatrixMinimumSize(4, 1, matrix);
+      set(matrix.unsafe_get(0, 0), matrix.unsafe_get(1, 0), matrix.unsafe_get(2, 0), matrix.unsafe_get(3, 0));
    }
 
    /**
@@ -168,7 +170,8 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
     */
    default void set(int startRow, DenseMatrix64F matrix)
    {
-      set(matrix.get(startRow++, 0), matrix.get(startRow++, 0), matrix.get(startRow++, 0), matrix.get(startRow, 0));
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, 1, matrix);
+      set(matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow++, 0), matrix.unsafe_get(startRow, 0));
    }
 
    /**
@@ -182,7 +185,11 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
     */
    default void set(int startRow, int column, DenseMatrix64F matrix)
    {
-      set(matrix.get(startRow++, column), matrix.get(startRow++, column), matrix.get(startRow++, column), matrix.get(startRow, column));
+      EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, column + 1, matrix);
+      set(matrix.unsafe_get(startRow++, column),
+          matrix.unsafe_get(startRow++, column),
+          matrix.unsafe_get(startRow++, column),
+          matrix.unsafe_get(startRow, column));
    }
 
    /**

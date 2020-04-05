@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
 import us.ihmc.euclid.interfaces.Clearable;
@@ -91,7 +91,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
     * <p>
     * Factories have to be provided before initializing this polytope.
     * </p>
-    * 
+    *
     * @param vertexFactory the factory to use for creating new vertices when expanding this polytope.
     * @param edgeFactory   the factory to use for creating new half-edges when expanding this polytope.
     * @param faceFactory   the factory to use for creating new faces when expanding this polytope.
@@ -122,7 +122,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
     * <p>
     * This method updates twin of every half-edge if not done beforehand.
     * </p>
-    * 
+    *
     * @param faces this polytope faces.
     */
    protected void initialize(List<Face> faces)
@@ -375,7 +375,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    private boolean handleNoFaceCase(Vertex vertexToAdd)
    {
       // Polytope is empty. Creating face and adding the vertex
-      Face newFace = faceFactory.newInstance(Axis.Z, constructionEpsilon);
+      Face newFace = faceFactory.newInstance(Axis3D.Z, constructionEpsilon);
       newFace.addVertex(vertexToAdd);
       return faces.add(newFace);
    }

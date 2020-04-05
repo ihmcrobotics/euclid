@@ -56,7 +56,7 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
 
    /**
     * Creates a new empty convex polytope and initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this polytope initial frame.
     */
    public FrameConvexPolytope3D(ReferenceFrame referenceFrame)
@@ -184,7 +184,7 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param other the other polytope to copy. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
     *                                         frame {@code this}.
@@ -200,7 +200,7 @@ public class FrameConvexPolytope3D extends AbstractConvexPolytope3D<FrameVertex3
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param other the other polytope to copy. Not modified.
     */
    public void setIncludingFrame(FrameConvexPolytope3DReadOnly other)

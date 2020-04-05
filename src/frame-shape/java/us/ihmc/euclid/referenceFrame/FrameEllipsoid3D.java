@@ -79,7 +79,7 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    /**
     * Creates a new ellipsoid 3D with its 3 radii initialized to {@code 1} and initializes its
     * reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameEllipsoid3D(ReferenceFrame referenceFrame)

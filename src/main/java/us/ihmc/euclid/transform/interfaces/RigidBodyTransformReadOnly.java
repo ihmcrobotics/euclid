@@ -22,7 +22,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 /**
  * Read-only interface for a rigid-body transform.
@@ -318,6 +317,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                             Modified.
     * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
     */
+   @Deprecated
    default void getRotation(RotationMatrixBasics rotationMatrixToPack)
    {
       rotationMatrixToPack.set(getRotation());
@@ -330,6 +330,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                             The scale part is reset. Modified.
     * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
     */
+   @Deprecated
    default void getRotation(RotationScaleMatrix rotationMatrixToPack)
    {
       rotationMatrixToPack.set(getRotation());
@@ -342,6 +343,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                          Modified.
     * @deprecated Use {@code orientationToPack.set(this.getRotation())} instead.
     */
+   @Deprecated
    default void getRotation(Orientation3DBasics orientationToPack)
    {
       orientationToPack.set(getRotation());
@@ -359,26 +361,10 @@ public interface RigidBodyTransformReadOnly extends Transform
     *                             transform. Modified.
     * @deprecated Use {@code this.getRotation().getRotationVector(rotationVectorToPack)} instead.
     */
+   @Deprecated
    default void getRotation(Vector3DBasics rotationVectorToPack)
    {
       getRotation().getRotationVector(rotationVectorToPack);
-   }
-
-   /**
-    * Computes and packs the orientation described by the rotation part of this transform as the
-    * yaw-pitch-roll angles.
-    * <p>
-    * WARNING: the Euler angles or yaw-pitch-roll representation is sensitive to gimbal lock and is
-    * sometimes undefined.
-    * </p>
-    *
-    * @param yawPitchRollToPack the array in which the yaw-pitch-roll angles are stored. Modified.
-    * @deprecated Use {@link YawPitchRoll} with {@link #getRotation(Orientation3DBasics)}.
-    */
-   @Deprecated
-   default void getRotationYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      getRotation().getYawPitchRoll(yawPitchRollToPack);
    }
 
    /**
@@ -392,6 +378,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
     * @deprecated Use {@code this.getRotation().getEuler(rotationVectorToPack)} instead.
     */
+   @Deprecated
    default void getRotationEuler(Vector3DBasics eulerAnglesToPack)
    {
       getRotation().getEuler(eulerAnglesToPack);
@@ -399,7 +386,7 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    /**
     * Packs the translation part of this rigid-body transform.
-    * 
+    *
     * @param translationToPack the tuple in which the translation part of this transform is stored.
     *                          Modified.
     * @deprecated Use {@code translationToPack.set(this.getTranslation())} instead.

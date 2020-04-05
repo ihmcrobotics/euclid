@@ -155,7 +155,7 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
     * The supporting vertex is the point or vertex on this shape that is the farthest along a given
     * direction.
     * </p>
-    * 
+    *
     * @param seed                   the starting point for the search, the closer it is to the
     *                               supporting vertex, the faster the search will converge. The seed
     *                               has to be a vertex that belongs to this polytope. Can be

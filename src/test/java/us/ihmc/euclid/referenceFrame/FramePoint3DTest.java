@@ -1,6 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
@@ -293,6 +297,7 @@ public class FramePoint3DTest extends FrameTuple3DBasicsTest<FramePoint3D>
       tester.assertOverloadingWithFrameObjects(FramePoint3D.class, Point3D.class, true, 1, methodFilter);
    }
 
+   @Override
    @Test
    public void testSetIncludingFrame()
    {

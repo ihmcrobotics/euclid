@@ -41,7 +41,7 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
 
    /** {@inheritDoc} */
    @Override
-   FrameVector2DReadOnly getDirection();
+   FrameUnitVector2DReadOnly getDirection();
 
    /**
     * Gets the point and direction defining this line by storing their components in the given

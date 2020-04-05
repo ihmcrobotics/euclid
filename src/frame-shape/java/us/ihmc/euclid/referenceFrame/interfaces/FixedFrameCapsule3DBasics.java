@@ -25,34 +25,7 @@ public interface FixedFrameCapsule3DBasics extends Capsule3DBasics, FrameCapsule
 
    /** {@inheritDoc} */
    @Override
-   FixedFrameVector3DBasics getAxis();
-
-   /**
-    * Sets this capsule axis of revolution and normalizes it.
-    *
-    * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param axis           the new axis. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void setAxis(ReferenceFrame referenceFrame, Vector3DReadOnly axis)
-   {
-      checkReferenceFrameMatch(referenceFrame);
-      Capsule3DBasics.super.setAxis(axis);
-   }
-
-   /**
-    * Sets this capsule axis of revolution and normalizes it.
-    *
-    * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param axis           the new axis. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void setAxis(FrameVector3DReadOnly axis)
-   {
-      setAxis(axis.getReferenceFrame(), axis);
-   }
+   FixedFrameUnitVector3DBasics getAxis();
 
    /**
     * Copies the {@code other} capsule data into {@code this}.

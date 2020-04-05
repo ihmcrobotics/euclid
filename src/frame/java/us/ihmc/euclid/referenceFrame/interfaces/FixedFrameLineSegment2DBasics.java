@@ -51,11 +51,14 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param firstEndpointX x-coordinate of the new first endpoint.
     * @param firstEndpointY y-coordinate of the new first endpoint.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    * @deprecated Use
+    *             {@code this.getFirstEndpoint().set(referenceFrame, firstEndpointX, firstEndpointY)}
+    *             instead.
     */
+   @Deprecated
    default void setFirstEndpoint(ReferenceFrame referenceFrame, double firstEndpointX, double firstEndpointY)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setFirstEndpoint(firstEndpointX, firstEndpointY);
+      getFirstEndpoint().set(referenceFrame, firstEndpointX, firstEndpointY);
    }
 
    /**
@@ -64,11 +67,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param referenceFrame the reference frame in which the given coordinates are expressed.
     * @param firstEndpoint  new endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    * @deprecated Use {@code this.getFirstEndpoint().set(referenceFrame, firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(ReferenceFrame referenceFrame, Point2DReadOnly firstEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setFirstEndpoint(firstEndpoint);
+      getFirstEndpoint().set(referenceFrame, firstEndpoint);
    }
 
    /**
@@ -77,11 +81,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param referenceFrame the reference frame in which the given coordinates are expressed.
     * @param firstEndpoint  new endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    * @deprecated Use {@code this.getFirstEndpoint().set(referenceFrame, firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(ReferenceFrame referenceFrame, Point3DReadOnly firstEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setFirstEndpoint(firstEndpoint);
+      getFirstEndpoint().set(referenceFrame, firstEndpoint);
    }
 
    /**
@@ -91,11 +96,14 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param secondEndpointX x-coordinate of the new second endpoint.
     * @param secondEndpointY y-coordinate of the new second endpoint.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    * @deprecated Use
+    *             {@code this.getSecondEndpoint().set(referenceFrame, secondEndpointX, secondEndpointY)}
+    *             instead.
     */
+   @Deprecated
    default void setSecondEndpoint(ReferenceFrame referenceFrame, double secondEndpointX, double secondEndpointY)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setSecondEndpoint(secondEndpointX, secondEndpointY);
+      getSecondEndpoint().set(referenceFrame, secondEndpointX, secondEndpointY);
    }
 
    /**
@@ -104,11 +112,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param referenceFrame the reference frame in which the given coordinates are expressed.
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    * @deprecated Use {@code this.getSecondEndpoint().set(referenceFrame, secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(ReferenceFrame referenceFrame, Point2DReadOnly secondEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setSecondEndpoint(secondEndpoint);
+      getSecondEndpoint().set(referenceFrame, secondEndpoint);
    }
 
    /**
@@ -117,11 +126,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param referenceFrame the reference frame in which the given coordinates are expressed.
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.getReferenceFrame() != referenceFrame}.
+    * @deprecated Use {@code this.getSecondEndpoint().set(referenceFrame, secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(ReferenceFrame referenceFrame, Point3DReadOnly secondEndpoint)
    {
-      checkReferenceFrameMatch(referenceFrame);
-      LineSegment2DBasics.super.setSecondEndpoint(secondEndpoint);
+      getSecondEndpoint().set(referenceFrame, secondEndpoint);
    }
 
    /**
@@ -130,10 +140,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param firstEndpoint new endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(FramePoint2DReadOnly firstEndpoint)
    {
-      setFirstEndpoint(firstEndpoint.getReferenceFrame(), firstEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
    }
 
    /**
@@ -142,10 +154,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param firstEndpoint new endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code firstEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(FramePoint3DReadOnly firstEndpoint)
    {
-      setFirstEndpoint(firstEndpoint.getReferenceFrame(), firstEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
    }
 
    /**
@@ -154,10 +168,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(FramePoint2DReadOnly secondEndpoint)
    {
-      setSecondEndpoint(secondEndpoint.getReferenceFrame(), secondEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -166,10 +182,12 @@ public interface FixedFrameLineSegment2DBasics extends FrameLineSegment2DReadOnl
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondEndpoint} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(FramePoint3DReadOnly secondEndpoint)
    {
-      setSecondEndpoint(secondEndpoint.getReferenceFrame(), secondEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**

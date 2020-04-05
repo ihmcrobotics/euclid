@@ -1,6 +1,17 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getBoundingBox2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getBoundingBox3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getConvexPolygon2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLine2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLine3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment1DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getLineSegment3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPlane3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPose2DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getPose3DString;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getTriangle3DString;
 
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.Plane3D;
@@ -11,10 +22,10 @@ import us.ihmc.euclid.geometry.interfaces.Line2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.LineSegment3DReadOnly;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.Triangle3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**
@@ -946,10 +957,14 @@ public class EuclidGeometryTestTools
     * @param epsilon  the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
+    * @deprecated Use
+    *             {@link EuclidCoreTestTools#assertOrientation2DEquals(Orientation2DReadOnly,Orientation2DReadOnly,double)}
+    *             instead
     */
+   @Deprecated
    public static void assertOrientation2DEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DEquals(null, expected, actual, epsilon);
+      EuclidCoreTestTools.assertOrientation2DEquals(expected, actual, epsilon);
    }
 
    /**
@@ -964,10 +979,14 @@ public class EuclidGeometryTestTools
     * @param epsilon       the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
+    * @deprecated Use
+    *             {@link EuclidCoreTestTools#assertOrientation2DEquals(String,Orientation2DReadOnly,Orientation2DReadOnly,double)}
+    *             instead
     */
+   @Deprecated
    public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      EuclidCoreTestTools.assertOrientation2DEquals(messagePrefix, expected, actual, epsilon);
    }
 
    /**
@@ -984,20 +1003,15 @@ public class EuclidGeometryTestTools
     *                      is thrown.
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
+    * @deprecated Use
+    *             {@link EuclidCoreTestTools#assertOrientation2DEquals(String,Orientation2DReadOnly,Orientation2DReadOnly,double,String)}
+    *             instead
     */
+   @Deprecated
    public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
                                                 String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.epsilonEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      EuclidCoreTestTools.assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -1011,10 +1025,14 @@ public class EuclidGeometryTestTools
     * @param epsilon  the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
     *                        of the arguments is equal to {@code null}.
+    * @deprecated Use
+    *             {@link EuclidCoreTestTools#assertOrientation2DGeometricallyEquals(Orientation2DReadOnly,Orientation2DReadOnly,double)}
+    *             instead
     */
+   @Deprecated
    public static void assertOrientation2DGeometricallyEquals(Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DGeometricallyEquals(null, expected, actual, epsilon);
+      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(expected, actual, epsilon);
    }
 
    /**
@@ -1029,10 +1047,14 @@ public class EuclidGeometryTestTools
     * @param epsilon       the tolerance to use.
     * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
     *                        of the arguments is equal to {@code null}.
+    * @deprecated Use
+    *             {@link EuclidCoreTestTools#assertOrientation2DGeometricallyEquals(String,Orientation2DReadOnly,Orientation2DReadOnly,double)}
+    *             instead
     */
+   @Deprecated
    public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon)
    {
-      assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon);
    }
 
    /**
@@ -1049,20 +1071,15 @@ public class EuclidGeometryTestTools
     *                      is thrown.
     * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
     *                        of the arguments is equal to {@code null}.
+    * @deprecated Use
+    *             {@link EuclidCoreTestTools#assertOrientation2DGeometricallyEquals(String,Orientation2DReadOnly,Orientation2DReadOnly,double,String)}
+    *             instead
     */
+   @Deprecated
    public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
                                                              String format)
    {
-      if (expected == null && actual == null)
-         return;
-
-      if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-
-      if (!expected.geometricallyEquals(actual, epsilon))
-      {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
-      }
+      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -1755,13 +1772,6 @@ public class EuclidGeometryTestTools
    {
       String expectedAsString = getBoundingBox3DString(format, expected);
       String actualAsString = getBoundingBox3DString(format, actual);
-      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, String format)
-   {
-      String expectedAsString = getOrientation2DString(format, expected);
-      String actualAsString = getOrientation2DString(format, actual);
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 

@@ -27,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * This class is an extension of {@link ExpandingPolytopeAlgorithm} to handle frame shapes,
  * especially when the shapes are expressed in different reference frames.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class FrameExpandingPolytopeAlgorithm
@@ -47,9 +47,9 @@ public class FrameExpandingPolytopeAlgorithm
     * The calculator implementing the GJK algorithm is declared as a field of {@link #epaAlgorithm}.
     * </p>
     */
-   private final FrameVector3DReadOnly gjkSupportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(epaAlgorithm.getGJKCollisionDetector()
-                                                                                                                             .getSupportDirection(),
-                                                                                                                 () -> detectorFrame);
+   private final FrameVector3DReadOnly gjkSupportDirection = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(() -> detectorFrame,
+                                                                                                                 epaAlgorithm.getGJKCollisionDetector()
+                                                                                                                             .getSupportDirection());
    /**
     * Flag to indicate whether the initial support direction has been provided by the user or not.
     */
@@ -417,7 +417,7 @@ public class FrameExpandingPolytopeAlgorithm
    public void setGJKInitialSupportDirection(FrameVector3DReadOnly initialSupportDirection)
    {
       isInitialSupportDirectionProvided = true;
-      this.gjkInitialSupportDirection.setIncludingFrame(initialSupportDirection);
+      gjkInitialSupportDirection.setIncludingFrame(initialSupportDirection);
    }
 
    /**
@@ -515,7 +515,7 @@ public class FrameExpandingPolytopeAlgorithm
 
    /**
     * Returns the reference frame in which the last result was computed.
-    * 
+    *
     * @return the most recent result's frame.
     */
    public ReferenceFrame getDetectorFrame()

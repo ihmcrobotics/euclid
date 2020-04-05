@@ -36,7 +36,7 @@ public class FrameSphere3D implements FrameSphere3DBasics, GeometryObject<FrameS
 
    /**
     * Creates a new sphere 3D with a radius of {@code 1} and initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameSphere3D(ReferenceFrame referenceFrame)

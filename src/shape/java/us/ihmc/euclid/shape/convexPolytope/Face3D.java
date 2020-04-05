@@ -77,7 +77,7 @@ public class Face3D extends AbstractFace3D<Vertex3D, HalfEdge3D, Face3D>
    {
       return normal;
    }
-   
+
    @Override
    public BoundingBox3D getBoundingBox()
    {

@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry.interfaces;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D;
 
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -127,8 +129,7 @@ public interface BoundingBox2DReadOnly
    default void getPointGivenParameters(double xParameter, double yParameter, Point2DBasics pointToPack)
    {
       checkBounds();
-      pointToPack.setX(getMinX() + xParameter * (getMaxX() - getMinX()));
-      pointToPack.setY(getMinY() + yParameter * (getMaxY() - getMinY()));
+      pointToPack.set(getMinX() + xParameter * (getMaxX() - getMinX()), getMinY() + yParameter * (getMaxY() - getMinY()));
    }
 
    /**

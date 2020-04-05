@@ -1,6 +1,13 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextQuaternion;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3DWithFixedLength;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,13 +25,14 @@ import us.ihmc.euclid.geometry.Line3D;
 import us.ihmc.euclid.geometry.LineSegment1D;
 import us.ihmc.euclid.geometry.LineSegment2D;
 import us.ihmc.euclid.geometry.LineSegment3D;
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.Plane3D;
 import us.ihmc.euclid.geometry.Pose2D;
 import us.ihmc.euclid.geometry.Pose3D;
 import us.ihmc.euclid.geometry.Triangle3D;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.geometry.interfaces.Vertex3DSupplier;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -292,10 +300,12 @@ public class EuclidGeometryRandomTools
     *
     * @param random the random generator to use.
     * @return the random orientation 2D.
+    * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random)} instead
     */
+   @Deprecated
    public static Orientation2D nextOrientation2D(Random random)
    {
-      return new Orientation2D(nextDouble(random, Math.PI));
+      return EuclidCoreRandomTools.nextOrientation2D(random);
    }
 
    /**
@@ -310,10 +320,12 @@ public class EuclidGeometryRandomTools
     * @param minMax the maximum absolute value orientation 2D's angle.
     * @return the random orientation 2D.
     * @throws RuntimeException if {@code pointMinMax < 0}.
+    * @deprecated Use {@link EuclidCoreRandomTools#nextOrientation2D(Random,double)} instead
     */
+   @Deprecated
    public static Orientation2D nextOrientation2D(Random random, double minMax)
    {
-      return new Orientation2D(nextDouble(random, minMax));
+      return EuclidCoreRandomTools.nextOrientation2D(random, minMax);
    }
 
    /**
@@ -359,7 +371,7 @@ public class EuclidGeometryRandomTools
     */
    public static Pose2D nextPose2D(Random random)
    {
-      return new Pose2D(nextPoint2D(random), nextOrientation2D(random));
+      return new Pose2D(nextPoint2D(random), EuclidCoreRandomTools.nextOrientation2D(random));
    }
 
    /**
@@ -379,7 +391,7 @@ public class EuclidGeometryRandomTools
     */
    public static Pose2D nextPose2D(Random random, double positionMinMax, double orientationMinMax)
    {
-      return new Pose2D(nextPoint2D(random, positionMinMax), nextOrientation2D(random, orientationMinMax));
+      return new Pose2D(nextPoint2D(random, positionMinMax), EuclidCoreRandomTools.nextOrientation2D(random, orientationMinMax));
    }
 
    /**

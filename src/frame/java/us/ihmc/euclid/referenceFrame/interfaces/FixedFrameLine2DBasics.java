@@ -47,7 +47,7 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @return the reference to the direction.
     */
    @Override
-   FixedFrameVector2DBasics getDirection();
+   FixedFrameUnitVector2DBasics getDirection();
 
    /**
     * Changes the point through which this line has to go.
@@ -55,11 +55,12 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param pointOnLine new point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(FramePoint2DReadOnly pointOnLine)
    {
-      checkReferenceFrameMatch(pointOnLine);
-      Line2DBasics.super.setPoint(pointOnLine);
+      getPoint().set(pointOnLine);
    }
 
    /**
@@ -68,11 +69,12 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param pointOnLine new point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
-      checkReferenceFrameMatch(pointOnLine);
-      Line2DBasics.super.setPoint(pointOnLine);
+      getPoint().set(pointOnLine);
    }
 
    /**
@@ -81,11 +83,12 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(FrameVector2DReadOnly lineDirection)
    {
-      checkReferenceFrameMatch(lineDirection);
-      Line2DBasics.super.setDirection(lineDirection);
+      getDirection().set(lineDirection);
    }
 
    /**
@@ -94,11 +97,12 @@ public interface FixedFrameLine2DBasics extends FrameLine2DReadOnly, Line2DBasic
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(FrameVector3DReadOnly lineDirection)
    {
-      checkReferenceFrameMatch(lineDirection);
-      Line2DBasics.super.setDirection(lineDirection);
+      getDirection().set(lineDirection);
    }
 
    /**

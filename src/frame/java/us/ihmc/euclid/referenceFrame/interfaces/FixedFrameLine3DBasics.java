@@ -39,7 +39,7 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
 
    /** {@inheritDoc} */
    @Override
-   FixedFrameVector3DBasics getDirection();
+   FixedFrameUnitVector3DBasics getDirection();
 
    /**
     * Changes the point through which this line has to go.
@@ -47,11 +47,12 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * @param pointOnLine new point on this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code pointOnLine} are not expressed
     *                                         in the same reference frame.
+    * @deprecated Use {@code this.getPoint().set(pointOnLine)} instead.
     */
+   @Deprecated
    default void setPoint(FramePoint3DReadOnly pointOnLine)
    {
-      checkReferenceFrameMatch(pointOnLine);
-      Line3DBasics.super.setPoint(pointOnLine);
+      getPoint().set(pointOnLine);
    }
 
    /**
@@ -60,11 +61,12 @@ public interface FixedFrameLine3DBasics extends FrameLine3DReadOnly, Line3DBasic
     * @param lineDirection new direction of this line. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code lineDirection} are not
     *                                         expressed in the same reference frame.
+    * @deprecated Use {@code this.getDirection().set(lineDirection)} instead.
     */
+   @Deprecated
    default void setDirection(FrameVector3DReadOnly lineDirection)
    {
-      checkReferenceFrameMatch(lineDirection);
-      Line3DBasics.super.setDirection(lineDirection);
+      getDirection().set(lineDirection);
    }
 
    /**

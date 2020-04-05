@@ -16,6 +16,10 @@ public class EuclidHashCodeTools
     * Long used for the multiplication factor in each step of the hash.
     */
    public final static long MULTIPLIER = 31L;
+   /** Smallest prime number used as the base for computing name based hash codes. */
+   public static final long DEFAULT_HASHCODE = 1L;
+   /** Default hash code for any object that is equal to {@code null}. */
+   public static final long NULL_HASHCODE = 0L;
 
    private EuclidHashCodeTools()
    {
@@ -35,7 +39,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 32-bit hash-code.
     */
@@ -46,7 +50,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 32-bit hash-code.
@@ -58,7 +62,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -71,7 +75,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -85,7 +89,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -100,7 +104,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -116,7 +120,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -135,7 +139,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 32-bit hash-code.
     */
@@ -146,7 +150,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 32-bit hash-code.
@@ -158,7 +162,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -171,7 +175,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -185,7 +189,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 32-bit hash-code.
@@ -197,7 +201,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -210,7 +214,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -224,7 +228,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -239,7 +243,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -255,7 +259,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -272,27 +276,27 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 64-bit hash-code.
     */
    public static long toLongHashCode(double a)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a);
       return bits;
    }
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 64-bit hash-code.
     */
    public static long toLongHashCode(double a0, double a1)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       return bits;
@@ -300,7 +304,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -308,7 +312,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(double a0, double a1, double a2)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -317,7 +321,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -326,7 +330,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(double a0, double a1, double a2, double a3)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -336,7 +340,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -346,7 +350,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(double a0, double a1, double a2, double a3, double a4)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -357,7 +361,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -368,7 +372,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(double a0, double a1, double a2, double a3, double a4, double a5)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -380,7 +384,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -394,7 +398,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -409,27 +413,27 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given argument.
-    * 
+    *
     * @param a the argument to get the hash-code of.
     * @return the 64-bit hash-code.
     */
    public static long toLongHashCode(float a)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a);
       return bits;
    }
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 64-bit hash-code.
     */
    public static long toLongHashCode(float a0, float a1)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       return bits;
@@ -437,7 +441,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -445,7 +449,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(float a0, float a1, float a2)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -454,7 +458,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -463,7 +467,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(float a0, float a1, float a2, float a3)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -473,7 +477,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -484,7 +488,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(float a0, float a1, float a2, float a3, float a4, float a5)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -496,14 +500,14 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @return the 64-bit hash-code.
     */
    public static long toLongHashCode(Object a0, Object a1)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       return bits;
@@ -511,7 +515,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -519,7 +523,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(Object a0, Object a1, Object a2)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -528,7 +532,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -537,7 +541,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -547,7 +551,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -557,7 +561,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -568,7 +572,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -579,7 +583,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);
@@ -591,7 +595,7 @@ public class EuclidHashCodeTools
 
    /**
     * Convenience method for computing the hash-code of the given arguments.
-    * 
+    *
     * @param a0 the argument to use for computing a hash-code.
     * @param a1 the argument to use for computing a hash-code.
     * @param a2 the argument to use for computing a hash-code.
@@ -603,7 +607,7 @@ public class EuclidHashCodeTools
     */
    public static long toLongHashCode(Object a0, Object a1, Object a2, Object a3, Object a4, Object a5, Object a6)
    {
-      long bits = 1L;
+      long bits = DEFAULT_HASHCODE;
       bits = addToHashCode(bits, a0);
       bits = addToHashCode(bits, a1);
       bits = addToHashCode(bits, a2);

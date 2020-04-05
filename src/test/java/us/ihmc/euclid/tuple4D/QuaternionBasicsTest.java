@@ -1,6 +1,10 @@
 package us.ihmc.euclid.tuple4D;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.InvocationTargetException;
@@ -278,16 +282,6 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
       for (int i = 0; i < ITERATIONS; i++)
       {
          quaternion = createRandomTuple(random);
-
-         { // Test getYawPitchRoll(double[] yawPitchRollToPack)
-            double[] yawPitchRoll = new double[4];
-            quaternion.getYawPitchRoll(yawPitchRoll);
-            double[] expectedYawPitchRoll = new double[4];
-            YawPitchRollConversion.convertQuaternionToYawPitchRoll(quaternion, expectedYawPitchRoll);
-
-            for (int j = 0; j < yawPitchRoll.length; j++)
-               assertEquals(yawPitchRoll[j], expectedYawPitchRoll[j], getEpsilon());
-         }
 
          { // Test getEuler(Vector3DBasics eulerAnglesToPack)
             Vector3DBasics eulerAngles = new Vector3D();
@@ -1113,29 +1107,6 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          QuaternionConversion.convertRotationVectorToQuaternion(rotationVector, expectedQuaternion);
 
          actualQuaternion.setRotationVector(rotationVector);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, getEpsilon());
-      }
-   }
-
-   @Test
-   public void testSetYawPitchRoll()
-   {
-      Random random = new Random(574631L);
-      T actualQuaternion = createEmptyTuple();
-      T expectedQuaternion = createEmptyTuple();
-      double[] yawPitchRoll;
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // Test setYawPitchRoll(double[] yawPitchRoll)
-         yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRollArray(random);
-
-         QuaternionConversion.convertYawPitchRollToQuaternion(yawPitchRoll, expectedQuaternion);
-
-         actualQuaternion.setYawPitchRoll(yawPitchRoll);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, getEpsilon());
-
-         actualQuaternion.setToZero();
-         actualQuaternion.setYawPitchRoll(yawPitchRoll[0], yawPitchRoll[1], yawPitchRoll[2]);
          EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, getEpsilon());
       }
    }

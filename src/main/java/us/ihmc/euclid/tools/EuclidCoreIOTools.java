@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
@@ -339,6 +340,64 @@ public class EuclidCoreIOTools
    }
 
    /**
+    * Gets a representative {@code String} of {@code orientation2D} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    *
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(Orientation2DReadOnly orientation2D)
+   {
+      return getOrientation2DString(DEFAULT_FORMAT, orientation2D);
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2D} given a specific format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format        the format to use for each number.
+    * @param orientation2D the object to get the {@code String} of. Not modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, Orientation2DReadOnly orientation2D)
+   {
+      if (orientation2D == null)
+         return "null";
+      else
+         return getOrientation2DString(format, orientation2D.getYaw());
+   }
+
+   /**
+    * Gets a representative {@code String} of {@code orientation2DAngle} given a specific format to
+    * use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * (0.174)
+    * </pre>
+    * </p>
+    *
+    * @param format             the format to use for each number.
+    * @param orientation2DAngle the angle of the orientation 2D to get the {@code String} of. Not
+    *                           modified.
+    * @return the representative {@code String}.
+    */
+   public static String getOrientation2DString(String format, double orientation2DAngle)
+   {
+      return getStringOf("(", " )", ", ", format, orientation2DAngle);
+   }
+
+   /**
     * Gets a representative {@code String} of {@code matrix} as follows:
     *
     * <pre>
@@ -377,15 +436,15 @@ public class EuclidCoreIOTools
          return "null";
       else
          return getMatrix3DString(format,
-                                matrix.getM00(),
-                                matrix.getM01(),
-                                matrix.getM02(),
-                                matrix.getM10(),
-                                matrix.getM11(),
-                                matrix.getM12(),
-                                matrix.getM20(),
-                                matrix.getM21(),
-                                matrix.getM22());
+                                  matrix.getM00(),
+                                  matrix.getM01(),
+                                  matrix.getM02(),
+                                  matrix.getM10(),
+                                  matrix.getM11(),
+                                  matrix.getM12(),
+                                  matrix.getM20(),
+                                  matrix.getM21(),
+                                  matrix.getM22());
    }
 
    /**
@@ -439,7 +498,7 @@ public class EuclidCoreIOTools
     * @return the representative {@code String}.
     */
    public static String getMatrix3DString(String format, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21,
-                                        double m22)
+                                          double m22)
    {
       String ret = getStringOf("/", " \\\n", ", ", format, m00, m01, m02);
       ret += getStringOf("|", " |\n", ", ", format, m10, m11, m12);

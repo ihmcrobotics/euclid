@@ -10,8 +10,10 @@ import us.ihmc.euclid.tools.AxisAngleTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
@@ -42,6 +44,13 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    }
 
    /**
+    * Gets the reference to the axis part of this axis-angle.
+    *
+    * @return the reference to the axis vector.
+    */
+   UnitVector3DReadOnly getAxis();
+
+   /**
     * Returns the angle of this axis-angle, usually expressed in radians.
     *
     * @return the angle.
@@ -63,7 +72,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @return the x-component of the unitary axis.
     */
-   double getX();
+   default double getX()
+   {
+      return getAxis().getX();
+   }
 
    /**
     * Returns the x-component of the unitary axis of this axis-angle.
@@ -80,7 +92,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @return the y-component of the unitary axis.
     */
-   double getY();
+   default double getY()
+   {
+      return getAxis().getY();
+   }
 
    /**
     * Returns the y-component of the unitary axis of this axis-angle.
@@ -97,7 +112,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @return the z-component of the unitary axis.
     */
-   double getZ();
+   default double getZ()
+   {
+      return getAxis().getZ();
+   }
 
    /**
     * Returns the z-component of the unitary axis of this axis-angle.
@@ -130,7 +148,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     */
    default double axisNorm()
    {
-      return EuclidCoreTools.fastNorm(getX(), getY(), getZ());
+      return getAxis().length();
    }
 
    /**
@@ -138,7 +156,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     *
     * @param epsilon tolerance to use in this test.
     * @return {@code true} if the axis is unitary, {@code false} otherwise.
+    * @deprecated Unneeded since {@link UnitVector3D} is used to implement the axis.
+    * @since 0.13.0
     */
+   @Deprecated
    default boolean isAxisUnitary(double epsilon)
    {
       return Math.abs(1.0 - axisNorm()) < epsilon;
@@ -205,14 +226,6 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    default void getRotationVector(Vector3DBasics rotationVectorToPack)
    {
       RotationVectorConversion.convertAxisAngleToRotationVector(this, rotationVectorToPack);
-   }
-
-   /** {@inheritDoc} */
-   @Deprecated
-   @Override
-   default void getYawPitchRoll(double[] yawPitchRollToPack)
-   {
-      YawPitchRollConversion.convertAxisAngleToYawPitchRoll(this, yawPitchRollToPack);
    }
 
    /** {@inheritDoc} */

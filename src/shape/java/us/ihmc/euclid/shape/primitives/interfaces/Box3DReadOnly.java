@@ -387,9 +387,9 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       if (vertexIndex < 0 || vertexIndex >= 8)
          throw new IndexOutOfBoundsException("The vertex index has to be in [0, 7], was: " + vertexIndex);
 
-      vertexToPack.setX((vertexIndex & 1) == 0 ? getSizeX() : -getSizeX());
-      vertexToPack.setY((vertexIndex & 2) == 0 ? getSizeY() : -getSizeY());
-      vertexToPack.setZ((vertexIndex & 4) == 0 ? getSizeZ() : -getSizeZ());
+      vertexToPack.set((vertexIndex & 1) == 0 ? getSizeX() : -getSizeX(),
+                       (vertexIndex & 2) == 0 ? getSizeY() : -getSizeY(),
+                       (vertexIndex & 4) == 0 ? getSizeZ() : -getSizeZ());
       vertexToPack.scale(0.5);
       transformToWorld(vertexToPack);
    }

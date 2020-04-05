@@ -24,7 +24,7 @@ public interface FrameCapsule3DReadOnly extends Capsule3DReadOnly, FrameShape3DR
 
    /** {@inheritDoc} */
    @Override
-   FrameVector3DReadOnly getAxis();
+   FrameUnitVector3DReadOnly getAxis();
 
    /**
     * {@inheritDoc}

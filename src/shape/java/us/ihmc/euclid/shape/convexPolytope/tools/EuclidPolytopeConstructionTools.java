@@ -60,7 +60,7 @@ public class EuclidPolytopeConstructionTools
     * <p>
     * WARNING: This method generates garbage.
     * </p>
-    * 
+    *
     * @param faceFactory     factory needed to create faces of the proper type.
     * @param vertex          faces are modified and/or created to include this vertex.
     * @param silhouetteEdges the contour visible from the vertex. Each edge is expected to be

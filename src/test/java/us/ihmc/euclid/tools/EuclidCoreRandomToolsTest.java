@@ -1,13 +1,16 @@
 package us.ihmc.euclid.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -52,7 +55,7 @@ public class EuclidCoreRandomToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Vector3DReadOnly vector = Axis.values[random.nextInt(3)];
+         Vector3DReadOnly vector = Axis3D.values[random.nextInt(3)];
          Vector3D orthogonal1 = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, false);
          assertEquals(0.0, vector.dot(orthogonal1), EPSILON);
 

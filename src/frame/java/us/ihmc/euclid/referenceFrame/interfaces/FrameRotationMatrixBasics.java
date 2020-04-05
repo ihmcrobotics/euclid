@@ -70,7 +70,7 @@ public interface FrameRotationMatrixBasics extends FixedFrameRotationMatrixBasic
     * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
     * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
-    * 
+    *
     * @param referenceFrame the reference frame in which the argument is expressed.
     * @param rotationMatrix the other rotation matrix to copy. Not modified.
     */
@@ -91,7 +91,7 @@ public interface FrameRotationMatrixBasics extends FixedFrameRotationMatrixBasic
     * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
     * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
-    * 
+    *
     * @param referenceFrame the reference frame in which the argument is expressed.
     * @param other          the other rotation matrix to copy. Not modified.
     */

@@ -72,7 +72,11 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param firstEndpointX x-coordinate of the new first endpoint.
     * @param firstEndpointY y-coordinate of the new first endpoint.
     * @param firstEndpointZ z-coordinate of the new first endpoint.
+    * @deprecated Use
+    *             {@code this.getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ)}
+    *             instead.
     */
+   @Deprecated
    default void setFirstEndpoint(double firstEndpointX, double firstEndpointY, double firstEndpointZ)
    {
       getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ);
@@ -84,7 +88,11 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * @param secondEndpointX x-coordinate of the new second endpoint.
     * @param secondEndpointY y-coordinate of the new second endpoint.
     * @param secondEndpointZ z-coordinate of the new second endpoint.
+    * @deprecated Use
+    *             {@code this.getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ)}
+    *             instead.
     */
+   @Deprecated
    default void setSecondEndpoint(double secondEndpointX, double secondEndpointY, double secondEndpointZ)
    {
       getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ);
@@ -94,7 +102,9 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * Changes the first endpoint of this line segment.
     *
     * @param firstEndpoint new endpoint of this line segment. Not modified.
+    * @deprecated Use {@code this.getFirstEndpoint().set(firstEndpoint)} instead.
     */
+   @Deprecated
    default void setFirstEndpoint(Point3DReadOnly firstEndpoint)
    {
       getFirstEndpoint().set(firstEndpoint);
@@ -104,7 +114,9 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     * Changes the second endpoint of this line segment.
     *
     * @param secondEndpoint new second endpoint of this line segment. Not modified.
+    * @deprecated Use {@code this.getSecondEndpoint().set(secondEndpoint)} instead.
     */
+   @Deprecated
    default void setSecondEndpoint(Point3DReadOnly secondEndpoint)
    {
       getSecondEndpoint().set(secondEndpoint);
@@ -132,8 +144,8 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     */
    default void set(double firstEndpointX, double firstEndpointY, double firstEndpointZ, double secondEndpointX, double secondEndpointY, double secondEndpointZ)
    {
-      setFirstEndpoint(firstEndpointX, firstEndpointY, firstEndpointZ);
-      setSecondEndpoint(secondEndpointX, secondEndpointY, secondEndpointZ);
+      getFirstEndpoint().set(firstEndpointX, firstEndpointY, firstEndpointZ);
+      getSecondEndpoint().set(secondEndpointX, secondEndpointY, secondEndpointZ);
    }
 
    /**
@@ -144,8 +156,8 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
     */
    default void set(Point3DReadOnly firstEndpoint, Point3DReadOnly secondEndpoint)
    {
-      setFirstEndpoint(firstEndpoint);
-      setSecondEndpoint(secondEndpoint);
+      getFirstEndpoint().set(firstEndpoint);
+      getSecondEndpoint().set(secondEndpoint);
    }
 
    /**
@@ -171,8 +183,8 @@ public interface LineSegment3DBasics extends LineSegment3DReadOnly, Clearable, T
       double y = getFirstEndpointY();
       double z = getFirstEndpointZ();
 
-      setFirstEndpoint(getSecondEndpoint());
-      setSecondEndpoint(x, y, z);
+      getFirstEndpoint().set(getSecondEndpoint());
+      getSecondEndpoint().set(x, y, z);
    }
 
    /**

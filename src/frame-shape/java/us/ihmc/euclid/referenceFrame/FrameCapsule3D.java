@@ -1,9 +1,10 @@
 package us.ihmc.euclid.referenceFrame;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
-import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameCapsule3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
@@ -31,7 +32,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    /** Position of this capsule's center. */
    private final FixedFramePoint3DBasics position = EuclidFrameFactories.newFixedFramePoint3DBasics(this);
    /** Axis of revolution of this capsule. */
-   private final FixedFrameVector3DBasics axis = EuclidFrameFactories.newFixedFrameVector3DBasics(this);
+   private final FixedFrameUnitVector3DBasics axis = EuclidFrameFactories.newFixedFrameUnitVector3DBasics(this, Axis3D.Z);
    /** This capsule radius. */
    private double radius;
    /** This capsule length. */
@@ -40,15 +41,15 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    private double halfLength;
 
    /** Position of the top half-sphere center linked to this capsule properties. */
-   private final FramePoint3DReadOnly topCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(() -> halfLength * axis.getX() + position.getX(),
+   private final FramePoint3DReadOnly topCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(this,
+                                                                                                     () -> halfLength * axis.getX() + position.getX(),
                                                                                                      () -> halfLength * axis.getY() + position.getY(),
-                                                                                                     () -> halfLength * axis.getZ() + position.getZ(),
-                                                                                                     this);
+                                                                                                     () -> halfLength * axis.getZ() + position.getZ());
    /** Position of the bottom half-sphere center linked to this capsule properties. */
-   private final FramePoint3DReadOnly bottomCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(() -> -halfLength * axis.getX() + position.getX(),
+   private final FramePoint3DReadOnly bottomCenter = EuclidFrameFactories.newLinkedFramePoint3DReadOnly(this,
+                                                                                                        () -> -halfLength * axis.getX() + position.getX(),
                                                                                                         () -> -halfLength * axis.getY() + position.getY(),
-                                                                                                        () -> -halfLength * axis.getZ() + position.getZ(),
-                                                                                                        this);
+                                                                                                        () -> -halfLength * axis.getZ() + position.getZ());
 
    /**
     * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5 and
@@ -62,7 +63,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
    /**
     * Creates a new capsule which axis is along the z-axis, a length of 1, and radius of 0.5 and
     * initializes its reference frame.
-    * 
+    *
     * @param referenceFrame this shape initial reference frame.
     */
    public FrameCapsule3D(ReferenceFrame referenceFrame)
@@ -206,7 +207,7 @@ public class FrameCapsule3D implements FrameCapsule3DBasics, GeometryObject<Fram
 
    /** {@inheritDoc} */
    @Override
-   public FixedFrameVector3DBasics getAxis()
+   public FixedFrameUnitVector3DBasics getAxis()
    {
       return axis;
    }

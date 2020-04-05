@@ -2,15 +2,17 @@ package us.ihmc.euclid.referenceFrame.tools;
 
 import java.util.function.DoubleSupplier;
 
+import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
-import us.ihmc.euclid.geometry.Orientation2D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.geometry.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.Orientation2D;
+import us.ihmc.euclid.orientation.interfaces.Orientation2DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
@@ -19,6 +21,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
@@ -34,18 +38,23 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -78,7 +87,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(DoubleSupplier scaleSupplier, FrameTuple2DReadOnly originalTuple)
    {
-      return newLinkedFramePoint2DReadOnly(EuclidCoreFactories.newLinkedPoint2DReadOnly(scaleSupplier, originalTuple), originalTuple);
+      return newLinkedFramePoint2DReadOnly(originalTuple, EuclidCoreFactories.newLinkedPoint2DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
@@ -96,7 +105,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(DoubleSupplier scaleSupplier, FrameTuple2DReadOnly originalTuple)
    {
-      return newLinkedFrameVector2DReadOnly(EuclidCoreFactories.newLinkedVector2DReadOnly(scaleSupplier, originalTuple), originalTuple);
+      return newLinkedFrameVector2DReadOnly(originalTuple, EuclidCoreFactories.newLinkedVector2DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
@@ -114,7 +123,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(DoubleSupplier scaleSupplier, FrameTuple3DReadOnly originalTuple)
    {
-      return newLinkedFramePoint3DReadOnly(EuclidCoreFactories.newLinkedPoint3DReadOnly(scaleSupplier, originalTuple), originalTuple);
+      return newLinkedFramePoint3DReadOnly(originalTuple, EuclidCoreFactories.newLinkedPoint3DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
@@ -132,80 +141,80 @@ public class EuclidFrameFactories
     */
    public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(DoubleSupplier scaleSupplier, FrameTuple3DReadOnly originalTuple)
    {
-      return newLinkedFrameVector3DReadOnly(EuclidCoreFactories.newLinkedVector3DReadOnly(scaleSupplier, originalTuple), originalTuple);
+      return newLinkedFrameVector3DReadOnly(originalTuple, EuclidCoreFactories.newLinkedVector3DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
     * Creates a new point 2D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
-    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame point 2D.
     */
-   public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier,
-                                                                    ReferenceFrameHolder referenceFrameHolder)
+   public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
+                                                                    DoubleSupplier ySupplier)
    {
-      return newLinkedFramePoint2DReadOnly(EuclidCoreFactories.newLinkedPoint2DReadOnly(xSupplier, ySupplier), referenceFrameHolder);
+      return newLinkedFramePoint2DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedPoint2DReadOnly(xSupplier, ySupplier));
    }
 
    /**
     * Creates a new vector 2D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
-    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame vector 2D.
     */
-   public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier,
-                                                                      ReferenceFrameHolder referenceFrameHolder)
+   public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
+                                                                      DoubleSupplier ySupplier)
    {
-      return newLinkedFrameVector2DReadOnly(EuclidCoreFactories.newLinkedVector2DReadOnly(xSupplier, ySupplier), referenceFrameHolder);
+      return newLinkedFrameVector2DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedVector2DReadOnly(xSupplier, ySupplier));
    }
 
    /**
     * Creates a new point 3D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
     * @param zSupplier            the z-coordinate supplier.
-    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame point 3D.
     */
-   public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier zSupplier,
-                                                                    ReferenceFrameHolder referenceFrameHolder)
+   public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
+                                                                    DoubleSupplier ySupplier, DoubleSupplier zSupplier)
    {
-      return newLinkedFramePoint3DReadOnly(EuclidCoreFactories.newLinkedPoint3DReadOnly(xSupplier, ySupplier, zSupplier), referenceFrameHolder);
+      return newLinkedFramePoint3DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedPoint3DReadOnly(xSupplier, ySupplier, zSupplier));
    }
 
    /**
     * Creates a new vector 3D that is a read-only view of the three coordinate suppliers expressed in
     * the reference frame provided by {@code referenceFrameHolder}.
     *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @param xSupplier            the x-coordinate supplier.
     * @param ySupplier            the y-coordinate supplier.
     * @param zSupplier            the z-coordinate supplier.
-    * @param referenceFrameHolder the reference frame supplier. Not modified.
     * @return the new read-only frame vector 3D.
     */
-   public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier zSupplier,
-                                                                      ReferenceFrameHolder referenceFrameHolder)
+   public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
+                                                                      DoubleSupplier ySupplier, DoubleSupplier zSupplier)
    {
-      return newLinkedFrameVector3DReadOnly(EuclidCoreFactories.newLinkedVector3DReadOnly(xSupplier, ySupplier, zSupplier), referenceFrameHolder);
+      return newLinkedFrameVector3DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedVector3DReadOnly(xSupplier, ySupplier, zSupplier));
    }
 
    /**
     * Creates a new point 2D that is a read-only view of the point expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param point                the point to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param point                the point to link. Not modified.
     * @return the new read-only frame point 2D.
     */
-   public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(Point2DReadOnly point, ReferenceFrameHolder referenceFrameHolder)
+   public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(ReferenceFrameHolder referenceFrameHolder, Point2DReadOnly point)
    {
       return new FramePoint2DReadOnly()
       {
@@ -254,11 +263,11 @@ public class EuclidFrameFactories
     * Creates a new vector 2D that is a read-only view of the vector expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param vector               the vector to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param vector               the vector to link. Not modified.
     * @return the new read-only frame vector 2D.
     */
-   public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(Vector2DReadOnly vector, ReferenceFrameHolder referenceFrameHolder)
+   public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(ReferenceFrameHolder referenceFrameHolder, Vector2DReadOnly vector)
    {
       return new FrameVector2DReadOnly()
       {
@@ -307,11 +316,11 @@ public class EuclidFrameFactories
     * Creates a new point 3D that is a read-only view of the point expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param point                the point to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param point                the point to link. Not modified.
     * @return the new read-only frame point 3D.
     */
-   public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(Point3DReadOnly point, ReferenceFrameHolder referenceFrameHolder)
+   public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(ReferenceFrameHolder referenceFrameHolder, Point3DReadOnly point)
    {
       return new FramePoint3DReadOnly()
       {
@@ -366,11 +375,11 @@ public class EuclidFrameFactories
     * Creates a new vector 3D that is a read-only view of the vector expressed in the reference frame
     * provided by {@code referenceFrameHolder}.
     *
-    * @param vector               the vector to link. Not modified.
     * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param vector               the vector to link. Not modified.
     * @return the new read-only frame vector 3D.
     */
-   public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(Vector3DReadOnly vector, ReferenceFrameHolder referenceFrameHolder)
+   public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly vector)
    {
       return new FrameVector3DReadOnly()
       {
@@ -429,7 +438,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint2DReadOnly newNegativeLinkedFramePoint2D(FramePoint2DReadOnly originalPoint)
    {
-      return newLinkedFramePoint2DReadOnly(EuclidCoreFactories.newNegativeLinkedPoint2D(originalPoint), originalPoint);
+      return newLinkedFramePoint2DReadOnly(originalPoint, EuclidCoreFactories.newNegativeLinkedPoint2D(originalPoint));
    }
 
    /**
@@ -441,7 +450,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector2DReadOnly newNegativeLinkedFrameVector2D(FrameVector2DReadOnly originalVector)
    {
-      return newLinkedFrameVector2DReadOnly(EuclidCoreFactories.newNegativeLinkedVector2D(originalVector), originalVector);
+      return newLinkedFrameVector2DReadOnly(originalVector, EuclidCoreFactories.newNegativeLinkedVector2D(originalVector));
    }
 
    /**
@@ -452,7 +461,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint3DReadOnly newNegativeLinkedFramePoint3D(FramePoint3DReadOnly originalPoint)
    {
-      return newLinkedFramePoint3DReadOnly(EuclidCoreFactories.newNegativeLinkedPoint3D(originalPoint), originalPoint);
+      return newLinkedFramePoint3DReadOnly(originalPoint, EuclidCoreFactories.newNegativeLinkedPoint3D(originalPoint));
    }
 
    /**
@@ -464,13 +473,13 @@ public class EuclidFrameFactories
     */
    public static FrameVector3DReadOnly newNegativeLinkedFrameVector3D(FrameVector3DReadOnly originalVector)
    {
-      return newLinkedFrameVector3DReadOnly(EuclidCoreFactories.newNegativeLinkedVector3D(originalVector), originalVector);
+      return newLinkedFrameVector3DReadOnly(originalVector, EuclidCoreFactories.newNegativeLinkedVector3D(originalVector));
    }
 
    /**
     * Creates a new frame point which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @return the new linked frame point.
     */
@@ -482,7 +491,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame point which reference frame is linked to the given frameless point and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @param originalPoint        the point to link to the new frame point. Modifications on either the
     *                             {@code originalPoint} or the new frame point will be propagated to
@@ -551,7 +560,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new linked frame vector.
     */
@@ -563,7 +572,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given frameless vector and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param originalVector       the vector to link to the new frame vector. Modifications on either
     *                             the {@code originalVector} or the new frame vector will be propagated
@@ -632,7 +641,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame point which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @return the new linked frame point.
     */
@@ -644,7 +653,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame point which reference frame is linked to the given frameless point and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
     * @param originalPoint        the point to link to the new frame point. Modifications on either the
     *                             {@code originalPoint} or the new frame point will be propagated to
@@ -725,7 +734,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @return the new linked frame vector.
     */
@@ -737,7 +746,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame vector which reference frame is linked to the given frameless vector and
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
     * @param originalVector       the vector to link to the new frame vector. Modifications on either
     *                             the {@code originalVector} or the new frame vector will be propagated
@@ -816,9 +825,287 @@ public class EuclidFrameFactories
    }
 
    /**
+    * Creates a new vector 2D that is constrained to be a unit-length vector, i.e.
+    * {@code vector.length() == 1.0}.
+    * <p>
+    * The new vector is initialized to {@link Axis2D#X}.
+    * </p>
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @return the new unitary vector.
+    */
+   public static FixedFrameUnitVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newFixedFrameUnitVector2DBasics(referenceFrameHolder, Axis2D.X);
+   }
+
+   /**
+    * Creates a new vector 2D that is constrained to be a unit-length vector, i.e.
+    * {@code vector.length() == 1.0}.
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param initialValue         the initial value for the new vector. Not modified.
+    * @return the new unitary vector.
+    */
+   public static FixedFrameUnitVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, Vector2DReadOnly initialValue)
+   {
+      return newFixedFrameUnitVector2DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY());
+   }
+
+   /**
+    * Creates a new vector 2D that is constrained to be a unit-length vector, i.e.
+    * {@code vector.length() == 1.0}.
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param initialX             the initial value for the x-component of the new vector.
+    * @param initialY             the initial value for the y-component of the new vector.
+    * @return the new unitary vector.
+    */
+   public static FixedFrameUnitVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY)
+   {
+      return new FixedFrameUnitVector2DBasics()
+      {
+         private final UnitVector2D vector = new UnitVector2D();
+
+         @Override
+         public void absolute()
+         {
+            vector.absolute();
+         }
+
+         @Override
+         public void negate()
+         {
+            vector.negate();
+         }
+
+         @Override
+         public void normalize()
+         {
+            vector.normalize();
+         }
+
+         @Override
+         public void markAsDirty()
+         {
+            vector.markAsDirty();
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return vector.isDirty();
+         }
+
+         @Override
+         public void set(UnitVector2DReadOnly other)
+         {
+            vector.set(other);
+         }
+
+         @Override
+         public void setX(double x)
+         {
+            vector.setX(x);
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            vector.setY(y);
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getRawX()
+         {
+            return vector.getRawX();
+         }
+
+         @Override
+         public double getRawY()
+         {
+            return vector.getRawY();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameVector2DReadOnly)
+               return FixedFrameUnitVector2DBasics.super.equals((FrameVector2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getTuple2DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new vector 3D that is constrained to be a unit-length vector, i.e.
+    * {@code vector.length() == 1.0}.
+    * <p>
+    * The new vector is initialized to: {@link Axis3D#X}.
+    * </p>
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @return the new unitary vector.
+    */
+   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder)
+   {
+      return newFixedFrameUnitVector3DBasics(referenceFrameHolder, Axis3D.X);
+   }
+
+   /**
+    * Creates a new vector 3D that is constrained to be a unit-length vector, i.e.
+    * {@code vector.length() == 1.0}.
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param initialValue         the initial value for the new vector. Not modified.
+    * @return the new unitary vector.
+    */
+   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, Vector3DReadOnly initialValue)
+   {
+      return newFixedFrameUnitVector3DBasics(referenceFrameHolder, initialValue.getX(), initialValue.getY(), initialValue.getZ());
+   }
+
+   /**
+    * Creates a new vector 3D that is constrained to be a unit-length vector, i.e.
+    * {@code vector.length() == 1.0}.
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param initialX             the initial value for the x-component of the new vector.
+    * @param initialY             the initial value for the y-component of the new vector.
+    * @param initialZ             the initial value for the z-component of the new vector.
+    * @return the new unitary vector.
+    */
+   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY,
+                                                                              double initialZ)
+   {
+      return new FixedFrameUnitVector3DBasics()
+      {
+         private final UnitVector3D vector = new UnitVector3D(initialX, initialY, initialZ);
+
+         @Override
+         public void absolute()
+         {
+            vector.absolute();
+         }
+
+         @Override
+         public void negate()
+         {
+            vector.negate();
+         }
+
+         @Override
+         public void normalize()
+         {
+            vector.normalize();
+         }
+
+         @Override
+         public void markAsDirty()
+         {
+            vector.markAsDirty();
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return vector.isDirty();
+         }
+
+         @Override
+         public void set(UnitVector3DReadOnly other)
+         {
+            vector.set(other);
+         }
+
+         @Override
+         public void setX(double x)
+         {
+            vector.setX(x);
+         }
+
+         @Override
+         public void setY(double y)
+         {
+            vector.setY(y);
+         }
+
+         @Override
+         public void setZ(double z)
+         {
+            vector.setZ(z);
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getRawX()
+         {
+            return vector.getRawX();
+         }
+
+         @Override
+         public double getRawY()
+         {
+            return vector.getRawY();
+         }
+
+         @Override
+         public double getRawZ()
+         {
+            return vector.getRawZ();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameVector3DReadOnly)
+               return FixedFrameUnitVector3DBasics.super.equals((FrameVector3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
+         }
+      };
+   }
+
+   /**
     * Creates a new frame orientation which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
     * @return the new linked frame orientation.
     */
@@ -830,7 +1117,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame orientation which reference frame is linked to the given frameless
     * orientation and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame orientation.
     * @param originalOrientation  the orientation to link to the new frame orientation. Modifications
     *                             on either the {@code originalOriginal} or the new frame vector will
@@ -900,7 +1187,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame quaternion which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
     * @return the new linked frame quaternion.
     */
@@ -912,7 +1199,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame quaternion which reference frame is linked to the given frameless quaternion
     * and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame quaternion.
     * @param originalQuaternion   the quaternion to link to the new frame quaternion. Modifications on
     *                             either the {@code originalQuaternion} or the new frame quaternion
@@ -987,7 +1274,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame rotation matrix which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame rotation matrix.
     * @return the new linked frame rotation matrix.
     */
@@ -999,7 +1286,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame rotation matrix which reference frame is linked to the given frameless
     * rotation matrix and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder   the reference frame holder to link to the new frame rotation
     *                               matrix.
     * @param originalRotationMatrix the rotation matrix to link to the new frame rotation matrix.
@@ -1157,7 +1444,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @return the new linked frame bounding box.
     */
@@ -1169,7 +1456,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
     * box and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
     *                             on either the {@code originalBoundingBox} or the new frame bounding
@@ -1232,7 +1519,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given
     * {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @return the new linked frame bounding box.
     */
@@ -1244,7 +1531,7 @@ public class EuclidFrameFactories
    /**
     * Creates a new frame bounding box which reference frame is linked to the given frameless bounding
     * box and {@code referenceFrameHolder}.
-    * 
+    *
     * @param referenceFrameHolder the reference frame holder to link to the new frame bounding box.
     * @param originalBoundingBox  the bounding box to link to the new frame bounding box. Modifications
     *                             on either the {@code originalBoundingBox} or the new frame bounding

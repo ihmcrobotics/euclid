@@ -1,12 +1,53 @@
 package us.ihmc.euclid.geometry.tools;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.EPSILON;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.canObserverSeeEdge;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestEdgeIndexToPoint2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestPointToNonInterectingRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToPoint2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.closestVertexIndexToRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.computeConvexPolygon2DArea;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.edgeNormal;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.grahamScanAngleCompare;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGiftWrapConvexHull2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.inPlaceGrahamScanConvexHull2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenLine2DAndConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenLineSegment2DAndConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.intersectionBetweenRay2DAndConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.isPolygon2DConvexAtVertex;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightEndIndex;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.lineOfSightStartIndex;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.next;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.nextEdgeIndexIntersectingWithLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.orthogonalProjectionOnConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.previous;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.signedDistanceFromPoint2DToConvexPolygon2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.wrap;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D;
 import static us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools.nextPointCloud2D;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.*;
-import static us.ihmc.euclid.tools.EuclidCoreRandomTools.*;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.averagePoint2Ds;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToLineSegment2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.distanceFromPoint2DToRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.intersectionBetweenTwoLine2Ds;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DInFrontOfRay2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnLeftSideOfLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.isPoint2DOnRightSideOfLine2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.perpendicularVector2D;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryTools.triangleArea;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector2DWithFixedLength;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -540,7 +581,7 @@ public class EuclidGeometryPolygonToolsTest
             expectedArea += triangleArea(average, vertex, nextVertex);
          }
          Point2D centroid = nextPoint2D(random);
-         double actualArea = computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         double actualArea = computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          assertEquals(expectedArea, actualArea, SMALLEST_EPSILON);
 
          Point2D recomputedCentroid = new Point2D();
@@ -561,7 +602,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            computeConvexPolyong2DArea(convexPolygon2D, -1, clockwiseOrdered, centroid);
+            computeConvexPolygon2DArea(convexPolygon2D, -1, clockwiseOrdered, centroid);
             fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
          }
          catch (IllegalArgumentException e)
@@ -571,7 +612,7 @@ public class EuclidGeometryPolygonToolsTest
 
          try
          {
-            computeConvexPolyong2DArea(convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered, centroid);
+            computeConvexPolygon2DArea(convexPolygon2D, convexPolygon2D.size() + 1, clockwiseOrdered, centroid);
             fail("Should have thrown an " + IllegalArgumentException.class.getSimpleName());
          }
          catch (IllegalArgumentException e)
@@ -582,7 +623,7 @@ public class EuclidGeometryPolygonToolsTest
 
       { // Test with empty polygon
          Point2D centroid = nextPoint2D(random);
-         double area = computeConvexPolyong2DArea(Collections.emptyList(), 0, true, centroid);
+         double area = computeConvexPolygon2DArea(Collections.emptyList(), 0, true, centroid);
          assertTrue(Double.isNaN(area));
          EuclidCoreTestTools.assertTuple2DContainsOnlyNaN(centroid);
       }
@@ -590,7 +631,7 @@ public class EuclidGeometryPolygonToolsTest
       { // Test with a polygon that has only one vertex
          Point2D vertex = nextPoint2D(random, 10.0);
          Point2D centroid = nextPoint2D(random);
-         double area = computeConvexPolyong2DArea(Collections.singletonList(vertex), 1, true, centroid);
+         double area = computeConvexPolygon2DArea(Collections.singletonList(vertex), 1, true, centroid);
          assertTrue(area == 0.0);
          EuclidCoreTestTools.assertTuple2DEquals(vertex, centroid, SMALLEST_EPSILON);
       }
@@ -603,7 +644,7 @@ public class EuclidGeometryPolygonToolsTest
          points.add(vertex1);
          Point2D expectedCentroid = averagePoint2Ds(points);
          Point2D actualCentroid = nextPoint2D(random);
-         double area = computeConvexPolyong2DArea(points, 2, true, actualCentroid);
+         double area = computeConvexPolygon2DArea(points, 2, true, actualCentroid);
          assertTrue(area == 0.0);
          EuclidCoreTestTools.assertTuple2DEquals(expectedCentroid, actualCentroid, SMALLEST_EPSILON);
       }
@@ -623,7 +664,7 @@ public class EuclidGeometryPolygonToolsTest
          points.add(vertex2);
 
          Point2D centroid = nextPoint2D(random);
-         computeConvexPolyong2DArea(points, 3, true, centroid);
+         computeConvexPolygon2DArea(points, 3, true, centroid);
          EuclidCoreTestTools.assertTuple2DEquals(vertex0, centroid, SMALLEST_EPSILON);
       }
    }
@@ -848,7 +889,7 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
          int nextVertexIndex = next(vertexIndex, hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -881,7 +922,7 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
          int nextVertexIndex = next(vertexIndex, hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -926,7 +967,7 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
          int nextVertexIndex = next(vertexIndex, hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -1140,7 +1181,7 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
          int nextVertexIndex = next(vertexIndex, hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -1366,7 +1407,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2DReadOnly vp1 = convexPolygon2D.get(vp1Index);
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
 
          Point2D v0Max = intersectionBetweenTwoLine2Ds(centroid, v0, vn1, vn2);
          Vector2D extrapolationDirection = new Vector2D();
@@ -1457,7 +1498,7 @@ public class EuclidGeometryPolygonToolsTest
          int vertexIndex = random.nextInt(hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
 
          Point2D pointOnLine = new Point2D(centroid);
          Vector2D lineDirection = new Vector2D();
@@ -2274,7 +2315,7 @@ public class EuclidGeometryPolygonToolsTest
          int vertexIndex = random.nextInt(hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
 
          Point2D lineSegmentStart = new Point2D(centroid);
          Vector2D lineSegmentDirection = new Vector2D();
@@ -2430,7 +2471,7 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
          int nextVertexIndex = next(vertexIndex, hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -2540,7 +2581,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D observer = new Point2D();
          { // Construction of the observer such that it is outside the polygon
             Point2D centroid = new Point2D();
-            computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+            computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
             int vertexIndex = random.nextInt(hullSize);
             int nextVertexIndex = next(vertexIndex, hullSize);
             Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -2960,7 +3001,7 @@ public class EuclidGeometryPolygonToolsTest
             Point2DReadOnly vp1 = convexPolygon2D.get(vp1Index);
 
             Point2D centroid = new Point2D();
-            computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+            computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
 
             Point2D v0Max = intersectionBetweenTwoLine2Ds(centroid, v0, vn1, vn2);
             Vector2D extrapolationDirection = new Vector2D();
@@ -3268,7 +3309,7 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
          int nextVertexIndex = next(vertexIndex, hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -3301,7 +3342,7 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(convexPolygon2D.subList(0, hullSize));
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
          int vertexIndex = random.nextInt(hullSize);
          int nextVertexIndex = next(vertexIndex, hullSize);
          Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);
@@ -3574,7 +3615,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2DReadOnly vp1 = convexPolygon2D.get(vp1Index);
 
          Point2D centroid = new Point2D();
-         computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+         computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
 
          Point2D v0Max = intersectionBetweenTwoLine2Ds(centroid, v0, vn1, vn2);
          Vector2D extrapolationDirection = new Vector2D();
@@ -3723,7 +3764,7 @@ public class EuclidGeometryPolygonToolsTest
          Point2D pointInside = new Point2D();
          { // Creating the point inside the polygon
             Point2D centroid = new Point2D();
-            computeConvexPolyong2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
+            computeConvexPolygon2DArea(convexPolygon2D, hullSize, clockwiseOrdered, centroid);
             int vertexIndex = random.nextInt(hullSize);
             int nextVertexIndex = next(vertexIndex, hullSize);
             Point2DReadOnly vertex = convexPolygon2D.get(vertexIndex);

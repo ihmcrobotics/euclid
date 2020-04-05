@@ -35,7 +35,7 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
 
    /** {@inheritDoc} */
    @Override
-   FrameVector3DReadOnly getDirection();
+   FrameUnitVector3DReadOnly getDirection();
 
    /**
     * Gets the point and direction defining this line by storing their components in the given

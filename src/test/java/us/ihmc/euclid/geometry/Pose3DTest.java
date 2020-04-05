@@ -1,6 +1,8 @@
 package us.ihmc.euclid.geometry;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
@@ -16,6 +18,7 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class Pose3DTest
 {
@@ -202,29 +205,23 @@ public class Pose3DTest
 
          toSet = EuclidGeometryRandomTools.nextPose3D(random);
 
-         double[] ypr = {random.nextDouble(), random.nextDouble(), random.nextDouble()};
+         YawPitchRoll ypr = EuclidCoreRandomTools.nextYawPitchRoll(random);
          toCopy = new Pose3D();
          toCopy.setPosition(x, y, z);
-         toCopy.setOrientationYawPitchRoll(ypr);
+         toCopy.setOrientationYawPitchRoll(ypr.getYaw(), ypr.getPitch(), ypr.getRoll());
 
-         assertEquals(ypr[0], toCopy.getYaw(), EPSILON);
-         assertEquals(ypr[1], toCopy.getPitch(), EPSILON);
-         assertEquals(ypr[2], toCopy.getRoll(), EPSILON);
-
-         toCopy.setOrientationYawPitchRoll(ypr[0], ypr[1], ypr[2]);
-
-         assertEquals(ypr[0], toCopy.getYaw(), EPSILON);
-         assertEquals(ypr[1], toCopy.getPitch(), EPSILON);
-         assertEquals(ypr[2], toCopy.getRoll(), EPSILON);
+         assertEquals(ypr.getYaw(), toCopy.getYaw(), EPSILON);
+         assertEquals(ypr.getPitch(), toCopy.getPitch(), EPSILON);
+         assertEquals(ypr.getRoll(), toCopy.getRoll(), EPSILON);
 
          toSet.set(toCopy);
 
          assertEquals(x, toSet.getX(), EPSILON);
          assertEquals(y, toSet.getY(), EPSILON);
          assertEquals(z, toSet.getZ(), EPSILON);
-         assertEquals(ypr[0], toSet.getYaw(), EPSILON);
-         assertEquals(ypr[1], toSet.getPitch(), EPSILON);
-         assertEquals(ypr[2], toSet.getRoll(), EPSILON);
+         assertEquals(ypr.getYaw(), toSet.getYaw(), EPSILON);
+         assertEquals(ypr.getPitch(), toSet.getPitch(), EPSILON);
+         assertEquals(ypr.getRoll(), toSet.getRoll(), EPSILON);
       }
    }
 

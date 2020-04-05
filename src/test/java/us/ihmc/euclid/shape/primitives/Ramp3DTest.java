@@ -1,6 +1,10 @@
 package us.ihmc.euclid.shape.primitives;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Arrays;
@@ -8,7 +12,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.Plane3D;
@@ -468,7 +472,7 @@ public class Ramp3DTest
          pointOutside.setZ(-random.nextDouble());
 
          expectedClosestPoint.set(pointOutside.getX(), pointOutside.getY(), 0.0);
-         expectedNormal.setAndNegate(Axis.Z);
+         expectedNormal.setAndNegate(Axis3D.Z);
 
          ramp3D.transformToWorld(pointOutside);
          ramp3D.transformToWorld(expectedClosestPoint);
@@ -488,7 +492,7 @@ public class Ramp3DTest
          pointOutside.setZ(random.nextDouble() * ramp3D.getSizeZ());
 
          expectedClosestPoint.set(ramp3D.getSizeX(), pointOutside.getY(), pointOutside.getZ());
-         expectedNormal.set(Axis.X);
+         expectedNormal.set(Axis3D.X);
 
          ramp3D.transformToWorld(pointOutside);
          ramp3D.transformToWorld(expectedClosestPoint);
@@ -535,7 +539,7 @@ public class Ramp3DTest
          pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          expectedClosestPoint.set(pointOutside.getX(), 0.5 * ramp3D.getSizeY(), pointOutside.getZ());
-         expectedNormal.set(Axis.Y);
+         expectedNormal.set(Axis3D.Y);
 
          ramp3D.transformToWorld(pointOutside);
          ramp3D.transformToWorld(expectedClosestPoint);
@@ -558,7 +562,7 @@ public class Ramp3DTest
          pointOutside.setZ(distanceOnRamp * EuclidCoreTools.sin(angle) * random.nextDouble());
 
          expectedClosestPoint.set(pointOutside.getX(), -0.5 * ramp3D.getSizeY(), pointOutside.getZ());
-         expectedNormal.setAndNegate(Axis.Y);
+         expectedNormal.setAndNegate(Axis3D.Y);
 
          ramp3D.transformToWorld(pointOutside);
          ramp3D.transformToWorld(expectedClosestPoint);
@@ -810,9 +814,9 @@ public class Ramp3DTest
 
          Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
 
-         Plane3D backPlane = new Plane3D(new Point3D(ramp3D.getSizeX(), 0.0, 0.0), Axis.X);
+         Plane3D backPlane = new Plane3D(new Point3D(ramp3D.getSizeX(), 0.0, 0.0), Axis3D.X);
          Plane3D bottomPlane = new Plane3D(new Point3D(0.0, 0.0, 0.0), new Vector3D(0.0, 0.0, -1.0));
-         Plane3D leftPlane = new Plane3D(new Point3D(0.0, 0.5 * ramp3D.getSizeY(), 0.0), Axis.Y);
+         Plane3D leftPlane = new Plane3D(new Point3D(0.0, 0.5 * ramp3D.getSizeY(), 0.0), Axis3D.Y);
          Plane3D rightPlane = new Plane3D(new Point3D(0.0, -0.5 * ramp3D.getSizeY(), 0.0), new Vector3D(0.0, -1.0, 0.0));
          Plane3D slopePlane = new Plane3D(ramp3D.getPosition(), ramp3D.getRampSurfaceNormal());
          ramp3D.transformToWorld(backPlane);
@@ -1566,9 +1570,9 @@ public class Ramp3DTest
          Ramp3D ramp3D = EuclidShapeRandomTools.nextRamp3D(random);
 
          Point3D pointInside = EuclidGeometryRandomTools.nextWeightedAverage(random, ramp3D.getVertices());
-         Plane3D backPlane = new Plane3D(new Point3D(ramp3D.getSizeX(), 0.0, 0.0), Axis.X);
+         Plane3D backPlane = new Plane3D(new Point3D(ramp3D.getSizeX(), 0.0, 0.0), Axis3D.X);
          Plane3D bottomPlane = new Plane3D(new Point3D(0.0, 0.0, 0.0), new Vector3D(0.0, 0.0, -1.0));
-         Plane3D leftPlane = new Plane3D(new Point3D(0.0, 0.5 * ramp3D.getSizeY(), 0.0), Axis.Y);
+         Plane3D leftPlane = new Plane3D(new Point3D(0.0, 0.5 * ramp3D.getSizeY(), 0.0), Axis3D.Y);
          Plane3D rightPlane = new Plane3D(new Point3D(0.0, -0.5 * ramp3D.getSizeY(), 0.0), new Vector3D(0.0, -1.0, 0.0));
          Plane3D slopePlane = new Plane3D(ramp3D.getPosition(), ramp3D.getRampSurfaceNormal());
          ramp3D.transformToWorld(backPlane);
@@ -1639,15 +1643,15 @@ public class Ramp3DTest
 
          BoundingBox3D expectedBoundingBox = new BoundingBox3D();
          expectedBoundingBox.setToNaN();
-         Vector3D supportDirection = new Vector3D(Axis.X);
+         Vector3D supportDirection = new Vector3D(Axis3D.X);
          expectedBoundingBox.updateToIncludePoint(ramp3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(ramp3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Y);
+         supportDirection.set(Axis3D.Y);
          expectedBoundingBox.updateToIncludePoint(ramp3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(ramp3D.getSupportingVertex(supportDirection));
-         supportDirection.set(Axis.Z);
+         supportDirection.set(Axis3D.Z);
          expectedBoundingBox.updateToIncludePoint(ramp3D.getSupportingVertex(supportDirection));
          supportDirection.negate();
          expectedBoundingBox.updateToIncludePoint(ramp3D.getSupportingVertex(supportDirection));
