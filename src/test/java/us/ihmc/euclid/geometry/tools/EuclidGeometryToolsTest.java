@@ -10826,6 +10826,69 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testSphere3DPositionFromThreePoints()
+   {
+      Random random = new Random(23498675);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double sphere3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Point3D expected = new Point3D(); //EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p1 = new Point3D();
+         Point3D p2 = new Point3D();
+         Point3D p3 = new Point3D();
+
+         p1.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+         p2.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+         p3.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+
+         // Checking the winding of the points
+         Vector3D p1ToSphere = new Vector3D();
+         p1ToSphere.sub(p1, expected);
+         Vector3D normal = EuclidGeometryTools.normal3DFromThreePoint3Ds(p1, p2, p3);
+         boolean isCounterClockwiseWinding = p1ToSphere.dot(normal) < 0.0;
+
+         boolean success;
+         Point3D actual = new Point3D();
+         if (isCounterClockwiseWinding)
+            success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, actual);
+         else
+            success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p3, p2, sphere3DRadius, actual);
+         assertTrue(success, "Iteration " + i);
+
+         EuclidCoreTestTools.assertTuple3DEquals("Iteration " + i, expected, actual, LARGE_EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double sphere3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Point3D sphere3DPosition = new Point3D();
+         Point3D p1 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p2 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p3 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+
+         double lengthA = p1.distance(p2);
+         double lengthB = p2.distance(p3);
+         double lengthC = p3.distance(p1);
+         double circumradius = EuclidGeometryTools.triangleCircumradius(lengthA, lengthB, lengthC);
+
+         boolean success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPosition);
+
+         assertEquals(circumradius <= sphere3DRadius, success);
+
+         if (success)
+         {
+            double d1 = sphere3DPosition.distance(p1);
+            double d2 = sphere3DPosition.distance(p2);
+            double d3 = sphere3DPosition.distance(p3);
+            assertEquals(d1, d2, EPSILON);
+            assertEquals(d1, d3, EPSILON);
+            assertEquals(d1, sphere3DRadius, EPSILON);
+         }
+      }
+   }
+
+   @Test
    public void testTopVertex3DOfIsoscelesTriangle3D() throws Exception
    {
       Random random = new Random(1176L);

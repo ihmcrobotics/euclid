@@ -6562,6 +6562,9 @@ public class EuclidGeometryTools
     * </ul>
     * </p>
     * <p>
+    * The normal is computed such that the points' winding around is counter-clockwise.
+    * </p>
+    * <p>
     * WARNING: This method generates garbage.
     * </p>
     *
@@ -8380,6 +8383,71 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    */
+   public static boolean sphere3DPositionFromThreePoints(Point3DReadOnly p1, Point3DReadOnly p2, Point3DReadOnly p3, double sphere3DRadius,
+                                                         Point3DBasics sphere3DPositionToPack)
+   {
+      double ux = p2.getX() - p1.getX();
+      double uy = p2.getY() - p1.getY();
+      double uz = p2.getZ() - p1.getZ();
+
+      double vx = p3.getX() - p1.getX();
+      double vy = p3.getY() - p1.getY();
+      double vz = p3.getZ() - p1.getZ();
+
+      double wx = uy * vz - uz * vy;
+      double wy = uz * vx - ux * vz;
+      double wz = ux * vy - uy * vx;
+
+      double uSquared = EuclidCoreTools.normSquared(ux, uy, uz);
+      double vSquared = EuclidCoreTools.normSquared(vx, vy, vz);
+      double wSquaredInverse = 1.0 / EuclidCoreTools.normSquared(wx, wy, wz);
+      double uv = ux * vx + uy * vy + uz * vz;
+
+      double alpha = 0.5 * (uSquared - uv) * vSquared * wSquaredInverse;
+      double beta = 0.5 * (vSquared - uv) * uSquared * wSquaredInverse;
+
+      double radiusSquared = sphere3DRadius * sphere3DRadius;
+      double alphaSquared = alpha * alpha;
+      double betaSquared = beta * beta;
+
+      double gammaSquared = (radiusSquared - alphaSquared * uSquared - betaSquared * vSquared - 2.0 * alpha * beta * uv) * wSquaredInverse;
+
+      if (gammaSquared < 0.0 || !Double.isFinite(gammaSquared))
+         return false; // The radius of the sphere is too small, or the problem is degenerate.
+
+      double gamma = Math.sqrt(gammaSquared);
+
+      double px = p1.getX() + alpha * ux + beta * vx + gamma * wx;
+      double py = p1.getY() + alpha * uy + beta * vy + gamma * wy;
+      double pz = p1.getZ() + alpha * uz + beta * vz + gamma * wz;
+      sphere3DPositionToPack.set(px, py, pz);
+      return true;
+   }
+
+   /**
     * Assuming an isosceles triangle defined by three vertices A, B, and C, with |AB| == |BC|, this
     * methods computes the missing vertex B given the vertices A and C, the normal of the triangle, the
     * angle ABC that is equal to the angle at B from the the leg BA to the leg BC.
@@ -8497,6 +8565,22 @@ public class EuclidGeometryTools
       XToPack.set(vectorAXx, vectorAXy);
       XToPack.add(A);
       return true;
+   }
+
+   /**
+    * Computes the radius of the circumcircle of the triangle ABC given the length of its edges.
+    * 
+    * @param lengthA the length of the side A of the triangle.
+    * @param lengthB the length of the side B of the triangle.
+    * @param lengthC the length of the side C of the triangle.
+    * @return the circumradius.
+    */
+   public static double triangleCircumradius(double lengthA, double lengthB, double lengthC)
+   {
+      // From https://en.wikipedia.org/wiki/Triangle#Circumradius_and_inradius
+      double circumradiusSquared = lengthA * lengthA * lengthB * lengthB * lengthC * lengthC;
+      circumradiusSquared /= ((lengthA + lengthB + lengthC) * (-lengthA + lengthB + lengthC) * (lengthA - lengthB + lengthC) * (lengthA + lengthB - lengthC));
+      return Math.sqrt(circumradiusSquared);
    }
 
    /**
