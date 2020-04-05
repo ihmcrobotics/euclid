@@ -2180,6 +2180,61 @@ public class EuclidShapeTools
    }
 
    /**
+    * Computes the supporting vertex for a circle positioned in the 3D space.
+    * <p>
+    * The supporting vertex represents the location on a shape that is the farthest in a given
+    * direction.
+    * </p>
+    * 
+    * @param supportDirection       the search direction. Not modified.
+    * @param circle3DPosition       the location of the circle's center. Not modified.
+    * @param circle3DAxis           the axis of revolution of the circle. Not modified.
+    * @param circle3DRadius         the radius of the circle.
+    * @param supportingVertexToPack point in which the supporting vertex is stored. Modified.
+    */
+   public static void supportingVertexCircle3D(Vector3DReadOnly supportDirection, Point3DReadOnly circle3DPosition, Vector3DReadOnly circle3DAxis,
+                                               double circle3DRadius, Point3DBasics supportingVertexToPack)
+   {
+      supportingVertexToPack.set(supportDirection);
+      double dot = supportDirection.dot(circle3DAxis);
+      supportingVertexToPack.setAndScale(dot / circle3DAxis.lengthSquared(), circle3DAxis);
+      supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
+      double distanceSquaredFromCenter = supportingVertexToPack.distanceFromOriginSquared();
+
+      if (distanceSquaredFromCenter < MIN_DISTANCE_EPSILON)
+      { // We need to setup a vector that is orthogonal to the circle's axis, then we'll perform the projection along that vector.
+         double xNonCollinearToAxis, yNonCollinearToAxis, zNonCollinearToAxis;
+
+         // Purposefully picking a large tolerance to ensure sanity of the cross-product.
+         if (Math.abs(circle3DAxis.getY()) > 0.1 || Math.abs(circle3DAxis.getZ()) > 0.1)
+         {
+            xNonCollinearToAxis = 1.0;
+            yNonCollinearToAxis = 0.0;
+            zNonCollinearToAxis = 0.0;
+         }
+         else
+         {
+            xNonCollinearToAxis = 0.0;
+            yNonCollinearToAxis = 1.0;
+            zNonCollinearToAxis = 0.0;
+         }
+
+         double xOrthogonalToAxis = yNonCollinearToAxis * circle3DAxis.getZ() - zNonCollinearToAxis * circle3DAxis.getY();
+         double yOrthogonalToAxis = zNonCollinearToAxis * circle3DAxis.getX() - xNonCollinearToAxis * circle3DAxis.getZ();
+         double zOrthogonalToAxis = xNonCollinearToAxis * circle3DAxis.getY() - yNonCollinearToAxis * circle3DAxis.getX();
+
+         supportingVertexToPack.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
+         supportingVertexToPack.scale(circle3DRadius / EuclidCoreTools.norm(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis));
+      }
+      else
+      {
+         supportingVertexToPack.scale(circle3DRadius / EuclidCoreTools.squareRoot(distanceSquaredFromCenter));
+      }
+
+      supportingVertexToPack.add(circle3DPosition);
+   }
+
+   /**
     * Computes the volume of a cone defined by its height and base radius.
     *
     * @param height the height of the cone.

@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.tools;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
@@ -19,6 +20,33 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 public class EuclidShapeToolsTest
 {
    private static final double EPSILON = 1.0e-12;
+
+   @Test
+   public void testSupportingVertexCircle3D()
+   {
+      Random random = new Random(89737893);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double circle3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         Point3D circle3DPosition = EuclidCoreRandomTools.nextPoint3D(random);
+         Vector3D circle3DAxis = EuclidCoreRandomTools.nextVector3D(random);
+         Vector3D axisOrthogonal = EuclidCoreRandomTools.nextOrthogonalVector3D(random, circle3DAxis, true);
+
+         Point3D expected = new Point3D();
+         expected.scaleAdd(circle3DRadius, axisOrthogonal, circle3DPosition);
+
+         Vector3D supportDirection = new Vector3D();
+         supportDirection.setAndScale(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0), axisOrthogonal);
+         supportDirection.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 10.0), circle3DAxis, supportDirection);
+
+         Point3D actual = new Point3D();
+         EuclidShapeTools.supportingVertexCircle3D(supportDirection, circle3DPosition, circle3DAxis, circle3DRadius, actual);
+
+         assertEquals(circle3DRadius, actual.distance(circle3DPosition), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+      }
+   }
 
    @Test
    public void testComputeRamp3DCentroid()
