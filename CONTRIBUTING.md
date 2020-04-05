@@ -3,7 +3,7 @@ First of all, thank you for taking the time to contribute!!
 # Guidelines
 
 ## Code quality
-We put our best effort into providing high quality software that is readable (class, field, and method names are written in English as much as possible), well documented, and well tested.
+We put our best effort into providing high quality software that is readable (class, field, and method names are written in full proper English with as little abbreviations as possible), well documented, and well tested.
 We would greatly appreciate if your contribution goes the same way.
 
 ## Code formatting
