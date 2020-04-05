@@ -14,7 +14,10 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * This class provides a variety of tools for performing operations with shapes.
- *
+ * <p>
+ * FIXME: Need to review every method for implicit expectation for a unit-vector.
+ * </p>
+ * 
  * @author Sylvain Bertrand
  */
 public class EuclidShapeTools
