@@ -403,6 +403,17 @@ public class EuclidCoreToolsTest
          double actual = EuclidCoreTools.max(a, b, c);
          assertTrue(expected == actual);
       }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double a = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double b = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double c = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double d = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double expected = Math.max(a, Math.max(b, Math.max(c, d)));
+         double actual = EuclidCoreTools.max(a, b, c, d);
+         assertTrue(expected == actual);
+      }
    }
 
    @Test
@@ -417,6 +428,17 @@ public class EuclidCoreToolsTest
          double c = EuclidCoreRandomTools.nextDouble(random, 10.0);
          double expected = Math.min(a, Math.min(b, c));
          double actual = EuclidCoreTools.min(a, b, c);
+         assertTrue(expected == actual);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double a = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double b = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double c = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double d = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double expected = Math.min(a, Math.min(b, Math.min(c, d)));
+         double actual = EuclidCoreTools.min(a, b, c, d);
          assertTrue(expected == actual);
       }
    }
