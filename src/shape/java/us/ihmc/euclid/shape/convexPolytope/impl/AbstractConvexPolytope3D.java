@@ -66,6 +66,11 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    private HalfEdge3DFactory<Vertex, Edge> edgeFactory;
    /** Factory used to create faces of the proper type. */
    private Face3DFactory<Face> faceFactory;
+   /**
+    * Last result from {@link #getSupportingVertex(Vertex3DReadOnly, Vector3DReadOnly)} that is
+    * automatically reused for the next call to provide a slight speedup.
+    */
+   private Vertex3DReadOnly lastSupportingVertex = null;
 
    /**
     * Creates a new empty convex polytope.
@@ -154,6 +159,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
     */
    public void clear()
    {
+      lastSupportingVertex = null;
       vertices.clear();
       halfEdges.clear();
       faces.clear();
@@ -179,6 +185,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    @Override
    public void setToZero()
    {
+      lastSupportingVertex = null;
       vertices.clear();
       halfEdges.clear();
       faces.clear();
@@ -444,6 +451,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
 
    private void updateVertices()
    {
+      lastSupportingVertex = null;
       vertices.clear();
       faces.stream().flatMap(face -> face.getVertices().stream()).distinct().forEach(vertices::add);
    }
@@ -573,8 +581,6 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
    {
       return volume;
    }
-
-   private Vertex3DReadOnly lastSupportingVertex = null;
 
    @Override
    public Vertex3DReadOnly getSupportingVertex(Vector3DReadOnly supportDirection)

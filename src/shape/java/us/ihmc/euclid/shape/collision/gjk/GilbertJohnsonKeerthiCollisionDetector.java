@@ -222,19 +222,30 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
             if (previousOutput.contains(newVertex))
             {
+               boolean retry = false;
+               supportDirection.negate(); // Undoing the negate from last iteration.
+
                if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
                {
                   supportDirection.setX(-SUPPORT_DIRECTION_ZERO_COMPONENT);
-                  continue;
+                  retry = true;
                }
                else if (supportDirection.getY() == SUPPORT_DIRECTION_ZERO_COMPONENT)
                {
                   supportDirection.setY(-SUPPORT_DIRECTION_ZERO_COMPONENT);
-                  continue;
+                  retry = true;
                }
                else if (supportDirection.getZ() == SUPPORT_DIRECTION_ZERO_COMPONENT)
                {
                   supportDirection.setZ(-SUPPORT_DIRECTION_ZERO_COMPONENT);
+                  retry = true;
+               }
+
+               if (retry)
+               {
+                  vertexA = shapeA.getSupportingVertex(supportDirection);
+                  supportDirection.negate();
+                  vertexB = shapeB.getSupportingVertex(supportDirection);
                   continue;
                }
 
@@ -290,11 +301,11 @@ public class GilbertJohnsonKeerthiCollisionDetector
             else
                supportDirection.setAndNegate(output.getClosestPointToOrigin());
 
-            if (supportDirection.getX() == 0.0)
+            if (Math.abs(supportDirection.getX()) == 0.0)
                supportDirection.setX(SUPPORT_DIRECTION_ZERO_COMPONENT);
-            else if (supportDirection.getY() == 0.0)
+            else if (Math.abs(supportDirection.getY()) == 0.0)
                supportDirection.setY(SUPPORT_DIRECTION_ZERO_COMPONENT);
-            else if (supportDirection.getZ() == 0.0)
+            else if (Math.abs(supportDirection.getZ()) == 0.0)
                supportDirection.setZ(SUPPORT_DIRECTION_ZERO_COMPONENT);
 
             vertexA = shapeA.getSupportingVertex(supportDirection);
