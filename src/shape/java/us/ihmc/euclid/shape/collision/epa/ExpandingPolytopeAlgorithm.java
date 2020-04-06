@@ -251,25 +251,48 @@ public class ExpandingPolytopeAlgorithm
 
             if (entry.contains(newVertex))
             {
+               boolean retry = false;
+               supportDirection.negate(); // Undoing the last negate.
+
                if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
                {
                   supportDirection.setX(-SUPPORT_DIRECTION_ZERO_COMPONENT);
-                  continue;
+                  retry = true;
                }
                else if (supportDirection.getY() == SUPPORT_DIRECTION_ZERO_COMPONENT)
                {
                   supportDirection.setY(-SUPPORT_DIRECTION_ZERO_COMPONENT);
-                  continue;
+                  retry = true;
                }
                else if (supportDirection.getZ() == SUPPORT_DIRECTION_ZERO_COMPONENT)
                {
                   supportDirection.setZ(-SUPPORT_DIRECTION_ZERO_COMPONENT);
-                  continue;
+                  retry = true;
                }
 
-               if (VERBOSE)
-                  System.out.println("New vertex equals to a vertex of entry, terminating.");
-               break;
+               boolean terminate;
+
+               if (retry)
+               {
+                  vertexA = shapeA.getSupportingVertex(supportDirection);
+                  supportDirection.negate();
+                  vertexB = shapeB.getSupportingVertex(supportDirection);
+
+                  newVertex = new EPAVertex3D(vertexA, vertexB);
+
+                  terminate = entry.contains(newVertex);
+               }
+               else
+               {
+                  terminate = true;
+               }
+
+               if (terminate)
+               {
+                  if (VERBOSE)
+                     System.out.println("New vertex equals to a vertex of entry, terminating.");
+                  break;
+               }
             }
 
             /*
