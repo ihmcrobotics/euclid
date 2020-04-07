@@ -8,6 +8,7 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -41,6 +42,8 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       checkSizePositive(axis);
       notifyChangeListeners();
    }, null, new Vector3D(1.0, 1.0, 1.0));
+
+   private BoxPolytope3D polytopeView = null;
 
    /**
     * Creates a 1-by-1-by-1 box 3D.
@@ -167,6 +170,14 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    public Box3D copy()
    {
       return new Box3D(this);
+   }
+
+   @Override
+   public BoxPolytope3DView asConvexPolytope()
+   {
+      if (polytopeView == null)
+         polytopeView = new BoxPolytope3D(this);
+      return polytopeView;
    }
 
    /**

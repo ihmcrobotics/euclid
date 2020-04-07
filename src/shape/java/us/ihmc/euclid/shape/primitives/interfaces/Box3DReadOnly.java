@@ -345,6 +345,8 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       EuclidShapeTools.boundingBoxBox3D(getPosition(), getOrientation(), getSize(), boundingBoxToPack);
    }
 
+   BoxPolytope3DView asConvexPolytope();
+
    /**
     * Gets the 8 vertices, expressed in world, of this box as an array.
     * <p>

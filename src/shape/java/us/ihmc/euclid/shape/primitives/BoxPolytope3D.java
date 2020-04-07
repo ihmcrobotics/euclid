@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
-import us.ihmc.euclid.shape.convexPolytope.interfaces.ConvexPolytope3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -25,13 +25,13 @@ import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public class BoxPolytope3D implements ConvexPolytope3DReadOnly
+public class BoxPolytope3D implements BoxPolytope3DView
 {
    private final Box3D box3D;
 
    // Faces
-   private final Face xMaxFace, yMaxFace, zMaxFace;
    private final Face xMinFace, yMinFace, zMinFace;
+   private final Face xMaxFace, yMaxFace, zMaxFace;
    private final List<Face> faces;
    // Edge
    // xMax and xMin
@@ -41,20 +41,20 @@ public class BoxPolytope3D implements ConvexPolytope3DReadOnly
    // zMax and zMin
    private final HalfEdge zMinE0, zMinE1, zMinE2, zMinE3, zMaxE0, zMaxE1, zMaxE2, zMaxE3;
    private final List<HalfEdge> edges;
-   // Vertices zMax face (clockwise ordering around z-axis)
-   private final Vertex v0, v1, v2, v3;
    // Vertices zMin face (clockwise ordering around z-axis)
    private final Vertex v4, v5, v6, v7;
+   // Vertices zMax face (clockwise ordering around z-axis)
+   private final Vertex v0, v1, v2, v3;
    private final List<Vertex> vertices;
 
    public BoxPolytope3D(Box3D box3D)
    {
       this.box3D = box3D;
       DoubleSupplier xMin = () -> -0.5 * box3D.getSizeX();
-      DoubleSupplier xMax = () -> +0.5 * box3D.getSizeX();
       DoubleSupplier yMin = () -> -0.5 * box3D.getSizeY();
-      DoubleSupplier yMax = () -> +0.5 * box3D.getSizeY();
       DoubleSupplier zMin = () -> -0.5 * box3D.getSizeZ();
+      DoubleSupplier xMax = () -> +0.5 * box3D.getSizeX();
+      DoubleSupplier yMax = () -> +0.5 * box3D.getSizeY();
       DoubleSupplier zMax = () -> +0.5 * box3D.getSizeZ();
 
       v0 = new Vertex(box3D.getPose(), xMax, yMax, zMax);
@@ -66,18 +66,6 @@ public class BoxPolytope3D implements ConvexPolytope3DReadOnly
       v6 = new Vertex(box3D.getPose(), xMin, yMin, zMin);
       v7 = new Vertex(box3D.getPose(), xMin, yMax, zMin);
 
-      xMaxE0 = new HalfEdge(v0, v4);
-      xMaxE1 = new HalfEdge(v4, v5);
-      xMaxE2 = new HalfEdge(v5, v1);
-      xMaxE3 = new HalfEdge(v1, v0);
-      yMaxE0 = new HalfEdge(v0, v3);
-      yMaxE1 = new HalfEdge(v3, v7);
-      yMaxE2 = new HalfEdge(v7, v4);
-      yMaxE3 = new HalfEdge(v4, v0);
-      zMaxE0 = new HalfEdge(v0, v1);
-      zMaxE1 = new HalfEdge(v1, v2);
-      zMaxE2 = new HalfEdge(v2, v3);
-      zMaxE3 = new HalfEdge(v3, v0);
       xMinE0 = new HalfEdge(v3, v2);
       xMinE1 = new HalfEdge(v2, v6);
       xMinE2 = new HalfEdge(v6, v7);
@@ -90,24 +78,78 @@ public class BoxPolytope3D implements ConvexPolytope3DReadOnly
       zMinE1 = new HalfEdge(v7, v6);
       zMinE2 = new HalfEdge(v6, v5);
       zMinE3 = new HalfEdge(v5, v4);
+      xMaxE0 = new HalfEdge(v0, v4);
+      xMaxE1 = new HalfEdge(v4, v5);
+      xMaxE2 = new HalfEdge(v5, v1);
+      xMaxE3 = new HalfEdge(v1, v0);
+      yMaxE0 = new HalfEdge(v0, v3);
+      yMaxE1 = new HalfEdge(v3, v7);
+      yMaxE2 = new HalfEdge(v7, v4);
+      yMaxE3 = new HalfEdge(v4, v0);
+      zMaxE0 = new HalfEdge(v0, v1);
+      zMaxE1 = new HalfEdge(v1, v2);
+      zMaxE2 = new HalfEdge(v2, v3);
+      zMaxE3 = new HalfEdge(v3, v0);
 
       DoubleSupplier xFaceAreaSupplier = () -> box3D.getSizeY() * box3D.getSizeZ();
       DoubleSupplier yFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeZ();
       DoubleSupplier zFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeY();
 
-      xMaxFace = new Face(box3D.getPose(), Axis3D.X, xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
-      yMaxFace = new Face(box3D.getPose(), Axis3D.Y, yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
-      zMaxFace = new Face(box3D.getPose(), Axis3D.Z, zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
       xMinFace = new Face(box3D.getPose(), Axis3D.X.negated(), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
       yMinFace = new Face(box3D.getPose(), Axis3D.Y.negated(), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
       zMinFace = new Face(box3D.getPose(), Axis3D.Z.negated(), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
+      xMaxFace = new Face(box3D.getPose(), Axis3D.X, xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
+      yMaxFace = new Face(box3D.getPose(), Axis3D.Y, yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
+      zMaxFace = new Face(box3D.getPose(), Axis3D.Z, zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
 
-      faces = Collections.unmodifiableList(Arrays.asList(xMaxFace, yMaxFace, zMaxFace, xMinFace, yMinFace, zMinFace));
+      faces = Collections.unmodifiableList(Arrays.asList(xMinFace, yMinFace, zMinFace, xMaxFace, yMaxFace, zMaxFace));
       edges = Collections.unmodifiableList(faces.stream().flatMap(f -> f.getEdges().stream()).collect(Collectors.toList()));
       vertices = Collections.unmodifiableList(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7));
 
       box3D.addChangeListeners(faces);
       box3D.addChangeListeners(vertices);
+   }
+
+   @Override
+   public Face3DReadOnly getXMinFace()
+   {
+      return xMinFace;
+   }
+
+   @Override
+   public Face3DReadOnly getYMinFace()
+   {
+      return yMinFace;
+   }
+
+   @Override
+   public Face3DReadOnly getZMinFace()
+   {
+      return zMinFace;
+   }
+
+   @Override
+   public Face3DReadOnly getXMaxFace()
+   {
+      return xMaxFace;
+   }
+
+   @Override
+   public Face3DReadOnly getYMaxFace()
+   {
+      return yMaxFace;
+   }
+
+   @Override
+   public Face3DReadOnly getZMaxFace()
+   {
+      return zMaxFace;
+   }
+
+   @Override
+   public Box3DReadOnly getOwner()
+   {
+      return box3D;
    }
 
    @Override
@@ -126,36 +168,6 @@ public class BoxPolytope3D implements ConvexPolytope3DReadOnly
    public List<Vertex> getVertices()
    {
       return vertices;
-   }
-
-   @Override
-   public BoundingBox3DReadOnly getBoundingBox()
-   {
-      return box3D.getBoundingBox();
-   }
-
-   @Override
-   public Point3DReadOnly getCentroid()
-   {
-      return box3D.getCentroid();
-   }
-
-   @Override
-   public double getVolume()
-   {
-      return box3D.getVolume();
-   }
-
-   @Override
-   public double getConstructionEpsilon()
-   {
-      return 0;
-   }
-
-   @Override
-   public Shape3DBasics copy()
-   {
-      return null;
    }
 
    private static class Face implements Face3DReadOnly, Shape3DChangeListener
