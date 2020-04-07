@@ -143,7 +143,7 @@ public class BoxPolytope3D implements ConvexPolytope3DReadOnly
    @Override
    public double getVolume()
    {
-      return 0;
+      return box3D.getVolume();
    }
 
    @Override
