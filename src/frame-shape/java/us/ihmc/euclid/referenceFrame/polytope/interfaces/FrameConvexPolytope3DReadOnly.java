@@ -96,14 +96,6 @@ public interface FrameConvexPolytope3DReadOnly extends ConvexPolytope3DReadOnly,
    FrameBoundingBox3DReadOnly getBoundingBox();
 
    /**
-    * Gets the read-only reference to the centroid of this polytope.
-    *
-    * @return this polytope centroid location.
-    */
-   @Override
-   FramePoint3DReadOnly getCentroid();
-
-   /**
     * Finds and returns the closest face to the query.
     *
     * @param query the coordinates of the query. Not modified.
