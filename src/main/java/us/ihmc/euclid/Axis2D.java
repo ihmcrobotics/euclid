@@ -2,6 +2,7 @@ package us.ihmc.euclid;
 
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 
@@ -102,7 +103,7 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @param axis  the {@link Axis2D} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}.
     */
-   public static double get(Tuple2DBasics tuple, Axis2D axis)
+   public static double get(Tuple2DReadOnly tuple, Axis2D axis)
    {
       switch (axis)
       {
