@@ -1,10 +1,8 @@
 package us.ihmc.euclid.shape.primitives;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -13,13 +11,11 @@ import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a box 3D.
@@ -46,63 +42,11 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       notifyChangeListeners();
    }, null, new Vector3D(1.0, 1.0, 1.0));
 
-   private final Vector3DReadOnly halfSize = EuclidCoreFactories.newLinkedVector3DReadOnly(() -> 0.5, size);
-
    /**
     * Creates a 1-by-1-by-1 box 3D.
     */
    public Box3D()
    {
-      Box3DVertex v0 = new Box3DVertex(pose, () -> +halfSize.getX(), () -> +halfSize.getY(), () -> +halfSize.getZ());
-      Box3DVertex v1 = new Box3DVertex(pose, () -> +halfSize.getX(), () -> -halfSize.getY(), () -> +halfSize.getZ());
-      Box3DVertex v2 = new Box3DVertex(pose, () -> -halfSize.getX(), () -> -halfSize.getY(), () -> +halfSize.getZ());
-      Box3DVertex v3 = new Box3DVertex(pose, () -> -halfSize.getX(), () -> +halfSize.getY(), () -> +halfSize.getZ());
-      Box3DVertex v4 = new Box3DVertex(pose, () -> +halfSize.getX(), () -> +halfSize.getY(), () -> -halfSize.getZ());
-      Box3DVertex v5 = new Box3DVertex(pose, () -> +halfSize.getX(), () -> -halfSize.getY(), () -> -halfSize.getZ());
-      Box3DVertex v6 = new Box3DVertex(pose, () -> -halfSize.getX(), () -> -halfSize.getY(), () -> -halfSize.getZ());
-      Box3DVertex v7 = new Box3DVertex(pose, () -> -halfSize.getX(), () -> +halfSize.getY(), () -> -halfSize.getZ());
-      changeListeners.addAll(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7));
-
-      // Face x+
-      Box3DHalfEdge xPlusE0 = new Box3DHalfEdge(v0, v4);
-      Box3DHalfEdge xPlusE1 = new Box3DHalfEdge(v4, v5);
-      Box3DHalfEdge xPlusE2 = new Box3DHalfEdge(v5, v1);
-      Box3DHalfEdge xPlusE3 = new Box3DHalfEdge(v1, v0);
-      // Edges of face x-
-      Box3DHalfEdge xMinusE0 = new Box3DHalfEdge(v3, v2);
-      Box3DHalfEdge xMinusE1 = new Box3DHalfEdge(v2, v6);
-      Box3DHalfEdge xMinusE2 = new Box3DHalfEdge(v6, v7);
-      Box3DHalfEdge xMinusE3 = new Box3DHalfEdge(v7, v3);
-      // Edges of face y+
-      Box3DHalfEdge yPlusE0 = new Box3DHalfEdge(v0, v3);
-      Box3DHalfEdge yPlusE1 = new Box3DHalfEdge(v3, v7);
-      Box3DHalfEdge yPlusE2 = new Box3DHalfEdge(v7, v4);
-      Box3DHalfEdge yPlusE3 = new Box3DHalfEdge(v4, v0);
-      // Edges of face y-
-      Box3DHalfEdge yMinusE0 = new Box3DHalfEdge(v1, v5);
-      Box3DHalfEdge yMinusE1 = new Box3DHalfEdge(v5, v6);
-      Box3DHalfEdge yMinusE2 = new Box3DHalfEdge(v6, v2);
-      Box3DHalfEdge yMinusE3 = new Box3DHalfEdge(v2, v1);
-      // Edges of face z+
-      Box3DHalfEdge zPlusE0 = new Box3DHalfEdge(v0, v1);
-      Box3DHalfEdge zPlusE1 = new Box3DHalfEdge(v1, v2);
-      Box3DHalfEdge zPlusE2 = new Box3DHalfEdge(v2, v3);
-      Box3DHalfEdge zPlusE3 = new Box3DHalfEdge(v3, v0);
-      // Edges of face z-
-      Box3DHalfEdge zMinusE0 = new Box3DHalfEdge(v4, v7);
-      Box3DHalfEdge zMinusE1 = new Box3DHalfEdge(v7, v6);
-      Box3DHalfEdge zMinusE2 = new Box3DHalfEdge(v6, v5);
-      Box3DHalfEdge zMinusE3 = new Box3DHalfEdge(v5, v4);
-
-      Box3DFace xPlusFace = new Box3DFace(pose, Axis3D.X, xPlusE0, xPlusE1, xPlusE2, xPlusE3);
-      Box3DFace xMinusFace = new Box3DFace(pose, Axis3D.X.negated(), xMinusE0, xMinusE1, xMinusE2, xMinusE3);
-      Box3DFace yPlusFace = new Box3DFace(pose, Axis3D.Y, yPlusE0, yPlusE1, yPlusE2, yPlusE3);
-      Box3DFace yMinusFace = new Box3DFace(pose, Axis3D.Y.negated(), yMinusE0, yMinusE1, yMinusE2, yMinusE3);
-      Box3DFace zPlusFace = new Box3DFace(pose, Axis3D.Z, zPlusE0, zPlusE1, zPlusE2, zPlusE3);
-      Box3DFace zMinusFace = new Box3DFace(pose, Axis3D.Z.negated(), zMinusE0, zMinusE1, zMinusE2, zMinusE3);
-      changeListeners.addAll(Arrays.asList(xPlusFace, xMinusFace, yPlusFace, yMinusFace, zPlusFace, zMinusFace));
-
-      pose.addChangeListeners(changeListeners);
    }
 
    /**
@@ -234,6 +178,47 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
       {
          changeListeners.get(i).changed();
       }
+   }
+
+   /**
+    * Registers a list of listeners to be notified when this shape changes.
+    *
+    * @param listeners the listeners to register.
+    */
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
+   {
+      for (int i = 0; i < listeners.size(); i++)
+      {
+         addChangeListener(listeners.get(i));
+      }
+   }
+
+   /**
+    * Registers a listener to be notified when this shape changes.
+    *
+    * @param listener the listener to register.
+    */
+   public void addChangeListener(Shape3DChangeListener listener)
+   {
+      changeListeners.add(listener);
+      pose.addChangeListener(listener);
+   }
+
+   /**
+    * Removes a previously registered listener.
+    * <p>
+    * This listener will no longer be notified of changes from this pose.
+    * </p>
+    *
+    * @param listener the listener to remove.
+    * @return {@code true} if the listener was removed successful, {@code false} if the listener could
+    *         not be found.
+    */
+   public boolean removeChangeListener(Shape3DChangeListener listener)
+   {
+      boolean hasBeenRemoved = changeListeners.remove(listener);
+      hasBeenRemoved |= pose.removeChangeListener(listener);
+      return hasBeenRemoved;
    }
 
    /**
