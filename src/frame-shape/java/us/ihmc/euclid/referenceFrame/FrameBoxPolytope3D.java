@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
-import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
@@ -95,19 +96,20 @@ public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       DoubleSupplier yFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeZ();
       DoubleSupplier zFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeY();
 
-      xMinFace = new Face(Axis3D.X.negated(), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
-      yMinFace = new Face(Axis3D.Y.negated(), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
-      zMinFace = new Face(Axis3D.Z.negated(), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
-      xMaxFace = new Face(Axis3D.X, xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
-      yMaxFace = new Face(Axis3D.Y, yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
-      zMaxFace = new Face(Axis3D.Z, zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
+      FixedFrameShape3DPoseBasics pose = box3D.getPose();
+      xMinFace = new Face("x-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getXAxis()), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
+      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
+      zMinFace = new Face("z-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
+      xMaxFace = new Face("x-max", pose.getXAxis(), xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
+      yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
+      zMaxFace = new Face("z-max", pose.getZAxis(), zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
 
       faces = Collections.unmodifiableList(Arrays.asList(xMinFace, yMinFace, zMinFace, xMaxFace, yMaxFace, zMaxFace));
       edges = Collections.unmodifiableList(faces.stream().flatMap(f -> f.getEdges().stream()).collect(Collectors.toList()));
       vertices = Collections.unmodifiableList(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7));
 
-      box3D.addChangeListeners(faces);
       box3D.addChangeListeners(vertices);
+      box3D.addChangeListeners(faces);
    }
 
    @Override
@@ -176,12 +178,16 @@ public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       return vertices;
    }
 
+   @Override
+   public FixedFrameBox3DBasics copy()
+   {
+      return getOwner().copy();
+   }
+
    private class Face extends AbstractFace3D<Vertex, HalfEdge, Face> implements FrameFace3DReadOnly, Shape3DChangeListener
    {
-      private final HalfEdge e0;
-      private final HalfEdge e1;
-      private final HalfEdge e2;
-      private final HalfEdge e3;
+      private final String name;
+      private final HalfEdge e0, e1, e2, e3;
 
       private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics(this,
                                                                                                                                 null,
@@ -196,9 +202,10 @@ public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       private boolean isCentroidDirty = true;
       private boolean isNormalDirty = true;
 
-      private Face(Vector3DReadOnly normalLocal, DoubleSupplier areaSupplier, HalfEdge e0, HalfEdge e1, HalfEdge e2, HalfEdge e3)
+      private Face(String name, Vector3DReadOnly normalLocal, DoubleSupplier areaSupplier, HalfEdge e0, HalfEdge e1, HalfEdge e2, HalfEdge e3)
       {
          super(null, 0.0);
+         this.name = name;
 
          this.normalLocal = normalLocal;
          this.areaSupplier = areaSupplier;
@@ -250,8 +257,8 @@ public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       {
          if (isNormalDirty)
          {
-            box3D.getPose().inverseTransform(normalLocal, normal);
             isNormalDirty = false;
+            normal.set(normalLocal);
          }
       }
 
@@ -283,6 +290,12 @@ public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       public ReferenceFrame getReferenceFrame()
       {
          return box3D.getReferenceFrame();
+      }
+
+      @Override
+      public String toString()
+      {
+         return "FrameBox3D Face " + name + " " + super.toString();
       }
    }
 
@@ -343,8 +356,8 @@ public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       {
          if (dirty)
          {
-            box3D.getPose().inverseTransform(positionLocal, this);
             dirty = false;
+            box3D.getPose().transform(positionLocal, this);
          }
       }
 

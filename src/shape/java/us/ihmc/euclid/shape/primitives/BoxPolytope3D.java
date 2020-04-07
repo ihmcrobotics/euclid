@@ -6,19 +6,18 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
-import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
+import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -92,19 +91,20 @@ public class BoxPolytope3D implements BoxPolytope3DView
       DoubleSupplier yFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeZ();
       DoubleSupplier zFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeY();
 
-      xMinFace = new Face(Axis3D.X.negated(), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
-      yMinFace = new Face(Axis3D.Y.negated(), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
-      zMinFace = new Face(Axis3D.Z.negated(), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
-      xMaxFace = new Face(Axis3D.X, xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
-      yMaxFace = new Face(Axis3D.Y, yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
-      zMaxFace = new Face(Axis3D.Z, zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
+      Shape3DPose pose = box3D.getPose();
+      xMinFace = new Face("x-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getXAxis()), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
+      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
+      zMinFace = new Face("z-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
+      xMaxFace = new Face("x-max", pose.getXAxis(), xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
+      yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
+      zMaxFace = new Face("z-max", pose.getZAxis(), zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
 
       faces = Collections.unmodifiableList(Arrays.asList(xMinFace, yMinFace, zMinFace, xMaxFace, yMaxFace, zMaxFace));
       edges = Collections.unmodifiableList(faces.stream().flatMap(f -> f.getEdges().stream()).collect(Collectors.toList()));
       vertices = Collections.unmodifiableList(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7));
 
-      box3D.addChangeListeners(faces);
       box3D.addChangeListeners(vertices);
+      box3D.addChangeListeners(faces);
    }
 
    @Override
@@ -167,27 +167,32 @@ public class BoxPolytope3D implements BoxPolytope3DView
       return vertices;
    }
 
+   @Override
+   public Box3DBasics copy()
+   {
+      return getOwner().copy();
+   }
+
    private class Face extends AbstractFace3D<Vertex, HalfEdge, Face> implements Shape3DChangeListener
    {
-      private final HalfEdge e0;
-      private final HalfEdge e1;
-      private final HalfEdge e2;
-      private final HalfEdge e3;
+      private final String name;
+      private final HalfEdge e0, e1, e2, e3;
 
       private final BoundingBox3DBasics boundingBox = EuclidGeometryFactories.newObservableBoundingBox3DBasics(null, axis -> updateBoundingBox());
 
       private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroidAndArea());
-      private final UnitVector3DBasics normal = EuclidCoreFactories.newObservableUnitVector3DBasics(null, axis -> updateNormal());
       private final Vector3DReadOnly normalLocal;
+      private final Vector3DBasics normal = EuclidCoreFactories.newObservableVector3DBasics(null, axis -> updateNormal());
       private final DoubleSupplier areaSupplier;
 
       private boolean isBoundingBoxDirty = true;
       private boolean isCentroidDirty = true;
       private boolean isNormalDirty = true;
 
-      private Face(Vector3DReadOnly normalLocal, DoubleSupplier areaSupplier, HalfEdge e0, HalfEdge e1, HalfEdge e2, HalfEdge e3)
+      private Face(String name, Vector3DReadOnly normalLocal, DoubleSupplier areaSupplier, HalfEdge e0, HalfEdge e1, HalfEdge e2, HalfEdge e3)
       {
          super(null, 0.0);
+         this.name = name;
 
          this.normalLocal = normalLocal;
          this.areaSupplier = areaSupplier;
@@ -216,8 +221,8 @@ public class BoxPolytope3D implements BoxPolytope3DView
       {
          if (isBoundingBoxDirty)
          {
-            super.updateBoundingBox();
             isBoundingBoxDirty = false;
+            super.updateBoundingBox();
          }
       }
 
@@ -226,11 +231,11 @@ public class BoxPolytope3D implements BoxPolytope3DView
       {
          if (isCentroidDirty)
          {
+            isCentroidDirty = false;
             centroid.add(e0.getOrigin(), e1.getOrigin());
             centroid.add(e2.getOrigin());
             centroid.add(e3.getOrigin());
             centroid.scale(0.25);
-            isCentroidDirty = false;
          }
       }
 
@@ -239,8 +244,8 @@ public class BoxPolytope3D implements BoxPolytope3DView
       {
          if (isNormalDirty)
          {
-            box3D.getPose().inverseTransform(normalLocal, normal);
             isNormalDirty = false;
+            normal.set(normalLocal);
          }
       }
 
@@ -266,6 +271,12 @@ public class BoxPolytope3D implements BoxPolytope3DView
       public BoundingBox3DBasics getBoundingBox()
       {
          return boundingBox;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "Box3D Face " + name + " " + super.toString();
       }
    }
 
@@ -308,8 +319,8 @@ public class BoxPolytope3D implements BoxPolytope3DView
       {
          if (dirty)
          {
-            box3D.getPose().inverseTransform(positionLocal, this);
             dirty = false;
+            box3D.getPose().transform(positionLocal, this);
          }
       }
 
