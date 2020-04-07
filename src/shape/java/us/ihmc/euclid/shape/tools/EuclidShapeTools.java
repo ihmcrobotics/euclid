@@ -2364,6 +2364,16 @@ public class EuclidShapeTools
       supportingVertexToPack.add(torus3DPosition);
    }
 
+   public static double boxVolume(double sizeX, double sizeY, double sizeZ)
+   {
+      return sizeX * sizeY * sizeZ;
+   }
+
+   public static double capsuleVolume(double radius, double length)
+   {
+      return Math.PI * radius * radius * (4.0 / 3.0 * radius + length);
+   }
+
    /**
     * Computes the volume of a cone defined by its height and base radius.
     *
@@ -2386,6 +2396,11 @@ public class EuclidShapeTools
    public static double cylinderVolume(double length, double radius)
    {
       return Math.PI * radius * radius * length;
+   }
+
+   public static double ellipsoidVolume(double radiusX, double radiusY, double radiusZ)
+   {
+      return 4.0 / 3.0 * Math.PI * radiusX * radiusY * radiusZ;
    }
 
    /**
@@ -2412,6 +2427,16 @@ public class EuclidShapeTools
       return baseLength * baseWidth * height / 3.0;
    }
 
+   public static double rampVolume(double sizeX, double sizeY, double sizeZ)
+   {
+      return 0.5 * boxVolume(sizeX, sizeY, sizeZ);
+   }
+
+   public static double sphereVolume(double radius)
+   {
+      return ellipsoidVolume(radius, radius, radius);
+   }
+
    /**
     * Computes the volume of a tetrahedron defined by its vertices.
     *
@@ -2433,6 +2458,11 @@ public class EuclidShapeTools
       double y = (c.getZ() - a.getZ()) * (d.getX() - a.getX()) - (c.getX() - a.getX()) * (d.getZ() - a.getZ());
       double z = (c.getX() - a.getX()) * (d.getY() - a.getY()) - (c.getY() - a.getY()) * (d.getX() - a.getX());
       return Math.abs(x * (b.getX() - a.getX()) + y * (b.getY() - a.getY()) + z * (b.getZ() - a.getZ())) / 6.0;
+   }
+
+   public static double torusVolume(double radius, double tubeRadius)
+   {
+      return 2.0 * Math.PI * Math.PI * radius * tubeRadius * tubeRadius;
    }
 
    /**

@@ -75,6 +75,13 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return getPosition();
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default double getVolume()
+   {
+      return EuclidShapeTools.boxVolume(getSizeX(), getSizeY(), getSizeZ());
+   }
+
    /**
     * Checks that the size component corresponding to the given axis is positive.
     * 

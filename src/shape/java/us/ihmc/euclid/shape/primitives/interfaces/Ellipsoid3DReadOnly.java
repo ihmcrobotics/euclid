@@ -74,6 +74,13 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
       return getPosition();
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default double getVolume()
+   {
+      return EuclidShapeTools.ellipsoidVolume(getRadiusX(), getRadiusY(), getRadiusZ());
+   }
+
    /**
     * Checks that the radius corresponding to the given axis is positive.
     * 
