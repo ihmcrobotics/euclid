@@ -331,6 +331,9 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
       EuclidFrameShapeTools.boundingBoxBox3D(this, destinationFrame, boundingBoxToPack);
    }
 
+   @Override
+   FrameBoxPolytope3DView asConvexPolytope();
+
    /** {@inheritDoc} */
    @Override
    default FramePoint3DBasics[] getVertices()

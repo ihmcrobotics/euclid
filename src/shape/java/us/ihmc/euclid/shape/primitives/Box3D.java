@@ -12,9 +12,9 @@ import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -41,7 +41,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    {
       checkSizePositive(axis);
       notifyChangeListeners();
-   }, null, new Vector3D(1.0, 1.0, 1.0));
+   }, null);
 
    private BoxPolytope3D polytopeView = null;
 
@@ -50,6 +50,7 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D()
    {
+      this(1.0, 1.0, 1.0);
    }
 
    /**
@@ -63,7 +64,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(double sizeX, double sizeY, double sizeZ)
    {
-      this();
       getSize().set(sizeX, sizeY, sizeZ);
    }
 
@@ -80,7 +80,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
-      this();
       set(position, orientation, sizeX, sizeY, sizeZ);
    }
 
@@ -96,7 +95,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      this();
       set(pose, sizeX, sizeY, sizeZ);
    }
 
@@ -112,7 +110,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
-      this();
       set(pose, sizeX, sizeY, sizeZ);
    }
 
@@ -123,7 +120,6 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
     */
    public Box3D(Box3DReadOnly other)
    {
-      this();
       set(other);
    }
 

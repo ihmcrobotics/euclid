@@ -1,4 +1,4 @@
-package us.ihmc.euclid.shape.primitives;
+package us.ihmc.euclid.referenceFrame;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,24 +7,27 @@ import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameUnitVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBoxPolytope3DView;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public class BoxPolytope3D implements BoxPolytope3DView
+public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
 {
-   private final Box3D box3D;
+   private final FrameBox3D box3D;
 
    // Faces
    private final Face xMinFace, yMinFace, zMinFace;
@@ -44,7 +47,7 @@ public class BoxPolytope3D implements BoxPolytope3DView
    private final Vertex v0, v1, v2, v3;
    private final List<Vertex> vertices;
 
-   public BoxPolytope3D(Box3D box3D)
+   public FrameBoxPolytope3D(FrameBox3D box3D)
    {
       this.box3D = box3D;
       DoubleSupplier xMin = () -> -0.5 * box3D.getSizeX();
@@ -108,6 +111,12 @@ public class BoxPolytope3D implements BoxPolytope3DView
    }
 
    @Override
+   public ReferenceFrame getReferenceFrame()
+   {
+      return box3D.getReferenceFrame();
+   }
+
+   @Override
    public Face getXMinFace()
    {
       return xMinFace;
@@ -144,7 +153,7 @@ public class BoxPolytope3D implements BoxPolytope3DView
    }
 
    @Override
-   public Box3DReadOnly getOwner()
+   public FrameBox3DReadOnly getOwner()
    {
       return box3D;
    }
@@ -167,17 +176,19 @@ public class BoxPolytope3D implements BoxPolytope3DView
       return vertices;
    }
 
-   private class Face extends AbstractFace3D<Vertex, HalfEdge, Face> implements Shape3DChangeListener
+   private class Face extends AbstractFace3D<Vertex, HalfEdge, Face> implements FrameFace3DReadOnly, Shape3DChangeListener
    {
       private final HalfEdge e0;
       private final HalfEdge e1;
       private final HalfEdge e2;
       private final HalfEdge e3;
 
-      private final BoundingBox3DBasics boundingBox = EuclidGeometryFactories.newObservableBoundingBox3DBasics(null, axis -> updateBoundingBox());
+      private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics(this,
+                                                                                                                                null,
+                                                                                                                                axis -> updateBoundingBox());
 
-      private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroidAndArea());
-      private final UnitVector3DBasics normal = EuclidCoreFactories.newObservableUnitVector3DBasics(null, axis -> updateNormal());
+      private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroidAndArea());
+      private final FixedFrameUnitVector3DBasics normal = EuclidFrameFactories.newObservableFixedFrameUnitVector3DBasics(this, null, axis -> updateNormal());
       private final Vector3DReadOnly normalLocal;
       private final DoubleSupplier areaSupplier;
 
@@ -245,13 +256,13 @@ public class BoxPolytope3D implements BoxPolytope3DView
       }
 
       @Override
-      public Point3DBasics getCentroid()
+      public FixedFramePoint3DBasics getCentroid()
       {
          return centroid;
       }
 
       @Override
-      public Vector3DBasics getNormal()
+      public FixedFrameVector3DBasics getNormal()
       {
          return normal;
       }
@@ -263,13 +274,19 @@ public class BoxPolytope3D implements BoxPolytope3DView
       }
 
       @Override
-      public BoundingBox3DBasics getBoundingBox()
+      public FixedFrameBoundingBox3DBasics getBoundingBox()
       {
          return boundingBox;
       }
+
+      @Override
+      public ReferenceFrame getReferenceFrame()
+      {
+         return box3D.getReferenceFrame();
+      }
    }
 
-   private class HalfEdge extends AbstractHalfEdge3D<Vertex, HalfEdge, Face>
+   private class HalfEdge extends AbstractHalfEdge3D<Vertex, HalfEdge, Face> implements FrameHalfEdge3DReadOnly
    {
       private HalfEdge(Vertex origin, Vertex destination)
       {
@@ -285,9 +302,27 @@ public class BoxPolytope3D implements BoxPolytope3DView
             getTwin().setTwin(this);
          }
       }
+
+      @Override
+      public Vertex getFirstEndpoint()
+      {
+         return getOrigin();
+      }
+
+      @Override
+      public Vertex getSecondEndpoint()
+      {
+         return getDestination();
+      }
+
+      @Override
+      public ReferenceFrame getReferenceFrame()
+      {
+         return box3D.getReferenceFrame();
+      }
    }
 
-   private class Vertex extends AbstractVertex3D<Vertex, HalfEdge, Face> implements Shape3DChangeListener
+   private class Vertex extends AbstractVertex3D<Vertex, HalfEdge, Face> implements FrameVertex3DReadOnly, Shape3DChangeListener, FixedFramePoint3DBasics
    {
       private final Point3DReadOnly positionLocal;
 
@@ -314,6 +349,12 @@ public class BoxPolytope3D implements BoxPolytope3DView
       }
 
       @Override
+      public HalfEdge getEdgeTo(FrameVertex3DReadOnly destination)
+      {
+         return (HalfEdge) FrameVertex3DReadOnly.super.getEdgeTo(destination);
+      }
+
+      @Override
       public double getX()
       {
          update();
@@ -332,6 +373,12 @@ public class BoxPolytope3D implements BoxPolytope3DView
       {
          update();
          return super.getZ();
+      }
+
+      @Override
+      public ReferenceFrame getReferenceFrame()
+      {
+         return box3D.getReferenceFrame();
       }
    }
 }

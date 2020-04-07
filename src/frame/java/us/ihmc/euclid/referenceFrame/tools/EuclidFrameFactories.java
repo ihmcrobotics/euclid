@@ -12,6 +12,7 @@ import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -2460,5 +2461,13 @@ public class EuclidFrameFactories
    {
       return newLinkedFixedFrameQuaternionBasics(source,
                                                  EuclidCoreFactories.newObservableQuaternionBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   public static FixedFrameBoundingBox3DBasics newObservableFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                          ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                                          Consumer<Axis3D> valueAccessedListener)
+   {
+      return newLinkedFixedFrameBoundingBox3DBasics(referenceFrameHolder,
+                                                    EuclidGeometryFactories.newObservableBoundingBox3DBasics(valueChangedListener, valueAccessedListener));
    }
 }
