@@ -870,7 +870,7 @@ public class EuclidShapeTools
          supportingVertexToPack.add(cylinder3DPosition);
       }
 
-      if (supportDirection.dot(cylinder3DAxis) > 0.0)
+      if (dot > 0.0)
          supportingVertexToPack.scaleAdd(0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
       else
          supportingVertexToPack.scaleAdd(-0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
