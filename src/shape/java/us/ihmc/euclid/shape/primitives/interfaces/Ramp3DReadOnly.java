@@ -354,6 +354,8 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       getIntermediateVariableSupplier().releasePoint3D(vertex);
    }
 
+   RampPolytope3DView asConvexPolytope();
+
    /** {@inheritDoc} */
    @Override
    default boolean isConvex()

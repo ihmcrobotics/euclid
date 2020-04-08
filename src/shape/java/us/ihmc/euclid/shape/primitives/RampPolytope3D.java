@@ -11,8 +11,8 @@ import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
-import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -20,96 +20,91 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public class BoxPolytope3D implements BoxPolytope3DView
+public class RampPolytope3D implements RampPolytope3DView
 {
-   private final Box3D box3D;
+   private final Ramp3D ramp3D;
 
    // Faces
-   private final Face xMinFace, yMinFace, zMinFace;
-   private final Face xMaxFace, yMaxFace, zMaxFace;
+   private final Face rampFace;
+   private final Face xMaxFace, yMinFace, yMaxFace, zMinFace;
    private final List<Face> faces;
    // Edge
-   // xMax and xMin
-   private final HalfEdge xMinE0, xMinE1, xMinE2, xMinE3, xMaxE0, xMaxE1, xMaxE2, xMaxE3;
+   // Ramp
+   private final HalfEdge rampE0, rampE1, rampE2, rampE3;
+   // xMax
+   private final HalfEdge xMaxE0, xMaxE1, xMaxE2, xMaxE3;
    // yMax and yMin
-   private final HalfEdge yMinE0, yMinE1, yMinE2, yMinE3, yMaxE0, yMaxE1, yMaxE2, yMaxE3;
-   // zMax and zMin
-   private final HalfEdge zMinE0, zMinE1, zMinE2, zMinE3, zMaxE0, zMaxE1, zMaxE2, zMaxE3;
+   private final HalfEdge yMinE0, yMinE1, yMinE2, yMaxE0, yMaxE1, yMaxE2;
+   // zMin
+   private final HalfEdge zMinE0, zMinE1, zMinE2, zMinE3;
    private final List<HalfEdge> edges;
-   // Vertices zMin face (clockwise ordering around z-axis)
-   private final Vertex v4, v5, v6, v7;
-   // Vertices zMax face (clockwise ordering around z-axis)
+   // Vertices slope face (clockwise ordering around z-axis)
    private final Vertex v0, v1, v2, v3;
+   // Vertices of bottom xMax edge
+   private final Vertex v4, v5;
    private final List<Vertex> vertices;
 
-   public BoxPolytope3D(Box3D box3D)
+   public RampPolytope3D(Ramp3D ramp3D)
    {
-      this.box3D = box3D;
-      DoubleSupplier xMin = () -> -0.5 * box3D.getSizeX();
-      DoubleSupplier yMin = () -> -0.5 * box3D.getSizeY();
-      DoubleSupplier zMin = () -> -0.5 * box3D.getSizeZ();
-      DoubleSupplier xMax = () -> +0.5 * box3D.getSizeX();
-      DoubleSupplier yMax = () -> +0.5 * box3D.getSizeY();
-      DoubleSupplier zMax = () -> +0.5 * box3D.getSizeZ();
+      this.ramp3D = ramp3D;
+      DoubleSupplier xMin = () -> 0.0;
+      DoubleSupplier yMin = () -> -0.5 * ramp3D.getSizeY();
+      DoubleSupplier zMin = () -> 0.0;
+      DoubleSupplier xMax = () -> ramp3D.getSizeX();
+      DoubleSupplier yMax = () -> +0.5 * ramp3D.getSizeY();
+      DoubleSupplier zMax = () -> ramp3D.getSizeZ();
 
-      v0 = new Vertex(xMax, yMax, zMax);
-      v1 = new Vertex(xMax, yMin, zMax);
-      v2 = new Vertex(xMin, yMin, zMax);
-      v3 = new Vertex(xMin, yMax, zMax);
+      v0 = new Vertex(xMin, yMax, zMin);
+      v1 = new Vertex(xMax, yMax, zMax);
+      v2 = new Vertex(xMax, yMin, zMax);
+      v3 = new Vertex(xMin, yMin, zMin);
       v4 = new Vertex(xMax, yMax, zMin);
       v5 = new Vertex(xMax, yMin, zMin);
-      v6 = new Vertex(xMin, yMin, zMin);
-      v7 = new Vertex(xMin, yMax, zMin);
 
-      xMinE0 = new HalfEdge(v3, v2);
-      xMinE1 = new HalfEdge(v2, v6);
-      xMinE2 = new HalfEdge(v6, v7);
-      xMinE3 = new HalfEdge(v7, v3);
-      yMinE0 = new HalfEdge(v1, v5);
-      yMinE1 = new HalfEdge(v5, v6);
-      yMinE2 = new HalfEdge(v6, v2);
-      yMinE3 = new HalfEdge(v2, v1);
-      zMinE0 = new HalfEdge(v4, v7);
-      zMinE1 = new HalfEdge(v7, v6);
-      zMinE2 = new HalfEdge(v6, v5);
-      zMinE3 = new HalfEdge(v5, v4);
-      xMaxE0 = new HalfEdge(v0, v4);
+      rampE0 = new HalfEdge(v0, v1);
+      rampE1 = new HalfEdge(v1, v2);
+      rampE2 = new HalfEdge(v2, v3);
+      rampE3 = new HalfEdge(v3, v0);
+      yMinE0 = new HalfEdge(v3, v2);
+      yMinE1 = new HalfEdge(v2, v5);
+      yMinE2 = new HalfEdge(v5, v3);
+      yMaxE0 = new HalfEdge(v0, v4);
+      yMaxE1 = new HalfEdge(v4, v1);
+      yMaxE2 = new HalfEdge(v1, v0);
+      xMaxE0 = new HalfEdge(v1, v4);
       xMaxE1 = new HalfEdge(v4, v5);
-      xMaxE2 = new HalfEdge(v5, v1);
-      xMaxE3 = new HalfEdge(v1, v0);
-      yMaxE0 = new HalfEdge(v0, v3);
-      yMaxE1 = new HalfEdge(v3, v7);
-      yMaxE2 = new HalfEdge(v7, v4);
-      yMaxE3 = new HalfEdge(v4, v0);
-      zMaxE0 = new HalfEdge(v0, v1);
-      zMaxE1 = new HalfEdge(v1, v2);
-      zMaxE2 = new HalfEdge(v2, v3);
-      zMaxE3 = new HalfEdge(v3, v0);
+      xMaxE2 = new HalfEdge(v5, v2);
+      xMaxE3 = new HalfEdge(v2, v1);
+      zMinE0 = new HalfEdge(v0, v3);
+      zMinE1 = new HalfEdge(v3, v5);
+      zMinE2 = new HalfEdge(v5, v4);
+      zMinE3 = new HalfEdge(v4, v0);
 
-      DoubleSupplier xFaceAreaSupplier = () -> box3D.getSizeY() * box3D.getSizeZ();
-      DoubleSupplier yFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeZ();
-      DoubleSupplier zFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeY();
+      DoubleSupplier slopeFaceAreaSupplier = () -> ramp3D.getSizeY() * ramp3D.getRampLength();
+      DoubleSupplier xFaceAreaSupplier = () -> ramp3D.getSizeY() * ramp3D.getSizeZ();
+      DoubleSupplier yFaceAreaSupplier = () -> 0.5 * ramp3D.getSizeX() * ramp3D.getSizeZ();
+      DoubleSupplier zFaceAreaSupplier = () -> ramp3D.getSizeX() * ramp3D.getSizeY();
 
-      Shape3DPose pose = box3D.getPose();
-      xMinFace = new Face("x-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getXAxis()), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
-      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
+      Shape3DPose pose = ramp3D.getPose();
+
+      rampFace = new Face("ramp", ramp3D.getRampSurfaceNormal(), slopeFaceAreaSupplier, rampE0, rampE1, rampE2, rampE3);
+      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2);
       zMinFace = new Face("z-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
       xMaxFace = new Face("x-max", pose.getXAxis(), xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
-      yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
-      zMaxFace = new Face("z-max", pose.getZAxis(), zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
+      yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2);
 
-      faces = Collections.unmodifiableList(Arrays.asList(xMinFace, yMinFace, zMinFace, xMaxFace, yMaxFace, zMaxFace));
+      faces = Collections.unmodifiableList(Arrays.asList(rampFace, yMinFace, zMinFace, xMaxFace, yMaxFace));
       edges = Collections.unmodifiableList(faces.stream().flatMap(f -> f.getEdges().stream()).collect(Collectors.toList()));
-      vertices = Collections.unmodifiableList(Arrays.asList(v0, v1, v2, v3, v4, v5, v6, v7));
+      vertices = Collections.unmodifiableList(Arrays.asList(v0, v1, v2, v3, v4, v5));
 
-      box3D.addChangeListeners(vertices);
-      box3D.addChangeListeners(faces);
+      ramp3D.addChangeListeners(vertices);
+      ramp3D.addChangeListeners(faces);
    }
 
    @Override
-   public Face getXMinFace()
+   public Face getRampFace()
    {
-      return xMinFace;
+      return rampFace;
    }
 
    @Override
@@ -137,15 +132,9 @@ public class BoxPolytope3D implements BoxPolytope3DView
    }
 
    @Override
-   public Face getZMaxFace()
+   public Ramp3DReadOnly getOwner()
    {
-      return zMaxFace;
-   }
-
-   @Override
-   public Box3DReadOnly getOwner()
-   {
-      return box3D;
+      return ramp3D;
    }
 
    @Override
@@ -169,7 +158,6 @@ public class BoxPolytope3D implements BoxPolytope3DView
    private class Face extends AbstractFace3D<Vertex, HalfEdge, Face> implements Shape3DChangeListener
    {
       private final String name;
-      private final HalfEdge e0, e1, e2, e3;
 
       private final BoundingBox3DBasics boundingBox = EuclidGeometryFactories.newObservableBoundingBox3DBasics(null, axis -> updateBoundingBox());
 
@@ -182,23 +170,17 @@ public class BoxPolytope3D implements BoxPolytope3DView
       private boolean isCentroidDirty = true;
       private boolean isNormalDirty = true;
 
-      private Face(String name, Vector3DReadOnly normalLocal, DoubleSupplier areaSupplier, HalfEdge e0, HalfEdge e1, HalfEdge e2, HalfEdge e3)
+      private Face(String name, Vector3DReadOnly normalLocal, DoubleSupplier areaSupplier, HalfEdge... edges)
       {
          super(null, 0.0);
          this.name = name;
 
          this.normalLocal = normalLocal;
          this.areaSupplier = areaSupplier;
-         this.e0 = e0;
-         this.e1 = e1;
-         this.e2 = e2;
-         this.e3 = e3;
-         initialize(Arrays.asList(e0, e1, e2, e3), normalLocal);
+         initialize(Arrays.asList(edges), normalLocal);
 
-         e0.findAndSetTwin();
-         e1.findAndSetTwin();
-         e2.findAndSetTwin();
-         e3.findAndSetTwin();
+         for (HalfEdge edge : edges)
+            edge.findAndSetTwin();
       }
 
       @Override
@@ -225,10 +207,10 @@ public class BoxPolytope3D implements BoxPolytope3DView
          if (isCentroidDirty)
          {
             isCentroidDirty = false;
-            centroid.add(e0.getOrigin(), e1.getOrigin());
-            centroid.add(e2.getOrigin());
-            centroid.add(e3.getOrigin());
-            centroid.scale(0.25);
+            centroid.setToZero();
+            for (int i = 0; i < getNumberOfEdges(); i++)
+               centroid.add(getVertex(i));
+            centroid.scale(1.0 / getNumberOfEdges());
          }
       }
 
@@ -269,7 +251,7 @@ public class BoxPolytope3D implements BoxPolytope3DView
       @Override
       public String toString()
       {
-         return "Box3D Face " + name + " " + super.toString();
+         return "Ramp3D Face " + name + " " + super.toString();
       }
    }
 
@@ -313,7 +295,7 @@ public class BoxPolytope3D implements BoxPolytope3DView
          if (dirty)
          {
             dirty = false;
-            box3D.getPose().transform(positionLocal, this);
+            ramp3D.getPose().transform(positionLocal, this);
          }
       }
 

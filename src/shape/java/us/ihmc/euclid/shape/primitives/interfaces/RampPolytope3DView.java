@@ -7,18 +7,22 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
- * Provides a {@link ConvexPolytope3DReadOnly} view backed by a {@link Box3DReadOnly}.
+ * Provides a {@link ConvexPolytope3DReadOnly} view backed by a {@link Ramp3DReadOnly}.
  * 
  * @author Sylvain Bertrand
  */
-public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
+public interface RampPolytope3DView extends ConvexPolytope3DReadOnly
 {
+   Face3DReadOnly getRampFace();
+
    Face3DReadOnly getXMaxFace();
 
    Face3DReadOnly getYMaxFace();
 
-   Face3DReadOnly getZMaxFace();
-
+   Face3DReadOnly getYMinFace();
+   
+   Face3DReadOnly getZMinFace();
+   
    default Face3DReadOnly getMaxFace(Axis3D axis)
    {
       switch (axis)
@@ -28,24 +32,18 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
          case Y:
             return getYMaxFace();
          case Z:
-            return getZMaxFace();
+            return getRampFace();
          default:
             throw new IllegalStateException();
       }
    }
-
-   Face3DReadOnly getXMinFace();
-
-   Face3DReadOnly getYMinFace();
-
-   Face3DReadOnly getZMinFace();
 
    default Face3DReadOnly getMinFace(Axis3D axis)
    {
       switch (axis)
       {
          case X:
-            return getXMinFace();
+            return getRampFace();
          case Y:
             return getYMinFace();
          case Z:
@@ -55,10 +53,10 @@ public interface BoxPolytope3DView extends ConvexPolytope3DReadOnly
       }
    }
 
-   Box3DReadOnly getOwner();
+   Ramp3DReadOnly getOwner();
 
    @Override
-   default Box3DBasics copy()
+   default Ramp3DBasics copy()
    {
       return getOwner().copy();
    }

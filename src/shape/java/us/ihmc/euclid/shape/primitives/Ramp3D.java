@@ -9,6 +9,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
@@ -67,6 +68,8 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    private boolean centroidDirty = true;
 
    private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroid());
+
+   private RampPolytope3D polytopeView = null;
 
    /**
     * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0}.
@@ -248,6 +251,47 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       }
    }
 
+   /**
+    * Registers a list of listeners to be notified when this shape changes.
+    *
+    * @param listeners the listeners to register.
+    */
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
+   {
+      for (int i = 0; i < listeners.size(); i++)
+      {
+         addChangeListener(listeners.get(i));
+      }
+   }
+
+   /**
+    * Registers a listener to be notified when this shape changes.
+    *
+    * @param listener the listener to register.
+    */
+   public void addChangeListener(Shape3DChangeListener listener)
+   {
+      changeListeners.add(listener);
+      pose.addChangeListener(listener);
+   }
+
+   /**
+    * Removes a previously registered listener.
+    * <p>
+    * This listener will no longer be notified of changes from this pose.
+    * </p>
+    *
+    * @param listener the listener to remove.
+    * @return {@code true} if the listener was removed successful, {@code false} if the listener could
+    *         not be found.
+    */
+   public boolean removeChangeListener(Shape3DChangeListener listener)
+   {
+      boolean hasBeenRemoved = changeListeners.remove(listener);
+      hasBeenRemoved |= pose.removeChangeListener(listener);
+      return hasBeenRemoved;
+   }
+
    /** {@inheritDoc} */
    @Override
    public IntermediateVariableSupplier getIntermediateVariableSupplier()
@@ -297,6 +341,14 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D copy()
    {
       return new Ramp3D(this);
+   }
+
+   @Override
+   public RampPolytope3DView asConvexPolytope()
+   {
+      if (polytopeView == null)
+         polytopeView = new RampPolytope3D(this);
+      return polytopeView;
    }
 
    /**

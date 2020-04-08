@@ -62,6 +62,9 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
       EuclidFrameShapeTools.boundingBoxRamp3D(this, destinationFrame, boundingBoxToPack);
    }
 
+   @Override
+   FrameRampPolytope3DView asConvexPolytope();
+
    /** {@inheritDoc} */
    @Override
    default FrameVector3DReadOnly getRampSurfaceNormal()

@@ -3,10 +3,13 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameConvexPolytope3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
-import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
+import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 
-public interface FrameBoxPolytope3DView extends BoxPolytope3DView, FrameConvexPolytope3DReadOnly
+public interface FrameRampPolytope3DView extends RampPolytope3DView, FrameConvexPolytope3DReadOnly
 {
+   @Override
+   FrameFace3DReadOnly getRampFace();
+
    @Override
    FrameFace3DReadOnly getXMaxFace();
 
@@ -14,16 +17,10 @@ public interface FrameBoxPolytope3DView extends BoxPolytope3DView, FrameConvexPo
    FrameFace3DReadOnly getYMaxFace();
 
    @Override
-   FrameFace3DReadOnly getZMaxFace();
-
-   @Override
    default FrameFace3DReadOnly getMaxFace(Axis3D axis)
    {
-      return (FrameFace3DReadOnly) BoxPolytope3DView.super.getMaxFace(axis);
+      return (FrameFace3DReadOnly) RampPolytope3DView.super.getMaxFace(axis);
    }
-
-   @Override
-   FrameFace3DReadOnly getXMinFace();
 
    @Override
    FrameFace3DReadOnly getYMinFace();
@@ -34,14 +31,14 @@ public interface FrameBoxPolytope3DView extends BoxPolytope3DView, FrameConvexPo
    @Override
    default FrameFace3DReadOnly getMinFace(Axis3D axis)
    {
-      return (FrameFace3DReadOnly) BoxPolytope3DView.super.getMinFace(axis);
+      return (FrameFace3DReadOnly) RampPolytope3DView.super.getMinFace(axis);
    }
 
    @Override
-   FrameBox3DReadOnly getOwner();
+   FrameRamp3DReadOnly getOwner();
 
    @Override
-   default FixedFrameBox3DBasics copy()
+   default FixedFrameRamp3DBasics copy()
    {
       return getOwner().copy();
    }
