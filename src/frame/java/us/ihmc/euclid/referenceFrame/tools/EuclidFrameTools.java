@@ -6553,6 +6553,73 @@ public class EuclidFrameTools
    }
 
    /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+                                                         FixedFramePoint3DBasics sphere3DPositionToPack)
+   {
+      p1.checkReferenceFrameMatch(p2, p3, sphere3DPositionToPack);
+      return EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPositionToPack);
+   }
+
+   /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    * @throws ReferenceFrameMismatchException if the three points are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+                                                         FramePoint3DBasics sphere3DPositionToPack)
+   {
+      p1.checkReferenceFrameMatch(p2, p3);
+      sphere3DPositionToPack.setReferenceFrame(p1.getReferenceFrame());
+      return EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPositionToPack);
+   }
+
+   /**
     * Assuming an isosceles triangle defined by three vertices A, B, and C, with |AB| == |BC|, this
     * methods computes the missing vertex B given the vertices A and C, the normal of the triangle, the
     * angle ABC that is equal to the angle at B from the the leg BA to the leg BC.
