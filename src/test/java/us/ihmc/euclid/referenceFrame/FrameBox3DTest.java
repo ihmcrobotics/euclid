@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameShapeAPIDefaultConfiguration;
@@ -27,14 +28,17 @@ public class FrameBox3DTest
    public void testAPIOverloading()
    {
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
-      tester.assertOverloadingWithFrameObjects(FrameBox3DReadOnly.class, Box3DReadOnly.class, false);
-      tester.assertOverloadingWithFrameObjects(FixedFrameBox3DBasics.class, Box3DBasics.class, false);
 
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("checkSizePositive", Axis3D.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      tester.assertOverloadingWithFrameObjects(FrameBox3DReadOnly.class, Box3DReadOnly.class, false, 1, methodFilter);
+      tester.assertOverloadingWithFrameObjects(FixedFrameBox3DBasics.class, Box3DBasics.class, false, 1, methodFilter);
+
       signaturesToIgnore.add(new MethodSignature("set", Box3D.class));
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Box3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Box3D.class, Double.TYPE));
-      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameBox3D.class, Box3D.class, false, 1, methodFilter);
    }
 
@@ -57,7 +61,7 @@ public class FrameBox3DTest
    public void testConsistencyWithBox3D()
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals")
-            && !m.getName().contains("IntermediateVariableSupplier");
+            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener") && !m.getName().equals("checkSizePositive");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, box) -> new FrameBox3D(frame, (Box3D) box),
                                                                   EuclidShapeRandomTools::nextBox3D,
