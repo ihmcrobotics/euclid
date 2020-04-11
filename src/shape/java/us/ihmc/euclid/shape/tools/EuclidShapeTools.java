@@ -1811,6 +1811,48 @@ public class EuclidShapeTools
    }
 
    /**
+    * Tests whether the first argument has the largest value of all the arguments.
+    *
+    * @param possibleMax the query.
+    * @param value1      the first value to compare the candidate against.
+    * @param value2      the second value to compare the candidate against.
+    * @param value3      the third value to compare the candidate against.
+    * @param value4      the fourth value to compare the candidate against.
+    * @return {@code true} if the query has the largest value, {@code false} otherwise
+    */
+   public static boolean isFirstValueMaximum(double possibleMax, double value1, double value2, double value3, double value4)
+   {
+      return possibleMax >= value1 && possibleMax >= value2 && possibleMax >= value3 && possibleMax >= value4;
+   }
+
+   /**
+    * Tests whether the first argument has the largest value of all the arguments.
+    *
+    * @param possibleMax the query.
+    * @param value1      the first value to compare the candidate against.
+    * @param value2      the second value to compare the candidate against.
+    * @param value3      the third value to compare the candidate against.
+    * @return {@code true} if the query has the largest value, {@code false} otherwise
+    */
+   public static boolean isFirstValueMaximum(double possibleMax, double value1, double value2, double value3)
+   {
+      return possibleMax >= value1 && possibleMax >= value2 && possibleMax >= value3;
+   }
+
+   /**
+    * Tests whether the first argument has the largest value of all the arguments.
+    *
+    * @param possibleMax the query.
+    * @param value1      the first value to compare the candidate against.
+    * @param value2      the second value to compare the candidate against.
+    * @return {@code true} if the query has the largest value, {@code false} otherwise
+    */
+   public static boolean isFirstValueMaximum(double possibleMax, double value1, double value2)
+   {
+      return possibleMax >= value1 && possibleMax >= value2;
+   }
+
+   /**
     * Tests whether the {@code query} is located inside a 3D sphere.
     *
     * @param query            the coordinates of the query. Not modified.

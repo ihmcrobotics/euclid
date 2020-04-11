@@ -226,6 +226,174 @@ public class EuclidShapeToolsTest
    }
 
    @Test
+   public void testIsFirstValueMinimum()
+   {
+      Random random = new Random(65467547);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double possibleMin = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double[] values = new double[4];
+
+         int numberOfCombinations = (int) Math.pow(2, values.length);
+
+         for (int j = 0; j < numberOfCombinations; j++)
+         {
+            int currentByte = 0;
+            boolean isMinimumValue = j == 0;
+
+            for (int k = 0; k < values.length; k++)
+            {
+               values[k] = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+               int mask = (int) Math.pow(2, currentByte);
+               boolean isLesser = (j & mask) != 0;
+               values[k] = possibleMin + (isLesser ? -values[k] : +values[k]);
+               currentByte++;
+            }
+
+            boolean actualResult = EuclidShapeTools.isFirstValueMinimum(possibleMin, values[0], values[1], values[2], values[3]);
+            assertEquals(isMinimumValue, actualResult);
+         }
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double possibleMin = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double[] values = new double[3];
+         
+         int numberOfCombinations = (int) Math.pow(2, values.length);
+         
+         for (int j = 0; j < numberOfCombinations; j++)
+         {
+            int currentByte = 0;
+            boolean isMinimumValue = j == 0;
+            
+            for (int k = 0; k < values.length; k++)
+            {
+               values[k] = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+               int mask = (int) Math.pow(2, currentByte);
+               boolean isLesser = (j & mask) != 0;
+               values[k] = possibleMin + (isLesser ? -values[k] : +values[k]);
+               currentByte++;
+            }
+            
+            boolean actualResult = EuclidShapeTools.isFirstValueMinimum(possibleMin, values[0], values[1], values[2]);
+            assertEquals(isMinimumValue, actualResult);
+         }
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double possibleMin = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double[] values = new double[2];
+         
+         int numberOfCombinations = (int) Math.pow(2, values.length);
+         
+         for (int j = 0; j < numberOfCombinations; j++)
+         {
+            int currentByte = 0;
+            boolean isMinimumValue = j == 0;
+            
+            for (int k = 0; k < values.length; k++)
+            {
+               values[k] = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+               int mask = (int) Math.pow(2, currentByte);
+               boolean isLesser = (j & mask) != 0;
+               values[k] = possibleMin + (isLesser ? -values[k] : +values[k]);
+               currentByte++;
+            }
+            
+            boolean actualResult = EuclidShapeTools.isFirstValueMinimum(possibleMin, values[0], values[1]);
+            assertEquals(isMinimumValue, actualResult);
+         }
+      }
+   }
+
+   @Test
+   public void testIsFirstValueMaximum()
+   {
+      Random random = new Random(65467547);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double possibleMax = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double[] values = new double[4];
+
+         int numberOfCombinations = (int) Math.pow(2, values.length);
+
+         for (int j = 0; j < numberOfCombinations; j++)
+         {
+            int currentByte = 0;
+            boolean isMinimumValue = j == 0;
+
+            for (int k = 0; k < values.length; k++)
+            {
+               values[k] = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+               int mask = (int) Math.pow(2, currentByte);
+               boolean isGreater = (j & mask) != 0;
+               values[k] = possibleMax + (isGreater ? +values[k] : -values[k]);
+               currentByte++;
+            }
+
+            boolean actualResult = EuclidShapeTools.isFirstValueMaximum(possibleMax, values[0], values[1], values[2], values[3]);
+            assertEquals(isMinimumValue, actualResult);
+         }
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double possibleMax = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double[] values = new double[3];
+         
+         int numberOfCombinations = (int) Math.pow(2, values.length);
+         
+         for (int j = 0; j < numberOfCombinations; j++)
+         {
+            int currentByte = 0;
+            boolean isMinimumValue = j == 0;
+            
+            for (int k = 0; k < values.length; k++)
+            {
+               values[k] = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+               int mask = (int) Math.pow(2, currentByte);
+               boolean isGreater = (j & mask) != 0;
+               values[k] = possibleMax + (isGreater ? +values[k] : -values[k]);
+               currentByte++;
+            }
+            
+            boolean actualResult = EuclidShapeTools.isFirstValueMaximum(possibleMax, values[0], values[1], values[2]);
+            assertEquals(isMinimumValue, actualResult);
+         }
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double possibleMax = EuclidCoreRandomTools.nextDouble(random, 10.0);
+         double[] values = new double[2];
+         
+         int numberOfCombinations = (int) Math.pow(2, values.length);
+         
+         for (int j = 0; j < numberOfCombinations; j++)
+         {
+            int currentByte = 0;
+            boolean isMinimumValue = j == 0;
+            
+            for (int k = 0; k < values.length; k++)
+            {
+               values[k] = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+               int mask = (int) Math.pow(2, currentByte);
+               boolean isGreater = (j & mask) != 0;
+               values[k] = possibleMax + (isGreater ? +values[k] : -values[k]);
+               currentByte++;
+            }
+            
+            boolean actualResult = EuclidShapeTools.isFirstValueMaximum(possibleMax, values[0], values[1]);
+            assertEquals(isMinimumValue, actualResult);
+         }
+      }
+   }
+
+   @Test
    public void testGeometricallyEduals()
    {
       Random random = new Random(5474);
