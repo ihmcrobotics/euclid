@@ -186,10 +186,35 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
 
    /**
     * Gets the convex property for this shape.
+    * <p>
+    * A shape is assumed to be convex if:
+    * <ul>
+    * <li>the line segment created from any pair of 2 points that are either interior or on the surface
+    * is interior to the shape. For instance, shapes such as a torus or a hollow cylinder are not
+    * convex.
+    * </ul>
+    * </p>
     *
     * @return {@code true} if this shape's implementation is convex, {@code false} otherwise.
     */
    boolean isConvex();
+
+   /**
+    * Gets the strictly convex property of this shape.
+    * <p>
+    * A shape is assumed to be strictly convex if:
+    * <ol>
+    * <li>the shape is convex.
+    * <li>the line segment created from any pair of 2 points that lie on the surface of the shape is
+    * strictly interior to the shape, except at its end-points. This means that shapes defined with at
+    * least one straight edge or at least one planar face can be convex but not strictly convex.
+    * </ol>
+    * </p>
+    * 
+    * @return {@code true} if this shape's implementation is strictly convex, {@code false} otherwise.
+    * @see #isConvex()
+    */
+   boolean isStrictlyConvex();
 
    /**
     * Gets whether this shape is a primitive shape or not.

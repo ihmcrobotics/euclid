@@ -105,6 +105,13 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
 
    /** {@inheritDoc} */
    @Override
+   default boolean isStrictlyConvex()
+   {
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
    default boolean isPrimitive()
    {
       return true;

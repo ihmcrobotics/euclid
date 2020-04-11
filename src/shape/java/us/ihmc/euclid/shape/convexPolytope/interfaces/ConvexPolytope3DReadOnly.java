@@ -488,6 +488,13 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
+   default boolean isStrictlyConvex()
+   {
+      return false;
+   }
+
+   /** {@inheritDoc} */
+   @Override
    default boolean isPrimitive()
    {
       return false;

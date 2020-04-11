@@ -190,6 +190,13 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
+   default boolean isStrictlyConvex()
+   {
+      return true;
+   }
+
+   /** {@inheritDoc} */
+   @Override
    default boolean isPrimitive()
    {
       return true;
