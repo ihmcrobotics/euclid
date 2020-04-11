@@ -10,6 +10,7 @@ import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -74,8 +75,59 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private final Vector3D initialSupportDirection = new Vector3D(Axis3D.Y);
    /** The last support direction used in the last evaluation. */
    private final Vector3D supportDirection = new Vector3D();
+   /** The last support direction used in the last evaluation. */
+   private final Vector3DReadOnly supportDirectionNegated = EuclidCoreFactories.newNegativeLinkedVector3D(supportDirection);
    /** The last support direction used in the previous iteration. */
    private final Vector3D supportDirectionPrevious = new Vector3D();
+
+   /**
+    * Enumeration representing the possible terminations of the algorithm. This is exposed for
+    * debugging purposes.
+    */
+   public enum TerminationType
+   {
+      /**
+       * The last vertex of the Minkowski difference is exactly equal to one vertex of the previous
+       * simplex.
+       */
+      EXISTING_VERTEX("The last vertex of the Minkowski difference is exactly equal to one vertex of the previous simplex."),
+      /**
+       * Progression on new Minkowski difference is determined to be under expected progression.
+       */
+      VERTEX_NO_PROGRESSION("Progression on new Minkowski difference is determined to be under expected progression."),
+      /**
+       * Unable to update simplex, new vertex of the Minkowski difference likely to result in linearly
+       * dependent simplex.
+       */
+      SIMPLEX_NULL("Unable to update simplex, new vertex of the Minkowski difference likely to result in linearly dependent simplex."),
+      /**
+       * New simplex is not closing onto the origin.
+       */
+      SIMPLEX_NO_PROGRESSION("No progression."),
+      /**
+       * Collision detected, distance to the origin is zero.
+       */
+      COLLISION_DETECTED("Collision detected, distance to the origin is zero.");
+
+      private final String description;
+
+      private TerminationType(String description)
+      {
+         this.description = description;
+      }
+
+      /**
+       * Returns a more detailed description of the termination type.
+       * 
+       * @return the description for this termination type.
+       */
+      public String getDescription()
+      {
+         return description;
+      }
+   }
+
+   private TerminationType lastTerminationType = null;
 
    /**
     * Creates a new collision detector that can be used right away to evaluate collisions.
@@ -204,9 +256,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
 
       supportDirection.set(initialSupportDirection);
       Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
-      supportDirection.negate();
-      Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
-      supportDirection.negate();
+      Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirectionNegated);
 
       boolean areColliding = false;
 
@@ -247,27 +297,28 @@ public class GilbertJohnsonKeerthiCollisionDetector
                if (retry)
                {
                   vertexA = shapeA.getSupportingVertex(supportDirection);
-                  supportDirection.negate();
-                  vertexB = shapeB.getSupportingVertex(supportDirection);
-                  supportDirection.negate();
+                  vertexB = shapeB.getSupportingVertex(supportDirectionNegated);
                   continue;
                }
 
                simplex = previousOutput;
                supportDirection.set(supportDirectionPrevious);
                areColliding = false;
+               lastTerminationType = TerminationType.EXISTING_VERTEX;
                if (VERBOSE)
-                  System.out.println("New vertex belongs to simplex, terminating.");
+                  System.out.println(lastTerminationType.getDescription() + " Terminating.");
                break;
             }
 
-            if (Math.abs(closestPointNormSquared - newVertex.dot(supportDirection)) <= epsilon * closestPointNormSquared)
+            // Note the sign difference w.r.t. the original algorithm, this is due to not negating the supportDirection.
+            if (Math.abs(closestPointNormSquared + newVertex.dot(supportDirection)) <= epsilon * closestPointNormSquared)
             {
                simplex = previousOutput;
                supportDirection.set(supportDirectionPrevious);
                areColliding = false;
+               lastTerminationType = TerminationType.VERTEX_NO_PROGRESSION;
                if (VERBOSE)
-                  System.out.println("Progression under tolerance, terminating.");
+                  System.out.println(lastTerminationType.getDescription() + " Terminating.");
                break;
             }
 
@@ -278,23 +329,27 @@ public class GilbertJohnsonKeerthiCollisionDetector
                simplex = previousOutput;
                supportDirection.set(supportDirectionPrevious);
                areColliding = false;
+               lastTerminationType = TerminationType.SIMPLEX_NULL;
                if (VERBOSE)
-                  System.out.println("Closest simplex is null, terminating.");
+                  System.out.println(lastTerminationType.getDescription() + " Terminating.");
                break;
             }
 
             if (VERBOSE)
+            {
+               String verticesAsString = EuclidCoreIOTools.getArrayString("[", "]", ", ", output.getVertices(), EuclidCoreIOTools::getTuple3DString);
                System.out.println("Support direction " + supportDirection + ", distance to origin: " + output.getDistanceToOrigin() + ", simplex size: "
-                     + output.getNumberOfVertices() + ", vertices "
-                     + EuclidCoreIOTools.getArrayString("[", "]", ", ", output.getVertices(), EuclidCoreIOTools::getTuple3DString));
+                     + output.getNumberOfVertices() + ", vertices " + verticesAsString);
+            }
 
             if (output.getDistanceSquaredToOrigin() >= previousOutput.getDistanceSquaredToOrigin())
             {
                simplex = previousOutput;
                supportDirection.set(supportDirectionPrevious);
                areColliding = false;
+               lastTerminationType = TerminationType.SIMPLEX_NO_PROGRESSION;
                if (VERBOSE)
-                  System.out.println("No progression, terminating.");
+                  System.out.println(lastTerminationType.getDescription() + " Terminating.");
                break;
             }
 
@@ -304,8 +359,9 @@ public class GilbertJohnsonKeerthiCollisionDetector
             { // End of process
                simplex = output;
                areColliding = true;
+               lastTerminationType = TerminationType.COLLISION_DETECTED;
                if (VERBOSE)
-                  System.out.println("Collision detected, terminating.");
+                  System.out.println(lastTerminationType.getDescription() + " Terminating.");
                break;
             }
 
@@ -324,9 +380,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
                supportDirection.setZ(SUPPORT_DIRECTION_ZERO_COMPONENT);
 
             vertexA = shapeA.getSupportingVertex(supportDirection);
-            supportDirection.negate();
-            vertexB = shapeB.getSupportingVertex(supportDirection);
-            supportDirection.negate();
+            vertexB = shapeB.getSupportingVertex(supportDirectionNegated);
 
             previousOutput = output;
          }
@@ -464,5 +518,19 @@ public class GilbertJohnsonKeerthiCollisionDetector
    public Vector3DReadOnly getSupportDirection()
    {
       return supportDirection;
+   }
+
+   /**
+    * Returns information about the termination for the last evaluation.
+    * <p>
+    * This is destined for debugging purposes to obtain further information about reason how the last
+    * evaluation terminated.
+    * </p>
+    * 
+    * @return the termination type for the last evaluation.
+    */
+   public TerminationType getLastTerminationType()
+   {
+      return lastTerminationType;
    }
 }
