@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
@@ -2406,11 +2407,26 @@ public class EuclidShapeTools
       supportingVertexToPack.add(torus3DPosition);
    }
 
+   /**
+    * Computes the volume of a box defined by its 3D size.
+    * 
+    * @param sizeX the size of the box along the x-axis.
+    * @param sizeY the size of the box along the y-axis.
+    * @param sizeZ the size of the box along the z-axis.
+    * @return the volume of the box.
+    */
    public static double boxVolume(double sizeX, double sizeY, double sizeZ)
    {
       return sizeX * sizeY * sizeZ;
    }
 
+   /**
+    * Computes the volume of a capsule defined by its radius and length.
+    * 
+    * @param radius the capsule radius.
+    * @param length the length of the capsule, i.e. the length of the cylindrical part of the capsule.
+    * @return the volume of the capsule.
+    */
    public static double capsuleVolume(double radius, double length)
    {
       return Math.PI * radius * radius * (4.0 / 3.0 * radius + length);
@@ -2440,6 +2456,14 @@ public class EuclidShapeTools
       return Math.PI * radius * radius * length;
    }
 
+   /**
+    * Computes the volume of an ellipsoid defined by its three radii.
+    * 
+    * @param radiusX the radius along the x-axis of the ellipsoid.
+    * @param radiusY the radius along the y-axis of the ellipsoid.
+    * @param radiusZ the radius along the z-axis of the ellipsoid.
+    * @return the volume of the ellipsoid.
+    */
    public static double ellipsoidVolume(double radiusX, double radiusY, double radiusZ)
    {
       return 4.0 / 3.0 * Math.PI * radiusX * radiusY * radiusZ;
@@ -2469,11 +2493,26 @@ public class EuclidShapeTools
       return baseLength * baseWidth * height / 3.0;
    }
 
+   /**
+    * Computes the volume of ramp defined by its 3D size, see {@link Ramp3DReadOnly} for the definition
+    * of a ramp.
+    * 
+    * @param sizeX the size of the ramp along the x-axis.
+    * @param sizeY the size of the ramp along the y-axis.
+    * @param sizeZ the size of the ramp along the z-axis.
+    * @return the volume of the ramp.
+    */
    public static double rampVolume(double sizeX, double sizeY, double sizeZ)
    {
       return 0.5 * boxVolume(sizeX, sizeY, sizeZ);
    }
 
+   /**
+    * Computes the volume of a sphere defined by its radius.
+    * 
+    * @param radius the radius of the sphere.
+    * @return the volume of the sphere.
+    */
    public static double sphereVolume(double radius)
    {
       return ellipsoidVolume(radius, radius, radius);
@@ -2502,6 +2541,14 @@ public class EuclidShapeTools
       return Math.abs(x * (b.getX() - a.getX()) + y * (b.getY() - a.getY()) + z * (b.getZ() - a.getZ())) / 6.0;
    }
 
+   /**
+    * Computes the volume of a torus defined by its radius (from torus axis to tube center) and the
+    * radius of its tube.
+    * 
+    * @param radius     the radius from the torus center to the tube center.
+    * @param tubeRadius the radius of the tube.
+    * @return the volume of the torus.
+    */
    public static double torusVolume(double radius, double tubeRadius)
    {
       return 2.0 * Math.PI * Math.PI * radius * tubeRadius * tubeRadius;
