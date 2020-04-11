@@ -502,13 +502,12 @@ public class EuclidShapeTools
    public static void supportingVertexCapsule3D(Vector3DReadOnly supportDirection, Point3DReadOnly capsule3DPosition, Vector3DReadOnly capsule3DAxis,
                                                 double capsule3DLength, double capsule3DRadius, Point3DBasics supportingVertexToPack)
    {
+      double dot = supportDirection.dot(capsule3DAxis);
+      double capsule3DHalfLength = dot > 0.0 ? 0.5 * capsule3DLength : -0.5 * capsule3DLength;
+
       supportingVertexToPack.setAndScale(capsule3DRadius / supportDirection.length(), supportDirection);
       supportingVertexToPack.add(capsule3DPosition);
-
-      if (supportDirection.dot(capsule3DAxis) > 0.0)
-         supportingVertexToPack.scaleAdd(0.5 * capsule3DLength, capsule3DAxis, supportingVertexToPack);
-      else
-         supportingVertexToPack.scaleAdd(-0.5 * capsule3DLength, capsule3DAxis, supportingVertexToPack);
+      supportingVertexToPack.scaleAdd(capsule3DHalfLength / capsule3DAxis.length(), capsule3DAxis, supportingVertexToPack);
    }
 
    /**
@@ -856,10 +855,13 @@ public class EuclidShapeTools
                                                  double cylinder3DLength, double cylinder3DRadius, Point3DBasics supportingVertexToPack)
    {
       supportingVertexToPack.set(supportDirection);
-      double dot = supportDirection.dot(cylinder3DAxis);
-      supportingVertexToPack.setAndScale(dot, cylinder3DAxis);
+
+      double axisNormInverse = 1.0 / cylinder3DAxis.length();
+      double dot = supportDirection.dot(cylinder3DAxis) * axisNormInverse;
+      supportingVertexToPack.setAndScale(dot * axisNormInverse, cylinder3DAxis);
       supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
       double distanceSquaredFromAxis = supportingVertexToPack.distanceFromOriginSquared();
+
       if (distanceSquaredFromAxis < MIN_DISTANCE_EPSILON)
       {
          supportingVertexToPack.set(cylinder3DPosition);
@@ -870,10 +872,8 @@ public class EuclidShapeTools
          supportingVertexToPack.add(cylinder3DPosition);
       }
 
-      if (dot > 0.0)
-         supportingVertexToPack.scaleAdd(0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
-      else
-         supportingVertexToPack.scaleAdd(-0.5 * cylinder3DLength, cylinder3DAxis, supportingVertexToPack);
+      double cylinder3DHalfLength = dot > 0.0 ? 0.5 * cylinder3DLength : -0.5 * cylinder3DLength;
+      supportingVertexToPack.scaleAdd(cylinder3DHalfLength * axisNormInverse, cylinder3DAxis, supportingVertexToPack);
    }
 
    /**
@@ -1892,9 +1892,7 @@ public class EuclidShapeTools
    public static void supportingVertexSphere3D(Vector3DReadOnly supportDirection, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
                                                Point3DBasics supportingVertexToPack)
    {
-      supportingVertexToPack.set(supportDirection);
-      supportingVertexToPack.scale(sphere3DRadius / supportDirection.length());
-      supportingVertexToPack.add(sphere3DPosition);
+      supportingVertexToPack.scaleAdd(sphere3DRadius / supportDirection.length(), supportDirection, sphere3DPosition);
    }
 
    /**

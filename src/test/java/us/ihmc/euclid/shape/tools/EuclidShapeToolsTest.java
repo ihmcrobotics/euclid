@@ -22,6 +22,56 @@ public class EuclidShapeToolsTest
    private static final double EPSILON = 1.0e-12;
 
    @Test
+   public void testSupportingVertexCapsule3D()
+   {
+      Random random = new Random(89737893);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double capsule3DLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         double capsule3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         Point3D capsule3DPosition = EuclidCoreRandomTools.nextPoint3D(random);
+         Vector3D capsule3DAxis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         Point3D expected = new Point3D();
+         EuclidShapeTools.supportingVertexCapsule3D(supportDirection, capsule3DPosition, capsule3DAxis, capsule3DLength, capsule3DRadius, expected);
+
+         capsule3DAxis.scale(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0));
+         supportDirection.scale(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0));
+         Point3D actual = new Point3D();
+         EuclidShapeTools.supportingVertexCapsule3D(supportDirection, capsule3DPosition, capsule3DAxis, capsule3DLength, capsule3DRadius, actual);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testSupportingVertexCylinder3D()
+   {
+      Random random = new Random(89737893);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double cylinder3DLength = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         double cylinder3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0);
+         Point3D cylinder3DPosition = EuclidCoreRandomTools.nextPoint3D(random);
+         Vector3D cylinder3DAxis = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+         Vector3D supportDirection = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         Point3D expected = new Point3D();
+         EuclidShapeTools.supportingVertexCylinder3D(supportDirection, cylinder3DPosition, cylinder3DAxis, cylinder3DLength, cylinder3DRadius, expected);
+
+         cylinder3DAxis.scale(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0));
+         supportDirection.scale(EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0));
+         Point3D actual = new Point3D();
+         EuclidShapeTools.supportingVertexCylinder3D(supportDirection, cylinder3DPosition, cylinder3DAxis, cylinder3DLength, cylinder3DRadius, actual);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
    public void testSupportingVertexCircle3D()
    {
       Random random = new Random(89737893);
