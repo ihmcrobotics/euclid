@@ -25,7 +25,20 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
+/**
+ * Implementation of a polytope view for a box.
+ * <p>
+ * Do not instantiate directly this class, instead use
+ * {@link FrameBox3DReadOnly#asConvexPolytope()}.
+ * </p>
+ * <p>
+ * This implementation registers listener to its owner such that it is always accurately
+ * representing its owner even being modified after creation of the polytope view.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
+class FrameBoxPolytope3D implements FrameBoxPolytope3DView
 {
    private final FrameBox3D box3D;
 
@@ -33,63 +46,24 @@ public class FrameBoxPolytope3D implements FrameBoxPolytope3DView
    private final Face xMinFace, yMinFace, zMinFace;
    private final Face xMaxFace, yMaxFace, zMaxFace;
    private final List<Face> faces;
-   // Edge
-   // xMax and xMin
-   private final HalfEdge xMinE0, xMinE1, xMinE2, xMinE3, xMaxE0, xMaxE1, xMaxE2, xMaxE3;
-   // yMax and yMin
-   private final HalfEdge yMinE0, yMinE1, yMinE2, yMinE3, yMaxE0, yMaxE1, yMaxE2, yMaxE3;
-   // zMax and zMin
-   private final HalfEdge zMinE0, zMinE1, zMinE2, zMinE3, zMaxE0, zMaxE1, zMaxE2, zMaxE3;
    private final List<HalfEdge> edges;
-   // Vertices zMin face (clockwise ordering around z-axis)
-   private final Vertex v4, v5, v6, v7;
-   // Vertices zMax face (clockwise ordering around z-axis)
-   private final Vertex v0, v1, v2, v3;
    private final List<Vertex> vertices;
 
-   public FrameBoxPolytope3D(FrameBox3D box3D)
+   FrameBoxPolytope3D(FrameBox3D box3D)
    {
       this.box3D = box3D;
-      DoubleSupplier xMin = () -> -0.5 * box3D.getSizeX();
-      DoubleSupplier yMin = () -> -0.5 * box3D.getSizeY();
-      DoubleSupplier zMin = () -> -0.5 * box3D.getSizeZ();
-      DoubleSupplier xMax = () -> +0.5 * box3D.getSizeX();
-      DoubleSupplier yMax = () -> +0.5 * box3D.getSizeY();
-      DoubleSupplier zMax = () -> +0.5 * box3D.getSizeZ();
+      DoubleSupplier xMin = () -> -0.5 * box3D.getSizeX(), yMin = () -> -0.5 * box3D.getSizeY(), zMin = () -> -0.5 * box3D.getSizeZ();
+      DoubleSupplier xMax = () -> +0.5 * box3D.getSizeX(), yMax = () -> +0.5 * box3D.getSizeY(), zMax = () -> +0.5 * box3D.getSizeZ();
 
-      v0 = new Vertex(xMax, yMax, zMax);
-      v1 = new Vertex(xMax, yMin, zMax);
-      v2 = new Vertex(xMin, yMin, zMax);
-      v3 = new Vertex(xMin, yMax, zMax);
-      v4 = new Vertex(xMax, yMax, zMin);
-      v5 = new Vertex(xMax, yMin, zMin);
-      v6 = new Vertex(xMin, yMin, zMin);
-      v7 = new Vertex(xMin, yMax, zMin);
+      Vertex v0 = new Vertex(xMax, yMax, zMax), v1 = new Vertex(xMax, yMin, zMax), v2 = new Vertex(xMin, yMin, zMax), v3 = new Vertex(xMin, yMax, zMax);
+      Vertex v4 = new Vertex(xMax, yMax, zMin), v5 = new Vertex(xMax, yMin, zMin), v6 = new Vertex(xMin, yMin, zMin), v7 = new Vertex(xMin, yMax, zMin);
 
-      xMinE0 = new HalfEdge(v3, v2);
-      xMinE1 = new HalfEdge(v2, v6);
-      xMinE2 = new HalfEdge(v6, v7);
-      xMinE3 = new HalfEdge(v7, v3);
-      yMinE0 = new HalfEdge(v1, v5);
-      yMinE1 = new HalfEdge(v5, v6);
-      yMinE2 = new HalfEdge(v6, v2);
-      yMinE3 = new HalfEdge(v2, v1);
-      zMinE0 = new HalfEdge(v4, v7);
-      zMinE1 = new HalfEdge(v7, v6);
-      zMinE2 = new HalfEdge(v6, v5);
-      zMinE3 = new HalfEdge(v5, v4);
-      xMaxE0 = new HalfEdge(v0, v4);
-      xMaxE1 = new HalfEdge(v4, v5);
-      xMaxE2 = new HalfEdge(v5, v1);
-      xMaxE3 = new HalfEdge(v1, v0);
-      yMaxE0 = new HalfEdge(v0, v3);
-      yMaxE1 = new HalfEdge(v3, v7);
-      yMaxE2 = new HalfEdge(v7, v4);
-      yMaxE3 = new HalfEdge(v4, v0);
-      zMaxE0 = new HalfEdge(v0, v1);
-      zMaxE1 = new HalfEdge(v1, v2);
-      zMaxE2 = new HalfEdge(v2, v3);
-      zMaxE3 = new HalfEdge(v3, v0);
+      HalfEdge xMinE0 = new HalfEdge(v3, v2), xMinE1 = new HalfEdge(v2, v6), xMinE2 = new HalfEdge(v6, v7), xMinE3 = new HalfEdge(v7, v3);
+      HalfEdge yMinE0 = new HalfEdge(v1, v5), yMinE1 = new HalfEdge(v5, v6), yMinE2 = new HalfEdge(v6, v2), yMinE3 = new HalfEdge(v2, v1);
+      HalfEdge zMinE0 = new HalfEdge(v4, v7), zMinE1 = new HalfEdge(v7, v6), zMinE2 = new HalfEdge(v6, v5), zMinE3 = new HalfEdge(v5, v4);
+      HalfEdge xMaxE0 = new HalfEdge(v0, v4), xMaxE1 = new HalfEdge(v4, v5), xMaxE2 = new HalfEdge(v5, v1), xMaxE3 = new HalfEdge(v1, v0);
+      HalfEdge yMaxE0 = new HalfEdge(v0, v3), yMaxE1 = new HalfEdge(v3, v7), yMaxE2 = new HalfEdge(v7, v4), yMaxE3 = new HalfEdge(v4, v0);
+      HalfEdge zMaxE0 = new HalfEdge(v0, v1), zMaxE1 = new HalfEdge(v1, v2), zMaxE2 = new HalfEdge(v2, v3), zMaxE3 = new HalfEdge(v3, v0);
 
       DoubleSupplier xFaceAreaSupplier = () -> box3D.getSizeY() * box3D.getSizeZ();
       DoubleSupplier yFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeZ();

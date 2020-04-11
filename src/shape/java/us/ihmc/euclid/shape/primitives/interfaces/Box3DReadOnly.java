@@ -345,6 +345,11 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       EuclidShapeTools.boundingBoxBox3D(getPosition(), getOrientation(), getSize(), boundingBoxToPack);
    }
 
+   /**
+    * Gets the {@code ConvexPolytope3DReadOnly} view backed this box.
+    * 
+    * @return the polytope view of this box.
+    */
    BoxPolytope3DView asConvexPolytope();
 
    /**

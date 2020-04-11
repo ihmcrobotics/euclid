@@ -24,7 +24,20 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
-public class FrameRampPolytope3D implements FrameRampPolytope3DView
+/**
+ * Implementation of a polytope view for a ramp.
+ * <p>
+ * Do not instantiate directly this class, instead use
+ * {@link FrameRamp3DReadOnly#asConvexPolytope()}.
+ * </p>
+ * <p>
+ * This implementation registers listener to its owner such that it is always accurately
+ * representing its owner even being modified after creation of the polytope view.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
+class FrameRampPolytope3D implements FrameRampPolytope3DView
 {
    private final FrameRamp3D ramp3D;
 
@@ -32,57 +45,23 @@ public class FrameRampPolytope3D implements FrameRampPolytope3DView
    private final Face rampFace;
    private final Face xMaxFace, yMinFace, yMaxFace, zMinFace;
    private final List<Face> faces;
-   // Edge
-   // Ramp
-   private final HalfEdge rampE0, rampE1, rampE2, rampE3;
-   // xMax
-   private final HalfEdge xMaxE0, xMaxE1, xMaxE2, xMaxE3;
-   // yMax and yMin
-   private final HalfEdge yMinE0, yMinE1, yMinE2, yMaxE0, yMaxE1, yMaxE2;
-   // zMin
-   private final HalfEdge zMinE0, zMinE1, zMinE2, zMinE3;
    private final List<HalfEdge> edges;
-   // Vertices slope face (clockwise ordering around z-axis)
-   private final Vertex v0, v1, v2, v3;
-   // Vertices of bottom xMax edge
-   private final Vertex v4, v5;
    private final List<Vertex> vertices;
 
-   public FrameRampPolytope3D(FrameRamp3D ramp3D)
+   FrameRampPolytope3D(FrameRamp3D ramp3D)
    {
       this.ramp3D = ramp3D;
-      DoubleSupplier xMin = () -> 0.0;
-      DoubleSupplier yMin = () -> -0.5 * ramp3D.getSizeY();
-      DoubleSupplier zMin = () -> 0.0;
-      DoubleSupplier xMax = () -> ramp3D.getSizeX();
-      DoubleSupplier yMax = () -> +0.5 * ramp3D.getSizeY();
-      DoubleSupplier zMax = () -> ramp3D.getSizeZ();
+      DoubleSupplier xMin = () -> 0.0, yMin = () -> -0.5 * ramp3D.getSizeY(), zMin = () -> 0.0;
+      DoubleSupplier xMax = () -> ramp3D.getSizeX(), yMax = () -> +0.5 * ramp3D.getSizeY(), zMax = () -> ramp3D.getSizeZ();
 
-      v0 = new Vertex(xMin, yMax, zMin);
-      v1 = new Vertex(xMax, yMax, zMax);
-      v2 = new Vertex(xMax, yMin, zMax);
-      v3 = new Vertex(xMin, yMin, zMin);
-      v4 = new Vertex(xMax, yMax, zMin);
-      v5 = new Vertex(xMax, yMin, zMin);
+      Vertex v0 = new Vertex(xMin, yMax, zMin), v1 = new Vertex(xMax, yMax, zMax), v2 = new Vertex(xMax, yMin, zMax);
+      Vertex v3 = new Vertex(xMin, yMin, zMin), v4 = new Vertex(xMax, yMax, zMin), v5 = new Vertex(xMax, yMin, zMin);
 
-      rampE0 = new HalfEdge(v0, v1);
-      rampE1 = new HalfEdge(v1, v2);
-      rampE2 = new HalfEdge(v2, v3);
-      rampE3 = new HalfEdge(v3, v0);
-      yMinE0 = new HalfEdge(v3, v2);
-      yMinE1 = new HalfEdge(v2, v5);
-      yMinE2 = new HalfEdge(v5, v3);
-      yMaxE0 = new HalfEdge(v0, v4);
-      yMaxE1 = new HalfEdge(v4, v1);
-      yMaxE2 = new HalfEdge(v1, v0);
-      xMaxE0 = new HalfEdge(v1, v4);
-      xMaxE1 = new HalfEdge(v4, v5);
-      xMaxE2 = new HalfEdge(v5, v2);
-      xMaxE3 = new HalfEdge(v2, v1);
-      zMinE0 = new HalfEdge(v0, v3);
-      zMinE1 = new HalfEdge(v3, v5);
-      zMinE2 = new HalfEdge(v5, v4);
-      zMinE3 = new HalfEdge(v4, v0);
+      HalfEdge rampE0 = new HalfEdge(v0, v1), rampE1 = new HalfEdge(v1, v2), rampE2 = new HalfEdge(v2, v3), rampE3 = new HalfEdge(v3, v0);
+      HalfEdge yMinE0 = new HalfEdge(v3, v2), yMinE1 = new HalfEdge(v2, v5), yMinE2 = new HalfEdge(v5, v3);
+      HalfEdge yMaxE0 = new HalfEdge(v0, v4), yMaxE1 = new HalfEdge(v4, v1), yMaxE2 = new HalfEdge(v1, v0);
+      HalfEdge xMaxE0 = new HalfEdge(v1, v4), xMaxE1 = new HalfEdge(v4, v5), xMaxE2 = new HalfEdge(v5, v2), xMaxE3 = new HalfEdge(v2, v1);
+      HalfEdge zMinE0 = new HalfEdge(v0, v3), zMinE1 = new HalfEdge(v3, v5), zMinE2 = new HalfEdge(v5, v4), zMinE3 = new HalfEdge(v4, v0);
 
       DoubleSupplier slopeFaceAreaSupplier = () -> ramp3D.getSizeY() * ramp3D.getRampLength();
       DoubleSupplier xFaceAreaSupplier = () -> ramp3D.getSizeY() * ramp3D.getSizeZ();
@@ -169,7 +148,9 @@ public class FrameRampPolytope3D implements FrameRampPolytope3DView
    {
       private final String name;
 
-      private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics(this, null, axis -> updateBoundingBox());
+      private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics(this,
+                                                                                                                                null,
+                                                                                                                                axis -> updateBoundingBox());
 
       private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroidAndArea());
       private final Vector3DReadOnly normalLocal;
