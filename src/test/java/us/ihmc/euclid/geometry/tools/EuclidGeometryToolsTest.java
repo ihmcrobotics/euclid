@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
@@ -10993,6 +10994,34 @@ public class EuclidGeometryToolsTest
          assertFalse(EuclidGeometryTools.triangleBisector2D(a, b, c, new Point2D()));
          assertNull(EuclidGeometryTools.triangleBisector2D(a, b, c));
       }
+   }
+
+   @Test
+   public void testTriangleIsoscelesHeight()
+   {
+      Random random = new Random(8734);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double legLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         double baseLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0 * legLength);
+         double height = EuclidGeometryTools.triangleIsoscelesHeight(legLength, baseLength);
+
+         // Comparing against area algorithm:
+         // triangle isosceles area is twist the area of the right triangle that formed with (leg, 0.5 * base, height)
+         double rightTriangleArea = EuclidGeometryTools.triangleAreaHeron1(legLength, height, 0.5 * baseLength);
+         double isoscelesTriangleArea = EuclidGeometryTools.triangleAreaHeron1(legLength, legLength, baseLength);
+         assertEquals(2.0 * rightTriangleArea, isoscelesTriangleArea, EPSILON);
+
+         // Comparing against pythagoras algorithm using the 
+         double pythagorasHeight = EuclidGeometryTools.pythagorasGetCathetus(legLength, 0.5 * baseLength);
+         assertEquals(height, pythagorasHeight, EPSILON);
+      }
+
+      // Test exceptions
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(0.5, 1.1));
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(-0.1, 1.1));
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(0.1, -0.1));
    }
 
    @Test

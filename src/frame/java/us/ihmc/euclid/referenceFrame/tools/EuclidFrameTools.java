@@ -65,6 +65,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -101,6 +102,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -131,6 +133,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -161,6 +164,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -197,6 +201,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -232,6 +237,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnPlane2} belongs to
     *                        the first plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -258,6 +264,7 @@ public class EuclidFrameTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -283,6 +290,7 @@ public class EuclidFrameTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -4113,6 +4121,7 @@ public class EuclidFrameTools
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
     *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleThreshold</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -4168,6 +4177,7 @@ public class EuclidFrameTools
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
     *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleThreshold</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
