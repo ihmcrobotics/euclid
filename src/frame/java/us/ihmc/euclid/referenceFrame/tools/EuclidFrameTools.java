@@ -4952,6 +4952,9 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
+    * </p>
+    * <p>
     * WARNING: This method generates garbage.
     * </p>
     *
@@ -4981,6 +4984,9 @@ public class EuclidFrameTools
     * <li>Fails and returns {@code false} if the three points are on a line.
     * <li>Fails and returns {@code false} if two or three points are equal.
     * </ul>
+    * </p>
+    * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
     * </p>
     *
     * @param firstPointOnPlane  first point on the plane. Not modified.
