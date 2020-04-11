@@ -10,6 +10,7 @@ import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -73,6 +74,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
    private final Vector3D initialSupportDirection = new Vector3D(Axis3D.Y);
    /** The last support direction used in the last evaluation. */
    private final Vector3D supportDirection = new Vector3D();
+   /** The last support direction used in the previous iteration. */
+   private final Vector3D supportDirectionPrevious = new Vector3D();
 
    /**
     * Creates a new collision detector that can be used right away to evaluate collisions.
@@ -203,6 +206,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
       Point3DReadOnly vertexA = shapeA.getSupportingVertex(supportDirection);
       supportDirection.negate();
       Point3DReadOnly vertexB = shapeB.getSupportingVertex(supportDirection);
+      supportDirection.negate();
 
       boolean areColliding = false;
 
@@ -223,7 +227,6 @@ public class GilbertJohnsonKeerthiCollisionDetector
             if (previousOutput.contains(newVertex))
             {
                boolean retry = false;
-               supportDirection.negate(); // Undoing the negate from last iteration.
 
                if (supportDirection.getX() == SUPPORT_DIRECTION_ZERO_COMPONENT)
                {
@@ -246,10 +249,12 @@ public class GilbertJohnsonKeerthiCollisionDetector
                   vertexA = shapeA.getSupportingVertex(supportDirection);
                   supportDirection.negate();
                   vertexB = shapeB.getSupportingVertex(supportDirection);
+                  supportDirection.negate();
                   continue;
                }
 
                simplex = previousOutput;
+               supportDirection.set(supportDirectionPrevious);
                areColliding = false;
                if (VERBOSE)
                   System.out.println("New vertex belongs to simplex, terminating.");
@@ -259,6 +264,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
             if (Math.abs(closestPointNormSquared - newVertex.dot(supportDirection)) <= epsilon * closestPointNormSquared)
             {
                simplex = previousOutput;
+               supportDirection.set(supportDirectionPrevious);
                areColliding = false;
                if (VERBOSE)
                   System.out.println("Progression under tolerance, terminating.");
@@ -270,15 +276,22 @@ public class GilbertJohnsonKeerthiCollisionDetector
             if (output == null)
             { // End of process
                simplex = previousOutput;
+               supportDirection.set(supportDirectionPrevious);
                areColliding = false;
                if (VERBOSE)
                   System.out.println("Closest simplex is null, terminating.");
                break;
             }
 
+            if (VERBOSE)
+               System.out.println("Support direction " + supportDirection + ", distance to origin: " + output.getDistanceToOrigin() + ", simplex size: "
+                     + output.getNumberOfVertices() + ", vertices "
+                     + EuclidCoreIOTools.getArrayString("[", "]", ", ", output.getVertices(), EuclidCoreIOTools::getTuple3DString));
+
             if (output.getDistanceSquaredToOrigin() >= previousOutput.getDistanceSquaredToOrigin())
             {
                simplex = previousOutput;
+               supportDirection.set(supportDirectionPrevious);
                areColliding = false;
                if (VERBOSE)
                   System.out.println("No progression, terminating.");
@@ -296,6 +309,8 @@ public class GilbertJohnsonKeerthiCollisionDetector
                break;
             }
 
+            supportDirectionPrevious.set(supportDirection);
+
             if (closestPointNormSquared < epsilonTriangleNormalSwitch && output.getNumberOfVertices() == 3)
                supportDirection.set(output.getTriangleNormal());
             else
@@ -311,6 +326,7 @@ public class GilbertJohnsonKeerthiCollisionDetector
             vertexA = shapeA.getSupportingVertex(supportDirection);
             supportDirection.negate();
             vertexB = shapeB.getSupportingVertex(supportDirection);
+            supportDirection.negate();
 
             previousOutput = output;
          }
