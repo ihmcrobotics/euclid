@@ -8612,7 +8612,7 @@ public class EuclidGeometryTools
    public static double triangleIsoscelesHeight(double legLength, double baseLength)
    {
       if (legLength < 0.5 * baseLength)
-         throw new IllegalArgumentException("Malformed isosceles triangle, expected legLength > baseLength / 2.0, was legLength: " + legLength
+         throw new IllegalArgumentException("Malformed isosceles triangle, expected legLength > baseLength/2, was legLength: " + legLength
                + ", baseLength/2: " + (0.5 * baseLength));
       if (baseLength < 0.0)
          throw new IllegalArgumentException("The base cannot have a negative length, baseLength = " + baseLength);
