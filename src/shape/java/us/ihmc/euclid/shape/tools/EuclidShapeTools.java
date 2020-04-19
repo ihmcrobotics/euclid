@@ -15,10 +15,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * This class provides a variety of tools for performing operations with shapes.
- * <p>
- * FIXME: Need to review every method for implicit expectation for a unit-vector.
- * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class EuclidShapeTools
@@ -2290,12 +2287,16 @@ public class EuclidShapeTools
    public static void innerSupportingVertexTorus3D(Vector3DReadOnly supportDirection, Point3DReadOnly torus3DPosition, Vector3DReadOnly torus3DAxis,
                                                    double torus3DRadius, double torus3DTubeRadius, Point3DBasics supportingVertexToPack)
    {
+      double torus3DAxisX = torus3DAxis.getX();
+      double torus3DAxisY = torus3DAxis.getY();
+      double torus3DAxisZ = torus3DAxis.getZ();
+
       // The first part is searching for the support vertex in the opposite direction of supportDirection.
       // This re-using the supporting vertex computation for a circle 3D, when the circle represents the center of the torus' tube.
       supportingVertexToPack.setAndNegate(supportDirection);
       double dot = TupleTools.dot(supportingVertexToPack, torus3DAxis);
       supportingVertexToPack.setAndScale(dot / torus3DAxis.lengthSquared(), torus3DAxis);
-      supportingVertexToPack.add(supportDirection, supportingVertexToPack);
+      supportingVertexToPack.add(supportDirection);
       supportingVertexToPack.negate();
       double distanceSquaredFromCenter = supportingVertexToPack.distanceFromOriginSquared();
 
@@ -2304,7 +2305,7 @@ public class EuclidShapeTools
          double xNonCollinearToAxis, yNonCollinearToAxis, zNonCollinearToAxis;
 
          // Purposefully picking a large tolerance to ensure sanity of the cross-product.
-         if (Math.abs(torus3DAxis.getY()) > 0.1 || Math.abs(torus3DAxis.getZ()) > 0.1)
+         if (Math.abs(torus3DAxisY) > 0.1 || Math.abs(torus3DAxisZ) > 0.1)
          {
             xNonCollinearToAxis = 1.0;
             yNonCollinearToAxis = 0.0;
@@ -2317,9 +2318,9 @@ public class EuclidShapeTools
             zNonCollinearToAxis = 0.0;
          }
 
-         double xOrthogonalToAxis = yNonCollinearToAxis * torus3DAxis.getZ() - zNonCollinearToAxis * torus3DAxis.getY();
-         double yOrthogonalToAxis = zNonCollinearToAxis * torus3DAxis.getX() - xNonCollinearToAxis * torus3DAxis.getZ();
-         double zOrthogonalToAxis = xNonCollinearToAxis * torus3DAxis.getY() - yNonCollinearToAxis * torus3DAxis.getX();
+         double xOrthogonalToAxis = yNonCollinearToAxis * torus3DAxisZ - zNonCollinearToAxis * torus3DAxisY;
+         double yOrthogonalToAxis = zNonCollinearToAxis * torus3DAxisX - xNonCollinearToAxis * torus3DAxisZ;
+         double zOrthogonalToAxis = xNonCollinearToAxis * torus3DAxisY - yNonCollinearToAxis * torus3DAxisX;
 
          supportingVertexToPack.set(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis);
          supportingVertexToPack.scale(torus3DRadius / EuclidCoreTools.norm(xOrthogonalToAxis, yOrthogonalToAxis, zOrthogonalToAxis));
@@ -2329,33 +2330,30 @@ public class EuclidShapeTools
          supportingVertexToPack.scale(torus3DRadius / EuclidCoreTools.squareRoot(distanceSquaredFromCenter));
       }
 
-      supportingVertexToPack.add(torus3DPosition);
-
       double tubeCenterX = supportingVertexToPack.getX();
       double tubeCenterY = supportingVertexToPack.getY();
       double tubeCenterZ = supportingVertexToPack.getZ();
 
       // Now we have the position of the tube section where we need to find the supporting vertex.
-      double toTubeCenterX = (tubeCenterX - torus3DPosition.getX()) / torus3DRadius;
-      double toTubeCenterY = (tubeCenterY - torus3DPosition.getY()) / torus3DRadius;
-      double toTubeCenterZ = (tubeCenterZ - torus3DPosition.getZ()) / torus3DRadius;
+      double toTubeCenterX = tubeCenterX / torus3DRadius;
+      double toTubeCenterY = tubeCenterY / torus3DRadius;
+      double toTubeCenterZ = tubeCenterZ / torus3DRadius;
 
-      double tubeLocalAxisX = torus3DAxis.getY() * toTubeCenterZ - torus3DAxis.getZ() * toTubeCenterY;
-      double tubeLocalAxisY = torus3DAxis.getZ() * toTubeCenterX - torus3DAxis.getX() * toTubeCenterZ;
-      double tubeLocalAxisZ = torus3DAxis.getX() * toTubeCenterY - torus3DAxis.getY() * toTubeCenterX;
+      double tubeLocalAxisX = torus3DAxisY * toTubeCenterZ - torus3DAxisZ * toTubeCenterY;
+      double tubeLocalAxisY = torus3DAxisZ * toTubeCenterX - torus3DAxisX * toTubeCenterZ;
+      double tubeLocalAxisZ = torus3DAxisX * toTubeCenterY - torus3DAxisY * toTubeCenterX;
+      double tubeLocalAxisNormSqured = EuclidCoreTools.normSquared(tubeLocalAxisX, tubeLocalAxisY, tubeLocalAxisZ);
 
-      supportingVertexToPack.set(supportDirection);
-      dot = TupleTools.dot(tubeLocalAxisX, tubeLocalAxisY, tubeLocalAxisZ, supportDirection)
-            / EuclidCoreTools.normSquared(tubeLocalAxisX, tubeLocalAxisY, tubeLocalAxisZ);
-      supportingVertexToPack.set(dot * tubeLocalAxisX, dot * tubeLocalAxisY, dot * tubeLocalAxisZ);
-      supportingVertexToPack.sub(supportDirection, supportingVertexToPack);
+      dot = TupleTools.dot(tubeLocalAxisX, tubeLocalAxisY, tubeLocalAxisZ, supportDirection) / tubeLocalAxisNormSqured;
+      supportingVertexToPack.set(supportDirection.getX() - dot * tubeLocalAxisX,
+                                 supportDirection.getY() - dot * tubeLocalAxisY,
+                                 supportDirection.getZ() - dot * tubeLocalAxisZ);
       distanceSquaredFromCenter = supportingVertexToPack.distanceFromOriginSquared();
 
       if (distanceSquaredFromCenter < MIN_DISTANCE_EPSILON)
       { // We'll compute the vertex that is the closest to the torus axis.
          supportingVertexToPack.set(tubeLocalAxisX, tubeLocalAxisY, tubeLocalAxisZ);
-         supportingVertexToPack.negate();
-         supportingVertexToPack.scale(torus3DTubeRadius / EuclidCoreTools.norm(tubeLocalAxisX, tubeLocalAxisY, tubeLocalAxisZ));
+         supportingVertexToPack.scale(-torus3DTubeRadius / EuclidCoreTools.squareRoot(tubeLocalAxisNormSqured));
       }
       else
       {
@@ -2363,6 +2361,7 @@ public class EuclidShapeTools
       }
 
       supportingVertexToPack.add(tubeCenterX, tubeCenterY, tubeCenterZ);
+      supportingVertexToPack.add(torus3DPosition);
    }
 
    /**
