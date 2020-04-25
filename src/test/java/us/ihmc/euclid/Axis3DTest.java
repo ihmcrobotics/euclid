@@ -1,153 +1,89 @@
 package us.ihmc.euclid;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class Axis3DTest
 {
-   private double allowedDelta = 1e-7;
-   private Axis3D xAxis = Axis3D.X, yAxis = Axis3D.Y, zAxis = Axis3D.Z;
-   private boolean touchedX, touchedY, touchedZ;
-   private Random random = new Random(12345);
-   private Vector3D randomVector = new Vector3D(random.nextDouble(), random.nextDouble(), random.nextDouble());
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void testOrdinals()
    {
-      assertEquals(xAxis.ordinal(), 0, allowedDelta);
-      assertEquals(yAxis.ordinal(), 1, allowedDelta);
-      assertEquals(zAxis.ordinal(), 2, allowedDelta);
+      assertEquals(Axis3D.X.ordinal(), 0);
+      assertEquals(Axis3D.Y.ordinal(), 1);
+      assertEquals(Axis3D.Z.ordinal(), 2);
    }
 
    @Test
-   public void testAxisValuesGetter()
+   public void testGetElement()
    {
-      assertEquals(3, Axis3D.values().length);
+      Random random = new Random(436566);
 
-      touchedX = false;
-      touchedY = false;
-      touchedZ = false;
-
-      for (Axis3D axis : Axis3D.values())
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         switch (axis)
+         Point3D point3D = EuclidCoreRandomTools.nextPoint3D(random);
+         assertEquals(point3D.getX(), Axis3D.X.getElement(point3D));
+         assertEquals(point3D.getY(), Axis3D.Y.getElement(point3D));
+         assertEquals(point3D.getZ(), Axis3D.Z.getElement(point3D));
+
+         for (int j = 0; j < 3; j++)
          {
-            case X:
-               touchedX = true;
-
-               break;
-
-            case Y:
-               touchedY = true;
-
-               break;
-
-            case Z:
-               touchedZ = true;
-
-               break;
+            assertEquals(point3D.getElement(j), Axis3D.values[j].getElement(point3D));
          }
       }
-
-      assertTrue(touchedX);
-      assertTrue(touchedY);
-      assertTrue(touchedZ);
    }
 
    @Test
-   public void testAxisValuesField()
+   public void testSetElement()
    {
-      assertEquals(3, Axis3D.values.length);
+      Random random = new Random(436566);
 
-      touchedX = false;
-      touchedY = false;
-      touchedZ = false;
-
-      for (Axis3D axis : Axis3D.values)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         switch (axis)
+         Point3D original = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D actual = new Point3D(original);
+         Point3D expected = new Point3D(original);
+         double newValue = random.nextDouble();
+
+         for (int j = 0; j < 3; j++)
          {
-            case X:
-               touchedX = true;
-
-               break;
-
-            case Y:
-               touchedY = true;
-
-               break;
-
-            case Z:
-               touchedZ = true;
-
-               break;
+            Axis3D.values[j].setElement(actual, newValue);
+            expected.setElement(j, newValue);
+            assertEquals(expected, actual);
          }
       }
-
-      assertTrue(touchedX);
-      assertTrue(touchedY);
-      assertTrue(touchedZ);
    }
 
    @Test
-   public void testAxisVectorsForCorrectValues()
+   public void testVectorValues()
    {
-      Vector3DReadOnly xAxisVector = xAxis;
-      Vector3DReadOnly yAxisVector = yAxis;
-      Vector3DReadOnly zAxisVector = zAxis;
+      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 0, 0), Axis3D.X, 0.0);
+      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, 1, 0), Axis3D.Y, 0.0);
+      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, 0, 1), Axis3D.Z, 0.0);
 
-      assertTrue(xAxisVector != null);
-      assertTrue(yAxisVector != null);
-      assertTrue(zAxisVector != null);
-
-      assertEquals(1.0, xAxisVector.getX(), allowedDelta);
-      assertEquals(0.0, xAxisVector.getY(), allowedDelta);
-      assertEquals(0.0, xAxisVector.getZ(), allowedDelta);
-      assertEquals(0.0, yAxisVector.getX(), allowedDelta);
-      assertEquals(1.0, yAxisVector.getY(), allowedDelta);
-      assertEquals(0.0, yAxisVector.getZ(), allowedDelta);
-      assertEquals(0.0, zAxisVector.getX(), allowedDelta);
-      assertEquals(0.0, zAxisVector.getY(), allowedDelta);
-      assertEquals(1.0, zAxisVector.getZ(), allowedDelta);
+      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(-1, 0, 0), Axis3D.X.negated(), 0.0);
+      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, -1, 0), Axis3D.Y.negated(), 0.0);
+      EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, 0, -1), Axis3D.Z.negated(), 0.0);
    }
 
    @Test
-   public void testAxisSetterWorks()
+   public void testNextAndPrevious()
    {
-      double newXValue = random.nextDouble(), newYValue = random.nextDouble(), newZValue = random.nextDouble();
+      assertEquals(Axis3D.X.next(), Axis3D.Y);
+      assertEquals(Axis3D.Y.next(), Axis3D.Z);
+      assertEquals(Axis3D.Z.next(), Axis3D.X);
 
-      Axis3D.set(randomVector, Axis3D.X, newXValue);
-      Axis3D.set(randomVector, Axis3D.Y, newYValue);
-      Axis3D.set(randomVector, Axis3D.Z, newZValue);
-
-      assertEquals(newXValue, randomVector.getX(), allowedDelta);
-      assertEquals(newYValue, randomVector.getY(), allowedDelta);
-      assertEquals(newZValue, randomVector.getZ(), allowedDelta);
-   }
-
-   @Test
-   public void testAxisGetterWorks()
-   {
-      assertEquals(randomVector.getX(), Axis3D.get(randomVector, Axis3D.X), allowedDelta);
-      assertEquals(randomVector.getY(), Axis3D.get(randomVector, Axis3D.Y), allowedDelta);
-      assertEquals(randomVector.getZ(), Axis3D.get(randomVector, Axis3D.Z), allowedDelta);
-   }
-
-   @Test
-   public void testClockwiseAxisGetters()
-   {
-      assertEquals(Axis3D.Z, Axis3D.X.getNextClockwiseAxis());
-      assertEquals(Axis3D.X, Axis3D.Y.getNextClockwiseAxis());
-      assertEquals(Axis3D.Y, Axis3D.Z.getNextClockwiseAxis());
-      assertEquals(Axis3D.Y, Axis3D.X.getNextCounterClockwiseAxis());
-      assertEquals(Axis3D.Z, Axis3D.Y.getNextCounterClockwiseAxis());
-      assertEquals(Axis3D.X, Axis3D.Z.getNextCounterClockwiseAxis());
+      assertEquals(Axis3D.X.previous(), Axis3D.Z);
+      assertEquals(Axis3D.Y.previous(), Axis3D.X);
+      assertEquals(Axis3D.Z.previous(), Axis3D.Y);
    }
 }
