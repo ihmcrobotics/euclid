@@ -4,6 +4,7 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -17,13 +18,13 @@ public enum Axis2D implements UnitVector2DReadOnly
    X(1.0, 0.0)
    {
       @Override
-      public double getElement(Tuple2DReadOnly tuple)
+      public double extract(Tuple2DReadOnly tuple)
       {
          return tuple.getX();
       }
 
       @Override
-      public void setElement(Tuple2DBasics tupleToUpdate, double value)
+      public void insert(Tuple2DBasics tupleToUpdate, double value)
       {
          tupleToUpdate.setX(value);
       }
@@ -47,13 +48,13 @@ public enum Axis2D implements UnitVector2DReadOnly
    Y(0.0, 1.0)
    {
       @Override
-      public double getElement(Tuple2DReadOnly tuple)
+      public double extract(Tuple2DReadOnly tuple)
       {
          return tuple.getY();
       }
 
       @Override
-      public void setElement(Tuple2DBasics tupleToUpdate, double value)
+      public void insert(Tuple2DBasics tupleToUpdate, double value)
       {
          tupleToUpdate.setY(value);
       }
@@ -94,6 +95,12 @@ public enum Axis2D implements UnitVector2DReadOnly
    public UnitVector2DReadOnly negated()
    {
       return negated;
+   }
+
+   @Override
+   public double dot(Vector2DReadOnly other)
+   {
+      return extract(other);
    }
 
    /** {@inheritDoc} */
@@ -153,7 +160,7 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @param tupleToUpdate the tuple to update. Modified.
     * @param value         the new value for the tuple's component.
     */
-   public abstract void setElement(Tuple2DBasics tupleToUpdate, double value);
+   public abstract void insert(Tuple2DBasics tupleToUpdate, double value);
 
    /**
     * Sets the value of {@code tupleToUpdate} for the component along this axis.
@@ -161,28 +168,28 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @param tupleToUpdate the tuple to update. Modified.
     * @param value         the new value for the tuple's component.
     */
-   public void setElement(Tuple3DBasics tupleToUpdate, double value)
+   public void insert(Tuple3DBasics tupleToUpdate, double value)
    {
-      asAxis3D().setElement(tupleToUpdate, value);
+      asAxis3D().insert(tupleToUpdate, value);
    }
 
    /**
     * Gets the value of {@code tupleToUpdate} for the component along this axis.
     *
-    * @param tuple the tuple to get the component's value of. Modified.
+    * @param tuple the tuple to get the component's value of. Not modified.
     * @return the compoent's value.
     */
-   public abstract double getElement(Tuple2DReadOnly tuple);
+   public abstract double extract(Tuple2DReadOnly tuple);
 
    /**
     * Gets the value of {@code tupleToUpdate} for the component along this axis.
     *
-    * @param tuple the tuple to get the component's value of. Modified.
+    * @param tuple the tuple to get the component's value of. Not modified.
     * @return the compoent's value.
     */
-   public double getElement(Tuple3DReadOnly tuple)
+   public double extract(Tuple3DReadOnly tuple)
    {
-      return asAxis3D().getElement(tuple);
+      return asAxis3D().extract(tuple);
    }
 
    /**
@@ -209,12 +216,12 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @param tuple the tuple to get value from. Not modified.
     * @param axis  the {@link Axis2D} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}.
-    * @deprecated Use {@link #getElement(Tuple2DReadOnly)} instead.
+    * @deprecated Use {@code tuple.getElement(axis)} instead.
     */
    @Deprecated
    public static double get(Tuple2DReadOnly tuple, Axis2D axis)
    {
-      return axis.getElement(tuple);
+      return axis.extract(tuple);
    }
 
    /**
@@ -223,12 +230,12 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @param tupleToModify the tuple to set value of. Modified.
     * @param axis          the {@link Axis2D} to set value for. Not modified.
     * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
-    * @deprecated Use {@link #setElement(Tuple2DBasics, double)} instead.
+    * @deprecated Use {@code tupleToModify.setElement(axis, value)} instead.
     */
    @Deprecated
    public static void set(Tuple2DBasics tupleToModify, Axis2D axis, double value)
    {
-      axis.setElement(tupleToModify, value);
+      axis.insert(tupleToModify, value);
    }
 
    /**
@@ -237,12 +244,12 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @param tuple the tuple to get value from. Not modified.
     * @param axis  the {@link Axis2D} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}.
-    * @deprecated Use {@link #getElement(Tuple3DReadOnly)} instead.
+    * @deprecated Use {@code tuple.getElement(axis)} instead.
     */
    @Deprecated
    public static double get(Tuple3DReadOnly tuple, Axis2D axis)
    {
-      return axis.getElement(tuple);
+      return axis.extract(tuple);
    }
 
    /**
@@ -251,12 +258,12 @@ public enum Axis2D implements UnitVector2DReadOnly
     * @param tupleToModify the tuple to set value of. Modified.
     * @param axis          the {@link Axis2D} to set value for. Not modified.
     * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
-    * @deprecated Use {@link #setElement(Tuple3DBasics, double)} instead.
+    * @deprecated Use {@code tupleToModify.setElement(axis, value)} instead.
     */
    @Deprecated
    public static void set(Tuple3DBasics tupleToModify, Axis2D axis, double value)
    {
-      axis.setElement(tupleToModify, value);
+      axis.insert(tupleToModify, value);
    }
 
    /**

@@ -4,6 +4,7 @@ import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * {@code Axis3D} can be used to provide a simple and readable way to refer the three main axes of a
@@ -15,13 +16,13 @@ public enum Axis3D implements UnitVector3DReadOnly
    X(1.0, 0.0, 0.0)
    {
       @Override
-      public double getElement(Tuple3DReadOnly tuple)
+      public double extract(Tuple3DReadOnly tuple)
       {
          return tuple.getX();
       }
 
       @Override
-      public void setElement(Tuple3DBasics tupleToUpdate, double value)
+      public void insert(Tuple3DBasics tupleToUpdate, double value)
       {
          tupleToUpdate.setX(value);
       }
@@ -45,13 +46,13 @@ public enum Axis3D implements UnitVector3DReadOnly
    Y(0.0, 1.0, 0.0)
    {
       @Override
-      public double getElement(Tuple3DReadOnly tuple)
+      public double extract(Tuple3DReadOnly tuple)
       {
          return tuple.getY();
       }
 
       @Override
-      public void setElement(Tuple3DBasics tupleToUpdate, double value)
+      public void insert(Tuple3DBasics tupleToUpdate, double value)
       {
          tupleToUpdate.setY(value);
       }
@@ -75,13 +76,13 @@ public enum Axis3D implements UnitVector3DReadOnly
    Z(0.0, 0.0, 1.0)
    {
       @Override
-      public double getElement(Tuple3DReadOnly tuple)
+      public double extract(Tuple3DReadOnly tuple)
       {
          return tuple.getZ();
       }
 
       @Override
-      public void setElement(Tuple3DBasics tupleToUpdate, double value)
+      public void insert(Tuple3DBasics tupleToUpdate, double value)
       {
          tupleToUpdate.setZ(value);
       }
@@ -123,6 +124,12 @@ public enum Axis3D implements UnitVector3DReadOnly
    public UnitVector3DReadOnly negated()
    {
       return negated;
+   }
+
+   @Override
+   public double dot(Vector3DReadOnly other)
+   {
+      return extract(other);
    }
 
    /** {@inheritDoc} */
@@ -204,15 +211,15 @@ public enum Axis3D implements UnitVector3DReadOnly
     * @param tupleToUpdate the tuple to update. Modified.
     * @param value         the new value for the tuple's component.
     */
-   public abstract void setElement(Tuple3DBasics tupleToUpdate, double value);
+   public abstract void insert(Tuple3DBasics tupleToUpdate, double value);
 
    /**
     * Gets the value of {@code tupleToUpdate} for the component along this axis.
     * 
-    * @param tuple the tuple to get the component's value of. Modified.
+    * @param tuple the tuple to get the component's value of. Not modified.
     * @return the compoent's value.
     */
-   public abstract double getElement(Tuple3DReadOnly tuple);
+   public abstract double extract(Tuple3DReadOnly tuple);
 
    /**
     * Obtains the next axis.
@@ -250,12 +257,12 @@ public enum Axis3D implements UnitVector3DReadOnly
     * @param tuple the tuple to get value from. Not modified.
     * @param axis  the {@link Axis3D} to get value for. Not modified.
     * @return the double value of {@code tuple} for {@code axis}.
-    * @deprecated Use {@link #getElement(Tuple3DReadOnly)} instead.
+    * @deprecated Use {@code tuple.getElement(axis)} instead.
     */
    @Deprecated
    public static double get(Tuple3DReadOnly tuple, Axis3D axis)
    {
-      return axis.getElement(tuple);
+      return axis.extract(tuple);
    }
 
    /**
@@ -264,11 +271,11 @@ public enum Axis3D implements UnitVector3DReadOnly
     * @param tupleToModify the tuple to set value of. Modified.
     * @param axis          the {@link Axis3D} to set value for. Not modified.
     * @param value         the double value to set {@code axis} of {@code tupleToModify} to.
-    * @deprecated Use {@link #setElement(Tuple3DBasics, double)} instead.
+    * @deprecated Use {@code tupleToModify.setElement(axis, value)} instead.
     */
    public static void set(Tuple3DBasics tupleToModify, Axis3D axis, double value)
    {
-      axis.setElement(tupleToModify, value);
+      axis.insert(tupleToModify, value);
    }
 
    /**

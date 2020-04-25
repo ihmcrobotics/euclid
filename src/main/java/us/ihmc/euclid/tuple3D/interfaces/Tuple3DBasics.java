@@ -2,6 +2,7 @@ package us.ihmc.euclid.tuple3D.interfaces;
 
 import org.ejml.data.DenseMatrix64F;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -126,6 +127,17 @@ public interface Tuple3DBasics extends Tuple3DReadOnly, Clearable, Transformable
    default void clipToMinMax(double min, double max)
    {
       setAndClipToMinMax(min, max, this);
+   }
+
+   /**
+    * Selects and sets the component of this tuple corresponding to the given {@code axis}.
+    *
+    * @param axis  the axis of the component to set.
+    * @param value the new value of the selected component.
+    */
+   default void setElement(Axis3D axis, double value)
+   {
+      axis.insert(this, value);
    }
 
    /**

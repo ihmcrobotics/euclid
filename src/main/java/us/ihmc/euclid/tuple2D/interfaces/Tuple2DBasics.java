@@ -2,6 +2,7 @@ package us.ihmc.euclid.tuple2D.interfaces;
 
 import org.ejml.data.DenseMatrix64F;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -121,6 +122,17 @@ public interface Tuple2DBasics extends Tuple2DReadOnly, Clearable, Transformable
    default void clipToMinMax(double min, double max)
    {
       setAndClipToMinMax(min, max, this);
+   }
+
+   /**
+    * Selects and sets the component of this tuple corresponding to the given {@code axis}.
+    *
+    * @param axis  the axis of the component to set.
+    * @param value the new value of the selected component.
+    */
+   default void setElement(Axis2D axis, double value)
+   {
+      axis.insert(this, value);
    }
 
    /**

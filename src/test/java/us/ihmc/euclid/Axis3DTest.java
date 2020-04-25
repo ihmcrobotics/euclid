@@ -24,6 +24,24 @@ public class Axis3DTest
    }
 
    @Test
+   public void testDot()
+   {
+      Random random = new Random(3249783);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         for (int j = 0; j < 3; j++)
+         {
+            Axis3D axis = Axis3D.values[j];
+            Vector3D axisVector = new Vector3D(axis);
+            Vector3D otherVector = EuclidCoreRandomTools.nextVector3D(random);
+
+            assertEquals(axisVector.dot(otherVector), axis.dot(otherVector));
+         }
+      }
+   }
+
+   @Test
    public void testGetElement()
    {
       Random random = new Random(436566);
@@ -31,13 +49,13 @@ public class Axis3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Point3D point3D = EuclidCoreRandomTools.nextPoint3D(random);
-         assertEquals(point3D.getX(), Axis3D.X.getElement(point3D));
-         assertEquals(point3D.getY(), Axis3D.Y.getElement(point3D));
-         assertEquals(point3D.getZ(), Axis3D.Z.getElement(point3D));
+         assertEquals(point3D.getX(), Axis3D.X.extract(point3D));
+         assertEquals(point3D.getY(), Axis3D.Y.extract(point3D));
+         assertEquals(point3D.getZ(), Axis3D.Z.extract(point3D));
 
          for (int j = 0; j < 3; j++)
          {
-            assertEquals(point3D.getElement(j), Axis3D.values[j].getElement(point3D));
+            assertEquals(point3D.getElement(j), Axis3D.values[j].extract(point3D));
          }
       }
    }
@@ -56,7 +74,7 @@ public class Axis3DTest
 
          for (int j = 0; j < 3; j++)
          {
-            Axis3D.values[j].setElement(actual, newValue);
+            Axis3D.values[j].insert(actual, newValue);
             expected.setElement(j, newValue);
             assertEquals(expected, actual);
          }
