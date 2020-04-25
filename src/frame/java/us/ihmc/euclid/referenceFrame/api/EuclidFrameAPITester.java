@@ -186,6 +186,19 @@ public class EuclidFrameAPITester
    }
 
    /**
+    * Registers the read-only API for a frameless type that does not have a frame type equivalent.
+    * <p>
+    * This is needed for preventing false assertion errors.
+    * </p>
+    *
+    * @param framelessReadOnlyType the read-only API of the frameless geometry type.
+    */
+   public void registerFramelessReadOnlyType(Class<?> framelessReadOnlyType)
+   {
+      framelessTypesWithoutFrameEquivalent.add(framelessReadOnlyType);
+   }
+
+   /**
     * Registers the read-only and basics API for a frameless type that does not have a frame type
     * equivalent.
     * <p>

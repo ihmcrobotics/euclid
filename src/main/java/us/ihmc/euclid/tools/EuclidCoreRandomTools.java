@@ -2,6 +2,8 @@ package us.ihmc.euclid.tools;
 
 import java.util.Random;
 
+import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.AxisAngle32;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
@@ -61,6 +63,28 @@ public class EuclidCoreRandomTools
    public static <T> T nextElementIn(Random random, T[] array)
    {
       return array[random.nextInt(array.length)];
+   }
+
+   /**
+    * Picks at random one of the constants in {@link Axis2D}.
+    * 
+    * @param random the random generator to use.
+    * @return the next axis picked at random.
+    */
+   public static Axis2D nextAxis2D(Random random)
+   {
+      return nextElementIn(random, Axis2D.values);
+   }
+
+   /**
+    * Picks at random one of the constants in {@link Axis3D}.
+    * 
+    * @param random the random generator to use.
+    * @return the next axis picked at random.
+    */
+   public static Axis3D nextAxis3D(Random random)
+   {
+      return nextElementIn(random, Axis3D.values);
    }
 
    /**
