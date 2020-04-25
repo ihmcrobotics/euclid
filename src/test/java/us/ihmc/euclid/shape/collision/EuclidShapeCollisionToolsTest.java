@@ -169,8 +169,8 @@ public class EuclidShapeCollisionToolsTest
       { // PointShape outside the Box closest to a randomly picked edge
          Box3D box3D = EuclidShapeRandomTools.nextBox3D(random);
          Axis3D edgeAxis = Axis3D.values[random.nextInt(3)];
-         Axis3D otherAxis1 = edgeAxis.getNextClockwiseAxis();
-         Axis3D otherAxis2 = otherAxis1.getNextClockwiseAxis();
+         Axis3D otherAxis1 = edgeAxis.previous();
+         Axis3D otherAxis2 = otherAxis1.previous();
          double signAxis1 = random.nextBoolean() ? -1.0 : 1.0;
          double signAxis2 = random.nextBoolean() ? -1.0 : 1.0;
          Vector3D direction1 = new Vector3D();
@@ -1463,8 +1463,8 @@ public class EuclidShapeCollisionToolsTest
    public static Point3D[] getBox3DFaceVertices(Axis3D axis, Bound bound, Box3DReadOnly box3D)
    {
       Point3D[] faceVertices = new Point3D[4];
-      Axis3D otherAxis1 = axis.getNextClockwiseAxis();
-      Axis3D otherAxis2 = otherAxis1.getNextClockwiseAxis();
+      Axis3D otherAxis1 = axis.previous();
+      Axis3D otherAxis2 = otherAxis1.previous();
 
       for (int i = 0; i < 4; i++)
       {

@@ -9643,8 +9643,8 @@ public class EuclidGeometryToolsTest
 
          performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
 
-         Axis3D otherAxis1 = planeNormal.getNextClockwiseAxis();
-         Axis3D otherAxis2 = otherAxis1.getNextClockwiseAxis();
+         Axis3D otherAxis1 = planeNormal.previous();
+         Axis3D otherAxis2 = otherAxis1.previous();
 
          Vector3D orthogonal1 = new Vector3D(otherAxis1);
          Vector3D orthogonal2 = new Vector3D(otherAxis2);
