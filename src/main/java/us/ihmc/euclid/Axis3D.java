@@ -1,5 +1,6 @@
 package us.ihmc.euclid;
 
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 
@@ -29,12 +30,23 @@ public enum Axis3D implements UnitVector3DReadOnly
    public static final Axis3D[] values = values();
 
    private final double x, y, z;
+   private final UnitVector3DReadOnly negated = EuclidCoreFactories.newNegativeLinkedUnitVector3D(this);
 
    Axis3D(double x, double y, double z)
    {
       this.x = x;
       this.y = y;
       this.z = z;
+   }
+
+   /**
+    * Returns a view of this axis negated.
+    * 
+    * @return this axis negated.
+    */
+   public UnitVector3DReadOnly negated()
+   {
+      return negated;
    }
 
    /** {@inheritDoc} */

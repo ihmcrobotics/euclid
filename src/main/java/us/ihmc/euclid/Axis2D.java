@@ -1,5 +1,6 @@
 package us.ihmc.euclid;
 
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -25,11 +26,22 @@ public enum Axis2D implements UnitVector2DReadOnly
    public static final Axis2D[] values = values();
 
    private final double x, y;
+   private final UnitVector2DReadOnly negated = EuclidCoreFactories.newNegativeLinkedUnitVector2D(this);
 
    Axis2D(double x, double y)
    {
       this.x = x;
       this.y = y;
+   }
+
+   /**
+    * Returns a view of this axis negated.
+    * 
+    * @return this axis negated.
+    */
+   public UnitVector2DReadOnly negated()
+   {
+      return negated;
    }
 
    /** {@inheritDoc} */
