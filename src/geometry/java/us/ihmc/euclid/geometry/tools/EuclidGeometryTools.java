@@ -1362,6 +1362,106 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    */
+   public static boolean triangleCircumcenter(Point2DReadOnly A, Point2DReadOnly B, Point2DReadOnly C, Point2DBasics circumcenterToPack)
+   {
+      double ASquared = A.distanceFromOriginSquared();
+      double BSquared = B.distanceFromOriginSquared();
+      double CSquared = C.distanceFromOriginSquared();
+
+      double ByCy = B.getY() - C.getY();
+      double CxBx = C.getX() - B.getX();
+      double CSquaredBSqured = CSquared - BSquared;
+
+      double a = 0.5 / A.getX() * ByCy + A.getY() * CxBx + B.getX() * C.getY() - B.getY() * C.getX();
+
+      if (!Double.isFinite(a))
+         return false;
+
+      double sx = ASquared * ByCy + A.getY() * CSquaredBSqured + BSquared * C.getY() - B.getY() * CSquared;
+      double sy = -A.getX() * CSquaredBSqured + ASquared * CxBx + B.getX() * CSquared - BSquared * C.getX();
+
+      circumcenterToPack.set(sx, sy);
+      circumcenterToPack.scale(a);
+      return true;
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    */
+   public static boolean triangleCircumcenter(Point3DReadOnly A, Point3DReadOnly B, Point3DReadOnly C, Point3DBasics circumcenterToPack)
+   {
+      double ux = B.getX() - C.getX();
+      double uy = B.getY() - C.getY();
+      double uz = B.getZ() - C.getZ();
+
+      double vx = A.getX() - C.getX();
+      double vy = A.getY() - C.getY();
+      double vz = A.getZ() - C.getZ();
+
+      double wx = A.getX() - B.getX();
+      double wy = A.getY() - B.getY();
+      double wz = A.getZ() - B.getZ();
+
+      double uSquared = EuclidCoreTools.normSquared(ux, uy, uz);
+      double vSquared = EuclidCoreTools.normSquared(vx, vy, vz);
+      double wSquared = EuclidCoreTools.normSquared(wx, wy, wz);
+      double uv = ux * vx + uy * vy + uz * vz;
+      double uw = ux * wx + uy * wy + uz * wz;
+      double vw = vx * wx + vy * wy + vz * wz;
+
+      double ucwx = wy * uz - wz * uy;
+      double ucwy = wz * ux - wx * uz;
+      double ucwz = wx * uy - wy * ux;
+      double ucwSquared = 0.5 / EuclidCoreTools.normSquared(ucwx, ucwy, ucwz);
+
+      if (!Double.isFinite(ucwSquared))
+         return false;
+
+      double alpha = uSquared * vw * ucwSquared;
+      double beta = -vSquared * uw * ucwSquared;
+      double gamma = wSquared * uv * ucwSquared;
+
+      double px = alpha * A.getX() + beta * B.getX() + gamma * C.getX();
+      double py = alpha * A.getY() + beta * B.getY() + gamma * C.getY();
+      double pz = alpha * A.getZ() + beta * B.getZ() + gamma * C.getZ();
+      circumcenterToPack.set(px, py, pz);
+
+      return true;
+   }
+
+   /**
     * Calculates the distance between two points.
     *
     * @param firstPointX  the x-coordinate of the first point.
@@ -8413,7 +8513,7 @@ public class EuclidGeometryTools
     * method fails and returns {@code false}.
     * </ul>
     * </p>
-    * 
+    *
     * @param p1                     the first point that belongs to the sphere. Not modified.
     * @param p2                     the second point that belongs to the sphere. Not modified.
     * @param p3                     the third point that belongs to the sphere. Not modified.
@@ -8584,7 +8684,7 @@ public class EuclidGeometryTools
 
    /**
     * Computes the radius of the circumcircle of the triangle ABC given the length of its edges.
-    * 
+    *
     * @param lengthA the length of the side A of the triangle.
     * @param lengthB the length of the side B of the triangle.
     * @param lengthC the length of the side C of the triangle.
@@ -8594,7 +8694,7 @@ public class EuclidGeometryTools
    {
       // From https://en.wikipedia.org/wiki/Triangle#Circumradius_and_inradius
       double circumradiusSquared = lengthA * lengthA * lengthB * lengthB * lengthC * lengthC;
-      circumradiusSquared /= ((lengthA + lengthB + lengthC) * (-lengthA + lengthB + lengthC) * (lengthA - lengthB + lengthC) * (lengthA + lengthB - lengthC));
+      circumradiusSquared /= (lengthA + lengthB + lengthC) * (-lengthA + lengthB + lengthC) * (lengthA - lengthB + lengthC) * (lengthA + lengthB - lengthC);
       return Math.sqrt(circumradiusSquared);
    }
 
@@ -8604,7 +8704,7 @@ public class EuclidGeometryTools
     * The height is the line that originates from the triangle's base to end at the triangle's apex
     * (vertex on the opposite side of the base).
     * </p>
-    * 
+    *
     * @param legLength  the length of the sides that are of same length.
     * @param baseLength the length of the side that has different length from the other sides.
     * @return the length of the height.
@@ -8612,8 +8712,8 @@ public class EuclidGeometryTools
    public static double triangleIsoscelesHeight(double legLength, double baseLength)
    {
       if (legLength < 0.5 * baseLength)
-         throw new IllegalArgumentException("Malformed isosceles triangle, expected legLength > baseLength/2, was legLength: " + legLength
-               + ", baseLength/2: " + (0.5 * baseLength));
+         throw new IllegalArgumentException("Malformed isosceles triangle, expected legLength > baseLength/2, was legLength: " + legLength + ", baseLength/2: "
+               + 0.5 * baseLength);
       if (baseLength < 0.0)
          throw new IllegalArgumentException("The base cannot have a negative length, baseLength = " + baseLength);
 

@@ -1404,6 +1404,77 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testTriangleCircumscribedCircle()
+   {
+      Random random = new Random(3456436);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Building the triangle knowing its circumcenter.
+         Point2D expected = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         Point2D A = new Point2D();
+         Point2D B = new Point2D();
+         Point2D C = new Point2D();
+
+         A.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+         B.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+         C.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+
+         Point2D actual = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Computing the circle position for 3 random points and verifying its properties.
+         Point2D A = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D B = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D C = EuclidCoreRandomTools.nextPoint2D(random);
+
+         Point2D circumcenter = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenter);
+
+         assertEquals(circumcenter.distance(A), circumcenter.distance(B), EPSILON);
+         assertEquals(circumcenter.distance(A), circumcenter.distance(C), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Building the triangle knowing its circumcenter.
+         Point3D expected = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         Point3D A = new Point3D();
+         Point3D B = new Point3D();
+         Point3D C = new Point3D();
+
+         Vector3D normal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         A.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+         B.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+         C.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+
+         Point3D actual = new Point3D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Computing the circle position for 3 random points and verifying its properties.
+         Point3D A = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D B = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D C = EuclidCoreRandomTools.nextPoint3D(random);
+
+         Point3D circumcenter = new Point3D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenter);
+
+         assertEquals(circumcenter.distance(A), circumcenter.distance(B), EPSILON);
+         assertEquals(circumcenter.distance(A), circumcenter.distance(C), EPSILON);
+      }
+
+   }
+
+   @Test
    public void testDistanceBetweenPoint2Ds() throws Exception
    {
       Random random = new Random(23423L);
