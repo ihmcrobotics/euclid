@@ -777,24 +777,44 @@ public class EuclidGeometryTools
    public static void orientation3DFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX,
                                                              double secondVectorY, double secondVectorZ, Orientation3DBasics rotationToPack)
    {
-      double firstVectorNormSquared = normSquared(firstVectorX, firstVectorY, firstVectorZ);
+      orientation3DFromFirstToSecondVector3D(firstVectorX,
+                                             firstVectorY,
+                                             firstVectorZ,
+                                             false,
+                                             secondVectorX,
+                                             secondVectorY,
+                                             secondVectorZ,
+                                             false,
+                                             rotationToPack);
+   }
 
-      if (!EuclidCoreTools.epsilonEquals(firstVectorNormSquared, 1.0, ONE_MILLIONTH))
+   private static void orientation3DFromFirstToSecondVector3D(double firstVectorX, double firstVectorY, double firstVectorZ, boolean isFirstVectorUnitary,
+                                                              double secondVectorX, double secondVectorY, double secondVectorZ, boolean isSecondVectorUnitary,
+                                                              Orientation3DBasics rotationToPack)
+   {
+      if (!isFirstVectorUnitary)
       {
-         double firstVectorInvLength = 1.0 / EuclidCoreTools.squareRoot(firstVectorNormSquared);
-         firstVectorX *= firstVectorInvLength;
-         firstVectorY *= firstVectorInvLength;
-         firstVectorZ *= firstVectorInvLength;
+         double firstVectorNormSquared = normSquared(firstVectorX, firstVectorY, firstVectorZ);
+
+         if (!EuclidCoreTools.epsilonEquals(firstVectorNormSquared, 1.0, ONE_MILLIONTH))
+         {
+            double firstVectorInvLength = 1.0 / EuclidCoreTools.squareRoot(firstVectorNormSquared);
+            firstVectorX *= firstVectorInvLength;
+            firstVectorY *= firstVectorInvLength;
+            firstVectorZ *= firstVectorInvLength;
+         }
       }
 
-      double secondVectorNormSquared = normSquared(secondVectorX, secondVectorY, secondVectorZ);
-
-      if (!EuclidCoreTools.epsilonEquals(secondVectorNormSquared, 1.0, ONE_MILLIONTH))
+      if (!isSecondVectorUnitary)
       {
-         double secondVectorInvLength = 1.0 / EuclidCoreTools.squareRoot(secondVectorNormSquared);
-         secondVectorX *= secondVectorInvLength;
-         secondVectorY *= secondVectorInvLength;
-         secondVectorZ *= secondVectorInvLength;
+         double secondVectorNormSquared = normSquared(secondVectorX, secondVectorY, secondVectorZ);
+         if (!EuclidCoreTools.epsilonEquals(secondVectorNormSquared, 1.0, ONE_MILLIONTH))
+         {
+            double secondVectorInvLength = 1.0 / EuclidCoreTools.squareRoot(secondVectorNormSquared);
+            secondVectorX *= secondVectorInvLength;
+            secondVectorY *= secondVectorInvLength;
+            secondVectorZ *= secondVectorInvLength;
+         }
       }
 
       double axisX = firstVectorY * secondVectorZ - firstVectorZ * secondVectorY;
@@ -856,9 +876,11 @@ public class EuclidGeometryTools
       orientation3DFromFirstToSecondVector3D(firstVector.getX(),
                                              firstVector.getY(),
                                              firstVector.getZ(),
+                                             firstVector instanceof UnitVector3DReadOnly,
                                              secondVector.getX(),
                                              secondVector.getY(),
                                              secondVector.getZ(),
+                                             secondVector instanceof UnitVector3DReadOnly,
                                              rotationToPack);
    }
 
