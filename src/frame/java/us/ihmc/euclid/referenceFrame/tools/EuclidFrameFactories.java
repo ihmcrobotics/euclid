@@ -38,7 +38,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -46,6 +45,7 @@ import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -54,6 +54,7 @@ import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -239,14 +240,14 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(point, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
-            if (object instanceof Point2DReadOnly)
-               return FramePoint2DReadOnly.super.equals((Point2DReadOnly) object);
+            if (object instanceof FramePoint2DReadOnly)
+               return equals((FramePoint2DReadOnly) object);
             else
                return false;
          }
@@ -292,14 +293,14 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
-            if (object instanceof Vector2DReadOnly)
-               return FrameVector2DReadOnly.super.equals((Vector2DReadOnly) object);
+            if (object instanceof FrameVector2DReadOnly)
+               return equals((FrameVector2DReadOnly) object);
             else
                return false;
          }
@@ -351,14 +352,14 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(point, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
-            if (object instanceof Point3DReadOnly)
-               return FramePoint3DReadOnly.super.equals((Point3DReadOnly) object);
+            if (object instanceof FramePoint3DReadOnly)
+               return equals((FramePoint3DReadOnly) object);
             else
                return false;
          }
@@ -410,14 +411,14 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
-            if (object instanceof Vector3DReadOnly)
-               return FrameVector3DReadOnly.super.equals((Vector3DReadOnly) object);
+            if (object instanceof FrameVector3DReadOnly)
+               return equals((FrameVector3DReadOnly) object);
             else
                return false;
          }
@@ -489,7 +490,7 @@ public class EuclidFrameFactories
    }
 
    /**
-    * Creates a new frame point which reference frame is linked to the given frameless point and
+    * Creates a new frame point which is linked to the given frameless point and
     * {@code referenceFrameHolder}.
     *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
@@ -538,7 +539,7 @@ public class EuclidFrameFactories
             if (object == this)
                return true;
             else if (object instanceof FramePoint2DReadOnly)
-               return FixedFramePoint2DBasics.super.equals((FramePoint2DReadOnly) object);
+               return equals((FramePoint2DReadOnly) object);
             else
                return false;
          }
@@ -546,7 +547,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(originalPoint, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -570,7 +571,7 @@ public class EuclidFrameFactories
    }
 
    /**
-    * Creates a new frame vector which reference frame is linked to the given frameless vector and
+    * Creates a new frame vector which is linked to the given frameless vector and
     * {@code referenceFrameHolder}.
     *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
@@ -619,7 +620,7 @@ public class EuclidFrameFactories
             if (object == this)
                return true;
             else if (object instanceof FrameVector2DReadOnly)
-               return FixedFrameVector2DBasics.super.equals((FrameVector2DReadOnly) object);
+               return equals((FrameVector2DReadOnly) object);
             else
                return false;
          }
@@ -627,7 +628,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(originalVector, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -651,7 +652,7 @@ public class EuclidFrameFactories
    }
 
    /**
-    * Creates a new frame point which reference frame is linked to the given frameless point and
+    * Creates a new frame point which is linked to the given frameless point and
     * {@code referenceFrameHolder}.
     *
     * @param referenceFrameHolder the reference frame holder to link to the new frame point.
@@ -712,7 +713,7 @@ public class EuclidFrameFactories
             if (object == this)
                return true;
             else if (object instanceof FramePoint3DReadOnly)
-               return FixedFramePoint3DBasics.super.equals((FramePoint3DReadOnly) object);
+               return equals((FramePoint3DReadOnly) object);
             else
                return false;
          }
@@ -720,7 +721,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(originalPoint, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -744,7 +745,7 @@ public class EuclidFrameFactories
    }
 
    /**
-    * Creates a new frame vector which reference frame is linked to the given frameless vector and
+    * Creates a new frame vector which is linked to the given frameless vector and
     * {@code referenceFrameHolder}.
     *
     * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
@@ -805,7 +806,7 @@ public class EuclidFrameFactories
             if (object == this)
                return true;
             else if (object instanceof FrameVector3DReadOnly)
-               return FixedFrameVector3DBasics.super.equals((FrameVector3DReadOnly) object);
+               return equals((FrameVector3DReadOnly) object);
             else
                return false;
          }
@@ -813,7 +814,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(originalVector, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -863,56 +864,70 @@ public class EuclidFrameFactories
     */
    public static FixedFrameUnitVector2DBasics newFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY)
    {
+      return newLinkedFixedFrameUnitVector2DBasics(referenceFrameHolder, new UnitVector2D(initialX, initialY));
+   }
+
+   /**
+    * Creates a new frame unit vector which is linked to the given frameless unit vector and
+    * {@code referenceFrameHolder}.
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param originalUnitVector   the unit vector to link to the new frame vector. Modifications on
+    *                             either the {@code originalUnitVector} or the new frame vector will be
+    *                             propagated to the other.
+    * @return the new linked frame unit vector.
+    */
+   public static FixedFrameUnitVector2DBasics newLinkedFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                    UnitVector2DBasics originalUnitVector)
+   {
       return new FixedFrameUnitVector2DBasics()
       {
-         private final UnitVector2D vector = new UnitVector2D();
-
          @Override
          public void absolute()
          {
-            vector.absolute();
+            originalUnitVector.absolute();
          }
 
          @Override
          public void negate()
          {
-            vector.negate();
+            originalUnitVector.negate();
          }
 
          @Override
          public void normalize()
          {
-            vector.normalize();
+            originalUnitVector.normalize();
          }
 
          @Override
          public void markAsDirty()
          {
-            vector.markAsDirty();
+            originalUnitVector.markAsDirty();
          }
 
          @Override
          public boolean isDirty()
          {
-            return vector.isDirty();
+            return originalUnitVector.isDirty();
          }
 
          @Override
          public void set(UnitVector2DReadOnly other)
          {
-            vector.set(other);
+            originalUnitVector.set(other);
          }
 
          @Override
          public void setX(double x)
          {
-            vector.setX(x);
+            originalUnitVector.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            vector.setY(y);
+            originalUnitVector.setY(y);
          }
 
          @Override
@@ -924,26 +939,26 @@ public class EuclidFrameFactories
          @Override
          public double getRawX()
          {
-            return vector.getRawX();
+            return originalUnitVector.getRawX();
          }
 
          @Override
          public double getRawY()
          {
-            return vector.getRawY();
+            return originalUnitVector.getRawY();
          }
 
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
             if (object instanceof FrameVector2DReadOnly)
-               return FixedFrameUnitVector2DBasics.super.equals((FrameVector2DReadOnly) object);
+               return equals((FrameVector2DReadOnly) object);
             else
                return false;
          }
@@ -951,7 +966,7 @@ public class EuclidFrameFactories
          @Override
          public String toString()
          {
-            return EuclidCoreIOTools.getTuple2DString(this);
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
          }
       };
    }
@@ -997,62 +1012,76 @@ public class EuclidFrameFactories
    public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY,
                                                                               double initialZ)
    {
+      return newLinkedFixedFrameUnitVector3DBasics(referenceFrameHolder, new UnitVector3D(initialX, initialY, initialZ));
+   };
+
+   /**
+    * Creates a new frame unit vector which is linked to the given frameless unit vector and
+    * {@code referenceFrameHolder}.
+    *
+    * @param referenceFrameHolder the reference frame holder to link to the new frame vector.
+    * @param originalUnitVector   the unit vector to link to the new frame vector. Modifications on
+    *                             either the {@code originalUnitVector} or the new frame vector will be
+    *                             propagated to the other.
+    * @return the new linked frame unit vector.
+    */
+   public static FixedFrameUnitVector3DBasics newLinkedFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                    UnitVector3DBasics originalUnitVector)
+   {
       return new FixedFrameUnitVector3DBasics()
       {
-         private final UnitVector3D vector = new UnitVector3D(initialX, initialY, initialZ);
-
          @Override
          public void absolute()
          {
-            vector.absolute();
+            originalUnitVector.absolute();
          }
 
          @Override
          public void negate()
          {
-            vector.negate();
+            originalUnitVector.negate();
          }
 
          @Override
          public void normalize()
          {
-            vector.normalize();
+            originalUnitVector.normalize();
          }
 
          @Override
          public void markAsDirty()
          {
-            vector.markAsDirty();
+            originalUnitVector.markAsDirty();
          }
 
          @Override
          public boolean isDirty()
          {
-            return vector.isDirty();
+            return originalUnitVector.isDirty();
          }
 
          @Override
          public void set(UnitVector3DReadOnly other)
          {
-            vector.set(other);
+            originalUnitVector.set(other);
          }
 
          @Override
          public void setX(double x)
          {
-            vector.setX(x);
+            originalUnitVector.setX(x);
          }
 
          @Override
          public void setY(double y)
          {
-            vector.setY(y);
+            originalUnitVector.setY(y);
          }
 
          @Override
          public void setZ(double z)
          {
-            vector.setZ(z);
+            originalUnitVector.setZ(z);
          }
 
          @Override
@@ -1064,32 +1093,32 @@ public class EuclidFrameFactories
          @Override
          public double getRawX()
          {
-            return vector.getRawX();
+            return originalUnitVector.getRawX();
          }
 
          @Override
          public double getRawY()
          {
-            return vector.getRawY();
+            return originalUnitVector.getRawY();
          }
 
          @Override
          public double getRawZ()
          {
-            return vector.getRawZ();
+            return originalUnitVector.getRawZ();
          }
 
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(vector, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
          public boolean equals(Object object)
          {
             if (object instanceof FrameVector3DReadOnly)
-               return FixedFrameUnitVector3DBasics.super.equals((FrameVector3DReadOnly) object);
+               return equals((FrameVector3DReadOnly) object);
             else
                return false;
          }
@@ -1165,7 +1194,7 @@ public class EuclidFrameFactories
             if (object == this)
                return true;
             else if (object instanceof FrameOrientation2DReadOnly)
-               return FixedFrameOrientation2DBasics.super.equals((FrameOrientation2DReadOnly) object);
+               return equals((FrameOrientation2DReadOnly) object);
             else
                return false;
          }
@@ -1173,7 +1202,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(originalOrientation, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getYaw()), getReferenceFrame());
          }
 
          @Override
@@ -1252,7 +1281,7 @@ public class EuclidFrameFactories
             if (object == this)
                return true;
             else if (object instanceof FrameQuaternionReadOnly)
-               return FixedFrameQuaternionBasics.super.equals((FrameQuaternionReadOnly) object);
+               return equals((FrameQuaternionReadOnly) object);
             else
                return false;
          }
@@ -1260,7 +1289,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(originalQuaternion, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS()), getReferenceFrame());
          }
 
          @Override
@@ -1422,7 +1451,7 @@ public class EuclidFrameFactories
             if (object == this)
                return true;
             else if (object instanceof FrameRotationMatrixReadOnly)
-               return FixedFrameRotationMatrixBasics.super.equals((FrameRotationMatrixReadOnly) object);
+               return equals((FrameRotationMatrixReadOnly) object);
             else
                return false;
          }
@@ -1430,7 +1459,16 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(originalRotationMatrix, getReferenceFrame());
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getM00(),
+                                                                                       getM01(),
+                                                                                       getM02(),
+                                                                                       getM10(),
+                                                                                       getM11(),
+                                                                                       getM12(),
+                                                                                       getM20(),
+                                                                                       getM21(),
+                                                                                       getM22()),
+                                                     getReferenceFrame());
          }
 
          @Override
@@ -1493,7 +1531,7 @@ public class EuclidFrameFactories
          public boolean equals(Object object)
          {
             if (object instanceof FrameBoundingBox2DReadOnly)
-               return FixedFrameBoundingBox2DBasics.super.equals((FrameBoundingBox2DReadOnly) object);
+               return equals((FrameBoundingBox2DReadOnly) object);
             else
                return false;
          }
@@ -1510,8 +1548,6 @@ public class EuclidFrameFactories
             return EuclidFrameIOTools.getFrameBoundingBox2DString(this);
          }
       };
-
-      fixedFrameBoundingBox2DBasics.setToNaN();
 
       return fixedFrameBoundingBox2DBasics;
    }
@@ -1568,7 +1604,7 @@ public class EuclidFrameFactories
          public boolean equals(Object object)
          {
             if (object instanceof FrameBoundingBox3DReadOnly)
-               return FixedFrameBoundingBox3DBasics.super.equals((FrameBoundingBox3DReadOnly) object);
+               return equals((FrameBoundingBox3DReadOnly) object);
             else
                return false;
          }
@@ -1585,8 +1621,6 @@ public class EuclidFrameFactories
             return EuclidFrameIOTools.getFrameBoundingBox3DString(this);
          }
       };
-
-      fixedFrameBoundingBox3DBasics.setToNaN();
 
       return fixedFrameBoundingBox3DBasics;
    }

@@ -24,7 +24,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DBasics;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 
-public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygon2DBasics> extends FrameConvexPolygon2DReadOnlyTest<F>
+public abstract class FrameConvexPolygon2DBasicsTest<F extends FrameConvexPolygon2DBasics> extends FrameConvexPolygon2DReadOnlyTest<F>
 {
    public ConvexPolygon2DBasics createRandomFramelessConvexPolygon2D(Random random)
    {
@@ -50,7 +50,7 @@ public abstract class FrameConvexPolyong2DBasicsTest<F extends FrameConvexPolygo
    }
 
    @Test
-   public void testConsistencyWithTuple2D() throws Exception
+   public void testConsistencyWithConvexPolygon2D() throws Exception
    {
       FrameTypeCopier frameTypeBuilder = (frame, polygon) -> createFrameConvexPolygon2D(frame, (ConvexPolygon2DReadOnly) polygon);
       RandomFramelessTypeBuilder framelessTypeBuilber = this::createRandomFramelessConvexPolygon2D;

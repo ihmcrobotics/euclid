@@ -1,30 +1,15 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools.getConvexPolygon2DString;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools.assertConvexPolygon2DEquals;
-import static us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools.assertConvexPolygon2DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertPoint2DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertPoint3DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertQuaternionGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertRotationVectorGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple2DEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple3DEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertTuple4DEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector2DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector3DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertVector4DGeometricallyEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertYawPitchRollEquals;
-import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertYawPitchRollGeometricallyEquals;
-
-import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
@@ -32,7 +17,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector4DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameYawPitchRollReadOnly;
-import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 
 /**
@@ -119,7 +103,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertRotationVectorGeometricallyEquals(messagePrefix, expected, actual, epsilon);
+      EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(messagePrefix, expected, actual, epsilon);
    }
 
    /**
@@ -200,7 +184,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertYawPitchRollEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertYawPitchRollEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -270,7 +254,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertYawPitchRollGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertYawPitchRollGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -335,7 +319,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertTuple2DEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertTuple2DEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -407,7 +391,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertPoint2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertPoint2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -479,7 +463,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertVector2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertVector2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -544,7 +528,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertTuple3DEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertTuple3DEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -616,7 +600,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertPoint3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertPoint3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -688,7 +672,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertVector3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertVector3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -753,7 +737,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertTuple4DEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertTuple4DEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -825,7 +809,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertVector4DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertVector4DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -898,7 +882,569 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertQuaternionGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidCoreTestTools.assertQuaternionGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame orientation 2Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual   the actual orientation 2D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal or not expressed in the reference
+    *                        frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameOrientation2DEquals(FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual, double epsilon)
+   {
+      assertFrameOrientation2DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame orientation 2Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds are not equal or not expressed in the reference
+    *                        frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameOrientation2DEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
+                                                     double epsilon)
+   {
+      assertFrameOrientation2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame orientation 2Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two orientation 2Ds are not equal or not expressed in the reference
+    *                        frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameOrientation2DEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
+                                                     double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidCoreTestTools.assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts that the two frame orientation 2Ds represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected orientation 2D. Not modified.
+    * @param actual   the actual orientation 2D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameOrientation2DGeometricallyEquals(FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual, double epsilon)
+   {
+      assertFrameOrientation2DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts that the two frame orientation 2Ds represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameOrientation2DGeometricallyEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
+                                                                  double epsilon)
+   {
+      assertFrameOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two frame orientation 2Ds represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected orientation 2D. Not modified.
+    * @param actual        the actual orientation 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two orientation 2Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameOrientation2DGeometricallyEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
+                                                                  double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame matrices are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected matrix. Not modified.
+    * @param actual   the actual matrix. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two matrices are not equal or not expressed in the reference frame.
+    *                        If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameMatrix3DEquals(FrameMatrix3DReadOnly expected, FrameMatrix3DReadOnly actual, double epsilon)
+   {
+      assertFrameMatrix3DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame matrices are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected matrix. Not modified.
+    * @param actual        the actual matrix. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two matrices are not equal or not expressed in the reference frame.
+    *                        If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameMatrix3DEquals(String messagePrefix, FrameMatrix3DReadOnly expected, FrameMatrix3DReadOnly actual, double epsilon)
+   {
+      assertFrameMatrix3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame matrices are equal to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected matrix. Not modified.
+    * @param actual        the actual matrix. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two matrices are not equal or not expressed in the reference frame.
+    *                        If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameMatrix3DEquals(String messagePrefix, FrameMatrix3DReadOnly expected, FrameMatrix3DReadOnly actual, double epsilon,
+                                                String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts that the two frame rotation matrices represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected rotation matrix. Not modified.
+    * @param actual   the actual rotation matrix. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two rotation matrices do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameRotationMatrixGeometricallyEquals(FrameRotationMatrixReadOnly expected, FrameRotationMatrixReadOnly actual, double epsilon)
+   {
+      assertFrameRotationMatrixGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts that the two frame rotation matrices represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected rotation matrix. Not modified.
+    * @param actual        the actual rotation matrix. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two rotation matrices do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameRotationMatrixGeometricallyEquals(String messagePrefix, FrameRotationMatrixReadOnly expected,
+                                                                   FrameRotationMatrixReadOnly actual, double epsilon)
+   {
+      assertFrameRotationMatrixGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts that the two frame rotation matrices represent the same geometry to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected rotation matrix. Not modified.
+    * @param actual        the actual rotation matrix. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two rotation matrices do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameRotationMatrixGeometricallyEquals(String messagePrefix, FrameRotationMatrixReadOnly expected,
+                                                                   FrameRotationMatrixReadOnly actual, double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidCoreTestTools.assertRotationMatrixGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 2Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected bounding box 2D. Not modified.
+    * @param actual   the actual bounding box 2D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two bounding box 2Ds are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameBoundingBox2DEquals(FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual, double epsilon)
+   {
+      assertFrameBoundingBox2DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 2Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 2D. Not modified.
+    * @param actual        the actual bounding box 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two bounding box 2Ds are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameBoundingBox2DEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
+                                                     double epsilon)
+   {
+      assertFrameBoundingBox2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 2Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 2D. Not modified.
+    * @param actual        the actual bounding box 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two bounding box 2Ds are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameBoundingBox2DEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
+                                                     double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidGeometryTestTools.assertBoundingBox2DEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 2Ds represent the same geometry
+    * to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected bounding box 2D. Not modified.
+    * @param actual   the actual bounding box 2D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two bounding box 2Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameBoundingBox2DGeometricallyEquals(FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual, double epsilon)
+   {
+      assertFrameBoundingBox2DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 2Ds represent the same geometry
+    * to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 2D. Not modified.
+    * @param actual        the actual bounding box 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two bounding box 2Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameBoundingBox2DGeometricallyEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
+                                                                  double epsilon)
+   {
+      assertFrameBoundingBox2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 2Ds represent the same geometry
+    * to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 2D. Not modified.
+    * @param actual        the actual bounding box 2D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two bounding box 2Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameBoundingBox2DGeometricallyEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
+                                                                  double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidGeometryTestTools.assertBoundingBox2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 3Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected bounding box 3D. Not modified.
+    * @param actual   the actual bounding box 3D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two bounding box 3Ds are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameBoundingBox3DEquals(FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual, double epsilon)
+   {
+      assertFrameBoundingBox3DEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 3Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 3D. Not modified.
+    * @param actual        the actual bounding box 3D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two bounding box 3Ds are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameBoundingBox3DEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
+                                                     double epsilon)
+   {
+      assertFrameBoundingBox3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 3Ds are equal to an
+    * {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 3D. Not modified.
+    * @param actual        the actual bounding box 3D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two bounding box 3Ds are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
+    */
+   public static void assertFrameBoundingBox3DEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
+                                                     double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidGeometryTestTools.assertBoundingBox3DEquals(messagePrefix, expected, actual, epsilon, format);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 3Ds represent the same geometry
+    * to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param expected the expected bounding box 3D. Not modified.
+    * @param actual   the actual bounding box 3D. Not modified.
+    * @param epsilon  the tolerance to use.
+    * @throws AssertionError if the two bounding box 3Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameBoundingBox3DGeometricallyEquals(FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual, double epsilon)
+   {
+      assertFrameBoundingBox3DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 3Ds represent the same geometry
+    * to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 3D. Not modified.
+    * @param actual        the actual bounding box 3D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @throws AssertionError if the two bounding box 3Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameBoundingBox3DGeometricallyEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
+                                                                  double epsilon)
+   {
+      assertFrameBoundingBox3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+
+   /**
+    * Asserts on a per component basis that the two frame bounding box 3Ds represent the same geometry
+    * to an {@code epsilon}.
+    * <p>
+    * Note: the two arguments are considered to be equal if they are both equal to {@code null}.
+    * </p>
+    *
+    * @param messagePrefix prefix to add to the error message.
+    * @param expected      the expected bounding box 3D. Not modified.
+    * @param actual        the actual bounding box 3D. Not modified.
+    * @param epsilon       the tolerance to use.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two bounding box 3Ds do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
+    */
+   public static void assertFrameBoundingBox3DGeometricallyEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
+                                                                  double epsilon, String format)
+   {
+      if (expected == null && actual == null)
+         return;
+
+      if (expected != null ^ actual != null)
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+
+      if (expected.getReferenceFrame() != actual.getReferenceFrame())
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      EuclidGeometryTestTools.assertBoundingBox3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -911,8 +1457,8 @@ public class EuclidFrameTestTools
     * @param expected the expected frame convex polygon 2D. Not modified.
     * @param actual   the actual frame convex polygon 2D. Not modified.
     * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two frame convex polygon 2D are not equal. If only one of the
-    *                        arguments is equal to {@code null}.
+    * @throws AssertionError if the two frame convex polygon 2D are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
    public static void assertFrameConvexPolygon2DEquals(FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual, double epsilon)
    {
@@ -930,8 +1476,8 @@ public class EuclidFrameTestTools
     * @param expected      the expected frame convex polygon 2D. Not modified.
     * @param actual        the actual frame convex polygon 2D. Not modified.
     * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two frame convex polygon 2D are not equal. If only one of the
-    *                        arguments is equal to {@code null}.
+    * @throws AssertionError if the two frame convex polygon 2D are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
    public static void assertFrameConvexPolygon2DEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual,
                                                        double epsilon)
@@ -951,8 +1497,8 @@ public class EuclidFrameTestTools
     * @param epsilon       the tolerance to use.
     * @param format        the format to use for printing each component when an {@code AssertionError}
     *                      is thrown.
-    * @throws AssertionError if the two frame convex polygon 2D are not equal. If only one of the
-    *                        arguments is equal to {@code null}.
+    * @throws AssertionError if the two frame convex polygon 2D are not equal or not expressed in the
+    *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
    public static void assertFrameConvexPolygon2DEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual,
                                                        double epsilon, String format)
@@ -967,7 +1513,7 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertConvexPolygon2DEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidGeometryTestTools.assertConvexPolygon2DEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    /**
@@ -979,8 +1525,9 @@ public class EuclidFrameTestTools
     * @param expected the expected frame convex polygon 2D. Not modified.
     * @param actual   the actual frame convex polygon 2D. Not modified.
     * @param epsilon  the tolerance to use.
-    * @throws AssertionError if the two convex polygon 2D do not represent the same geometry. If only
-    *                        one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two convex polygon 2D do not represent the same geometry or not
+    *                        expressed in the reference frame. If only one of the arguments is equal to
+    *                        {@code null}.
     */
    public static void assertFrameConvexPolygon2DGeometricallyEquals(FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual, double epsilon)
    {
@@ -997,8 +1544,9 @@ public class EuclidFrameTestTools
     * @param expected      the expected frame convex polygon 2D. Not modified.
     * @param actual        the actual frame convex polygon 2D. Not modified.
     * @param epsilon       the tolerance to use.
-    * @throws AssertionError if the two frame convex polygon 2D do not represent the same geometry. If
-    *                        only one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two frame convex polygon 2D do not represent the same geometry or
+    *                        not expressed in the reference frame. If only one of the arguments is
+    *                        equal to {@code null}.
     */
    public static void assertFrameConvexPolygon2DGeometricallyEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected,
                                                                     FrameConvexPolygon2DReadOnly actual, double epsilon)
@@ -1018,8 +1566,9 @@ public class EuclidFrameTestTools
     * @param epsilon       the tolerance to use.
     * @param format        the format to use for printing each component when an {@code AssertionError}
     *                      is thrown.
-    * @throws AssertionError if the two frame convex polygon 2D do not represent the same geometry. If
-    *                        only one of the arguments is equal to {@code null}.
+    * @throws AssertionError if the two frame convex polygon 2D do not represent the same geometry or
+    *                        not expressed in the reference frame. If only one of the arguments is
+    *                        equal to {@code null}.
     */
    public static void assertFrameConvexPolygon2DGeometricallyEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected,
                                                                     FrameConvexPolygon2DReadOnly actual, double epsilon, String format)
@@ -1034,61 +1583,76 @@ public class EuclidFrameTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
-      assertConvexPolygon2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
+      EuclidGeometryTestTools.assertConvexPolygon2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, FrameTuple2DReadOnly expected, FrameTuple2DReadOnly actual, String format)
    {
-      String expectedAsString = appendFrameName(getTuple2DString(format, expected), expected);
-      String actualAsString = appendFrameName(getTuple2DString(format, actual), actual);
+      String expectedAsString = EuclidFrameIOTools.getFrameTuple2DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameTuple2DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, FrameTuple3DReadOnly expected, FrameTuple3DReadOnly actual, String format)
    {
-      String expectedAsString = appendFrameName(getTuple3DString(format, expected), expected);
-      String actualAsString = appendFrameName(getTuple3DString(format, actual), actual);
+      String expectedAsString = EuclidFrameIOTools.getFrameTuple3DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameTuple3DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, FrameTuple4DReadOnly expected, FrameTuple4DReadOnly actual, String format)
    {
-      String expectedAsString = appendFrameName(getTuple4DString(format, expected), expected);
-      String actualAsString = appendFrameName(getTuple4DString(format, actual), actual);
+      String expectedAsString = EuclidFrameIOTools.getFrameTuple4DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameTuple4DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual, String format)
+   {
+      String expectedAsString = EuclidFrameIOTools.getFrameOrientation2DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameOrientation2DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, FrameYawPitchRollReadOnly expected, FrameYawPitchRollReadOnly actual, String format)
    {
-      String expectedAsString = appendFrameName(getYawPitchRollString(format, expected), expected);
-      String actualAsString = appendFrameName(getYawPitchRollString(format, actual), actual);
+      String expectedAsString = EuclidFrameIOTools.getFrameYawPitchRollString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameYawPitchRollString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, FrameMatrix3DReadOnly expected, FrameMatrix3DReadOnly actual, String format)
+   {
+      String expectedAsString = EuclidFrameIOTools.getFrameMatrix3DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameMatrix3DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual, String format)
+   {
+      String expectedAsString = EuclidFrameIOTools.getFrameBoundingBox2DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameBoundingBox2DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual, String format)
+   {
+      String expectedAsString = EuclidFrameIOTools.getFrameBoundingBox3DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameBoundingBox3DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual,
                                                    String format)
    {
-      String expectedAsString = appendFrameName(getConvexPolygon2DString(format, expected), expected);
-      String actualAsString = appendFrameName(getConvexPolygon2DString(format, actual), actual);
+      String expectedAsString = EuclidFrameIOTools.getFrameConvexPolygon2DString(format, expected);
+      String actualAsString = EuclidFrameIOTools.getFrameConvexPolygon2DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString)
    {
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, null);
-   }
-
-   private static String appendFrameName(String string, ReferenceFrameHolder referenceFrameHolder)
-   {
-      if (referenceFrameHolder != null)
-         return appendFrameName(string, referenceFrameHolder.getReferenceFrame());
-      else
-         return appendFrameName(string, (ReferenceFrame) null);
-   }
-
-   private static String appendFrameName(String string, ReferenceFrame referenceFrame)
-   {
-      return string + "-" + referenceFrame;
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, String expectedAsString, String actualAsString, String differenceAsString)
