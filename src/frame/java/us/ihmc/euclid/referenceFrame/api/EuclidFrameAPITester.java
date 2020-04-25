@@ -1699,7 +1699,14 @@ public class EuclidFrameAPITester
                                                                     Predicate<Method> methodFilter, int numberOfIterations)
    {
 
-      Class<? extends ReferenceFrameHolder> frameTypeToTest = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+      Class<?> frameTypeToTest = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+      if (frameTypeToTest.isAnonymousClass())
+      { // Need to fall back to the original type that the anonymous type implements/extends, otherwise we cannot invoke methods on it.
+         if (frameTypeToTest.getInterfaces().length == 0)
+            frameTypeToTest = frameTypeToTest.getSuperclass();
+         else
+            frameTypeToTest = frameTypeToTest.getInterfaces()[0];
+      }
       Class<? extends Object> framelessType = framelessTypeBuilber.newInstance(random).getClass();
 
       List<Method> frameMethods = Stream.of(frameTypeToTest.getMethods()).filter(methodFilter).collect(Collectors.toList());

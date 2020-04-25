@@ -2,18 +2,15 @@ package us.ihmc.euclid.tools;
 
 import java.util.function.DoubleSupplier;
 
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.UnitVector2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * This class provides a varieties of factories to create Euclid types.
@@ -142,7 +139,7 @@ public class EuclidCoreFactories
          public boolean equals(Object object)
          {
             if (object instanceof Point2DReadOnly)
-               return Point2DReadOnly.super.equals((Point2DReadOnly) object);
+               return equals((Point2DReadOnly) object);
             else
                return false;
          }
@@ -188,7 +185,7 @@ public class EuclidCoreFactories
          public boolean equals(Object object)
          {
             if (object instanceof Vector2DReadOnly)
-               return Vector2DReadOnly.super.equals((Vector2DReadOnly) object);
+               return equals((Vector2DReadOnly) object);
             else
                return false;
          }
@@ -241,7 +238,7 @@ public class EuclidCoreFactories
          public boolean equals(Object object)
          {
             if (object instanceof Point3DReadOnly)
-               return Point3DReadOnly.super.equals((Point3DReadOnly) object);
+               return equals((Point3DReadOnly) object);
             else
                return false;
          }
@@ -294,7 +291,7 @@ public class EuclidCoreFactories
          public boolean equals(Object object)
          {
             if (object instanceof Vector3DReadOnly)
-               return Vector3DReadOnly.super.equals((Vector3DReadOnly) object);
+               return equals((Vector3DReadOnly) object);
             else
                return false;
          }
@@ -362,12 +359,152 @@ public class EuclidCoreFactories
    }
 
    /**
+    * Creates a new unit vector 2D that is a read-only view of the given {@code originalUnitVector}
+    * negated.
+    *
+    * @param originalUnitVector the original vector to create linked negative vector for. Not modified.
+    * @return the negative read-only view of {@code originalUnitVector}.
+    */
+   public static UnitVector2DReadOnly newNegativeLinkedUnitVector2D(UnitVector2DReadOnly originalUnitVector)
+   {
+      return new UnitVector2DReadOnly()
+      {
+         @Override
+         public boolean isDirty()
+         {
+            return originalUnitVector.isDirty();
+         }
+
+         @Override
+         public double getX()
+         {
+            return -originalUnitVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return -originalUnitVector.getY();
+         }
+
+         @Override
+         public double getRawX()
+         {
+            return -originalUnitVector.getRawX();
+         }
+
+         @Override
+         public double getRawY()
+         {
+            return -originalUnitVector.getRawY();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Vector2DReadOnly)
+               return equals((Vector2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getTuple2DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new unit vector 3D that is a read-only view of the given {@code originalUnitVector}
+    * negated.
+    *
+    * @param originalUnitVector the original vector to create linked negative vector for. Not modified.
+    * @return the negative read-only view of {@code originalUnitVector}.
+    */
+   public static UnitVector3DReadOnly newNegativeLinkedUnitVector3D(UnitVector3DReadOnly originalUnitVector)
+   {
+      return new UnitVector3DReadOnly()
+      {
+         @Override
+         public boolean isDirty()
+         {
+            return originalUnitVector.isDirty();
+         }
+
+         @Override
+         public double getX()
+         {
+            return -originalUnitVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return -originalUnitVector.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return -originalUnitVector.getZ();
+         }
+
+         @Override
+         public double getRawX()
+         {
+            return -originalUnitVector.getRawX();
+         }
+
+         @Override
+         public double getRawY()
+         {
+            return -originalUnitVector.getRawY();
+         }
+
+         @Override
+         public double getRawZ()
+         {
+            return -originalUnitVector.getRawZ();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Vector3DReadOnly)
+               return equals((Vector3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getTuple3DString(this);
+         }
+      };
+   }
+
+   /**
     * Creates a new matrix 3D that is a read-only view of the transpose of the given {@code original}.
     *
     * @param original the original matrix to create linked transpose matrix for. Not modified.
     * @return the transpose read-only view of {@code original}.
     */
-   public static Matrix3DReadOnly newTransposeLinkedMatrix3DReadOnly(Matrix3DBasics original)
+   public static Matrix3DReadOnly newTransposeLinkedMatrix3DReadOnly(Matrix3DReadOnly original)
    {
       return new Matrix3DReadOnly()
       {
@@ -426,33 +563,102 @@ public class EuclidCoreFactories
          }
 
          @Override
-         public void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
+         public int hashCode()
          {
-            Matrix3DTools.transform(this, matrixOriginal, matrixTransformed);
+            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
          }
 
          @Override
-         public void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
+         public boolean equals(Object object)
          {
-            Matrix3DTools.inverseTransform(this, matrixOriginal, matrixTransformed);
+            if (object instanceof Matrix3DReadOnly)
+               return equals((Matrix3DReadOnly) object);
+            else
+               return false;
          }
 
          @Override
-         public void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
+         public String toString()
          {
-            Matrix3DTools.inverseTransform(this, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
+            return EuclidCoreIOTools.getMatrix3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new matrix 3D that is a read-only view of the tilde form of the given
+    * {@code originalTuple}.
+    * <p>
+    * The tilde form is the matrix implementation of cross product:
+    * 
+    * <pre>
+    *               /  0 -z  y \
+    * tildeMatrix = |  z  0 -x |
+    *               \ -y  x  0 /
+    * </pre>
+    * 
+    * where <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> are the components of {@code originalTuple}.
+    * </p>
+    *
+    * @param originalTuple the original tuple to create linked tilde matrix for. Not modified.
+    * @return the tilde read-only view of {@code originalTuple}.
+    */
+   public static Matrix3DReadOnly newTildeLinkedMatrix3DReadOnly(Tuple3DReadOnly originalTuple)
+   {
+      return new Matrix3DReadOnly()
+      {
+         @Override
+         public double getM00()
+         {
+            return 0.0;
          }
 
          @Override
-         public void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+         public double getM01()
          {
-            Matrix3DTools.inverseTransform(this, tupleOriginal, tupleTransformed);
+            return -originalTuple.getZ();
          }
 
          @Override
-         public void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
+         public double getM02()
          {
-            Matrix3DTools.inverseTransform(this, vectorOriginal, vectorTransformed);
+            return originalTuple.getY();
+         }
+
+         @Override
+         public double getM10()
+         {
+            return originalTuple.getZ();
+         }
+
+         @Override
+         public double getM11()
+         {
+            return 0.0;
+         }
+
+         @Override
+         public double getM12()
+         {
+            return -originalTuple.getX();
+         }
+
+         @Override
+         public double getM20()
+         {
+            return -originalTuple.getY();
+         }
+
+         @Override
+         public double getM21()
+         {
+            return originalTuple.getX();
+         }
+
+         @Override
+         public double getM22()
+         {
+            return 0.0;
          }
 
          @Override
@@ -465,7 +671,103 @@ public class EuclidCoreFactories
          public boolean equals(Object object)
          {
             if (object instanceof Matrix3DReadOnly)
-               return Matrix3DReadOnly.super.equals((Matrix3DReadOnly) object);
+               return equals((Matrix3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getMatrix3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new matrix 3D that is a read-only view of the diagonal form of the given
+    * {@code originalTuple}:
+    * 
+    * <pre>
+    *                  / x  0  0 \
+    * diagonalMatrix = | 0  y  0 |
+    *                  \ 0  0  z /
+    * </pre>
+    * 
+    * where <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> are the components of {@code originalTuple}.
+    *
+    * @param originalTuple the original tuple to create linked diagonal matrix for. Not modified.
+    * @return the diagonal read-only view of {@code originalTuple}.
+    */
+   public static Matrix3DReadOnly newDiagonalLinkedMatrix3DReadOnly(Tuple3DReadOnly originalTuple)
+   {
+      return new Matrix3DReadOnly()
+      {
+         @Override
+         public double getM00()
+         {
+            return originalTuple.getX();
+         }
+
+         @Override
+         public double getM01()
+         {
+            return 0.0;
+         }
+
+         @Override
+         public double getM02()
+         {
+            return 0.0;
+         }
+
+         @Override
+         public double getM10()
+         {
+            return 0.0;
+         }
+
+         @Override
+         public double getM11()
+         {
+            return originalTuple.getY();
+         }
+
+         @Override
+         public double getM12()
+         {
+            return 0.0;
+         }
+
+         @Override
+         public double getM20()
+         {
+            return 0.0;
+         }
+
+         @Override
+         public double getM21()
+         {
+            return 0.0;
+         }
+
+         @Override
+         public double getM22()
+         {
+            return originalTuple.getZ();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Matrix3DReadOnly)
+               return equals((Matrix3DReadOnly) object);
             else
                return false;
          }

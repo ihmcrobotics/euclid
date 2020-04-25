@@ -721,7 +721,10 @@ public interface Matrix3DReadOnly
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
-   void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed);
+   default void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
+   {
+      Matrix3DTools.transform(this, matrixOriginal, matrixTransformed);
+   }
 
    /**
     * Transforms the vector part of the given 4D vector.
@@ -778,7 +781,10 @@ public interface Matrix3DReadOnly
     * @param tupleTransformed the tuple in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
-   void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed);
+   default void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      Matrix3DTools.inverseTransform(this, tupleOriginal, tupleTransformed);
+   }
 
    /**
     * Performs the inverse of the transform to the given tuple by this matrix.
@@ -847,7 +853,10 @@ public interface Matrix3DReadOnly
     *                                 not represent a transformation in the XY plane.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
-   void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane);
+   default void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
+   {
+      Matrix3DTools.inverseTransform(this, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
+   }
 
    /**
     * Performs the inverse of the transforms to the given 3D matrix {@code matrixOriginal} by this
@@ -875,7 +884,10 @@ public interface Matrix3DReadOnly
     * @param matrixTransformed the matrix in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
-   void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed);
+   default void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
+   {
+      Matrix3DTools.inverseTransform(this, matrixOriginal, matrixTransformed);
+   }
 
    /**
     * Performs the inverse of the transform to the vector part the given 4D vector by this matrix.
@@ -904,7 +916,10 @@ public interface Matrix3DReadOnly
     * @param vectorTransformed the vector in which the result is stored. Modified.
     * @throws SingularMatrixException if this matrix is not invertible.
     */
-   void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed);
+   default void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
+   {
+      Matrix3DTools.inverseTransform(this, vectorOriginal, vectorTransformed);
+   }
 
    /**
     * Tests on a per component basis if this matrix is exactly equal to {@code other}.

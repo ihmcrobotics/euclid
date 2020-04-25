@@ -256,6 +256,6 @@ public class UnitVector2D implements UnitVector2DBasics, GeometryObject<UnitVect
    @Override
    public int hashCode()
    {
-      return EuclidHashCodeTools.toIntHashCode(x, y);
+      return EuclidHashCodeTools.toIntHashCode(getX(), getY());
    }
 }

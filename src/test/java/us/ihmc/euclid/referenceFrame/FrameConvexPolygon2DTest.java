@@ -24,7 +24,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
 
-public class FrameConvexPolygon2DTest extends FrameConvexPolyong2DBasicsTest<FrameConvexPolygon2D>
+public class FrameConvexPolygon2DTest extends FrameConvexPolygon2DBasicsTest<FrameConvexPolygon2D>
 {
    @Override
    public FrameConvexPolygon2D createFrameConvexPolygon2D(ReferenceFrame referenceFrame, Vertex2DSupplier vertex2DSupplier)

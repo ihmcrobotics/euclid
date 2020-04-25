@@ -51,6 +51,19 @@ public class EuclidCoreRandomTools
    }
 
    /**
+    * Picks at random an element in the given {@code array}.
+    * 
+    * @param <T>    the element type.
+    * @param random the random generator to use.
+    * @param array  the array to pick the next element from.
+    * @return the next element picked at random.
+    */
+   public static <T> T nextElementIn(Random random, T[] array)
+   {
+      return array[random.nextInt(array.length)];
+   }
+
+   /**
     * Generates random a yaw-pitch-roll orientation.
     * <p>
     * <ul>

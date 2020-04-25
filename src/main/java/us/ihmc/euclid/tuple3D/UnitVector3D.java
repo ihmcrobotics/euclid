@@ -281,6 +281,6 @@ public class UnitVector3D implements UnitVector3DBasics, GeometryObject<UnitVect
    @Override
    public int hashCode()
    {
-      return EuclidHashCodeTools.toIntHashCode(x, y, z);
+      return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ());
    }
 }
