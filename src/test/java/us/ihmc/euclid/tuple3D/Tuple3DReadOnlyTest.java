@@ -2,8 +2,8 @@ package us.ihmc.euclid.tuple3D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
@@ -11,6 +11,7 @@ import java.util.Random;
 import org.ejml.data.DenseMatrix64F;
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
@@ -27,14 +28,13 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
    public void testGetters() throws Exception
    {
       Random random = new Random(621541L);
-      T tuple = createEmptyTuple();
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test getX(), getY()
          double x = random.nextDouble();
          double y = random.nextDouble();
          double z = random.nextDouble();
-         tuple = createTuple(x, y, z);
+         T tuple = createTuple(x, y, z);
 
          assertEquals(tuple.getX(), x, getEpsilon());
          assertEquals(tuple.getY(), y, getEpsilon());
@@ -46,7 +46,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
          float x = random.nextFloat();
          float y = random.nextFloat();
          float z = random.nextFloat();
-         tuple = createTuple(x, y, z);
+         T tuple = createTuple(x, y, z);
 
          assertEquals(tuple.getX32(), x, getEpsilon());
          assertEquals(tuple.getY32(), y, getEpsilon());
@@ -54,88 +54,50 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(int index)
+      { // Test getElement(int index)
          double x = random.nextDouble();
          double y = random.nextDouble();
          double z = random.nextDouble();
-         tuple = createTuple(x, y, z);
+         T tuple = createTuple(x, y, z);
 
          assertEquals(tuple.getElement(0), x, getEpsilon());
          assertEquals(tuple.getElement(1), y, getEpsilon());
          assertEquals(tuple.getElement(2), z, getEpsilon());
 
-         try
-         {
-            tuple.getElement(-1);
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
-         catch (IndexOutOfBoundsException e)
-         {
-            // good
-         }
-         catch (Exception e)
-         {
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
-
-         try
-         {
-            tuple.getElement(3);
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
-         catch (IndexOutOfBoundsException e)
-         {
-            // good
-         }
-         catch (Exception e)
-         {
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
+         assertThrows(IndexOutOfBoundsException.class, () -> tuple.getElement(-1));
+         assertThrows(IndexOutOfBoundsException.class, () -> tuple.getElement(3));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get32(int index)
+      { // Test getElement(Axis3D)
+         double x = random.nextDouble();
+         double y = random.nextDouble();
+         double z = random.nextDouble();
+         T tuple = createTuple(x, y, z);
+
+         assertEquals(tuple.getElement(Axis3D.X), x, getEpsilon());
+         assertEquals(tuple.getElement(Axis3D.Y), y, getEpsilon());
+         assertEquals(tuple.getElement(Axis3D.Z), z, getEpsilon());
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test getElement32(int index)
          float x = random.nextFloat();
          float y = random.nextFloat();
          float z = random.nextFloat();
-         tuple = createTuple(x, y, z);
+         T tuple = createTuple(x, y, z);
 
          assertTrue(tuple.getElement32(0) == x);
          assertTrue(tuple.getElement32(1) == y);
          assertTrue(tuple.getElement32(2) == z);
 
-         try
-         {
-            tuple.getElement32(-1);
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
-         catch (IndexOutOfBoundsException e)
-         {
-            // good
-         }
-         catch (Exception e)
-         {
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
-
-         try
-         {
-            tuple.getElement32(3);
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
-         catch (IndexOutOfBoundsException e)
-         {
-            // good
-         }
-         catch (Exception e)
-         {
-            fail("Should have thrown IndexOutOfBoundsException.");
-         }
+         assertThrows(IndexOutOfBoundsException.class, () -> tuple.getElement32(-1));
+         assertThrows(IndexOutOfBoundsException.class, () -> tuple.getElement32(3));
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack)
-         tuple = createRandomTuple(random);
+         T tuple = createRandomTuple(random);
          double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
                random.nextDouble()};
          tuple.get(tupleArray);
@@ -146,7 +108,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
-         tuple = createRandomTuple(random);
+         T tuple = createRandomTuple(random);
          double[] tupleArray = new double[] {random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble(),
                random.nextDouble()};
          tuple.get(2, tupleArray);
@@ -157,7 +119,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(float[] tupleArrayToPack)
-         tuple = createRandomTuple(random);
+         T tuple = createRandomTuple(random);
          float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
                random.nextFloat()};
          tuple.get(tupleArray);
@@ -168,7 +130,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(double[] tupleArrayToPack, int startIndex)
-         tuple = createRandomTuple(random);
+         T tuple = createRandomTuple(random);
          float[] tupleArray = new float[] {random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat(),
                random.nextFloat()};
          tuple.get(2, tupleArray);
@@ -179,6 +141,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(DenseMatrix64F tupleMatrixToPack)
+         T tuple = createRandomTuple(random);
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -191,6 +154,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int startRow, DenseMatrix64F tupleMatrixToPack)
+         T tuple = createRandomTuple(random);
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -203,6 +167,7 @@ public abstract class Tuple3DReadOnlyTest<T extends Tuple3DReadOnly>
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test get(int startRow, int startColumn, DenseMatrix64F tupleMatrixToPack)
+         T tuple = createRandomTuple(random);
          DenseMatrix64F matrix = new DenseMatrix64F(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());

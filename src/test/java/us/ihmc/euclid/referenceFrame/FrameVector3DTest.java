@@ -269,6 +269,7 @@ public class FrameVector3DTest extends FrameTuple3DBasicsTest<FrameVector3D>
       }
    }
 
+   @Test
    @Override
    public void testOverloading() throws Exception
    {
