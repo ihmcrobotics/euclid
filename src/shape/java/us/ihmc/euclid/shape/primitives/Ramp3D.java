@@ -153,9 +153,12 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 
    private void setupListeners()
    {
-      changeListeners.add(() -> rampSurfaceNormalDirty = true);
-      changeListeners.add(() -> rampFeaturesDirty = true);
-      changeListeners.add(() -> centroidDirty = true);
+      changeListeners.add(() ->
+      {
+         rampSurfaceNormalDirty = true;
+         rampFeaturesDirty = true;
+         centroidDirty = true;
+      });
       pose.addChangeListeners(changeListeners);
    }
 

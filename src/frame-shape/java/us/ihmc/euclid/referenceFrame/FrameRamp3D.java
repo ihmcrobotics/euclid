@@ -244,9 +244,12 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
 
    private void setupListeners()
    {
-      changeListeners.add(() -> rampSurfaceNormalDirty = true);
-      changeListeners.add(() -> rampFeaturesDirty = true);
-      changeListeners.add(() -> centroidDirty = true);
+      changeListeners.add(() ->
+      {
+         rampSurfaceNormalDirty = true;
+         rampFeaturesDirty = true;
+         centroidDirty = true;
+      });
       pose.addChangeListeners(changeListeners);
    }
 
