@@ -452,13 +452,31 @@ public class EuclidShapeRandomTools
    public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices,
                                                               Vector3DReadOnly planeNormal)
    {
+      return nextCircleBasedConvexPolygon3D(random, EuclidCoreRandomTools.nextPoint3D(random, centerMinMax), maxEdgeLength, numberOfVertices, planeNormal);
+   }
+
+   /**
+    * Generates a random convex polygon 3D by defining a random circle onto which the vertices are
+    * randomly positioned.
+    *
+    * @param random           the random generator to use.
+    * @param center           the coordinates of the circle's center.
+    * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
+    *                         the random circle.
+    * @param numberOfVertices the size of the convex polygon.
+    * @param planeNormal      defines the normal of the plane onto which the vertices are positioned.
+    * @return the random convex polygon 3D.
+    */
+   public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random, Point3DReadOnly center, double maxEdgeLength, int numberOfVertices,
+                                                              Vector3DReadOnly planeNormal)
+   {
       List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random,
-                                                                                                          centerMinMax,
+                                                                                                          new Point2D(),
                                                                                                           maxEdgeLength,
                                                                                                           numberOfVertices);
       List<Point3D> circleBasedConvexPolygon3D = circleBasedConvexPolygon2D.stream().map(Point3D::new).collect(Collectors.toList());
       RigidBodyTransform transform = new RigidBodyTransform();
-      transform.getTranslation().setZ(EuclidCoreRandomTools.nextDouble(random, centerMinMax));
+      transform.getTranslation().set(center);
       transform.getRotation().set(EuclidGeometryTools.axisAngleFromZUpToVector3D(planeNormal));
       circleBasedConvexPolygon3D.forEach(transform::transform);
       return circleBasedConvexPolygon3D;
