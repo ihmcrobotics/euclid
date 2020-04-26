@@ -1,13 +1,22 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.tools.EuclidCoreFactoriesTest.assertAllFalses;
+import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextElementIn;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
@@ -46,15 +55,25 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector2DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreFactoriesTest;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -77,7 +96,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames)));
             scale[0] = random.nextDouble();
 
             FramePoint2D expected = new FramePoint2D(originalTuple);
@@ -93,7 +112,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple2D(expected, actual);
          }
       }
@@ -105,7 +124,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple2D(expected, actual);
          }
       }
@@ -124,7 +143,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames)));
             scale[0] = random.nextDouble();
 
             FrameVector2D expected = new FrameVector2D(originalTuple);
@@ -140,7 +159,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple2D(expected, actual);
          }
       }
@@ -152,7 +171,25 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames)));
+            thoroughAssertionsFrameTuple2D(expected, actual);
+         }
+      }
+   }
+
+   @Test
+   public void testNewLinkedFrameUnitVector2DReadOnly()
+   {
+      Random random = new Random(5416);
+
+      { // Test newLinkedFrameUnitVector2DReadOnly(ReferenceFrameHolder referenceFrameHolder, UnitVector2DReadOnly unitVector)
+         ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         FrameUnitVector2D expected = new FrameUnitVector2D();
+         FrameUnitVector2DReadOnly actual = EuclidFrameFactories.newLinkedFrameUnitVector2DReadOnly(expected::getReferenceFrame, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameUnitVector2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple2D(expected, actual);
          }
       }
@@ -171,7 +208,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames)));
             scale[0] = random.nextDouble();
 
             FramePoint3D expected = new FramePoint3D(originalTuple);
@@ -190,7 +227,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
          }
       }
@@ -202,7 +239,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
          }
       }
@@ -221,7 +258,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames)));
             scale[0] = random.nextDouble();
 
             FrameVector3D expected = new FrameVector3D(originalTuple);
@@ -240,7 +277,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
          }
       }
@@ -252,7 +289,25 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames)));
+            thoroughAssertionsFrameTuple3D(expected, actual);
+         }
+      }
+   }
+
+   @Test
+   public void testNewLinkedFrameUnitVector3DReadOnly()
+   {
+      Random random = new Random(5416);
+
+      { // Test newLinkedFrameUnitVector3DReadOnly(ReferenceFrameHolder referenceFrameHolder, UnitVector3DReadOnly unitVector)
+         ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         FrameUnitVector3D expected = new FrameUnitVector3D();
+         FrameUnitVector3DReadOnly actual = EuclidFrameFactories.newLinkedFrameUnitVector3DReadOnly(expected::getReferenceFrame, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameUnitVector3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
          }
       }
@@ -270,7 +325,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames)));
             FramePoint2D expected = new FramePoint2D(originalTuple);
             expected.negate();
 
@@ -291,7 +346,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames)));
             FrameVector2D expected = new FrameVector2D(originalTuple);
             expected.negate();
 
@@ -312,7 +367,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames)));
             FramePoint3D expected = new FramePoint3D(originalTuple);
             expected.negate();
 
@@ -333,7 +388,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            originalTuple.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames)));
             FrameVector3D expected = new FrameVector3D(originalTuple);
             expected.negate();
 
@@ -384,7 +439,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple2D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextPoint2D(random));
@@ -435,7 +490,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple2D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextVector2D(random));
@@ -456,7 +511,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextPoint3D(random));
@@ -507,7 +562,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextVector3D(random));
@@ -558,7 +613,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameUnitVector2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameUnitVector2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple2D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextUnitVector2D(random));
@@ -609,7 +664,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameUnitVector3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameUnitVector3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextUnitVector3D(random));
@@ -660,7 +715,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameOrientation2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameOrientation2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameOrientation2D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextOrientation2D(random));
@@ -711,7 +766,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameQuaternion(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameQuaternion(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple4D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextQuaternion(random));
@@ -762,7 +817,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameRotationMatrix(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameRotationMatrix(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameMatrix3D(expected, actual);
 
             actual.set(EuclidCoreRandomTools.nextRotationMatrix(random));
@@ -813,7 +868,7 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameBoundingBox2D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameBoundingBox2D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameBoundingBox2D(expected, actual);
 
             actual.set(EuclidGeometryRandomTools.nextBoundingBox2D(random));
@@ -864,12 +919,635 @@ public class EuclidFrameFactoriesTest
 
          for (int i = 0; i < ITERATIONS; i++)
          {
-            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameBoundingBox3D(random, EuclidCoreRandomTools.nextElementIn(random, frames)));
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameBoundingBox3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameBoundingBox3D(expected, actual);
 
             actual.set(EuclidGeometryRandomTools.nextBoundingBox3D(random));
             thoroughAssertionsFrameBoundingBox3D(expected, actual);
          }
+      }
+   }
+
+   @Test
+   public void testNewObservableFramePoint2DReadOnly()
+   {
+      Random random = new Random(45);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test simple update operation.
+         FramePoint2D expected = EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames));
+         FramePoint2D source = new FramePoint2D(expected.getReferenceFrame());
+         Consumer<Axis2D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         FramePoint2DReadOnly observable = EuclidFrameFactories.newObservableFramePoint2DReadOnly(valueAccessedListener, source);
+
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(source);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         thoroughAssertionsFrameTuple2D(expected, observable);
+      }
+
+      { // Test transform operation.
+         FramePoint2D expected = EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames));
+         FramePoint2D source = new FramePoint2D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         FramePoint2DReadOnly observable = EuclidFrameFactories.newObservableFramePoint2DReadOnly(valueAccessedListener, source);
+
+         transform.transform(expected, false);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected, false);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFramePoint3DReadOnly()
+   {
+      Random random = new Random(45);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test simple update operation.
+         FramePoint3D expected = EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames));
+         FramePoint3D source = new FramePoint3D(expected.getReferenceFrame());
+         Consumer<Axis3D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         FramePoint3DReadOnly observable = EuclidFrameFactories.newObservableFramePoint3DReadOnly(valueAccessedListener, source);
+
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(source);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         thoroughAssertionsFrameTuple3D(expected, observable);
+      }
+
+      { // Test transform operation.
+         FramePoint3D expected = EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames));
+         FramePoint3D source = new FramePoint3D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         FramePoint3DReadOnly observable = EuclidFrameFactories.newObservableFramePoint3DReadOnly(valueAccessedListener, source);
+
+         transform.transform(expected);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameVector2DReadOnly()
+   {
+      Random random = new Random(45);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test simple update operation.
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames));
+         FrameVector2D source = new FrameVector2D(expected.getReferenceFrame());
+         Consumer<Axis2D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         FrameVector2DReadOnly observable = EuclidFrameFactories.newObservableFrameVector2DReadOnly(valueAccessedListener, source);
+
+         EuclidCoreTestTools.assertTuple2DIsSetToZero(source);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         thoroughAssertionsFrameTuple2D(expected, observable);
+      }
+
+      { // Test transform operation.
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames));
+         FrameVector2D source = new FrameVector2D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         FrameVector2DReadOnly observable = EuclidFrameFactories.newObservableFrameVector2DReadOnly(valueAccessedListener, source);
+
+         transform.transform(expected, false);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected, false);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameVector3DReadOnly()
+   {
+      Random random = new Random(45);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test simple update operation.
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames));
+         FrameVector3D source = new FrameVector3D(expected.getReferenceFrame());
+         Consumer<Axis3D> valueAccessedListener = axis -> source.setElement(axis, expected.getElement(axis));
+         FrameVector3DReadOnly observable = EuclidFrameFactories.newObservableFrameVector3DReadOnly(valueAccessedListener, source);
+
+         EuclidCoreTestTools.assertTuple3DIsSetToZero(source);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         thoroughAssertionsFrameTuple3D(expected, observable);
+      }
+
+      { // Test transform operation.
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames));
+         FrameVector3D source = new FrameVector3D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         FrameVector3DReadOnly observable = EuclidFrameFactories.newObservableFrameVector3DReadOnly(valueAccessedListener, source);
+
+         transform.transform(expected);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameUnitVector2DReadOnly()
+   {
+      Random random = new Random(45);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test simple update operation.
+         FrameUnitVector2D expected = EuclidFrameRandomTools.nextFrameUnitVector2D(random, nextElementIn(random, frames));
+         FrameUnitVector2D source = new FrameUnitVector2D(expected.getReferenceFrame());
+         Consumer<Axis2D> valueAccessedListener = axis -> source.setIncludingFrame(expected);
+         FrameUnitVector2DReadOnly observable = EuclidFrameFactories.newObservableFrameUnitVector2DReadOnly(valueAccessedListener, source);
+
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         thoroughAssertionsFrameTuple2D(expected, observable);
+      }
+
+      { // Test transform operation.
+         FrameUnitVector2D expected = EuclidFrameRandomTools.nextFrameUnitVector2D(random, nextElementIn(random, frames));
+         FrameUnitVector2D source = new FrameUnitVector2D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         FrameUnitVector2DReadOnly observable = EuclidFrameFactories.newObservableFrameUnitVector2DReadOnly(valueAccessedListener, source);
+
+         transform.transform(expected, false);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected, false);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameUnitVector3DReadOnly()
+   {
+      Random random = new Random(45);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test simple update operation.
+         FrameUnitVector3D expected = EuclidFrameRandomTools.nextFrameUnitVector3D(random, nextElementIn(random, frames));
+         FrameUnitVector3D source = new FrameUnitVector3D(expected.getReferenceFrame());
+         Consumer<Axis3D> valueAccessedListener = axis -> source.setIncludingFrame(expected);
+         FrameUnitVector3DReadOnly observable = EuclidFrameFactories.newObservableFrameUnitVector3DReadOnly(valueAccessedListener, source);
+
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         thoroughAssertionsFrameTuple3D(expected, observable);
+      }
+
+      { // Test transform operation.
+         FrameUnitVector3D expected = EuclidFrameRandomTools.nextFrameUnitVector3D(random, nextElementIn(random, frames));
+         FrameUnitVector3D source = new FrameUnitVector3D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         FrameUnitVector3DReadOnly observable = EuclidFrameFactories.newObservableFrameUnitVector3DReadOnly(valueAccessedListener, source);
+
+         transform.transform(expected);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFramePoint2DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FramePoint2D expected = new FramePoint2D();
+         FixedFramePoint2DBasics actual = EuclidFrameFactories.newObservableFixedFramePoint2DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextPoint2D(random));
+            thoroughAssertionsFrameTuple2D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextPoint2D(random));
+            thoroughAssertionsFrameTuple2D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false, false};
+         boolean[] accessTrace = {false, false};
+         FramePoint2DBasics source = new FramePoint2D();
+         FixedFramePoint2DBasics observable = EuclidFrameFactories.newObservableFixedFramePoint2DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
+                                                                                                        axis -> accessTrace[axis.ordinal()] = true,
+                                                                                                        source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         for (int i = 0; i < 2; i++)
+         {
+            double value = random.nextDouble();
+            observable.setElement(i, value);
+            assertTrue(changeTrace[i]);
+            changeTrace[i] = false;
+            observable.setElement(i, value);
+            assertFalse(changeTrace[i]);
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+
+            observable.getElement(i);
+            assertTrue(accessTrace[i]);
+            accessTrace[i] = false;
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+         }
+      }
+
+      { // Test transform operation.
+         FramePoint2D expected = EuclidFrameRandomTools.nextFramePoint2D(random, nextElementIn(random, frames));
+         FramePoint2D source = new FramePoint2D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         FixedFramePoint2DBasics observable = EuclidFrameFactories.newObservableFixedFramePoint2DBasics(null, valueAccessedListener, source);
+
+         transform.transform(expected, false);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected, false);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFramePoint3DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FramePoint3D expected = new FramePoint3D();
+         FixedFramePoint3DBasics actual = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextPoint3D(random));
+            thoroughAssertionsFrameTuple3D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextPoint3D(random));
+            thoroughAssertionsFrameTuple3D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false, false, false};
+         boolean[] accessTrace = {false, false, false};
+         FramePoint3DBasics source = new FramePoint3D();
+         FixedFramePoint3DBasics observable = EuclidFrameFactories.newObservableFixedFramePoint3DBasics((axis, newValue) -> changeTrace[axis.ordinal()] = true,
+                                                                                                        axis -> accessTrace[axis.ordinal()] = true,
+                                                                                                        source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         for (int i = 0; i < 3; i++)
+         {
+            double value = random.nextDouble();
+            observable.setElement(i, value);
+            assertTrue(changeTrace[i]);
+            changeTrace[i] = false;
+            observable.setElement(i, value);
+            assertFalse(changeTrace[i]);
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+
+            observable.getElement(i);
+            assertTrue(accessTrace[i]);
+            accessTrace[i] = false;
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+         }
+      }
+
+      { // Test transform operation.
+         FramePoint3D expected = EuclidFrameRandomTools.nextFramePoint3D(random, nextElementIn(random, frames));
+         FramePoint3D source = new FramePoint3D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         FixedFramePoint3DBasics observable = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(null, valueAccessedListener, source);
+
+         transform.transform(expected);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         transform.transform(expected);
+         assertEquals(expected.getZ(), observable.getZ());
+         assertEquals(expected.getZ(), source.getZ());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameVector2DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameVector2D expected = new FrameVector2D();
+         FixedFrameVector2DBasics actual = EuclidFrameFactories.newObservableFixedFrameVector2DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextVector2D(random));
+            thoroughAssertionsFrameTuple2D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextVector2D(random));
+            thoroughAssertionsFrameTuple2D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false, false};
+         boolean[] accessTrace = {false, false};
+         FrameVector2DBasics source = new FrameVector2D();
+         FixedFrameVector2DBasics observable = EuclidFrameFactories.newObservableFixedFrameVector2DBasics((axis,
+                                                                                                           newValue) -> changeTrace[axis.ordinal()] = true,
+                                                                                                          axis -> accessTrace[axis.ordinal()] = true,
+                                                                                                          source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         for (int i = 0; i < 2; i++)
+         {
+            double value = random.nextDouble();
+            observable.setElement(i, value);
+            assertTrue(changeTrace[i]);
+            changeTrace[i] = false;
+            observable.setElement(i, value);
+            assertFalse(changeTrace[i]);
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+
+            observable.getElement(i);
+            assertTrue(accessTrace[i]);
+            accessTrace[i] = false;
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+         }
+      }
+
+      { // Test transform operation.
+         FrameVector2D expected = EuclidFrameRandomTools.nextFrameVector2D(random, nextElementIn(random, frames));
+         FrameVector2D source = new FrameVector2D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         FixedFrameVector2DBasics observable = EuclidFrameFactories.newObservableFixedFrameVector2DBasics(null, valueAccessedListener, source);
+
+         transform.transform(expected, false);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected, false);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameVector3DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameVector3D expected = new FrameVector3D();
+         FixedFrameVector3DBasics actual = EuclidFrameFactories.newObservableFixedFrameVector3DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextVector3D(random));
+            thoroughAssertionsFrameTuple3D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextVector3D(random));
+            thoroughAssertionsFrameTuple3D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false, false, false};
+         boolean[] accessTrace = {false, false, false};
+         FrameVector3DBasics source = new FrameVector3D();
+         FixedFrameVector3DBasics observable = EuclidFrameFactories.newObservableFixedFrameVector3DBasics((axis,
+                                                                                                           newValue) -> changeTrace[axis.ordinal()] = true,
+                                                                                                          axis -> accessTrace[axis.ordinal()] = true,
+                                                                                                          source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         for (int i = 0; i < 3; i++)
+         {
+            double value = random.nextDouble();
+            observable.setElement(i, value);
+            assertTrue(changeTrace[i]);
+            changeTrace[i] = false;
+            observable.setElement(i, value);
+            assertFalse(changeTrace[i]);
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+
+            observable.getElement(i);
+            assertTrue(accessTrace[i]);
+            accessTrace[i] = false;
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+         }
+      }
+
+      { // Test transform operation.
+         FrameVector3D expected = EuclidFrameRandomTools.nextFrameVector3D(random, nextElementIn(random, frames));
+         FrameVector3D source = new FrameVector3D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         FixedFrameVector3DBasics observable = EuclidFrameFactories.newObservableFixedFrameVector3DBasics(null, valueAccessedListener, source);
+
+         transform.transform(expected);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         transform.transform(expected);
+         assertEquals(expected.getZ(), observable.getZ());
+         assertEquals(expected.getZ(), source.getZ());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameUnitVector2DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameUnitVector2D expected = new FrameUnitVector2D();
+         FixedFrameUnitVector2DBasics actual = EuclidFrameFactories.newObservableFixedFrameUnitVector2DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextUnitVector2D(random));
+            thoroughAssertionsFrameTuple2D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextUnitVector2D(random));
+            thoroughAssertionsFrameTuple2D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false, false};
+         boolean[] accessTrace = {false, false};
+         FrameUnitVector2DBasics source = new FrameUnitVector2D();
+         FixedFrameUnitVector2DBasics observable = EuclidFrameFactories.newObservableFixedFrameUnitVector2DBasics((axis,
+                                                                                                                   newValue) -> changeTrace[axis.ordinal()] = true,
+                                                                                                                  axis -> accessTrace[axis.ordinal()] = true,
+                                                                                                                  source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         for (int i = 0; i < 2; i++)
+         {
+            double value = random.nextDouble();
+            observable.setElement(i, value);
+            assertTrue(changeTrace[i]);
+            changeTrace[i] = false;
+            observable.setElement(i, value);
+            assertFalse(changeTrace[i]);
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+
+            observable.getElement(i);
+            assertTrue(accessTrace[i]);
+            accessTrace[i] = false;
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+         }
+      }
+
+      { // Test transform operation.
+         FrameUnitVector2D expected = EuclidFrameRandomTools.nextFrameUnitVector2D(random, nextElementIn(random, frames));
+         FrameUnitVector2D source = new FrameUnitVector2D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis2D> valueAccessedListener = axis -> transform.transform(source, false);
+         FixedFrameUnitVector2DBasics observable = EuclidFrameFactories.newObservableFixedFrameUnitVector2DBasics(null, valueAccessedListener, source);
+
+         transform.transform(expected, false);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected, false);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameUnitVector3DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameUnitVector3D expected = new FrameUnitVector3D();
+         FixedFrameUnitVector3DBasics actual = EuclidFrameFactories.newObservableFixedFrameUnitVector3DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextUnitVector3D(random));
+            thoroughAssertionsFrameTuple3D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextUnitVector3D(random));
+            thoroughAssertionsFrameTuple3D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false, false, false};
+         boolean[] accessTrace = {false, false, false};
+         FrameUnitVector3DBasics source = new FrameUnitVector3D();
+         FixedFrameUnitVector3DBasics observable = EuclidFrameFactories.newObservableFixedFrameUnitVector3DBasics((axis,
+                                                                                                                   newValue) -> changeTrace[axis.ordinal()] = true,
+                                                                                                                  axis -> accessTrace[axis.ordinal()] = true,
+                                                                                                                  source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         for (int i = 0; i < 3; i++)
+         {
+            double value = random.nextDouble();
+            observable.setElement(i, value);
+            assertTrue(changeTrace[i]);
+            changeTrace[i] = false;
+            observable.setElement(i, value);
+            assertFalse(changeTrace[i]);
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+
+            observable.getElement(i);
+            assertTrue(accessTrace[i]);
+            accessTrace[i] = false;
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+         }
+      }
+
+      { // Test transform operation.
+         FrameUnitVector3D expected = EuclidFrameRandomTools.nextFrameUnitVector3D(random, nextElementIn(random, frames));
+         FrameUnitVector3D source = new FrameUnitVector3D(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Consumer<Axis3D> valueAccessedListener = axis -> transform.transform(source);
+         FixedFrameUnitVector3DBasics observable = EuclidFrameFactories.newObservableFixedFrameUnitVector3DBasics(null, valueAccessedListener, source);
+
+         transform.transform(expected);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         transform.transform(expected);
+         assertEquals(expected.getZ(), observable.getZ());
+         assertEquals(expected.getZ(), source.getZ());
       }
    }
 

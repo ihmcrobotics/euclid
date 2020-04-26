@@ -1,6 +1,8 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+import java.util.function.ObjDoubleConsumer;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
@@ -34,6 +36,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector2DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
@@ -406,6 +410,160 @@ public class EuclidFrameFactories
          public ReferenceFrame getReferenceFrame()
          {
             return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameVector3DReadOnly)
+               return equals((FrameVector3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new unit vector 2D that is a read-only view of the unit vector expressed in the
+    * reference frame provided by {@code referenceFrameHolder}.
+    *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param unitVector           the vector to link. Not modified.
+    * @return the new read-only frame unit vector 2D.
+    */
+   public static FrameUnitVector2DReadOnly newLinkedFrameUnitVector2DReadOnly(ReferenceFrameHolder referenceFrameHolder, UnitVector2DReadOnly unitVector)
+   {
+      return new FrameUnitVector2DReadOnly()
+      {
+         @Override
+         public boolean isDirty()
+         {
+            return unitVector.isDirty();
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getX()
+         {
+            return unitVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return unitVector.getY();
+         }
+
+         @Override
+         public double getRawX()
+         {
+            return unitVector.getRawX();
+         }
+
+         @Override
+         public double getRawY()
+         {
+            return unitVector.getRawY();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameVector2DReadOnly)
+               return equals((FrameVector2DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple2DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new unit vector 3D that is a read-only view of the unit vector expressed in the
+    * reference frame provided by {@code referenceFrameHolder}.
+    *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param unitVector           the vector to link. Not modified.
+    * @return the new read-only frame unit vector 3D.
+    */
+   public static FrameUnitVector3DReadOnly newLinkedFrameUnitVector3DReadOnly(ReferenceFrameHolder referenceFrameHolder, UnitVector3DReadOnly unitVector)
+   {
+      return new FrameUnitVector3DReadOnly()
+      {
+         @Override
+         public boolean isDirty()
+         {
+            return unitVector.isDirty();
+         }
+
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getX()
+         {
+            return unitVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return unitVector.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return unitVector.getZ();
+         }
+
+         @Override
+         public double getRawX()
+         {
+            return unitVector.getRawX();
+         }
+
+         @Override
+         public double getRawY()
+         {
+            return unitVector.getRawY();
+         }
+
+         @Override
+         public double getRawZ()
+         {
+            return unitVector.getRawZ();
          }
 
          @Override
@@ -937,6 +1095,18 @@ public class EuclidFrameFactories
          }
 
          @Override
+         public double getX()
+         {
+            return originalUnitVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return originalUnitVector.getY();
+         }
+
+         @Override
          public double getRawX()
          {
             return originalUnitVector.getRawX();
@@ -1088,6 +1258,24 @@ public class EuclidFrameFactories
          public ReferenceFrame getReferenceFrame()
          {
             return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getX()
+         {
+            return originalUnitVector.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return originalUnitVector.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return originalUnitVector.getZ();
          }
 
          @Override
@@ -1623,5 +1811,351 @@ public class EuclidFrameFactories
       };
 
       return fixedFrameBoundingBox3DBasics;
+   }
+
+   /**
+    * Creates a linked frame point that can be used to observe access to the source point's
+    * coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    *                              being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original frame point to link and observe. Not modified.
+    * @return the observable frame point.
+    */
+   public static FramePoint2DReadOnly newObservableFramePoint2DReadOnly(Consumer<Axis2D> valueAccessedListener, FramePoint2DReadOnly source)
+   {
+      return newLinkedFramePoint2DReadOnly(source, EuclidCoreFactories.newObservablePoint2DReadOnly(valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a linked frame point that can be used to observe access to the source point's
+    * coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    *                              being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original frame point to link and observe. Not modified.
+    * @return the observable frame point.
+    */
+   public static FramePoint3DReadOnly newObservableFramePoint3DReadOnly(Consumer<Axis3D> valueAccessedListener, FramePoint3DReadOnly source)
+   {
+      return newLinkedFramePoint3DReadOnly(source, EuclidCoreFactories.newObservablePoint3DReadOnly(valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a linked frame vector that can be used to observe access to the source vector's
+    * coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
+    *                              being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original frame vector to link and observe. Not modified.
+    * @return the observable frame vector.
+    */
+   public static FrameVector2DReadOnly newObservableFrameVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, FrameVector2DReadOnly source)
+   {
+      return newLinkedFrameVector2DReadOnly(source, EuclidCoreFactories.newObservableVector2DReadOnly(valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a linked frame vector that can be used to observe access to the source vector's
+    * coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
+    *                              being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original frame vector to link and observe. Not modified.
+    * @return the observable frame vector.
+    */
+   public static FrameVector3DReadOnly newObservableFrameVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, FrameVector3DReadOnly source)
+   {
+      return newLinkedFrameVector3DReadOnly(source, EuclidCoreFactories.newObservableVector3DReadOnly(valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a linked frame unit vector that can be used to observe access to the source unit vector's
+    * coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
+    *                              is being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original frame unit vector to link and observe. Not modified.
+    * @return the observable frame unit vector.
+    */
+   public static FrameUnitVector2DReadOnly newObservableFrameUnitVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, FrameUnitVector2DReadOnly source)
+   {
+      return newLinkedFrameUnitVector2DReadOnly(source, EuclidCoreFactories.newObservableUnitVector2DReadOnly(valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a linked frame unit vector that can be used to observe access to the source unit vector's
+    * coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
+    *                              is being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original frame unit vector to link and observe. Not modified.
+    * @return the observable frame unit vector.
+    */
+   public static FrameUnitVector3DReadOnly newObservableFrameUnitVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, FrameUnitVector3DReadOnly source)
+   {
+      return newLinkedFrameUnitVector3DReadOnly(source, EuclidCoreFactories.newObservableUnitVector3DReadOnly(valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame point that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame point. Not modified.
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
+    *                              been modified. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    *                              being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
+    * @return the observable frame point.
+    */
+   public static FixedFramePoint2DBasics newObservableFixedFramePoint2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                              ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                                              Consumer<Axis2D> valueAccessedListener)
+   {
+      return newObservableFixedFramePoint2DBasics(valueChangedListener, valueAccessedListener, newFixedFramePoint2DBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame point that can be used to observe read and write operations on the source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
+    *                              been modified. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    *                              being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original point to link and observe. Modifiable via the linked
+    *                              point interface. Can be {@code null}.
+    * @return the observable frame point.
+    */
+   public static FixedFramePoint2DBasics newObservableFixedFramePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                                              Consumer<Axis2D> valueAccessedListener, FixedFramePoint2DBasics source)
+   {
+      return newLinkedFixedFramePoint2DBasics(source, EuclidCoreFactories.newObservablePoint2DBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame point that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame point. Not modified.
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
+    *                              been modified. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    *                              being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
+    * @return the observable frame point.
+    */
+   public static FixedFramePoint3DBasics newObservableFixedFramePoint3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                              ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                              Consumer<Axis3D> valueAccessedListener)
+   {
+      return newObservableFixedFramePoint3DBasics(valueChangedListener, valueAccessedListener, newFixedFramePoint3DBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame point that can be used to observe read and write operations on the source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
+    *                              been modified. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
+    *                              being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original point to link and observe. Modifiable via the linked
+    *                              point interface. Can be {@code null}.
+    * @return the observable frame point.
+    */
+   public static FixedFramePoint3DBasics newObservableFixedFramePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                              Consumer<Axis3D> valueAccessedListener, FixedFramePoint3DBasics source)
+   {
+      return newLinkedFixedFramePoint3DBasics(source, EuclidCoreFactories.newObservablePoint3DBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame vector that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame vector. Not modified.
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
+    *                              been modified. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
+    *                              being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
+    * @return the observable frame vector.
+    */
+   public static FixedFrameVector2DBasics newObservableFixedFrameVector2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                                                Consumer<Axis2D> valueAccessedListener)
+   {
+      return newObservableFixedFrameVector2DBasics(valueChangedListener, valueAccessedListener, newFixedFrameVector2DBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame vector that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
+    *                              been modified. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
+    *                              being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original vector to link and observe. Modifiable via the linked
+    *                              vector interface. Can be {@code null}.
+    * @return the observable frame vector.
+    */
+   public static FixedFrameVector2DBasics newObservableFixedFrameVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                                                Consumer<Axis2D> valueAccessedListener, FixedFrameVector2DBasics source)
+   {
+      return newLinkedFixedFrameVector2DBasics(source, EuclidCoreFactories.newObservableVector2DBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame vector that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame vector. Not modified.
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
+    *                              been modified. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
+    *                              being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
+    * @return the observable frame vector.
+    */
+   public static FixedFrameVector3DBasics newObservableFixedFrameVector3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                                Consumer<Axis3D> valueAccessedListener)
+   {
+      return newObservableFixedFrameVector3DBasics(valueChangedListener, valueAccessedListener, newFixedFrameVector3DBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame vector that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the vector has
+    *                              been modified. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
+    *                              being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original vector to link and observe. Modifiable via the linked
+    *                              vector interface. Can be {@code null}.
+    * @return the observable frame vector.
+    */
+   public static FixedFrameVector3DBasics newObservableFixedFrameVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                                Consumer<Axis3D> valueAccessedListener, FixedFrameVector3DBasics source)
+   {
+      return newLinkedFixedFrameVector3DBasics(source, EuclidCoreFactories.newObservableVector3DBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame unit vector that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame unit vector. Not
+    *                              modified.
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
+    *                              has been modified. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
+    *                              is being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
+    * @return the observable frame unit vector.
+    */
+   public static FixedFrameUnitVector2DBasics newObservableFixedFrameUnitVector2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                        ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                                                        Consumer<Axis2D> valueAccessedListener)
+   {
+      return newObservableFixedFrameUnitVector2DBasics(valueChangedListener, valueAccessedListener, newFixedFrameUnitVector2DBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame unit vector that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
+    *                              has been modified. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
+    *                              is being accessed. The corresponding constant {@link Axis2D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original unit vector to link and observe. Modifiable via the
+    *                              linked unit vector interface. Can be {@code null}.
+    * @return the observable frame unit vector.
+    */
+   public static FixedFrameUnitVector2DBasics newObservableFixedFrameUnitVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                                                        Consumer<Axis2D> valueAccessedListener,
+                                                                                        FixedFrameUnitVector2DBasics source)
+   {
+      return newLinkedFixedFrameUnitVector2DBasics(source,
+                                                   EuclidCoreFactories.newObservableUnitVector2DBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame unit vector that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame unit vector. Not
+    *                              modified.
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
+    *                              has been modified. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
+    *                              is being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
+    * @return the observable frame unit vector.
+    */
+   public static FixedFrameUnitVector3DBasics newObservableFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                        ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                                        Consumer<Axis3D> valueAccessedListener)
+   {
+      return newObservableFixedFrameUnitVector3DBasics(valueChangedListener, valueAccessedListener, newFixedFrameUnitVector3DBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame unit vector that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the unit vector
+    *                              has been modified. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate that was changed alongside its new
+    *                              value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
+    *                              is being accessed. The corresponding constant {@link Axis3D} will be
+    *                              passed to indicate the coordinate being accessed.
+    * @param source                the original unit vector to link and observe. Modifiable via the
+    *                              linked unit vector interface. Can be {@code null}.
+    * @return the observable frame unit vector.
+    */
+   public static FixedFrameUnitVector3DBasics newObservableFixedFrameUnitVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                                        Consumer<Axis3D> valueAccessedListener,
+                                                                                        FixedFrameUnitVector3DBasics source)
+   {
+      return newLinkedFixedFrameUnitVector3DBasics(source,
+                                                   EuclidCoreFactories.newObservableUnitVector3DBasics(valueChangedListener, valueAccessedListener, source));
    }
 }
