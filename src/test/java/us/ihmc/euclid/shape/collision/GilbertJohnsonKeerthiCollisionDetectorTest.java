@@ -36,6 +36,7 @@ import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
 import us.ihmc.euclid.shape.primitives.PointShape3D;
 import us.ihmc.euclid.shape.primitives.Ramp3D;
 import us.ihmc.euclid.shape.primitives.Sphere3D;
+import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
@@ -43,16 +44,116 @@ import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 
 class GilbertJohnsonKeerthiCollisionDetectorTest
 {
    private static final int ITERATIONS = 5000;
    private static final double EPSILON = 1.0e-10;
+
+   /**
+    * Tests that saving the detector's last support direction for the next evaluation, leads to
+    * decreasing the number of iterations when the shapes haven't moved, while the result remains the
+    * same.
+    */
+   @Test
+   void testReusingSupportDirection()
+   {
+      Random random = new Random(789034504);
+      GilbertJohnsonKeerthiCollisionDetector detector = new GilbertJohnsonKeerthiCollisionDetector();
+      double distanceEpsilon = 1.0e-4;
+      double pointTangentialEpsilon = 1.0e-2;
+
+      {
+         int totalIterationsWithoutHint = 0;
+         int totalIterationsWithHint = 0;
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Shape3DBasics shapeA = EuclidShapeRandomTools.nextConvexShape3D(random);
+            Shape3DBasics shapeB = EuclidShapeRandomTools.nextConvexShape3D(random);
+
+            EuclidShape3DCollisionResult expectedResult = detector.evaluateCollision(shapeA, shapeB);
+
+            if (expectedResult.areShapesColliding())
+            { // Force non-colliding cases
+               i--;
+               continue;
+            }
+
+            int originalNumberOfIterations = detector.getNumberOfIterations();
+            Vector3D initialSupportDirection = new Vector3D(detector.getSupportDirection());
+
+            detector.setInitialSupportDirection(initialSupportDirection);
+            EuclidShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
+            int newNumberOfIterations = detector.getNumberOfIterations();
+
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
+                  + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+
+            totalIterationsWithoutHint += originalNumberOfIterations;
+            totalIterationsWithHint += newNumberOfIterations;
+         }
+
+         System.out.println("Non-colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         assertTrue(totalIterationsWithHint < totalIterationsWithoutHint / 3);
+      }
+
+      {
+         int totalIterationsWithoutHint = 0;
+         int totalIterationsWithHint = 0;
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Shape3DBasics shapeA = EuclidShapeRandomTools.nextConvexShape3D(random);
+            Shape3DBasics shapeB = EuclidShapeRandomTools.nextConvexShape3D(random);
+
+            if (shapeA instanceof PointShape3DReadOnly && shapeB instanceof PointShape3DReadOnly)
+            { // Points cannot collide, skipping
+               i--;
+               continue;
+            }
+
+            EuclidShape3DCollisionResult expectedResult = detector.evaluateCollision(shapeA, shapeB);
+
+            while (!expectedResult.areShapesColliding())
+            { // Force colliding cases
+               Vector3D centroidSeparation = new Vector3D();
+               centroidSeparation.sub(shapeB.getCentroid(), shapeA.getCentroid());
+               centroidSeparation.scale(0.5);
+               shapeA.applyTransform(new RigidBodyTransform(new Quaternion(), centroidSeparation));
+               expectedResult = detector.evaluateCollision(shapeA, shapeB);
+            }
+
+            int originalNumberOfIterations = detector.getNumberOfIterations();
+            Vector3D initialSupportDirection = new Vector3D(detector.getSupportDirection());
+
+            detector.setInitialSupportDirection(initialSupportDirection);
+            EuclidShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
+            int newNumberOfIterations = detector.getNumberOfIterations();
+
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
+                  + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+
+            totalIterationsWithoutHint += originalNumberOfIterations;
+            totalIterationsWithHint += newNumberOfIterations;
+         }
+
+         System.out.println("Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         /*
+          * Providing the initial support direction doesn't seem to be as beneficial compared to
+          * non-colliding case. The average number of iterations to converge is also by default about 4 times
+          * less than the non-colliding scenario.
+          */
+         assertTrue(totalIterationsWithHint < totalIterationsWithoutHint);
+      }
+   }
 
    @Test
    void testSimpleCollisionWithNonCollidingCubeAndTetrahedron()

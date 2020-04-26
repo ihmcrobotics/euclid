@@ -12,6 +12,7 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.shape.collision.epa.ExpandingPolytopeAlgorithm;
 import us.ihmc.euclid.shape.collision.gjk.GJKSimplex3D;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
+import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector.TerminationType;
 import us.ihmc.euclid.shape.collision.interfaces.SupportingVertexHolder;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -452,5 +453,19 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
    public ReferenceFrame getDetectorFrame()
    {
       return detectorFrame;
+   }
+
+   /**
+    * Returns information about the termination for the last evaluation.
+    * <p>
+    * This is destined for debugging purposes to obtain further information about reason how the last
+    * evaluation terminated.
+    * </p>
+    * 
+    * @return the termination type for the last evaluation.
+    */
+   public TerminationType getLastTerminationType()
+   {
+      return gjkCollisionDetector.getLastTerminationType();
    }
 }

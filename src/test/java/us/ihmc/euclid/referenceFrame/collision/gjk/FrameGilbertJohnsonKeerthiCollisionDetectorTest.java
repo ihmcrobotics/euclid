@@ -10,8 +10,11 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.referenceFrame.FramePoint3D;
+import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.collision.EuclidFrameShape3DCollisionResult;
+import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DBasics;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameRandomTools;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
@@ -19,9 +22,12 @@ import us.ihmc.euclid.shape.collision.EuclidShape3DCollisionResult;
 import us.ihmc.euclid.shape.collision.gjk.GilbertJohnsonKeerthiCollisionDetector;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
 {
@@ -36,6 +42,110 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
    private static final double DISTANCE_AVERAGE_EPSILON = 1.0e-10;
    private static final double POINT_NORMAL_ERROR_AVERAGE_EPSILON = 1.0e-10;
    private static final double POINT_TANGENTIAL_ERROR_AVERAGE_EPSILON = 1.0e-7;
+
+   /**
+    * Tests that saving the detector's last support direction for the next evaluation, leads to
+    * decreasing the number of iterations when the shapes haven't moved, while the result remains the
+    * same.
+    */
+   @Test
+   void testReusingSupportDirection()
+   {
+      Random random = new Random(789034504);
+      ReferenceFrame[] referenceFrames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+      FrameGilbertJohnsonKeerthiCollisionDetector detector = new FrameGilbertJohnsonKeerthiCollisionDetector();
+      double distanceEpsilon = 1.0e-4;
+      double pointTangentialEpsilon = 1.0e-2;
+
+      {
+         int totalIterationsWithoutHint = 0;
+         int totalIterationsWithHint = 0;
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            FrameShape3DBasics shapeA = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random,
+                                                                                           EuclidCoreRandomTools.nextElementIn(random, referenceFrames));
+            FrameShape3DBasics shapeB = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random,
+                                                                                           EuclidCoreRandomTools.nextElementIn(random, referenceFrames));
+
+            EuclidFrameShape3DCollisionResult expectedResult = detector.evaluateCollision(shapeA, shapeB);
+
+            if (expectedResult.areShapesColliding())
+            { // Force non-colliding cases
+               i--;
+               continue;
+            }
+
+            int originalNumberOfIterations = detector.getNumberOfIterations();
+            FrameVector3D initialSupportDirection = new FrameVector3D(detector.getSupportDirection());
+
+            detector.setInitialSupportDirection(initialSupportDirection);
+            EuclidFrameShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
+            int newNumberOfIterations = detector.getNumberOfIterations();
+
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
+                  + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+
+            totalIterationsWithoutHint += originalNumberOfIterations;
+            totalIterationsWithHint += newNumberOfIterations;
+         }
+
+         System.out.println("Non-colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         assertTrue(totalIterationsWithHint < totalIterationsWithoutHint / 3);
+      }
+
+      {
+         int totalIterationsWithoutHint = 0;
+         int totalIterationsWithHint = 0;
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            FrameShape3DBasics shapeA = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random,
+                                                                                           EuclidCoreRandomTools.nextElementIn(random, referenceFrames));
+            FrameShape3DBasics shapeB = EuclidFrameShapeRandomTools.nextFrameConvexShape3D(random,
+                                                                                           EuclidCoreRandomTools.nextElementIn(random, referenceFrames));
+
+            if (shapeA instanceof FramePointShape3DReadOnly && shapeB instanceof FramePointShape3DReadOnly)
+            { // Points cannot collide, skipping
+               i--;
+               continue;
+            }
+
+            EuclidFrameShape3DCollisionResult expectedResult = detector.evaluateCollision(shapeA, shapeB);
+
+            while (!expectedResult.areShapesColliding())
+            { // Force colliding cases
+               FramePoint3D centroidSeparation = new FramePoint3D(shapeB.getCentroid());
+               centroidSeparation.changeFrame(shapeA.getReferenceFrame());
+               centroidSeparation.sub(shapeA.getCentroid());
+               centroidSeparation.scale(0.5);
+               shapeA.applyTransform(new RigidBodyTransform(new Quaternion(), centroidSeparation));
+               expectedResult = detector.evaluateCollision(shapeA, shapeB);
+            }
+
+            int originalNumberOfIterations = detector.getNumberOfIterations();
+            FrameVector3D initialSupportDirection = new FrameVector3D(detector.getSupportDirection());
+
+            detector.setInitialSupportDirection(initialSupportDirection);
+            EuclidFrameShape3DCollisionResult actualResult = detector.evaluateCollision(shapeA, shapeB);
+            int newNumberOfIterations = detector.getNumberOfIterations();
+
+            EuclidShapeTestTools.assertEuclidShape3DCollisionResultGeometricallyEquals("Iteration "
+                  + i, expectedResult, actualResult, distanceEpsilon, pointTangentialEpsilon, 0.0);
+
+            totalIterationsWithoutHint += originalNumberOfIterations;
+            totalIterationsWithHint += newNumberOfIterations;
+         }
+
+         System.out.println("Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         /*
+          * Providing the initial support direction doesn't seem to be as beneficial compared to
+          * non-colliding case. The average number of iterations to converge is also by default about 4 times
+          * less than the non-colliding scenario.
+          */
+         assertTrue(totalIterationsWithHint < totalIterationsWithoutHint);
+      }
+   }
 
    @Test
    public void testCompareAgainstFramelessGJK()
