@@ -789,6 +789,114 @@ public class EuclidFrameTools
    }
 
    /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C,
+                                              FixedFramePoint2DBasics circumcenterToPack)
+   {
+      circumcenterToPack.checkReferenceFrameMatch(A, B, C);
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code A}, {@code B}, and {@code C} are not all
+    *                                         expressed in the same reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C, FramePoint2DBasics circumcenterToPack)
+   {
+      A.checkReferenceFrameMatch(B, C);
+      circumcenterToPack.setReferenceFrame(A.getReferenceFrame());
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint3DReadOnly A, FramePoint3DReadOnly B, FramePoint3DReadOnly C,
+                                              FixedFramePoint3DBasics circumcenterToPack)
+   {
+      circumcenterToPack.checkReferenceFrameMatch(A, B, C);
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code A}, {@code B}, and {@code C} are not all
+    *                                         expressed in the same reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint3DReadOnly A, FramePoint3DReadOnly B, FramePoint3DReadOnly C, FramePoint3DBasics circumcenterToPack)
+   {
+      A.checkReferenceFrameMatch(B, C);
+      circumcenterToPack.setReferenceFrame(A.getReferenceFrame());
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
     * This methods computes the minimum distance between the two infinitely long 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
