@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -71,6 +72,19 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
    default Point3DReadOnly getCentroid()
    {
       return getPosition();
+   }
+
+   /**
+    * Checks that the radius corresponding to the given axis is positive.
+    * 
+    * @param axis to identify the component to check.
+    * @throws IllegalArgumentException if the radius component is strictly negative.
+    */
+   default void checkRadiusPositive(Axis3D axis)
+   {
+      if (getRadii().getElement(axis) < 0.0)
+         throw new IllegalArgumentException("The " + axis + "-radius of a " + getClass().getSimpleName() + " cannot be negative: "
+               + getRadii().getElement(axis));
    }
 
    /**

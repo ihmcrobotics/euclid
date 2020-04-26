@@ -7,9 +7,9 @@ import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
@@ -29,32 +29,7 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** The three radii of this ellipsoid. */
-   private final Vector3D radii = new Vector3D()
-   {
-      @Override
-      public void setX(double x)
-      {
-         if (x < 0.0)
-            throw new IllegalArgumentException("The x-radius of an Ellipsoid3D cannot be negative: " + x);
-         super.setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         if (y < 0.0)
-            throw new IllegalArgumentException("The y-radius of an Ellipsoid3D cannot be negative: " + y);
-         super.setY(y);
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         if (z < 0.0)
-            throw new IllegalArgumentException("The z-radius of an Ellipsoid3D cannot be negative: " + z);
-         super.setZ(z);
-      }
-   };
+   private final Vector3DBasics radii = EuclidCoreFactories.newObservableVector3DBasics((axis, newValue) -> checkRadiusPositive(axis), null);
 
    /**
     * Creates a new ellipsoid 3D with its 3 radii initialized to {@code 1}.

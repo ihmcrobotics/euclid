@@ -18,7 +18,6 @@ import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -40,32 +39,9 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    /**
     * Represents the sizeX, sizeY, and sizeZ of this box.
     */
-   private final FixedFrameVector3DBasics size = EuclidFrameFactories.newLinkedFixedFrameVector3DBasics(this, new Vector3D()
-   {
-      @Override
-      public void setX(double x)
-      {
-         if (x < 0.0)
-            throw new IllegalArgumentException("The x-size of a FrameBox3D cannot be negative: " + x);
-         super.setX(x);
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         if (y < 0.0)
-            throw new IllegalArgumentException("The y-size of a FrameBox3D cannot be negative: " + y);
-         super.setY(y);
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         if (z < 0.0)
-            throw new IllegalArgumentException("The z-size of a FrameBox3D cannot be negative: " + z);
-         super.setZ(z);
-      }
-   });
+   private final FixedFrameVector3DBasics size = EuclidFrameFactories.newObservableFixedFrameVector3DBasics(this,
+                                                                                                            (axis, newValue) -> checkSizePositive(axis),
+                                                                                                            null);
 
    /**
     * Creates a 1-by-1-by-1 box 3D and initializes its reference frame to

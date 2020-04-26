@@ -2,6 +2,7 @@ package us.ihmc.euclid.shape.primitives.interfaces;
 
 import static us.ihmc.euclid.tools.TupleTools.dot;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Line3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -72,6 +73,18 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    default Point3DReadOnly getCentroid()
    {
       return getPosition();
+   }
+
+   /**
+    * Checks that the size component corresponding to the given axis is positive.
+    * 
+    * @param axis to identify the component to check.
+    * @throws IllegalArgumentException if the size component is strictly negative.
+    */
+   default void checkSizePositive(Axis3D axis)
+   {
+      if (getSize().getElement(axis) < 0.0)
+         throw new IllegalArgumentException("The " + axis + "-size of a " + getClass().getSimpleName() + " cannot be negative: " + getSize().getElement(axis));
    }
 
    /**

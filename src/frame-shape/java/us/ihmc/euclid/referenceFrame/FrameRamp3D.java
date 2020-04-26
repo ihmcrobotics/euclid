@@ -24,8 +24,6 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -46,6 +44,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  */
 public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3D>
 {
+   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The reference frame in which this shape is expressed. */
    private ReferenceFrame referenceFrame;
    /** Pose of this ramp. */
@@ -53,44 +52,11 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
    /** Represents the sizeX, sizeY, and sizeZ of this ramp. */
-   private final FixedFrameVector3DBasics size = EuclidFrameFactories.newLinkedFixedFrameVector3DBasics(this, new Vector3D()
+   private final FixedFrameVector3DBasics size = EuclidFrameFactories.newObservableFixedFrameVector3DBasics(this, (axis, newValue) ->
    {
-      @Override
-      public void setX(double x)
-      {
-         if (x != getX())
-         {
-            if (x < 0.0)
-               throw new IllegalArgumentException("The x-size of a FrameRamp3D cannot be negative: " + x);
-            super.setX(x);
-            notifyChangeListeners();
-         }
-      }
-
-      @Override
-      public void setY(double y)
-      {
-         if (y != getY())
-         {
-            if (y < 0.0)
-               throw new IllegalArgumentException("The y-size of a FrameRamp3D cannot be negative: " + y);
-            super.setY(y);
-            notifyChangeListeners();
-         }
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         if (z != getZ())
-         {
-            if (z < 0.0)
-               throw new IllegalArgumentException("The z-size of a FrameRamp3D cannot be negative: " + z);
-            super.setZ(z);
-            notifyChangeListeners();
-         }
-      }
-   });
+      checkSizePositive(axis);
+      notifyChangeListeners();
+   }, null);
 
    private boolean rampFeaturesDirty = true;
 
@@ -104,31 +70,7 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
 
    private boolean centroidDirty = true;
 
-   private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newLinkedFixedFramePoint3DBasics(this, new Point3D()
-   {
-      @Override
-      public double getX()
-      {
-         updateCentroid();
-         return super.getX();
-      };
-
-      @Override
-      public double getY()
-      {
-         updateCentroid();
-         return super.getY();
-      };
-
-      @Override
-      public double getZ()
-      {
-         updateCentroid();
-         return super.getZ();
-      };
-   });
-
-   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
+   private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroid());
 
    /**
     * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0} and
