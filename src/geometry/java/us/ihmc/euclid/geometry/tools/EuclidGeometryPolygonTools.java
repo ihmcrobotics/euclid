@@ -2326,7 +2326,7 @@ public class EuclidGeometryPolygonTools
     *                         the maximum allowed deviation from a potential circumscribed circle.
     * @return {@code true} is the convex polygon is concyclic, {@code false} otherwise.
     */
-   public static boolean isConvexPolygonConcyclic(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, double epsilon)
+   public static boolean isConvexPolygon2DConcyclic(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, double epsilon)
    {
       checkNumberOfVertices(convexPolygon2D, numberOfVertices);
 

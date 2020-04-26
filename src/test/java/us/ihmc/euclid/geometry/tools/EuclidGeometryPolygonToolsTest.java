@@ -4045,9 +4045,9 @@ public class EuclidGeometryPolygonToolsTest
             Collections.reverse(concyclicPoints);
 
          if (concyclicPoints.isEmpty())
-            assertFalse(EuclidGeometryPolygonTools.isConvexPolygonConcyclic(concyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
+            assertFalse(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(concyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
          else
-            assertTrue(EuclidGeometryPolygonTools.isConvexPolygonConcyclic(concyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
+            assertTrue(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(concyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -4065,13 +4065,13 @@ public class EuclidGeometryPolygonToolsTest
          directionAway.sub(vertex, circumcenter);
          double distanceOutside = EuclidCoreRandomTools.nextDouble(random, 2.0 * SMALL_EPSILON, 1.0);
          vertex.scaleAdd(distanceOutside, directionAway, vertex);
-         assertFalse(EuclidGeometryPolygonTools.isConvexPolygonConcyclic(notConcyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
+         assertFalse(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(notConcyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
 
          vertex.set(vertexUnmodified);
          double radius = vertex.distance(circumcenter);
          double distanceInside = EuclidCoreRandomTools.nextDouble(random, 2.0 * SMALL_EPSILON, radius);
          vertex.scaleAdd(-distanceInside, directionAway, vertex);
-         assertFalse(EuclidGeometryPolygonTools.isConvexPolygonConcyclic(notConcyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
+         assertFalse(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(notConcyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
       }
    }
 }
