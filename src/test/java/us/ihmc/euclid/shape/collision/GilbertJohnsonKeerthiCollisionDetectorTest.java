@@ -145,7 +145,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
             totalIterationsWithHint += newNumberOfIterations;
          }
 
-         System.out.println(" Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
+         System.out.println("Colliding total iterations w/o hint: " + totalIterationsWithoutHint + ", with hint: " + totalIterationsWithHint);
          /*
           * Providing the initial support direction doesn't seem to be as beneficial compared to
           * non-colliding case. The average number of iterations to converge is also by default about 4 times
