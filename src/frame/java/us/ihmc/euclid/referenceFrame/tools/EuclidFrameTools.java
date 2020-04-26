@@ -65,6 +65,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -101,6 +102,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -131,6 +133,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -161,6 +164,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -197,6 +201,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -232,6 +237,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnPlane2} belongs to
     *                        the first plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -258,6 +264,7 @@ public class EuclidFrameTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -283,6 +290,7 @@ public class EuclidFrameTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -778,6 +786,114 @@ public class EuclidFrameTools
    {
       a.checkReferenceFrameMatch(b, c);
       return EuclidGeometryTools.triangleArea(a, b, c);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C,
+                                              FixedFramePoint2DBasics circumcenterToPack)
+   {
+      circumcenterToPack.checkReferenceFrameMatch(A, B, C);
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code A}, {@code B}, and {@code C} are not all
+    *                                         expressed in the same reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C, FramePoint2DBasics circumcenterToPack)
+   {
+      A.checkReferenceFrameMatch(B, C);
+      circumcenterToPack.setReferenceFrame(A.getReferenceFrame());
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint3DReadOnly A, FramePoint3DReadOnly B, FramePoint3DReadOnly C,
+                                              FixedFramePoint3DBasics circumcenterToPack)
+   {
+      circumcenterToPack.checkReferenceFrameMatch(A, B, C);
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code A}, {@code B}, and {@code C} are not all
+    *                                         expressed in the same reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint3DReadOnly A, FramePoint3DReadOnly B, FramePoint3DReadOnly C, FramePoint3DBasics circumcenterToPack)
+   {
+      A.checkReferenceFrameMatch(B, C);
+      circumcenterToPack.setReferenceFrame(A.getReferenceFrame());
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
    }
 
    /**
@@ -4113,6 +4229,7 @@ public class EuclidFrameTools
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
     *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleThreshold</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -4168,6 +4285,7 @@ public class EuclidFrameTools
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
     *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleThreshold</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
@@ -4942,6 +5060,9 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
+    * </p>
+    * <p>
     * WARNING: This method generates garbage.
     * </p>
     *
@@ -4971,6 +5092,9 @@ public class EuclidFrameTools
     * <li>Fails and returns {@code false} if the three points are on a line.
     * <li>Fails and returns {@code false} if two or three points are equal.
     * </ul>
+    * </p>
+    * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
     * </p>
     *
     * @param firstPointOnPlane  first point on the plane. Not modified.
@@ -6550,6 +6674,73 @@ public class EuclidFrameTools
    {
       point.checkReferenceFrameMatch(pointOnLine, lineDirection);
       return EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(point, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+                                                         FixedFramePoint3DBasics sphere3DPositionToPack)
+   {
+      p1.checkReferenceFrameMatch(p2, p3, sphere3DPositionToPack);
+      return EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPositionToPack);
+   }
+
+   /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    * @throws ReferenceFrameMismatchException if the three points are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+                                                         FramePoint3DBasics sphere3DPositionToPack)
+   {
+      p1.checkReferenceFrameMatch(p2, p3);
+      sphere3DPositionToPack.setReferenceFrame(p1.getReferenceFrame());
+      return EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPositionToPack);
    }
 
    /**

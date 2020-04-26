@@ -551,14 +551,29 @@ public class EuclidGeometryRandomTools
     */
    public static List<Point2D> nextCircleBasedConvexPolygon2D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices)
    {
+      return nextCircleBasedConvexPolygon2D(random, nextPoint2D(random, centerMinMax), maxEdgeLength, numberOfVertices);
+   }
+
+   /**
+    * Generates a random convex polygon 2D by defining a random circle onto which the vertices are
+    * randomly positioned.
+    *
+    * @param random           the random generator to use.
+    * @param center           the coordinates of the circle's center. Not modified.
+    * @param maxEdgeLength    maximum distance between two successive vertices constraining the size of
+    *                         the random circle.
+    * @param numberOfVertices the size of the convex polygon.
+    * @return the random convex polygon 2D.
+    */
+   public static List<Point2D> nextCircleBasedConvexPolygon2D(Random random, Point2DReadOnly center, double maxEdgeLength, int numberOfVertices)
+   {
       if (numberOfVertices == 0)
          return Collections.emptyList();
       if (numberOfVertices == 1)
-         return Collections.singletonList(nextPoint2D(random, centerMinMax));
+         return Collections.singletonList(new Point2D(center));
       if (numberOfVertices == 2)
       {
          Vector2D halfEdgeLentgh = nextVector2DWithFixedLength(random, 0.5 * maxEdgeLength * random.nextDouble());
-         Point2D center = nextPoint2D(random, centerMinMax);
          Point2D a = new Point2D();
          Point2D b = new Point2D();
          a.add(center, halfEdgeLentgh);
@@ -637,7 +652,6 @@ public class EuclidGeometryRandomTools
       }
 
       // Make a new list with the vertices properly ordered and shifted to be around a random center
-      Point2D center = nextPoint2D(random, centerMinMax);
       List<Point2D> convexPolygon2D = new ArrayList<>();
 
       for (int i = 0; i < numberOfVertices; i++)

@@ -159,6 +159,7 @@ public class EuclidGeometryTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areLine2DsCollinear(double pointOnLine1x, double pointOnLine1y, double lineDirection1x, double lineDirection1y, double pointOnLine2x,
                                              double pointOnLine2y, double lineDirection2x, double lineDirection2y, double angleEpsilon, double distanceEpsilon)
@@ -214,6 +215,7 @@ public class EuclidGeometryTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areLine2DsCollinear(Point2DReadOnly firstPointOnLine1, Point2DReadOnly secondPointOnLine1, Point2DReadOnly firstPointOnLine2,
                                              Point2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
@@ -258,6 +260,7 @@ public class EuclidGeometryTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areLine2DsCollinear(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly firstPointOnLine2,
                                              Point2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
@@ -300,6 +303,7 @@ public class EuclidGeometryTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areLine2DsCollinear(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly pointOnLine2,
                                              Vector2DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
@@ -344,6 +348,7 @@ public class EuclidGeometryTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areLine3DsCollinear(double pointOnLine1x, double pointOnLine1y, double pointOnLine1z, double lineDirection1x, double lineDirection1y,
                                              double lineDirection1z, double pointOnLine2x, double pointOnLine2y, double pointOnLine2z, double lineDirection2x,
@@ -416,6 +421,7 @@ public class EuclidGeometryTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areLine3DsCollinear(Point3DReadOnly firstPointOnLine1, Point3DReadOnly secondPointOnLine1, Point3DReadOnly firstPointOnLine2,
                                              Point3DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
@@ -515,6 +521,7 @@ public class EuclidGeometryTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnPlane2} belongs to
     *                        the first plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean arePlane3DsCoincident(Point3DReadOnly pointOnPlane1, Vector3DReadOnly planeNormal1, Point3DReadOnly pointOnPlane2,
                                                Vector3DReadOnly planeNormal2, double angleEpsilon, double distanceEpsilon)
@@ -543,6 +550,7 @@ public class EuclidGeometryTools
     * @param secondVectorY y-component of the second vector. Not modified.
     * @param angleEpsilon  tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areVector2DsParallel(double firstVectorX, double firstVectorY, double secondVectorX, double secondVectorY, double angleEpsilon)
    {
@@ -553,7 +561,7 @@ public class EuclidGeometryTools
                                                double secondVectorY, boolean isSecondVectorUnitary, double angleEpsilon)
    {
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
-         throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
+         throw new IllegalArgumentException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
       double firstVectorLength = isFirstVectorUnitary ? 1.0 : EuclidCoreTools.norm(firstVectorX, firstVectorY);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
@@ -581,6 +589,7 @@ public class EuclidGeometryTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areVector2DsParallel(Vector2DReadOnly firstVector, Vector2DReadOnly secondVector, double angleEpsilon)
    {
@@ -613,6 +622,7 @@ public class EuclidGeometryTools
     * @param secondVectorZ z-component of the second vector. Not modified.
     * @param angleEpsilon  tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areVector3DsParallel(double firstVectorX, double firstVectorY, double firstVectorZ, double secondVectorX, double secondVectorY,
                                               double secondVectorZ, double angleEpsilon)
@@ -625,7 +635,7 @@ public class EuclidGeometryTools
                                                double angleEpsilon)
    {
       if (angleEpsilon < 0.0 || angleEpsilon > HALF_PI)
-         throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
+         throw new IllegalArgumentException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
       double firstVectorLength = isFirstVectorUnitary ? 1.0 : EuclidCoreTools.norm(firstVectorX, firstVectorY, firstVectorZ);
       if (firstVectorLength < ONE_TEN_MILLIONTH)
@@ -653,6 +663,7 @@ public class EuclidGeometryTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean areVector3DsParallel(Vector3DReadOnly firstVector, Vector3DReadOnly secondVector, double angleEpsilon)
    {
@@ -1348,6 +1359,106 @@ public class EuclidGeometryTools
       double areaPt2 = lengthSquaredA + lengthSquaredB + lengthSquaredC;
       double areaPt3 = 4.0 * areaPt1 - areaPt2 * areaPt2;
       return areaPt3 <= 0.0 ? 0.0 : 0.25 * EuclidCoreTools.squareRoot(areaPt3);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    */
+   public static boolean triangleCircumcenter(Point2DReadOnly A, Point2DReadOnly B, Point2DReadOnly C, Point2DBasics circumcenterToPack)
+   {
+      double ASquared = A.distanceFromOriginSquared();
+      double BSquared = B.distanceFromOriginSquared();
+      double CSquared = C.distanceFromOriginSquared();
+
+      double ByCy = B.getY() - C.getY();
+      double CxBx = C.getX() - B.getX();
+
+      double a = 0.5 / (A.getX() * ByCy + A.getY() * CxBx + B.getX() * C.getY() - B.getY() * C.getX());
+
+      if (!Double.isFinite(a))
+         return false;
+
+      double CSquaredBSquared = CSquared - BSquared;
+      double sx = ASquared * ByCy + A.getY() * CSquaredBSquared + BSquared * C.getY() - B.getY() * CSquared;
+      double sy = -A.getX() * CSquaredBSquared + ASquared * CxBx + B.getX() * CSquared - BSquared * C.getX();
+
+      circumcenterToPack.set(sx, sy);
+      circumcenterToPack.scale(a);
+      return true;
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    */
+   public static boolean triangleCircumcenter(Point3DReadOnly A, Point3DReadOnly B, Point3DReadOnly C, Point3DBasics circumcenterToPack)
+   {
+      double ux = B.getX() - C.getX();
+      double uy = B.getY() - C.getY();
+      double uz = B.getZ() - C.getZ();
+
+      double vx = A.getX() - C.getX();
+      double vy = A.getY() - C.getY();
+      double vz = A.getZ() - C.getZ();
+
+      double wx = A.getX() - B.getX();
+      double wy = A.getY() - B.getY();
+      double wz = A.getZ() - B.getZ();
+
+      double uSquared = EuclidCoreTools.normSquared(ux, uy, uz);
+      double vSquared = EuclidCoreTools.normSquared(vx, vy, vz);
+      double wSquared = EuclidCoreTools.normSquared(wx, wy, wz);
+      double uv = ux * vx + uy * vy + uz * vz;
+      double uw = ux * wx + uy * wy + uz * wz;
+      double vw = vx * wx + vy * wy + vz * wz;
+
+      double ucwx = wy * uz - wz * uy;
+      double ucwy = wz * ux - wx * uz;
+      double ucwz = wx * uy - wy * ux;
+      double ucwSquared = 0.5 / EuclidCoreTools.normSquared(ucwx, ucwy, ucwz);
+
+      if (!Double.isFinite(ucwSquared))
+         return false;
+
+      double alpha = uSquared * vw * ucwSquared;
+      double beta = -vSquared * uw * ucwSquared;
+      double gamma = wSquared * uv * ucwSquared;
+
+      double px = alpha * A.getX() + beta * B.getX() + gamma * C.getX();
+      double py = alpha * A.getY() + beta * B.getY() + gamma * C.getY();
+      double pz = alpha * A.getZ() + beta * B.getZ() + gamma * C.getZ();
+      circumcenterToPack.set(px, py, pz);
+
+      return true;
    }
 
    /**
@@ -2935,7 +3046,7 @@ public class EuclidGeometryTools
             }
             return 2;
          default:
-            throw new RuntimeException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
+            throw new IllegalStateException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
       }
    }
 
@@ -3725,7 +3836,7 @@ public class EuclidGeometryTools
 
             return 2;
          default:
-            throw new RuntimeException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
+            throw new IllegalStateException("Unexpected number of intersections. Should either be 0, 1, or 2, but is: " + numberOfIntersections);
       }
    }
 
@@ -5623,13 +5734,14 @@ public class EuclidGeometryTools
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
     *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleThreshold</tt> &notin; [0; <i>pi</i>/2]
     */
    public static boolean intersectionBetweenTwoPlane3Ds(Point3DReadOnly pointOnPlane1, Vector3DReadOnly planeNormal1, Point3DReadOnly pointOnPlane2,
                                                         Vector3DReadOnly planeNormal2, double angleThreshold, Point3DBasics pointOnIntersectionToPack,
                                                         Vector3DBasics intersectionDirectionToPack)
    {
       if (angleThreshold < 0.0 || angleThreshold > HALF_PI)
-         throw new RuntimeException("The angle epsilon has to be inside the interval: [0.0 ; Math.PI / 2.0]");
+         throw new IllegalArgumentException("The angle threshold has to be inside the interval: [0.0 ; Math.PI / 2.0]");
 
       pointOnIntersectionToPack.setToNaN();
       intersectionDirectionToPack.setToNaN();
@@ -5747,16 +5859,16 @@ public class EuclidGeometryTools
     * @param lengthSideC the length of the side C.
     * @return {@code true} if the lengths represents the three sides of a triangle, {@code false}
     *         otherwise.
-    * @throws RuntimeException if any of the three lengths is negative.
+    * @throws IllegalArgumentException if any of the three lengths is negative.
     */
    public static boolean isFormingTriangle(double lengthSideA, double lengthSideB, double lengthSideC)
    {
       if (lengthSideA < 0.0)
-         throw new RuntimeException("The side A cannot have a negative length, lengthSideA = " + lengthSideA);
+         throw new IllegalArgumentException("The side A cannot have a negative length, lengthSideA = " + lengthSideA);
       if (lengthSideB < 0.0)
-         throw new RuntimeException("The side B cannot have a negative length, lengthSideB = " + lengthSideB);
+         throw new IllegalArgumentException("The side B cannot have a negative length, lengthSideB = " + lengthSideB);
       if (lengthSideC < 0.0)
-         throw new RuntimeException("The side C cannot have a negative length, lengthSideC = " + lengthSideC);
+         throw new IllegalArgumentException("The side C cannot have a negative length, lengthSideC = " + lengthSideC);
 
       if (lengthSideA + lengthSideB <= lengthSideC)
          return false;
@@ -6562,6 +6674,9 @@ public class EuclidGeometryTools
     * </ul>
     * </p>
     * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
+    * </p>
+    * <p>
     * WARNING: This method generates garbage.
     * </p>
     *
@@ -6588,6 +6703,9 @@ public class EuclidGeometryTools
     * <li>Fails and returns {@code false} if the three points are on a line.
     * <li>Fails and returns {@code false} if two or three points are equal.
     * </ul>
+    * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
+    * </p>
     * </p>
     *
     * @param firstPointOnPlane  first point on the plane. Not modified.
@@ -8165,17 +8283,17 @@ public class EuclidGeometryTools
     * @param hypotenuseC the length of the hypotenuse C.
     * @param cathetusA   the length of the cathetus A.
     * @return the length of the cathetus B.
-    * @throws RuntimeException if the length of the cathetus A is negative or greater than the
-    *                          hypotenuse C.
+    * @throws IllegalArgumentException if the length of the cathetus A is negative or greater than the
+    *                                  hypotenuse C.
     */
    public static double pythagorasGetCathetus(double hypotenuseC, double cathetusA)
    {
       if (hypotenuseC < 0.0)
-         throw new RuntimeException("The hypotenuse cannot have a negative length, hypotenuseC = " + hypotenuseC);
+         throw new IllegalArgumentException("The hypotenuse cannot have a negative length, hypotenuseC = " + hypotenuseC);
       if (cathetusA < 0.0)
-         throw new RuntimeException("The cathetus cannot have a negative length, cathetusA = " + cathetusA);
+         throw new IllegalArgumentException("The cathetus cannot have a negative length, cathetusA = " + cathetusA);
       if (cathetusA > hypotenuseC)
-         throw new RuntimeException("The cathetus cannot be longer than the hypotenuse, cathetusA = " + cathetusA + ", hypotenuseC = " + hypotenuseC);
+         throw new IllegalArgumentException("The cathetus cannot be longer than the hypotenuse, cathetusA = " + cathetusA + ", hypotenuseC = " + hypotenuseC);
 
       return EuclidCoreTools.squareRoot(hypotenuseC * hypotenuseC - cathetusA * cathetusA);
    }
@@ -8194,14 +8312,14 @@ public class EuclidGeometryTools
     * @param cathetusA the length of the cathetus A.
     * @param cathetusB the length of the cathetus B.
     * @return the length of the hypotenuse C.
-    * @throws RuntimeException if any of the two lengths is negative.
+    * @throws IllegalArgumentException if any of the two lengths is negative.
     */
    public static double pythagorasGetHypotenuse(double cathetusA, double cathetusB)
    {
       if (cathetusA < 0.0)
-         throw new RuntimeException("The cathetus A cannot have a negative length, cathetusA = " + cathetusA);
+         throw new IllegalArgumentException("The cathetus A cannot have a negative length, cathetusA = " + cathetusA);
       if (cathetusB < 0.0)
-         throw new RuntimeException("The cathetus B cannot have a negative length, cathetusB = " + cathetusB);
+         throw new IllegalArgumentException("The cathetus B cannot have a negative length, cathetusB = " + cathetusB);
       return Math.hypot(cathetusA, cathetusB);
    }
 
@@ -8380,6 +8498,71 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    *
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    */
+   public static boolean sphere3DPositionFromThreePoints(Point3DReadOnly p1, Point3DReadOnly p2, Point3DReadOnly p3, double sphere3DRadius,
+                                                         Point3DBasics sphere3DPositionToPack)
+   {
+      double ux = p2.getX() - p1.getX();
+      double uy = p2.getY() - p1.getY();
+      double uz = p2.getZ() - p1.getZ();
+
+      double vx = p3.getX() - p1.getX();
+      double vy = p3.getY() - p1.getY();
+      double vz = p3.getZ() - p1.getZ();
+
+      double wx = uy * vz - uz * vy;
+      double wy = uz * vx - ux * vz;
+      double wz = ux * vy - uy * vx;
+
+      double uSquared = EuclidCoreTools.normSquared(ux, uy, uz);
+      double vSquared = EuclidCoreTools.normSquared(vx, vy, vz);
+      double wSquaredInverse = 1.0 / EuclidCoreTools.normSquared(wx, wy, wz);
+      double uv = ux * vx + uy * vy + uz * vz;
+
+      double alpha = 0.5 * (uSquared - uv) * vSquared * wSquaredInverse;
+      double beta = 0.5 * (vSquared - uv) * uSquared * wSquaredInverse;
+
+      double radiusSquared = sphere3DRadius * sphere3DRadius;
+      double alphaSquared = alpha * alpha;
+      double betaSquared = beta * beta;
+
+      double gammaSquared = (radiusSquared - alphaSquared * uSquared - betaSquared * vSquared - 2.0 * alpha * beta * uv) * wSquaredInverse;
+
+      if (gammaSquared < 0.0 || !Double.isFinite(gammaSquared))
+         return false; // The radius of the sphere is too small, or the problem is degenerate.
+
+      double gamma = Math.sqrt(gammaSquared);
+
+      double px = p1.getX() + alpha * ux + beta * vx + gamma * wx;
+      double py = p1.getY() + alpha * uy + beta * vy + gamma * wy;
+      double pz = p1.getZ() + alpha * uz + beta * vz + gamma * wz;
+      sphere3DPositionToPack.set(px, py, pz);
+      return true;
+   }
+
+   /**
     * Assuming an isosceles triangle defined by three vertices A, B, and C, with |AB| == |BC|, this
     * methods computes the missing vertex B given the vertices A and C, the normal of the triangle, the
     * angle ABC that is equal to the angle at B from the the leg BA to the leg BC.
@@ -8500,6 +8683,44 @@ public class EuclidGeometryTools
    }
 
    /**
+    * Computes the radius of the circumcircle of the triangle ABC given the length of its edges.
+    *
+    * @param lengthA the length of the side A of the triangle.
+    * @param lengthB the length of the side B of the triangle.
+    * @param lengthC the length of the side C of the triangle.
+    * @return the circumradius.
+    */
+   public static double triangleCircumradius(double lengthA, double lengthB, double lengthC)
+   {
+      // From https://en.wikipedia.org/wiki/Triangle#Circumradius_and_inradius
+      double circumradiusSquared = lengthA * lengthA * lengthB * lengthB * lengthC * lengthC;
+      circumradiusSquared /= (lengthA + lengthB + lengthC) * (-lengthA + lengthB + lengthC) * (lengthA - lengthB + lengthC) * (lengthA + lengthB - lengthC);
+      return Math.sqrt(circumradiusSquared);
+   }
+
+   /**
+    * Computes the length of the height of the triangle from its sides lengths.
+    * <p>
+    * The height is the line that originates from the triangle's base to end at the triangle's apex
+    * (vertex on the opposite side of the base).
+    * </p>
+    *
+    * @param legLength  the length of the sides that are of same length.
+    * @param baseLength the length of the side that has different length from the other sides.
+    * @return the length of the height.
+    */
+   public static double triangleIsoscelesHeight(double legLength, double baseLength)
+   {
+      if (legLength < 0.5 * baseLength)
+         throw new IllegalArgumentException("Malformed isosceles triangle, expected legLength > baseLength/2, was legLength: " + legLength + ", baseLength/2: "
+               + 0.5 * baseLength);
+      if (baseLength < 0.0)
+         throw new IllegalArgumentException("The base cannot have a negative length, baseLength = " + baseLength);
+
+      return Math.sqrt(legLength * legLength - 0.25 * baseLength * baseLength);
+   }
+
+   /**
     * Calculate an unknown angle of a fully defined 2D Triangle by the law of Cosine.
     * <p>
     * Given a triangle with the three sides A, B, and C, this methods calculates the angle between A
@@ -8509,15 +8730,15 @@ public class EuclidGeometryTools
     * @param lengthNeighbourSideB the length of the side B.
     * @param lengthOppositeSideC  the length of the side C.
     * @return the value in radians of the unknown angle.
-    * @throws RuntimeException if the lengths do not describe a triangle, see
-    *                          {@link #isFormingTriangle(double, double, double)}.
+    * @throws IllegalArgumentException if the lengths do not describe a triangle, see
+    *                                  {@link #isFormingTriangle(double, double, double)}.
     */
    public static double unknownTriangleAngleByLawOfCosine(double lengthNeighbourSideA, double lengthNeighbourSideB, double lengthOppositeSideC)
    {
       if (!isFormingTriangle(lengthNeighbourSideA, lengthNeighbourSideB, lengthOppositeSideC))
       {
-         throw new RuntimeException("Unable to build a Triangle of the given triangle sides a: " + lengthNeighbourSideA + " b: " + lengthNeighbourSideB + " c: "
-               + lengthOppositeSideC);
+         throw new IllegalArgumentException("Unable to build a Triangle of the given triangle sides a: " + lengthNeighbourSideA + " b: " + lengthNeighbourSideB
+               + " c: " + lengthOppositeSideC);
       }
 
       double numerator = lengthNeighbourSideA * lengthNeighbourSideA + lengthNeighbourSideB * lengthNeighbourSideB - lengthOppositeSideC * lengthOppositeSideC;
@@ -8540,17 +8761,17 @@ public class EuclidGeometryTools
     * @param lengthSideB       the length of the side B.
     * @param angleBetweenAAndB the angle between the sides A and B.
     * @return the value of the unknown side length.
-    * @throws RuntimeException if {@code lengthSideA} and/or {@code lengthSideB} are negative, if
-    *                          {@code angleBetweenAAndB} is greater than <i>pi</i>.
+    * @throws IllegalArgumentException if {@code lengthSideA} and/or {@code lengthSideB} are negative,
+    *                                  if {@code angleBetweenAAndB} is greater than <i>pi</i>.
     */
    public static double unknownTriangleSideLengthByLawOfCosine(double lengthSideA, double lengthSideB, double angleBetweenAAndB)
    {
       if (lengthSideA < 0.0)
-         throw new RuntimeException("lengthSideA cannot be negative: " + lengthSideA);
+         throw new IllegalArgumentException("lengthSideA cannot be negative: " + lengthSideA);
       if (lengthSideB < 0.0)
-         throw new RuntimeException("lengthSideB cannot be negative: " + lengthSideA);
+         throw new IllegalArgumentException("lengthSideB cannot be negative: " + lengthSideA);
       if (Math.abs(angleBetweenAAndB) > Math.PI)
-         throw new RuntimeException("angleBetweenAAndB " + angleBetweenAAndB + " does not define a triangle.");
+         throw new IllegalArgumentException("angleBetweenAAndB " + angleBetweenAAndB + " does not define a triangle.");
 
       return EuclidCoreTools.squareRoot(lengthSideA * lengthSideA + lengthSideB * lengthSideB
             - 2.0 * lengthSideA * lengthSideB * EuclidCoreTools.cos(angleBetweenAAndB));

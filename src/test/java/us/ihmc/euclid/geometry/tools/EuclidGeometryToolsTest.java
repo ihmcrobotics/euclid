@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
@@ -1400,6 +1401,96 @@ public class EuclidGeometryToolsTest
          actualArea = EuclidGeometryTools.triangleArea(a3D, b3D, c3D);
          assertEquals(expectedArea, actualArea, EPSILON);
       }
+   }
+
+   @Test
+   public void testTriangleCircumscribedCircle()
+   {
+      Random random = new Random(3456436);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Building the triangle knowing its circumcenter.
+         Point2D expected = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         Point2D A = new Point2D();
+         Point2D B = new Point2D();
+         Point2D C = new Point2D();
+
+         A.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+         B.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+         C.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+
+         Point2D actual = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Computing the circle position for 3 random points and verifying its properties.
+         Point2D A = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D B = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D C = EuclidCoreRandomTools.nextPoint2D(random);
+
+         Point2D circumcenter = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenter);
+
+         assertEquals(circumcenter.distance(A), circumcenter.distance(B), EPSILON);
+         assertEquals(circumcenter.distance(A), circumcenter.distance(C), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Testing that picking 3 points at random from a concyclic polygon allows to retrieve the circumscribed center of the polygon.
+         Point2D expected = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         int numberOfVertices = random.nextInt(20) + 3;
+         List<Point2D> concyclicPolygon = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, expected, 1.0, numberOfVertices);
+         Point2D A = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         Point2D B = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         while (B == A)
+            B = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         Point2D C = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         while (C == B || C == A)
+            C = concyclicPolygon.get(random.nextInt(numberOfVertices));
+
+         Point2D actual = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Building the triangle knowing its circumcenter.
+         Point3D expected = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         Point3D A = new Point3D();
+         Point3D B = new Point3D();
+         Point3D C = new Point3D();
+
+         Vector3D normal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         A.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+         B.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+         C.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+
+         Point3D actual = new Point3D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Computing the circle position for 3 random points and verifying its properties.
+         Point3D A = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D B = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D C = EuclidCoreRandomTools.nextPoint3D(random);
+
+         Point3D circumcenter = new Point3D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenter);
+
+         assertEquals(circumcenter.distance(A), circumcenter.distance(B), EPSILON);
+         assertEquals(circumcenter.distance(A), circumcenter.distance(C), EPSILON);
+      }
+
    }
 
    @Test
@@ -10826,6 +10917,69 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testSphere3DPositionFromThreePoints()
+   {
+      Random random = new Random(23498675);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double sphere3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Point3D expected = new Point3D(); //EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p1 = new Point3D();
+         Point3D p2 = new Point3D();
+         Point3D p3 = new Point3D();
+
+         p1.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+         p2.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+         p3.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+
+         // Checking the winding of the points
+         Vector3D p1ToSphere = new Vector3D();
+         p1ToSphere.sub(p1, expected);
+         Vector3D normal = EuclidGeometryTools.normal3DFromThreePoint3Ds(p1, p2, p3);
+         boolean isCounterClockwiseWinding = p1ToSphere.dot(normal) < 0.0;
+
+         boolean success;
+         Point3D actual = new Point3D();
+         if (isCounterClockwiseWinding)
+            success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, actual);
+         else
+            success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p3, p2, sphere3DRadius, actual);
+         assertTrue(success, "Iteration " + i);
+
+         EuclidCoreTestTools.assertTuple3DEquals("Iteration " + i, expected, actual, LARGE_EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double sphere3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Point3D sphere3DPosition = new Point3D();
+         Point3D p1 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p2 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p3 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+
+         double lengthA = p1.distance(p2);
+         double lengthB = p2.distance(p3);
+         double lengthC = p3.distance(p1);
+         double circumradius = EuclidGeometryTools.triangleCircumradius(lengthA, lengthB, lengthC);
+
+         boolean success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPosition);
+
+         assertEquals(circumradius <= sphere3DRadius, success);
+
+         if (success)
+         {
+            double d1 = sphere3DPosition.distance(p1);
+            double d2 = sphere3DPosition.distance(p2);
+            double d3 = sphere3DPosition.distance(p3);
+            assertEquals(d1, d2, EPSILON);
+            assertEquals(d1, d3, EPSILON);
+            assertEquals(d1, sphere3DRadius, EPSILON);
+         }
+      }
+   }
+
+   @Test
    public void testTopVertex3DOfIsoscelesTriangle3D() throws Exception
    {
       Random random = new Random(1176L);
@@ -10930,6 +11084,34 @@ public class EuclidGeometryToolsTest
          assertFalse(EuclidGeometryTools.triangleBisector2D(a, b, c, new Point2D()));
          assertNull(EuclidGeometryTools.triangleBisector2D(a, b, c));
       }
+   }
+
+   @Test
+   public void testTriangleIsoscelesHeight()
+   {
+      Random random = new Random(8734);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double legLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         double baseLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0 * legLength);
+         double height = EuclidGeometryTools.triangleIsoscelesHeight(legLength, baseLength);
+
+         // Comparing against area algorithm:
+         // triangle isosceles area is twist the area of the right triangle that formed with (leg, 0.5 * base, height)
+         double rightTriangleArea = EuclidGeometryTools.triangleAreaHeron1(legLength, height, 0.5 * baseLength);
+         double isoscelesTriangleArea = EuclidGeometryTools.triangleAreaHeron1(legLength, legLength, baseLength);
+         assertEquals(2.0 * rightTriangleArea, isoscelesTriangleArea, EPSILON);
+
+         // Comparing against pythagoras algorithm using the 
+         double pythagorasHeight = EuclidGeometryTools.pythagorasGetCathetus(legLength, 0.5 * baseLength);
+         assertEquals(height, pythagorasHeight, EPSILON);
+      }
+
+      // Test exceptions
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(0.5, 1.1));
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(-0.1, 1.1));
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(0.1, -0.1));
    }
 
    @Test

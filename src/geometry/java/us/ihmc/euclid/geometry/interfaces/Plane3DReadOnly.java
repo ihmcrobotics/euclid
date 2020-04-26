@@ -217,6 +217,7 @@ public interface Plane3DReadOnly
     * @param distanceEpsilon tolerance on the distance to determine if {@code otherPlane.point} belongs
     *                        to this plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    default boolean isCoincident(Plane3DReadOnly otherPlane, double angleEpsilon, double distanceEpsilon)
    {
@@ -417,6 +418,7 @@ public interface Plane3DReadOnly
     * @param otherPlane   the other plane to do the test with. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two planes are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    default boolean isParallel(Plane3DReadOnly otherPlane, double angleEpsilon)
    {

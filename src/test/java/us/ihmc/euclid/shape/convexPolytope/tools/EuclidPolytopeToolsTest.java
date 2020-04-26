@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -33,6 +34,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.UnitVector3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -257,6 +259,57 @@ public class EuclidPolytopeToolsTest
             assertEquals(radius, EuclidShapeTools.icosahedronRadius(triangle.getBC()), EPSILON);
             assertEquals(radius, EuclidShapeTools.icosahedronRadius(triangle.getCA()), EPSILON);
          }
+      }
+   }
+
+   @Test
+   public void testIsConvexPolygonConcyclic()
+   {
+      Random random = new Random(4365);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Generating points to be on circle, the resulting polygon is concyclic.
+         int numberOfVertices = random.nextInt(20);
+         List<Point3D> concyclicPoints = EuclidShapeRandomTools.nextCircleBasedConvexPolygon3D(random,
+                                                                                               10.0,
+                                                                                               1.0,
+                                                                                               numberOfVertices,
+                                                                                               EuclidCoreRandomTools.nextVector3D(random));
+         if (random.nextBoolean())
+            Collections.reverse(concyclicPoints);
+
+         if (concyclicPoints.isEmpty())
+            assertFalse(EuclidPolytopeTools.isConvexPolygon3DConcyclic(concyclicPoints, numberOfVertices, EPSILON), "Iteration " + i);
+         else
+            assertTrue(EuclidPolytopeTools.isConvexPolygon3DConcyclic(concyclicPoints, numberOfVertices, EPSILON), "Iteration " + i);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Testing for a polygon that is not concyclic. To do so, we take a concyclic polygon and shift one of its vertices away for the circumcenter so it is not concyclic.
+         int numberOfVertices = random.nextInt(16) + 4; // Need at least 4 vertices as anything with less vertices is considered concyclic automatically.
+         Point3D circumcenter = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         List<Point3D> notConcyclicPoints = EuclidShapeRandomTools.nextCircleBasedConvexPolygon3D(random,
+                                                                                                  circumcenter,
+                                                                                                  1.0,
+                                                                                                  numberOfVertices,
+                                                                                                  EuclidCoreRandomTools.nextVector3D(random));
+         if (random.nextBoolean())
+            Collections.reverse(notConcyclicPoints);
+
+         Point3D vertexUnmodified = new Point3D(notConcyclicPoints.get(random.nextInt(numberOfVertices)));
+         Point3D vertex = notConcyclicPoints.get(random.nextInt(numberOfVertices));
+
+         UnitVector3D directionAway = new UnitVector3D();
+         directionAway.sub(vertex, circumcenter);
+         double distanceOutside = EuclidCoreRandomTools.nextDouble(random, 2.0 * EPSILON, 1.0);
+         vertex.scaleAdd(distanceOutside, directionAway, vertex);
+         assertFalse(EuclidPolytopeTools.isConvexPolygon3DConcyclic(notConcyclicPoints, numberOfVertices, EPSILON), "Iteration " + i);
+
+         vertex.set(vertexUnmodified);
+         double radius = vertex.distance(circumcenter);
+         double distanceInside = EuclidCoreRandomTools.nextDouble(random, 2.0 * EPSILON, radius);
+         vertex.scaleAdd(-distanceInside, directionAway, vertex);
+         assertFalse(EuclidPolytopeTools.isConvexPolygon3DConcyclic(notConcyclicPoints, numberOfVertices, EPSILON), "Iteration " + i);
       }
    }
 }
