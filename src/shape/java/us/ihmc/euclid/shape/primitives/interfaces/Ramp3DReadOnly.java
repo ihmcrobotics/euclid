@@ -245,7 +245,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @return the surface normal of the slope.
     */
-   default Vector3DBasics getRampSurfaceNormal()
+   default Vector3DReadOnly getRampSurfaceNormal()
    {
       Vector3D surfaceNormal = new Vector3D();
       getRampSurfaceNormal(surfaceNormal);

@@ -18,6 +18,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a ramp 3D.
@@ -51,8 +52,10 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       notifyChangeListeners();
    }, null);
 
-   private boolean rampFeaturesDirty = true;
+   private boolean rampSurfaceNormalDirty = true;
+   private final Vector3DBasics rampSurfaceNormal = EuclidCoreFactories.newObservableVector3DBasics(null, axis -> updateRampSurfaceNormal());
 
+   private boolean rampFeaturesDirty = true;
    /** Length of the slope face of this ramp. */
    private double rampLength;
    /**
@@ -150,6 +153,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 
    private void setupListeners()
    {
+      changeListeners.add(() -> rampSurfaceNormalDirty = true);
       changeListeners.add(() -> rampFeaturesDirty = true);
       changeListeners.add(() -> centroidDirty = true);
       pose.addChangeListeners(changeListeners);
@@ -163,6 +167,16 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       rampLength = EuclidShapeTools.computeRamp3DLength(size.getX(), size.getZ());
       angleOfRampIncline = EuclidShapeTools.computeRamp3DIncline(size.getX(), size.getZ());
       rampFeaturesDirty = false;
+   }
+
+   private void updateRampSurfaceNormal()
+   {
+      if (!rampSurfaceNormalDirty)
+         return;
+
+      rampSurfaceNormal.set(-getSizeZ() / getRampLength(), 0.0, getSizeX() / getRampLength());
+      transformToWorld(rampSurfaceNormal);
+      rampSurfaceNormalDirty = false;
    }
 
    private void updateCentroid()
@@ -199,10 +213,25 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       return size;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3DReadOnly getCentroid()
    {
       return centroid;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public Vector3DReadOnly getRampSurfaceNormal()
+   {
+      return rampSurfaceNormal;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getRampSurfaceNormal(Vector3DBasics surfaceNormalToPack)
+   {
+      surfaceNormalToPack.set(rampSurfaceNormal);
    }
 
    /**

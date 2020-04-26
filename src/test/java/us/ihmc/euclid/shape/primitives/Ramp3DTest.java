@@ -34,7 +34,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Ramp3DTest
@@ -579,7 +579,7 @@ public class Ramp3DTest
          Point3D pointOnEdge = new Point3D(ramp3D.getSizeX(), EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()), ramp3D.getSizeZ());
          ramp3D.transformToWorld(pointOnEdge);
 
-         Vector3DBasics rampNormal = ramp3D.getRampSurfaceNormal();
+         Vector3DReadOnly rampNormal = ramp3D.getRampSurfaceNormal();
          Vector3D backFaceNormal = new Vector3D(ramp3D.getPose().getXAxis());
          Vector3D towardOutside = new Vector3D();
          towardOutside.interpolate(rampNormal, backFaceNormal, random.nextDouble());
@@ -604,7 +604,7 @@ public class Ramp3DTest
          Point3D pointOnEdge = new Point3D(0.0, EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()), 0.0);
          ramp3D.transformToWorld(pointOnEdge);
 
-         Vector3DBasics rampNormal = ramp3D.getRampSurfaceNormal();
+         Vector3DReadOnly rampNormal = ramp3D.getRampSurfaceNormal();
          Vector3D bottomFaceNormal = new Vector3D();
          bottomFaceNormal.setAndNegate(ramp3D.getPose().getZAxis());
          Vector3D towardOutside = new Vector3D();
@@ -1094,7 +1094,7 @@ public class Ramp3DTest
          Point3D pointOnEdge = new Point3D(ramp3D.getSizeX(), EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()), ramp3D.getSizeZ());
          ramp3D.transformToWorld(pointOnEdge);
 
-         Vector3DBasics rampNormal = ramp3D.getRampSurfaceNormal();
+         Vector3DReadOnly rampNormal = ramp3D.getRampSurfaceNormal();
          Vector3D backFaceNormal = new Vector3D(ramp3D.getPose().getXAxis());
          Vector3D towardOutside = new Vector3D();
          towardOutside.interpolate(rampNormal, backFaceNormal, random.nextDouble());
@@ -1114,7 +1114,7 @@ public class Ramp3DTest
          Point3D pointOnEdge = new Point3D(0.0, EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()), 0.0);
          ramp3D.transformToWorld(pointOnEdge);
 
-         Vector3DBasics rampNormal = ramp3D.getRampSurfaceNormal();
+         Vector3DReadOnly rampNormal = ramp3D.getRampSurfaceNormal();
          Vector3D bottomFaceNormal = new Vector3D();
          bottomFaceNormal.setAndNegate(ramp3D.getPose().getZAxis());
          Vector3D towardOutside = new Vector3D();
@@ -1381,7 +1381,7 @@ public class Ramp3DTest
          Point3D pointOnEdge = new Point3D(ramp3D.getSizeX(), EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()), ramp3D.getSizeZ());
          ramp3D.transformToWorld(pointOnEdge);
 
-         Vector3DBasics rampNormal = ramp3D.getRampSurfaceNormal();
+         Vector3DReadOnly rampNormal = ramp3D.getRampSurfaceNormal();
          Vector3D backFaceNormal = new Vector3D(ramp3D.getPose().getXAxis());
          Vector3D towardOutside = new Vector3D();
          towardOutside.interpolate(rampNormal, backFaceNormal, random.nextDouble());
@@ -1401,7 +1401,7 @@ public class Ramp3DTest
          Point3D pointOnEdge = new Point3D(0.0, EuclidCoreRandomTools.nextDouble(random, 0.5 * ramp3D.getSizeY()), 0.0);
          ramp3D.transformToWorld(pointOnEdge);
 
-         Vector3DBasics rampNormal = ramp3D.getRampSurfaceNormal();
+         Vector3DReadOnly rampNormal = ramp3D.getRampSurfaceNormal();
          Vector3D bottomFaceNormal = new Vector3D();
          bottomFaceNormal.setAndNegate(ramp3D.getPose().getZAxis());
          Vector3D towardOutside = new Vector3D();
@@ -1749,14 +1749,14 @@ public class Ramp3DTest
          AxisAngle axisAngle = new AxisAngle();
 
          axisAngle.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 0.99 * epsilon);
-         transform.setRotation(axisAngle);
+         transform.getRotation().set(axisAngle);
          secondRamp.getPose().multiply(transform);
          assertTrue(firstRamp.geometricallyEquals(secondRamp, epsilon));
 
          secondRamp = new Ramp3D(firstRamp);
 
          axisAngle.set(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), 1.01 * epsilon);
-         transform.setRotation(axisAngle);
+         transform.getRotation().set(axisAngle);
          secondRamp.getPose().multiply(transform);
          assertFalse(firstRamp.geometricallyEquals(secondRamp, epsilon));
       }

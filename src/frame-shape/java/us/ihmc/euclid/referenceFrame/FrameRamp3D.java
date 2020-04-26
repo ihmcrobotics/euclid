@@ -16,6 +16,8 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
@@ -25,6 +27,7 @@ import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 /**
  * Implementation of a ramp 3D expressed in a given reference frame.
@@ -58,8 +61,12 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       notifyChangeListeners();
    }, null);
 
-   private boolean rampFeaturesDirty = true;
+   private boolean rampSurfaceNormalDirty = true;
+   private final FixedFrameVector3DBasics rampSurfaceNormal = EuclidFrameFactories.newObservableFixedFrameVector3DBasics(this,
+                                                                                                                         null,
+                                                                                                                         axis -> updateRampSurfaceNormal());
 
+   private boolean rampFeaturesDirty = true;
    /** Length of the slope face of this ramp. */
    private double rampLength;
    /**
@@ -237,6 +244,7 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
 
    private void setupListeners()
    {
+      changeListeners.add(() -> rampSurfaceNormalDirty = true);
       changeListeners.add(() -> rampFeaturesDirty = true);
       changeListeners.add(() -> centroidDirty = true);
       pose.addChangeListeners(changeListeners);
@@ -250,6 +258,16 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       rampLength = EuclidShapeTools.computeRamp3DLength(size.getX(), size.getZ());
       angleOfRampIncline = EuclidShapeTools.computeRamp3DIncline(size.getX(), size.getZ());
       rampFeaturesDirty = false;
+   }
+
+   private void updateRampSurfaceNormal()
+   {
+      if (!rampSurfaceNormalDirty)
+         return;
+
+      rampSurfaceNormalDirty = false;
+      rampSurfaceNormal.set(-getSizeZ() / getRampLength(), 0.0, getSizeX() / getRampLength());
+      transformToWorld(rampSurfaceNormal);
    }
 
    private void updateCentroid()
@@ -289,10 +307,39 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       return size;
    }
 
+   /** {@inheritDoc} */
    @Override
    public FramePoint3DReadOnly getCentroid()
    {
       return centroid;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public FrameVector3DReadOnly getRampSurfaceNormal()
+   {
+      return rampSurfaceNormal;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getRampSurfaceNormal(Vector3DBasics surfaceNormalToPack)
+   {
+      surfaceNormalToPack.set(rampSurfaceNormal);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getRampSurfaceNormal(FixedFrameVector3DBasics surfaceNormalToPack)
+   {
+      surfaceNormalToPack.set(rampSurfaceNormal);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getRampSurfaceNormal(FrameVector3DBasics surfaceNormalToPack)
+   {
+      surfaceNormalToPack.setIncludingFrame(rampSurfaceNormal);
    }
 
    /**
