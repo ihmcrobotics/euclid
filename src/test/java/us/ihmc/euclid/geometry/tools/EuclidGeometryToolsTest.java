@@ -1440,6 +1440,25 @@ public class EuclidGeometryToolsTest
       }
 
       for (int i = 0; i < ITERATIONS; i++)
+      { // Testing that picking 3 points at random from a concyclic polygon allows to retrieve the circumscribed center of the polygon.
+         Point2D expected = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         int numberOfVertices = random.nextInt(20) + 3;
+         List<Point2D> concyclicPolygon = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, expected, 1.0, numberOfVertices);
+         Point2D A = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         Point2D B = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         while (B == A)
+            B = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         Point2D C = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         while (C == B || C == A)
+            C = concyclicPolygon.get(random.nextInt(numberOfVertices));
+
+         Point2D actual = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
       { // Building the triangle knowing its circumcenter.
          Point3D expected = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
          double radius = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);

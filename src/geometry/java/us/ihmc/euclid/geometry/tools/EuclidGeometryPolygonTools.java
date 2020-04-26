@@ -2303,6 +2303,80 @@ public class EuclidGeometryPolygonTools
    }
 
    /**
+    * Determines if the given convex polygon is a concyclic polygon, i.e. there exists a unique circle
+    * that intersects with all the polygon's vertices.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon which vertices
+    * are stored in successive order, either clockwise or counter-clockwise.
+    * </p>
+    * <p>
+    * Edge-cases:
+    * <ul>
+    * <li>An empty convex polygon is not considered a concyclic polygon.
+    * <li>Any convex polygon with 2 or 3 vertices is a concyclic polygon.
+    * <li>If the polygon is degenerate, i.e. all vertices are on a line or equal, this method fails and
+    * returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param convexPolygon2D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
+    *                         convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param epsilon          the tolerance to use during the test. Its unit is meter and represents
+    *                         the maximum allowed deviation from a potential circumscribed circle.
+    * @return {@code true} is the convex polygon is concyclic, {@code false} otherwise.
+    */
+   public static boolean isConvexPolygonConcyclic(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, double epsilon)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return false;
+
+      if (numberOfVertices <= 3)
+         return true;
+      /*
+       * The main idea here is to evaluate the circumcenter from 3 of the polygon's vertices and then we
+       * simply check that all vertices are at the same distance from that circumcenter. If so, the
+       * polygon is concyclic.
+       */
+      int interval = Math.max(1, numberOfVertices / 3);
+      // We can use any set of 3 vertices, so we use the 3 vertices that are the farthest from each other to reduce numerical errors.
+      Point2DReadOnly A = convexPolygon2D.get(0);
+      Point2DReadOnly B = convexPolygon2D.get(interval);
+      Point2DReadOnly C = convexPolygon2D.get(2 * interval);
+
+      // See EuclidGeometryTools.triangleCircumcenter(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly, Point2DBasics)
+      double ASquared = A.distanceFromOriginSquared();
+      double BSquared = B.distanceFromOriginSquared();
+      double CSquared = C.distanceFromOriginSquared();
+
+      double ByCy = B.getY() - C.getY();
+      double CxBx = C.getX() - B.getX();
+
+      double a = 0.5 / (A.getX() * ByCy + A.getY() * CxBx + B.getX() * C.getY() - B.getY() * C.getX());
+
+      if (!Double.isFinite(a))
+         return false; // The polytope is degenerate.
+
+      double CSquaredBSqured = CSquared - BSquared;
+      double sx = a * (ASquared * ByCy + A.getY() * CSquaredBSqured + BSquared * C.getY() - B.getY() * CSquared);
+      double sy = a * (-A.getX() * CSquaredBSqured + ASquared * CxBx + B.getX() * CSquared - BSquared * C.getX());
+
+      double distanceSquaredReference = EuclidCoreTools.normSquared(sx - C.getX(), sy - C.getY());
+
+      for (int i = 1; i < numberOfVertices; i++)
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(i);
+         double distanceSquared = EuclidCoreTools.normSquared(sx - vertex.getX(), sy - vertex.getY());
+
+         if (!EuclidCoreTools.epsilonEquals(distanceSquaredReference, distanceSquared, epsilon))
+            return false;
+      }
+      return true;
+   }
+
+   /**
     * Sorts the vertices to complete the first step of the Graham scan algorithm.
     * <p>
     * First the vertex located at the lowest x-coordinate is found and used as the reference P.

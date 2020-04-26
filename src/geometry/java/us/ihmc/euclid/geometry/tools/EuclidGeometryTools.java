@@ -1387,15 +1387,15 @@ public class EuclidGeometryTools
 
       double ByCy = B.getY() - C.getY();
       double CxBx = C.getX() - B.getX();
-      double CSquaredBSqured = CSquared - BSquared;
 
-      double a = 0.5 / A.getX() * ByCy + A.getY() * CxBx + B.getX() * C.getY() - B.getY() * C.getX();
+      double a = 0.5 / (A.getX() * ByCy + A.getY() * CxBx + B.getX() * C.getY() - B.getY() * C.getX());
 
       if (!Double.isFinite(a))
          return false;
 
-      double sx = ASquared * ByCy + A.getY() * CSquaredBSqured + BSquared * C.getY() - B.getY() * CSquared;
-      double sy = -A.getX() * CSquaredBSqured + ASquared * CxBx + B.getX() * CSquared - BSquared * C.getX();
+      double CSquaredBSquared = CSquared - BSquared;
+      double sx = ASquared * ByCy + A.getY() * CSquaredBSquared + BSquared * C.getY() - B.getY() * CSquared;
+      double sy = -A.getX() * CSquaredBSquared + ASquared * CxBx + B.getX() * CSquared - BSquared * C.getX();
 
       circumcenterToPack.set(sx, sy);
       circumcenterToPack.scale(a);
