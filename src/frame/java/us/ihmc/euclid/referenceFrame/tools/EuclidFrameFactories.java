@@ -1,7 +1,9 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+import java.util.function.IntConsumer;
 import java.util.function.ObjDoubleConsumer;
 
 import us.ihmc.euclid.Axis2D;
@@ -29,6 +31,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
@@ -64,6 +67,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * This class provides a varieties of factories to create Euclid frame types.
@@ -585,6 +589,182 @@ public class EuclidFrameFactories
          public String toString()
          {
             return EuclidFrameIOTools.getFrameTuple3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new unit rotation matrix that is a read-only view of the rotation matrix expressed in
+    * the reference frame provided by {@code referenceFrameHolder}.
+    *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param rotationMatrix       the rotation matrix to link. Not modified.
+    * @return the new read-only frame rotation matrix.
+    */
+   public static FrameRotationMatrixReadOnly newLinkedFrameRotationMatrixReadOnly(ReferenceFrameHolder referenceFrameHolder,
+                                                                                  RotationMatrixReadOnly rotationMatrix)
+   {
+      return new FrameRotationMatrixReadOnly()
+      {
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return rotationMatrix.isDirty();
+         }
+
+         @Override
+         public double getM00()
+         {
+            return rotationMatrix.getM00();
+         }
+
+         @Override
+         public double getM01()
+         {
+            return rotationMatrix.getM01();
+         }
+
+         @Override
+         public double getM02()
+         {
+            return rotationMatrix.getM02();
+         }
+
+         @Override
+         public double getM10()
+         {
+            return rotationMatrix.getM10();
+         }
+
+         @Override
+         public double getM11()
+         {
+            return rotationMatrix.getM11();
+         }
+
+         @Override
+         public double getM12()
+         {
+            return rotationMatrix.getM12();
+         }
+
+         @Override
+         public double getM20()
+         {
+            return rotationMatrix.getM20();
+         }
+
+         @Override
+         public double getM21()
+         {
+            return rotationMatrix.getM21();
+         }
+
+         @Override
+         public double getM22()
+         {
+            return rotationMatrix.getM22();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getM00(),
+                                                                                       getM01(),
+                                                                                       getM02(),
+                                                                                       getM10(),
+                                                                                       getM11(),
+                                                                                       getM12(),
+                                                                                       getM20(),
+                                                                                       getM21(),
+                                                                                       getM22()),
+                                                     getReferenceFrame());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameMatrix3DReadOnly)
+               return equals((FrameMatrix3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameMatrix3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new unit quaternion that is a read-only view of the quaternion expressed in the
+    * reference frame provided by {@code referenceFrameHolder}.
+    *
+    * @param referenceFrameHolder the reference frame supplier. Not modified.
+    * @param quaternion           the quaternion to link. Not modified.
+    * @return the new read-only frame quaternion.
+    */
+   public static FrameQuaternionReadOnly newLinkedFrameQuaternionReadOnly(ReferenceFrameHolder referenceFrameHolder, QuaternionReadOnly quaternion)
+   {
+      return new FrameQuaternionReadOnly()
+      {
+         @Override
+         public ReferenceFrame getReferenceFrame()
+         {
+            return referenceFrameHolder.getReferenceFrame();
+         }
+
+         @Override
+         public double getX()
+         {
+            return quaternion.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return quaternion.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return quaternion.getZ();
+         }
+
+         @Override
+         public double getS()
+         {
+            return quaternion.getS();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS()), getReferenceFrame());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof FrameQuaternionReadOnly)
+               return equals((FrameQuaternionReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidFrameIOTools.getFrameTuple4DString(this);
          }
       };
    }
@@ -1904,6 +2084,39 @@ public class EuclidFrameFactories
    }
 
    /**
+    * Creates a linked frame rotation matrix that can be used to observe access to the source rotation
+    * matrix's coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
+    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
+    *                              will be passed to indicate the row and column respectively of the
+    *                              coefficient being accessed.
+    * @param source                the original frame rotation matrix to link and observe. Not
+    *                              modified.
+    * @return the observable frame rotation matrix.
+    */
+   public static FrameRotationMatrixReadOnly newObservableFrameRotationMatrixReadOnly(BiConsumer<Axis3D, Axis3D> valueAccessedListener,
+                                                                                      FrameRotationMatrixReadOnly source)
+   {
+      return newLinkedFrameRotationMatrixReadOnly(source, EuclidCoreFactories.newObservableRotationMatrixReadOnly(valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a linked frame quaternion that can be used to observe access to the source quaternion's
+    * coordinates.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
+    *                              is being accessed. The index of the component being accessed will be
+    *                              passed.
+    * @param source                the original frame quaternion to link and observe. Not modified.
+    * @return the observable frame quaternion.
+    */
+   public static FrameQuaternionReadOnly newObservableFrameQuaternionReadOnly(IntConsumer valueAccessedListener, FrameQuaternionReadOnly source)
+   {
+      return newLinkedFrameQuaternionReadOnly(source, EuclidCoreFactories.newObservableQuaternionReadOnly(valueAccessedListener, source));
+   }
+
+   /**
     * Creates a new frame point that can be used to observe read and write operations.
     * 
     * @param referenceFrameHolder  the reference frame supplier for the new frame point. Not modified.
@@ -1933,9 +2146,10 @@ public class EuclidFrameFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original point to link and observe. Modifiable via the linked
-    *                              point interface. Can be {@code null}.
+    *                              point interface.
     * @return the observable frame point.
     */
    public static FixedFramePoint2DBasics newObservableFixedFramePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
@@ -1974,9 +2188,10 @@ public class EuclidFrameFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original point to link and observe. Modifiable via the linked
-    *                              point interface. Can be {@code null}.
+    *                              point interface.
     * @return the observable frame point.
     */
    public static FixedFramePoint3DBasics newObservableFixedFramePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
@@ -2016,9 +2231,10 @@ public class EuclidFrameFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface. Can be {@code null}.
+    *                              vector interface.
     * @return the observable frame vector.
     */
    public static FixedFrameVector2DBasics newObservableFixedFrameVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
@@ -2058,9 +2274,10 @@ public class EuclidFrameFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface. Can be {@code null}.
+    *                              vector interface.
     * @return the observable frame vector.
     */
    public static FixedFrameVector3DBasics newObservableFixedFrameVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
@@ -2101,9 +2318,10 @@ public class EuclidFrameFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
     *                              is being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original unit vector to link and observe. Modifiable via the
-    *                              linked unit vector interface. Can be {@code null}.
+    *                              linked unit vector interface.
     * @return the observable frame unit vector.
     */
    public static FixedFrameUnitVector2DBasics newObservableFixedFrameUnitVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
@@ -2146,9 +2364,10 @@ public class EuclidFrameFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the unit vector
     *                              is being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original unit vector to link and observe. Modifiable via the
-    *                              linked unit vector interface. Can be {@code null}.
+    *                              linked unit vector interface.
     * @return the observable frame unit vector.
     */
    public static FixedFrameUnitVector3DBasics newObservableFixedFrameUnitVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
@@ -2157,5 +2376,89 @@ public class EuclidFrameFactories
    {
       return newLinkedFixedFrameUnitVector3DBasics(source,
                                                    EuclidCoreFactories.newObservableUnitVector3DBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame rotation matrix that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame rotation matrix. Not
+    *                              modified.
+    * @param valueChangedListener  the listener to be notified whenever a coordinate of the rotation
+    *                              matrix has been modified. The corresponding constant {@link Axis3D}
+    *                              will be passed to indicate the coordinate that was changed alongside
+    *                              its new value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a coordinate of the rotation
+    *                              matrix is being accessed. The corresponding constant {@link Axis3D}
+    *                              will be passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
+    * @return the observable frame rotation matrix.
+    */
+   public static FixedFrameRotationMatrixBasics newObservableFixedFrameRotationMatrixBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                            Runnable valueChangedListener,
+                                                                                            BiConsumer<Axis3D, Axis3D> valueAccessedListener)
+   {
+      return newObservableFixedFrameRotationMatrixBasics(valueChangedListener, valueAccessedListener, newFixedFrameRotationMatrixBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame rotation matrix that can be used to observe read and write operations on
+    * the source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
+    *                              modified. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
+    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
+    *                              will be passed to indicate the row and column respectively of the
+    *                              coefficient being accessed. Can be {@code null}.
+    * @param source                the original rotation matrix to link and observe. Modifiable via the
+    *                              linked rotation matrix interface.
+    * @return the observable frame rotation matrix.
+    */
+   public static FixedFrameRotationMatrixBasics newObservableFixedFrameRotationMatrixBasics(Runnable valueChangedListener,
+                                                                                            BiConsumer<Axis3D, Axis3D> valueAccessedListener,
+                                                                                            FixedFrameRotationMatrixBasics source)
+   {
+      return newLinkedFixedFrameRotationMatrixBasics(source,
+                                                     EuclidCoreFactories.newObservableRotationMatrixBasics(valueChangedListener,
+                                                                                                           valueAccessedListener,
+                                                                                                           source));
+   }
+
+   /**
+    * Creates a new frame quaternion that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame quaternion. Not
+    *                              modified.
+    * @param valueChangedListener  the listener to be notified whenever the quaternion has been
+    *                              modified. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
+    *                              is being accessed. The index of the component being accessed will be
+    *                              passed. Can be {@code null}.
+    * @return the observable frame quaternion.
+    */
+   public static FixedFrameQuaternionBasics newObservableFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder, Runnable valueChangedListener,
+                                                                                    IntConsumer valueAccessedListener)
+   {
+      return newObservableFixedFrameQuaternionBasics(valueChangedListener, valueAccessedListener, newFixedFrameQuaternionBasics(referenceFrameHolder));
+   }
+
+   /**
+    * Creates a linked frame quaternion that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever the quaternion has been
+    *                              modified. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
+    *                              is being accessed. The index of the component being accessed will be
+    *                              passed. Can be {@code null}.
+    * @param source                the original quaternion to link and observe. Modifiable via the
+    *                              linked quaternion interface.
+    * @return the observable frame quaternion.
+    */
+   public static FixedFrameQuaternionBasics newObservableFixedFrameQuaternionBasics(Runnable valueChangedListener, IntConsumer valueAccessedListener,
+                                                                                    FixedFrameQuaternionBasics source)
+   {
+      return newLinkedFixedFrameQuaternionBasics(source,
+                                                 EuclidCoreFactories.newObservableQuaternionBasics(valueChangedListener, valueAccessedListener, source));
    }
 }

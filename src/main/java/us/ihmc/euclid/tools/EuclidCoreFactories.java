@@ -1,13 +1,18 @@
 package us.ihmc.euclid.tools;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+import java.util.function.IntConsumer;
 import java.util.function.ObjDoubleConsumer;
 import java.util.function.ToDoubleFunction;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -28,6 +33,9 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * This class provides a varieties of factories to create Euclid types.
@@ -833,7 +841,7 @@ public class EuclidCoreFactories
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the component being accessed.
-    * @param source                the original component to link and observe. Not modified.
+    * @param source                the original vector to link and observe. Not modified.
     * @return the observable vector.
     */
    public static Vector2DReadOnly newObservableVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, Vector2DReadOnly source)
@@ -848,7 +856,7 @@ public class EuclidCoreFactories
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the component being accessed.
-    * @param source                the original component to link and observe. Not modified.
+    * @param source                the original vector to link and observe. Not modified.
     * @return the observable vector.
     */
    public static Vector3DReadOnly newObservableVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, Vector3DReadOnly source)
@@ -884,7 +892,7 @@ public class EuclidCoreFactories
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
     *                              passed to indicate the component being accessed.
-    * @param source                the original component to link and observe. Not modified.
+    * @param source                the original unit vector to link and observe. Not modified.
     * @return the observable unit vector.
     */
    public static UnitVector2DReadOnly newObservableUnitVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, UnitVector2DReadOnly source)
@@ -952,7 +960,7 @@ public class EuclidCoreFactories
     * @param valueAccessedListener the listener to be notified whenever a component of the vector is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
     *                              passed to indicate the component being accessed.
-    * @param source                the original component to link and observe. Not modified.
+    * @param source                the original unit vector to link and observe. Not modified.
     * @return the observable unit vector.
     */
    public static UnitVector3DReadOnly newObservableUnitVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, UnitVector3DReadOnly source)
@@ -1026,6 +1034,206 @@ public class EuclidCoreFactories
    }
 
    /**
+    * Creates a linked rotation matrix that can be used to observe access to the source rotation
+    * matrix's components.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
+    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
+    *                              will be passed to indicate the row and column respectively of the
+    *                              coefficient being accessed.
+    * @param source                the original rotation matrix to link and observe. Not modified.
+    * @return the observable rotation matrix.
+    */
+   public static RotationMatrixReadOnly newObservableRotationMatrixReadOnly(BiConsumer<Axis3D, Axis3D> valueAccessedListener, RotationMatrixReadOnly source)
+   {
+      return new RotationMatrixReadOnly()
+      {
+         private boolean isNotifying = false;
+
+         @Override
+         public boolean isDirty()
+         {
+            return source.isDirty();
+         }
+
+         @Override
+         public double getM00()
+         {
+            notifyAccessListener(Axis3D.X, Axis3D.X);
+            return source.getM00();
+         }
+
+         @Override
+         public double getM01()
+         {
+            notifyAccessListener(Axis3D.X, Axis3D.Y);
+            return source.getM01();
+         }
+
+         @Override
+         public double getM02()
+         {
+            notifyAccessListener(Axis3D.X, Axis3D.Z);
+            return source.getM02();
+         }
+
+         @Override
+         public double getM10()
+         {
+            notifyAccessListener(Axis3D.Y, Axis3D.X);
+            return source.getM10();
+         }
+
+         @Override
+         public double getM11()
+         {
+            notifyAccessListener(Axis3D.Y, Axis3D.Y);
+            return source.getM11();
+         }
+
+         @Override
+         public double getM12()
+         {
+            notifyAccessListener(Axis3D.Y, Axis3D.Z);
+            return source.getM12();
+         }
+
+         @Override
+         public double getM20()
+         {
+            notifyAccessListener(Axis3D.Z, Axis3D.X);
+            return source.getM20();
+         }
+
+         @Override
+         public double getM21()
+         {
+            notifyAccessListener(Axis3D.Z, Axis3D.Y);
+            return source.getM21();
+         }
+
+         @Override
+         public double getM22()
+         {
+            notifyAccessListener(Axis3D.Z, Axis3D.Z);
+            return source.getM22();
+         }
+
+         private void notifyAccessListener(Axis3D row, Axis3D column)
+         {
+            if (valueAccessedListener == null)
+               return;
+            if (isNotifying)
+               return;
+
+            isNotifying = true;
+            valueAccessedListener.accept(row, column);
+            isNotifying = false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Matrix3DReadOnly)
+               return equals((Matrix3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getMatrix3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a linked quaternion that can be used to observe access to the source rotation matrix's
+    * components.
+    * 
+    * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
+    *                              is being accessed. The index of the component being accessed will be
+    *                              passed.
+    * @param source                the original quaternion to link and observe. Not modified.
+    * @return the observable quaternion.
+    */
+   public static QuaternionReadOnly newObservableQuaternionReadOnly(IntConsumer valueAccessedListener, QuaternionReadOnly source)
+   {
+      return new QuaternionReadOnly()
+      {
+         private boolean isNotifying = false;
+
+         @Override
+         public double getX()
+         {
+            notifyAccessListener(0);
+            return source.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            notifyAccessListener(1);
+            return source.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            notifyAccessListener(2);
+            return source.getZ();
+         }
+
+         @Override
+         public double getS()
+         {
+            notifyAccessListener(3);
+            return source.getS();
+         }
+
+         private void notifyAccessListener(int index)
+         {
+            if (valueAccessedListener == null)
+               return;
+            if (isNotifying)
+               return;
+
+            isNotifying = true;
+            valueAccessedListener.accept(index);
+            isNotifying = false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof QuaternionReadOnly)
+               return equals((QuaternionReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getTuple4DString(this);
+         }
+      };
+   }
+
+   /**
     * Creates a new point that can be used to observe read and write operations.
     * 
     * @param valueChangedListener  the listener to be notified whenever a coordinate of the point has
@@ -1052,9 +1260,10 @@ public class EuclidCoreFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original point to link and observe. Modifiable via the linked
-    *                              point interface. Can be {@code null}.
+    *                              point interface.
     * @return the observable point.
     */
    public static Point2DBasics newObservablePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener,
@@ -1173,9 +1382,10 @@ public class EuclidCoreFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the point is
     *                              being accessed. The corresponding constant {@link Axis3D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original point to link and observe. Modifiable via the linked
-    *                              point interface. Can be {@code null}.
+    *                              point interface.
     * @return the observable point.
     */
    public static Point3DBasics newObservablePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener, Consumer<Axis3D> valueAccessedListener,
@@ -1312,9 +1522,10 @@ public class EuclidCoreFactories
     *                              value. Can be {@code null}.
     * @param valueAccessedListener the listener to be notified whenever a coordinate of the vector is
     *                              being accessed. The corresponding constant {@link Axis2D} will be
-    *                              passed to indicate the coordinate being accessed.
+    *                              passed to indicate the coordinate being accessed. Can be
+    *                              {@code null}.
     * @param source                the original vector to link and observe. Modifiable via the linked
-    *                              vector interface. Can be {@code null}.
+    *                              vector interface.
     * @return the observable vector.
     */
    public static Vector2DBasics newObservableVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener,
@@ -1966,6 +2177,321 @@ public class EuclidCoreFactories
          public String toString()
          {
             return EuclidCoreIOTools.getTuple3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new rotation matrix that can be used to observe read and write operations.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
+    *                              modified. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
+    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
+    *                              will be passed to indicate the row and column respectively of the
+    *                              coefficient being accessed. Can be {@code null}.
+    * @return the observable rotation matrix.
+    */
+   public static RotationMatrixBasics newObservableRotationMatrixBasics(Runnable valueChangedListener, BiConsumer<Axis3D, Axis3D> valueAccessedListener)
+   {
+      return newObservableRotationMatrixBasics(valueChangedListener, valueAccessedListener, new RotationMatrix());
+   }
+
+   /**
+    * Creates a linked rotation matrix that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever the rotation matrix has been
+    *                              modified. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
+    *                              matrix is being accessed. The corresponding constants {@link Axis3D}
+    *                              will be passed to indicate the row and column respectively of the
+    *                              coefficient being accessed. Can be {@code null}.
+    * @param source                the original rotation matrix to link and observe. Modifiable via the
+    *                              linked rotation matrix interface.
+    * @return the observable rotation matrix.
+    */
+   public static RotationMatrixBasics newObservableRotationMatrixBasics(Runnable valueChangedListener, BiConsumer<Axis3D, Axis3D> valueAccessedListener,
+                                                                        RotationMatrixBasics source)
+   {
+      return new RotationMatrixBasics()
+      {
+         private boolean isNotifying = false;
+
+         @Override
+         public void setIdentity()
+         {
+            source.setIdentity();
+            notifyChangeListener();
+         }
+
+         @Override
+         public void setToNaN()
+         {
+            source.setToNaN();
+            notifyChangeListener();
+         }
+
+         @Override
+         public void normalize()
+         {
+            source.normalize();
+            notifyChangeListener();
+         }
+
+         @Override
+         public void transpose()
+         {
+            source.transpose();
+            notifyChangeListener();
+         }
+
+         @Override
+         public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+         {
+            source.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+            notifyChangeListener();
+         }
+
+         @Override
+         public void set(RotationMatrixReadOnly other)
+         {
+            if (other != source)
+            {
+               source.set(other);
+               notifyChangeListener();
+            }
+         }
+
+         @Override
+         public boolean isDirty()
+         {
+            return source.isDirty();
+         }
+
+         @Override
+         public double getM00()
+         {
+            notifyAccessListener(Axis3D.X, Axis3D.X);
+            return source.getM00();
+         }
+
+         @Override
+         public double getM01()
+         {
+            notifyAccessListener(Axis3D.X, Axis3D.Y);
+            return source.getM01();
+         }
+
+         @Override
+         public double getM02()
+         {
+            notifyAccessListener(Axis3D.X, Axis3D.Z);
+            return source.getM02();
+         }
+
+         @Override
+         public double getM10()
+         {
+            notifyAccessListener(Axis3D.Y, Axis3D.X);
+            return source.getM10();
+         }
+
+         @Override
+         public double getM11()
+         {
+            notifyAccessListener(Axis3D.Y, Axis3D.Y);
+            return source.getM11();
+         }
+
+         @Override
+         public double getM12()
+         {
+            notifyAccessListener(Axis3D.Y, Axis3D.Z);
+            return source.getM12();
+         }
+
+         @Override
+         public double getM20()
+         {
+            notifyAccessListener(Axis3D.Z, Axis3D.X);
+            return source.getM20();
+         }
+
+         @Override
+         public double getM21()
+         {
+            notifyAccessListener(Axis3D.Z, Axis3D.Y);
+            return source.getM21();
+         }
+
+         @Override
+         public double getM22()
+         {
+            notifyAccessListener(Axis3D.Z, Axis3D.Z);
+            return source.getM22();
+         }
+
+         private void notifyChangeListener()
+         {
+            if (valueChangedListener == null)
+               return;
+
+            if (isNotifying)
+               return;
+
+            isNotifying = true;
+            valueChangedListener.run();
+            isNotifying = false;
+         }
+
+         private void notifyAccessListener(Axis3D row, Axis3D column)
+         {
+            if (valueAccessedListener == null)
+               return;
+            if (isNotifying)
+               return;
+
+            isNotifying = true;
+            valueAccessedListener.accept(row, column);
+            isNotifying = false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof Matrix3DReadOnly)
+               return equals((Matrix3DReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getMatrix3DString(this);
+         }
+      };
+   }
+
+   /**
+    * Creates a new quaternion that can be used to observe read and write operations.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever the quaternion has been
+    *                              modified. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the quaternion
+    *                              is being accessed. The index of the component being accessed will be
+    *                              passed. Can be {@code null}.
+    * @return the observable quaternion.
+    */
+   public static QuaternionBasics newObservableQuaternionBasics(Runnable valueChangedListener, IntConsumer valueAccessedListener)
+   {
+      return newObservableQuaternionBasics(valueChangedListener, valueAccessedListener, new Quaternion());
+   }
+
+   /**
+    * Creates a linked quaternion that can be used to observe read and write operations on the source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever the quaternion has been
+    *                              modified. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the rotation
+    *                              matrix is being accessed. The index of the component being accessed
+    *                              will be passed. Can be {@code null}.
+    * @param source                the original vector to link and observe. Modifiable via the linked
+    *                              vector interface.
+    * @return the observable quaternion.
+    */
+   public static QuaternionBasics newObservableQuaternionBasics(Runnable valueChangedListener, IntConsumer valueAccessedListener, QuaternionBasics source)
+   {
+      return new QuaternionBasics()
+      {
+         private boolean isNotifying = false;
+
+         @Override
+         public void setUnsafe(double qx, double qy, double qz, double qs)
+         {
+            source.setUnsafe(qx, qy, qz, qs);
+            notifyChangeListener();
+         }
+
+         @Override
+         public double getX()
+         {
+            notifyAccessListener(0);
+            return source.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            notifyAccessListener(1);
+            return source.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            notifyAccessListener(2);
+            return source.getZ();
+         }
+
+         @Override
+         public double getS()
+         {
+            notifyAccessListener(3);
+            return source.getS();
+         }
+
+         private void notifyChangeListener()
+         {
+            if (valueChangedListener == null)
+               return;
+
+            if (isNotifying)
+               return;
+
+            isNotifying = true;
+            valueChangedListener.run();
+            isNotifying = false;
+         }
+
+         private void notifyAccessListener(int index)
+         {
+            if (valueAccessedListener == null)
+               return;
+            if (isNotifying)
+               return;
+
+            isNotifying = true;
+            valueAccessedListener.accept(index);
+            isNotifying = false;
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof QuaternionReadOnly)
+               return equals((QuaternionReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getTuple4DString(this);
          }
       };
    }

@@ -10,7 +10,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -59,6 +61,10 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
@@ -309,6 +315,42 @@ public class EuclidFrameFactoriesTest
          {
             expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameUnitVector3D(random, nextElementIn(random, frames)));
             thoroughAssertionsFrameTuple3D(expected, actual);
+         }
+      }
+   }
+
+   @Test
+   public void testNewLinkedFrameRotationMatrixReadOnly()
+   {
+      Random random = new Random(5416);
+
+      { // Test newLinkedFrameRotationMatrixReadOnly(ReferenceFrameHolder referenceFrameHolder, RotationMatrixReadOnly unitVector)
+         ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         FrameRotationMatrix expected = new FrameRotationMatrix();
+         FrameRotationMatrixReadOnly actual = EuclidFrameFactories.newLinkedFrameRotationMatrixReadOnly(expected::getReferenceFrame, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameRotationMatrix(random, nextElementIn(random, frames)));
+            thoroughAssertionsFrameMatrix3D(expected, actual);
+         }
+      }
+   }
+
+   @Test
+   public void testNewLinkedFrameQuaternionReadOnly()
+   {
+      Random random = new Random(5416);
+
+      { // Test newLinkedFrameQuaternionReadOnly(ReferenceFrameHolder referenceFrameHolder, QuaternionReadOnly unitVector)
+         ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         FrameQuaternion expected = new FrameQuaternion();
+         FrameQuaternionReadOnly actual = EuclidFrameFactories.newLinkedFrameQuaternionReadOnly(expected::getReferenceFrame, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.setIncludingFrame(EuclidFrameRandomTools.nextFrameQuaternion(random, nextElementIn(random, frames)));
+            thoroughAssertionsFrameTuple4D(expected, actual);
          }
       }
    }
@@ -1548,6 +1590,159 @@ public class EuclidFrameFactoriesTest
          transform.transform(expected);
          assertEquals(expected.getZ(), observable.getZ());
          assertEquals(expected.getZ(), source.getZ());
+      }
+   }
+
+   @Test
+   public void testNewObservableRotationMatrixBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameRotationMatrix expected = new FrameRotationMatrix();
+         FixedFrameRotationMatrixBasics actual = EuclidFrameFactories.newObservableFixedFrameRotationMatrixBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextRotationMatrix(random));
+            thoroughAssertionsFrameMatrix3D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextRotationMatrix(random));
+            thoroughAssertionsFrameMatrix3D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false};
+         boolean[][] accessTrace = {{false, false, false}, {false, false, false}, {false, false, false}};
+         FrameRotationMatrixBasics source = EuclidFrameRandomTools.nextFrameRotationMatrix(random, nextElementIn(random, frames));
+         FixedFrameRotationMatrixBasics observable = EuclidFrameFactories.newObservableFixedFrameRotationMatrixBasics(() -> changeTrace[0] = true,
+                                                                                                                      (row,
+                                                                                                                       col) -> accessTrace[row.ordinal()][col.ordinal()] = true,
+                                                                                                                      source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         observable.transpose();
+         assertTrue(changeTrace[0]);
+         assertAllFalses(accessTrace);
+         changeTrace[0] = false;
+         observable.setToNaN();
+         assertTrue(changeTrace[0]);
+         assertAllFalses(accessTrace);
+         changeTrace[0] = false;
+         observable.setToZero();
+         assertTrue(changeTrace[0]);
+         assertAllFalses(accessTrace);
+         changeTrace[0] = false;
+         observable.set(EuclidCoreRandomTools.nextRotationMatrix(random));
+         assertTrue(changeTrace[0]);
+         assertAllFalses(accessTrace);
+         changeTrace[0] = false;
+
+         for (int row = 0; row < 3; row++)
+         {
+            for (int col = 0; col < 3; col++)
+            {
+               observable.getElement(row, col);
+               assertTrue(accessTrace[row][col]);
+               accessTrace[row][col] = false;
+               assertAllFalses(changeTrace);
+               assertAllFalses(accessTrace);
+            }
+         }
+      }
+
+      { // Test transform operation.
+         FrameRotationMatrix expected = EuclidFrameRandomTools.nextFrameRotationMatrix(random, nextElementIn(random, frames));
+         FrameRotationMatrix source = new FrameRotationMatrix(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         BiConsumer<Axis3D, Axis3D> valueAccessedListener = (row, col) -> transform.transform(source);
+         FixedFrameRotationMatrixBasics observable = EuclidFrameFactories.newObservableFixedFrameRotationMatrixBasics(null, valueAccessedListener, source);
+
+         for (int row = 0; row < 3; row++)
+         {
+            for (int col = 0; col < 3; col++)
+            {
+               transform.transform(expected);
+               assertEquals(expected.getElement(row, col), observable.getElement(row, col));
+               assertEquals(expected.getElement(row, col), source.getElement(row, col));
+            }
+         }
+      }
+   }
+
+   @Test
+   public void testNewObservableFrameQuaternionBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameQuaternion expected = new FrameQuaternion();
+         FixedFrameQuaternionBasics actual = EuclidFrameFactories.newObservableFixedFrameQuaternionBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidCoreRandomTools.nextQuaternion(random));
+            thoroughAssertionsFrameTuple4D(expected, actual);
+
+            actual.set(EuclidCoreRandomTools.nextQuaternion(random));
+            thoroughAssertionsFrameTuple4D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         boolean[] changeTrace = {false};
+         boolean[] accessTrace = {false, false, false, false};
+         FrameQuaternionBasics source = new FrameQuaternion();
+         FixedFrameQuaternionBasics observable = EuclidFrameFactories.newObservableFixedFrameQuaternionBasics(() -> changeTrace[0] = true,
+                                                                                                              index -> accessTrace[index] = true,
+                                                                                                              source);
+
+         assertAllFalses(changeTrace);
+         assertAllFalses(accessTrace);
+
+         observable.setToZero();
+         assertTrue(changeTrace[0]);
+         assertAllFalses(accessTrace);
+         changeTrace[0] = false;
+         observable.set(EuclidCoreRandomTools.nextQuaternion(random));
+         assertTrue(changeTrace[0]);
+         assertAllFalses(accessTrace);
+         changeTrace[0] = false;
+
+         for (int i = 0; i < 4; i++)
+         {
+            observable.getElement(i);
+            assertTrue(accessTrace[i]);
+            accessTrace[i] = false;
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTrace);
+         }
+      }
+
+      { // Test transform operation.
+         FrameQuaternion expected = EuclidFrameRandomTools.nextFrameQuaternion(random, nextElementIn(random, frames));
+         FrameQuaternion source = new FrameQuaternion(expected);
+         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         IntConsumer valueAccessedListener = index -> transform.transform(source);
+         FixedFrameQuaternionBasics observable = EuclidFrameFactories.newObservableFixedFrameQuaternionBasics(null, valueAccessedListener, source);
+
+         transform.transform(expected);
+         assertEquals(expected.getX(), observable.getX());
+         assertEquals(expected.getX(), source.getX());
+         transform.transform(expected);
+         assertEquals(expected.getY(), observable.getY());
+         assertEquals(expected.getY(), source.getY());
+         transform.transform(expected);
+         assertEquals(expected.getZ(), observable.getZ());
+         assertEquals(expected.getZ(), source.getZ());
+         transform.transform(expected);
+         assertEquals(expected.getS(), observable.getS());
+         assertEquals(expected.getS(), source.getS());
       }
    }
 
