@@ -2343,8 +2343,10 @@ public class EuclidGeometryPolygonTools
       int interval = Math.max(1, numberOfVertices / 3);
       // We can use any set of 3 vertices, so we use the 3 vertices that are the farthest from each other to reduce numerical errors.
       Point2DReadOnly A = convexPolygon2D.get(0);
-      Point2DReadOnly B = convexPolygon2D.get(interval);
-      Point2DReadOnly C = convexPolygon2D.get(2 * interval);
+      int indexB = interval;
+      Point2DReadOnly B = convexPolygon2D.get(indexB);
+      int indexC = 2 * interval;
+      Point2DReadOnly C = convexPolygon2D.get(indexC);
 
       // See EuclidGeometryTools.triangleCircumcenter(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly, Point2DBasics)
       double ASquared = A.distanceFromOriginSquared();
@@ -2367,6 +2369,9 @@ public class EuclidGeometryPolygonTools
 
       for (int i = 1; i < numberOfVertices; i++)
       {
+         if (i == indexB || i == indexC)
+            continue;
+
          Point2DReadOnly vertex = convexPolygon2D.get(i);
          double distanceSquared = EuclidCoreTools.normSquared(sx - vertex.getX(), sy - vertex.getY());
 

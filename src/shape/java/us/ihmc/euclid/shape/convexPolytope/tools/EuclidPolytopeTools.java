@@ -692,8 +692,10 @@ public class EuclidPolytopeTools
       int interval = Math.max(1, numberOfVertices / 3);
       // We can use any set of 3 vertices, so we use the 3 vertices that are the farthest from each other to reduce numerical errors.
       Point3DReadOnly A = convexPolygon3D.get(0);
-      Point3DReadOnly B = convexPolygon3D.get(interval);
-      Point3DReadOnly C = convexPolygon3D.get(2 * interval);
+      int indexB = interval;
+      Point3DReadOnly B = convexPolygon3D.get(indexB);
+      int indexC = 2 * interval;
+      Point3DReadOnly C = convexPolygon3D.get(indexC);
 
       // See EuclidGeometryTools.triangleCircumcenter(Point3DReadOnly, Point3DReadOnly, Point3DReadOnly, Point3DBasics)
       double ux = B.getX() - C.getX();
@@ -735,6 +737,9 @@ public class EuclidPolytopeTools
 
       for (int i = 1; i < numberOfVertices; i++)
       {
+         if (i == indexB || i == indexC)
+            continue;
+
          Point3DReadOnly vertex = convexPolygon3D.get(i);
          double distanceSquared = EuclidCoreTools.normSquared(px - vertex.getX(), py - vertex.getY(), pz - vertex.getZ());
 
