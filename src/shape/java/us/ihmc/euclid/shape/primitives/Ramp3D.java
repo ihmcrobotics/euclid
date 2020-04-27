@@ -12,12 +12,13 @@ import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a ramp 3D.
@@ -37,53 +38,24 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  */
 public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 {
+   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
+
    /** Pose of this ramp. */
    private final Shape3DPose pose = new Shape3DPose();
    /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** Size of this ramp's bounding box. */
-   private final Vector3D size = new Vector3D()
+   private final Vector3DBasics size = EuclidCoreFactories.newObservableVector3DBasics((axis, newValue) ->
    {
-      @Override
-      public void setX(double x)
-      {
-         if (x != getX())
-         {
-            if (x < 0.0)
-               throw new IllegalArgumentException("The x-size of a Ramp3D cannot be negative: " + x);
-            super.setX(x);
-            notifyChangeListeners();
-         }
-      }
+      checkSizePositive(axis);
+      notifyChangeListeners();
+   }, null);
 
-      @Override
-      public void setY(double y)
-      {
-         if (y != getY())
-         {
-            if (y < 0.0)
-               throw new IllegalArgumentException("The y-size of a Ramp3D cannot be negative: " + y);
-            super.setY(y);
-            notifyChangeListeners();
-         }
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         if (z != getZ())
-         {
-            if (z < 0.0)
-               throw new IllegalArgumentException("The z-size of a Ramp3D cannot be negative: " + z);
-            super.setZ(z);
-            notifyChangeListeners();
-         }
-      }
-   };
+   private boolean rampSurfaceNormalDirty = true;
+   private final Vector3DBasics rampSurfaceNormal = EuclidCoreFactories.newObservableVector3DBasics(null, axis -> updateRampSurfaceNormal());
 
    private boolean rampFeaturesDirty = true;
-
    /** Length of the slope face of this ramp. */
    private double rampLength;
    /**
@@ -94,31 +66,7 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 
    private boolean centroidDirty = true;
 
-   private final Point3D centroid = new Point3D()
-   {
-      @Override
-      public double getX()
-      {
-         updateCentroid();
-         return super.getX();
-      };
-
-      @Override
-      public double getY()
-      {
-         updateCentroid();
-         return super.getY();
-      };
-
-      @Override
-      public double getZ()
-      {
-         updateCentroid();
-         return super.getZ();
-      };
-   };
-
-   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
+   private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroid());
 
    /**
     * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0}.
@@ -205,8 +153,12 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 
    private void setupListeners()
    {
-      changeListeners.add(() -> rampFeaturesDirty = true);
-      changeListeners.add(() -> centroidDirty = true);
+      changeListeners.add(() ->
+      {
+         rampSurfaceNormalDirty = true;
+         rampFeaturesDirty = true;
+         centroidDirty = true;
+      });
       pose.addChangeListeners(changeListeners);
    }
 
@@ -218,6 +170,16 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       rampLength = EuclidShapeTools.computeRamp3DLength(size.getX(), size.getZ());
       angleOfRampIncline = EuclidShapeTools.computeRamp3DIncline(size.getX(), size.getZ());
       rampFeaturesDirty = false;
+   }
+
+   private void updateRampSurfaceNormal()
+   {
+      if (!rampSurfaceNormalDirty)
+         return;
+
+      rampSurfaceNormal.set(-getSizeZ() / getRampLength(), 0.0, getSizeX() / getRampLength());
+      transformToWorld(rampSurfaceNormal);
+      rampSurfaceNormalDirty = false;
    }
 
    private void updateCentroid()
@@ -254,10 +216,25 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       return size;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3DReadOnly getCentroid()
    {
       return centroid;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public Vector3DReadOnly getRampSurfaceNormal()
+   {
+      return rampSurfaceNormal;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getRampSurfaceNormal(Vector3DBasics surfaceNormalToPack)
+   {
+      surfaceNormalToPack.set(rampSurfaceNormal);
    }
 
    /**

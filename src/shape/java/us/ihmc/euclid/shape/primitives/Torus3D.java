@@ -101,9 +101,9 @@ public class Torus3D implements Torus3DBasics, GeometryObject<Torus3D>
    public void setRadii(double radius, double tubeRadius)
    {
       if (radius < 0.0)
-         throw new IllegalArgumentException("The radius of a Torus3D cannot be negative: " + radius);
+         throw new IllegalArgumentException("The radius of a " + getClass().getSimpleName() + " cannot be negative: " + radius);
       if (tubeRadius < 0.0)
-         throw new IllegalArgumentException("The tube radius of a Torus3D cannot be negative: " + tubeRadius);
+         throw new IllegalArgumentException("The tube radius of a " + getClass().getSimpleName() + " cannot be negative: " + tubeRadius);
 
       this.radius = radius;
       this.tubeRadius = tubeRadius;

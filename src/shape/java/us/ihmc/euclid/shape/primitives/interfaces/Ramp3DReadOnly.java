@@ -1,5 +1,6 @@
 package us.ihmc.euclid.shape.primitives.interfaces;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -62,6 +63,18 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
    default Point3DReadOnly getPosition()
    {
       return getPose().getShapePosition();
+   }
+
+   /**
+    * Checks that the size component corresponding to the given axis is positive.
+    * 
+    * @param axis to identify the component to check.
+    * @throws IllegalArgumentException if the size component is strictly negative.
+    */
+   default void checkSizePositive(Axis3D axis)
+   {
+      if (getSize().getElement(axis) < 0.0)
+         throw new IllegalArgumentException("The " + axis + "-size of a " + getClass().getSimpleName() + " cannot be negative: " + getSize().getElement(axis));
    }
 
    /**
@@ -232,7 +245,7 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
     *
     * @return the surface normal of the slope.
     */
-   default Vector3DBasics getRampSurfaceNormal()
+   default Vector3DReadOnly getRampSurfaceNormal()
    {
       Vector3D surfaceNormal = new Vector3D();
       getRampSurfaceNormal(surfaceNormal);
