@@ -2024,6 +2024,7 @@ public class EuclidFrameAPITester
    {
       try
       {
+         frameMethod.setAccessible(true);
          return frameMethod.invoke(methodHolder, parameters);
       }
       catch (IllegalAccessException | IllegalArgumentException e)
