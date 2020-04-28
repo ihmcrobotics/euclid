@@ -73,6 +73,13 @@ public interface Cylinder3DReadOnly extends Shape3DReadOnly
       return getPosition();
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default double getVolume()
+   {
+      return EuclidShapeTools.cylinderVolume(getRadius(), getLength());
+   }
+
    /**
     * Gets the read-only reference to the center of the top cap.
     * <p>

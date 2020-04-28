@@ -123,7 +123,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
     *
     * @param listeners the listeners to register.
     */
-   public void addChangeListeners(List<Shape3DChangeListener> listeners)
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
    {
       for (int i = 0; i < listeners.size(); i++)
       {

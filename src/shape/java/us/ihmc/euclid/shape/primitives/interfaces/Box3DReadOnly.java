@@ -75,6 +75,13 @@ public interface Box3DReadOnly extends Shape3DReadOnly
       return getPosition();
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default double getVolume()
+   {
+      return EuclidShapeTools.boxVolume(getSizeX(), getSizeY(), getSizeZ());
+   }
+
    /**
     * Checks that the size component corresponding to the given axis is positive.
     * 
@@ -337,6 +344,13 @@ public interface Box3DReadOnly extends Shape3DReadOnly
    {
       EuclidShapeTools.boundingBoxBox3D(getPosition(), getOrientation(), getSize(), boundingBoxToPack);
    }
+
+   /**
+    * Gets the {@code ConvexPolytope3DReadOnly} view backed this box.
+    * 
+    * @return the polytope view of this box.
+    */
+   BoxPolytope3DView asConvexPolytope();
 
    /**
     * Gets the 8 vertices, expressed in world, of this box as an array.

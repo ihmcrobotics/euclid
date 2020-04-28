@@ -132,7 +132,7 @@ public class EuclidCoreFactories
    }
 
    /**
-    * Creates a new point 2D that is a read-only view of the three coordinate suppliers.
+    * Creates a new point 2D that is a read-only view of the coordinate suppliers.
     *
     * @param xSupplier the x-coordinate supplier.
     * @param ySupplier the y-coordinate supplier.
@@ -178,7 +178,7 @@ public class EuclidCoreFactories
    }
 
    /**
-    * Creates a new vector 2D that is a read-only view of the three component suppliers.
+    * Creates a new vector 2D that is a read-only view of the component suppliers.
     *
     * @param xSupplier the x-component supplier.
     * @param ySupplier the y-component supplier.
@@ -224,7 +224,7 @@ public class EuclidCoreFactories
    }
 
    /**
-    * Creates a new point 3D that is a read-only view of the three coordinate suppliers.
+    * Creates a new point 3D that is a read-only view of the coordinate suppliers.
     *
     * @param xSupplier the x-coordinate supplier.
     * @param ySupplier the y-coordinate supplier.
@@ -277,7 +277,7 @@ public class EuclidCoreFactories
    }
 
    /**
-    * Creates a new vector 3D that is a read-only view of the three component suppliers.
+    * Creates a new vector 3D that is a read-only view of the component suppliers.
     *
     * @param xSupplier the x-component supplier.
     * @param ySupplier the y-component supplier.

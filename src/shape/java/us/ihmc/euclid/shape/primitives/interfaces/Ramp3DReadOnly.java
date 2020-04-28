@@ -65,6 +65,13 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
       return getPose().getShapePosition();
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default double getVolume()
+   {
+      return EuclidShapeTools.rampVolume(getSizeX(), getSizeY(), getSizeZ());
+   }
+
    /**
     * Checks that the size component corresponding to the given axis is positive.
     * 
@@ -346,6 +353,13 @@ public interface Ramp3DReadOnly extends Shape3DReadOnly
 
       getIntermediateVariableSupplier().releasePoint3D(vertex);
    }
+
+   /**
+    * Gets the {@code ConvexPolytope3DReadOnly} view backed this ramp.
+    * 
+    * @return the polytope view of this ramp.
+    */
+   RampPolytope3DView asConvexPolytope();
 
    /** {@inheritDoc} */
    @Override

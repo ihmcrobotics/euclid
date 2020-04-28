@@ -31,6 +31,14 @@ public abstract class AbstractVertex3D<Vertex extends AbstractVertex3D<Vertex, E
    private final List<Edge> associatedEdges = new ArrayList<>();
 
    /**
+    * Creates a new vertex at (0, 0, 0).
+    */
+   public AbstractVertex3D()
+   {
+      setToZero();
+   }
+
+   /**
     * Creates a new vertex and initializes its coordinates.
     *
     * @param x the x-coordinate of this vertex.

@@ -73,6 +73,13 @@ public interface Capsule3DReadOnly extends Shape3DReadOnly
       return getPosition();
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default double getVolume()
+   {
+      return EuclidShapeTools.capsuleVolume(getRadius(), getLength());
+   }
+
    /**
     * Gets the read-only reference to the center of the top half-sphere.
     * <p>

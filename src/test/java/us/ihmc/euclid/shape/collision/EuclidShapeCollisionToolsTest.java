@@ -10,8 +10,8 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.Plane3D;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.primitives.Box3D;

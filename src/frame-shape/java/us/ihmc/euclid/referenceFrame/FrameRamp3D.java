@@ -15,6 +15,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRamp3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameRampPolytope3DView;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
@@ -78,6 +79,8 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    private boolean centroidDirty = true;
 
    private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroid());
+
+   private FrameRampPolytope3D polytopeView = null;
 
    /**
     * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0} and
@@ -356,6 +359,47 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
       }
    }
 
+   /**
+    * Registers a list of listeners to be notified when this shape changes.
+    *
+    * @param listeners the listeners to register.
+    */
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
+   {
+      for (int i = 0; i < listeners.size(); i++)
+      {
+         addChangeListener(listeners.get(i));
+      }
+   }
+
+   /**
+    * Registers a listener to be notified when this shape changes.
+    *
+    * @param listener the listener to register.
+    */
+   public void addChangeListener(Shape3DChangeListener listener)
+   {
+      changeListeners.add(listener);
+      pose.addChangeListener(listener);
+   }
+
+   /**
+    * Removes a previously registered listener.
+    * <p>
+    * This listener will no longer be notified of changes from this pose.
+    * </p>
+    *
+    * @param listener the listener to remove.
+    * @return {@code true} if the listener was removed successful, {@code false} if the listener could
+    *         not be found.
+    */
+   public boolean removeChangeListener(Shape3DChangeListener listener)
+   {
+      boolean hasBeenRemoved = changeListeners.remove(listener);
+      hasBeenRemoved |= pose.removeChangeListener(listener);
+      return hasBeenRemoved;
+   }
+
    /** {@inheritDoc} */
    @Override
    public IntermediateVariableSupplier getIntermediateVariableSupplier()
@@ -413,6 +457,14 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    public FrameRamp3D copy()
    {
       return new FrameRamp3D(this);
+   }
+
+   @Override
+   public FrameRampPolytope3DView asConvexPolytope()
+   {
+      if (polytopeView == null)
+         polytopeView = new FrameRampPolytope3D(this);
+      return polytopeView;
    }
 
    /**

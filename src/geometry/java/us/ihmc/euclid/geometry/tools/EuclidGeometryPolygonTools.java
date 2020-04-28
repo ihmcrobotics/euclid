@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -40,40 +41,6 @@ public class EuclidGeometryPolygonTools
 {
    private static final Random random = new Random();
    static final double EPSILON = 1.0e-7;
-
-   /**
-    * Human readable enum that helps defining search criteria for some of the search methods in this
-    * tool class.
-    *
-    * @author Sylvain Bertrand
-    */
-   public static enum Bound
-   {
-      /**
-       * Refers to lower values, i.e. towards -&infin;.
-       */
-      MIN
-      {
-         @Override
-         boolean isFirstBetter(double first, double second)
-         {
-            return first < second;
-         }
-      },
-      /**
-       * Refers to higher values, i.e. towards +&infin;.
-       */
-      MAX
-      {
-         @Override
-         boolean isFirstBetter(double first, double second)
-         {
-            return first > second;
-         }
-      };
-
-      abstract boolean isFirstBetter(double first, double second);
-   }
 
    private EuclidGeometryPolygonTools()
    {

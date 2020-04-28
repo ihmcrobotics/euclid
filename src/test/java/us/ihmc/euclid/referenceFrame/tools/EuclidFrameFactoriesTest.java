@@ -8,6 +8,7 @@ import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextElementIn;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiConsumer;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
+import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DReadOnly;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -80,7 +82,9 @@ import us.ihmc.euclid.tools.EuclidCoreFactoriesTest;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
@@ -1600,7 +1604,7 @@ public class EuclidFrameFactoriesTest
       ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
       { // Test the link property with the source
-         FrameRotationMatrix expected = new FrameRotationMatrix();
+         FrameRotationMatrix expected = new FrameRotationMatrix(nextElementIn(random, frames));
          FixedFrameRotationMatrixBasics actual = EuclidFrameFactories.newObservableFixedFrameRotationMatrixBasics(null, null, expected);
 
          for (int i = 0; i < ITERATIONS; i++)
@@ -1681,7 +1685,7 @@ public class EuclidFrameFactoriesTest
       ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
 
       { // Test the link property with the source
-         FrameQuaternion expected = new FrameQuaternion();
+         FrameQuaternion expected = new FrameQuaternion(nextElementIn(random, frames));
          FixedFrameQuaternionBasics actual = EuclidFrameFactories.newObservableFixedFrameQuaternionBasics(null, null, expected);
 
          for (int i = 0; i < ITERATIONS; i++)
@@ -1697,7 +1701,7 @@ public class EuclidFrameFactoriesTest
       { // Test with simple notification flags
          boolean[] changeTrace = {false};
          boolean[] accessTrace = {false, false, false, false};
-         FrameQuaternionBasics source = new FrameQuaternion();
+         FrameQuaternionBasics source = new FrameQuaternion(nextElementIn(random, frames));
          FixedFrameQuaternionBasics observable = EuclidFrameFactories.newObservableFixedFrameQuaternionBasics(() -> changeTrace[0] = true,
                                                                                                               index -> accessTrace[index] = true,
                                                                                                               source);
@@ -1743,6 +1747,144 @@ public class EuclidFrameFactoriesTest
          transform.transform(expected);
          assertEquals(expected.getS(), observable.getS());
          assertEquals(expected.getS(), source.getS());
+      }
+   }
+
+   @Test
+   public void testNewObservableFixedFrameBoundingBox2DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameBoundingBox2D expected = new FrameBoundingBox2D(nextElementIn(random, frames));
+         FixedFrameBoundingBox2DBasics actual = EuclidFrameFactories.newObservableFixedFrameBoundingBox2DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidGeometryRandomTools.nextBoundingBox2D(random));
+            thoroughAssertionsFrameBoundingBox2D(expected, actual);
+
+            actual.set(EuclidGeometryRandomTools.nextBoundingBox2D(random));
+            thoroughAssertionsFrameBoundingBox2D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         EnumMap<Bound, boolean[]> changeTraceMap = new EnumMap<>(Bound.class);
+         EnumMap<Bound, boolean[]> accessTraceMap = new EnumMap<>(Bound.class);
+         for (Bound bound : Bound.values)
+         {
+            changeTraceMap.put(bound, new boolean[] {false, false});
+            accessTraceMap.put(bound, new boolean[] {false, false});
+         }
+         FrameBoundingBox2D source = new FrameBoundingBox2D();
+         FixedFrameBoundingBox2DBasics observable = EuclidFrameFactories.newObservableFixedFrameBoundingBox2DBasics((axis, bound,
+                                                                                                                     newValue) -> changeTraceMap.get(bound)[axis.ordinal()] = true,
+                                                                                                                    (axis,
+                                                                                                                     bound) -> accessTraceMap.get(bound)[axis.ordinal()] = true,
+                                                                                                                    source);
+
+         EnumMap<Bound, Point2DBasics> boundPoints = new EnumMap<>(Bound.class);
+         boundPoints.put(Bound.MIN, observable.getMinPoint());
+         boundPoints.put(Bound.MAX, observable.getMaxPoint());
+
+         for (Bound bound : Bound.values)
+         {
+            boolean[] changeTrace = changeTraceMap.get(bound);
+            boolean[] accessTraces = accessTraceMap.get(bound);
+            Point2DBasics boundPoint = boundPoints.get(bound);
+
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTraces);
+
+            for (int i = 0; i < 2; i++)
+            {
+               double value = random.nextDouble();
+               boundPoint.setElement(i, value);
+               assertTrue(changeTrace[i]);
+               changeTrace[i] = false;
+               boundPoint.setElement(i, value);
+               assertFalse(changeTrace[i]);
+               assertAllFalses(changeTrace);
+               assertAllFalses(accessTraces);
+
+               boundPoint.getElement(i);
+               assertTrue(accessTraces[i]);
+               accessTraces[i] = false;
+               assertAllFalses(changeTrace);
+               assertAllFalses(accessTraces);
+            }
+         }
+      }
+   }
+
+   @Test
+   public void testNewObservableFixedFrameBoundingBox3DBasics()
+   {
+      Random random = new Random(4367);
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+
+      { // Test the link property with the source
+         FrameBoundingBox3D expected = new FrameBoundingBox3D(nextElementIn(random, frames));
+         FixedFrameBoundingBox3DBasics actual = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics(null, null, expected);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            expected.set(EuclidGeometryRandomTools.nextBoundingBox3D(random));
+            thoroughAssertionsFrameBoundingBox3D(expected, actual);
+
+            actual.set(EuclidGeometryRandomTools.nextBoundingBox3D(random));
+            thoroughAssertionsFrameBoundingBox3D(expected, actual);
+         }
+      }
+
+      { // Test with simple notification flags
+         EnumMap<Bound, boolean[]> changeTraceMap = new EnumMap<>(Bound.class);
+         EnumMap<Bound, boolean[]> accessTraceMap = new EnumMap<>(Bound.class);
+         for (Bound bound : Bound.values)
+         {
+            changeTraceMap.put(bound, new boolean[] {false, false, false});
+            accessTraceMap.put(bound, new boolean[] {false, false, false});
+         }
+         FrameBoundingBox3D source = new FrameBoundingBox3D();
+         FixedFrameBoundingBox3DBasics observable = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics((axis, bound,
+                                                                                                                     newValue) -> changeTraceMap.get(bound)[axis.ordinal()] = true,
+                                                                                                                    (axis,
+                                                                                                                     bound) -> accessTraceMap.get(bound)[axis.ordinal()] = true,
+                                                                                                                    source);
+
+         EnumMap<Bound, Point3DBasics> boundPoints = new EnumMap<>(Bound.class);
+         boundPoints.put(Bound.MIN, observable.getMinPoint());
+         boundPoints.put(Bound.MAX, observable.getMaxPoint());
+
+         for (Bound bound : Bound.values)
+         {
+            boolean[] changeTrace = changeTraceMap.get(bound);
+            boolean[] accessTraces = accessTraceMap.get(bound);
+            Point3DBasics boundPoint = boundPoints.get(bound);
+
+            assertAllFalses(changeTrace);
+            assertAllFalses(accessTraces);
+
+            for (int i = 0; i < 3; i++)
+            {
+               double value = random.nextDouble();
+               boundPoint.setElement(i, value);
+               assertTrue(changeTrace[i]);
+               changeTrace[i] = false;
+               boundPoint.setElement(i, value);
+               assertFalse(changeTrace[i]);
+               assertAllFalses(changeTrace);
+               assertAllFalses(accessTraces);
+
+               boundPoint.getElement(i);
+               assertTrue(accessTraces[i]);
+               accessTraces[i] = false;
+               assertAllFalses(changeTrace);
+               assertAllFalses(accessTraces);
+            }
+         }
       }
    }
 

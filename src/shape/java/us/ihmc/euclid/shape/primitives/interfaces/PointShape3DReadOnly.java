@@ -30,6 +30,13 @@ public interface PointShape3DReadOnly extends Shape3DReadOnly, Point3DReadOnly
 
    /** {@inheritDoc} */
    @Override
+   default double getVolume()
+   {
+      return 0.0;
+   }
+
+   /** {@inheritDoc} */
+   @Override
    default double distance(Point3DReadOnly point)
    {
       return Point3DReadOnly.super.distance(point);

@@ -4,6 +4,7 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
@@ -1811,6 +1812,48 @@ public class EuclidShapeTools
    }
 
    /**
+    * Tests whether the first argument has the largest value of all the arguments.
+    *
+    * @param possibleMax the query.
+    * @param value1      the first value to compare the candidate against.
+    * @param value2      the second value to compare the candidate against.
+    * @param value3      the third value to compare the candidate against.
+    * @param value4      the fourth value to compare the candidate against.
+    * @return {@code true} if the query has the largest value, {@code false} otherwise
+    */
+   public static boolean isFirstValueMaximum(double possibleMax, double value1, double value2, double value3, double value4)
+   {
+      return possibleMax >= value1 && possibleMax >= value2 && possibleMax >= value3 && possibleMax >= value4;
+   }
+
+   /**
+    * Tests whether the first argument has the largest value of all the arguments.
+    *
+    * @param possibleMax the query.
+    * @param value1      the first value to compare the candidate against.
+    * @param value2      the second value to compare the candidate against.
+    * @param value3      the third value to compare the candidate against.
+    * @return {@code true} if the query has the largest value, {@code false} otherwise
+    */
+   public static boolean isFirstValueMaximum(double possibleMax, double value1, double value2, double value3)
+   {
+      return possibleMax >= value1 && possibleMax >= value2 && possibleMax >= value3;
+   }
+
+   /**
+    * Tests whether the first argument has the largest value of all the arguments.
+    *
+    * @param possibleMax the query.
+    * @param value1      the first value to compare the candidate against.
+    * @param value2      the second value to compare the candidate against.
+    * @return {@code true} if the query has the largest value, {@code false} otherwise
+    */
+   public static boolean isFirstValueMaximum(double possibleMax, double value1, double value2)
+   {
+      return possibleMax >= value1 && possibleMax >= value2;
+   }
+
+   /**
     * Tests whether the {@code query} is located inside a 3D sphere.
     *
     * @param query            the coordinates of the query. Not modified.
@@ -2365,6 +2408,31 @@ public class EuclidShapeTools
    }
 
    /**
+    * Computes the volume of a box defined by its 3D size.
+    * 
+    * @param sizeX the size of the box along the x-axis.
+    * @param sizeY the size of the box along the y-axis.
+    * @param sizeZ the size of the box along the z-axis.
+    * @return the volume of the box.
+    */
+   public static double boxVolume(double sizeX, double sizeY, double sizeZ)
+   {
+      return sizeX * sizeY * sizeZ;
+   }
+
+   /**
+    * Computes the volume of a capsule defined by its radius and length.
+    * 
+    * @param radius the capsule radius.
+    * @param length the length of the capsule, i.e. the length of the cylindrical part of the capsule.
+    * @return the volume of the capsule.
+    */
+   public static double capsuleVolume(double radius, double length)
+   {
+      return Math.PI * radius * radius * (4.0 / 3.0 * radius + length);
+   }
+
+   /**
     * Computes the volume of a cone defined by its height and base radius.
     *
     * @param height the height of the cone.
@@ -2386,6 +2454,19 @@ public class EuclidShapeTools
    public static double cylinderVolume(double length, double radius)
    {
       return Math.PI * radius * radius * length;
+   }
+
+   /**
+    * Computes the volume of an ellipsoid defined by its three radii.
+    * 
+    * @param radiusX the radius along the x-axis of the ellipsoid.
+    * @param radiusY the radius along the y-axis of the ellipsoid.
+    * @param radiusZ the radius along the z-axis of the ellipsoid.
+    * @return the volume of the ellipsoid.
+    */
+   public static double ellipsoidVolume(double radiusX, double radiusY, double radiusZ)
+   {
+      return 4.0 / 3.0 * Math.PI * radiusX * radiusY * radiusZ;
    }
 
    /**
@@ -2413,6 +2494,31 @@ public class EuclidShapeTools
    }
 
    /**
+    * Computes the volume of ramp defined by its 3D size, see {@link Ramp3DReadOnly} for the definition
+    * of a ramp.
+    * 
+    * @param sizeX the size of the ramp along the x-axis.
+    * @param sizeY the size of the ramp along the y-axis.
+    * @param sizeZ the size of the ramp along the z-axis.
+    * @return the volume of the ramp.
+    */
+   public static double rampVolume(double sizeX, double sizeY, double sizeZ)
+   {
+      return 0.5 * boxVolume(sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Computes the volume of a sphere defined by its radius.
+    * 
+    * @param radius the radius of the sphere.
+    * @return the volume of the sphere.
+    */
+   public static double sphereVolume(double radius)
+   {
+      return ellipsoidVolume(radius, radius, radius);
+   }
+
+   /**
     * Computes the volume of a tetrahedron defined by its vertices.
     *
     * @param a the coordinates of the first vertex of the tetrahedron. Not modified.
@@ -2433,6 +2539,19 @@ public class EuclidShapeTools
       double y = (c.getZ() - a.getZ()) * (d.getX() - a.getX()) - (c.getX() - a.getX()) * (d.getZ() - a.getZ());
       double z = (c.getX() - a.getX()) * (d.getY() - a.getY()) - (c.getY() - a.getY()) * (d.getX() - a.getX());
       return Math.abs(x * (b.getX() - a.getX()) + y * (b.getY() - a.getY()) + z * (b.getZ() - a.getZ())) / 6.0;
+   }
+
+   /**
+    * Computes the volume of a torus defined by its radius (from torus axis to tube center) and the
+    * radius of its tube.
+    * 
+    * @param radius     the radius from the torus center to the tube center.
+    * @param tubeRadius the radius of the tube.
+    * @return the volume of the torus.
+    */
+   public static double torusVolume(double radius, double tubeRadius)
+   {
+      return 2.0 * Math.PI * Math.PI * radius * tubeRadius * tubeRadius;
    }
 
    /**

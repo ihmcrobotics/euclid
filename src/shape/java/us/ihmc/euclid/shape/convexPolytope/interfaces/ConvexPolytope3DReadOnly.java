@@ -144,21 +144,6 @@ public interface ConvexPolytope3DReadOnly extends Shape3DReadOnly
    }
 
    /**
-    * Gets the read-only reference to the centroid of this polytope.
-    *
-    * @return this polytope centroid location.
-    */
-   @Override
-   Point3DReadOnly getCentroid();
-
-   /**
-    * Gets this polytope volume.
-    *
-    * @return this polytope volume.
-    */
-   double getVolume();
-
-   /**
     * Gets the tolerance used for building this convex polytope.
     *
     * @return the construction tolerance.

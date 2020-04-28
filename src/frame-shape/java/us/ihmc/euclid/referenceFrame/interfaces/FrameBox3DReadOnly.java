@@ -333,6 +333,10 @@ public interface FrameBox3DReadOnly extends Box3DReadOnly, FrameShape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
+   FrameBoxPolytope3DView asConvexPolytope();
+
+   /** {@inheritDoc} */
+   @Override
    default FramePoint3DBasics[] getVertices()
    {
       FramePoint3D[] vertices = new FramePoint3D[8];
