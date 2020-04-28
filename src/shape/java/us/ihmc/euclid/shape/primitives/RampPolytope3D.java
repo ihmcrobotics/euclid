@@ -1,5 +1,11 @@
 package us.ihmc.euclid.shape.primitives;
 
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryFactories.newObservableBoundingBox3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedPoint3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservablePoint3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableVector3DBasics;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -7,14 +13,12 @@ import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -66,8 +70,8 @@ class RampPolytope3D implements RampPolytope3DView
       Shape3DPose pose = ramp3D.getPose();
 
       rampFace = new Face("ramp", ramp3D.getRampSurfaceNormal(), slopeFaceAreaSupplier, rampE0, rampE1, rampE2, rampE3);
-      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2);
-      zMinFace = new Face("z-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
+      yMinFace = new Face("y-min", newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2);
+      zMinFace = new Face("z-min", newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
       xMaxFace = new Face("x-max", pose.getXAxis(), xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
       yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2);
 
@@ -137,11 +141,11 @@ class RampPolytope3D implements RampPolytope3DView
    {
       private final String name;
 
-      private final BoundingBox3DBasics boundingBox = EuclidGeometryFactories.newObservableBoundingBox3DBasics(null, axis -> updateBoundingBox());
+      private final BoundingBox3DBasics boundingBox = newObservableBoundingBox3DBasics(null, (axis, bound) -> updateBoundingBox());
 
-      private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroidAndArea());
+      private final Point3DBasics centroid = newObservablePoint3DBasics(null, axis -> updateCentroidAndArea());
       private final Vector3DReadOnly normalLocal;
-      private final Vector3DBasics normal = EuclidCoreFactories.newObservableVector3DBasics(null, axis -> updateNormal());
+      private final Vector3DBasics normal = newObservableVector3DBasics(null, axis -> updateNormal());
       private final DoubleSupplier areaSupplier;
 
       private boolean isBoundingBoxDirty = true;
@@ -259,7 +263,7 @@ class RampPolytope3D implements RampPolytope3DView
 
       private Vertex(DoubleSupplier xLocal, DoubleSupplier yLocal, DoubleSupplier zLocal)
       {
-         positionLocal = EuclidCoreFactories.newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
+         positionLocal = newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
       }
 
       @Override

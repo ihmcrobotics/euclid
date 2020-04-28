@@ -10,8 +10,8 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
  * Provides a {@link ConvexPolytope3DReadOnly} view backed by a {@link Ramp3DReadOnly}.
  * <p>
  * The implementation is expected to always reflect the current state of the ramp and its geometry
- * components are expected to be expressed in the global coordinate system of the box, i.e.
- * accounting for the box's pose.
+ * components are expected to be expressed in the global coordinate system of the ramp, i.e.
+ * accounting for the ramp's pose.
  * </p>
  * 
  * @author Sylvain Bertrand

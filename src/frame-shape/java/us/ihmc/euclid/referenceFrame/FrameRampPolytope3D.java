@@ -1,5 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories.newObservableFixedFramePoint3DBasics;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories.newObservableFixedFrameVector3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedPoint3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedVector3D;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -15,12 +21,10 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameRampPolytope3DView;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -71,8 +75,8 @@ class FrameRampPolytope3D implements FrameRampPolytope3DView
       FixedFrameShape3DPoseBasics pose = ramp3D.getPose();
 
       rampFace = new Face("ramp", ramp3D.getRampSurfaceNormal(), slopeFaceAreaSupplier, rampE0, rampE1, rampE2, rampE3);
-      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2);
-      zMinFace = new Face("z-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
+      yMinFace = new Face("y-min", newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2);
+      zMinFace = new Face("z-min", newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
       xMaxFace = new Face("x-max", pose.getXAxis(), xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
       yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2);
 
@@ -148,13 +152,10 @@ class FrameRampPolytope3D implements FrameRampPolytope3DView
    {
       private final String name;
 
-      private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics(this,
-                                                                                                                                null,
-                                                                                                                                axis -> updateBoundingBox());
-
-      private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroidAndArea());
+      private final FixedFrameBoundingBox3DBasics boundingBox = newObservableFixedFrameBoundingBox3DBasics(this, null, (axis, bound) -> updateBoundingBox());
+      private final FixedFramePoint3DBasics centroid = newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroidAndArea());
       private final Vector3DReadOnly normalLocal;
-      private final FixedFrameVector3DBasics normal = EuclidFrameFactories.newObservableFixedFrameVector3DBasics(this, null, axis -> updateNormal());
+      private final FixedFrameVector3DBasics normal = newObservableFixedFrameVector3DBasics(this, null, axis -> updateNormal());
       private final DoubleSupplier areaSupplier;
 
       private boolean isBoundingBoxDirty = true;
@@ -296,7 +297,7 @@ class FrameRampPolytope3D implements FrameRampPolytope3DView
 
       private Vertex(DoubleSupplier xLocal, DoubleSupplier yLocal, DoubleSupplier zLocal)
       {
-         positionLocal = EuclidCoreFactories.newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
+         positionLocal = newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
       }
 
       @Override

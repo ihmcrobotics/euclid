@@ -1,5 +1,33 @@
 package us.ihmc.euclid.referenceFrame.tools;
 
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryFactories.newObservableBoundingBox2DBasics;
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryFactories.newObservableBoundingBox3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedPoint2DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedPoint3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedVector2DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedVector3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedPoint2D;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedPoint3D;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedVector2D;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservablePoint2DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservablePoint2DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservablePoint3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservablePoint3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableQuaternionBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableQuaternionReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableRotationMatrixBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableRotationMatrixReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableUnitVector2DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableUnitVector2DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableUnitVector3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableUnitVector3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableVector2DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableVector2DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableVector3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableVector3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidHashCodeTools.toIntHashCode;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
@@ -8,11 +36,12 @@ import java.util.function.ObjDoubleConsumer;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.BoundingBox2D;
 import us.ihmc.euclid.geometry.BoundingBox3D;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox2DBasics;
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
+import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories.BoundingBoxChangedListener;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -45,8 +74,6 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
-import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.UnitVector2D;
@@ -97,7 +124,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(DoubleSupplier scaleSupplier, FrameTuple2DReadOnly originalTuple)
    {
-      return newLinkedFramePoint2DReadOnly(originalTuple, EuclidCoreFactories.newLinkedPoint2DReadOnly(scaleSupplier, originalTuple));
+      return newLinkedFramePoint2DReadOnly(originalTuple, newLinkedPoint2DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
@@ -115,7 +142,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(DoubleSupplier scaleSupplier, FrameTuple2DReadOnly originalTuple)
    {
-      return newLinkedFrameVector2DReadOnly(originalTuple, EuclidCoreFactories.newLinkedVector2DReadOnly(scaleSupplier, originalTuple));
+      return newLinkedFrameVector2DReadOnly(originalTuple, newLinkedVector2DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
@@ -133,7 +160,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(DoubleSupplier scaleSupplier, FrameTuple3DReadOnly originalTuple)
    {
-      return newLinkedFramePoint3DReadOnly(originalTuple, EuclidCoreFactories.newLinkedPoint3DReadOnly(scaleSupplier, originalTuple));
+      return newLinkedFramePoint3DReadOnly(originalTuple, newLinkedPoint3DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
@@ -151,7 +178,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(DoubleSupplier scaleSupplier, FrameTuple3DReadOnly originalTuple)
    {
-      return newLinkedFrameVector3DReadOnly(originalTuple, EuclidCoreFactories.newLinkedVector3DReadOnly(scaleSupplier, originalTuple));
+      return newLinkedFrameVector3DReadOnly(originalTuple, newLinkedVector3DReadOnly(scaleSupplier, originalTuple));
    }
 
    /**
@@ -166,7 +193,7 @@ public class EuclidFrameFactories
    public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
                                                                     DoubleSupplier ySupplier)
    {
-      return newLinkedFramePoint2DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedPoint2DReadOnly(xSupplier, ySupplier));
+      return newLinkedFramePoint2DReadOnly(referenceFrameHolder, newLinkedPoint2DReadOnly(xSupplier, ySupplier));
    }
 
    /**
@@ -181,7 +208,7 @@ public class EuclidFrameFactories
    public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
                                                                       DoubleSupplier ySupplier)
    {
-      return newLinkedFrameVector2DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedVector2DReadOnly(xSupplier, ySupplier));
+      return newLinkedFrameVector2DReadOnly(referenceFrameHolder, newLinkedVector2DReadOnly(xSupplier, ySupplier));
    }
 
    /**
@@ -197,7 +224,7 @@ public class EuclidFrameFactories
    public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
                                                                     DoubleSupplier ySupplier, DoubleSupplier zSupplier)
    {
-      return newLinkedFramePoint3DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedPoint3DReadOnly(xSupplier, ySupplier, zSupplier));
+      return newLinkedFramePoint3DReadOnly(referenceFrameHolder, newLinkedPoint3DReadOnly(xSupplier, ySupplier, zSupplier));
    }
 
    /**
@@ -213,7 +240,7 @@ public class EuclidFrameFactories
    public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
                                                                       DoubleSupplier ySupplier, DoubleSupplier zSupplier)
    {
-      return newLinkedFrameVector3DReadOnly(referenceFrameHolder, EuclidCoreFactories.newLinkedVector3DReadOnly(xSupplier, ySupplier, zSupplier));
+      return newLinkedFrameVector3DReadOnly(referenceFrameHolder, newLinkedVector3DReadOnly(xSupplier, ySupplier, zSupplier));
    }
 
    /**
@@ -249,7 +276,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -302,7 +329,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -361,7 +388,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -420,7 +447,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -491,7 +518,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -574,7 +601,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -676,16 +703,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getM00(),
-                                                                                       getM01(),
-                                                                                       getM02(),
-                                                                                       getM10(),
-                                                                                       getM11(),
-                                                                                       getM12(),
-                                                                                       getM20(),
-                                                                                       getM21(),
-                                                                                       getM22()),
-                                                     getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22()), getReferenceFrame());
          }
 
          @Override
@@ -750,7 +768,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ(), getS()), getReferenceFrame());
          }
 
          @Override
@@ -778,7 +796,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint2DReadOnly newNegativeLinkedFramePoint2D(FramePoint2DReadOnly originalPoint)
    {
-      return newLinkedFramePoint2DReadOnly(originalPoint, EuclidCoreFactories.newNegativeLinkedPoint2D(originalPoint));
+      return newLinkedFramePoint2DReadOnly(originalPoint, newNegativeLinkedPoint2D(originalPoint));
    }
 
    /**
@@ -790,7 +808,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector2DReadOnly newNegativeLinkedFrameVector2D(FrameVector2DReadOnly originalVector)
    {
-      return newLinkedFrameVector2DReadOnly(originalVector, EuclidCoreFactories.newNegativeLinkedVector2D(originalVector));
+      return newLinkedFrameVector2DReadOnly(originalVector, newNegativeLinkedVector2D(originalVector));
    }
 
    /**
@@ -801,7 +819,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint3DReadOnly newNegativeLinkedFramePoint3D(FramePoint3DReadOnly originalPoint)
    {
-      return newLinkedFramePoint3DReadOnly(originalPoint, EuclidCoreFactories.newNegativeLinkedPoint3D(originalPoint));
+      return newLinkedFramePoint3DReadOnly(originalPoint, newNegativeLinkedPoint3D(originalPoint));
    }
 
    /**
@@ -813,7 +831,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector3DReadOnly newNegativeLinkedFrameVector3D(FrameVector3DReadOnly originalVector)
    {
-      return newLinkedFrameVector3DReadOnly(originalVector, EuclidCoreFactories.newNegativeLinkedVector3D(originalVector));
+      return newLinkedFrameVector3DReadOnly(originalVector, newNegativeLinkedVector3D(originalVector));
    }
 
    /**
@@ -886,7 +904,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -967,7 +985,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -1060,7 +1078,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -1153,7 +1171,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -1302,7 +1320,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY()), getReferenceFrame());
          }
 
          @Override
@@ -1480,7 +1498,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ()), getReferenceFrame());
          }
 
          @Override
@@ -1571,7 +1589,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getYaw()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getYaw()), getReferenceFrame());
          }
 
          @Override
@@ -1658,7 +1676,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS()), getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getX(), getY(), getZ(), getS()), getReferenceFrame());
          }
 
          @Override
@@ -1828,16 +1846,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(EuclidHashCodeTools.toIntHashCode(getM00(),
-                                                                                       getM01(),
-                                                                                       getM02(),
-                                                                                       getM10(),
-                                                                                       getM11(),
-                                                                                       getM12(),
-                                                                                       getM20(),
-                                                                                       getM21(),
-                                                                                       getM22()),
-                                                     getReferenceFrame());
+            return toIntHashCode(toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22()), getReferenceFrame());
          }
 
          @Override
@@ -1908,7 +1917,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+            return toIntHashCode(minPoint, maxPoint);
          }
 
          @Override
@@ -1981,7 +1990,7 @@ public class EuclidFrameFactories
          @Override
          public int hashCode()
          {
-            return EuclidHashCodeTools.toIntHashCode(minPoint, maxPoint);
+            return toIntHashCode(minPoint, maxPoint);
          }
 
          @Override
@@ -2006,7 +2015,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint2DReadOnly newObservableFramePoint2DReadOnly(Consumer<Axis2D> valueAccessedListener, FramePoint2DReadOnly source)
    {
-      return newLinkedFramePoint2DReadOnly(source, EuclidCoreFactories.newObservablePoint2DReadOnly(valueAccessedListener, source));
+      return newLinkedFramePoint2DReadOnly(source, newObservablePoint2DReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2021,7 +2030,7 @@ public class EuclidFrameFactories
     */
    public static FramePoint3DReadOnly newObservableFramePoint3DReadOnly(Consumer<Axis3D> valueAccessedListener, FramePoint3DReadOnly source)
    {
-      return newLinkedFramePoint3DReadOnly(source, EuclidCoreFactories.newObservablePoint3DReadOnly(valueAccessedListener, source));
+      return newLinkedFramePoint3DReadOnly(source, newObservablePoint3DReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2036,7 +2045,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector2DReadOnly newObservableFrameVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, FrameVector2DReadOnly source)
    {
-      return newLinkedFrameVector2DReadOnly(source, EuclidCoreFactories.newObservableVector2DReadOnly(valueAccessedListener, source));
+      return newLinkedFrameVector2DReadOnly(source, newObservableVector2DReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2051,7 +2060,7 @@ public class EuclidFrameFactories
     */
    public static FrameVector3DReadOnly newObservableFrameVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, FrameVector3DReadOnly source)
    {
-      return newLinkedFrameVector3DReadOnly(source, EuclidCoreFactories.newObservableVector3DReadOnly(valueAccessedListener, source));
+      return newLinkedFrameVector3DReadOnly(source, newObservableVector3DReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2066,7 +2075,7 @@ public class EuclidFrameFactories
     */
    public static FrameUnitVector2DReadOnly newObservableFrameUnitVector2DReadOnly(Consumer<Axis2D> valueAccessedListener, FrameUnitVector2DReadOnly source)
    {
-      return newLinkedFrameUnitVector2DReadOnly(source, EuclidCoreFactories.newObservableUnitVector2DReadOnly(valueAccessedListener, source));
+      return newLinkedFrameUnitVector2DReadOnly(source, newObservableUnitVector2DReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2081,7 +2090,7 @@ public class EuclidFrameFactories
     */
    public static FrameUnitVector3DReadOnly newObservableFrameUnitVector3DReadOnly(Consumer<Axis3D> valueAccessedListener, FrameUnitVector3DReadOnly source)
    {
-      return newLinkedFrameUnitVector3DReadOnly(source, EuclidCoreFactories.newObservableUnitVector3DReadOnly(valueAccessedListener, source));
+      return newLinkedFrameUnitVector3DReadOnly(source, newObservableUnitVector3DReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2099,7 +2108,7 @@ public class EuclidFrameFactories
    public static FrameRotationMatrixReadOnly newObservableFrameRotationMatrixReadOnly(BiConsumer<Axis3D, Axis3D> valueAccessedListener,
                                                                                       FrameRotationMatrixReadOnly source)
    {
-      return newLinkedFrameRotationMatrixReadOnly(source, EuclidCoreFactories.newObservableRotationMatrixReadOnly(valueAccessedListener, source));
+      return newLinkedFrameRotationMatrixReadOnly(source, newObservableRotationMatrixReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2114,7 +2123,7 @@ public class EuclidFrameFactories
     */
    public static FrameQuaternionReadOnly newObservableFrameQuaternionReadOnly(IntConsumer valueAccessedListener, FrameQuaternionReadOnly source)
    {
-      return newLinkedFrameQuaternionReadOnly(source, EuclidCoreFactories.newObservableQuaternionReadOnly(valueAccessedListener, source));
+      return newLinkedFrameQuaternionReadOnly(source, newObservableQuaternionReadOnly(valueAccessedListener, source));
    }
 
    /**
@@ -2156,7 +2165,7 @@ public class EuclidFrameFactories
    public static FixedFramePoint2DBasics newObservableFixedFramePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
                                                                               Consumer<Axis2D> valueAccessedListener, FixedFramePoint2DBasics source)
    {
-      return newLinkedFixedFramePoint2DBasics(source, EuclidCoreFactories.newObservablePoint2DBasics(valueChangedListener, valueAccessedListener, source));
+      return newLinkedFixedFramePoint2DBasics(source, newObservablePoint2DBasics(valueChangedListener, valueAccessedListener, source));
    }
 
    /**
@@ -2198,7 +2207,7 @@ public class EuclidFrameFactories
    public static FixedFramePoint3DBasics newObservableFixedFramePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
                                                                               Consumer<Axis3D> valueAccessedListener, FixedFramePoint3DBasics source)
    {
-      return newLinkedFixedFramePoint3DBasics(source, EuclidCoreFactories.newObservablePoint3DBasics(valueChangedListener, valueAccessedListener, source));
+      return newLinkedFixedFramePoint3DBasics(source, newObservablePoint3DBasics(valueChangedListener, valueAccessedListener, source));
    }
 
    /**
@@ -2241,7 +2250,7 @@ public class EuclidFrameFactories
    public static FixedFrameVector2DBasics newObservableFixedFrameVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
                                                                                 Consumer<Axis2D> valueAccessedListener, FixedFrameVector2DBasics source)
    {
-      return newLinkedFixedFrameVector2DBasics(source, EuclidCoreFactories.newObservableVector2DBasics(valueChangedListener, valueAccessedListener, source));
+      return newLinkedFixedFrameVector2DBasics(source, newObservableVector2DBasics(valueChangedListener, valueAccessedListener, source));
    }
 
    /**
@@ -2284,7 +2293,7 @@ public class EuclidFrameFactories
    public static FixedFrameVector3DBasics newObservableFixedFrameVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
                                                                                 Consumer<Axis3D> valueAccessedListener, FixedFrameVector3DBasics source)
    {
-      return newLinkedFixedFrameVector3DBasics(source, EuclidCoreFactories.newObservableVector3DBasics(valueChangedListener, valueAccessedListener, source));
+      return newLinkedFixedFrameVector3DBasics(source, newObservableVector3DBasics(valueChangedListener, valueAccessedListener, source));
    }
 
    /**
@@ -2329,8 +2338,7 @@ public class EuclidFrameFactories
                                                                                         Consumer<Axis2D> valueAccessedListener,
                                                                                         FixedFrameUnitVector2DBasics source)
    {
-      return newLinkedFixedFrameUnitVector2DBasics(source,
-                                                   EuclidCoreFactories.newObservableUnitVector2DBasics(valueChangedListener, valueAccessedListener, source));
+      return newLinkedFixedFrameUnitVector2DBasics(source, newObservableUnitVector2DBasics(valueChangedListener, valueAccessedListener, source));
    }
 
    /**
@@ -2375,8 +2383,7 @@ public class EuclidFrameFactories
                                                                                         Consumer<Axis3D> valueAccessedListener,
                                                                                         FixedFrameUnitVector3DBasics source)
    {
-      return newLinkedFixedFrameUnitVector3DBasics(source,
-                                                   EuclidCoreFactories.newObservableUnitVector3DBasics(valueChangedListener, valueAccessedListener, source));
+      return newLinkedFixedFrameUnitVector3DBasics(source, newObservableUnitVector3DBasics(valueChangedListener, valueAccessedListener, source));
    }
 
    /**
@@ -2419,10 +2426,7 @@ public class EuclidFrameFactories
                                                                                             BiConsumer<Axis3D, Axis3D> valueAccessedListener,
                                                                                             FixedFrameRotationMatrixBasics source)
    {
-      return newLinkedFixedFrameRotationMatrixBasics(source,
-                                                     EuclidCoreFactories.newObservableRotationMatrixBasics(valueChangedListener,
-                                                                                                           valueAccessedListener,
-                                                                                                           source));
+      return newLinkedFixedFrameRotationMatrixBasics(source, newObservableRotationMatrixBasics(valueChangedListener, valueAccessedListener, source));
    }
 
    /**
@@ -2459,15 +2463,96 @@ public class EuclidFrameFactories
    public static FixedFrameQuaternionBasics newObservableFixedFrameQuaternionBasics(Runnable valueChangedListener, IntConsumer valueAccessedListener,
                                                                                     FixedFrameQuaternionBasics source)
    {
-      return newLinkedFixedFrameQuaternionBasics(source,
-                                                 EuclidCoreFactories.newObservableQuaternionBasics(valueChangedListener, valueAccessedListener, source));
+      return newLinkedFixedFrameQuaternionBasics(source, newObservableQuaternionBasics(valueChangedListener, valueAccessedListener, source));
    }
 
-   public static FixedFrameBoundingBox3DBasics newObservableFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder,
-                                                                                          ObjDoubleConsumer<Axis3D> valueChangedListener,
-                                                                                          Consumer<Axis3D> valueAccessedListener)
+   /**
+    * Creates a new frame bounding box that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame bounding box. Not
+    *                              modified.
+    * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
+    *                              has been modified. The corresponding constants {@link Axis2D} and
+    *                              {@link Bound} will be passed to indicate the component that was
+    *                              changed alongside its new value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the bounding box
+    *                              is being accessed. The corresponding constants {@link Axis2D} and
+    *                              {@link Bound} will be passed to indicate the component being
+    *                              accessed. Can be {@code null}.
+    * @return the observable frame bounding box.
+    */
+   public static FixedFrameBoundingBox2DBasics newObservableFixedFrameBoundingBox2DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                          BoundingBoxChangedListener<Axis2D> valueChangedListener,
+                                                                                          BiConsumer<Axis2D, Bound> valueAccessedListener)
    {
-      return newLinkedFixedFrameBoundingBox3DBasics(referenceFrameHolder,
-                                                    EuclidGeometryFactories.newObservableBoundingBox3DBasics(valueChangedListener, valueAccessedListener));
+      return newLinkedFixedFrameBoundingBox2DBasics(referenceFrameHolder, newObservableBoundingBox2DBasics(valueChangedListener, valueAccessedListener));
+   }
+
+   /**
+    * Creates a linked frame bounding box that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
+    *                              has been modified. The corresponding constants {@link Axis2D} and
+    *                              {@link Bound} will be passed to indicate the component that was
+    *                              changed alongside its new value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the bounding box
+    *                              is being accessed. The corresponding constants {@link Axis2D} and
+    *                              {@link Bound} will be passed to indicate the component being
+    *                              accessed. Can be {@code null}.
+    * @param source                the original frame bounding box to link and observe. Modifiable via
+    *                              the linked point interface.
+    * @return the observable frame bounding box.
+    */
+   public static FixedFrameBoundingBox2DBasics newObservableFixedFrameBoundingBox2DBasics(BoundingBoxChangedListener<Axis2D> valueChangedListener,
+                                                                                          BiConsumer<Axis2D, Bound> valueAccessedListener,
+                                                                                          FixedFrameBoundingBox2DBasics source)
+   {
+      return newLinkedFixedFrameBoundingBox2DBasics(source, newObservableBoundingBox2DBasics(valueChangedListener, valueAccessedListener, source));
+   }
+
+   /**
+    * Creates a new frame bounding box that can be used to observe read and write operations.
+    * 
+    * @param referenceFrameHolder  the reference frame supplier for the new frame bounding box. Not
+    *                              modified.
+    * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
+    *                              has been modified. The corresponding constants {@link Axis3D} and
+    *                              {@link Bound} will be passed to indicate the component that was
+    *                              changed alongside its new value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the bounding box
+    *                              is being accessed. The corresponding constants {@link Axis3D} and
+    *                              {@link Bound} will be passed to indicate the component being
+    *                              accessed. Can be {@code null}.
+    * @return the observable frame bounding box.
+    */
+   public static FixedFrameBoundingBox3DBasics newObservableFixedFrameBoundingBox3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                          BoundingBoxChangedListener<Axis3D> valueChangedListener,
+                                                                                          BiConsumer<Axis3D, Bound> valueAccessedListener)
+   {
+      return newLinkedFixedFrameBoundingBox3DBasics(referenceFrameHolder, newObservableBoundingBox3DBasics(valueChangedListener, valueAccessedListener));
+   }
+
+   /**
+    * Creates a linked frame bounding box that can be used to observe read and write operations on the
+    * source.
+    * 
+    * @param valueChangedListener  the listener to be notified whenever a component of the bounding box
+    *                              has been modified. The corresponding constants {@link Axis3D} and
+    *                              {@link Bound} will be passed to indicate the component that was
+    *                              changed alongside its new value. Can be {@code null}.
+    * @param valueAccessedListener the listener to be notified whenever a component of the bounding box
+    *                              is being accessed. The corresponding constants {@link Axis3D} and
+    *                              {@link Bound} will be passed to indicate the component being
+    *                              accessed. Can be {@code null}.
+    * @param source                the original frame bounding box to link and observe. Modifiable via
+    *                              the linked point interface.
+    * @return the observable frame bounding box.
+    */
+   public static FixedFrameBoundingBox3DBasics newObservableFixedFrameBoundingBox3DBasics(BoundingBoxChangedListener<Axis3D> valueChangedListener,
+                                                                                          BiConsumer<Axis3D, Bound> valueAccessedListener,
+                                                                                          FixedFrameBoundingBox3DBasics source)
+   {
+      return newLinkedFixedFrameBoundingBox3DBasics(source, newObservableBoundingBox3DBasics(valueChangedListener, valueAccessedListener, source));
    }
 }

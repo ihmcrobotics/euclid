@@ -1,5 +1,11 @@
 package us.ihmc.euclid.shape.primitives;
 
+import static us.ihmc.euclid.geometry.tools.EuclidGeometryFactories.newObservableBoundingBox3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedPoint3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedVector3D;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservablePoint3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newObservableVector3DBasics;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -7,14 +13,12 @@ import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryFactories;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -64,9 +68,9 @@ class BoxPolytope3D implements BoxPolytope3DView
       DoubleSupplier zFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeY();
 
       Shape3DPose pose = box3D.getPose();
-      xMinFace = new Face("x-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getXAxis()), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
-      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
-      zMinFace = new Face("z-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
+      xMinFace = new Face("x-min", newNegativeLinkedVector3D(pose.getXAxis()), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
+      yMinFace = new Face("y-min", newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
+      zMinFace = new Face("z-min", newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
       xMaxFace = new Face("x-max", pose.getXAxis(), xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
       yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
       zMaxFace = new Face("z-max", pose.getZAxis(), zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
@@ -144,11 +148,11 @@ class BoxPolytope3D implements BoxPolytope3DView
       private final String name;
       private final HalfEdge e0, e1, e2, e3;
 
-      private final BoundingBox3DBasics boundingBox = EuclidGeometryFactories.newObservableBoundingBox3DBasics(null, axis -> updateBoundingBox());
+      private final BoundingBox3DBasics boundingBox = newObservableBoundingBox3DBasics(null, (axis, bound) -> updateBoundingBox());
 
-      private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroidAndArea());
+      private final Point3DBasics centroid = newObservablePoint3DBasics(null, axis -> updateCentroidAndArea());
       private final Vector3DReadOnly normalLocal;
-      private final Vector3DBasics normal = EuclidCoreFactories.newObservableVector3DBasics(null, axis -> updateNormal());
+      private final Vector3DBasics normal = newObservableVector3DBasics(null, axis -> updateNormal());
       private final DoubleSupplier areaSupplier;
 
       private boolean isBoundingBoxDirty = true;
@@ -272,7 +276,7 @@ class BoxPolytope3D implements BoxPolytope3DView
 
       private Vertex(DoubleSupplier xLocal, DoubleSupplier yLocal, DoubleSupplier zLocal)
       {
-         positionLocal = EuclidCoreFactories.newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
+         positionLocal = newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
       }
 
       @Override

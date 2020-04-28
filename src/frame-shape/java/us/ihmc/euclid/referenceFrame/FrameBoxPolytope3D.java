@@ -1,5 +1,11 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories.newObservableFixedFramePoint3DBasics;
+import static us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories.newObservableFixedFrameUnitVector3DBasics;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newLinkedPoint3DReadOnly;
+import static us.ihmc.euclid.tools.EuclidCoreFactories.newNegativeLinkedVector3D;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,12 +22,10 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameBoxPolytope3DView;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameHalfEdge3DReadOnly;
 import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractVertex3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
-import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
@@ -70,9 +74,9 @@ class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       DoubleSupplier zFaceAreaSupplier = () -> box3D.getSizeX() * box3D.getSizeY();
 
       FixedFrameShape3DPoseBasics pose = box3D.getPose();
-      xMinFace = new Face("x-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getXAxis()), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
-      yMinFace = new Face("y-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
-      zMinFace = new Face("z-min", EuclidCoreFactories.newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
+      xMinFace = new Face("x-min", newNegativeLinkedVector3D(pose.getXAxis()), xFaceAreaSupplier, xMinE0, xMinE1, xMinE2, xMinE3);
+      yMinFace = new Face("y-min", newNegativeLinkedVector3D(pose.getYAxis()), yFaceAreaSupplier, yMinE0, yMinE1, yMinE2, yMinE3);
+      zMinFace = new Face("z-min", newNegativeLinkedVector3D(pose.getZAxis()), zFaceAreaSupplier, zMinE0, zMinE1, zMinE2, zMinE3);
       xMaxFace = new Face("x-max", pose.getXAxis(), xFaceAreaSupplier, xMaxE0, xMaxE1, xMaxE2, xMaxE3);
       yMaxFace = new Face("y-max", pose.getYAxis(), yFaceAreaSupplier, yMaxE0, yMaxE1, yMaxE2, yMaxE3);
       zMaxFace = new Face("z-max", pose.getZAxis(), zFaceAreaSupplier, zMaxE0, zMaxE1, zMaxE2, zMaxE3);
@@ -156,12 +160,10 @@ class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       private final String name;
       private final HalfEdge e0, e1, e2, e3;
 
-      private final FixedFrameBoundingBox3DBasics boundingBox = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics(this,
-                                                                                                                                null,
-                                                                                                                                axis -> updateBoundingBox());
+      private final FixedFrameBoundingBox3DBasics boundingBox = newObservableFixedFrameBoundingBox3DBasics(this, null, (axis, bound) -> updateBoundingBox());
 
-      private final FixedFramePoint3DBasics centroid = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroidAndArea());
-      private final FixedFrameUnitVector3DBasics normal = EuclidFrameFactories.newObservableFixedFrameUnitVector3DBasics(this, null, axis -> updateNormal());
+      private final FixedFramePoint3DBasics centroid = newObservableFixedFramePoint3DBasics(this, null, axis -> updateCentroidAndArea());
+      private final FixedFrameUnitVector3DBasics normal = newObservableFixedFrameUnitVector3DBasics(this, null, axis -> updateNormal());
       private final Vector3DReadOnly normalLocal;
       private final DoubleSupplier areaSupplier;
 
@@ -310,7 +312,7 @@ class FrameBoxPolytope3D implements FrameBoxPolytope3DView
 
       private Vertex(DoubleSupplier xLocal, DoubleSupplier yLocal, DoubleSupplier zLocal)
       {
-         positionLocal = EuclidCoreFactories.newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
+         positionLocal = newLinkedPoint3DReadOnly(xLocal, yLocal, zLocal);
       }
 
       @Override

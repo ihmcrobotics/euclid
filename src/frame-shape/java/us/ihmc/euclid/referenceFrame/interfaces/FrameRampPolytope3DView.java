@@ -9,8 +9,8 @@ import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
  * Provides a {@link FrameConvexPolytope3DReadOnly} view backed by a {@link FrameRamp3DReadOnly}.
  * <p>
  * The implementation is expected to always reflect the current state of the ramp and its geometry
- * components are expected to be expressed in the global coordinate system of the box, i.e.
- * accounting for the box's pose.
+ * components are expected to be expressed in the global coordinate system of the ramp, i.e.
+ * accounting for the ramp's pose.
  * </p>
  * <p>
  * This polytope reference frame is linked to the ramp reference frame.

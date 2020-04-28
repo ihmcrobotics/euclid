@@ -186,7 +186,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
     *
     * @param listeners the listeners to register.
     */
-   public void addChangeListeners(List<Shape3DChangeListener> listeners)
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
    {
       for (int i = 0; i < listeners.size(); i++)
       {

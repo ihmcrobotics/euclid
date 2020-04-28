@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.EuclidTestConstants;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameShapeAPIDefaultConfiguration;
@@ -30,7 +29,6 @@ public class FrameRamp3DTest
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
 
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
-      signaturesToIgnore.add(new MethodSignature("checkSizePositive", Axis3D.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameRamp3DReadOnly.class, Ramp3DReadOnly.class, false, 1, methodFilter);
       tester.assertOverloadingWithFrameObjects(FixedFrameRamp3DBasics.class, Ramp3DBasics.class, false, 1, methodFilter);
@@ -61,7 +59,7 @@ public class FrameRamp3DTest
    public void testConsistencyWithRamp3D()
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals")
-            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener") && !m.getName().equals("checkSizePositive");
+            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, ramp) -> new FrameRamp3D(frame, (Ramp3D) ramp),
                                                                   EuclidShapeRandomTools::nextRamp3D,

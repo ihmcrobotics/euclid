@@ -155,7 +155,7 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
     *
     * @param listeners the listeners to register.
     */
-   public void addChangeListeners(List<Shape3DChangeListener> listeners)
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
    {
       for (int i = 0; i < listeners.size(); i++)
       {
