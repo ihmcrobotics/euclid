@@ -266,7 +266,7 @@ public class EuclidGeometryFactories
 
          private ObjDoubleConsumer<Axis2D> toPoint2DValueChangedListener(BoundingBoxChangedListener<Axis2D> valueChangedListener, Bound bound)
          {
-            if (valueAccessedListener == null)
+            if (valueChangedListener == null)
                return null;
             else
                return (axis, newValue) ->
@@ -384,7 +384,7 @@ public class EuclidGeometryFactories
 
          private ObjDoubleConsumer<Axis3D> toPoint3DValueChangedListener(BoundingBoxChangedListener<Axis3D> valueChangedListener, Bound bound)
          {
-            if (valueAccessedListener == null)
+            if (valueChangedListener == null)
                return null;
             else
                return (axis, newValue) ->
