@@ -724,7 +724,7 @@ public interface Line2DReadOnly
       { // Lines are parallel but not collinear
          return false;
       }
-      else if (t == 0.0 && EuclidGeometryTools.areVector2DsParallel(getDirection(), secondLine.getDirection(), 1.0e-7))
+      else if (Double.isInfinite(t))
       { // Lines are collinear
          interiorBisectorToPack.set(this);
          return true;

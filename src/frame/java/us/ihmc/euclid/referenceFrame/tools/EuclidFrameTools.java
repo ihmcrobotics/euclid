@@ -5819,8 +5819,7 @@ public class EuclidFrameTools
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and the
     * returned value is {@link Double#NaN}.
-    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
-    * {@code pointOnLine1}, the returned value {@code 0.0}.
+    * <li>if the two lines are collinear, this method returns {@link Double#POSITIVE_INFINITY}.
     * </ul>
     * </p>
     *
@@ -5853,8 +5852,8 @@ public class EuclidFrameTools
     * not intersect.
     * <li>if the line segment and the line are parallel but not collinear, they do not intersect and
     * the returned value is {@link Double#NaN}.
-    * <li>if the line segment and the line are collinear, they are assumed to be intersecting at
-    * {@code lineSegmentStart}, the returned value {@code 0.0}.
+    * <li>if the line segment and the line are collinear, this method returns
+    * {@link Double#POSITIVE_INFINITY}.
     * </ul>
     * </p>
     *

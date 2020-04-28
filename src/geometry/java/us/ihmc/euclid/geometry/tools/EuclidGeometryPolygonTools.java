@@ -935,6 +935,9 @@ public class EuclidGeometryPolygonTools
                                                                    lineSegmentStart.getY(),
                                                                    lineSegmentDx,
                                                                    lineSegmentDy);
+         if (Double.isInfinite(lambda))
+            lambda = 0.0; // edge and segment are collinear, let's set the intersection to the start of the edge.
+
          if (Double.isNaN(lambda))
             continue;
 

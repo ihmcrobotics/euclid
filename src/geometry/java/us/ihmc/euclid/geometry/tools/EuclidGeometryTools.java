@@ -3093,6 +3093,13 @@ public class EuclidGeometryTools
                                                                     pointOnLineY,
                                                                     lineDirectionX,
                                                                     lineDirectionY);
+      if (Double.isInfinite(percentage))
+      { // The line and the segment are collinear, let's set the intersection to the start of the segment.
+         if (intersectionToPack != null)
+            intersectionToPack.set(lineSegmentStartX, lineSegmentStartY);
+         return true;
+      }
+
       if (Double.isNaN(percentage) || percentage < 0.0 - ONE_TEN_MILLIONTH || percentage > 1.0 + ONE_TEN_MILLIONTH)
       {
          if (intersectionToPack != null)
@@ -5458,6 +5465,12 @@ public class EuclidGeometryTools
                                                                pointOnLine2y,
                                                                lineDirection2x,
                                                                lineDirection2y);
+      if (Double.isInfinite(alpha))
+      { // The lines are collinear, let's set the intersection to pointOnLine1
+         if (intersectionToPack != null)
+            intersectionToPack.set(pointOnLine1x, pointOnLine1y);
+         return true;
+      }
       if (Double.isNaN(alpha))
       {
          if (intersectionToPack != null)
@@ -7405,8 +7418,7 @@ public class EuclidGeometryTools
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and the
     * returned value is {@link Double#NaN}.
-    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
-    * {@code pointOnLine1}, the returned value {@code 0.0}.
+    * <li>if the two lines are collinear, this method returns {@link Double#POSITIVE_INFINITY}.
     * </ul>
     * </p>
     *
@@ -7443,10 +7455,10 @@ public class EuclidGeometryTools
          if (Math.abs(cross) < ONE_TRILLIONTH)
          {
             /*
-             * The two lines are collinear. There's an infinite number of intersection. Let's just set the
-             * result to pointOnLine1, i.e. alpha = 0.0.
+             * The two lines are collinear. There's an infinite number of intersection. Let's indicate the
+             * result by returning infinity.
              */
-            return 0.0;
+            return Double.POSITIVE_INFINITY;
          }
          else
          {
@@ -7475,8 +7487,7 @@ public class EuclidGeometryTools
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and the
     * returned value is {@link Double#NaN}.
-    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
-    * {@code pointOnLine1}, the returned value {@code 0.0}.
+    * <li>if the two lines are collinear, this method returns {@link Double#POSITIVE_INFINITY}.
     * </ul>
     * </p>
     *
@@ -7513,8 +7524,8 @@ public class EuclidGeometryTools
     * not intersect.
     * <li>if the line segment and the line are parallel but not collinear, they do not intersect and
     * the returned value is {@link Double#NaN}.
-    * <li>if the line segment and the line are collinear, they are assumed to be intersecting at
-    * {@code lineSegmentStart}, the returned value {@code 0.0}.
+    * <li>if the line segment and the line are collinear, this method returns
+    * {@link Double#POSITIVE_INFINITY}.
     * </ul>
     * </p>
     *
@@ -7540,6 +7551,8 @@ public class EuclidGeometryTools
                                                                pointOnLine.getY(),
                                                                lineDirection.getX(),
                                                                lineDirection.getY());
+      if (Double.isInfinite(alpha))
+         return Double.POSITIVE_INFINITY;
       if (Double.isNaN(alpha) || alpha < 0.0 - ONE_TEN_MILLIONTH || alpha > 1.0 + ONE_TEN_MILLIONTH)
          return Double.NaN;
       else if (alpha < 0.0)
