@@ -188,15 +188,15 @@ public interface Line2DReadOnly
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns {@code null}.
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
     * </p>
     *
     * @param secondLine         the other line that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
    default boolean intersectionWith(Line2DReadOnly secondLine, Point2DBasics intersectionToPack)

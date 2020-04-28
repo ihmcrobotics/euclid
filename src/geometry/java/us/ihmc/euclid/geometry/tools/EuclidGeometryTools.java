@@ -5638,7 +5638,7 @@ public class EuclidGeometryTools
     * @param pointOnLine2y      y-coordinate of a point located on the second line.
     * @param lineDirection2x    x-component of the second line direction.
     * @param lineDirection2y    y-component of the second line direction.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     */
    public static boolean intersectionBetweenTwoLine2Ds(double pointOnLine1x, double pointOnLine1y, double lineDirection1x, double lineDirection1y,
@@ -5679,7 +5679,7 @@ public class EuclidGeometryTools
     * Edge cases:
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns null.
+    * method returns {@code null}.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code pointOnLine1}.
     * </ul>
@@ -5699,6 +5699,37 @@ public class EuclidGeometryTools
    {
       Point2D intersection = new Point2D();
 
+      boolean success = intersectionBetweenTwoLine2Ds(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2, intersection);
+
+      if (!success)
+         return null;
+      else
+         return intersection;
+   }
+
+   /**
+    * Computes the intersection between two infinitely long 2D lines each defined by two 2D points.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code pointOnLine1}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
+    * @param secondPointOnLine1 a second point located on the first line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
+    * @param secondPointOnLine2 a second point located on the second line. Not modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
+    * @return {@code true} if the two lines intersect, {@code false} otherwise.
+    */
+   public static boolean intersectionBetweenTwoLine2Ds(Point2DReadOnly firstPointOnLine1, Point2DReadOnly secondPointOnLine1, Point2DReadOnly firstPointOnLine2,
+                                                       Point2DReadOnly secondPointOnLine2, Point2DBasics intersectionToPack)
+   {
       double pointOnLine1x = firstPointOnLine1.getX();
       double pointOnLine1y = firstPointOnLine1.getY();
       double lineDirection1x = secondPointOnLine1.getX() - firstPointOnLine1.getX();
@@ -5707,20 +5738,16 @@ public class EuclidGeometryTools
       double pointOnLine2y = firstPointOnLine2.getY();
       double lineDirection2x = secondPointOnLine2.getX() - firstPointOnLine2.getX();
       double lineDirection2y = secondPointOnLine2.getY() - firstPointOnLine2.getY();
-      boolean success = intersectionBetweenTwoLine2Ds(pointOnLine1x,
-                                                      pointOnLine1y,
-                                                      lineDirection1x,
-                                                      lineDirection1y,
-                                                      pointOnLine2x,
-                                                      pointOnLine2y,
-                                                      lineDirection2x,
-                                                      lineDirection2y,
-                                                      intersection);
 
-      if (!success)
-         return null;
-      else
-         return intersection;
+      return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(pointOnLine1x,
+                                                               pointOnLine1y,
+                                                               lineDirection1x,
+                                                               lineDirection1y,
+                                                               pointOnLine2x,
+                                                               pointOnLine2y,
+                                                               lineDirection2x,
+                                                               lineDirection2y,
+                                                               intersectionToPack);
    }
 
    /**
@@ -5774,7 +5801,7 @@ public class EuclidGeometryTools
     * @param lineDirection1     the first line direction. Not modified.
     * @param pointOnLine2       point located on the second line. Not modified.
     * @param lineDirection2     the second line direction. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     */
    public static boolean intersectionBetweenTwoLine2Ds(Point2DReadOnly pointOnLine1, Vector2DReadOnly lineDirection1, Point2DReadOnly pointOnLine2,

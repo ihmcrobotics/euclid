@@ -4043,7 +4043,7 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns null.
+    * method returns {@code null}.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code pointOnLine1}.
     * </ul>
@@ -4070,6 +4070,78 @@ public class EuclidFrameTools
          return null;
       else
          return new FramePoint2D(firstPointOnLine1.getReferenceFrame(), intersection);
+   }
+
+   /**
+    * Computes the intersection between two infinitely long 2D lines each defined by two 2D points.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code pointOnLine1}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
+    * @param secondPointOnLine1 a second point located on the first line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
+    * @param secondPointOnLine2 a second point located on the second line. Not modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
+    * @return {@code true} if the two lines intersect, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
+                                                       FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2,
+                                                       FixedFramePoint2DBasics intersectionToPack)
+   {
+      firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
+      if (intersectionToPack != null)
+         firstPointOnLine1.checkReferenceFrameMatch(intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1,
+                                                               secondPointOnLine1,
+                                                               firstPointOnLine2,
+                                                               secondPointOnLine2,
+                                                               intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between two infinitely long 2D lines each defined by two 2D points.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code pointOnLine1}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
+    * @param secondPointOnLine1 a second point located on the first line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
+    * @param secondPointOnLine2 a second point located on the second line. Not modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
+    * @return {@code true} if the two lines intersect, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
+    *                                         same reference frame.
+    */
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
+                                                       FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2,
+                                                       FramePoint2DBasics intersectionToPack)
+   {
+      firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
+      if (intersectionToPack != null)
+         intersectionToPack.setReferenceFrame(firstPointOnLine1.getReferenceFrame());
+      return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1,
+                                                               secondPointOnLine1,
+                                                               firstPointOnLine2,
+                                                               secondPointOnLine2,
+                                                               intersectionToPack);
    }
 
    /**
@@ -4126,7 +4198,7 @@ public class EuclidFrameTools
     * @param lineDirection1     the first line direction. Not modified.
     * @param pointOnLine2       point located on the second line. Not modified.
     * @param lineDirection2     the second line direction. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
@@ -4161,7 +4233,7 @@ public class EuclidFrameTools
     * @param lineDirection1     the first line direction. Not modified.
     * @param pointOnLine2       point located on the second line. Not modified.
     * @param lineDirection2     the second line direction. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.

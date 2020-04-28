@@ -317,15 +317,15 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns {@code null}.
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
     * </p>
     *
     * @param secondLine         the other line that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
     *                                         in the same reference frame.
@@ -342,15 +342,15 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns {@code null}.
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
     * </p>
     *
     * @param secondLine         the other line that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this}, {@code secondLine}, and
     *                                         {@code intersectionToPack} are not expressed in the same
@@ -358,7 +358,9 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     */
    default boolean intersectionWith(FrameLine2DReadOnly secondLine, FixedFramePoint2DBasics intersectionToPack)
    {
-      checkReferenceFrameMatch(secondLine, intersectionToPack);
+      checkReferenceFrameMatch(secondLine);
+      if (intersectionToPack != null)
+         checkReferenceFrameMatch(intersectionToPack);
       return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
    }
 
@@ -368,15 +370,15 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns {@code null}.
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
     * </p>
     *
     * @param secondLine         the other line that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code secondLine} are not expressed
     *                                         in the same reference frame.
@@ -384,7 +386,8 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
    default boolean intersectionWith(FrameLine2DReadOnly secondLine, FramePoint2DBasics intersectionToPack)
    {
       checkReferenceFrameMatch(secondLine);
-      intersectionToPack.setReferenceFrame(getReferenceFrame());
+      if (intersectionToPack != null)
+         intersectionToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
    }
 
@@ -394,22 +397,23 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns {@code null}.
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
     * </p>
     *
     * @param secondLine         the other line that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code intersectionToPack} are not
     *                                         expressed in the same reference frame.
     */
    default boolean intersectionWith(Line2DReadOnly secondLine, FixedFramePoint2DBasics intersectionToPack)
    {
-      checkReferenceFrameMatch(intersectionToPack);
+      if (intersectionToPack != null)
+         checkReferenceFrameMatch(intersectionToPack);
       return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
    }
 
@@ -419,20 +423,21 @@ public interface FrameLine2DReadOnly extends Line2DReadOnly, ReferenceFrameHolde
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns {@code null}.
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
     * </p>
     *
     * @param secondLine         the other line that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
    default boolean intersectionWith(Line2DReadOnly secondLine, FramePoint2DBasics intersectionToPack)
    {
-      intersectionToPack.setReferenceFrame(getReferenceFrame());
+      if (intersectionToPack != null)
+         intersectionToPack.setReferenceFrame(getReferenceFrame());
       return Line2DReadOnly.super.intersectionWith(secondLine, intersectionToPack);
    }
 
