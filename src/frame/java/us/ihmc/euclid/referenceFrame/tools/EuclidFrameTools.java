@@ -672,6 +672,86 @@ public class EuclidFrameTools
    }
 
    /**
+    * Given two 2D line segments with finite length, this methods computes two points P &in;
+    * lineSegment1 and Q &in; lineSegment2 such that the distance || P - Q || is the minimum distance
+    * between the two 2D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
+    * link</a>.
+    *
+    * @param lineSegmentStart1                the first endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd1                  the second endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentStart2                the first endpoint of the second line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd2                  the second endpoint of the second line segment. Not
+    *                                         modified.
+    * @param closestPointOnLineSegment1ToPack the 2D coordinates of the point P are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @param closestPointOnLineSegment2ToPack the 2D coordinates of the point Q are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two line segments.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
+    *                                         same reference frame.
+    */
+   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
+                                                                FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+                                                                FixedFramePoint2DBasics closestPointOnLineSegment1ToPack,
+                                                                FixedFramePoint2DBasics closestPointOnLineSegment2ToPack)
+   {
+      lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
+      if (closestPointOnLineSegment1ToPack != null)
+         closestPointOnLineSegment1ToPack.checkReferenceFrameMatch(lineSegmentStart1);
+      if (closestPointOnLineSegment2ToPack != null)
+         closestPointOnLineSegment2ToPack.checkReferenceFrameMatch(lineSegmentStart1);
+      return EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                         lineSegmentEnd1,
+                                                                         lineSegmentStart2,
+                                                                         lineSegmentEnd2,
+                                                                         closestPointOnLineSegment1ToPack,
+                                                                         closestPointOnLineSegment2ToPack);
+   }
+
+   /**
+    * Given two 2D line segments with finite length, this methods computes two points P &in;
+    * lineSegment1 and Q &in; lineSegment2 such that the distance || P - Q || is the minimum distance
+    * between the two 2D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
+    * link</a>.
+    *
+    * @param lineSegmentStart1                the first endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd1                  the second endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentStart2                the first endpoint of the second line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd2                  the second endpoint of the second line segment. Not
+    *                                         modified.
+    * @param closestPointOnLineSegment1ToPack the 2D coordinates of the point P are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @param closestPointOnLineSegment2ToPack the 2D coordinates of the point Q are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two line segments.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
+                                                                FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+                                                                FramePoint2DBasics closestPointOnLineSegment1ToPack,
+                                                                FramePoint2DBasics closestPointOnLineSegment2ToPack)
+   {
+      lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
+      if (closestPointOnLineSegment1ToPack != null)
+         closestPointOnLineSegment1ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
+      if (closestPointOnLineSegment2ToPack != null)
+         closestPointOnLineSegment2ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
+      return EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                         lineSegmentEnd1,
+                                                                         lineSegmentStart2,
+                                                                         lineSegmentEnd2,
+                                                                         closestPointOnLineSegment1ToPack,
+                                                                         closestPointOnLineSegment2ToPack);
+   }
+
+   /**
     * Given two 3D line segments with finite length, this methods computes two points P &in;
     * lineSegment1 and Q &in; lineSegment2 such that the distance || P - Q || is the minimum distance
     * between the two 3D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
@@ -913,6 +993,25 @@ public class EuclidFrameTools
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, null, null);
+   }
+
+   /**
+    * This methods computes the minimum distance between the two 2D line segments with finite length.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
+    * @param lineSegmentEnd1   the second endpoint of the first line segment. Not modified.
+    * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2   the second endpoint of the second line segment. Not modified.
+    * @return the minimum distance between the two line segments.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double distanceBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
+                                                         FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
+   {
+      lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
+      return EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, null, null);
    }
 
    /**

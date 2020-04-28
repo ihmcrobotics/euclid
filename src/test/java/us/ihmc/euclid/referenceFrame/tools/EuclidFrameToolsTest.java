@@ -51,6 +51,7 @@ public class EuclidFrameToolsTest
       signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndBoundingBox3D", D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
       signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndCylinder3D", D, D, D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
       signaturesToIgnore.add(new MethodSignature("intersectionBetweenLine3DAndEllipsoid3D", D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
+      signaturesToIgnore.add(new MethodSignature("closestPoint2DsBetweenTwoLineSegment2Ds", D, D, D, D, D, D, D, D, P2_BA, P2_BA));
       signaturesToIgnore.add(new MethodSignature("closestPoint3DsBetweenTwoLineSegment3Ds", D, D, D, D, D, D, D, D, D, D, D, D, P3_BA, P3_BA));
       signaturesToIgnore.add(new MethodSignature("axisAngleFromZUpToVector3D", Vector3DReadOnly.class, AxisAngleBasics.class));
 
