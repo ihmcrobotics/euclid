@@ -485,6 +485,142 @@ public class EuclidGeometryPolygonTools
     * <p>
     * Edge cases:
     * <ul>
+    * <li>if {@code numberOfVertices < 3}, this method returns {@code false}.
+    * </ul>
+    *
+    * @param pointX           the x-coordinate of the query.
+    * @param pointY           the y-coordinate of the query.
+    * @param convexPolygon2D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
+    *                         convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the query is considered to be inside the polygon, {@code false}
+    *         otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *                                  of the given list of vertices.
+    */
+   public static boolean isPoint2DInsideConvexPolygon2D(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                        boolean clockwiseOrdered)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return false;
+
+      if (numberOfVertices == 1)
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         return pointX == vertex.getX() && pointY == vertex.getY();
+      }
+
+      Point2DReadOnly edgeStart = convexPolygon2D.get(0);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(1);
+
+      if (numberOfVertices == 2)
+      {
+         // Quick check with the end-points
+         if (pointX == edgeStart.getX() && pointY == edgeStart.getY())
+            return true;
+         if (pointX == edgeEnd.getX() && pointY == edgeEnd.getY())
+            return true;
+
+         // Check first that the query is inside the bounding box containing the edge.
+         if (edgeStart.getX() < edgeEnd.getX())
+         {
+            if (pointX < edgeStart.getX() || pointX > edgeEnd.getX())
+               return false;
+         }
+         else
+         {
+            if (pointX < edgeEnd.getX() || pointX > edgeStart.getX())
+               return false;
+         }
+
+         if (edgeStart.getY() < edgeEnd.getY())
+         {
+            if (pointY < edgeStart.getY() || pointY > edgeEnd.getY())
+               return false;
+         }
+         else
+         {
+            if (pointY < edgeEnd.getY() || pointY > edgeStart.getY())
+               return false;
+         }
+
+         double dx = pointX - edgeStart.getX();
+         double dy = pointY - edgeStart.getY();
+         double edgeDirectionX = edgeEnd.getX() - edgeStart.getX();
+         double edgeDirectionY = edgeEnd.getY() - edgeStart.getY();
+         double crossProduct = edgeDirectionY * dy - dx * edgeDirectionX;
+         return crossProduct == 0.0;
+      }
+
+      if (!isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, !clockwiseOrdered))
+         return false;
+
+      for (int index = 1; index < numberOfVertices; index++)
+      {
+         edgeStart = edgeEnd;
+         edgeEnd = convexPolygon2D.get(next(index, numberOfVertices));
+
+         if (!isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, !clockwiseOrdered))
+            return false;
+      }
+
+      return true;
+   }
+
+   /**
+    * Determines if the point is inside the convex polygon given the tolerance {@code epsilon}.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * It is equivalent to performing the test against the polygon shrunk by {@code Math.abs(epsilon)}
+    * if {@code epsilon < 0.0}, or against the polygon enlarged by {@code epsilon} if
+    * {@code epsilon > 0.0}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
+    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0} or
+    * if the query is at a distance from the polygon's only vertex that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
+    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0} or
+    * if the query is at a distance from the polygon's only edge that is greater than {@code epsilon},
+    * returns {@code true} otherwise.
+    * </ul>
+    *
+    * @param point            the coordinates of the query. Not modified.
+    * @param convexPolygon2D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
+    *                         convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the query is considered to be inside the polygon, {@code false}
+    *         otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *                                  of the given list of vertices.
+    */
+   public static boolean isPoint2DInsideConvexPolygon2D(Point2DReadOnly point, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                        boolean clockwiseOrdered)
+   {
+      return isPoint2DInsideConvexPolygon2D(point.getX(), point.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
+   }
+
+   /**
+    * Determines if the point is inside the convex polygon given the tolerance {@code epsilon}.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * It is equivalent to performing the test against the polygon shrunk by {@code Math.abs(epsilon)}
+    * if {@code epsilon < 0.0}, or against the polygon enlarged by {@code epsilon} if
+    * {@code epsilon > 0.0}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
     * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0} or
     * if the query is at a distance from the polygon's only vertex that is greater than

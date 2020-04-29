@@ -524,7 +524,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     */
    default boolean isPointInside(double x, double y)
    {
-      return isPointInside(x, y, 0.0);
+      checkIfUpToDate();
+      return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(x, y, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**
@@ -579,7 +580,8 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     */
    default boolean isPointInside(Point2DReadOnly point)
    {
-      return isPointInside(point, 0.0);
+      checkIfUpToDate();
+      return EuclidGeometryPolygonTools.isPoint2DInsideConvexPolygon2D(point, getVertexBufferView(), getNumberOfVertices(), isClockwiseOrdered());
    }
 
    /**

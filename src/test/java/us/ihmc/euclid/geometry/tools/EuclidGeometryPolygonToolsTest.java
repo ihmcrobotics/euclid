@@ -902,13 +902,17 @@ public class EuclidGeometryPolygonToolsTest
          double alphaOutside = nextDouble(random, 1.0, 3.0);
          Point2D outsidePoint = new Point2D();
          outsidePoint.interpolate(centroid, pointOnEdge, alphaOutside);
+         assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered));
          assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
+         assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint.getX(), outsidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered));
          assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint.getX(), outsidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered, 0));
 
          double alphaInside = nextDouble(random, 0.0, 1.0);
          Point2D insidePoint = new Point2D();
          insidePoint.interpolate(centroid, pointOnEdge, alphaInside);
+         assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered));
          assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
+         assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint.getX(), insidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered));
          assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint.getX(), insidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered, 0));
       }
 

@@ -619,32 +619,49 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
    @Test
    public void testIsPointInside2()
    {
-      // line polygon
-      T polygon = createEmptyConvexPolygon2D();
-      polygon.addVertex(new Point2D(0.0, 0.0));
-      polygon.addVertex(new Point2D(1.0, 0.0));
-      polygon.update();
+      {
+         // line polygon
+         T polygon = createEmptyConvexPolygon2D();
+         polygon.addVertex(new Point2D(0.0, 0.0));
+         polygon.addVertex(new Point2D(1.0, 0.0));
+         polygon.update();
 
-      Point2D point1 = new Point2D(0.1, 0.0);
-      assertTrue(polygon.isPointInside(point1, EPSILON));
+         assertTrue(polygon.isPointInside(0.1, 0.0, EPSILON));
+         assertTrue(polygon.isPointInside(0.5, 0.0, EPSILON));
+         assertTrue(polygon.isPointInside(0.9, 0.0, EPSILON));
 
-      Point2D point2 = new Point2D(0.1, 0.1);
-      assertFalse(polygon.isPointInside(point2, EPSILON));
+         assertFalse(polygon.isPointInside(0.1, 0.1, EPSILON));
 
-      Point2D point3 = new Point2D(1.5, 0.0);
-      assertFalse(polygon.isPointInside(point3, EPSILON));
+         assertFalse(polygon.isPointInside(1.5, 0.0, EPSILON));
 
-      Point2D point4 = new Point2D(1.0, 0.0);
-      assertTrue(polygon.isPointInside(point4.getX(), point4.getY()));
+         assertTrue(polygon.isPointInside(1.0, 0.0));
 
-      Point2D point5 = new Point2D(1.0, EPSILON * 0.1);
-      assertFalse(polygon.isPointInside(point5.getX(), point5.getY()));
+         assertFalse(polygon.isPointInside(1.0, EPSILON * 0.1));
 
-      Point2D point6 = new Point2D(1.0, EPSILON * 0.1);
-      assertTrue(polygon.isPointInside(point6, EPSILON));
+         assertTrue(polygon.isPointInside(1.0, EPSILON * 0.1, EPSILON));
 
-      Point2D point7 = new Point2D(1.5, 0.0);
-      assertTrue(polygon.isPointInside(point7, 0.5));
+         assertTrue(polygon.isPointInside(1.5, 0.0, 0.5));
+      }
+
+      {
+         // line polygon
+         T polygon = createEmptyConvexPolygon2D();
+         polygon.addVertex(new Point2D(0.0, 0.0));
+         polygon.addVertex(new Point2D(1.0, 1.0));
+         polygon.update();
+
+         assertFalse(polygon.isPointInside(0.1, 0.0));
+         assertFalse(polygon.isPointInside(0.5, 0.0));
+         assertFalse(polygon.isPointInside(0.9, 0.0));
+
+         assertFalse(polygon.isPointInside(-0.1, -0.1));
+         assertTrue(polygon.isPointInside(0.1, 0.1));
+         assertTrue(polygon.isPointInside(0.5, 0.5));
+         assertTrue(polygon.isPointInside(0.9, 0.9));
+
+         assertTrue(polygon.isPointInside(0.0, 0.0));
+         assertTrue(polygon.isPointInside(1.0, 1.0));
+      }
    }
 
    @Test
