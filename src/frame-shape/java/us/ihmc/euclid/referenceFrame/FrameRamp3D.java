@@ -29,6 +29,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a ramp 3D expressed in a given reference frame.
@@ -120,6 +121,20 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    }
 
    /**
+    * Creates a new ramp 3D and initializes its size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param size           the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameRamp3D(ReferenceFrame referenceFrame, Vector3DReadOnly size)
+   {
+      setReferenceFrame(referenceFrame);
+      getSize().set(size);
+      setupListeners();
+   }
+
+   /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
     * @param referenceFrame this shape initial reference frame.
@@ -134,6 +149,21 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    public FrameRamp3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(referenceFrame, position, orientation, sizeX, sizeY, sizeZ);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param position       the position of this ramp. Not modified.
+    * @param orientation    the orientation of this ramp. Not modified.
+    * @param size           the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameRamp3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      setIncludingFrame(referenceFrame, position, orientation, size);
       setupListeners();
    }
 
@@ -159,6 +189,38 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
+    * @param position    the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param size        the size of this ramp. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
+    *                                         frame.
+    */
+   public FrameRamp3D(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      setIncludingFrame(position, orientation, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param position    the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param size        the size of this ramp. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
+    *                                         frame.
+    */
+   public FrameRamp3D(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, FrameVector3DReadOnly size)
+   {
+      setIncludingFrame(position, orientation, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
     * @param referenceFrame this shape initial reference frame.
     * @param pose           the position and orientation for this ramp. Not modified.
     * @param sizeX          the size of this ramp along the x-axis.
@@ -176,6 +238,20 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation for this ramp. Not modified.
+    * @param size           the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameRamp3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(referenceFrame, pose, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation for this ramp. Not modified.
     * @param sizeX the size of this ramp along the x-axis.
     * @param sizeY the size of this ramp along the y-axis.
@@ -186,6 +262,34 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    public FrameRamp3D(FramePose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(pose, sizeX, sizeY, sizeZ);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameRamp3D(FramePose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
+    *                                         frame.
+    */
+   public FrameRamp3D(FramePose3DReadOnly pose, FrameVector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
       setupListeners();
    }
 
@@ -209,6 +313,20 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation for this ramp. Not modified.
+    * @param size           the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameRamp3D(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(referenceFrame, pose, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation for this ramp. Not modified.
     * @param sizeX the size of this ramp along the x-axis.
     * @param sizeY the size of this ramp along the y-axis.
@@ -219,6 +337,34 @@ public class FrameRamp3D implements FrameRamp3DBasics, GeometryObject<FrameRamp3
    public FrameRamp3D(FrameShape3DPoseReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(pose, sizeX, sizeY, sizeZ);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameRamp3D(FrameShape3DPoseReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
+    *                                         frame.
+    */
+   public FrameRamp3D(FrameShape3DPoseReadOnly pose, FrameVector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
       setupListeners();
    }
 

@@ -90,7 +90,19 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     */
    public Ramp3D(double sizeX, double sizeY, double sizeZ)
    {
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its size.
+    *
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(Vector3DReadOnly size)
+   {
+      getSize().set(size);
       setupListeners();
    }
 
@@ -114,6 +126,20 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
+    * @param position    the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param size        the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      set(position, orientation, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation for this ramp. Not modified.
     * @param sizeX the size of this ramp along the x-axis.
     * @param sizeY the size of this ramp along the y-axis.
@@ -130,6 +156,19 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(RigidBodyTransformReadOnly pose, Vector3DReadOnly size)
+   {
+      set(pose, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation for this ramp. Not modified.
     * @param sizeX the size of this ramp along the x-axis.
     * @param sizeY the size of this ramp along the y-axis.
@@ -140,6 +179,19 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       set(pose, sizeX, sizeY, sizeZ);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(Pose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      set(pose, size);
       setupListeners();
    }
 

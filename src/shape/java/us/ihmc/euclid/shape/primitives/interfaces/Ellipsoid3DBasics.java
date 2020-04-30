@@ -8,6 +8,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Write and read interface for ellipsoid 3D.
@@ -118,6 +119,20 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    }
 
    /**
+    * Sets this ellipsoid properties.
+    *
+    * @param position    the position of this ellipsoid center. Not modified.
+    * @param orientation the orientation of this ellipsoid. Not modified.
+    * @param radii       the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly radii)
+   {
+      getPose().set(orientation, position);
+      getRadii().set(radii);
+   }
+
+   /**
     * Sets the pose and radii of this ellipsoid.
     *
     * @param pose    the position and orientation of this ellipsoid. Not modified.
@@ -135,6 +150,19 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    /**
     * Sets the pose and radii of this ellipsoid.
     *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   default void set(Pose3DReadOnly pose, Vector3DReadOnly radii)
+   {
+      getPose().set(pose);
+      getRadii().set(radii);
+   }
+
+   /**
+    * Sets the pose and radii of this ellipsoid.
+    *
     * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -145,6 +173,19 @@ public interface Ellipsoid3DBasics extends Ellipsoid3DReadOnly, Shape3DBasics
    {
       getPose().set(pose);
       getRadii().set(radiusX, radiusY, radiusZ);
+   }
+
+   /**
+    * Sets the pose and radii of this ellipsoid.
+    *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   default void set(RigidBodyTransformReadOnly pose, Vector3DReadOnly radii)
+   {
+      getPose().set(pose);
+      getRadii().set(radii);
    }
 
    /**

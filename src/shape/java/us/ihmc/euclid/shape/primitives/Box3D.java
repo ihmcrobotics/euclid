@@ -17,6 +17,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a box 3D.
@@ -68,6 +69,17 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    }
 
    /**
+    * Creates a new box 3D and initializes its size.
+    *
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of size components is negative.
+    */
+   public Box3D(Vector3DReadOnly size)
+   {
+      getSize().set(size);
+   }
+
+   /**
     * Creates a new box 3D and initializes its pose and size.
     *
     * @param position    the position of this box. Not modified.
@@ -81,6 +93,19 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       set(position, orientation, sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param position    the position of this box. Not modified.
+    * @param orientation the orientation of this box. Not modified.
+    * @param size        the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of size components is negative.
+    */
+   public Box3D(Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      set(position, orientation, size);
    }
 
    /**
@@ -101,6 +126,18 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
+    * @param pose the position and orientation of this box. Not modified.
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of size components is negative.
+    */
+   public Box3D(Pose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      set(pose, size);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation of this box. Not modified.
     * @param sizeX the size of this box along the x-axis.
     * @param sizeY the size of this box along the y-axis.
@@ -111,6 +148,18 @@ public class Box3D implements Box3DBasics, GeometryObject<Box3D>
    public Box3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       set(pose, sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation of this box. Not modified.
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of size components is negative.
+    */
+   public Box3D(RigidBodyTransformReadOnly pose, Vector3DReadOnly size)
+   {
+      set(pose, size);
    }
 
    /**

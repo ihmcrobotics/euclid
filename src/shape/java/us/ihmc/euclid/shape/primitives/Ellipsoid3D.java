@@ -12,6 +12,7 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of an ellipsoid 3D.
@@ -53,6 +54,17 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    }
 
    /**
+    * Creates a new 3D ellipsoid and initializes its radii.
+    *
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public Ellipsoid3D(Vector3DReadOnly radii)
+   {
+      getRadii().set(radii);
+   }
+
+   /**
     * Creates a new ellipsoid 3D and initializes its pose and size.
     *
     * @param position    the position of this ellipsoid. Not modified.
@@ -65,6 +77,19 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    public Ellipsoid3D(Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY, double radiusZ)
    {
       set(position, orientation, radiusX, radiusY, radiusZ);
+   }
+
+   /**
+    * Creates a new ellipsoid 3D and initializes its pose and size.
+    *
+    * @param position    the position of this ellipsoid. Not modified.
+    * @param orientation the orientation of this ellipsoid. Not modified.
+    * @param radii       the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public Ellipsoid3D(Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly radii)
+   {
+      set(position, orientation, radii);
    }
 
    /**
@@ -84,6 +109,18 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
     *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public Ellipsoid3D(Pose3DReadOnly pose, Vector3DReadOnly radii)
+   {
+      set(pose, radii);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
     * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -93,6 +130,18 @@ public class Ellipsoid3D implements Ellipsoid3DBasics, GeometryObject<Ellipsoid3
    public Ellipsoid3D(RigidBodyTransformReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       set(pose, radiusX, radiusY, radiusZ);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public Ellipsoid3D(RigidBodyTransformReadOnly pose, Vector3DReadOnly radii)
+   {
+      set(pose, radii);
    }
 
    /**

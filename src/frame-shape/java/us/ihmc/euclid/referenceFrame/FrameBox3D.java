@@ -16,6 +16,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
@@ -24,6 +25,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a box 3D expressed in a given reference frame.
@@ -89,6 +91,19 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    }
 
    /**
+    * Creates a new box 3D and initializes its size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param size           the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameBox3D(ReferenceFrame referenceFrame, Vector3DReadOnly size)
+   {
+      setReferenceFrame(referenceFrame);
+      getSize().set(size);
+   }
+
+   /**
     * Creates a new box 3D and initializes its pose and size.
     *
     * @param referenceFrame this shape initial reference frame.
@@ -103,6 +118,20 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    public FrameBox3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(referenceFrame, position, orientation, sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param position       the position of this box. Not modified.
+    * @param orientation    the orientation of this box. Not modified.
+    * @param size           the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameBox3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      setIncludingFrame(referenceFrame, position, orientation, size);
    }
 
    /**
@@ -126,6 +155,36 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
+    * @param position    the position of this box. Not modified.
+    * @param orientation the orientation of this box. Not modified.
+    * @param size        the size of this box. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
+    */
+   public FrameBox3D(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      setIncludingFrame(position, orientation, size);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param position    the position of this box. Not modified.
+    * @param orientation the orientation of this box. Not modified.
+    * @param size        the size of this box. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
+    */
+   public FrameBox3D(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, FrameVector3DReadOnly size)
+   {
+      setIncludingFrame(position, orientation, size);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
     * @param referenceFrame this shape initial reference frame.
     * @param pose           the position and orientation of this box. Not modified.
     * @param sizeX          the size of this box along the x-axis.
@@ -142,6 +201,19 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation of this box. Not modified.
+    * @param size           the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameBox3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(referenceFrame, pose, size);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation of this box. Not modified.
     * @param sizeX the size of this box along the x-axis.
     * @param sizeY the size of this box along the y-axis.
@@ -152,6 +224,32 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    public FrameBox3D(FramePose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(pose, sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation of this box. Not modified.
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameBox3D(FramePose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation of this box. Not modified.
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
+    */
+   public FrameBox3D(FramePose3DReadOnly pose, FrameVector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
    }
 
    /**
@@ -173,6 +271,19 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    /**
     * Creates a new box 3D and initializes its pose and size.
     *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation of this box. Not modified.
+    * @param size           the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameBox3D(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(referenceFrame, pose, size);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation of this box. Not modified.
     * @param sizeX the size of this box along the x-axis.
     * @param sizeY the size of this box along the y-axis.
@@ -183,6 +294,32 @@ public class FrameBox3D implements FrameBox3DBasics, GeometryObject<FrameBox3D>
    public FrameBox3D(FrameShape3DPoseReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       setIncludingFrame(pose, sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation of this box. Not modified.
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public FrameBox3D(FrameShape3DPoseReadOnly pose, Vector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
+   }
+
+   /**
+    * Creates a new box 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation of this box. Not modified.
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
+    */
+   public FrameBox3D(FrameShape3DPoseReadOnly pose, FrameVector3DReadOnly size)
+   {
+      setIncludingFrame(pose, size);
    }
 
    /**

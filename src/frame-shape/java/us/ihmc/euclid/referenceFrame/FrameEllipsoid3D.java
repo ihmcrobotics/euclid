@@ -12,6 +12,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePose3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DPoseReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameFactories;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
@@ -19,6 +20,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of an ellipsoid 3D expressed in a given reference frame.
@@ -79,6 +81,19 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    }
 
    /**
+    * Creates a new 3D ellipsoid and initializes its radii.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param radii          the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public FrameEllipsoid3D(ReferenceFrame referenceFrame, Vector3DReadOnly radii)
+   {
+      setReferenceFrame(referenceFrame);
+      getRadii().set(radii);
+   }
+
+   /**
     * Creates a new ellipsoid 3D and initializes its pose and size.
     *
     * @param referenceFrame this shape initial reference frame.
@@ -93,6 +108,20 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
                            double radiusZ)
    {
       setIncludingFrame(referenceFrame, position, orientation, radiusX, radiusY, radiusZ);
+   }
+
+   /**
+    * Creates a new ellipsoid 3D and initializes its pose and size.
+    *
+    * @param referenceFrame this shape initial reference frame.
+    * @param position       the position of this ellipsoid. Not modified.
+    * @param orientation    the orientation of this ellipsoid. Not modified.
+    * @param radii          the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public FrameEllipsoid3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly radii)
+   {
+      setIncludingFrame(referenceFrame, position, orientation, radii);
    }
 
    /**
@@ -113,6 +142,36 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    }
 
    /**
+    * Creates a new ellipsoid 3D and initializes its pose and size.
+    *
+    * @param position    the position of this ellipsoid. Not modified.
+    * @param orientation the orientation of this ellipsoid. Not modified.
+    * @param radii       the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException        if any of the radii components is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
+    */
+   public FrameEllipsoid3D(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, Vector3DReadOnly radii)
+   {
+      setIncludingFrame(position, orientation, radii);
+   }
+
+   /**
+    * Creates a new ellipsoid 3D and initializes its pose and size.
+    *
+    * @param position    the position of this ellipsoid. Not modified.
+    * @param orientation the orientation of this ellipsoid. Not modified.
+    * @param radii       the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException        if any of the radii components is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
+    */
+   public FrameEllipsoid3D(FramePoint3DReadOnly position, FrameOrientation3DReadOnly orientation, FrameVector3DReadOnly radii)
+   {
+      setIncludingFrame(position, orientation, radii);
+   }
+
+   /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
     *
     * @param referenceFrame this shape initial reference frame.
@@ -130,6 +189,19 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
     *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation of this ellipsoid. Not modified.
+    * @param radii          the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public FrameEllipsoid3D(ReferenceFrame referenceFrame, Pose3DReadOnly pose, Vector3DReadOnly radii)
+   {
+      setIncludingFrame(referenceFrame, pose, radii);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
     * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -139,6 +211,32 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    public FrameEllipsoid3D(FramePose3DReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       setIncludingFrame(pose, radiusX, radiusY, radiusZ);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public FrameEllipsoid3D(FramePose3DReadOnly pose, Vector3DReadOnly radii)
+   {
+      setIncludingFrame(pose, radii);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException        if any of the radii components is negative.
+    * @throws ReferenceFrameMismatchException if the frame arguments are not expressed in the same
+    *                                         reference frame.
+    */
+   public FrameEllipsoid3D(FramePose3DReadOnly pose, FrameVector3DReadOnly radii)
+   {
+      setIncludingFrame(pose, radii);
    }
 
    /**
@@ -159,6 +257,19 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    /**
     * Creates a new 3D ellipsoid and initializes its pose and radii.
     *
+    * @param referenceFrame this shape initial reference frame.
+    * @param pose           the position and orientation of this ellipsoid. Not modified.
+    * @param radii          the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public FrameEllipsoid3D(ReferenceFrame referenceFrame, RigidBodyTransformReadOnly pose, Vector3DReadOnly radii)
+   {
+      setIncludingFrame(referenceFrame, pose, radii);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
     * @param pose    the position and orientation of this ellipsoid. Not modified.
     * @param radiusX radius of the ellipsoid along the x-axis.
     * @param radiusY radius of the ellipsoid along the y-axis.
@@ -168,6 +279,32 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
    public FrameEllipsoid3D(FrameShape3DPoseReadOnly pose, double radiusX, double radiusY, double radiusZ)
    {
       setIncludingFrame(pose, radiusX, radiusY, radiusZ);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException if any of the radii components is negative.
+    */
+   public FrameEllipsoid3D(FrameShape3DPoseReadOnly pose, Vector3DReadOnly radii)
+   {
+      setIncludingFrame(pose, radii);
+   }
+
+   /**
+    * Creates a new 3D ellipsoid and initializes its pose and radii.
+    *
+    * @param pose  the position and orientation of this ellipsoid. Not modified.
+    * @param radii the radii of the ellipsoid. Not modified.
+    * @throws IllegalArgumentException        if any of the radii components is negative.
+    * @throws ReferenceFrameMismatchException if arguments are not expressed in the same reference
+    *                                         frame.
+    */
+   public FrameEllipsoid3D(FrameShape3DPoseReadOnly pose, FrameVector3DReadOnly radii)
+   {
+      setIncludingFrame(pose, radii);
    }
 
    /**

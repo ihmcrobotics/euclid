@@ -8,6 +8,7 @@ import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Write and read interface for a ramp 3D.
@@ -111,6 +112,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
     *
     * @param sizeX the size of this ramp along the x-axis.
     * @throws IllegalArgumentException if {@code length} is negative.
+    * @deprecated Use {@code this.getSize().setX(sizeX)} instead.
     */
    default void setSizeX(double sizeX)
    {
@@ -122,6 +124,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
     *
     * @param sizeY the size of this ramp along the y-axis.
     * @throws IllegalArgumentException if {@code width} is negative.
+    * @deprecated Use {@code this.getSize().setY(sizeY)} instead.
     */
    default void setSizeY(double sizeY)
    {
@@ -133,6 +136,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
     *
     * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if {@code height} is negative.
+    * @deprecated Use {@code this.getSize().setZ(sizeZ)} instead.
     */
    default void setSizeZ(double sizeZ)
    {
@@ -152,7 +156,21 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(orientation, position);
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Sets this ramp properties.
+    *
+    * @param position    the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param size        the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   default void set(Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      getPose().set(orientation, position);
+      getSize().set(size);
    }
 
    /**
@@ -167,7 +185,20 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    default void set(Pose3DReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(pose);
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Sets this ramp properties.
+    *
+    * @param pose the pose of this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   default void set(Pose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      getPose().set(pose);
+      getSize().set(size);
    }
 
    /**
@@ -182,7 +213,20 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    default void set(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       getPose().set(pose);
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
+   }
+
+   /**
+    * Sets this ramp properties.
+    *
+    * @param pose the pose of this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   default void set(RigidBodyTransformReadOnly pose, Vector3DReadOnly size)
+   {
+      getPose().set(pose);
+      getSize().set(size);
    }
 
    /**
@@ -195,7 +239,7 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
    default void set(RigidBodyTransformReadOnly pose, double[] size)
    {
       getPose().set(pose);
-      setSize(size[0], size[1], size[2]);
+      getSize().set(size[0], size[1], size[2]);
    }
 
    /**
@@ -206,7 +250,9 @@ public interface Ramp3DBasics extends Ramp3DReadOnly, Shape3DBasics
     * @param sizeZ the size of this ramp along the z-axis.
     * @throws IllegalArgumentException if any of {@code length}, {@code width}, or {@code height} is
     *                                  negative.
+    * @deprecated Use {@code this.getSize().set(sizeX, sizeY, sizeZ)} instead.
     */
+   @Deprecated
    default void setSize(double sizeX, double sizeY, double sizeZ)
    {
       getSize().set(sizeX, sizeY, sizeZ);

@@ -20,6 +20,8 @@ import us.ihmc.euclid.shape.primitives.Ramp3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameRamp3DTest
 {
@@ -29,6 +31,7 @@ public class FrameRamp3DTest
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
 
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", RigidBodyTransformReadOnly.class, Vector3DReadOnly.class));
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameRamp3DReadOnly.class, Ramp3DReadOnly.class, false, 1, methodFilter);
       tester.assertOverloadingWithFrameObjects(FixedFrameRamp3DBasics.class, Ramp3DBasics.class, false, 1, methodFilter);
