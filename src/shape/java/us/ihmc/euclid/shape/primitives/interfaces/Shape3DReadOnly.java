@@ -24,6 +24,13 @@ public interface Shape3DReadOnly extends SupportingVertexHolder
    Point3DReadOnly getCentroid();
 
    /**
+    * Returns the volume for this shape.
+    * 
+    * @return the volume in cubic meters.
+    */
+   double getVolume();
+
+   /**
     * Tests whether this shape contains at least one {@link Double#NaN} or not.
     *
     * @return {@code true} if this shape contains {@link Double#NaN}, {@code false} otherwise.

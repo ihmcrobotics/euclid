@@ -21,6 +21,7 @@ import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.Sphere3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -333,9 +334,9 @@ public class EuclidFrameShapeTools
          double axisZ = axis.getZ();
 
          double invNormSquared = 1.0 / axis.lengthSquared();
-         double capMinMaxX = Math.max(0.0, radius * Math.sqrt(1.0 - axisX * axisX * invNormSquared));
-         double capMinMaxY = Math.max(0.0, radius * Math.sqrt(1.0 - axisY * axisY * invNormSquared));
-         double capMinMaxZ = Math.max(0.0, radius * Math.sqrt(1.0 - axisZ * axisZ * invNormSquared));
+         double capMinMaxX = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisX * axisX * invNormSquared));
+         double capMinMaxY = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisY * axisY * invNormSquared));
+         double capMinMaxZ = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisZ * axisZ * invNormSquared));
 
          double rangeX = halfLength * Math.abs(axisX) + capMinMaxX;
          double rangeY = halfLength * Math.abs(axisY) + capMinMaxY;
@@ -355,9 +356,9 @@ public class EuclidFrameShapeTools
          double axisZ = m20 * axis.getX() + m21 * axis.getY() + m22 * axis.getZ();
 
          double invNormSquared = 1.0 / axis.lengthSquared();
-         double capMinMaxX = Math.max(0.0, radius * Math.sqrt(1.0 - axisX * axisX * invNormSquared));
-         double capMinMaxY = Math.max(0.0, radius * Math.sqrt(1.0 - axisY * axisY * invNormSquared));
-         double capMinMaxZ = Math.max(0.0, radius * Math.sqrt(1.0 - axisZ * axisZ * invNormSquared));
+         double capMinMaxX = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisX * axisX * invNormSquared));
+         double capMinMaxY = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisY * axisY * invNormSquared));
+         double capMinMaxZ = Math.max(0.0, radius * EuclidCoreTools.squareRoot(1.0 - axisZ * axisZ * invNormSquared));
 
          double rangeX = halfLength * Math.abs(axisX) + capMinMaxX;
          double rangeY = halfLength * Math.abs(axisY) + capMinMaxY;
@@ -459,9 +460,9 @@ public class EuclidFrameShapeTools
          double ry = radii.getY() * radii.getY();
          double rz = radii.getZ() * radii.getZ();
 
-         double xRange = Math.sqrt(m00 * m00 * rx + m01 * m01 * ry + m02 * m02 * rz);
-         double yRange = Math.sqrt(m10 * m10 * rx + m11 * m11 * ry + m12 * m12 * rz);
-         double zRange = Math.sqrt(m20 * m20 * rx + m21 * m21 * ry + m22 * m22 * rz);
+         double xRange = EuclidCoreTools.squareRoot(m00 * m00 * rx + m01 * m01 * ry + m02 * m02 * rz);
+         double yRange = EuclidCoreTools.squareRoot(m10 * m10 * rx + m11 * m11 * ry + m12 * m12 * rz);
+         double zRange = EuclidCoreTools.squareRoot(m20 * m20 * rx + m21 * m21 * ry + m22 * m22 * rz);
          boundingBoxToPack.set(-xRange, -yRange, -zRange, xRange, yRange, zRange);
       }
    };

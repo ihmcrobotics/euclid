@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
@@ -1050,6 +1051,236 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testClosestPoint2DsBetweenTwoLineSegment2Ds() throws Exception
+   {
+      Point2D expectedPointOnLineSegment1 = new Point2D();
+      Point2D expectedPointOnLineSegment2 = new Point2D();
+
+      Point2D actualPointOnLineSegment1 = new Point2D();
+      Point2D actualPointOnLineSegment2 = new Point2D();
+
+      Vector2D lineSegmentDirection1 = new Vector2D();
+      Vector2D lineSegmentDirection2 = new Vector2D();
+
+      Random random = new Random(1176L);
+
+      // Parallel case, expecting expectedPointOnLineSegment1 =
+      // lineSegmentStart1
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart1 = EuclidCoreRandomTools.nextPoint2D(random);
+         lineSegmentStart1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D lineSegmentEnd1 = EuclidCoreRandomTools.nextPoint2D(random);
+         lineSegmentEnd1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         lineSegmentDirection1.sub(lineSegmentEnd1, lineSegmentStart1);
+         lineSegmentDirection1.normalize();
+
+         // expectedPointOnLineSegment1 = lineSegmentStart1
+         expectedPointOnLineSegment1.set(lineSegmentStart1);
+
+         // Create the closest point of line segment 2
+         Vector2D orthogonalToLineSegment1 = EuclidGeometryTools.perpendicularVector2D(lineSegmentDirection1);
+         expectedPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), orthogonalToLineSegment1, expectedPointOnLineSegment1);
+
+         // Set the lineSegmentDirection2 = lineSegmentDirection1
+         lineSegmentDirection2.set(lineSegmentDirection1);
+
+         // Set the end points of the line segment 2 around the expected
+         // closest point.
+         Point2D lineSegmentStart2 = new Point2D();
+         Point2D lineSegmentEnd2 = new Point2D();
+         lineSegmentStart2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), lineSegmentDirection2, expectedPointOnLineSegment2);
+         lineSegmentEnd2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineSegmentDirection2, expectedPointOnLineSegment2);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                     lineSegmentEnd1,
+                                                                     lineSegmentStart2,
+                                                                     lineSegmentEnd2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+
+         double eps = 1.0e-10;
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, eps);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, eps);
+
+         // Set the end points of the line segment 2 before the expected
+         // closest point, so we have expectedClosestPointOnLineSegment2 =
+         // lineSegmentEnd2
+         double shiftStartFromExpected = EuclidCoreRandomTools.nextDouble(random, -20.0, -10.0);
+         double shiftEndFromExpected = EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0);
+         lineSegmentStart2.scaleAdd(shiftStartFromExpected, lineSegmentDirection2, expectedPointOnLineSegment2);
+         lineSegmentEnd2.scaleAdd(shiftEndFromExpected, lineSegmentDirection2, expectedPointOnLineSegment2);
+         expectedPointOnLineSegment2.set(lineSegmentEnd2);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                     lineSegmentEnd1,
+                                                                     lineSegmentStart2,
+                                                                     lineSegmentEnd2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                     lineSegmentEnd1,
+                                                                     lineSegmentEnd2,
+                                                                     lineSegmentStart2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+      }
+
+      // Case: on closest point on lineSegment1 outside end points.
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart1 = EuclidCoreRandomTools.nextPoint2D(random);
+         lineSegmentStart1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D lineSegmentEnd1 = EuclidCoreRandomTools.nextPoint2D(random);
+         lineSegmentEnd1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         lineSegmentDirection1.sub(lineSegmentEnd1, lineSegmentStart1);
+         lineSegmentDirection1.normalize();
+
+         // Put the first closest to the start of line segment 1
+         expectedPointOnLineSegment1.set(lineSegmentStart1);
+
+         // Create the closest point of line segment 2 such that it reaches
+         // out of line segment 1
+         Vector2D oppositeOflineSegmentDirection1 = new Vector2D();
+         oppositeOflineSegmentDirection1.setAndNegate(lineSegmentDirection1);
+         Vector2D orthogonalToLineSegment1 = EuclidGeometryTools.perpendicularVector2D(lineSegmentDirection1);
+         Vector2D shiftVector = new Vector2D();
+         shiftVector.interpolate(orthogonalToLineSegment1, oppositeOflineSegmentDirection1, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         expectedPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), shiftVector, expectedPointOnLineSegment1);
+
+         // Set the line direction 2 to orthogonal to the shift vector
+         lineSegmentDirection2 = EuclidGeometryTools.perpendicularVector2D(shiftVector);
+
+         // Set the end points of the line segment 2 around the expected
+         // closest point.
+         Point2D lineSegmentStart2 = new Point2D();
+         Point2D lineSegmentEnd2 = new Point2D();
+         lineSegmentStart2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), lineSegmentDirection2, expectedPointOnLineSegment2);
+         lineSegmentEnd2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineSegmentDirection2, expectedPointOnLineSegment2);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                     lineSegmentEnd1,
+                                                                     lineSegmentStart2,
+                                                                     lineSegmentEnd2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                     lineSegmentEnd1,
+                                                                     lineSegmentEnd2,
+                                                                     lineSegmentStart2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentEnd1,
+                                                                     lineSegmentStart1,
+                                                                     lineSegmentStart2,
+                                                                     lineSegmentEnd2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentEnd1,
+                                                                     lineSegmentStart1,
+                                                                     lineSegmentEnd2,
+                                                                     lineSegmentStart2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+      }
+
+      // Edge case: both closest points are outside bounds of each line
+      // segment
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D lineSegmentStart1 = EuclidCoreRandomTools.nextPoint2D(random);
+         lineSegmentStart1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+         Point2D lineSegmentEnd1 = EuclidCoreRandomTools.nextPoint2D(random);
+         lineSegmentEnd1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+         lineSegmentDirection1.sub(lineSegmentEnd1, lineSegmentStart1);
+         lineSegmentDirection1.normalize();
+
+         // Put the first closest to the start of line segment 1
+         expectedPointOnLineSegment1.set(lineSegmentStart1);
+
+         // Create the closest point of line segment 2 such that it reaches
+         // out of line segment 1
+         Vector2D oppositeOflineSegmentDirection1 = new Vector2D();
+         oppositeOflineSegmentDirection1.setAndNegate(lineSegmentDirection1);
+         Vector2D orthogonalToLineSegment1 = EuclidGeometryTools.perpendicularVector2D(lineSegmentDirection1);
+         Vector2D shiftVector = new Vector2D();
+         shiftVector.interpolate(orthogonalToLineSegment1, oppositeOflineSegmentDirection1, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+         expectedPointOnLineSegment2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), shiftVector, expectedPointOnLineSegment1);
+
+         // set the start of the second line segment to the expected closest
+         // point
+         Point2D lineSegmentStart2 = new Point2D(expectedPointOnLineSegment2);
+
+         // Set the line direction 2 to point somewhat in the same direction
+         // as the shift vector
+         Vector2D orthogonalToShiftVector = EuclidGeometryTools.perpendicularVector2D(shiftVector);
+         lineSegmentDirection2.interpolate(shiftVector, orthogonalToShiftVector, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+         // Set the end points of the line segment 2 around the expected
+         // closest point.
+         Point2D lineSegmentEnd2 = new Point2D();
+         lineSegmentEnd2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineSegmentDirection2, expectedPointOnLineSegment2);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                     lineSegmentEnd1,
+                                                                     lineSegmentStart2,
+                                                                     lineSegmentEnd2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                     lineSegmentEnd1,
+                                                                     lineSegmentEnd2,
+                                                                     lineSegmentStart2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentEnd1,
+                                                                     lineSegmentStart1,
+                                                                     lineSegmentStart2,
+                                                                     lineSegmentEnd2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+
+         EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentEnd1,
+                                                                     lineSegmentStart1,
+                                                                     lineSegmentEnd2,
+                                                                     lineSegmentStart2,
+                                                                     actualPointOnLineSegment1,
+                                                                     actualPointOnLineSegment2);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment1, actualPointOnLineSegment1, EPSILON);
+         EuclidCoreTestTools.assertTuple2DEquals(expectedPointOnLineSegment2, actualPointOnLineSegment2, EPSILON);
+      }
+   }
+
+   @Test
    public void testClosestPoint3DsBetweenTwoLineSegment3Ds() throws Exception
    {
       Point3D expectedPointOnLineSegment1 = new Point3D();
@@ -1403,6 +1634,96 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testTriangleCircumscribedCircle()
+   {
+      Random random = new Random(3456436);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Building the triangle knowing its circumcenter.
+         Point2D expected = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         Point2D A = new Point2D();
+         Point2D B = new Point2D();
+         Point2D C = new Point2D();
+
+         A.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+         B.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+         C.scaleAdd(radius, EuclidCoreRandomTools.nextUnitVector2D(random), expected);
+
+         Point2D actual = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Computing the circle position for 3 random points and verifying its properties.
+         Point2D A = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D B = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D C = EuclidCoreRandomTools.nextPoint2D(random);
+
+         Point2D circumcenter = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenter);
+
+         assertEquals(circumcenter.distance(A), circumcenter.distance(B), EPSILON);
+         assertEquals(circumcenter.distance(A), circumcenter.distance(C), EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Testing that picking 3 points at random from a concyclic polygon allows to retrieve the circumscribed center of the polygon.
+         Point2D expected = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         int numberOfVertices = random.nextInt(20) + 3;
+         List<Point2D> concyclicPolygon = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, expected, 1.0, numberOfVertices);
+         Point2D A = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         Point2D B = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         while (B == A)
+            B = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         Point2D C = concyclicPolygon.get(random.nextInt(numberOfVertices));
+         while (C == B || C == A)
+            C = concyclicPolygon.get(random.nextInt(numberOfVertices));
+
+         Point2D actual = new Point2D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple2DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Building the triangle knowing its circumcenter.
+         Point3D expected = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         double radius = EuclidCoreRandomTools.nextDouble(random, 0.001, 10.0);
+         Point3D A = new Point3D();
+         Point3D B = new Point3D();
+         Point3D C = new Point3D();
+
+         Vector3D normal = EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0);
+
+         A.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+         B.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+         C.scaleAdd(radius, EuclidCoreRandomTools.nextOrthogonalVector3D(random, normal, true), expected);
+
+         Point3D actual = new Point3D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, actual);
+
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, 1.0e-6);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Computing the circle position for 3 random points and verifying its properties.
+         Point3D A = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D B = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D C = EuclidCoreRandomTools.nextPoint3D(random);
+
+         Point3D circumcenter = new Point3D();
+         EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenter);
+
+         assertEquals(circumcenter.distance(A), circumcenter.distance(B), EPSILON);
+         assertEquals(circumcenter.distance(A), circumcenter.distance(C), EPSILON);
+      }
+
+   }
+
+   @Test
    public void testDistanceBetweenPoint2Ds() throws Exception
    {
       Random random = new Random(23423L);
@@ -1578,6 +1899,242 @@ public class EuclidGeometryToolsTest
          actualMinimumDistance = EuclidGeometryTools.distanceBetweenTwoLine3Ds(lineStart1, lineDirection1, lineStart2, lineDirection2);
          assertEquals(expectedMinimumDistance, actualMinimumDistance, EPSILON);
       }
+   }
+
+   @Test
+   public void testDistanceBetweenTwoLineSegment2Ds() throws Exception
+   {
+      Random random = new Random(46344);
+
+      { // Asserting that for intersecting line segments, the method returns 0
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Point2D lineSegmentStart1 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+            Point2D lineSegmentEnd1 = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+
+            Point2D pointOnLineSegment1 = new Point2D();
+            pointOnLineSegment1.interpolate(lineSegmentStart1, lineSegmentEnd1, EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0));
+
+            Vector2D lineDirection2 = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
+
+            Point2D lineSegmentStart2 = new Point2D();
+            Point2D lineSegmentEnd2 = new Point2D();
+
+            // Expecting intersection
+            lineSegmentStart2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineDirection2, pointOnLineSegment1);
+            lineSegmentEnd2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), lineDirection2, pointOnLineSegment1);
+            assertDistanceBetweenTwoLineSegment2Ds(i, 0.0, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, LARGE_EPSILON);
+
+            // Not expecting intersection: lineSegmentStart2 is closest
+            double alphaClose = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+            double alphaFar = alphaClose + EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+            lineSegmentStart2.scaleAdd(alphaClose, lineDirection2, pointOnLineSegment1);
+            lineSegmentEnd2.scaleAdd(alphaFar, lineDirection2, pointOnLineSegment1);
+            double expectedDistance = EuclidGeometryTools.distanceFromPoint2DToLineSegment2D(lineSegmentStart2, lineSegmentStart1, lineSegmentEnd1);
+            assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+         }
+
+         // Test intersection at one of the end points
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Point2D lineSegmentStart1 = EuclidCoreRandomTools.nextPoint2D(random);
+            lineSegmentStart1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+            Point2D lineSegmentEnd1 = EuclidCoreRandomTools.nextPoint2D(random);
+            lineSegmentEnd1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+            Point2D pointOnLineSegment1 = new Point2D(lineSegmentStart1);
+
+            Vector2D lineDirection2 = EuclidCoreRandomTools.nextVector2DWithFixedLength(random, 1.0);
+
+            Point2D lineSegmentStart2 = new Point2D();
+            Point2D lineSegmentEnd2 = new Point2D();
+
+            // Expecting intersection
+            lineSegmentStart2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0), lineDirection2, pointOnLineSegment1);
+            lineSegmentEnd2.scaleAdd(EuclidCoreRandomTools.nextDouble(random, -10.0, 0.0), lineDirection2, pointOnLineSegment1);
+            assertDistanceBetweenTwoLineSegment2Ds(i, 0.0, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, LARGE_EPSILON);
+         }
+
+         // Test with parallel/collinear line segments
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Point2D lineSegmentStart1 = EuclidCoreRandomTools.nextPoint2D(random);
+            lineSegmentStart1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+            Point2D lineSegmentEnd1 = EuclidCoreRandomTools.nextPoint2D(random);
+            lineSegmentEnd1.scale(EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+            Point2D lineSegmentStart2 = new Point2D();
+            Point2D lineSegmentEnd2 = new Point2D();
+
+            double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+            double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+            // Make the second line segment collinear to the first one
+            lineSegmentStart2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha1);
+            lineSegmentEnd2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha2);
+
+            double expectedDistance;
+
+            if (0.0 < alpha1 && alpha1 < 1.0 || 0.0 < alpha2 && alpha2 < 1.0 || alpha1 * alpha2 < 0.0)
+            {
+               expectedDistance = 0.0;
+               assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+            }
+            else
+            {
+               if (alpha1 < 0.0)
+                  expectedDistance = alpha1 < alpha2 ? lineSegmentEnd2.distance(lineSegmentStart1) : lineSegmentStart2.distance(lineSegmentStart1);
+               else
+                  expectedDistance = alpha1 > alpha2 ? lineSegmentEnd2.distance(lineSegmentEnd1) : lineSegmentStart2.distance(lineSegmentEnd1);
+
+               assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+            }
+
+            // Shift the second line segment such that it becomes only parallel to the first.
+            Vector2D orthogonal = new Vector2D();
+            orthogonal.sub(lineSegmentEnd1, lineSegmentStart1);
+            orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+            orthogonal.normalize();
+
+            double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+            lineSegmentStart2.scaleAdd(distance, orthogonal, lineSegmentStart2);
+            lineSegmentEnd2.scaleAdd(distance, orthogonal, lineSegmentEnd2);
+            expectedDistance = EuclidCoreTools.norm(expectedDistance, distance);
+            assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+         }
+
+         // Test with vertical parallel/collinear line segments
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            double x = EuclidCoreRandomTools.nextDouble(random, 10.0);
+            Point2D lineSegmentStart1 = new Point2D(x, EuclidCoreRandomTools.nextDouble(random, 10.0));
+            Point2D lineSegmentEnd1 = new Point2D(x, EuclidCoreRandomTools.nextDouble(random, 10.0));
+
+            Point2D lineSegmentStart2 = new Point2D();
+            Point2D lineSegmentEnd2 = new Point2D();
+
+            double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+            double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+            // Make the second line segment collinear to the first one
+            lineSegmentStart2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha1);
+            lineSegmentEnd2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha2);
+
+            double expectedDistance;
+
+            if (0.0 < alpha1 && alpha1 < 1.0 || 0.0 < alpha2 && alpha2 < 1.0 || alpha1 * alpha2 < 0.0)
+            {
+               expectedDistance = 0.0;
+               assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+            }
+            else
+            {
+               if (alpha1 < 0.0)
+                  expectedDistance = alpha1 < alpha2 ? lineSegmentEnd2.distance(lineSegmentStart1) : lineSegmentStart2.distance(lineSegmentStart1);
+               else
+                  expectedDistance = alpha1 > alpha2 ? lineSegmentEnd2.distance(lineSegmentEnd1) : lineSegmentStart2.distance(lineSegmentEnd1);
+
+               assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+            }
+
+            // Shift the second line segment such that it becomes only parallel to the first.
+            Vector2D orthogonal = new Vector2D();
+            orthogonal.sub(lineSegmentEnd1, lineSegmentStart1);
+            orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+            orthogonal.normalize();
+
+            double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+            lineSegmentStart2.scaleAdd(distance, orthogonal, lineSegmentStart2);
+            lineSegmentEnd2.scaleAdd(distance, orthogonal, lineSegmentEnd2);
+            expectedDistance = EuclidCoreTools.norm(expectedDistance, distance);
+            assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+         }
+
+         // Test with horizontal parallel/collinear line segments
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            double y = EuclidCoreRandomTools.nextDouble(random, 10.0);
+            Point2D lineSegmentStart1 = new Point2D(EuclidCoreRandomTools.nextDouble(random, 10.0), y);
+            Point2D lineSegmentEnd1 = new Point2D(EuclidCoreRandomTools.nextDouble(random, 10.0), y);
+
+            Point2D lineSegmentStart2 = new Point2D();
+            Point2D lineSegmentEnd2 = new Point2D();
+
+            double alpha1 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+            double alpha2 = EuclidCoreRandomTools.nextDouble(random, 2.0);
+
+            // Make the second line segment collinear to the first one
+            lineSegmentStart2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha1);
+            lineSegmentEnd2.interpolate(lineSegmentStart1, lineSegmentEnd1, alpha2);
+
+            double expectedDistance;
+
+            if (0.0 < alpha1 && alpha1 < 1.0 || 0.0 < alpha2 && alpha2 < 1.0 || alpha1 * alpha2 < 0.0)
+            {
+               expectedDistance = 0.0;
+               assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+            }
+            else
+            {
+               if (alpha1 < 0.0)
+                  expectedDistance = alpha1 < alpha2 ? lineSegmentEnd2.distance(lineSegmentStart1) : lineSegmentStart2.distance(lineSegmentStart1);
+               else
+                  expectedDistance = alpha1 > alpha2 ? lineSegmentEnd2.distance(lineSegmentEnd1) : lineSegmentStart2.distance(lineSegmentEnd1);
+
+               assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+            }
+
+            // Shift the second line segment such that it becomes only parallel to the first.
+            Vector2D orthogonal = new Vector2D();
+            orthogonal.sub(lineSegmentEnd1, lineSegmentStart1);
+            orthogonal.set(-orthogonal.getY(), orthogonal.getX());
+            orthogonal.normalize();
+
+            double distance = EuclidCoreRandomTools.nextDouble(random, 1.0e-10, 10.0);
+            lineSegmentStart2.scaleAdd(distance, orthogonal, lineSegmentStart2);
+            lineSegmentEnd2.scaleAdd(distance, orthogonal, lineSegmentEnd2);
+            expectedDistance = EuclidCoreTools.norm(expectedDistance, distance);
+            assertDistanceBetweenTwoLineSegment2Ds(i, expectedDistance, lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, EPSILON);
+         }
+      }
+   }
+
+   private void assertDistanceBetweenTwoLineSegment2Ds(int iteration, double expectedDistance, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
+                                                       Point2D lineSegmentStart2, Point2D lineSegmentEnd2, double epsilon)
+   {
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2),
+                   epsilon,
+                   "Itertation " + iteration);
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentStart2, lineSegmentEnd2),
+                   epsilon,
+                   "Itertation " + iteration);
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentEnd1, lineSegmentStart1, lineSegmentEnd2, lineSegmentStart2),
+                   epsilon,
+                   "Itertation " + iteration);
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentEnd2, lineSegmentStart2),
+                   epsilon,
+                   "Itertation " + iteration);
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentStart2, lineSegmentEnd2, lineSegmentStart1, lineSegmentEnd1),
+                   epsilon,
+                   "Itertation " + iteration);
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentStart2, lineSegmentEnd2, lineSegmentEnd1, lineSegmentStart1),
+                   epsilon,
+                   "Itertation " + iteration);
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentEnd2, lineSegmentStart2, lineSegmentEnd1, lineSegmentStart1),
+                   epsilon,
+                   "Itertation " + iteration);
+      assertEquals(expectedDistance,
+                   EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentEnd2, lineSegmentStart2, lineSegmentStart1, lineSegmentEnd1),
+                   epsilon,
+                   "Itertation " + iteration);
    }
 
    @Test
@@ -9643,8 +10200,8 @@ public class EuclidGeometryToolsTest
 
          performAssertionsForPoint3DOnSideOfPlane3D(random, pointOnPlane, pointOnPlane, planeNormal, Plane3DSide.EXACTLY_ON);
 
-         Axis3D otherAxis1 = planeNormal.getNextClockwiseAxis();
-         Axis3D otherAxis2 = otherAxis1.getNextClockwiseAxis();
+         Axis3D otherAxis1 = planeNormal.previous();
+         Axis3D otherAxis2 = otherAxis1.previous();
 
          Vector3D orthogonal1 = new Vector3D(otherAxis1);
          Vector3D orthogonal2 = new Vector3D(otherAxis2);
@@ -10826,6 +11383,69 @@ public class EuclidGeometryToolsTest
    }
 
    @Test
+   public void testSphere3DPositionFromThreePoints()
+   {
+      Random random = new Random(23498675);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double sphere3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Point3D expected = new Point3D(); //EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p1 = new Point3D();
+         Point3D p2 = new Point3D();
+         Point3D p3 = new Point3D();
+
+         p1.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+         p2.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+         p3.scaleAdd(sphere3DRadius, EuclidCoreRandomTools.nextUnitVector3D(random), expected);
+
+         // Checking the winding of the points
+         Vector3D p1ToSphere = new Vector3D();
+         p1ToSphere.sub(p1, expected);
+         Vector3D normal = EuclidGeometryTools.normal3DFromThreePoint3Ds(p1, p2, p3);
+         boolean isCounterClockwiseWinding = p1ToSphere.dot(normal) < 0.0;
+
+         boolean success;
+         Point3D actual = new Point3D();
+         if (isCounterClockwiseWinding)
+            success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, actual);
+         else
+            success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p3, p2, sphere3DRadius, actual);
+         assertTrue(success, "Iteration " + i);
+
+         EuclidCoreTestTools.assertTuple3DEquals("Iteration " + i, expected, actual, LARGE_EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double sphere3DRadius = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         Point3D sphere3DPosition = new Point3D();
+         Point3D p1 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p2 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+         Point3D p3 = EuclidCoreRandomTools.nextPoint3D(random, 10.0);
+
+         double lengthA = p1.distance(p2);
+         double lengthB = p2.distance(p3);
+         double lengthC = p3.distance(p1);
+         double circumradius = EuclidGeometryTools.triangleCircumradius(lengthA, lengthB, lengthC);
+
+         boolean success = EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPosition);
+
+         assertEquals(circumradius <= sphere3DRadius, success);
+
+         if (success)
+         {
+            double d1 = sphere3DPosition.distance(p1);
+            double d2 = sphere3DPosition.distance(p2);
+            double d3 = sphere3DPosition.distance(p3);
+            assertEquals(d1, d2, EPSILON);
+            assertEquals(d1, d3, EPSILON);
+            assertEquals(d1, sphere3DRadius, EPSILON);
+         }
+      }
+   }
+
+   @Test
    public void testTopVertex3DOfIsoscelesTriangle3D() throws Exception
    {
       Random random = new Random(1176L);
@@ -10930,6 +11550,34 @@ public class EuclidGeometryToolsTest
          assertFalse(EuclidGeometryTools.triangleBisector2D(a, b, c, new Point2D()));
          assertNull(EuclidGeometryTools.triangleBisector2D(a, b, c));
       }
+   }
+
+   @Test
+   public void testTriangleIsoscelesHeight()
+   {
+      Random random = new Random(8734);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double legLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 10.0);
+         double baseLength = EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0 * legLength);
+         double height = EuclidGeometryTools.triangleIsoscelesHeight(legLength, baseLength);
+
+         // Comparing against area algorithm:
+         // triangle isosceles area is twist the area of the right triangle that formed with (leg, 0.5 * base, height)
+         double rightTriangleArea = EuclidGeometryTools.triangleAreaHeron1(legLength, height, 0.5 * baseLength);
+         double isoscelesTriangleArea = EuclidGeometryTools.triangleAreaHeron1(legLength, legLength, baseLength);
+         assertEquals(2.0 * rightTriangleArea, isoscelesTriangleArea, EPSILON);
+
+         // Comparing against pythagoras algorithm using the 
+         double pythagorasHeight = EuclidGeometryTools.pythagorasGetCathetus(legLength, 0.5 * baseLength);
+         assertEquals(height, pythagorasHeight, EPSILON);
+      }
+
+      // Test exceptions
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(0.5, 1.1));
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(-0.1, 1.1));
+      assertThrows(IllegalArgumentException.class, () -> EuclidGeometryTools.triangleIsoscelesHeight(0.1, -0.1));
    }
 
    @Test

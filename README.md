@@ -55,6 +55,8 @@ Note that most of the modules define the following tools:
 - `Euclid(...)IOTools` defines static methods to create a representative `String` of any object defined in the module.
 - `Euclid(...)Tools` defines static methods that gather the actual computation used in the different objects defined in the module.
 
+For more information about the static tools, see [Wiki- Static tools summary](https://github.com/ihmcrobotics/euclid/wiki/Static-tools-summary).
+
 #### Euclid
 - Points in 2 and 3 dimensions: `Point2D`, `Point3D`, and their single-float precision defined counterparts: `Point2D32`, `Point3D32`.
 - Vectors in 2, 3, and 4 dimensions: `Vector2D`, `Vector3D`, `Vector4D`, and their single-float precision defined counterparts: `Vector2D32`, `Vector3D32`, `Vector4D32`.

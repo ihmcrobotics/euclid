@@ -186,6 +186,19 @@ public class EuclidFrameAPITester
    }
 
    /**
+    * Registers the read-only API for a frameless type that does not have a frame type equivalent.
+    * <p>
+    * This is needed for preventing false assertion errors.
+    * </p>
+    *
+    * @param framelessReadOnlyType the read-only API of the frameless geometry type.
+    */
+   public void registerFramelessReadOnlyType(Class<?> framelessReadOnlyType)
+   {
+      framelessTypesWithoutFrameEquivalent.add(framelessReadOnlyType);
+   }
+
+   /**
     * Registers the read-only and basics API for a frameless type that does not have a frame type
     * equivalent.
     * <p>
@@ -1698,8 +1711,40 @@ public class EuclidFrameAPITester
    public void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
                                                                     Predicate<Method> methodFilter, int numberOfIterations)
    {
+      assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier, framelessTypeBuilber, methodFilter, numberOfIterations, EPSILON);
+   }
 
-      Class<? extends ReferenceFrameHolder> frameTypeToTest = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+   /**
+    * Assuming the type built by the {@code frameTypeBuilder} declares the same methods as declared in
+    * the type built by {@code framelessTypeBuilder} with the difference of handling the reference
+    * frame information, this method asserts that the methods the type built by the
+    * {@code frameTypeBuilder} does not change the underlying algorithms.
+    * <p>
+    * For each method declared in the type built by the {@code frameTypeBuilder}, this methods searched
+    * for the equivalent method in type built by the {@code framelessTypeBuilder} and the methods from
+    * both classes are invoked to compare the output.
+    * </p>
+    *
+    * @param frameTypeCopier      the builder for creating instances of the frame object to test.
+    * @param framelessTypeBuilber the builder for creating instances of the corresponding frameless
+    *                             objects.
+    * @param methodFilter         custom filter used on the methods. The assertions are performed on
+    *                             the methods for which {@code methodFilter.test(method)} returns
+    *                             {@code true}.
+    * @param epsilon              the tolerance to use when comparing geometries.
+    * @param numberOfIterations   number of iterations to perform for each method.
+    */
+   public void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
+                                                                    Predicate<Method> methodFilter, int numberOfIterations, double epsilon)
+   {
+      Class<?> frameTypeToTest = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
+      if (frameTypeToTest.isAnonymousClass())
+      { // Need to fall back to the original type that the anonymous type implements/extends, otherwise we cannot invoke methods on it.
+         if (frameTypeToTest.getInterfaces().length == 0)
+            frameTypeToTest = frameTypeToTest.getSuperclass();
+         else
+            frameTypeToTest = frameTypeToTest.getInterfaces()[0];
+      }
       Class<? extends Object> framelessType = framelessTypeBuilber.newInstance(random).getClass();
 
       List<Method> frameMethods = Stream.of(frameTypeToTest.getMethods()).filter(methodFilter).collect(Collectors.toList());
@@ -1788,7 +1833,7 @@ public class EuclidFrameAPITester
                   Object framelessParameter = framelessMethodParameters[i];
                   Object frameParameter = frameMethodParameters[i];
 
-                  if (!ReflectionBasedComparer.epsilonEquals(framelessParameter, frameParameter, EPSILON))
+                  if (!ReflectionBasedComparer.epsilonEquals(framelessParameter, frameParameter, epsilon))
                      reportInconsistentArguments(frameMethod,
                                                  framelessMethod,
                                                  frameMethodParameters,
@@ -1797,10 +1842,10 @@ public class EuclidFrameAPITester
                                                  frameParameter);
                }
 
-               if (!ReflectionBasedComparer.epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, EPSILON))
+               if (!ReflectionBasedComparer.epsilonEquals(framelessMethodReturnObject, frameMethodReturnObject, epsilon))
                   reportInconsistentReturnedType(frameMethod, framelessMethod, framelessMethodReturnObject, frameMethodReturnObject);
 
-               if (!ReflectionBasedComparer.epsilonEquals(framelessObject, frameObject, EPSILON))
+               if (!ReflectionBasedComparer.epsilonEquals(framelessObject, frameObject, epsilon))
                   reportInconsistentObject(frameMethod, framelessObject, frameObject, framelessMethod);
             }
             catch (NoSuchMethodException e)
@@ -1979,6 +2024,7 @@ public class EuclidFrameAPITester
    {
       try
       {
+         frameMethod.setAccessible(true);
          return frameMethod.invoke(methodHolder, parameters);
       }
       catch (IllegalAccessException | IllegalArgumentException e)

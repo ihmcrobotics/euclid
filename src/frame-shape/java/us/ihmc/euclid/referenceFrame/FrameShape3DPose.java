@@ -5,8 +5,6 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
@@ -19,7 +17,6 @@ import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Point3D;
 
 /**
  * Implementation of a shape pose 3D expressed in a given reference frame.
@@ -33,62 +30,13 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
    /** The reference frame in which this pose is expressed. */
    private ReferenceFrame referenceFrame;
    /** The orientation part. */
-   private final FixedFrameRotationMatrixBasics shapeOrientation = EuclidFrameFactories.newLinkedFixedFrameRotationMatrixBasics(this, new RotationMatrix()
-   {
-      @Override
-      public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-      {
-         super.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-         notifyChangeListeners();
-      };
-
-      @Override
-      public void set(RotationMatrixReadOnly other)
-      {
-         super.set(other);
-         notifyChangeListeners();
-      };
-
-      @Override
-      public void transpose()
-      {
-         super.transpose();
-         notifyChangeListeners();
-      };
-   });
+   private final FixedFrameRotationMatrixBasics shapeOrientation = EuclidFrameFactories.newObservableFixedFrameRotationMatrixBasics(this,
+                                                                                                                                    this::notifyChangeListeners,
+                                                                                                                                    null);
    /** The position part. */
-   private final FixedFramePoint3DBasics shapePosition = EuclidFrameFactories.newLinkedFixedFramePoint3DBasics(this, new Point3D()
-   {
-      @Override
-      public void setX(double x)
-      {
-         if (x != getX())
-         {
-            super.setX(x);
-            notifyChangeListeners();
-         }
-      };
-
-      @Override
-      public void setY(double y)
-      {
-         if (y != getY())
-         {
-            super.setY(y);
-            notifyChangeListeners();
-         }
-      };
-
-      @Override
-      public void setZ(double z)
-      {
-         if (z != getZ())
-         {
-            super.setZ(z);
-            notifyChangeListeners();
-         }
-      };
-   });
+   private final FixedFramePoint3DBasics shapePosition = EuclidFrameFactories.newObservableFixedFramePoint3DBasics(this,
+                                                                                                                   (axis, newValue) -> notifyChangeListeners(),
+                                                                                                                   null);
 
    /** Vector linked to the components of the x-axis unit-vector. */
    private final FrameVector3DReadOnly xAxis = EuclidFrameFactories.newLinkedFrameVector3DReadOnly(this,
@@ -238,7 +186,7 @@ public class FrameShape3DPose implements FrameShape3DPoseBasics, GeometryObject<
     *
     * @param listeners the listeners to register.
     */
-   public void addChangeListeners(List<Shape3DChangeListener> listeners)
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
    {
       for (int i = 0; i < listeners.size(); i++)
       {

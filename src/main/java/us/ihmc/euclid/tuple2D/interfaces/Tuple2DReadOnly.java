@@ -2,6 +2,7 @@ package us.ihmc.euclid.tuple2D.interfaces;
 
 import org.ejml.data.DenseMatrix64F;
 
+import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -74,6 +75,17 @@ public interface Tuple2DReadOnly
    default boolean containsNaN()
    {
       return EuclidCoreTools.containsNaN(getX(), getY());
+   }
+
+   /**
+    * Selects and returns the component of this tuple corresponding to the given {@code axis}.
+    *
+    * @param axis the axis of the component to get.
+    * @return the value of the component.
+    */
+   default double getElement(Axis2D axis)
+   {
+      return axis.extract(this);
    }
 
    /**

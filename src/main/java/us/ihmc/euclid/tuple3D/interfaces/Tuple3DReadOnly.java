@@ -2,6 +2,7 @@ package us.ihmc.euclid.tuple3D.interfaces;
 
 import org.ejml.data.DenseMatrix64F;
 
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -94,6 +95,17 @@ public interface Tuple3DReadOnly
    }
 
    /**
+    * Selects and returns the component of this tuple corresponding to the given {@code axis}.
+    *
+    * @param axis the axis of the component to get.
+    * @return the value of the component.
+    */
+   default double getElement(Axis3D axis)
+   {
+      return axis.extract(this);
+   }
+
+   /**
     * Selects a component of this tuple based on {@code index} and returns its value.
     * <p>
     * For an {@code index} of 0, the corresponding component is {@code x}, 1 it is {@code y}, 2 it is
@@ -130,7 +142,7 @@ public interface Tuple3DReadOnly
     * @return the value of the component.
     * @throws IndexOutOfBoundsException if {@code index} &notin; [0, 2].
     */
-   default double getElement32(int index)
+   default float getElement32(int index)
    {
       switch (index)
       {

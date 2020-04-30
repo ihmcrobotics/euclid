@@ -60,12 +60,13 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
-import us.ihmc.euclid.geometry.tools.EuclidGeometryPolygonTools.Bound;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.UnitVector2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 
@@ -901,13 +902,17 @@ public class EuclidGeometryPolygonToolsTest
          double alphaOutside = nextDouble(random, 1.0, 3.0);
          Point2D outsidePoint = new Point2D();
          outsidePoint.interpolate(centroid, pointOnEdge, alphaOutside);
+         assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered));
          assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
+         assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint.getX(), outsidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered));
          assertFalse(isPoint2DInsideConvexPolygon2D(outsidePoint.getX(), outsidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered, 0));
 
          double alphaInside = nextDouble(random, 0.0, 1.0);
          Point2D insidePoint = new Point2D();
          insidePoint.interpolate(centroid, pointOnEdge, alphaInside);
+         assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered));
          assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint, convexPolygon2D, hullSize, clockwiseOrdered, 0));
+         assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint.getX(), insidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered));
          assertTrue(isPoint2DInsideConvexPolygon2D(insidePoint.getX(), insidePoint.getY(), convexPolygon2D, hullSize, clockwiseOrdered, 0));
       }
 
@@ -4028,6 +4033,49 @@ public class EuclidGeometryPolygonToolsTest
          {
             assertTrue(supplier.getVertex(index).getY() >= supplier.getVertex(bestIndex).getY());
          }
+      }
+   }
+
+   @Test
+   public void testIsConvexPolygonConcyclic()
+   {
+      Random random = new Random(4365);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Generating points to be on circle, the resulting polygon is concyclic.
+         int numberOfVertices = random.nextInt(20);
+         List<Point2D> concyclicPoints = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, 10.0, 1.0, numberOfVertices);
+         if (random.nextBoolean())
+            Collections.reverse(concyclicPoints);
+
+         if (concyclicPoints.isEmpty())
+            assertFalse(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(concyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
+         else
+            assertTrue(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(concyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Testing for a polygon that is not concyclic. To do so, we take a concyclic polygon and shift one of its vertices away for the circumcenter so it is not concyclic.
+         int numberOfVertices = random.nextInt(16) + 4; // Need at least 4 vertices as anything with less vertices is considered concyclic automatically.
+         Point2D circumcenter = EuclidCoreRandomTools.nextPoint2D(random, 10.0);
+         List<Point2D> notConcyclicPoints = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random, circumcenter, 1.0, numberOfVertices);
+         if (random.nextBoolean())
+            Collections.reverse(notConcyclicPoints);
+
+         Point2D vertexUnmodified = new Point2D(notConcyclicPoints.get(random.nextInt(numberOfVertices)));
+         Point2D vertex = notConcyclicPoints.get(random.nextInt(numberOfVertices));
+
+         UnitVector2D directionAway = new UnitVector2D();
+         directionAway.sub(vertex, circumcenter);
+         double distanceOutside = EuclidCoreRandomTools.nextDouble(random, 2.0 * SMALL_EPSILON, 1.0);
+         vertex.scaleAdd(distanceOutside, directionAway, vertex);
+         assertFalse(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(notConcyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
+
+         vertex.set(vertexUnmodified);
+         double radius = vertex.distance(circumcenter);
+         double distanceInside = EuclidCoreRandomTools.nextDouble(random, 2.0 * SMALL_EPSILON, radius);
+         vertex.scaleAdd(-distanceInside, directionAway, vertex);
+         assertFalse(EuclidGeometryPolygonTools.isConvexPolygon2DConcyclic(notConcyclicPoints, numberOfVertices, SMALL_EPSILON), "Iteration " + i);
       }
    }
 }

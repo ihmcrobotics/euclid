@@ -188,15 +188,15 @@ public interface Line2DReadOnly
     * <p>
     * Edge cases:
     * <ul>
-    * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns {@code null}.
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code this.point}.
     * </ul>
     * </p>
     *
     * @param secondLine         the other line that may intersect this line. Not modified.
-    * @param intersectionToPack the 2D point in which the result is stored. Modified.
+    * @param intersectionToPack the 2D point in which the result is stored. Can be {@code null}.
+    *                           Modified.
     * @return {@code true} if the two lines intersects, {@code false} otherwise.
     */
    default boolean intersectionWith(Line2DReadOnly secondLine, Point2DBasics intersectionToPack)
@@ -724,7 +724,7 @@ public interface Line2DReadOnly
       { // Lines are parallel but not collinear
          return false;
       }
-      else if (t == 0.0 && EuclidGeometryTools.areVector2DsParallel(getDirection(), secondLine.getDirection(), 1.0e-7))
+      else if (Double.isInfinite(t))
       { // Lines are collinear
          interiorBisectorToPack.set(this);
          return true;
@@ -795,6 +795,7 @@ public interface Line2DReadOnly
     * @param other   the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>epsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    default boolean isCollinear(Line2DReadOnly other, double epsilon)
    {
@@ -808,6 +809,7 @@ public interface Line2DReadOnly
     * @param angleEpsilon    the tolerance of the comparison for angle.
     * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    default boolean isCollinear(Line2DReadOnly other, double angleEpsilon, double distanceEpsilon)
    {

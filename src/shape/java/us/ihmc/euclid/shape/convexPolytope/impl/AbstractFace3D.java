@@ -56,9 +56,9 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
     * 3-by-3 covariance matrix computed from the vertices location and used to compute this face
     * normal.
     */
-   private final DenseMatrix64F verticesCovariance = new DenseMatrix64F(3, 3);
+   private DenseMatrix64F verticesCovariance;
    /** Eigen decomposition solver used to compute this face normal. */
-   private final EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(3, true, true);
+   private EigenDecomposition<DenseMatrix64F> eigenDecomposition;
    /** Factory used to create half-edges of the proper type. */
    private final HalfEdge3DFactory<Vertex, Edge> edgeFactory;
 
@@ -133,7 +133,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
       updateVertices();
       updateNormal();
       updateCentroidAndArea();
-      refreshBoundingBox();
+      updateBoundingBox();
 
       for (Edge edge : faceEdges)
       {
@@ -416,7 +416,11 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
    {
       if (vertices.size() > 3)
       {
+         if (verticesCovariance == null)
+            verticesCovariance = new DenseMatrix64F(3, 3);
          EuclidPolytopeConstructionTools.computeCovariance3D(vertices, verticesCovariance);
+         if (eigenDecomposition == null)
+            eigenDecomposition = DecompositionFactory.eig(3, true, true);
          EuclidPolytopeConstructionTools.updateFace3DNormal(eigenDecomposition, verticesCovariance, getNormal());
       }
       else if (vertices.size() == 3)
@@ -451,7 +455,7 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
     * adding a new vertex.
     * </p>
     */
-   public void refreshBoundingBox()
+   public void updateBoundingBox()
    {
       getBoundingBox().setToNaN();
 

@@ -20,6 +20,8 @@ import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameBox3DTest
 {
@@ -27,14 +29,17 @@ public class FrameBox3DTest
    public void testAPIOverloading()
    {
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
-      tester.assertOverloadingWithFrameObjects(FrameBox3DReadOnly.class, Box3DReadOnly.class, false);
-      tester.assertOverloadingWithFrameObjects(FixedFrameBox3DBasics.class, Box3DBasics.class, false);
 
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", RigidBodyTransformReadOnly.class, Vector3DReadOnly.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      tester.assertOverloadingWithFrameObjects(FrameBox3DReadOnly.class, Box3DReadOnly.class, false, 1, methodFilter);
+      tester.assertOverloadingWithFrameObjects(FixedFrameBox3DBasics.class, Box3DBasics.class, false, 1, methodFilter);
+
       signaturesToIgnore.add(new MethodSignature("set", Box3D.class));
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Box3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Box3D.class, Double.TYPE));
-      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameBox3D.class, Box3D.class, false, 1, methodFilter);
    }
 
@@ -57,7 +62,7 @@ public class FrameBox3DTest
    public void testConsistencyWithBox3D()
    {
       Predicate<Method> methodFilter = m -> !m.getName().equals("hashCode") && !m.getName().equals("epsilonEquals")
-            && !m.getName().contains("IntermediateVariableSupplier");
+            && !m.getName().contains("IntermediateVariableSupplier") && !m.getName().contains("Listener");
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       tester.assertFrameMethodsOfFrameHolderPreserveFunctionality((frame, box) -> new FrameBox3D(frame, (Box3D) box),
                                                                   EuclidShapeRandomTools::nextBox3D,

@@ -612,7 +612,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
          Face face = faces.get(i);
          face.updateNormal();
          face.updateCentroidAndArea();
-         face.refreshBoundingBox();
+         face.updateBoundingBox();
       }
 
       updateBoundingBox();
@@ -633,7 +633,7 @@ public abstract class AbstractConvexPolytope3D<Vertex extends AbstractVertex3D<V
          Face face = faces.get(i);
          face.updateNormal();
          face.updateCentroidAndArea();
-         face.refreshBoundingBox();
+         face.updateBoundingBox();
       }
 
       updateBoundingBox();

@@ -48,6 +48,13 @@ public interface Sphere3DReadOnly extends Shape3DReadOnly
 
    /** {@inheritDoc} */
    @Override
+   default double getVolume()
+   {
+      return EuclidShapeTools.sphereVolume(getRadius());
+   }
+
+   /** {@inheritDoc} */
+   @Override
    default boolean containsNaN()
    {
       return getPosition().containsNaN() || Double.isNaN(getRadius());

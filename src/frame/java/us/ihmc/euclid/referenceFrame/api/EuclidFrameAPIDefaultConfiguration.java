@@ -1,5 +1,7 @@
 package us.ihmc.euclid.referenceFrame.api;
 
+import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
@@ -66,6 +68,8 @@ public class EuclidFrameAPIDefaultConfiguration implements EuclidFrameAPITestCon
       testerToConfigure.registerReadOnlyFrameTypeSmart(FrameVertex2DSupplier.class);
       testerToConfigure.registerReadOnlyFrameTypeSmart(FrameVertex3DSupplier.class);
 
+      testerToConfigure.registerFramelessReadOnlyType(Axis2D.class);
+      testerToConfigure.registerFramelessReadOnlyType(Axis3D.class);
       testerToConfigure.registerFramelessTypesSmart(AxisAngleBasics.class, RigidBodyTransformBasics.class);
       testerToConfigure.registerFramelessType(RotationScaleMatrix.class, RotationScaleMatrixReadOnly.class);
    }

@@ -65,6 +65,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -101,6 +102,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -131,6 +133,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -161,6 +164,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon    tolerance on the distance to determine if {@code firstPointOnLine2}
     *                           belongs to the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -197,6 +201,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnLine2} belongs to
     *                        the first line segment.
     * @return {@code true} if the two line segments are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -232,6 +237,7 @@ public class EuclidFrameTools
     * @param distanceEpsilon tolerance on the distance to determine if {@code pointOnPlane2} belongs to
     *                        the first plane.
     * @return {@code true} if the two planes are coincident, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -258,6 +264,7 @@ public class EuclidFrameTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -283,6 +290,7 @@ public class EuclidFrameTools
     * @param secondVector the second vector. Not modified.
     * @param angleEpsilon tolerance on the angle in radians.
     * @return {@code true} if the two vectors are parallel, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -664,6 +672,86 @@ public class EuclidFrameTools
    }
 
    /**
+    * Given two 2D line segments with finite length, this methods computes two points P &in;
+    * lineSegment1 and Q &in; lineSegment2 such that the distance || P - Q || is the minimum distance
+    * between the two 2D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
+    * link</a>.
+    *
+    * @param lineSegmentStart1                the first endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd1                  the second endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentStart2                the first endpoint of the second line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd2                  the second endpoint of the second line segment. Not
+    *                                         modified.
+    * @param closestPointOnLineSegment1ToPack the 2D coordinates of the point P are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @param closestPointOnLineSegment2ToPack the 2D coordinates of the point Q are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two line segments.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
+    *                                         same reference frame.
+    */
+   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
+                                                                FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+                                                                FixedFramePoint2DBasics closestPointOnLineSegment1ToPack,
+                                                                FixedFramePoint2DBasics closestPointOnLineSegment2ToPack)
+   {
+      lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
+      if (closestPointOnLineSegment1ToPack != null)
+         closestPointOnLineSegment1ToPack.checkReferenceFrameMatch(lineSegmentStart1);
+      if (closestPointOnLineSegment2ToPack != null)
+         closestPointOnLineSegment2ToPack.checkReferenceFrameMatch(lineSegmentStart1);
+      return EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                         lineSegmentEnd1,
+                                                                         lineSegmentStart2,
+                                                                         lineSegmentEnd2,
+                                                                         closestPointOnLineSegment1ToPack,
+                                                                         closestPointOnLineSegment2ToPack);
+   }
+
+   /**
+    * Given two 2D line segments with finite length, this methods computes two points P &in;
+    * lineSegment1 and Q &in; lineSegment2 such that the distance || P - Q || is the minimum distance
+    * between the two 2D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
+    * link</a>.
+    *
+    * @param lineSegmentStart1                the first endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd1                  the second endpoint of the first line segment. Not
+    *                                         modified.
+    * @param lineSegmentStart2                the first endpoint of the second line segment. Not
+    *                                         modified.
+    * @param lineSegmentEnd2                  the second endpoint of the second line segment. Not
+    *                                         modified.
+    * @param closestPointOnLineSegment1ToPack the 2D coordinates of the point P are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @param closestPointOnLineSegment2ToPack the 2D coordinates of the point Q are packed in this 2D
+    *                                         point. Modified. Can be {@code null}.
+    * @return the minimum distance between the two line segments.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
+                                                                FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+                                                                FramePoint2DBasics closestPointOnLineSegment1ToPack,
+                                                                FramePoint2DBasics closestPointOnLineSegment2ToPack)
+   {
+      lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
+      if (closestPointOnLineSegment1ToPack != null)
+         closestPointOnLineSegment1ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
+      if (closestPointOnLineSegment2ToPack != null)
+         closestPointOnLineSegment2ToPack.setReferenceFrame(lineSegmentStart1.getReferenceFrame());
+      return EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1,
+                                                                         lineSegmentEnd1,
+                                                                         lineSegmentStart2,
+                                                                         lineSegmentEnd2,
+                                                                         closestPointOnLineSegment1ToPack,
+                                                                         closestPointOnLineSegment2ToPack);
+   }
+
+   /**
     * Given two 3D line segments with finite length, this methods computes two points P &in;
     * lineSegment1 and Q &in; lineSegment2 such that the distance || P - Q || is the minimum distance
     * between the two 3D line segments. <a href="http://geomalgorithms.com/a07-_distance.html"> Useful
@@ -781,6 +869,114 @@ public class EuclidFrameTools
    }
 
    /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C,
+                                              FixedFramePoint2DBasics circumcenterToPack)
+   {
+      circumcenterToPack.checkReferenceFrameMatch(A, B, C);
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from
+    * <a href="https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code A}, {@code B}, and {@code C} are not all
+    *                                         expressed in the same reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C, FramePoint2DBasics circumcenterToPack)
+   {
+      A.checkReferenceFrameMatch(B, C);
+      circumcenterToPack.setReferenceFrame(A.getReferenceFrame());
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint3DReadOnly A, FramePoint3DReadOnly B, FramePoint3DReadOnly C,
+                                              FixedFramePoint3DBasics circumcenterToPack)
+   {
+      circumcenterToPack.checkReferenceFrameMatch(A, B, C);
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
+    * Computes the coordinates of the center of the circumscribed circle of the triangle ABC.
+    * <p>
+    * Edge-case, if the problem is degenerate, i.e. the three points are on a line or all equal, this
+    * method fails and returns {@code false}.
+    * </p>
+    * <p>
+    * Algorithm from <a href=
+    * "https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_from_cross-_and_dot-products">Wikipedia
+    * article</a>.
+    * </p>
+    * 
+    * @param A                  the position of the first vertex of the triangle. Not modified.
+    * @param B                  the position of the second vertex of the triangle. Not modified.
+    * @param C                  the position of the third vertex of the triangle. Not modified.
+    * @param circumcenterToPack the coordinates of the circumscribed circle's center.
+    * @return {@code true} if the calculation was successful, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if {@code A}, {@code B}, and {@code C} are not all
+    *                                         expressed in the same reference frame.
+    */
+   public static boolean triangleCircumcenter(FramePoint3DReadOnly A, FramePoint3DReadOnly B, FramePoint3DReadOnly C, FramePoint3DBasics circumcenterToPack)
+   {
+      A.checkReferenceFrameMatch(B, C);
+      circumcenterToPack.setReferenceFrame(A.getReferenceFrame());
+      return EuclidGeometryTools.triangleCircumcenter(A, B, C, circumcenterToPack);
+   }
+
+   /**
     * This methods computes the minimum distance between the two infinitely long 3D lines.
     * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
     *
@@ -797,6 +993,25 @@ public class EuclidFrameTools
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLine3Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, null, null);
+   }
+
+   /**
+    * This methods computes the minimum distance between the two 2D line segments with finite length.
+    * <a href="http://geomalgorithms.com/a07-_distance.html"> Useful link</a>.
+    *
+    * @param lineSegmentStart1 the first endpoint of the first line segment. Not modified.
+    * @param lineSegmentEnd1   the second endpoint of the first line segment. Not modified.
+    * @param lineSegmentStart2 the first endpoint of the second line segment. Not modified.
+    * @param lineSegmentEnd2   the second endpoint of the second line segment. Not modified.
+    * @return the minimum distance between the two line segments.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static double distanceBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
+                                                         FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
+   {
+      lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
+      return EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, null, null);
    }
 
    /**
@@ -3828,7 +4043,7 @@ public class EuclidFrameTools
     * Edge cases:
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and this
-    * method returns null.
+    * method returns {@code null}.
     * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
     * {@code pointOnLine1}.
     * </ul>
@@ -3855,6 +4070,78 @@ public class EuclidFrameTools
          return null;
       else
          return new FramePoint2D(firstPointOnLine1.getReferenceFrame(), intersection);
+   }
+
+   /**
+    * Computes the intersection between two infinitely long 2D lines each defined by two 2D points.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code pointOnLine1}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
+    * @param secondPointOnLine1 a second point located on the first line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
+    * @param secondPointOnLine2 a second point located on the second line. Not modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
+    * @return {@code true} if the two lines intersect, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
+                                                       FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2,
+                                                       FixedFramePoint2DBasics intersectionToPack)
+   {
+      firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
+      if (intersectionToPack != null)
+         firstPointOnLine1.checkReferenceFrameMatch(intersectionToPack);
+      return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1,
+                                                               secondPointOnLine1,
+                                                               firstPointOnLine2,
+                                                               secondPointOnLine2,
+                                                               intersectionToPack);
+   }
+
+   /**
+    * Computes the intersection between two infinitely long 2D lines each defined by two 2D points.
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if the two lines are parallel but not collinear, the two lines do not intersect.
+    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
+    * {@code pointOnLine1}.
+    * <li>When there is no intersection, this method returns {@code false} and
+    * {@code intersectionToPack} is set to {@link Double#NaN}.
+    * </ul>
+    * </p>
+    *
+    * @param firstPointOnLine1  a first point located on the first line. Not modified.
+    * @param secondPointOnLine1 a second point located on the first line. Not modified.
+    * @param firstPointOnLine2  a first point located on the second line. Not modified.
+    * @param secondPointOnLine2 a second point located on the second line. Not modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
+    * @return {@code true} if the two lines intersect, {@code false} otherwise.
+    * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
+    *                                         same reference frame.
+    */
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
+                                                       FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2,
+                                                       FramePoint2DBasics intersectionToPack)
+   {
+      firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
+      if (intersectionToPack != null)
+         intersectionToPack.setReferenceFrame(firstPointOnLine1.getReferenceFrame());
+      return EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1,
+                                                               secondPointOnLine1,
+                                                               firstPointOnLine2,
+                                                               secondPointOnLine2,
+                                                               intersectionToPack);
    }
 
    /**
@@ -3911,7 +4198,7 @@ public class EuclidFrameTools
     * @param lineDirection1     the first line direction. Not modified.
     * @param pointOnLine2       point located on the second line. Not modified.
     * @param lineDirection2     the second line direction. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
@@ -3946,7 +4233,7 @@ public class EuclidFrameTools
     * @param lineDirection1     the first line direction. Not modified.
     * @param pointOnLine2       point located on the second line. Not modified.
     * @param lineDirection2     the second line direction. Not modified.
-    * @param intersectionToPack 2D point in which the result is stored. Modified.
+    * @param intersectionToPack 2D point in which the result is stored. Can be {@code null}. Modified.
     * @return {@code true} if the two lines intersect, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
@@ -4113,6 +4400,7 @@ public class EuclidFrameTools
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
     *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleThreshold</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
@@ -4168,6 +4456,7 @@ public class EuclidFrameTools
     * @param intersectionDirectionToPack a 3D vector that is set to the direction of the line of
     *                                    intersection between the two planes. Modified.
     * @return {@code true} if the intersection was calculated properly, {@code false} otherwise.
+    * @throws IllegalArgumentException        if <tt>angleThreshold</tt> &notin; [0; <i>pi</i>/2]
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
@@ -4942,6 +5231,9 @@ public class EuclidFrameTools
     * </ul>
     * </p>
     * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
+    * </p>
+    * <p>
     * WARNING: This method generates garbage.
     * </p>
     *
@@ -4971,6 +5263,9 @@ public class EuclidFrameTools
     * <li>Fails and returns {@code false} if the three points are on a line.
     * <li>Fails and returns {@code false} if two or three points are equal.
     * </ul>
+    * </p>
+    * <p>
+    * The normal is computed such that the points' winding around it is counter-clockwise.
     * </p>
     *
     * @param firstPointOnPlane  first point on the plane. Not modified.
@@ -5695,8 +5990,7 @@ public class EuclidFrameTools
     * <ul>
     * <li>if the two lines are parallel but not collinear, the two lines do not intersect and the
     * returned value is {@link Double#NaN}.
-    * <li>if the two lines are collinear, the two lines are assumed to be intersecting at
-    * {@code pointOnLine1}, the returned value {@code 0.0}.
+    * <li>if the two lines are collinear, this method returns {@link Double#POSITIVE_INFINITY}.
     * </ul>
     * </p>
     *
@@ -5729,8 +6023,8 @@ public class EuclidFrameTools
     * not intersect.
     * <li>if the line segment and the line are parallel but not collinear, they do not intersect and
     * the returned value is {@link Double#NaN}.
-    * <li>if the line segment and the line are collinear, they are assumed to be intersecting at
-    * {@code lineSegmentStart}, the returned value {@code 0.0}.
+    * <li>if the line segment and the line are collinear, this method returns
+    * {@link Double#POSITIVE_INFINITY}.
     * </ul>
     * </p>
     *
@@ -6550,6 +6844,73 @@ public class EuclidFrameTools
    {
       point.checkReferenceFrameMatch(pointOnLine, lineDirection);
       return EuclidGeometryTools.signedDistanceFromPoint2DToLine2D(point, pointOnLine, lineDirection);
+   }
+
+   /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+                                                         FixedFramePoint3DBasics sphere3DPositionToPack)
+   {
+      p1.checkReferenceFrameMatch(p2, p3, sphere3DPositionToPack);
+      return EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPositionToPack);
+   }
+
+   /**
+    * Computes the position of the sphere given its radius and three points that lie on its surface.
+    * <p>
+    * There two possible solutions to this problem. The solution returned is located "above" the
+    * triangle's plane. "Above" is defined by the direction given by the normal of the three points
+    * such as their winding is counter-clockwise.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>In the case the radius of the sphere is too small to reach all three points, i.e. the radius
+    * is smaller than the circumradius of the triangle, this method fails and returns {@code false}.
+    * <li>If the problem is degenerate, i.e. any of the three lengths of the triangle is zero, this
+    * method fails and returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param p1                     the first point that belongs to the sphere. Not modified.
+    * @param p2                     the second point that belongs to the sphere. Not modified.
+    * @param p3                     the third point that belongs to the sphere. Not modified.
+    * @param sphere3DRadius         the radius of the sphere.
+    * @param sphere3DPositionToPack the point used to store the result. Modified.
+    * @return whether the sphere position was successfully or not.
+    * @throws ReferenceFrameMismatchException if the three points are not all expressed in the same
+    *                                         reference frame.
+    */
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+                                                         FramePoint3DBasics sphere3DPositionToPack)
+   {
+      p1.checkReferenceFrameMatch(p2, p3);
+      sphere3DPositionToPack.setReferenceFrame(p1.getReferenceFrame());
+      return EuclidGeometryTools.sphere3DPositionFromThreePoints(p1, p2, p3, sphere3DRadius, sphere3DPositionToPack);
    }
 
    /**

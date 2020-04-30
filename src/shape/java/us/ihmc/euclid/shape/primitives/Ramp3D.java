@@ -9,15 +9,17 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.IntermediateVariableSupplier;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ramp3DReadOnly;
+import us.ihmc.euclid.shape.primitives.interfaces.RampPolytope3DView;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
  * Implementation of a ramp 3D.
@@ -37,53 +39,24 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  */
 public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 {
+   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
+
    /** Pose of this ramp. */
    private final Shape3DPose pose = new Shape3DPose();
    /** Current supplier to use for storing intermediate results. */
    private IntermediateVariableSupplier supplier = IntermediateVariableSupplier.defaultIntermediateVariableSupplier();
 
    /** Size of this ramp's bounding box. */
-   private final Vector3D size = new Vector3D()
+   private final Vector3DBasics size = EuclidCoreFactories.newObservableVector3DBasics((axis, newValue) ->
    {
-      @Override
-      public void setX(double x)
-      {
-         if (x != getX())
-         {
-            if (x < 0.0)
-               throw new IllegalArgumentException("The x-size of a Ramp3D cannot be negative: " + x);
-            super.setX(x);
-            notifyChangeListeners();
-         }
-      }
+      checkSizePositive(axis);
+      notifyChangeListeners();
+   }, null);
 
-      @Override
-      public void setY(double y)
-      {
-         if (y != getY())
-         {
-            if (y < 0.0)
-               throw new IllegalArgumentException("The y-size of a Ramp3D cannot be negative: " + y);
-            super.setY(y);
-            notifyChangeListeners();
-         }
-      }
-
-      @Override
-      public void setZ(double z)
-      {
-         if (z != getZ())
-         {
-            if (z < 0.0)
-               throw new IllegalArgumentException("The z-size of a Ramp3D cannot be negative: " + z);
-            super.setZ(z);
-            notifyChangeListeners();
-         }
-      }
-   };
+   private boolean rampSurfaceNormalDirty = true;
+   private final Vector3DBasics rampSurfaceNormal = EuclidCoreFactories.newObservableVector3DBasics(null, axis -> updateRampSurfaceNormal());
 
    private boolean rampFeaturesDirty = true;
-
    /** Length of the slope face of this ramp. */
    private double rampLength;
    /**
@@ -94,31 +67,9 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 
    private boolean centroidDirty = true;
 
-   private final Point3D centroid = new Point3D()
-   {
-      @Override
-      public double getX()
-      {
-         updateCentroid();
-         return super.getX();
-      };
+   private final Point3DBasics centroid = EuclidCoreFactories.newObservablePoint3DBasics(null, axis -> updateCentroid());
 
-      @Override
-      public double getY()
-      {
-         updateCentroid();
-         return super.getY();
-      };
-
-      @Override
-      public double getZ()
-      {
-         updateCentroid();
-         return super.getZ();
-      };
-   };
-
-   private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
+   private RampPolytope3D polytopeView = null;
 
    /**
     * Creates a new ramp 3D and initializes its length, width, and height to {@code 1.0}.
@@ -139,7 +90,19 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
     */
    public Ramp3D(double sizeX, double sizeY, double sizeZ)
    {
-      setSize(sizeX, sizeY, sizeZ);
+      getSize().set(sizeX, sizeY, sizeZ);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its size.
+    *
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(Vector3DReadOnly size)
+   {
+      getSize().set(size);
       setupListeners();
    }
 
@@ -163,6 +126,20 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    /**
     * Creates a new ramp 3D and initializes its pose and size.
     *
+    * @param position    the position of this ramp. Not modified.
+    * @param orientation the orientation of this ramp. Not modified.
+    * @param size        the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(Point3DReadOnly position, Orientation3DReadOnly orientation, Vector3DReadOnly size)
+   {
+      set(position, orientation, size);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
     * @param pose  the position and orientation for this ramp. Not modified.
     * @param sizeX the size of this ramp along the x-axis.
     * @param sizeY the size of this ramp along the y-axis.
@@ -173,6 +150,19 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D(RigidBodyTransformReadOnly pose, double sizeX, double sizeY, double sizeZ)
    {
       set(pose, sizeX, sizeY, sizeZ);
+      setupListeners();
+   }
+
+   /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(RigidBodyTransformReadOnly pose, Vector3DReadOnly size)
+   {
+      set(pose, size);
       setupListeners();
    }
 
@@ -193,6 +183,19 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    }
 
    /**
+    * Creates a new ramp 3D and initializes its pose and size.
+    *
+    * @param pose the position and orientation for this ramp. Not modified.
+    * @param size the size of this ramp. Not modified.
+    * @throws IllegalArgumentException if any of the size components is negative.
+    */
+   public Ramp3D(Pose3DReadOnly pose, Vector3DReadOnly size)
+   {
+      set(pose, size);
+      setupListeners();
+   }
+
+   /**
     * Creates a new ramp 3D identical to {@code other}.
     *
     * @param other the other ramp to copy. Not modified.
@@ -205,8 +208,12 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
 
    private void setupListeners()
    {
-      changeListeners.add(() -> rampFeaturesDirty = true);
-      changeListeners.add(() -> centroidDirty = true);
+      changeListeners.add(() ->
+      {
+         rampSurfaceNormalDirty = true;
+         rampFeaturesDirty = true;
+         centroidDirty = true;
+      });
       pose.addChangeListeners(changeListeners);
    }
 
@@ -218,6 +225,16 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       rampLength = EuclidShapeTools.computeRamp3DLength(size.getX(), size.getZ());
       angleOfRampIncline = EuclidShapeTools.computeRamp3DIncline(size.getX(), size.getZ());
       rampFeaturesDirty = false;
+   }
+
+   private void updateRampSurfaceNormal()
+   {
+      if (!rampSurfaceNormalDirty)
+         return;
+
+      rampSurfaceNormal.set(-getSizeZ() / getRampLength(), 0.0, getSizeX() / getRampLength());
+      transformToWorld(rampSurfaceNormal);
+      rampSurfaceNormalDirty = false;
    }
 
    private void updateCentroid()
@@ -254,10 +271,25 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       return size;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Point3DReadOnly getCentroid()
    {
       return centroid;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public Vector3DReadOnly getRampSurfaceNormal()
+   {
+      return rampSurfaceNormal;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void getRampSurfaceNormal(Vector3DBasics surfaceNormalToPack)
+   {
+      surfaceNormalToPack.set(rampSurfaceNormal);
    }
 
    /**
@@ -269,6 +301,47 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
       {
          changeListeners.get(i).changed();
       }
+   }
+
+   /**
+    * Registers a list of listeners to be notified when this shape changes.
+    *
+    * @param listeners the listeners to register.
+    */
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
+   {
+      for (int i = 0; i < listeners.size(); i++)
+      {
+         addChangeListener(listeners.get(i));
+      }
+   }
+
+   /**
+    * Registers a listener to be notified when this shape changes.
+    *
+    * @param listener the listener to register.
+    */
+   public void addChangeListener(Shape3DChangeListener listener)
+   {
+      changeListeners.add(listener);
+      pose.addChangeListener(listener);
+   }
+
+   /**
+    * Removes a previously registered listener.
+    * <p>
+    * This listener will no longer be notified of changes from this pose.
+    * </p>
+    *
+    * @param listener the listener to remove.
+    * @return {@code true} if the listener was removed successful, {@code false} if the listener could
+    *         not be found.
+    */
+   public boolean removeChangeListener(Shape3DChangeListener listener)
+   {
+      boolean hasBeenRemoved = changeListeners.remove(listener);
+      hasBeenRemoved |= pose.removeChangeListener(listener);
+      return hasBeenRemoved;
    }
 
    /** {@inheritDoc} */
@@ -320,6 +393,14 @@ public class Ramp3D implements Ramp3DBasics, GeometryObject<Ramp3D>
    public Ramp3D copy()
    {
       return new Ramp3D(this);
+   }
+
+   @Override
+   public RampPolytope3DView asConvexPolytope()
+   {
+      if (polytopeView == null)
+         polytopeView = new RampPolytope3D(this);
+      return polytopeView;
    }
 
    /**

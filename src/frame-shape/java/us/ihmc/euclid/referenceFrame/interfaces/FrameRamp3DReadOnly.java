@@ -64,7 +64,11 @@ public interface FrameRamp3DReadOnly extends Ramp3DReadOnly, FrameShape3DReadOnl
 
    /** {@inheritDoc} */
    @Override
-   default FrameVector3DBasics getRampSurfaceNormal()
+   FrameRampPolytope3DView asConvexPolytope();
+
+   /** {@inheritDoc} */
+   @Override
+   default FrameVector3DReadOnly getRampSurfaceNormal()
    {
       FrameVector3D surfaceNormal = new FrameVector3D();
       getRampSurfaceNormal(surfaceNormal);

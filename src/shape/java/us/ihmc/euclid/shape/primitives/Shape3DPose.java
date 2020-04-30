@@ -7,15 +7,15 @@ import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
 import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
-import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 /**
@@ -28,62 +28,9 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
    /** The orientation part. */
-   private final RotationMatrix shapeOrientation = new RotationMatrix()
-   {
-      @Override
-      public void setUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-      {
-         super.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-         notifyChangeListeners();
-      };
-
-      @Override
-      public void set(RotationMatrixReadOnly other)
-      {
-         super.set(other);
-         notifyChangeListeners();
-      };
-
-      @Override
-      public void transpose()
-      {
-         super.transpose();
-         notifyChangeListeners();
-      };
-   };
+   private final RotationMatrixBasics shapeOrientation = EuclidCoreFactories.newObservableRotationMatrixBasics(this::notifyChangeListeners, null);
    /** The position part. */
-   private final Point3D shapePosition = new Point3D()
-   {
-      @Override
-      public void setX(double x)
-      {
-         if (x != getX())
-         {
-            super.setX(x);
-            notifyChangeListeners();
-         }
-      };
-
-      @Override
-      public void setY(double y)
-      {
-         if (y != getY())
-         {
-            super.setY(y);
-            notifyChangeListeners();
-         }
-      };
-
-      @Override
-      public void setZ(double z)
-      {
-         if (z != getZ())
-         {
-            super.setZ(z);
-            notifyChangeListeners();
-         }
-      };
-   };
+   private final Point3DBasics shapePosition = EuclidCoreFactories.newObservablePoint3DBasics((axis, newValue) -> notifyChangeListeners(), null);
 
    /** Vector linked to the components of the x-axis unit-vector. */
    private final Vector3DReadOnly xAxis = newLinkedVector3DReadOnly(shapeOrientation::getM00, shapeOrientation::getM10, shapeOrientation::getM20);
@@ -129,14 +76,14 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
 
    /** {@inheritDoc} */
    @Override
-   public RotationMatrix getShapeOrientation()
+   public RotationMatrixBasics getShapeOrientation()
    {
       return shapeOrientation;
    }
 
    /** {@inheritDoc} */
    @Override
-   public Point3D getShapePosition()
+   public Point3DBasics getShapePosition()
    {
       return shapePosition;
    }
@@ -176,7 +123,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
     *
     * @param listeners the listeners to register.
     */
-   public void addChangeListeners(List<Shape3DChangeListener> listeners)
+   public void addChangeListeners(List<? extends Shape3DChangeListener> listeners)
    {
       for (int i = 0; i < listeners.size(); i++)
       {

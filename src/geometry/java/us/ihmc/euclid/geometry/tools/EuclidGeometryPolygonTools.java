@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import us.ihmc.euclid.geometry.Bound;
 import us.ihmc.euclid.geometry.interfaces.Vertex2DSupplier;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -40,40 +41,6 @@ public class EuclidGeometryPolygonTools
 {
    private static final Random random = new Random();
    static final double EPSILON = 1.0e-7;
-
-   /**
-    * Human readable enum that helps defining search criteria for some of the search methods in this
-    * tool class.
-    *
-    * @author Sylvain Bertrand
-    */
-   public static enum Bound
-   {
-      /**
-       * Refers to lower values, i.e. towards -&infin;.
-       */
-      MIN
-      {
-         @Override
-         boolean isFirstBetter(double first, double second)
-         {
-            return first < second;
-         }
-      },
-      /**
-       * Refers to higher values, i.e. towards +&infin;.
-       */
-      MAX
-      {
-         @Override
-         boolean isFirstBetter(double first, double second)
-         {
-            return first > second;
-         }
-      };
-
-      abstract boolean isFirstBetter(double first, double second);
-   }
 
    private EuclidGeometryPolygonTools()
    {
@@ -503,6 +470,142 @@ public class EuclidGeometryPolygonTools
          normalToPack.negate();
 
       return true;
+   }
+
+   /**
+    * Determines if the point is inside the convex polygon given the tolerance {@code epsilon}.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * It is equivalent to performing the test against the polygon shrunk by {@code Math.abs(epsilon)}
+    * if {@code epsilon < 0.0}, or against the polygon enlarged by {@code epsilon} if
+    * {@code epsilon > 0.0}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code numberOfVertices < 3}, this method returns {@code false}.
+    * </ul>
+    *
+    * @param pointX           the x-coordinate of the query.
+    * @param pointY           the y-coordinate of the query.
+    * @param convexPolygon2D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
+    *                         convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the query is considered to be inside the polygon, {@code false}
+    *         otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *                                  of the given list of vertices.
+    */
+   public static boolean isPoint2DInsideConvexPolygon2D(double pointX, double pointY, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                        boolean clockwiseOrdered)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return false;
+
+      if (numberOfVertices == 1)
+      {
+         Point2DReadOnly vertex = convexPolygon2D.get(0);
+         return pointX == vertex.getX() && pointY == vertex.getY();
+      }
+
+      Point2DReadOnly edgeStart = convexPolygon2D.get(0);
+      Point2DReadOnly edgeEnd = convexPolygon2D.get(1);
+
+      if (numberOfVertices == 2)
+      {
+         // Quick check with the end-points
+         if (pointX == edgeStart.getX() && pointY == edgeStart.getY())
+            return true;
+         if (pointX == edgeEnd.getX() && pointY == edgeEnd.getY())
+            return true;
+
+         // Check first that the query is inside the bounding box containing the edge.
+         if (edgeStart.getX() < edgeEnd.getX())
+         {
+            if (pointX < edgeStart.getX() || pointX > edgeEnd.getX())
+               return false;
+         }
+         else
+         {
+            if (pointX < edgeEnd.getX() || pointX > edgeStart.getX())
+               return false;
+         }
+
+         if (edgeStart.getY() < edgeEnd.getY())
+         {
+            if (pointY < edgeStart.getY() || pointY > edgeEnd.getY())
+               return false;
+         }
+         else
+         {
+            if (pointY < edgeEnd.getY() || pointY > edgeStart.getY())
+               return false;
+         }
+
+         double dx = pointX - edgeStart.getX();
+         double dy = pointY - edgeStart.getY();
+         double edgeDirectionX = edgeEnd.getX() - edgeStart.getX();
+         double edgeDirectionY = edgeEnd.getY() - edgeStart.getY();
+         double crossProduct = edgeDirectionY * dy - dx * edgeDirectionX;
+         return crossProduct == 0.0;
+      }
+
+      if (!isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, !clockwiseOrdered))
+         return false;
+
+      for (int index = 1; index < numberOfVertices; index++)
+      {
+         edgeStart = edgeEnd;
+         edgeEnd = convexPolygon2D.get(next(index, numberOfVertices));
+
+         if (!isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, !clockwiseOrdered))
+            return false;
+      }
+
+      return true;
+   }
+
+   /**
+    * Determines if the point is inside the convex polygon given the tolerance {@code epsilon}.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon.
+    * </p>
+    * <p>
+    * It is equivalent to performing the test against the polygon shrunk by {@code Math.abs(epsilon)}
+    * if {@code epsilon < 0.0}, or against the polygon enlarged by {@code epsilon} if
+    * {@code epsilon > 0.0}.
+    * </p>
+    * <p>
+    * Edge cases:
+    * <ul>
+    * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
+    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0} or
+    * if the query is at a distance from the polygon's only vertex that is greater than
+    * {@code epsilon}, returns {@code true} otherwise.
+    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0} or
+    * if the query is at a distance from the polygon's only edge that is greater than {@code epsilon},
+    * returns {@code true} otherwise.
+    * </ul>
+    *
+    * @param point            the coordinates of the query. Not modified.
+    * @param convexPolygon2D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
+    *                         convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param clockwiseOrdered whether the vertices are clockwise or counter-clockwise ordered.
+    * @return {@code true} if the query is considered to be inside the polygon, {@code false}
+    *         otherwise.
+    * @throws IllegalArgumentException if {@code numberOfVertices} is negative or greater than the size
+    *                                  of the given list of vertices.
+    */
+   public static boolean isPoint2DInsideConvexPolygon2D(Point2DReadOnly point, List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices,
+                                                        boolean clockwiseOrdered)
+   {
+      return isPoint2DInsideConvexPolygon2D(point.getX(), point.getY(), convexPolygon2D, numberOfVertices, clockwiseOrdered);
    }
 
    /**
@@ -968,6 +1071,9 @@ public class EuclidGeometryPolygonTools
                                                                    lineSegmentStart.getY(),
                                                                    lineSegmentDx,
                                                                    lineSegmentDy);
+         if (Double.isInfinite(lambda))
+            lambda = 0.0; // edge and segment are collinear, let's set the intersection to the start of the edge.
+
          if (Double.isNaN(lambda))
             continue;
 
@@ -2300,6 +2406,85 @@ public class EuclidGeometryPolygonTools
       Point2DReadOnly edgeStart = convexPolygon2D.get(edgeIndex);
       Point2DReadOnly edgeEnd = convexPolygon2D.get(next(edgeIndex, numberOfVertices));
       return isPoint2DOnSideOfLine2D(observerX, observerY, edgeStart, edgeEnd, clockwiseOrdered);
+   }
+
+   /**
+    * Determines if the given convex polygon is a concyclic polygon, i.e. there exists a unique circle
+    * that intersects with all the polygon's vertices.
+    * <p>
+    * WARNING: This method assumes that the given vertices already form a convex polygon which vertices
+    * are stored in successive order, either clockwise or counter-clockwise.
+    * </p>
+    * <p>
+    * Edge-cases:
+    * <ul>
+    * <li>An empty convex polygon is not considered a concyclic polygon.
+    * <li>Any convex polygon with 2 or 3 vertices is a concyclic polygon.
+    * <li>If the polygon is degenerate, i.e. all vertices are on a line or equal, this method fails and
+    * returns {@code false}.
+    * </ul>
+    * </p>
+    * 
+    * @param convexPolygon2D  the list containing in [0, {@code numberOfVertices}[ the vertices of the
+    *                         convex polygon. Not modified.
+    * @param numberOfVertices the number of vertices that belong to the convex polygon.
+    * @param epsilon          the tolerance to use during the test. Its unit is meter and represents
+    *                         the maximum allowed deviation from a potential circumscribed circle.
+    * @return {@code true} is the convex polygon is concyclic, {@code false} otherwise.
+    */
+   public static boolean isConvexPolygon2DConcyclic(List<? extends Point2DReadOnly> convexPolygon2D, int numberOfVertices, double epsilon)
+   {
+      checkNumberOfVertices(convexPolygon2D, numberOfVertices);
+
+      if (numberOfVertices == 0)
+         return false;
+
+      if (numberOfVertices <= 3)
+         return true;
+      /*
+       * The main idea here is to evaluate the circumcenter from 3 of the polygon's vertices and then we
+       * simply check that all vertices are at the same distance from that circumcenter. If so, the
+       * polygon is concyclic.
+       */
+      int interval = Math.max(1, numberOfVertices / 3);
+      // We can use any set of 3 vertices, so we use the 3 vertices that are the farthest from each other to reduce numerical errors.
+      Point2DReadOnly A = convexPolygon2D.get(0);
+      int indexB = interval;
+      Point2DReadOnly B = convexPolygon2D.get(indexB);
+      int indexC = 2 * interval;
+      Point2DReadOnly C = convexPolygon2D.get(indexC);
+
+      // See EuclidGeometryTools.triangleCircumcenter(Point2DReadOnly, Point2DReadOnly, Point2DReadOnly, Point2DBasics)
+      double ASquared = A.distanceFromOriginSquared();
+      double BSquared = B.distanceFromOriginSquared();
+      double CSquared = C.distanceFromOriginSquared();
+
+      double ByCy = B.getY() - C.getY();
+      double CxBx = C.getX() - B.getX();
+
+      double a = 0.5 / (A.getX() * ByCy + A.getY() * CxBx + B.getX() * C.getY() - B.getY() * C.getX());
+
+      if (!Double.isFinite(a))
+         return false; // The polytope is degenerate.
+
+      double CSquaredBSqured = CSquared - BSquared;
+      double sx = a * (ASquared * ByCy + A.getY() * CSquaredBSqured + BSquared * C.getY() - B.getY() * CSquared);
+      double sy = a * (-A.getX() * CSquaredBSqured + ASquared * CxBx + B.getX() * CSquared - BSquared * C.getX());
+
+      double distanceSquaredReference = EuclidCoreTools.normSquared(sx - C.getX(), sy - C.getY());
+
+      for (int i = 1; i < numberOfVertices; i++)
+      {
+         if (i == indexB || i == indexC)
+            continue;
+
+         Point2DReadOnly vertex = convexPolygon2D.get(i);
+         double distanceSquared = EuclidCoreTools.normSquared(sx - vertex.getX(), sy - vertex.getY());
+
+         if (!EuclidCoreTools.epsilonEquals(distanceSquaredReference, distanceSquared, epsilon))
+            return false;
+      }
+      return true;
    }
 
    /**

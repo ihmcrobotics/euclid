@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tools;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Function;
@@ -708,6 +709,51 @@ public class EuclidCoreIOTools
       for (int i = 1; i < values.length; i++)
          ret += separator + String.format(format, values[i]);
       return ret;
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given array.
+    * <p>
+    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
+    * can be controlled by defining a custom {@code separator}. For instance, with
+    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
+    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param prefix                  the {@code String} to prepend to the result.
+    * @param suffix                  the {@code String} to append to the result.
+    * @param separator               the {@code String} used to separate elements of the array.
+    * @param array                   the array of elements to get the {@code String} of.
+    * @param elementToStringFunction the {@code Function} used to generate a representative
+    *                                {@code String} for each element.
+    * @return the representative {@code String}.
+    */
+   public static <T> String getArrayString(String prefix, String suffix, String separator, T[] array, Function<T, String> elementToStringFunction)
+   {
+      if (array == null)
+         return "null";
+      else
+         return getCollectionString(prefix, suffix, separator, Arrays.asList(array), elementToStringFunction);
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given array.
+    * <p>
+    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
+    * can be controller by defining a custom {@code separator}. For instance, with
+    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
+    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param separator               the {@code String} used to separate elements of the array.
+    * @param array                   the array of elements to get the {@code String} of.
+    * @param elementToStringFunction the {@code Function} used to generate a representative
+    *                                {@code String} for each element.
+    * @return the representative {@code String}.
+    */
+   public static <T> String getArrayString(String separator, T[] array, Function<T, String> elementToStringFunction)
+   {
+      return getCollectionString(separator, Arrays.asList(array), elementToStringFunction);
    }
 
    /**

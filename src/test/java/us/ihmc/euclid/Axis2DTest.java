@@ -1,120 +1,98 @@
 package us.ihmc.euclid;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 
 public class Axis2DTest
 {
-   private double allowedDelta = 1e-7;
-   private Axis2D xAxis = Axis2D.X, yAxis = Axis2D.Y;
-   private boolean touchedX, touchedY;
-   private Random random = new Random(12345);
-   private Vector2D randomVector = new Vector2D(random.nextDouble(), random.nextDouble());
+   private static final int ITERATIONS = 1000;
 
    @Test
    public void testOrdinals()
    {
-      assertEquals(xAxis.ordinal(), 0, allowedDelta);
-      assertEquals(yAxis.ordinal(), 1, allowedDelta);
+      assertEquals(Axis2D.X.ordinal(), 0);
+      assertEquals(Axis2D.Y.ordinal(), 1);
    }
 
    @Test
-   public void testAxisValuesGetter()
+   public void testDot()
    {
-      assertEquals(2, Axis2D.values().length);
+      Random random = new Random(3249783);
 
-      touchedX = false;
-      touchedY = false;
-
-      for (Axis2D axis : Axis2D.values())
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         switch (axis)
+         for (int j = 0; j < 2; j++)
          {
-            case X:
-               touchedX = true;
-               break;
-            case Y:
-               touchedY = true;
-               break;
+            Axis2D axis = Axis2D.values[j];
+            Vector2D axisVector = new Vector2D(axis);
+            Vector2D otherVector = EuclidCoreRandomTools.nextVector2D(random);
+
+            assertEquals(axisVector.dot(otherVector), axis.dot(otherVector));
          }
       }
-
-      assertTrue(touchedX);
-      assertTrue(touchedY);
    }
 
    @Test
-   public void testAxisValuesField()
+   public void testExtract()
    {
-      assertEquals(2, Axis2D.values.length);
+      Random random = new Random(436566);
 
-      touchedX = false;
-      touchedY = false;
-
-      for (Axis2D axis : Axis2D.values)
+      for (int i = 0; i < ITERATIONS; i++)
       {
-         switch (axis)
+         Point2D point2D = EuclidCoreRandomTools.nextPoint2D(random);
+         assertEquals(point2D.getX(), Axis2D.X.extract(point2D));
+         assertEquals(point2D.getY(), Axis2D.Y.extract(point2D));
+
+         for (int j = 0; j < 2; j++)
          {
-            case X:
-               touchedX = true;
-               break;
-            case Y:
-               touchedY = true;
-               break;
+            assertEquals(point2D.getElement(j), Axis2D.values[j].extract(point2D));
          }
       }
-
-      assertTrue(touchedX);
-      assertTrue(touchedY);
    }
 
    @Test
-   public void testAxisVectorsForCorrectValues()
+   public void testInsert()
    {
-      Vector2DReadOnly xAxisVector = xAxis;
-      Vector2DReadOnly yAxisVector = yAxis;
+      Random random = new Random(436566);
 
-      assertTrue(xAxisVector != null);
-      assertTrue(yAxisVector != null);
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point2D original = EuclidCoreRandomTools.nextPoint2D(random);
+         Point2D actual = new Point2D(original);
+         Point2D expected = new Point2D(original);
+         double newValue = random.nextDouble();
 
-      assertEquals(1.0, xAxisVector.getX(), allowedDelta);
-      assertEquals(0.0, xAxisVector.getY(), allowedDelta);
-      assertEquals(0.0, yAxisVector.getX(), allowedDelta);
-      assertEquals(1.0, yAxisVector.getY(), allowedDelta);
+         for (int j = 0; j < 2; j++)
+         {
+            Axis2D.values[j].insert(actual, newValue);
+            expected.setElement(j, newValue);
+            assertEquals(expected, actual);
+         }
+      }
    }
 
    @Test
-   public void testAxisSetterWorks()
+   public void testVectorValues()
    {
-      double newXValue = random.nextDouble(), newYValue = random.nextDouble();
+      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(1, 0), Axis2D.X, 0.0);
+      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(0, 1), Axis2D.Y, 0.0);
 
-      Axis2D.set(randomVector, Axis2D.X, newXValue);
-      Axis2D.set(randomVector, Axis2D.Y, newYValue);
-
-      assertEquals(newXValue, randomVector.getX(), allowedDelta);
-      assertEquals(newYValue, randomVector.getY(), allowedDelta);
+      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(-1, 0), Axis2D.X.negated(), 0.0);
+      EuclidCoreTestTools.assertTuple2DEquals(new Vector2D(0, -1), Axis2D.Y.negated(), 0.0);
    }
 
    @Test
-   public void testAxisGetterWorks()
+   public void testOther()
    {
-      assertEquals(randomVector.getX(), Axis2D.get(randomVector, Axis2D.X), allowedDelta);
-      assertEquals(randomVector.getY(), Axis2D.get(randomVector, Axis2D.Y), allowedDelta);
-   }
-
-   @Test
-   public void testClockwiseAxisGetters()
-   {
-      assertEquals(Axis2D.Y, Axis2D.X.getNextClockwiseAxis());
-      assertEquals(Axis2D.X, Axis2D.Y.getNextClockwiseAxis());
-      assertEquals(Axis2D.Y, Axis2D.X.getNextCounterClockwiseAxis());
-      assertEquals(Axis2D.X, Axis2D.Y.getNextCounterClockwiseAxis());
+      assertEquals(Axis2D.X.other(), Axis2D.Y);
+      assertEquals(Axis2D.Y.other(), Axis2D.X);
    }
 }

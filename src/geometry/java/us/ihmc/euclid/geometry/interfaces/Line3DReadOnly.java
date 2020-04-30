@@ -290,6 +290,7 @@ public interface Line3DReadOnly
     * @param other   the line to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>epsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    default boolean isCollinear(Line3DReadOnly other, double epsilon)
    {
@@ -303,6 +304,7 @@ public interface Line3DReadOnly
     * @param angleEpsilon    the tolerance of the comparison for angle.
     * @param distanceEpsilon the tolerance of the comparison for distance.
     * @return {@code true} if the lines are collinear, {@code false} otherwise.
+    * @throws IllegalArgumentException if <tt>angleEpsilon</tt> &notin; [0; <i>pi</i>/2]
     */
    default boolean isCollinear(Line3DReadOnly other, double angleEpsilon, double distanceEpsilon)
    {

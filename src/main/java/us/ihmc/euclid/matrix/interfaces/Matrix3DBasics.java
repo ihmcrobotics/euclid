@@ -5,12 +5,7 @@ import us.ihmc.euclid.interfaces.Transformable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
-import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
-import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 /**
  * Write and read interface for generic matrix 3D.
@@ -205,16 +200,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    }
 
    /**
-    * Orthonormalization of this matrix using the
-    * <a href="https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process"> Gram-Schmidt method</a>.
-    */
-   @Override
-   default void normalize()
-   {
-      Matrix3DTools.normalize(this);
-   }
-
-   /**
     * Negates each component of this matrix.
     */
    default void negate()
@@ -324,18 +309,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    {
       set(other);
       invert();
-   }
-
-   /**
-    * Sets this matrix to equal the other matrix and then normalizes this, see {@link #normalize()}.
-    *
-    * @param other the other matrix used to update this matrix. Not modified.
-    */
-   @Override
-   default void setAndNormalize(Matrix3DReadOnly other)
-   {
-      set(other);
-      normalize();
    }
 
    /**
@@ -1398,40 +1371,4 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    {
       Matrix3DTools.multiplyInvertLeft(other, this, this);
    }
-
-   /** {@inheritDoc} */
-   @Override
-   default void transform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
-   {
-      Matrix3DTools.transform(this, matrixOriginal, matrixTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void inverseTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
-   {
-      Matrix3DTools.inverseTransform(this, tupleOriginal, tupleTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void inverseTransform(Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
-   {
-      Matrix3DTools.inverseTransform(this, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void inverseTransform(Vector4DReadOnly vectorOriginal, Vector4DBasics vectorTransformed)
-   {
-      Matrix3DTools.inverseTransform(this, vectorOriginal, vectorTransformed);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   default void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
-   {
-      Matrix3DTools.inverseTransform(this, matrixOriginal, matrixTransformed);
-   }
-
 }

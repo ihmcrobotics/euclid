@@ -20,6 +20,8 @@ import us.ihmc.euclid.shape.primitives.Ellipsoid3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Ellipsoid3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameEllipsoid3DTest
 {
@@ -27,14 +29,17 @@ public class FrameEllipsoid3DTest
    public void testAPIOverloading()
    {
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
-      tester.assertOverloadingWithFrameObjects(FrameEllipsoid3DReadOnly.class, Ellipsoid3DReadOnly.class, false);
-      tester.assertOverloadingWithFrameObjects(FixedFrameEllipsoid3DBasics.class, Ellipsoid3DBasics.class, false);
 
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
+      signaturesToIgnore.add(new MethodSignature("set", RigidBodyTransformReadOnly.class, Vector3DReadOnly.class));
+      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      tester.assertOverloadingWithFrameObjects(FrameEllipsoid3DReadOnly.class, Ellipsoid3DReadOnly.class, false, 1, methodFilter);
+      tester.assertOverloadingWithFrameObjects(FixedFrameEllipsoid3DBasics.class, Ellipsoid3DBasics.class, false, 1, methodFilter);
+
       signaturesToIgnore.add(new MethodSignature("set", Ellipsoid3D.class));
       signaturesToIgnore.add(new MethodSignature("epsilonEquals", Ellipsoid3D.class, Double.TYPE));
       signaturesToIgnore.add(new MethodSignature("geometricallyEquals", Ellipsoid3D.class, Double.TYPE));
-      Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
+      methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameEllipsoid3D.class, Ellipsoid3D.class, false, 1, methodFilter);
    }
 
