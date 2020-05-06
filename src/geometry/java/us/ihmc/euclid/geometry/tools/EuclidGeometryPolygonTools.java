@@ -478,14 +478,17 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * It is equivalent to performing the test against the polygon shrunk by {@code Math.abs(epsilon)}
-    * if {@code epsilon < 0.0}, or against the polygon enlarged by {@code epsilon} if
-    * {@code epsilon > 0.0}.
-    * </p>
-    * <p>
     * Edge cases:
     * <ul>
-    * <li>if {@code numberOfVertices < 3}, this method returns {@code false}.
+    * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
+    * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single vertex
+    * are exactly equal.
+    * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
+    * polygon single edge.
+    * <li>if the query is exactly equal to one of the polygon vertices, this method returns
+    * {@code true}.
+    * <li>if the query is exactly on one of the polygon's edges, the intent for this method is to
+    * return {@code true} but this scenario is highly sensitive to numerical error.
     * </ul>
     *
     * @param pointX           the x-coordinate of the query.
@@ -555,7 +558,7 @@ public class EuclidGeometryPolygonTools
          return crossProduct == 0.0;
       }
 
-      if (!isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, !clockwiseOrdered))
+      if (isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, clockwiseOrdered))
          return false;
 
       for (int index = 1; index < numberOfVertices; index++)
@@ -563,7 +566,7 @@ public class EuclidGeometryPolygonTools
          edgeStart = edgeEnd;
          edgeEnd = convexPolygon2D.get(next(index, numberOfVertices));
 
-         if (!isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, !clockwiseOrdered))
+         if (isPoint2DOnSideOfLine2D(pointX, pointY, edgeStart, edgeEnd, clockwiseOrdered))
             return false;
       }
 
@@ -576,20 +579,17 @@ public class EuclidGeometryPolygonTools
     * WARNING: This method assumes that the given vertices already form a convex polygon.
     * </p>
     * <p>
-    * It is equivalent to performing the test against the polygon shrunk by {@code Math.abs(epsilon)}
-    * if {@code epsilon < 0.0}, or against the polygon enlarged by {@code epsilon} if
-    * {@code epsilon > 0.0}.
-    * </p>
-    * <p>
     * Edge cases:
     * <ul>
     * <li>if {@code numberOfVertices == 0}, this method returns {@code false}.
-    * <li>if {@code numberOfVertices == 1}, this method returns {@code false} if {@code epsilon < 0} or
-    * if the query is at a distance from the polygon's only vertex that is greater than
-    * {@code epsilon}, returns {@code true} otherwise.
-    * <li>if {@code numberOfVertices == 2}, this method returns {@code false} if {@code epsilon < 0} or
-    * if the query is at a distance from the polygon's only edge that is greater than {@code epsilon},
-    * returns {@code true} otherwise.
+    * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single vertex
+    * are exactly equal.
+    * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
+    * polygon single edge.
+    * <li>if the query is exactly equal to one of the polygon vertices, this method returns
+    * {@code true}.
+    * <li>if the query is exactly on one of the polygon's edges, the intent for this method is to
+    * return {@code true} but this scenario is highly sensitive to numerical error.
     * </ul>
     *
     * @param point            the coordinates of the query. Not modified.
