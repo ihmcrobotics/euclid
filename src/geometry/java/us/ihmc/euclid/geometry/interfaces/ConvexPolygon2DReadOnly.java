@@ -513,7 +513,11 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single vertex
     * are exactly equal.
     * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
-    * polygons single edge.
+    * polygon single edge.
+    * <li>if the query is exactly equal to one of the polygon vertices, this method returns
+    * {@code true}.
+    * <li>if the query is exactly on one of the polygon's edges, the intent for this method is to
+    * return {@code true} but this scenario is highly sensitive to numerical error.
     * </ul>
     *
     * @param x the x-coordinate of the query.
@@ -570,7 +574,11 @@ public interface ConvexPolygon2DReadOnly extends Vertex2DSupplier
     * <li>if {@code numberOfVertices == 1}, this method returns whether the query and the single vertex
     * are exactly equal.
     * <li>if {@code numberOfVertices == 2}, this method returns whether the query is exactly on the
-    * polygons single edge.
+    * polygon single edge.
+    * <li>if the query is exactly equal to one of the polygon vertices, this method returns
+    * {@code true}.
+    * <li>if the query is exactly on one of the polygon's edges, the intent for this method is to
+    * return {@code true} but this scenario is highly sensitive to numerical error.
     * </ul>
     *
     * @param point the query. Not modified.
