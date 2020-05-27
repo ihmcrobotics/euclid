@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
-import org.ejml.dense.row.RandomMatrices_DDRM;
 
 import us.ihmc.euclid.referenceFrame.FrameConvexPolygon2D;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
@@ -64,7 +63,7 @@ public class ReflectionBasedBuilder
       framelessTypeBuilders.put(char[].class, random -> nextCharArray(random));
       framelessTypeBuilders.put(long[].class, random -> random.longs(20, -100, 100).toArray());
 
-      framelessTypeBuilders.put(DMatrix.class, random -> RandomMatrices_DDRM.rectangle(20, 20, random));
+      framelessTypeBuilders.put(DMatrix.class, random -> EuclidCoreRandomTools.nextDMatrixRMaj(random, 20, 20));
    }
 
    /**
