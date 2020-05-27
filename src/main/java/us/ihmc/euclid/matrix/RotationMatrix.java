@@ -1,6 +1,6 @@
 package us.ihmc.euclid.matrix;
 
-import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -108,7 +108,7 @@ public class RotationMatrix implements RotationMatrixBasics, GeometryObject<Rota
     * @param rotationMatrix the other 3D matrix to copy the values from. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
     */
-   public RotationMatrix(DMatrixRMaj rotationMatrix)
+   public RotationMatrix(DMatrix rotationMatrix)
    {
       set(rotationMatrix);
    }

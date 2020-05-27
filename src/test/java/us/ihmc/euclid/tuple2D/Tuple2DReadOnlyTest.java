@@ -126,7 +126,7 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test Tuple2DReadOnly.get(DMatrixRMaj tupleMatrixToPack)
+      { // Test Tuple2DReadOnly.get(DenseMatrix64F tupleMatrixToPack)
          T tuple = createRandomTuple(random);
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -138,7 +138,7 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test Tuple2DReadOnly.get(int startRow, DMatrixRMaj tupleMatrixToPack)
+      { // Test Tuple2DReadOnly.get(int startRow, DenseMatrix64F tupleMatrixToPack)
          T tuple = createRandomTuple(random);
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -150,7 +150,7 @@ public abstract class Tuple2DReadOnlyTest<T extends Tuple2DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test Tuple2DReadOnly.get(int startRow, int startColumn, DMatrixRMaj tupleMatrixToPack)
+      { // Test Tuple2DReadOnly.get(int startRow, int startColumn, DenseMatrix64F tupleMatrixToPack)
          T tuple = createRandomTuple(random);
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)

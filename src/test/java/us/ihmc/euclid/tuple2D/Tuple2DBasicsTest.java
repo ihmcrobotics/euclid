@@ -148,7 +148,7 @@ public abstract class Tuple2DBasicsTest<T extends Tuple2DBasics> extends Tuple2D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix);
+      { // Test set(DMatrix matrix);
          T tuple1 = createEmptyTuple();
          DMatrixRMaj matrix = new DMatrixRMaj(5, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -159,7 +159,7 @@ public abstract class Tuple2DBasicsTest<T extends Tuple2DBasics> extends Tuple2D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix, int startRow);
+      { // Test set(DMatrix matrix, int startRow);
          T tuple1 = createEmptyTuple();
          DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
@@ -170,7 +170,7 @@ public abstract class Tuple2DBasicsTest<T extends Tuple2DBasics> extends Tuple2D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix, int startRow, int column);
+      { // Test set(DMatrix matrix, int startRow, int column);
          T tuple1 = createEmptyTuple();
          DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)

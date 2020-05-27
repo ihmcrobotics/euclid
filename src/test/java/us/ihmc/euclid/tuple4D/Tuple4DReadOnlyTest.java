@@ -193,7 +193,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(DMatrixRMaj tupleMatrixToPack)
+      { // Test get(DMatrix tupleMatrixToPack)
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -206,7 +206,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(int startRow, DMatrixRMaj tupleMatrixToPack)
+      { // Test get(int startRow, DMatrix tupleMatrixToPack)
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -219,7 +219,7 @@ public abstract class Tuple4DReadOnlyTest<T extends Tuple4DReadOnly>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(int startRow, int startColumn, DMatrixRMaj tupleMatrixToPack)
+      { // Test get(int startRow, int startColumn, DMatrix tupleMatrixToPack)
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());

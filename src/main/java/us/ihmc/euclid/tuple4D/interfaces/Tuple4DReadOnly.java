@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tuple4D.interfaces;
 
-import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
@@ -227,7 +227,7 @@ public interface Tuple4DReadOnly
     *
     * @param tupleMatrixToPack the array in which this tuple is stored. Modified.
     */
-   default void get(DMatrixRMaj tupleMatrixToPack)
+   default void get(DMatrix tupleMatrixToPack)
    {
       get(0, 0, tupleMatrixToPack);
    }
@@ -239,7 +239,7 @@ public interface Tuple4DReadOnly
     * @param startRow          the first row index to start writing in the dense-matrix.
     * @param tupleMatrixToPack the column vector in which this tuple is stored. Modified.
     */
-   default void get(int startRow, DMatrixRMaj tupleMatrixToPack)
+   default void get(int startRow, DMatrix tupleMatrixToPack)
    {
       get(startRow, 0, tupleMatrixToPack);
    }
@@ -252,7 +252,7 @@ public interface Tuple4DReadOnly
     * @param column            the column index to write in the dense-matrix.
     * @param tupleMatrixToPack the matrix in which this tuple is stored. Modified.
     */
-   default void get(int startRow, int column, DMatrixRMaj tupleMatrixToPack)
+   default void get(int startRow, int column, DMatrix tupleMatrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, column + 1, tupleMatrixToPack);
       tupleMatrixToPack.unsafe_set(startRow++, column, getX());

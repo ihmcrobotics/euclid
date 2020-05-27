@@ -7,8 +7,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.ejml.data.DMatrixRMaj;
-import org.ejml.dense.row.MatrixFeatures_DDRM;
+import org.ejml.data.DMatrix;
+import org.ejml.ops.MatrixFeatures_D;
 
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -127,9 +127,9 @@ class ReflectionBasedComparer
          }
       }
 
-      if (framelessParameter instanceof DMatrixRMaj && frameParameter instanceof DMatrixRMaj)
+      if (framelessParameter instanceof DMatrix && frameParameter instanceof DMatrix)
       {
-         return MatrixFeatures_DDRM.isEquals((DMatrixRMaj) framelessParameter, (DMatrixRMaj) frameParameter, epsilon);
+         return MatrixFeatures_D.isIdentical((DMatrix) framelessParameter, (DMatrix) frameParameter, epsilon);
       }
 
       if (framelessParameter.getClass().isArray() && frameParameter.getClass().isArray())

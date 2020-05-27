@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
@@ -88,9 +89,9 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test RotationMatrix(DMatrixRMaj rotationMatrix)
+      { // Test RotationMatrix(DMatrix rotationMatrix)
          expectedRotationMatrix = createRandomMatrix(random);
-         DMatrixRMaj rotationMatrixDenseMatrix = new DMatrixRMaj(3, 3);
+         DMatrix rotationMatrixDenseMatrix = new DMatrixRMaj(3, 3);
          expectedRotationMatrix.get(rotationMatrixDenseMatrix);
          actualRotationMatrix = new RotationMatrix(rotationMatrixDenseMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationMatrix, actualRotationMatrix, SMALL_EPS);
@@ -342,12 +343,12 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          }
       }
 
-      { // Test set(DMatrixRMaj matrix)
+      { // Test set(DMatrix matrix)
          for (int i = 0; i < ITERATIONS; i++)
          {
             RotationMatrix actualMatrix = new RotationMatrix();
             RotationMatrix randomRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
-            DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+            DMatrix denseMatrix = new DMatrixRMaj(3, 3);
             for (int row = 0; row < 3; row++)
             {
                for (int column = 0; column < 3; column++)
@@ -368,14 +369,14 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          }
       }
 
-      { // Test set(DMatrixRMaj matrix, int startRow, int startColumn)
+      { // Test set(DMatrix matrix, int startRow, int startColumn)
          for (int i = 0; i < ITERATIONS; i++)
          {
             RotationMatrix actualMatrix = new RotationMatrix();
             RotationMatrix randomRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
             int startRow = random.nextInt(10);
             int startColumn = random.nextInt(10);
-            DMatrixRMaj denseMatrix = new DMatrixRMaj(3 + startRow, 3 + startColumn);
+            DMatrix denseMatrix = new DMatrixRMaj(3 + startRow, 3 + startColumn);
 
             for (int row = 0; row < 3; row++)
             {

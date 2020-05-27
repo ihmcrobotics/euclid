@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.RandomMatrices_DDRM;
 
@@ -63,7 +64,7 @@ public class ReflectionBasedBuilder
       framelessTypeBuilders.put(char[].class, random -> nextCharArray(random));
       framelessTypeBuilders.put(long[].class, random -> random.longs(20, -100, 100).toArray());
 
-      framelessTypeBuilders.put(DMatrixRMaj.class, random -> RandomMatrices_DDRM.rectangle(20, 20, random));
+      framelessTypeBuilders.put(DMatrix.class, random -> RandomMatrices_DDRM.rectangle(20, 20, random));
    }
 
    /**
@@ -227,9 +228,9 @@ public class ReflectionBasedBuilder
          {
             clone[i] = parametersToClone[i];
          }
-         else if (DMatrixRMaj.class.equals(parameterType))
+         else if (DMatrix.class.isAssignableFrom(parameterType))
          {
-            clone[i] = new DMatrixRMaj((DMatrixRMaj) parametersToClone[i]);
+            clone[i] = new DMatrixRMaj((DMatrix) parametersToClone[i]);
          }
          else if (float[].class.equals(parameterType))
          {

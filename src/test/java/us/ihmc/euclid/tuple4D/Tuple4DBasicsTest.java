@@ -6,6 +6,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
@@ -233,8 +234,8 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix);
-         DMatrixRMaj matrix = new DMatrixRMaj(5, 4);
+      { // Test set(DMatrix matrix);
+         DMatrix matrix = new DMatrixRMaj(5, 4);
          tuple2 = createRandomTuple(random);
          tuple2.get(matrix);
          tuple1.set(matrix);
@@ -242,8 +243,8 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix, int startRow);
-         DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
+      { // Test set(DMatrix matrix, int startRow);
+         DMatrix matrix = new DMatrixRMaj(10, 4);
          tuple2 = createRandomTuple(random);
          tuple2.get(5, matrix);
          tuple1.set(5, matrix);
@@ -251,8 +252,8 @@ public abstract class Tuple4DBasicsTest<T extends Tuple4DBasics> extends Tuple4D
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix, int startRow, int column);
-         DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
+      { // Test set(DMatrix matrix, int startRow, int column);
+         DMatrix matrix = new DMatrixRMaj(10, 4);
          tuple2 = createRandomTuple(random);
          tuple2.get(5, 2, matrix);
          tuple1.set(5, 2, matrix);

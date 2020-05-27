@@ -245,7 +245,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix);
+      { // Test set(DMatrix matrix);
          DMatrixRMaj matrix = new DMatrixRMaj(5, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -260,7 +260,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix, int startRow);
+      { // Test set(DMatrix matrix, int startRow);
          DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -275,7 +275,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test set(DMatrixRMaj matrix, int startRow, int column);
+      { // Test set(DMatrix matrix, int startRow, int column);
          DMatrixRMaj matrix = new DMatrixRMaj(10, 4);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -486,7 +486,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(DMatrixRMaj tupleMatrixToPack)
+      { // Test get(DMatrix tupleMatrixToPack)
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -497,7 +497,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(int startRow, DMatrixRMaj tupleMatrixToPack)
+      { // Test get(int startRow, DMatrix tupleMatrixToPack)
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());
@@ -508,7 +508,7 @@ public class UnitVector2DTest extends Vector2DBasicsTest<UnitVector2D>
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test get(int startRow, int startColumn, DMatrixRMaj tupleMatrixToPack)
+      { // Test get(int startRow, int startColumn, DMatrix tupleMatrixToPack)
          DMatrixRMaj matrix = new DMatrixRMaj(10, 5);
          for (int index = 0; index < matrix.getNumElements(); index++)
             matrix.set(index, random.nextDouble());

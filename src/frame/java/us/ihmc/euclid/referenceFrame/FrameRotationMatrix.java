@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
-import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.GeometryObject;
@@ -114,7 +114,7 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
     * @param rotationMatrix the other 3D matrix to copy the values from. Not modified.
     * @throws NotARotationMatrixException if the resulting matrix is not a rotation matrix.
     */
-   public FrameRotationMatrix(ReferenceFrame referenceFrame, DMatrixRMaj rotationMatrix)
+   public FrameRotationMatrix(ReferenceFrame referenceFrame, DMatrix rotationMatrix)
    {
       setIncludingFrame(referenceFrame, rotationMatrix);
    }

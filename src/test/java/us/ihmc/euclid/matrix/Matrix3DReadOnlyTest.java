@@ -7,6 +7,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
@@ -114,7 +115,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
       Random random = new Random(4356L);
       Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
 
-      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+      DMatrix denseMatrix = new DMatrixRMaj(3, 3);
       matrix.get(denseMatrix);
 
       for (int row = 0; row < 3; row++)

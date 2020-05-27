@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
 import org.ejml.interfaces.decomposition.EigenDecomposition_F64;
@@ -569,7 +570,7 @@ public class EuclidPolytopeConstructionTools
          }
       }
 
-      DMatrixRMaj eigenVector = eigenDecomposition.getEigenVector(smallEigenValueIndex);
+      DMatrix eigenVector = eigenDecomposition.getEigenVector(smallEigenValueIndex);
       double newX = eigenVector.get(0, 0);
       double newY = eigenVector.get(1, 0);
       double newZ = eigenVector.get(2, 0);

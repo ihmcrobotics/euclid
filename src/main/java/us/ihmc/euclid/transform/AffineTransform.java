@@ -1,6 +1,6 @@
 package us.ihmc.euclid.transform;
 
-import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.exceptions.NotARotationScaleMatrixException;
@@ -311,7 +311,7 @@ public class AffineTransform
     * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
     *                                          this transform is not a rotation-scale matrix.
     */
-   public void set(DMatrixRMaj matrix)
+   public void set(DMatrix matrix)
    {
       rotationScaleMatrix.set(matrix);
       translationVector.set(0, 3, matrix);
@@ -343,7 +343,7 @@ public class AffineTransform
     * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
     *                                          this transform is not a rotation-scale matrix.
     */
-   public void set(DMatrixRMaj matrix, int startRow, int startColumn)
+   public void set(DMatrix matrix, int startRow, int startColumn)
    {
       rotationScaleMatrix.set(startRow, startColumn, matrix);
       translationVector.set(startRow, startColumn + 3, matrix);
@@ -602,7 +602,7 @@ public class AffineTransform
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
     */
-   public void setRotation(DMatrixRMaj rotationMatrix)
+   public void setRotation(DMatrix rotationMatrix)
    {
       rotationScaleMatrix.setRotation(rotationMatrix);
    }
@@ -1509,7 +1509,7 @@ public class AffineTransform
     *
     * @param matrixToPack the matrix in which this transform is stored. Modified.
     */
-   public void get(DMatrixRMaj matrixToPack)
+   public void get(DMatrix matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(4, 4, matrixToPack);
       rotationScaleMatrix.get(matrixToPack);
@@ -1537,7 +1537,7 @@ public class AffineTransform
     * @param startColumn  the first column index to start writing in {@code matrixToPack}.
     * @param matrixToPack the matrix in which this transform is stored. Modified.
     */
-   public void get(int startRow, int startColumn, DMatrixRMaj matrixToPack)
+   public void get(int startRow, int startColumn, DMatrix matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, startColumn + 4, matrixToPack);
       rotationScaleMatrix.get(startRow, startColumn, matrixToPack);
@@ -1650,7 +1650,7 @@ public class AffineTransform
     * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
     *                             Modified.
     */
-   public void getRotation(DMatrixRMaj rotationMatrixToPack)
+   public void getRotation(DMatrix rotationMatrixToPack)
    {
       rotationScaleMatrix.getRotation(rotationMatrixToPack);
    }
@@ -1795,7 +1795,7 @@ public class AffineTransform
     * @param rotationScaleMatrixToPack the matrix in which the rotation-scale part of this transform is
     *                                  stored. Modified.
     */
-   public void getRotationScale(DMatrixRMaj rotationScaleMatrixToPack)
+   public void getRotationScale(DMatrix rotationScaleMatrixToPack)
    {
       rotationScaleMatrix.get(rotationScaleMatrixToPack);
    }

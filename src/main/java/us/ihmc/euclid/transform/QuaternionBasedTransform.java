@@ -1,6 +1,6 @@
 package us.ihmc.euclid.transform;
 
-import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.interfaces.GeometricallyComparable;
@@ -96,7 +96,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * @param matrix the column vector containing the values of the 7 components of this transform. Not
     *               modified.
     */
-   public QuaternionBasedTransform(DMatrixRMaj matrix)
+   public QuaternionBasedTransform(DMatrix matrix)
    {
       set(matrix);
    }
@@ -246,7 +246,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * @param matrix the column vector containing the values of the 7 components of this transform. Not
     *               modified.
     */
-   public void set(DMatrixRMaj matrix)
+   public void set(DMatrix matrix)
    {
       quaternion.set(matrix);
       translationVector.set(4, matrix);
@@ -340,7 +340,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     *
     * @param matrixToPack the column vector in which this transform is stored. Modified.
     */
-   public void get(DMatrixRMaj matrixToPack)
+   public void get(DMatrix matrixToPack)
    {
       quaternion.get(matrixToPack);
       translationVector.get(4, matrixToPack);
@@ -365,7 +365,7 @@ public class QuaternionBasedTransform implements RigidBodyTransformBasics, Epsil
     * @param column       the column index to write in {@code matrixToPack}.
     * @param matrixToPack the column vector in which this transform is stored. Modified.
     */
-   public void get(int startRow, int column, DMatrixRMaj matrixToPack)
+   public void get(int startRow, int column, DMatrix matrixToPack)
    {
       quaternion.get(startRow, column, matrixToPack);
       translationVector.get(startRow + 4, column, matrixToPack);

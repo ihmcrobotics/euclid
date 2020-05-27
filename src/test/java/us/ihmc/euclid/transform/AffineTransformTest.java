@@ -9,6 +9,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 import org.ejml.dense.row.RandomMatrices_DDRM;
@@ -383,9 +384,9 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
                assertTrue(rigidBodyTransform.getElement(row, column) == actual.getElement(row, column));
       }
 
-      { // Test set(DMatrixRMaj matrix)
+      { // Test set(DMatrix matrix)
          actual.setIdentity();
-         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 4);
+         DMatrix denseMatrix = new DMatrixRMaj(4, 4);
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
@@ -397,11 +398,11 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
       }
 
-      { // Test set(DMatrixRMaj matrix, int startRow, int startColumn)
+      { // Test set(DMatrix matrix, int startRow, int startColumn)
          actual.setIdentity();
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DMatrixRMaj denseMatrix = new DMatrixRMaj(4 + startRow, 4 + startColumn);
+         DMatrix denseMatrix = new DMatrixRMaj(4 + startRow, 4 + startColumn);
          for (int row = 0; row < 4; row++)
          {
             for (int column = 0; column < 4; column++)
@@ -681,9 +682,9 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTranslation, EPS);
       }
 
-      { // Test setRotation(DMatrixRMaj matrix)
+      { // Test setRotation(DMatrix matrix)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+         DMatrix denseMatrix = new DMatrixRMaj(3, 3);
          rotationMatrix.get(denseMatrix);
          transform.getRotationScale(expectedRotationScale);
          expectedRotationScale.setRotation(rotationMatrix);
@@ -1911,20 +1912,20 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          EuclidCoreTestTools.assertTuple3DEquals(rigidBodyTransform.getTranslation(), transform.getTranslationVector(), EPS);
       }
 
-      { // Test get(DMatrixRMaj matrixToPack)
+      { // Test get(DMatrix matrixToPack)
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
-         DMatrixRMaj denseMatrix = RandomMatrices_DDRM.rectangle(4, 4, random);
+         DMatrix denseMatrix = RandomMatrices_DDRM.rectangle(4, 4, random);
          transform.get(denseMatrix);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
                assertTrue(denseMatrix.get(row, column) == transform.getElement(row, column));
       }
 
-      { // Test get(DMatrixRMaj matrixToPack, int startRow, int startColumn)
+      { // Test get(DMatrix matrixToPack, int startRow, int startColumn)
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DMatrixRMaj denseMatrix = RandomMatrices_DDRM.rectangle(4 + startRow, 4 + startColumn, random);
+         DMatrix denseMatrix = RandomMatrices_DDRM.rectangle(4 + startRow, 4 + startColumn, random);
          transform.get(startRow, startColumn, denseMatrix);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
@@ -1989,7 +1990,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
                assertTrue(rotationMatrix.getElement(row, column) == transform.getRotationMatrix().getElement(row, column));
       }
 
-      { // Test getRotation(DMatrixRMaj matrixToPack)
+      { // Test getRotation(DMatrix matrixToPack)
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          transform.getRotation(denseMatrix);
@@ -2070,7 +2071,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
                assertTrue(rotationScaleMatrix.getElement(row, column) == transform.getElement(row, column));
       }
 
-      { // Test getRotationScale(DMatrixRMaj matrixToPack)
+      { // Test getRotationScale(DMatrix matrixToPack)
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
          transform.getRotationScale(denseMatrix);

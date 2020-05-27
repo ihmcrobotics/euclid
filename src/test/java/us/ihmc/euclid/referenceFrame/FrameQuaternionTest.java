@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
@@ -112,10 +113,10 @@ public final class FrameQuaternionTest extends FrameQuaternionReadOnlyTest<Frame
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Test FrameQuaternion(ReferenceFrame referenceFrame, DMatrixRMaj matrix)
+      { // Test FrameQuaternion(ReferenceFrame referenceFrame, DMatrix matrix)
          ReferenceFrame randomFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
-         DMatrixRMaj denseMatrix = new DMatrixRMaj(4, 1);
+         DMatrix denseMatrix = new DMatrixRMaj(4, 1);
          randomQuaternion.get(denseMatrix);
          FrameQuaternion frameQuaternion = new FrameQuaternion(randomFrame, denseMatrix);
          assertTrue(frameQuaternion.getReferenceFrame() == randomFrame);

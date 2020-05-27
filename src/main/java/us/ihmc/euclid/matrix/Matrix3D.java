@@ -1,6 +1,6 @@
 package us.ihmc.euclid.matrix;
 
-import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
@@ -66,7 +66,7 @@ public class Matrix3D implements Matrix3DBasics, GeometryObject<Matrix3D>
     *
     * @param matrix the dense-matrix containing the values for this matrix. Not modified.
     */
-   public Matrix3D(DMatrixRMaj matrix)
+   public Matrix3D(DMatrix matrix)
    {
       set(matrix);
    }
