@@ -12,7 +12,6 @@ import java.util.Random;
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
-import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -1914,7 +1913,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
       { // Test get(DMatrix matrixToPack)
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
-         DMatrix denseMatrix = RandomMatrices_DDRM.rectangle(4, 4, random);
+         DMatrix denseMatrix = EuclidCoreRandomTools.nextDMatrixRMaj(random, 4, 4);
          transform.get(denseMatrix);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)
@@ -1925,7 +1924,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          int startRow = random.nextInt(10);
          int startColumn = random.nextInt(10);
-         DMatrix denseMatrix = RandomMatrices_DDRM.rectangle(4 + startRow, 4 + startColumn, random);
+         DMatrix denseMatrix = EuclidCoreRandomTools.nextDMatrixRMaj(random, 4 + startRow, 4 + startColumn);
          transform.get(startRow, startColumn, denseMatrix);
          for (int row = 0; row < 4; row++)
             for (int column = 0; column < 4; column++)

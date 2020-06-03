@@ -12,7 +12,6 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 import org.ejml.data.DMatrix;
-import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -323,7 +322,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DMatrix tupleDenseMatrix)
-         DMatrix input = RandomMatrices_DDRM.rectangle(random.nextInt(20), random.nextInt(20), random);
+         DMatrix input = EuclidCoreRandomTools.nextDMatrixRMaj(random, random.nextInt(20), random.nextInt(20));
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomFrameTuple(random, initialFrame);
 
@@ -360,7 +359,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
       for (int i = 0; i < ITERATIONS; i++)
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DMatrix tupleDenseMatrix)
          int startRow = random.nextInt(10);
-         DMatrix input = RandomMatrices_DDRM.rectangle(random.nextInt(20), random.nextInt(20), random);
+         DMatrix input = EuclidCoreRandomTools.nextDMatrixRMaj(random, random.nextInt(20), random.nextInt(20));
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomFrameTuple(random, initialFrame);
 
@@ -398,7 +397,7 @@ public abstract class FrameTuple4DBasicsTest<F extends FrameTuple4DBasics> exten
       { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DMatrix tupleDenseMatrix)
          int startRow = random.nextInt(10);
          int column = random.nextInt(10);
-         DMatrix input = RandomMatrices_DDRM.rectangle(random.nextInt(20), random.nextInt(20), random);
+         DMatrix input = EuclidCoreRandomTools.nextDMatrixRMaj(random, random.nextInt(20), random.nextInt(20));
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomFrameTuple(random, initialFrame);
 
