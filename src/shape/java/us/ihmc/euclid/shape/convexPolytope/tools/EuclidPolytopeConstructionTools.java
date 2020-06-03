@@ -535,8 +535,7 @@ public class EuclidPolytopeConstructionTools
     *                           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
-   public static boolean updateFace3DNormal(EigenDecomposition_F64<DMatrixRMaj> eigenDecomposition, DMatrixRMaj covarianceMatrix,
-                                            Vector3DBasics normalToUpdate)
+   public static boolean updateFace3DNormal(EigenDecomposition_F64<DMatrixRMaj> eigenDecomposition, DMatrixRMaj covarianceMatrix, Vector3DBasics normalToUpdate)
    {
       if (!eigenDecomposition.decompose(covarianceMatrix))
          return false;

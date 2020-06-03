@@ -182,8 +182,7 @@ public interface Matrix3DReadOnly
    /**
     * Packs the coefficients of this matrix into a matrix.
     *
-    * @param matrixToPack the matrix in which the coefficients of this matrix are stored.
-    *                     Modified.
+    * @param matrixToPack the matrix in which the coefficients of this matrix are stored. Modified.
     */
    default void get(DMatrix matrixToPack)
    {
@@ -206,8 +205,7 @@ public interface Matrix3DReadOnly
     *
     * @param startRow     the first row index to start writing in the matrix.
     * @param startColumn  the first column index to start writing in the matrix.
-    * @param matrixToPack the matrix in which the coefficients of this matrix are stored.
-    *                     Modified.
+    * @param matrixToPack the matrix in which the coefficients of this matrix are stored. Modified.
     */
    default void get(int startRow, int startColumn, DMatrix matrixToPack)
    {

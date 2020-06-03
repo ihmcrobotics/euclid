@@ -1,6 +1,5 @@
 package us.ihmc.euclid.matrix.interfaces;
 
-
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.Clearable;
