@@ -180,9 +180,9 @@ public interface Matrix3DReadOnly
    }
 
    /**
-    * Packs the coefficients of this matrix into a dense-matrix.
+    * Packs the coefficients of this matrix into a matrix.
     *
-    * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
+    * @param matrixToPack the matrix in which the coefficients of this matrix are stored.
     *                     Modified.
     */
    default void get(DMatrix matrixToPack)
@@ -201,12 +201,12 @@ public interface Matrix3DReadOnly
    }
 
    /**
-    * Packs the coefficients of this matrix into a dense-matrix given index offsets for the row and the
+    * Packs the coefficients of this matrix into a matrix given index offsets for the row and the
     * column.
     *
-    * @param startRow     the first row index to start writing in the dense-matrix.
-    * @param startColumn  the first column index to start writing in the dense-matrix.
-    * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
+    * @param startRow     the first row index to start writing in the matrix.
+    * @param startColumn  the first column index to start writing in the matrix.
+    * @param matrixToPack the matrix in which the coefficients of this matrix are stored.
     *                     Modified.
     */
    default void get(int startRow, int startColumn, DMatrix matrixToPack)

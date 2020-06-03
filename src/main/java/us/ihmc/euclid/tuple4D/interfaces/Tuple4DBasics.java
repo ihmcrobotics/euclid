@@ -164,7 +164,7 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
     * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
     * column vector starting to read from {@code startRow}.
     *
-    * @param startRow the first row index to start reading in the dense-matrix.
+    * @param startRow the first row index to start reading in the matrix.
     * @param matrix   the column vector containing the new values for this tuple's components. Not
     *                 modified.
     */
@@ -178,8 +178,8 @@ public interface Tuple4DBasics extends Tuple4DReadOnly, Clearable, Transformable
     * Sets this tuple's components {@code x}, {@code y}, {@code z}, {@code s} in order from the given
     * matrix starting to read from {@code startRow} at the column index {@code column}.
     *
-    * @param startRow the first row index to start reading in the dense-matrix.
-    * @param column   the column index to read in the dense-matrix.
+    * @param startRow the first row index to start reading in the matrix.
+    * @param column   the column index to read in the matrix.
     * @param matrix   the column vector containing the new values for this tuple's components. Not
     *                 modified.
     */

@@ -1647,7 +1647,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       transform.transform(vectorActual);
       EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
 
-      // Try with dense-matrix
+      // Try with EJML matrix
       DMatrixRMaj transformDenseMatrix = new DMatrixRMaj(4, 4);
       transform.get(transformDenseMatrix);
       DMatrixRMaj vectorOriginalDenseMatrix = new DMatrixRMaj(4, 1);

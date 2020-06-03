@@ -222,7 +222,7 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in a column vector starting from
     * {@code startRow}.
     *
-    * @param startRow          the first row index to start writing in the dense-matrix.
+    * @param startRow          the first row index to start writing in the matrix.
     * @param tupleMatrixToPack the column vector in which this tuple is stored. Modified.
     */
    default void get(int startRow, DMatrix tupleMatrixToPack)
@@ -234,8 +234,8 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in a column vector starting from
     * {@code startRow} at the column index {@code column}.
     *
-    * @param startRow          the first row index to start writing in the dense-matrix.
-    * @param column            the column index to write in the dense-matrix.
+    * @param startRow          the first row index to start writing in the matrix.
+    * @param column            the column index to write in the matrix.
     * @param tupleMatrixToPack the matrix in which this tuple is stored. Modified.
     */
    default void get(int startRow, int column, DMatrix tupleMatrixToPack)

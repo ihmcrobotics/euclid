@@ -95,7 +95,7 @@ public class FrameQuaternion implements FrameQuaternionBasics, GeometryObject<Fr
     * </p>
     *
     * @param referenceFrame the initial frame for this frame quaternion.
-    * @param matrix         the dense-matrix containing this quaternion's components. Not modified.
+    * @param matrix         the matrix containing this quaternion's components. Not modified.
     */
    public FrameQuaternion(ReferenceFrame referenceFrame, DMatrix matrix)
    {

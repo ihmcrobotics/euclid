@@ -108,10 +108,10 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    }
 
    /**
-    * Copies the values in the given dense-matrix into this matrix.
+    * Copies the values in the given matrix into this matrix.
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
+    * @param matrix         the matrix containing the new values for this matrix. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, DMatrix matrix)
    {
@@ -120,13 +120,13 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    }
 
    /**
-    * Copies the values in the given dense-matrix into this matrix given index offsets for the row and
+    * Copies the values in the given matrix into this matrix given index offsets for the row and
     * column.
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param startRow       the first row index to start reading from in the dense-matrix.
-    * @param startColumn    the first column index to start reading from in the dense-matrix.
-    * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
+    * @param startRow       the first row index to start reading from in the given matrix.
+    * @param startColumn    the first column index to start reading from in the given matrix.
+    * @param matrix         the matrix containing the new values for this matrix. Not modified.
     */
    default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int startColumn, DMatrix matrix)
    {

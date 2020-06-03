@@ -148,7 +148,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * to read from {@code startRow} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param startRow       the first row index to start reading in the dense-matrix.
+    * @param startRow       the first row index to start reading in the matrix.
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */
@@ -164,8 +164,8 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param startRow       the first row index to start reading in the dense-matrix.
-    * @param column         the column index to read in the dense-matrix.
+    * @param startRow       the first row index to start reading in the matrix.
+    * @param column         the column index to read in the matrix.
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */

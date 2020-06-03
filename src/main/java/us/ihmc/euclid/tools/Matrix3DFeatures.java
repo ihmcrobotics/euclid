@@ -60,7 +60,7 @@ public class Matrix3DFeatures
    }
 
    /**
-    * Asserts that the given dense-matrix is a rotation matrix.
+    * Asserts that the given matrix is a rotation matrix.
     * <p>
     * The given matrix is a rotation matrix if:
     * <ul>

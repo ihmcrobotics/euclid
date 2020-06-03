@@ -77,7 +77,7 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
     * The quaternion is immediately normalized.
     * </p>
     *
-    * @param matrix the dense-matrix containing this quaternion's components. Not modified.
+    * @param matrix the matrix containing this quaternion's components. Not modified.
     */
    public Quaternion(DMatrix matrix)
    {
