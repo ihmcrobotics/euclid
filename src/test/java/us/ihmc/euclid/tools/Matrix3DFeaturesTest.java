@@ -9,9 +9,9 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.CommonOps;
-import org.ejml.ops.MatrixDimensionException;
+import org.ejml.MatrixDimensionException;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
@@ -150,19 +150,19 @@ public class Matrix3DFeaturesTest
          testAllCheckIfRotationMatrixAndIsRotationMatrixMethods(matrix, false);
       }
 
-      // Also test the check on the DenseMatrix64F dimension
-      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(2, 3)));
-      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 2)));
-      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(4, 3)));
-      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 4)));
+      // Also test the check on the DMatrixRMaj dimension
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(2, 3)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(3, 2)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(4, 3)));
+      assertThrows(MatrixDimensionException.class, () -> Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(3, 4)));
    }
 
    private void testAllCheckIfRotationMatrixAndIsRotationMatrixMethods(Matrix3DReadOnly matrix, boolean isRotationMatrix)
    {
       Matrix3D matrixCopy = new Matrix3D(matrix);
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
       matrix.get(denseMatrix);
-      DenseMatrix64F denseMatrixCopy = new DenseMatrix64F(denseMatrix);
+      DMatrixRMaj denseMatrixCopy = new DMatrixRMaj(denseMatrix);
       double[] matrixArray = new double[9];
       matrix.get(matrixArray);
       double[] matrixArrayCopy = new double[9];
@@ -351,10 +351,10 @@ public class Matrix3DFeaturesTest
    @Test
    public void testCheckMatrixSize() throws Exception
    {
-      // Also test the check on the DenseMatrix64F dimension
+      // Also test the check on the DMatrixRMaj dimension
       try
       {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(2, 3));
+         Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(2, 3));
          fail("Should have got a RuntimeException for providing a matrix with wrong size.");
       }
       catch (RuntimeException e)
@@ -364,7 +364,7 @@ public class Matrix3DFeaturesTest
 
       try
       {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 2));
+         Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(3, 2));
          fail("Should have got a RuntimeException for providing a matrix with wrong size.");
       }
       catch (RuntimeException e)
@@ -374,7 +374,7 @@ public class Matrix3DFeaturesTest
 
       try
       {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(4, 3));
+         Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(4, 3));
          fail("Should have got a RuntimeException for providing a matrix with wrong size.");
       }
       catch (RuntimeException e)
@@ -384,7 +384,7 @@ public class Matrix3DFeaturesTest
 
       try
       {
-         Matrix3DFeatures.checkIfRotationMatrix(new DenseMatrix64F(3, 4));
+         Matrix3DFeatures.checkIfRotationMatrix(new DMatrixRMaj(3, 4));
          fail("Should have got a RuntimeException for providing a matrix with wrong size.");
       }
       catch (RuntimeException e)
@@ -397,7 +397,7 @@ public class Matrix3DFeaturesTest
    public void testDeterminant() throws Exception
    {
       Random random = new Random(641651L);
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
 
       { // Test that the identity's determinant is equal to 1.0
          Matrix3D identity = new Matrix3D();
@@ -590,7 +590,7 @@ public class Matrix3DFeaturesTest
          Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          matrix.get(denseMatrix);
 
-         assertEquals(CommonOps.det(denseMatrix), matrix.determinant(), EPS);
+         assertEquals(CommonOps_DDRM.det(denseMatrix), matrix.determinant(), EPS);
 
          double m00 = matrix.getM00();
          double m01 = matrix.getM01();
@@ -601,7 +601,7 @@ public class Matrix3DFeaturesTest
          double m20 = matrix.getM20();
          double m21 = matrix.getM21();
          double m22 = matrix.getM22();
-         assertEquals(CommonOps.det(denseMatrix), Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22), EPS);
+         assertEquals(CommonOps_DDRM.det(denseMatrix), Matrix3DFeatures.determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22), EPS);
       }
    }
 

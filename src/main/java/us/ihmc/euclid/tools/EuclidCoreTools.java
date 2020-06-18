@@ -1,7 +1,7 @@
 package us.ihmc.euclid.tools;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.MatrixDimensionException;
+import org.ejml.MatrixDimensionException;
+import org.ejml.data.Matrix;
 
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -954,9 +954,9 @@ public class EuclidCoreTools
     * @param matrixToTest the matrix which size is to be tested.
     * @throws MatrixDimensionException if the matrix does not meet the minimum size.
     */
-   public static void checkMatrixMinimumSize(int minRows, int minColumns, DenseMatrix64F matrixToTest)
+   public static void checkMatrixMinimumSize(int minRows, int minColumns, Matrix matrixToTest)
    {
-      if (!matrixToTest.isInBounds(minRows - 1, minColumns - 1))
+      if (matrixToTest.getNumCols() < minColumns || matrixToTest.getNumRows() < minRows)
       {
          throw new MatrixDimensionException("The matrix is too small, expected: [nRows >= " + minRows + ", nColumns >= " + minColumns + "], was: [nRows = "
                + matrixToTest.getNumRows() + ", nCols = " + matrixToTest.getNumCols() + "].");

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.matrix.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
@@ -180,12 +180,11 @@ public interface Matrix3DReadOnly
    }
 
    /**
-    * Packs the coefficients of this matrix into a dense-matrix.
+    * Packs the coefficients of this matrix into a matrix.
     *
-    * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
-    *                     Modified.
+    * @param matrixToPack the matrix in which the coefficients of this matrix are stored. Modified.
     */
-   default void get(DenseMatrix64F matrixToPack)
+   default void get(DMatrix matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(3, 3, matrixToPack);
 
@@ -201,15 +200,14 @@ public interface Matrix3DReadOnly
    }
 
    /**
-    * Packs the coefficients of this matrix into a dense-matrix given index offsets for the row and the
+    * Packs the coefficients of this matrix into a matrix given index offsets for the row and the
     * column.
     *
-    * @param startRow     the first row index to start writing in the dense-matrix.
-    * @param startColumn  the first column index to start writing in the dense-matrix.
-    * @param matrixToPack the dense-matrix in which the coefficients of this matrix are stored.
-    *                     Modified.
+    * @param startRow     the first row index to start writing in the matrix.
+    * @param startColumn  the first column index to start writing in the matrix.
+    * @param matrixToPack the matrix in which the coefficients of this matrix are stored. Modified.
     */
-   default void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
+   default void get(int startRow, int startColumn, DMatrix matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, startColumn + 3, matrixToPack);
 

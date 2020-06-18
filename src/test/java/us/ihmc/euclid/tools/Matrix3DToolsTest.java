@@ -8,8 +8,8 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.CommonOps;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
@@ -92,10 +92,10 @@ public class Matrix3DToolsTest
          Matrix3D expected = new Matrix3D();
          Matrix3D actual = new Matrix3D(original);
 
-         DenseMatrix64F originalDenseMatrix = new DenseMatrix64F(3, 3);
+         DMatrixRMaj originalDenseMatrix = new DMatrixRMaj(3, 3);
          original.get(originalDenseMatrix);
-         DenseMatrix64F expectedDenseMatrix = new DenseMatrix64F(3, 3);
-         boolean expectedSuccess = CommonOps.invert(originalDenseMatrix, expectedDenseMatrix);
+         DMatrixRMaj expectedDenseMatrix = new DMatrixRMaj(3, 3);
+         boolean expectedSuccess = CommonOps_DDRM.invert(originalDenseMatrix, expectedDenseMatrix);
          expected.set(expectedDenseMatrix);
 
          boolean actualSuccess = Matrix3DTools.invert(actual);
@@ -198,9 +198,9 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertMatrix3DEquals(rotationMatrixExpected, rotationMatrixActual, EPS);
       }
 
-      DenseMatrix64F dm1 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dm2 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
+      DMatrixRMaj dm1 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dm2 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dmResult = new DMatrixRMaj(3, 3);
 
       // Finally check against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -211,7 +211,7 @@ public class Matrix3DToolsTest
          m1.get(dm1);
          m2.get(dm2);
 
-         CommonOps.mult(dm1, dm2, dmResult);
+         CommonOps_DDRM.mult(dm1, dm2, dmResult);
          matrixExpected.set(dmResult);
 
          Matrix3DTools.multiply(m1, m2, matrixActual);
@@ -248,9 +248,9 @@ public class Matrix3DToolsTest
          assertEquals(m2, m2Copy);
       }
 
-      DenseMatrix64F dm1 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dm2 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
+      DMatrixRMaj dm1 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dm2 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dmResult = new DMatrixRMaj(3, 3);
 
       // Finally check against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -261,7 +261,7 @@ public class Matrix3DToolsTest
          m1.get(dm1);
          m2.get(dm2);
 
-         CommonOps.multTransAB(dm1, dm2, dmResult);
+         CommonOps_DDRM.multTransAB(dm1, dm2, dmResult);
          matrixExpected.set(dmResult);
 
          Matrix3DTools.multiplyTransposeBoth(m1, m2, matrixActual);
@@ -356,9 +356,9 @@ public class Matrix3DToolsTest
          assertEquals(m2, m2Copy);
       }
 
-      DenseMatrix64F dm1 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dm2 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
+      DMatrixRMaj dm1 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dm2 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dmResult = new DMatrixRMaj(3, 3);
 
       // Finally check against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -369,7 +369,7 @@ public class Matrix3DToolsTest
          m1.get(dm1);
          m2.get(dm2);
 
-         CommonOps.multTransA(dm1, dm2, dmResult);
+         CommonOps_DDRM.multTransA(dm1, dm2, dmResult);
          matrixExpected.set(dmResult);
 
          Matrix3DTools.multiplyTransposeLeft(m1, m2, matrixActual);
@@ -476,9 +476,9 @@ public class Matrix3DToolsTest
          assertEquals(m2, m2Copy);
       }
 
-      DenseMatrix64F dm1 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dm2 = new DenseMatrix64F(3, 3);
-      DenseMatrix64F dmResult = new DenseMatrix64F(3, 3);
+      DMatrixRMaj dm1 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dm2 = new DMatrixRMaj(3, 3);
+      DMatrixRMaj dmResult = new DMatrixRMaj(3, 3);
 
       // Finally check against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -489,7 +489,7 @@ public class Matrix3DToolsTest
          m1.get(dm1);
          m2.get(dm2);
 
-         CommonOps.multTransB(dm1, dm2, dmResult);
+         CommonOps_DDRM.multTransB(dm1, dm2, dmResult);
          matrixExpected.set(dmResult);
 
          Matrix3DTools.multiplyTransposeRight(m1, m2, matrixActual);
@@ -669,9 +669,9 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertTuple3DEquals(tupleExpected, tupleActual, EPS);
       }
 
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
-      DenseMatrix64F denseVectorOriginal = new DenseMatrix64F(3, 1);
-      DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+      DMatrixRMaj denseVectorOriginal = new DMatrixRMaj(3, 1);
+      DMatrixRMaj denseVectorTransformed = new DMatrixRMaj(3, 1);
 
       // Test against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -681,7 +681,7 @@ public class Matrix3DToolsTest
          matrix.get(denseMatrix);
          tupleOriginal.get(denseVectorOriginal);
 
-         CommonOps.mult(denseMatrix, denseVectorOriginal, denseVectorTransformed);
+         CommonOps_DDRM.mult(denseMatrix, denseVectorOriginal, denseVectorTransformed);
          tupleExpected.set(denseVectorTransformed);
 
          Matrix3DTools.transform(matrix, tupleOriginal, tupleActual);
@@ -747,9 +747,9 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertTuple3DEquals(tupleExpected, tupleActual, EPS);
       }
 
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
-      DenseMatrix64F denseVectorOriginal = new DenseMatrix64F(3, 1);
-      DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+      DMatrixRMaj denseVectorOriginal = new DMatrixRMaj(3, 1);
+      DMatrixRMaj denseVectorTransformed = new DMatrixRMaj(3, 1);
 
       // Test against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -761,7 +761,7 @@ public class Matrix3DToolsTest
          tupleOriginal.get(denseVectorOriginal);
          tupleActual.get(denseVectorTransformed);
 
-         CommonOps.multAdd(denseMatrix, denseVectorOriginal, denseVectorTransformed);
+         CommonOps_DDRM.multAdd(denseMatrix, denseVectorOriginal, denseVectorTransformed);
          tupleExpected.set(denseVectorTransformed);
 
          Matrix3DTools.addTransform(matrix, tupleOriginal, tupleActual);
@@ -827,9 +827,9 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertTuple3DEquals(tupleExpected, tupleActual, EPS);
       }
 
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
-      DenseMatrix64F denseVectorOriginal = new DenseMatrix64F(3, 1);
-      DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+      DMatrixRMaj denseVectorOriginal = new DMatrixRMaj(3, 1);
+      DMatrixRMaj denseVectorTransformed = new DMatrixRMaj(3, 1);
 
       // Test against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -841,7 +841,7 @@ public class Matrix3DToolsTest
          tupleOriginal.get(denseVectorOriginal);
          tupleActual.get(denseVectorTransformed);
 
-         CommonOps.multAdd(-1.0, denseMatrix, denseVectorOriginal, denseVectorTransformed);
+         CommonOps_DDRM.multAdd(-1.0, denseMatrix, denseVectorOriginal, denseVectorTransformed);
          tupleExpected.set(denseVectorTransformed);
 
          Matrix3DTools.subTransform(matrix, tupleOriginal, tupleActual);
@@ -902,9 +902,9 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertTuple2DEquals(tupleExpected, tupleActual, EPS);
       }
 
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(2, 2);
-      DenseMatrix64F denseVectorOriginal = new DenseMatrix64F(2, 1);
-      DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(2, 1);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(2, 2);
+      DMatrixRMaj denseVectorOriginal = new DMatrixRMaj(2, 1);
+      DMatrixRMaj denseVectorTransformed = new DMatrixRMaj(2, 1);
 
       // Test against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -917,7 +917,7 @@ public class Matrix3DToolsTest
          denseMatrix.set(1, 1, matrix.getM11());
          tupleOriginal.get(denseVectorOriginal);
 
-         CommonOps.mult(denseMatrix, denseVectorOriginal, denseVectorTransformed);
+         CommonOps_DDRM.mult(denseMatrix, denseVectorOriginal, denseVectorTransformed);
          tupleExpected.set(denseVectorTransformed);
 
          Matrix3DTools.transform(matrix, tupleOriginal, tupleActual, false);
@@ -1077,9 +1077,9 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
       }
 
-      DenseMatrix64F denseMatrix = new DenseMatrix64F(3, 3);
-      DenseMatrix64F denseVectorOriginal = new DenseMatrix64F(3, 1);
-      DenseMatrix64F denseVectorTransformed = new DenseMatrix64F(3, 1);
+      DMatrixRMaj denseMatrix = new DMatrixRMaj(3, 3);
+      DMatrixRMaj denseVectorOriginal = new DMatrixRMaj(3, 1);
+      DMatrixRMaj denseVectorTransformed = new DMatrixRMaj(3, 1);
 
       // Test against EJML
       for (int i = 0; i < ITERATIONS; i++)
@@ -1090,7 +1090,7 @@ public class Matrix3DToolsTest
          for (int index = 0; index < 3; index++)
             denseVectorOriginal.set(index, vectorOriginal.getElement(index));
 
-         CommonOps.mult(denseMatrix, denseVectorOriginal, denseVectorTransformed);
+         CommonOps_DDRM.mult(denseMatrix, denseVectorOriginal, denseVectorTransformed);
          for (int index = 0; index < 3; index++)
             vectorExpected.setElement(index, denseVectorTransformed.get(index));
          vectorExpected.setS(vectorOriginal.getS());

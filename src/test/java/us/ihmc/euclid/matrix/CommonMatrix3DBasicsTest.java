@@ -6,7 +6,8 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
+import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
@@ -94,9 +95,9 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // set(DenseMatrix64F matrix)
+      { // set(DMatrix matrix)
          RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(30, 30);
+         DMatrix denseMatrix = new DMatrixRMaj(30, 30);
          expectedMatrix.get(denseMatrix);
          T actualMatrix = createEmptyMatrix();
          actualMatrix.set(denseMatrix);
@@ -104,9 +105,9 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // set(int startRow, int startColumn, DenseMatrix64F matrix)
+      { // set(int startRow, int startColumn, DMatrix matrix)
          RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         DenseMatrix64F denseMatrix = new DenseMatrix64F(30, 30);
+         DMatrix denseMatrix = new DMatrixRMaj(30, 30);
          int startRow = random.nextInt(denseMatrix.getNumRows() - 3);
          int startColumn = random.nextInt(denseMatrix.getNumCols() - 3);
          expectedMatrix.get(startRow, startColumn, denseMatrix);

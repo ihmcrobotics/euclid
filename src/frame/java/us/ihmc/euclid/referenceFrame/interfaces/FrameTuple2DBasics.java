@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.referenceFrame.FramePoint2D;
 import us.ihmc.euclid.referenceFrame.FrameVector2D;
@@ -137,7 +137,7 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, DMatrix matrix)
    {
       setReferenceFrame(referenceFrame);
       set(matrix);
@@ -148,11 +148,11 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * to read from {@code startRow} and sets this tuple frame to {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param startRow       the first row index to start reading in the dense-matrix.
+    * @param startRow       the first row index to start reading in the matrix.
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DMatrix matrix)
    {
       setReferenceFrame(referenceFrame);
       set(startRow, matrix);
@@ -164,12 +164,12 @@ public interface FrameTuple2DBasics extends FixedFrameTuple2DBasics
     * {@code referenceFrame}.
     *
     * @param referenceFrame the new reference frame for this tuple.
-    * @param startRow       the first row index to start reading in the dense-matrix.
-    * @param column         the column index to read in the dense-matrix.
+    * @param startRow       the first row index to start reading in the matrix.
+    * @param column         the column index to read in the matrix.
     * @param matrix         the column vector containing the new values for this tuple's components.
     *                       Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DMatrix matrix)
    {
       setReferenceFrame(referenceFrame);
       set(startRow, column, matrix);

@@ -1,6 +1,6 @@
 package us.ihmc.euclid.matrix;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.exceptions.NotARotationScaleMatrixException;
@@ -96,7 +96,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * @param rotationScaleMatrix the other 3D matrix to copy the values from. Not modified.
     * @throws NotARotationScaleMatrixException if the resulting matrix is not a rotation-scale matrix.
     */
-   public RotationScaleMatrix(DenseMatrix64F rotationScaleMatrix)
+   public RotationScaleMatrix(DMatrix rotationScaleMatrix)
    {
       set(rotationScaleMatrix);
    }
@@ -128,7 +128,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *                                          matrix.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
-   public RotationScaleMatrix(DenseMatrix64F rotationMatrix, double scale)
+   public RotationScaleMatrix(DMatrix rotationMatrix, double scale)
    {
       set(rotationMatrix, scale);
    }
@@ -149,7 +149,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
-   public RotationScaleMatrix(DenseMatrix64F rotationMatrix, double scaleX, double scaleY, double scaleZ)
+   public RotationScaleMatrix(DMatrix rotationMatrix, double scaleX, double scaleY, double scaleZ)
    {
       set(rotationMatrix, scaleX, scaleY, scaleZ);
    }
@@ -165,7 +165,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
-   public RotationScaleMatrix(DenseMatrix64F rotationMatrix, Tuple3DReadOnly scales)
+   public RotationScaleMatrix(DMatrix rotationMatrix, Tuple3DReadOnly scales)
    {
       set(rotationMatrix, scales);
    }
@@ -433,7 +433,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *                                          matrix.
     * @throws NotARotationScaleMatrixException if {@code scale <= 0.0}.
     */
-   public void set(DenseMatrix64F rotationMatrix, double scale)
+   public void set(DMatrix rotationMatrix, double scale)
    {
       set(rotationMatrix, scale, scale, scale);
    }
@@ -450,7 +450,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
-   public void set(DenseMatrix64F rotationMatrix, double scaleX, double scaleY, double scaleZ)
+   public void set(DMatrix rotationMatrix, double scaleX, double scaleY, double scaleZ)
    {
       setRotation(rotationMatrix);
       setScale(scaleX, scaleY, scaleZ);
@@ -467,7 +467,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     *                                          matrix.
     * @throws NotARotationScaleMatrixException if any of the scale factors is less or equal to zero.
     */
-   public void set(DenseMatrix64F rotationMatrix, Tuple3DReadOnly scales)
+   public void set(DMatrix rotationMatrix, Tuple3DReadOnly scales)
    {
       set(rotationMatrix, scales.getX(), scales.getY(), scales.getZ());
    }
@@ -622,7 +622,7 @@ public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleM
     * @param rotationMatrix the matrix used to set the rotation part to. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
     */
-   public void setRotation(DenseMatrix64F rotationMatrix)
+   public void setRotation(DMatrix rotationMatrix)
    {
       this.rotationMatrix.set(rotationMatrix);
    }

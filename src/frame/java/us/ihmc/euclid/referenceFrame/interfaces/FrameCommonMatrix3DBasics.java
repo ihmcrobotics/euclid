@@ -1,6 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -108,27 +108,27 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    }
 
    /**
-    * Copies the values in the given dense-matrix into this matrix.
+    * Copies the values in the given matrix into this matrix.
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
+    * @param matrix         the matrix containing the new values for this matrix. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, DMatrix matrix)
    {
       setReferenceFrame(referenceFrame);
       set(matrix);
    }
 
    /**
-    * Copies the values in the given dense-matrix into this matrix given index offsets for the row and
+    * Copies the values in the given matrix into this matrix given index offsets for the row and
     * column.
     *
     * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param startRow       the first row index to start reading from in the dense-matrix.
-    * @param startColumn    the first column index to start reading from in the dense-matrix.
-    * @param matrix         the dense-matrix containing the new values for this matrix. Not modified.
+    * @param startRow       the first row index to start reading from in the given matrix.
+    * @param startColumn    the first column index to start reading from in the given matrix.
+    * @param matrix         the matrix containing the new values for this matrix. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int startColumn, DenseMatrix64F matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int startColumn, DMatrix matrix)
    {
       setReferenceFrame(referenceFrame);
       set(startRow, startColumn, matrix);

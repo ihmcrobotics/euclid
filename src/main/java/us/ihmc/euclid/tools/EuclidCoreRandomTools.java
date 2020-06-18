@@ -2,6 +2,8 @@ package us.ihmc.euclid.tools;
 
 import java.util.Random;
 
+import org.ejml.data.DMatrixRMaj;
+
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
@@ -1256,6 +1258,61 @@ public class EuclidCoreRandomTools
       for (int i = 0; i < 4; i++)
          vector.setElement(i, nextDouble(random));
       return vector;
+   }
+
+   /**
+    * Generates a random matrix.
+    * <p>
+    * Each coefficient of the matrix is generated randomly to be in [-1, 1].
+    * </p>
+    * 
+    * @param random          the random generator to use.
+    * @param numberOfRows    the number of rows for the matrix to generate.
+    * @param numberOfColumns the number of columns for the matrix to generate.
+    * @return the random matrix.
+    */
+   public static DMatrixRMaj nextDMatrixRMaj(Random random, int numberOfRows, int numberOfColumns)
+   {
+      return nextDMatrixRMaj(random, numberOfRows, numberOfColumns, 1.0);
+   }
+
+   /**
+    * Generates a random matrix.
+    * 
+    * @param random          the random generator to use.
+    * @param numberOfRows    the number of rows for the matrix to generate.
+    * @param numberOfColumns the number of columns for the matrix to generate.
+    * @param minMax          the maximum absolute value used for generating each coefficient of the
+    *                        matrix.
+    * @return the random matrix.
+    */
+   public static DMatrixRMaj nextDMatrixRMaj(Random random, int numberOfRows, int numberOfColumns, double minMax)
+   {
+      return nextDMatrixRMaj(random, numberOfRows, numberOfColumns, -minMax, minMax);
+   }
+
+   /**
+    * Generates a random matrix.
+    * 
+    * @param random          the random generator to use.
+    * @param numberOfRows    the number of rows for the matrix to generate.
+    * @param numberOfColumns the number of columns for the matrix to generate.
+    * @param min             the minimum value used for generating each coefficient of the matrix.
+    * @param max             the maximum value used for generating each coefficient of the matrix.
+    * @return the random matrix.
+    */
+   public static DMatrixRMaj nextDMatrixRMaj(Random random, int numberOfRows, int numberOfColumns, double min, double max)
+   {
+      DMatrixRMaj next = new DMatrixRMaj(numberOfRows, numberOfColumns);
+
+      for (int row = 0; row < numberOfRows; row++)
+      {
+         for (int col = 0; col < numberOfColumns; col++)
+         {
+            next.set(row, col, nextDouble(random, min, max));
+         }
+      }
+      return next;
    }
 
    /**

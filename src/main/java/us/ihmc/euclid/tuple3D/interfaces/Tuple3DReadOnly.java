@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -213,7 +213,7 @@ public interface Tuple3DReadOnly
     *
     * @param tupleMatrixToPack the array in which this tuple is stored. Modified.
     */
-   default void get(DenseMatrix64F tupleMatrixToPack)
+   default void get(DMatrix tupleMatrixToPack)
    {
       get(0, 0, tupleMatrixToPack);
    }
@@ -222,10 +222,10 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in a column vector starting from
     * {@code startRow}.
     *
-    * @param startRow          the first row index to start writing in the dense-matrix.
+    * @param startRow          the first row index to start writing in the matrix.
     * @param tupleMatrixToPack the column vector in which this tuple is stored. Modified.
     */
-   default void get(int startRow, DenseMatrix64F tupleMatrixToPack)
+   default void get(int startRow, DMatrix tupleMatrixToPack)
    {
       get(startRow, 0, tupleMatrixToPack);
    }
@@ -234,11 +234,11 @@ public interface Tuple3DReadOnly
     * Packs the components {@code x}, {@code y}, {@code z} in order in a column vector starting from
     * {@code startRow} at the column index {@code column}.
     *
-    * @param startRow          the first row index to start writing in the dense-matrix.
-    * @param column            the column index to write in the dense-matrix.
+    * @param startRow          the first row index to start writing in the matrix.
+    * @param column            the column index to write in the matrix.
     * @param tupleMatrixToPack the matrix in which this tuple is stored. Modified.
     */
-   default void get(int startRow, int column, DenseMatrix64F tupleMatrixToPack)
+   default void get(int startRow, int column, DMatrix tupleMatrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 3, column + 1, tupleMatrixToPack);
       tupleMatrixToPack.unsafe_set(startRow++, column, getX());
