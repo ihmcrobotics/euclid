@@ -1,6 +1,6 @@
 package us.ihmc.euclid.transform;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.EpsilonComparable;
@@ -105,7 +105,7 @@ public class RigidBodyTransform
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
     *                                     transform is not a rotation matrix.
     */
-   public RigidBodyTransform(DenseMatrix64F matrix)
+   public RigidBodyTransform(DMatrix matrix)
    {
       set(matrix);
    }
@@ -287,7 +287,7 @@ public class RigidBodyTransform
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
     *                                     transform is not a rotation matrix.
     */
-   public void set(DenseMatrix64F matrix)
+   public void set(DMatrix matrix)
    {
       getRotation().set(matrix);
       getTranslation().set(0, 3, matrix);
@@ -319,7 +319,7 @@ public class RigidBodyTransform
     * @throws NotARotationMatrixException if the resulting matrix for the rotation part of this
     *                                     transform is not a rotation matrix.
     */
-   public void set(DenseMatrix64F matrix, int startRow, int startColumn)
+   public void set(DMatrix matrix, int startRow, int startColumn)
    {
       getRotation().set(startRow, startColumn, matrix);
       getTranslation().set(startRow, startColumn + 3, matrix);
@@ -573,7 +573,7 @@ public class RigidBodyTransform
     * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
     */
    @Deprecated
-   public void setRotation(DenseMatrix64F rotationMatrix)
+   public void setRotation(DMatrix rotationMatrix)
    {
       getRotation().set(rotationMatrix);
    }
@@ -601,7 +601,7 @@ public class RigidBodyTransform
     * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
     * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
     */
-   public void setRotationAndZeroTranslation(DenseMatrix64F rotationMatrix)
+   public void setRotationAndZeroTranslation(DMatrix rotationMatrix)
    {
       getRotation().set(rotationMatrix);
       setTranslationToZero();
@@ -676,7 +676,7 @@ public class RigidBodyTransform
     *
     * @param matrixToPack the matrix in which this transform is stored. Modified.
     */
-   public void get(DenseMatrix64F matrixToPack)
+   public void get(DMatrix matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(4, 4, matrixToPack);
       getRotation().get(matrixToPack);
@@ -703,7 +703,7 @@ public class RigidBodyTransform
     * @param startColumn  the first column index to start writing in {@code matrixToPack}.
     * @param matrixToPack the matrix in which this transform is stored. Modified.
     */
-   public void get(int startRow, int startColumn, DenseMatrix64F matrixToPack)
+   public void get(int startRow, int startColumn, DMatrix matrixToPack)
    {
       EuclidCoreTools.checkMatrixMinimumSize(startRow + 4, startColumn + 4, matrixToPack);
       getRotation().get(startRow, startColumn, matrixToPack);
@@ -822,7 +822,7 @@ public class RigidBodyTransform
     * @deprecated Use {@code this.getRotation().get(rotationMatrixToPack)} instead.
     */
    @Deprecated
-   public void getRotation(DenseMatrix64F rotationMatrixToPack)
+   public void getRotation(DMatrix rotationMatrixToPack)
    {
       getRotation().get(rotationMatrixToPack);
    }

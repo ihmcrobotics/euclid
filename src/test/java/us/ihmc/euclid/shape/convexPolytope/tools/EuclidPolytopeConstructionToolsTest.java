@@ -8,9 +8,9 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.factory.DecompositionFactory;
-import org.ejml.ops.CommonOps;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
@@ -51,7 +51,7 @@ public class EuclidPolytopeConstructionToolsTest
                                          .collect(Collectors.toList());
          points.stream().filter(p -> random.nextBoolean()).forEach(Point3D::negate);
 
-         DenseMatrix64F actualCovariance = new DenseMatrix64F(3, 3);
+         DMatrixRMaj actualCovariance = new DMatrixRMaj(3, 3);
          EuclidPolytopeConstructionTools.computeCovariance3D(points, null, actualCovariance);
 
          Vector3D actualNormal = new Vector3D(1.0, 1.0, 1.0);
@@ -63,7 +63,7 @@ public class EuclidPolytopeConstructionToolsTest
          assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 0.30), errorMessage);
 
          actualNormal = new Vector3D(-1.0, -1.0, -1.0);
-         EuclidPolytopeConstructionTools.updateFace3DNormal(DecompositionFactory.eig(3, true, true), actualCovariance, actualNormal);
+         EuclidPolytopeConstructionTools.updateFace3DNormal(DecompositionFactory_DDRM.eig(3, true, true), actualCovariance, actualNormal);
 
          expectedNormal.negate();
 
@@ -84,7 +84,7 @@ public class EuclidPolytopeConstructionToolsTest
 
          for (int j = 3; j <= vertices.size(); j++)
          {
-            DenseMatrix64F actualCovariance = new DenseMatrix64F(3, 3);
+            DMatrixRMaj actualCovariance = new DMatrixRMaj(3, 3);
             Vector3D actualNormal = new Vector3D();
             EuclidPolytopeConstructionTools.computeCovariance3D(vertices.subList(0, j), null, actualCovariance);
             EuclidPolytopeConstructionTools.updateFace3DNormal(actualCovariance, actualNormal);
@@ -110,7 +110,7 @@ public class EuclidPolytopeConstructionToolsTest
                                          .mapToObj(h -> EuclidCoreRandomTools.nextPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ))
                                          .collect(Collectors.toList());
 
-         DenseMatrix64F actualCovariance = new DenseMatrix64F(3, 3);
+         DMatrixRMaj actualCovariance = new DMatrixRMaj(3, 3);
          EuclidPolytopeConstructionTools.computeCovariance3D(points, null, actualCovariance);
          Matrix3D expectedCovariance = computeCovarianceMatrix(points);
 
@@ -193,9 +193,9 @@ public class EuclidPolytopeConstructionToolsTest
     */
    private static Matrix3D computeCovarianceMatrix(List<? extends Point3DReadOnly> dataset)
    {
-      DenseMatrix64F covariance = new DenseMatrix64F(3, 3);
+      DMatrixRMaj covariance = new DMatrixRMaj(3, 3);
       int n = dataset.size();
-      DenseMatrix64F datasetMatrix = new DenseMatrix64F(n, 3);
+      DMatrixRMaj datasetMatrix = new DMatrixRMaj(n, 3);
 
       Point3D average = EuclidGeometryTools.averagePoint3Ds(dataset);
 
@@ -207,9 +207,9 @@ public class EuclidPolytopeConstructionToolsTest
          datasetMatrix.set(i, 2, dataPoint.getZ() - average.getZ());
       }
 
-      CommonOps.multInner(datasetMatrix, covariance);
+      CommonOps_DDRM.multInner(datasetMatrix, covariance);
 
-      CommonOps.scale(1.0 / n, covariance);
+      CommonOps_DDRM.scale(1.0 / n, covariance);
 
       return new Matrix3D(covariance);
    }

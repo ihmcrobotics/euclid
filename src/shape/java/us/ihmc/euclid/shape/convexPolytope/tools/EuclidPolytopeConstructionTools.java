@@ -9,9 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.factory.DecompositionFactory;
-import org.ejml.interfaces.decomposition.EigenDecomposition;
+import org.ejml.data.DMatrix;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
+import org.ejml.interfaces.decomposition.EigenDecomposition_F64;
 
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
@@ -501,7 +502,7 @@ public class EuclidPolytopeConstructionTools
     */
    public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
    {
-      DenseMatrix64F covarianceMatrix = new DenseMatrix64F(3, 3);
+      DMatrixRMaj covarianceMatrix = new DMatrixRMaj(3, 3);
       computeCovariance3D(vertices, averageToPack, covarianceMatrix);
       return updateFace3DNormal(covarianceMatrix, normalToUpdate);
    }
@@ -517,9 +518,9 @@ public class EuclidPolytopeConstructionTools
     *                         {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
-   public static boolean updateFace3DNormal(DenseMatrix64F covarianceMatrix, Vector3DBasics normalToUpdate)
+   public static boolean updateFace3DNormal(DMatrixRMaj covarianceMatrix, Vector3DBasics normalToUpdate)
    {
-      return updateFace3DNormal(DecompositionFactory.eig(3, true, true), covarianceMatrix, normalToUpdate);
+      return updateFace3DNormal(DecompositionFactory_DDRM.eig(3, true, true), covarianceMatrix, normalToUpdate);
    }
 
    /**
@@ -534,8 +535,7 @@ public class EuclidPolytopeConstructionTools
     *                           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
-   public static boolean updateFace3DNormal(EigenDecomposition<DenseMatrix64F> eigenDecomposition, DenseMatrix64F covarianceMatrix,
-                                            Vector3DBasics normalToUpdate)
+   public static boolean updateFace3DNormal(EigenDecomposition_F64<DMatrixRMaj> eigenDecomposition, DMatrixRMaj covarianceMatrix, Vector3DBasics normalToUpdate)
    {
       if (!eigenDecomposition.decompose(covarianceMatrix))
          return false;
@@ -569,7 +569,7 @@ public class EuclidPolytopeConstructionTools
          }
       }
 
-      DenseMatrix64F eigenVector = eigenDecomposition.getEigenVector(smallEigenValueIndex);
+      DMatrix eigenVector = eigenDecomposition.getEigenVector(smallEigenValueIndex);
       double newX = eigenVector.get(0, 0);
       double newY = eigenVector.get(1, 0);
       double newZ = eigenVector.get(2, 0);
@@ -590,7 +590,7 @@ public class EuclidPolytopeConstructionTools
     *                         modified.
     * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
     */
-   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, DenseMatrix64F covarianceToPack)
+   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, DMatrixRMaj covarianceToPack)
    {
       computeCovariance3D(input, null, covarianceToPack);
    }
@@ -604,7 +604,7 @@ public class EuclidPolytopeConstructionTools
     *                         {@code null}.
     * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
     */
-   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, DenseMatrix64F covarianceToPack)
+   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, DMatrixRMaj covarianceToPack)
    {
       double meanX = 0.0;
       double meanY = 0.0;

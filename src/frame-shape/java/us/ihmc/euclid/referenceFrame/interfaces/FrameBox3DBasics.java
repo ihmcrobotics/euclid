@@ -243,8 +243,8 @@ public interface FrameBox3DBasics extends FixedFrameBox3DBasics, FrameShape3DBas
    /**
     * Sets this box properties and its reference frame.
     *
-    * @param pose  the pose of this box. Not modified.
-    * @param size           the size of this box. Not modified.
+    * @param pose the pose of this box. Not modified.
+    * @param size the size of this box. Not modified.
     * @throws IllegalArgumentException if any of the size components is negative.
     */
    default void setIncludingFrame(FrameShape3DPoseReadOnly pose, Vector3DReadOnly size)
@@ -255,9 +255,9 @@ public interface FrameBox3DBasics extends FixedFrameBox3DBasics, FrameShape3DBas
    /**
     * Sets this box properties and its reference frame.
     *
-    * @param pose  the pose of this box. Not modified.
-    * @param size           the size of this box. Not modified.
-    * @throws IllegalArgumentException if any of the size components is negative.
+    * @param pose the pose of this box. Not modified.
+    * @param size the size of this box. Not modified.
+    * @throws IllegalArgumentException        if any of the size components is negative.
     * @throws ReferenceFrameMismatchException if the arguments are not expressed in the same reference
     *                                         frame.
     */

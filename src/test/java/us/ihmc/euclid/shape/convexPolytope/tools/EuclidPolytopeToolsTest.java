@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.CommonOps;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
@@ -202,7 +202,7 @@ public class EuclidPolytopeToolsTest
          // http://mathcentral.uregina.ca/QQ/database/QQ.09.06/haivan1.html
          // http://mathworld.wolfram.com/Tetrahedron.html
          // @formatter:off
-         DenseMatrix64F matrix = new DenseMatrix64F(new double[][] {
+         DMatrixRMaj matrix = new DMatrixRMaj(new double[][] {
             {0, 1, 1, 1, 1},        // | 0   1     1     1     1   |
             {1, 0, ab2, ac2, ad2},  // | 1   0   d12^2 d13^2 d14^2 |
             {1, ab2, 0, bc2, db2},  // | 1 d21^2   0   d23^2 d24^2 |
@@ -211,7 +211,7 @@ public class EuclidPolytopeToolsTest
             });
          // @formatter:on
 
-         double volume1 = EuclidCoreTools.squareRoot(CommonOps.det(matrix) / 288.0);
+         double volume1 = EuclidCoreTools.squareRoot(CommonOps_DDRM.det(matrix) / 288.0);
          Plane3D basePlane = new Plane3D(b, c, d);
          double height = basePlane.distance(a);
          double baseArea = EuclidGeometryTools.triangleArea(b, c, d);

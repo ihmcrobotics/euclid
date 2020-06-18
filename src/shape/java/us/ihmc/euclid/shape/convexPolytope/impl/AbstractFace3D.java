@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.factory.DecompositionFactory;
-import org.ejml.interfaces.decomposition.EigenDecomposition;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
+import org.ejml.interfaces.decomposition.EigenDecomposition_F64;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
@@ -56,9 +56,9 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
     * 3-by-3 covariance matrix computed from the vertices location and used to compute this face
     * normal.
     */
-   private DenseMatrix64F verticesCovariance;
+   private DMatrixRMaj verticesCovariance;
    /** Eigen decomposition solver used to compute this face normal. */
-   private EigenDecomposition<DenseMatrix64F> eigenDecomposition;
+   private EigenDecomposition_F64<DMatrixRMaj> eigenDecomposition;
    /** Factory used to create half-edges of the proper type. */
    private final HalfEdge3DFactory<Vertex, Edge> edgeFactory;
 
@@ -417,10 +417,10 @@ public abstract class AbstractFace3D<Vertex extends AbstractVertex3D<Vertex, Edg
       if (vertices.size() > 3)
       {
          if (verticesCovariance == null)
-            verticesCovariance = new DenseMatrix64F(3, 3);
+            verticesCovariance = new DMatrixRMaj(3, 3);
          EuclidPolytopeConstructionTools.computeCovariance3D(vertices, verticesCovariance);
          if (eigenDecomposition == null)
-            eigenDecomposition = DecompositionFactory.eig(3, true, true);
+            eigenDecomposition = DecompositionFactory_DDRM.eig(3, true, true);
          EuclidPolytopeConstructionTools.updateFace3DNormal(eigenDecomposition, verticesCovariance, getNormal());
       }
       else if (vertices.size() == 3)

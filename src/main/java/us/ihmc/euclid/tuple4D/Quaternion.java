@@ -1,6 +1,6 @@
 package us.ihmc.euclid.tuple4D;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -77,9 +77,9 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
     * The quaternion is immediately normalized.
     * </p>
     *
-    * @param matrix the dense-matrix containing this quaternion's components. Not modified.
+    * @param matrix the matrix containing this quaternion's components. Not modified.
     */
-   public Quaternion(DenseMatrix64F matrix)
+   public Quaternion(DMatrix matrix)
    {
       set(matrix);
    }

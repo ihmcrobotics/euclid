@@ -10,8 +10,7 @@ import java.lang.reflect.Modifier;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.RandomMatrices;
+import org.ejml.data.DMatrix;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
@@ -245,8 +244,8 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DenseMatrix64F tupleDenseMatrix)
-         DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, DMatrix tupleDenseMatrix)
+         DMatrix input = EuclidCoreRandomTools.nextDMatrixRMaj(random, random.nextInt(20), random.nextInt(20));
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomFrameTuple(random, initialFrame);
 
@@ -281,9 +280,9 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DenseMatrix64F tupleDenseMatrix)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, DMatrix tupleDenseMatrix)
          int startRow = random.nextInt(10);
-         DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
+         DMatrix input = EuclidCoreRandomTools.nextDMatrixRMaj(random, random.nextInt(20), random.nextInt(20));
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomFrameTuple(random, initialFrame);
 
@@ -318,10 +317,10 @@ public abstract class FrameTuple2DBasicsTest<F extends FrameTuple2DBasics> exten
       }
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DenseMatrix64F tupleDenseMatrix)
+      { // Tests setIncludingFrame(ReferenceFrame referenceFrame, int startRow, int column, DMatrix tupleDenseMatrix)
          int startRow = random.nextInt(10);
          int column = random.nextInt(10);
-         DenseMatrix64F input = RandomMatrices.createRandom(random.nextInt(20), random.nextInt(20), random);
+         DMatrix input = EuclidCoreRandomTools.nextDMatrixRMaj(random, random.nextInt(20), random.nextInt(20));
          ReferenceFrame newFrame = EuclidFrameRandomTools.nextReferenceFrame(random);
          F frameTuple = createRandomFrameTuple(random, initialFrame);
 
