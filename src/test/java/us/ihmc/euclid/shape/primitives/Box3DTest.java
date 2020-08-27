@@ -24,8 +24,6 @@ import us.ihmc.euclid.geometry.interfaces.BoundingBox3DReadOnly;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTestTools;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.referenceFrame.FrameBox3D;
-import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
@@ -288,26 +286,6 @@ public class Box3DTest
       assertThrows(IllegalArgumentException.class, () -> new Box3D().getSize().set(-0.1, 1.0, 1.0));
       assertThrows(IllegalArgumentException.class, () -> new Box3D().getSize().set(1.0, -0.1, 1.0));
       assertThrows(IllegalArgumentException.class, () -> new Box3D().getSize().set(1.0, 1.0, -0.1));
-   }
-
-   @Test
-   public void testBoxFeatures()
-   {
-      Box3D unitBox3D = new Box3D(1.0, 1.0, 1.0);
-      assertEquals(new Point3D(-0.5, 0.0, 0.0), unitBox3D.asConvexPolytope().getFace(0).getCentroid());
-      assertEquals(new Point3D(0.0, -0.5, 0.0), unitBox3D.asConvexPolytope().getFace(1).getCentroid());
-      assertEquals(new Point3D(0.0, 0.0, -0.5), unitBox3D.asConvexPolytope().getFace(2).getCentroid());
-      assertEquals(new Point3D(0.5, 0.0, 0.0), unitBox3D.asConvexPolytope().getFace(3).getCentroid());
-      assertEquals(new Point3D(0.0, 0.5, 0.0), unitBox3D.asConvexPolytope().getFace(4).getCentroid());
-      assertEquals(new Point3D(0.0, 0.0, 0.5), unitBox3D.asConvexPolytope().getFace(5).getCentroid());
-
-      FrameBox3D unitFrameBox3D = new FrameBox3D(ReferenceFrame.getWorldFrame(), 1.0, 1.0, 1.0);
-      assertEquals(new Point3D(-0.5, 0.0, 0.0), unitFrameBox3D.asConvexPolytope().getFace(0).getCentroid());
-      assertEquals(new Point3D(0.0, -0.5, 0.0), unitFrameBox3D.asConvexPolytope().getFace(1).getCentroid());
-      assertEquals(new Point3D(0.0, 0.0, -0.5), unitFrameBox3D.asConvexPolytope().getFace(2).getCentroid());
-      assertEquals(new Point3D(0.5, 0.0, 0.0), unitFrameBox3D.asConvexPolytope().getFace(3).getCentroid());
-      assertEquals(new Point3D(0.0, 0.5, 0.0), unitFrameBox3D.asConvexPolytope().getFace(4).getCentroid());
-      assertEquals(new Point3D(0.0, 0.0, 0.5), unitFrameBox3D.asConvexPolytope().getFace(5).getCentroid());
    }
 
    @Test
