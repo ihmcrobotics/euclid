@@ -1,5 +1,9 @@
 package us.ihmc.euclid.referenceFrame;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +22,103 @@ import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoxPolytope3DView;
 import us.ihmc.euclid.referenceFrame.polytope.FrameConvexPolytope3D;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameFace3DReadOnly;
+import us.ihmc.euclid.referenceFrame.polytope.interfaces.FrameVertex3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeRandomTools;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameTestTools;
+import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
+import us.ihmc.euclid.shape.primitives.Box3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Box3DReadOnly;
 import us.ihmc.euclid.shape.primitives.interfaces.BoxPolytope3DView;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
+import us.ihmc.euclid.shape.tools.EuclidShapeTestTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public class FrameBoxPolytope3DTest
 {
+   private static final ReferenceFrame worldFrame = ReferenceFrame.getWorldFrame();
+   private static final double EPSILON = 1.0e-12;
+
+   @Test
+   public void testIntegrity()
+   {
+      Random random = new Random(897234);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         FrameBox3D box3D = EuclidFrameShapeRandomTools.nextFrameBox3D(random, worldFrame);
+         FrameBoxPolytope3DView boxPolytope = box3D.asConvexPolytope();
+         EuclidShapeTestTools.assertConvexPolytope3DGeneralIntegrity("Iteration " + i, boxPolytope);
+
+         assertEquals(6, boxPolytope.getNumberOfFaces());
+         assertEquals(12, boxPolytope.getNumberOfEdges());
+         assertEquals(8, boxPolytope.getNumberOfVertices());
+
+         for (FrameFace3DReadOnly face : boxPolytope.getFaces())
+            assertEquals(4, face.getNumberOfEdges());
+         for (FrameVertex3DReadOnly vertex : boxPolytope.getVertices())
+            assertEquals(3, vertex.getNumberOfAssociatedEdges());
+      }
+   }
+
+   @Test
+   public void testAgainstConvexPolytope()
+   {
+      Random random = new Random(987345);
+      FrameBox3D box3D = EuclidFrameShapeRandomTools.nextFrameBox3D(random, worldFrame);
+      FrameBoxPolytope3DView boxPolytope3D = box3D.asConvexPolytope();
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         // By re-using the same box, we're ensuring that the polytope view is updating accordingly.
+         switch (random.nextInt(3))
+         {
+            case 0:
+               box3D.set(EuclidShapeRandomTools.nextBox3D(random));
+               break;
+            case 1:
+               box3D.getPose().set(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+               break;
+            case 2:
+               box3D.getSize().set(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+               break;
+         }
+
+         FrameConvexPolytope3D convexPolytope3D = new FrameConvexPolytope3D(worldFrame);
+
+         for (int vertexIndex = 0; vertexIndex < 8; vertexIndex++)
+         {
+            Point3D vertex = new Point3D();
+            vertex.set((vertexIndex & 1) == 0 ? box3D.getSizeX() : -box3D.getSizeX(),
+                       (vertexIndex & 2) == 0 ? box3D.getSizeY() : -box3D.getSizeY(),
+                       (vertexIndex & 4) == 0 ? box3D.getSizeZ() : -box3D.getSizeZ());
+            vertex.scale(0.5);
+            box3D.transformToWorld(vertex);
+            convexPolytope3D.addVertex(vertex);
+         }
+
+         assertEquals(boxPolytope3D.getVolume(), convexPolytope3D.getVolume(), EPSILON);
+         EuclidCoreTestTools.assertTuple3DEquals(convexPolytope3D.getCentroid(), boxPolytope3D.getCentroid(), EPSILON);
+
+         for (FrameFace3DReadOnly boxFace : boxPolytope3D.getFaces())
+         {
+            FrameFace3DReadOnly polytopeFace = convexPolytope3D.getClosestFace(boxFace.getCentroid());
+
+            EuclidFrameTestTools.assertFramePoint3DGeometricallyEquals(boxFace.getCentroid(), boxFace.getCentroid(), EPSILON);
+            EuclidFrameTestTools.assertFrameVector3DGeometricallyEquals(boxFace.getNormal(), boxFace.getNormal(), EPSILON);
+
+            for (FrameVertex3DReadOnly boxVertex : boxFace.getVertices())
+            {
+               assertEquals(1L, polytopeFace.getVertices().stream().filter(polytopeVertex -> polytopeVertex.epsilonEquals(boxVertex, EPSILON)).count());
+            }
+         }
+      }
+   }
+
    @Test
    public void testAPIOverloading()
    {
@@ -73,6 +165,63 @@ public class FrameBoxPolytope3DTest
                                                                   FrameBoxPolytope3DTest::nextBoxPolytope3DView,
                                                                   methodFilter,
                                                                   EuclidTestConstants.API_FUNCTIONALITY_TEST_ITERATIONS);
+   }
+
+   /**
+    * Test exposing a bug about the centroid of the faces for a frame box.
+    * <p>
+    * The bug was due to a bad location for clearing a dirty flag. By moving the clearing to before
+    * actually calculation, this would prevent the centroid to be recomputed several time.
+    * </p>
+    */
+   @SuppressWarnings("unlikely-arg-type")
+   @Test
+   public void testFaceCentroidBug()
+   {
+      Box3D unitBox3D = new Box3D(1.0, 1.0, 1.0);
+      FrameBox3D unitFrameBox3D = new FrameBox3D(worldFrame, 1.0, 1.0, 1.0);
+      BoxPolytope3DView boxPolytope = unitBox3D.asConvexPolytope();
+      FrameBoxPolytope3DView frameBoxPolytope = unitFrameBox3D.asConvexPolytope();
+
+      assertEquals(new Point3D(-0.5, 0.0, 0.0), boxPolytope.getFace(0).getCentroid());
+      assertEquals(new Point3D(0.0, -0.5, 0.0), boxPolytope.getFace(1).getCentroid());
+      assertEquals(new Point3D(0.0, 0.0, -0.5), boxPolytope.getFace(2).getCentroid());
+      assertEquals(new Point3D(0.5, 0.0, 0.0), boxPolytope.getFace(3).getCentroid());
+      assertEquals(new Point3D(0.0, 0.5, 0.0), boxPolytope.getFace(4).getCentroid());
+      assertEquals(new Point3D(0.0, 0.0, 0.5), boxPolytope.getFace(5).getCentroid());
+
+      assertEquals(new Point3D(-0.5, 0.0, 0.0), frameBoxPolytope.getFace(0).getCentroid());
+      assertEquals(new Point3D(0.0, -0.5, 0.0), frameBoxPolytope.getFace(1).getCentroid());
+      assertEquals(new Point3D(0.0, 0.0, -0.5), frameBoxPolytope.getFace(2).getCentroid());
+      assertEquals(new Point3D(0.5, 0.0, 0.0), frameBoxPolytope.getFace(3).getCentroid());
+      assertEquals(new Point3D(0.0, 0.5, 0.0), frameBoxPolytope.getFace(4).getCentroid());
+      assertEquals(new Point3D(0.0, 0.0, 0.5), frameBoxPolytope.getFace(5).getCentroid());
+
+      for (int i = 0; i < 8; i++)
+      {
+         assertTrue(frameBoxPolytope.getVertices().contains(unitFrameBox3D.getVertex(i)));
+         assertEquals(boxPolytope.getVertex(i), frameBoxPolytope.getVertex(i));
+         assertEquals(boxPolytope.getHalfEdge(i), frameBoxPolytope.getHalfEdge(i));
+         assertEquals(1.0, boxPolytope.getHalfEdge(i).length());
+         assertEquals(1.0, frameBoxPolytope.getHalfEdge(i).length());
+      }
+
+      for (int i = 0; i < 6; i++)
+      {
+         Face3DReadOnly boxFace = boxPolytope.getFace(i);
+         FrameFace3DReadOnly frameBoxFace = frameBoxPolytope.getFace(i);
+
+         for (int j = 0; j < 4; j++)
+         {
+            assertEquals(boxFace.getVertex(j), frameBoxFace.getVertex(j));
+         }
+
+         assertEquals(boxFace.getNormal(), frameBoxFace.getNormal());
+         assertEquals(boxFace.getCentroid(), frameBoxFace.getCentroid());
+         assertEquals(boxFace.getBoundingBox(), frameBoxFace.getBoundingBox());
+         assertEquals(1.0, boxFace.getArea());
+         assertEquals(1.0, frameBoxFace.getArea());
+      }
    }
 
    private static BoxPolytope3DView nextBoxPolytope3DView(Random random)
