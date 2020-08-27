@@ -213,11 +213,11 @@ class FrameBoxPolytope3D implements FrameBoxPolytope3DView
       {
          if (isCentroidDirty)
          {
+            isCentroidDirty = false;
             centroid.add(e0.getOrigin(), e1.getOrigin());
             centroid.add(e2.getOrigin());
             centroid.add(e3.getOrigin());
             centroid.scale(0.25);
-            isCentroidDirty = false;
          }
       }
 
