@@ -3,6 +3,7 @@ package us.ihmc.euclid.tools;
 import org.ejml.MatrixDimensionException;
 import org.ejml.data.Matrix;
 
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
@@ -218,6 +219,167 @@ public class EuclidCoreTools
       public String toString()
       {
          return EuclidCoreIOTools.getTuple3DString(this);
+      }
+   };
+
+   /** Constant representing the zero-matrix 3D, i.e. the 9 elements are zero. */
+   public static final Matrix3DReadOnly zeroMatrix3D = new Matrix3DReadOnly()
+   {
+      @Override
+      public double getM00()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM01()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM02()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM10()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM11()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM12()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM20()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM21()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM22()
+      {
+         return 0;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Matrix3DReadOnly)
+            return Matrix3DReadOnly.super.equals((Matrix3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getMatrix3DString(this);
+      }
+
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+      }
+   };
+
+   /**
+    * Constant representing the identity matrix 3D, i.e. the 3 diagonal elements are equal to one and
+    * the other equal to zero.
+    */
+   public static final Matrix3DReadOnly identityMatrix3D = new Matrix3DReadOnly()
+   {
+      @Override
+      public double getM00()
+      {
+         return 1;
+      }
+
+      @Override
+      public double getM01()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM02()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM10()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM11()
+      {
+         return 1;
+      }
+
+      @Override
+      public double getM12()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM20()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM21()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getM22()
+      {
+         return 1;
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof Matrix3DReadOnly)
+            return Matrix3DReadOnly.super.equals((Matrix3DReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getMatrix3DString(this);
+      }
+
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
       }
    };
 
