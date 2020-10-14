@@ -680,6 +680,80 @@ public class Matrix3DFeaturesTest
    }
 
    @Test
+   public void testIsZero() throws Exception
+   {
+      Random random = new Random(982364L);
+      Matrix3D matrix = new Matrix3D();
+      // Test with a identity matrix
+      matrix.setIdentity();
+      testAllIsZeroMethods(matrix, false);
+      // Test with a NaN matrix
+      matrix.setToNaN();
+      testAllIsZeroMethods(matrix, false);
+
+      // Test with zero
+      matrix.setToZero();
+      testAllIsZeroMethods(matrix, true);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double delta = random.nextBoolean() ? 1.0 : -1.0;
+         delta *= random.nextDouble();
+         matrix.setToZero();
+         matrix.setM00(matrix.getM00() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM01(matrix.getM01() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM02(matrix.getM02() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM10(matrix.getM10() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM11(matrix.getM11() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM12(matrix.getM12() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM20(matrix.getM20() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM21(matrix.getM21() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+         matrix.setToZero();
+         matrix.setM22(matrix.getM22() + delta);
+         testAllIsZeroMethods(matrix, Math.abs(delta) <= Matrix3DFeatures.EPS_CHECK_IDENTITY);
+      }
+   }
+
+   private void testAllIsZeroMethods(Matrix3DReadOnly matrix, boolean isZero)
+   {
+      Matrix3D matrixCopy = new Matrix3D(matrix);
+
+      double m00 = matrix.getM00();
+      double m01 = matrix.getM01();
+      double m02 = matrix.getM02();
+      double m10 = matrix.getM10();
+      double m11 = matrix.getM11();
+      double m12 = matrix.getM12();
+      double m20 = matrix.getM20();
+      double m21 = matrix.getM21();
+      double m22 = matrix.getM22();
+
+      assertTrue(Matrix3DFeatures.isZero(m00, m01, m02, m10, m11, m12, m20, m21, m22) == isZero);
+      assertTrue(Matrix3DFeatures.isZero(m00, m01, m02, m10, m11, m12, m20, m21, m22, Matrix3DFeatures.EPS_CHECK_IDENTITY) == isZero);
+
+      assertTrue(matrix.isZero(Matrix3DFeatures.EPS_CHECK_IDENTITY) == isZero);
+
+      for (int row = 0; row < 3; row++)
+         for (int column = 0; column < 3; column++)
+            assertTrue(Double.compare(matrix.getElement(row, column), matrixCopy.getElement(row, column)) == 0);
+   }
+
+   @Test
    public void testIsMatrixSkewSymmetric() throws Exception
    {
       Random random = new Random(982364L);

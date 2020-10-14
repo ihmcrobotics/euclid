@@ -216,6 +216,55 @@ public class Matrix3DFeatures
    }
 
    /**
+    * Tests if the matrix described by the given 9 coefficients is equal to the zero matrix.
+    * <p>
+    * The assertion is done on a per coefficient basis using {@link #EPS_CHECK_IDENTITY} as the
+    * tolerance.
+    * </p>
+    *
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @return {@code true} if the matrix is considered to be equal to the zero matrix, {@code false}
+    *         otherwise.
+    */
+   public static boolean isZero(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      return isZero(m00, m01, m02, m10, m11, m12, m20, m21, m22, EPS_CHECK_IDENTITY);
+   }
+
+   /**
+    * Tests if the matrix described by the given 9 coefficients is equal to the zero matrix.
+    * <p>
+    * The assertion is done on a per coefficient basis using {@code epsilon} as the tolerance.
+    * </p>
+    *
+    * @param m00     first matrix element in the first row.
+    * @param m01     second matrix element in the first row.
+    * @param m02     third matrix element in the first row.
+    * @param m10     first matrix element in the second row.
+    * @param m11     second matrix element in the second row.
+    * @param m12     third matrix element in the second row.
+    * @param m20     first matrix element in the third row.
+    * @param m21     second matrix element in the third row.
+    * @param m22     third matrix element in the third row.
+    * @param epsilon the tolerance as shown above.
+    * @return {@code true} if the matrix is considered to be equal to the zero matrix, {@code false}
+    *         otherwise.
+    */
+   public static boolean isZero(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22, double epsilon)
+   {
+      return Math.abs(m00) <= epsilon && Math.abs(m01) <= epsilon && Math.abs(m02) <= epsilon && Math.abs(m10) <= epsilon && Math.abs(m11) <= epsilon
+            && Math.abs(m12) <= epsilon && Math.abs(m20) <= epsilon && Math.abs(m21) <= epsilon && Math.abs(m22) <= epsilon;
+   }
+
+   /**
     * Tests if the given matrix is a rotation matrix.
     * <p>
     * The given matrix is a rotation matrix if:
