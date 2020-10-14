@@ -8,6 +8,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -459,6 +460,8 @@ public class ReferenceFrameTest
       assertEquals(0L, ReferenceFrameTools.getWorldFrame().getFrameIndex());
       existingIds.add(0L);
 
+      List<Long> frameIndices = new ArrayList<>();
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
@@ -472,6 +475,39 @@ public class ReferenceFrameTest
             long frameIndex = referenceFrame.getFrameIndex();
             assertFalse(existingIds.contains(frameIndex), "Already has ID " + frameIndex);
             existingIds.add(frameIndex);
+            frameIndices.add(frameIndex);
+         }
+
+         if (random.nextBoolean())
+         {
+            ReferenceFrame frameToClear = frameTree[random.nextInt(frameTree.length)];
+            if (frameToClear == ReferenceFrameTools.getWorldFrame())
+               continue;
+            // Check that explicitly clearing a part of the tree does not affect the indexing.
+            frameToClear.clearChildren();
+         }
+      }
+
+      // Assert that after clearing, the indexing is being reset.
+      ReferenceFrameTools.clearWorldFrameTree();
+
+      random = new Random(84358345L);
+      assertEquals(0L, ReferenceFrameTools.getWorldFrame().getFrameIndex());
+
+      int position = 0;
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
+         for (ReferenceFrame referenceFrame : frameTree)
+         {
+            if (referenceFrame == ReferenceFrameTools.getWorldFrame())
+            {
+               continue;
+            }
+            
+            long frameIndex = referenceFrame.getFrameIndex();
+            assertEquals(frameIndices.get(position++), frameIndex);
          }
       }
    }

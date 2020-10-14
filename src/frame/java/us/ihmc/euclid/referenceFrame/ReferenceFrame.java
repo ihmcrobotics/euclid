@@ -86,7 +86,7 @@ public abstract class ReferenceFrame
     * A counter for the number of frames in the reference frame tree that starts at this frame. Note,
     * that this counter does not account for frames that might be removed from the frame tree. It is
     * meant to account all frames that were ever added to this frame tree to provide a unique number
-    * Identifier for each frame.
+    * Identifier for each frame. The counter is rest to zero if the root frame is cleared.
     */
    private long framesAddedToTree = 0L;
 
@@ -1054,6 +1054,9 @@ public abstract class ReferenceFrame
       checkIfRemoved();
       children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
       children.clear();
+
+      if (isRootFrame())
+         framesAddedToTree = 0L;
    }
 
    private void disableRecursivly()
