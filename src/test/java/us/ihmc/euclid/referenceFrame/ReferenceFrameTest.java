@@ -457,6 +457,7 @@ public class ReferenceFrameTest
    {
       Random random = new Random(84358345L);
       Set<Long> existingIds = new HashSet<>();
+      ReferenceFrameTools.clearWorldFrameTree();
       assertEquals(0L, ReferenceFrameTools.getWorldFrame().getFrameIndex());
       existingIds.add(0L);
 
