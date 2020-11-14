@@ -16,12 +16,14 @@ import org.ejml.dense.row.decomposition.svd.SvdImplicitQrDecompose_DDRM;
 import org.junit.jupiter.api.Test;
 
 import javafx.util.Pair;
+import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Vector4D;
+import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
 public class SingularValueDecomposition3DTest
 {
@@ -46,7 +48,7 @@ public class SingularValueDecomposition3DTest
 
       for (int i = 0; i < 5 * ITERATIONS; i++)
       { // warmup
-         new SingularValueDecomposition3D().compute(EuclidCoreRandomTools.nextMatrix3D(random));
+         new SingularValueDecomposition3D().decompose(EuclidCoreRandomTools.nextMatrix3D(random));
          ejmlSVDDecomposition(EuclidCoreRandomTools.nextMatrix3D(random), new Matrix3D(), new Matrix3D(), new Matrix3D());
       }
 
@@ -56,14 +58,14 @@ public class SingularValueDecomposition3DTest
          {
             Matrix3D A = generator.get().getKey();
             long start = System.nanoTime();
-            svd3d.compute(A);
+            svd3d.decompose(A);
             long end = System.nanoTime();
             euclidTotalTime += end - start;
             double varEpsilon = Math.max(1.0, Math.abs(A.determinant())) * EPSILON;
 
-            Matrix3D Ueuclid = svd3d.getUmat();
-            Matrix3D Weuclid = svd3d.getWmat();
-            Matrix3D Veuclid = svd3d.getVmat();
+            Matrix3D Ueuclid = svd3d.getUMatrix();
+            Matrix3DBasics Weuclid = svd3d.getW(null);
+            Matrix3D Veuclid = svd3d.getVMatrix();
 
             assertTrue(Ueuclid.isRotationMatrix(EPSILON));
             assertTrue(Veuclid.isRotationMatrix(EPSILON));
@@ -222,6 +224,69 @@ public class SingularValueDecomposition3DTest
    }
 
    @Test
+   public void testApplyJacobiGivensRotation()
+   {
+      Random random = new Random(4576756);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Matrix3D Q = new Matrix3D();
+         Matrix3D S = EuclidCoreRandomTools.nextSymmetricMatrix3D(random, 10.0);
+
+         int p, q;
+         Axis3D rotationAxis;
+         switch (random.nextInt(3))
+         {
+            case 0:
+               p = 0;
+               q = 1;
+               rotationAxis = Axis3D.Z;
+               break;
+            case 1:
+               p = 0;
+               q = 2;
+               rotationAxis = Axis3D.Y;
+               break;
+            default:
+               p = 1;
+               q = 2;
+               rotationAxis = Axis3D.X;
+               break;
+         }
+
+         double s_pp = S.getElement(p, p);
+         double s_pq = S.getElement(p, q);
+         double s_qq = S.getElement(q, q);
+
+         double ch = 2.0 * (s_pp - s_qq);
+         double sh = s_pq;
+
+         if (SingularValueDecomposition3D.gamma * sh * sh < ch * ch)
+         {
+            double omega = 1.0 / Math.sqrt(ch * ch + sh * sh);
+            ch *= omega;
+            sh *= omega;
+         }
+         else
+         {
+            ch = SingularValueDecomposition3D.cosPiOverEight;
+            sh = SingularValueDecomposition3D.sinPiOverEight;
+         }
+
+         Matrix3D expected = new Matrix3D();
+         packGivensRotation(rotationAxis, ch, sh, new Vector4D(), Q);
+         expected.setAndTranspose(Q);
+         expected.multiply(S);
+         expected.multiply(Q);
+
+         Matrix3D actual = new Matrix3D(S);
+         applyJacobiGivensRotation(rotationAxis, ch, sh, actual);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
    public void testSwapElements()
    {
       Random random = new Random(4677);
@@ -259,6 +324,55 @@ public class SingularValueDecomposition3DTest
          SingularValueDecomposition3D.swapElements(c1, c2, quaternion);
          RotationMatrixConversion.convertQuaternionToMatrix(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), actual);
          EuclidCoreTestTools.assertMatrix3DEquals("Iteration: " + i + ", original:\n" + original + "\nc1=" + c1 + ", c2=" + c2, expected, actual, EPSILON);
+      }
+   }
+
+   static void applyJacobiGivensRotation(Axis3D rotationAxis, double ch, double sh, Matrix3DBasics S)
+   {
+      switch (rotationAxis)
+      {
+         case X:
+            SingularValueDecomposition3D.applyJacobiGivensRotationX(ch, sh, S);
+            break;
+         case Y:
+            SingularValueDecomposition3D.applyJacobiGivensRotationY(ch, sh, S);
+            break;
+         case Z:
+            SingularValueDecomposition3D.applyJacobiGivensRotationZ(ch, sh, S);
+            break;
+         default:
+            throw new IllegalStateException("Unexpected value for Axis3D: " + rotationAxis);
+      }
+   }
+
+   static void packGivensRotation(Axis3D rotationAxis, double ch, double sh, Vector4DBasics givensQuaternionToPack, Matrix3DBasics givensRotationToPack)
+   {
+      double ch2 = ch * ch;
+      double sh2 = sh * sh;
+
+      double diag_a = ch2 + sh2;
+      double diag_b = (ch2 - sh2) / diag_a;
+      double off_diag = 2.0 * ch * sh / diag_a;
+
+      switch (rotationAxis)
+      {
+         case X:
+            givensQuaternionToPack.set(sh, 0, 0, ch);
+            givensRotationToPack.set(1, 0, 0, 0, diag_b, -off_diag, 0, off_diag, diag_b);
+            break;
+         case Y:
+            // Kind off an oddity that the rotation needs to be inverted. 
+            // Best guess so far is that sh is computed from the s_02 element which is the location for the +sin(angle) element of a rotation along the y_axis, while the other 2 rotations uses the -sin(angle) element.
+            givensQuaternionToPack.set(0, -sh, 0, ch);
+            givensRotationToPack.set(diag_b, 0, -off_diag, 0, 1, 0, off_diag, 0, diag_b);
+            break;
+         case Z:
+            givensQuaternionToPack.set(0, 0, sh, ch);
+            givensRotationToPack.set(diag_b, -off_diag, 0, off_diag, diag_b, 0, 0, 0, 1);
+            break;
+
+         default:
+            throw new IllegalStateException("Unexpected value for Axis3D: " + rotationAxis);
       }
    }
 }
