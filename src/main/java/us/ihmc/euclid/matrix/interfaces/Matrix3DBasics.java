@@ -176,12 +176,23 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    /**
     * Sets this matrix to be equal to its outer-product.
     * <p>
-    * this = this * this<sup>T<sup>
+    * this = this * this<sup>T</sup>
     * </p>
     */
    default void multiplyOuter()
    {
       Matrix3DTools.multiplyTransposeRight(this, this, this);
+   }
+
+   /**
+    * Sets this matrix to be equal to its inner-product.
+    * <p>
+    * this = this<sup>T</sup> * this
+    * </p>
+    */
+   default void multiplyInner()
+   {
+      Matrix3DTools.multiplyTransposeLeft(this, this, this);
    }
 
    /**
@@ -285,7 +296,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    /**
     * Sets this matrix to be equal to the outer-product of {@code other}.
     * <p>
-    * this = other * other<sup>T<sup>
+    * this = other * other<sup>T</sup>
     * </p>
     *
     * @param other the other matrix used for this operation. Not modified.
@@ -294,6 +305,20 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    {
       set(other);
       multiplyOuter();
+   }
+
+   /**
+    * Sets this matrix to be equal to the inner-product of {@code other}.
+    * <p>
+    * this = other<sup>T</sup> * other
+    * </p>
+    *
+    * @param other the other matrix used for this operation. Not modified.
+    */
+   default void setAndMultiplyInner(Matrix3DReadOnly other)
+   {
+      set(other);
+      multiplyInner();
    }
 
    /**
