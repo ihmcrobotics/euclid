@@ -333,6 +333,34 @@ public class EuclidCoreRandomTools
       return matrix3D;
    }
 
+   public static Matrix3D nextSymmetricMatrix3D(Random random)
+   {
+      return nextSymmetricMatrix3D(random, 1.0);
+   }
+
+   public static Matrix3D nextSymmetricMatrix3D(Random random, double minMaxValue)
+   {
+      return nextSymmetricMatrix3D(random, -minMaxValue, minMaxValue);
+   }
+
+   public static Matrix3D nextSymmetricMatrix3D(Random random, double minValue, double maxValue)
+   {
+      Matrix3D matrix3D = new Matrix3D();
+      for (int row = 0; row < 3; row++)
+      {
+         double value = nextDouble(random, minValue, maxValue);
+         matrix3D.setElement(row, row, value);
+
+         for (int col = row + 1; col < 3; col++)
+         {
+            value = nextDouble(random, minValue, maxValue);
+            matrix3D.setElement(row, col, value);
+            matrix3D.setElement(col, row, value);
+         }
+      }
+      return matrix3D;
+   }
+
    /**
     * Generates a random double &in; [-1.0; 1.0].
     *
