@@ -18,10 +18,13 @@ import org.junit.jupiter.api.Test;
 import javafx.util.Pair;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 
@@ -63,9 +66,9 @@ public class SingularValueDecomposition3DTest
             euclidTotalTime += end - start;
             double varEpsilon = Math.max(1.0, Math.abs(A.determinant())) * EPSILON;
 
-            Matrix3D Ueuclid = svd3d.getUMatrix();
-            Matrix3DBasics Weuclid = svd3d.getW(null);
-            Matrix3D Veuclid = svd3d.getVMatrix();
+            Matrix3DReadOnly Ueuclid = svd3d.getUMatrix();
+            Matrix3DReadOnly Weuclid = svd3d.getW(null);
+            Matrix3DReadOnly Veuclid = svd3d.getVMatrix();
 
             assertTrue(Ueuclid.isRotationMatrix(EPSILON));
             assertTrue(Veuclid.isRotationMatrix(EPSILON));
@@ -191,6 +194,37 @@ public class SingularValueDecomposition3DTest
    }
 
    @Test
+   public void testSortBColumns()
+   {
+      Random random = new Random(425346);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Matrix3D diag = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 10.0);
+         RotationMatrix Vmat = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Quaternion Vquat = new Quaternion(Vmat);
+
+         Matrix3D originalB = new Matrix3D();
+         Matrix3DTools.multiply(diag, Vmat, originalB);
+
+         Matrix3D sortedB = new Matrix3D(originalB);
+         SingularValueDecomposition3D.sortBColumns(sortedB, Vmat, Vquat);
+
+         Matrix3D recomputedB = new Matrix3D();
+         Matrix3DTools.multiply(diag, Vmat, recomputedB);
+         EuclidCoreTestTools.assertMatrix3DEquals(sortedB, recomputedB, EPSILON);
+         Vector3D[] cols = {new Vector3D(), new Vector3D(), new Vector3D()};
+         sortedB.getColumn(0, cols[0]);
+         sortedB.getColumn(1, cols[1]);
+         sortedB.getColumn(2, cols[2]);
+         assertTrue(cols[0].length() > cols[1].length());
+         assertTrue(cols[1].length() > cols[2].length());
+
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(new Quaternion(Vmat), Vquat, EPSILON);
+      }
+   }
+
+   @Test
    public void testSwapColumn()
    {
       Matrix3D original = new Matrix3D(0, 1, 2, 3, 4, 5, 6, 7, 8);
@@ -216,7 +250,7 @@ public class SingularValueDecomposition3DTest
                expected.setColumn(c2, tuple1);
 
                actual.set(original);
-               SingularValueDecomposition3D.swapColumns(c1, negateC1, c2, actual);
+               swapColumns(c1, negateC1, c2, actual);
                assertEquals(expected, actual);
             }
          }
@@ -318,10 +352,10 @@ public class SingularValueDecomposition3DTest
 
          Matrix3D expected = new Matrix3D();
          RotationMatrixConversion.convertQuaternionToMatrix(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), expected);
-         SingularValueDecomposition3D.swapColumns(c1, true, c2, expected);
+         swapColumns(c1, true, c2, expected);
 
          Matrix3D actual = new Matrix3D();
-         SingularValueDecomposition3D.swapElements(c1, c2, quaternion);
+         swapElements(c1, c2, quaternion);
          RotationMatrixConversion.convertQuaternionToMatrix(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), actual);
          EuclidCoreTestTools.assertMatrix3DEquals("Iteration: " + i + ", original:\n" + original + "\nc1=" + c1 + ", c2=" + c2, expected, actual, EPSILON);
       }
@@ -373,6 +407,112 @@ public class SingularValueDecomposition3DTest
 
          default:
             throw new IllegalStateException("Unexpected value for Axis3D: " + rotationAxis);
+      }
+   }
+
+   static void swapColumns(int col1, boolean negateCol1, int col2, Matrix3DBasics matrixToSwapColumns)
+   {
+      if (col2 <= col1)
+         throw new IllegalArgumentException("col2 is expected to be strictly greater than col1");
+
+      double r0, r1, r2;
+      double m00, m01, m02, m10, m11, m12, m20, m21, m22;
+
+      if (col1 == 0)
+      {
+         r0 = matrixToSwapColumns.getM00();
+         r1 = matrixToSwapColumns.getM10();
+         r2 = matrixToSwapColumns.getM20();
+
+         if (negateCol1)
+         {
+            r0 = -r0;
+            r1 = -r1;
+            r2 = -r2;
+         }
+
+         if (col2 == 1)
+         {
+            m00 = matrixToSwapColumns.getM01();
+            m01 = r0;
+            m02 = matrixToSwapColumns.getM02();
+            m10 = matrixToSwapColumns.getM11();
+            m11 = r1;
+            m12 = matrixToSwapColumns.getM12();
+            m20 = matrixToSwapColumns.getM21();
+            m21 = r2;
+            m22 = matrixToSwapColumns.getM22();
+         }
+         else // col2 == 2
+         {
+            m00 = matrixToSwapColumns.getM02();
+            m01 = matrixToSwapColumns.getM01();
+            m02 = r0;
+            m10 = matrixToSwapColumns.getM12();
+            m11 = matrixToSwapColumns.getM11();
+            m12 = r1;
+            m20 = matrixToSwapColumns.getM22();
+            m21 = matrixToSwapColumns.getM21();
+            m22 = r2;
+         }
+      }
+      else // col1 == 1 & col2 == 2
+      {
+         r0 = matrixToSwapColumns.getM01();
+         r1 = matrixToSwapColumns.getM11();
+         r2 = matrixToSwapColumns.getM21();
+
+         if (negateCol1)
+         {
+            r0 = -r0;
+            r1 = -r1;
+            r2 = -r2;
+         }
+
+         m00 = matrixToSwapColumns.getM00();
+         m01 = matrixToSwapColumns.getM02();
+         m02 = r0;
+         m10 = matrixToSwapColumns.getM10();
+         m11 = matrixToSwapColumns.getM12();
+         m12 = r1;
+         m20 = matrixToSwapColumns.getM20();
+         m21 = matrixToSwapColumns.getM22();
+         m22 = r2;
+      }
+
+      if (matrixToSwapColumns instanceof RotationMatrixBasics)
+         ((RotationMatrixBasics) matrixToSwapColumns).setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      else
+         matrixToSwapColumns.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   static void swapElements(int c1, int c2, Vector4DBasics quaternion)
+   {
+      if (c2 <= c1)
+         throw new IllegalArgumentException("c2 is expected to be strictly greater than col1");
+
+      double q1x = quaternion.getX() * SingularValueDecomposition3D.sqrtTwoOverTwo;
+      double q1y = quaternion.getY() * SingularValueDecomposition3D.sqrtTwoOverTwo;
+      double q1z = quaternion.getZ() * SingularValueDecomposition3D.sqrtTwoOverTwo;
+      double q1s = quaternion.getS() * SingularValueDecomposition3D.sqrtTwoOverTwo;
+
+      if (c1 == 0)
+      {
+         if (c2 == 1)
+         {
+            // QuaternionTools.multiplyImpl(q1x, q1y, q1z, q1s, false, 0, 0, sqrtTwoOverTwo, sqrtTwoOverTwo, false, quaternion);
+            quaternion.set(q1x + q1y, q1y - q1x, q1s + q1z, q1s - q1z);
+         }
+         else // c2 == 2
+         {
+            // QuaternionTools.multiplyImpl(q1x, q1y, q1z, q1s, false, 0, -sqrtTwoOverTwo, 0, sqrtTwoOverTwo, false, quaternion);
+            quaternion.set(q1x + q1z, q1y - q1s, q1z - q1x, q1s + q1y);
+         }
+      }
+      else // c1 == 1 & c2 == 2
+      {
+         // QuaternionTools.multiplyImpl(q1x, q1y, q1z, q1s, false, sqrtTwoOverTwo, 0, 0, sqrtTwoOverTwo, false, quaternion);
+         quaternion.set(q1s + q1x, q1y + q1z, q1z - q1y, q1s - q1x);
       }
    }
 }
