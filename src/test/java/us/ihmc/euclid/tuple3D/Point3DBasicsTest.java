@@ -9,7 +9,6 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -236,9 +235,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         AffineTransform transform = new AffineTransform(new RotationScaleMatrix(EuclidCoreRandomTools.nextRotationMatrix(random),
-                                                                                 EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0)),
-                                                         EuclidCoreRandomTools.nextPoint3D(random, 10.0));
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
 
          T original = createRandomTuple(random);
          T expected = createEmptyTuple();

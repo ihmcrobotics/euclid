@@ -11,7 +11,6 @@ import us.ihmc.euclid.axisAngle.AxisAngle32;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -656,70 +655,6 @@ public class EuclidCoreRandomTools
    {
       AxisAngle randomRotation = nextAxisAngle(random, minMaxAngle);
       return new RotationMatrix(randomRotation);
-   }
-
-   /**
-    * Generates a random rotation-scale matrix.
-    * <p>
-    * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-<i>pi</i>; <i>pi</i>].
-    * <li>Each scale factor is in ]0.0; 10.0].
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @return the random rotation-scale matrix.
-    * @throws RuntimeException if {@code maxScale < 0}.
-    */
-   public static RotationScaleMatrix nextRotationScaleMatrix(Random random)
-   {
-      return nextRotationScaleMatrix(random, 10.0);
-   }
-
-   /**
-    * Generates a random rotation-scale matrix.
-    * <p>
-    * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-<i>pi</i>; <i>pi</i>].
-    * <li>Each scale factor is in ]0.0; {@code maxScale}].
-    * </ul>
-    * </p>
-    *
-    * @param random   the random generator to use.
-    * @param maxScale the maximum scale value used for each scale factor.
-    * @return the random rotation-scale matrix.
-    * @throws RuntimeException if {@code maxScale < 0}.
-    */
-   public static RotationScaleMatrix nextRotationScaleMatrix(Random random, double maxScale)
-   {
-      return nextRotationScaleMatrix(random, Math.PI, maxScale);
-   }
-
-   /**
-    * Generates a random rotation-scale matrix.
-    * <p>
-    * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-{@code minMaxAngle}; {@code minMaxAngle}].
-    * <li>Each scale factor is in ]0.0; {@code maxScale}].
-    * </ul>
-    * </p>
-    *
-    * @param random      the random generator to use.
-    * @param minMaxAngle the maximum absolute angle value that describes the generated rotation-scale
-    *                    matrix.
-    * @param maxScale    the maximum scale value used for each scale factor.
-    * @return the random rotation-scale matrix.
-    * @throws RuntimeException if {@code minMaxAngle < 0}.
-    * @throws RuntimeException if {@code maxScale < 0}.
-    */
-   public static RotationScaleMatrix nextRotationScaleMatrix(Random random, double minMaxAngle, double maxScale)
-   {
-      AxisAngle randomRotation = nextAxisAngle(random, minMaxAngle);
-      Vector3D randomScales = nextVector3D(random, new Vector3D(0.0, 0.0, 0.0), new Vector3D(maxScale, maxScale, maxScale));
-      return new RotationScaleMatrix(randomRotation, randomScales);
    }
 
    /**

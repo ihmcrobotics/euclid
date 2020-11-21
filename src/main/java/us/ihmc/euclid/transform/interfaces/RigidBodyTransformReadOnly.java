@@ -1,7 +1,6 @@
 package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -323,19 +322,6 @@ public interface RigidBodyTransformReadOnly extends Transform
    }
 
    /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the rotation-scale matrix that is set to this transform's rotation.
-    *                             The scale part is reset. Modified.
-    * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
-    */
-   @Deprecated
-   default void getRotation(RotationScaleMatrix rotationMatrixToPack)
-   {
-      rotationMatrixToPack.set(getRotation());
-   }
-
-   /**
     * Packs the rotation part of this rigid-body transform as a quaternion.
     *
     * @param orientationToPack the orientation that is set to the rotation part of this transform.
@@ -465,19 +451,6 @@ public interface RigidBodyTransformReadOnly extends Transform
    default void get(RotationMatrixBasics rotationMatrixToPack, Tuple3DBasics translationToPack)
    {
       rotationMatrixToPack.set(getRotation());
-      translationToPack.set(getTranslation());
-   }
-
-   /**
-    * Packs the rotation matrix and translation vector of this rigid-body transform.
-    *
-    * @param rotationMarixToPack the matrix to set to the rotation of this transform. The scale part is
-    *                            reset. Modified.
-    * @param translationToPack   the tuple to set to the translation of this transform. Modified.
-    */
-   default void get(RotationScaleMatrix rotationMarixToPack, Tuple3DBasics translationToPack)
-   {
-      rotationMarixToPack.set(getRotation());
       translationToPack.set(getTranslation());
    }
 }

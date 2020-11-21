@@ -6,7 +6,6 @@ import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -232,29 +231,6 @@ public class Matrix3DTools
    }
 
    /**
-    * Performs the multiplication: {@code m1}<sup>-1</sup> * {@code m2} and stores the result in
-    * {@code matrixToPack}.
-    * <p>
-    * {@code m2} and {@code matrixToPack} can be the same object. {@code m1} and {@code m2} can be the
-    * same object.
-    * <p>
-    * <p>
-    * This operation uses the property: <br>
-    * (R * S)<sup>-1</sup> = S<sup>-1</sup> * R<sup>T</sup> </br>
-    * of the rotation-scale matrix preventing to actually compute its inverse.
-    * </p>
-    *
-    * @param m1           the first matrix. Not modified.
-    * @param m2           the second matrix. Not modified.
-    * @param matrixToPack the matrix in which the result is stored. Modified.
-    */
-   public static void multiplyInvertLeft(RotationScaleMatrixReadOnly m1, Matrix3DReadOnly m2, Matrix3DBasics matrixToPack)
-   {
-      multiplyInvertLeft(m1.getRotationMatrix(), m2, matrixToPack);
-      matrixToPack.scaleRows(1.0 / m1.getScaleX(), 1.0 / m1.getScaleY(), 1.0 / m1.getScaleZ());
-   }
-
-   /**
     * Performs the multiplication: {@code m1} * {@code m2}<sup>T</sup> and stores the result in
     * {@code matrixToPack}.
     * <p>
@@ -340,30 +316,6 @@ public class Matrix3DTools
    public static void multiplyInvertRight(Matrix3DReadOnly m1, RotationMatrixReadOnly m2, CommonMatrix3DBasics matrixToPack)
    {
       multiplyTransposeRight(m1, m2, matrixToPack);
-   }
-
-   /**
-    * Performs the multiplication: {@code m1} * {@code m2}<sup>-1</sup> and stores the result in
-    * {@code matrixToPack}.
-    * <p>
-    * {@code m1} and {@code matrixToPack} can be the same object. {@code m1} and {@code m2} can be the
-    * same object.
-    * <p>
-    * <p>
-    * This operation uses the property: <br>
-    * (R * S)<sup>-1</sup> = S<sup>-1</sup> * R<sup>T</sup> </br>
-    * of the rotation-scale matrix preventing to actually compute its inverse.
-    * </p>
-    *
-    * @param m1           the first matrix. Not modified.
-    * @param m2           the second matrix. Not modified.
-    * @param matrixToPack the matrix in which the result is stored. Modified.
-    */
-   public static void multiplyInvertRight(Matrix3DReadOnly m1, RotationScaleMatrixReadOnly m2, Matrix3DBasics matrixToPack)
-   {
-      matrixToPack.set(m1);
-      matrixToPack.scaleColumns(1.0 / m2.getScaleX(), 1.0 / m2.getScaleY(), 1.0 / m2.getScaleZ());
-      multiplyTransposeRight(matrixToPack, m2.getRotationMatrix(), matrixToPack);
    }
 
    public static boolean multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation,

@@ -882,12 +882,6 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
          actual.set(m1);
          actual.multiplyInvertOther(rotationMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-
-         RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         Matrix3DTools.multiplyInvertRight(m1, rotationScaleMatrix, expected);
-         actual.set(m1);
-         actual.multiplyInvertOther(rotationScaleMatrix);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
 
@@ -1019,12 +1013,6 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
          Matrix3DTools.multiplyInvertLeft(rotationMatrix, m1, expected);
          actual.set(m1);
          actual.preMultiplyInvertOther(rotationMatrix);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-
-         RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         Matrix3DTools.multiplyInvertLeft(rotationScaleMatrix, m1, expected);
-         actual.set(m1);
-         actual.preMultiplyInvertOther(rotationScaleMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
@@ -1417,9 +1405,7 @@ public class Matrix3DTest extends CommonMatrix3DBasicsTest<Matrix3D>
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         AffineTransform transform = new AffineTransform(new RotationScaleMatrix(EuclidCoreRandomTools.nextRotationMatrix(random),
-                                                                                 EuclidCoreRandomTools.nextPoint3D(random, 1.0, 10.0)),
-                                                         EuclidCoreRandomTools.nextPoint3D(random, 10.0));
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          Matrix3D original = createRandomMatrix(random);
          Matrix3D expected = createEmptyMatrix();
          Matrix3D actual = createEmptyMatrix();

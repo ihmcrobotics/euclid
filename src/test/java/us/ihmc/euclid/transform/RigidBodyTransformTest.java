@@ -19,7 +19,6 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -274,14 +273,14 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       double m20 = original.getM20() + corruptionFactor * random.nextDouble();
       double m21 = original.getM21() + corruptionFactor * random.nextDouble();
       double m22 = original.getM22() + corruptionFactor * random.nextDouble();
-      transform.setRotationUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      transform.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       transform.normalizeRotationPart();
 
       Matrix3D rotation = new Matrix3D();
       Vector3D vector1 = new Vector3D();
       Vector3D vector2 = new Vector3D();
 
-      transform.getRotation(rotation);
+      rotation.set(transform.getRotation());
 
       // Test that each row & column vectors are unit-length
       for (int j = 0; j < 3; j++)
@@ -315,7 +314,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       m20 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
       m21 = 0.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
       m22 = 1.0 + EuclidCoreRandomTools.nextDouble(random, corruptionFactor);
-      transform.setRotationUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      transform.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       assertFalse(transform.hasRotation());
 
       for (int row = 0; row < 3; row++)
@@ -370,10 +369,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       double m20 = original.getM20() * corruptionFactor;
       double m21 = original.getM21() * corruptionFactor;
       double m22 = original.getM22() * corruptionFactor;
-      transform.setRotationUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      assertTrue(transform.determinantRotationPart() < corruptionFactor);
+      transform.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      assertTrue(transform.getRotation().determinant() < corruptionFactor);
       transform.normalizeRotationPart();
-      assertEquals(1.0, transform.determinantRotationPart(), EPS);
+      assertEquals(1.0, transform.getRotation().determinant(), EPS);
    }
 
    @Test
@@ -789,33 +788,6 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertTrue(actual.hasTranslation());
       }
 
-      { // Test set(RotationScaleMatrix rotationMatrix, TupleReadOnly translation)
-         RigidBodyTransform actual = new RigidBodyTransform();
-         RotationScaleMatrix expectedRotationScale = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         Vector3D expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
-         actual.set(expectedRotationScale, expectedTranslation);
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationScale.getRotationMatrix(), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
-         assertTrue(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-
-         expectedRotationScale = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         expectedTranslation = new Vector3D();
-         actual.set(expectedRotationScale, expectedTranslation);
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationScale.getRotationMatrix(), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
-         assertTrue(actual.hasRotation());
-         assertFalse(actual.hasTranslation());
-
-         expectedRotationScale = new RotationScaleMatrix();
-         expectedTranslation = EuclidCoreRandomTools.nextVector3D(random);
-         actual.set(expectedRotationScale, expectedTranslation);
-         EuclidCoreTestTools.assertMatrix3DEquals(expectedRotationScale.getRotationMatrix(), actual.getRotation(), 0.0);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actual.getTranslation(), 0.0);
-         assertFalse(actual.hasRotation());
-         assertTrue(actual.hasTranslation());
-      }
-
       { // Test set(Orientation3DReadOnly orientation, TupleReadOnly translation)
          RigidBodyTransform actual = new RigidBodyTransform();
          Quaternion expectedOrientation = EuclidCoreRandomTools.nextQuaternion(random);
@@ -1004,15 +976,15 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       RigidBodyTransform transform = new RigidBodyTransform();
       double d = EuclidCoreRandomTools.nextDouble(random, 5.0);
-      transform.setRotationUnsafe(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
-      transform.setTranslation(5.0, 3.0, -2.0);
+      transform.getRotation().setUnsafe(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+      transform.getTranslation().set(5.0, 3.0, -2.0);
       assertTrue(transform.isRotation2D());
 
-      transform.setRotationUnsafe(0.0, 0.0, d, 0.0, 0.0, d, d, d, d);
-      transform.setTranslation(5.0, 3.0, -2.0);
+      transform.getRotation().setUnsafe(0.0, 0.0, d, 0.0, 0.0, d, d, d, d);
+      transform.getTranslation().set(5.0, 3.0, -2.0);
       assertFalse(transform.isRotation2D());
-      transform.setRotationUnsafe(d, d, 0.0, d, d, 0.0, 0.0, 0.0, 1.0);
-      transform.setTranslation(5.0, 3.0, -2.0);
+      transform.getRotation().setUnsafe(d, d, 0.0, d, d, 0.0, 0.0, 0.0, 1.0);
+      transform.getTranslation().set(5.0, 3.0, -2.0);
       assertTrue(transform.isRotation2D());
    }
 
@@ -1024,8 +996,8 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
       RigidBodyTransform transform = new RigidBodyTransform();
       double d = EuclidCoreRandomTools.nextDouble(random, 5.0);
-      transform.setRotationUnsafe(0.0, 0.0, d, 0.0, 0.0, d, d, d, d);
-      transform.setTranslation(5.0, 3.0, -2.0);
+      transform.getRotation().setUnsafe(0.0, 0.0, d, 0.0, 0.0, d, d, d, d);
+      transform.getTranslation().set(5.0, 3.0, -2.0);
       try
       {
          transform.checkIfRotation2D();
@@ -1037,11 +1009,11 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertTrue(e.getMessage().equals("The orientation is not in XY plane: \n" + transform.getRotation()));
       }
 
-      transform.setRotationUnsafe(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
-      transform.setTranslation(5.0, 3.0, -2.0);
+      transform.getRotation().setUnsafe(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+      transform.getTranslation().set(5.0, 3.0, -2.0);
       transform.checkIfRotation2D();
-      transform.setRotationUnsafe(d, d, 0.0, d, d, 0.0, 0.0, 0.0, 1.0);
-      transform.setTranslation(5.0, 3.0, -2.0);
+      transform.getRotation().setUnsafe(d, d, 0.0, d, d, 0.0, 0.0, 0.0, 1.0);
+      transform.getTranslation().set(5.0, 3.0, -2.0);
       transform.checkIfRotation2D();
    }
 
@@ -1968,15 +1940,6 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
                assertTrue(rotationMatrix.getElement(row, column) == transform.getElement(row, column));
       }
 
-      { // Test getRotation(RotationScaleMatrix rotationMatrixToPack)
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RotationScaleMatrix rotationScaleMatrix = new RotationScaleMatrix();
-         transform.getRotation(rotationScaleMatrix);
-         for (int row = 0; row < 3; row++)
-            for (int column = 0; column < 3; column++)
-               assertTrue(rotationScaleMatrix.getElement(row, column) == transform.getElement(row, column));
-      }
-
       { // Test getRotation(DMatrix matrixToPack)
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          DMatrix denseMatrix = new DMatrixRMaj(3, 3);
@@ -2151,19 +2114,6 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          RotationMatrix expectedMatrix = new RotationMatrix();
          RotationMatrix actualMatrix = new RotationMatrix();
-         Vector3D expectedTranslation = new Vector3D();
-         Vector3D actualTranslation = new Vector3D();
-         transform.getRotation(expectedMatrix);
-         transform.getTranslation(expectedTranslation);
-         transform.get(actualMatrix, actualTranslation);
-         assertEquals(expectedMatrix, actualMatrix);
-         assertEquals(expectedTranslation, actualTranslation);
-      }
-
-      { // Test get(RotationScaleMatrix rotationMarixToPack, TupleBasics translationToPack)
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RotationScaleMatrix expectedMatrix = new RotationScaleMatrix();
-         RotationScaleMatrix actualMatrix = new RotationScaleMatrix();
          Vector3D expectedTranslation = new Vector3D();
          Vector3D actualTranslation = new Vector3D();
          transform.getRotation(expectedMatrix);

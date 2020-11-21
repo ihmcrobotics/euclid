@@ -2,9 +2,7 @@ package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.RotationMatrixTools;
@@ -180,24 +178,6 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    default void set(RotationMatrixReadOnly rotationMatrix, Tuple3DReadOnly translation)
    {
       getRotation().set(rotationMatrix);
-      getTranslation().set(translation);
-   }
-
-   /**
-    * Sets the rotation and translation parts of this transform separately.
-    * <p>
-    * Only the rotation matrix from {@code rotationScaleMatrix} is used to set the rotation part of
-    * this transform.
-    * </p>
-    *
-    * @param rotationScaleMatrix the matrix used to set the rotation part of this transform. Not
-    *                            modified.
-    * @param translation         the tuple used to set the translation part of this transform. Not
-    *                            modified.
-    */
-   default void set(RotationScaleMatrixReadOnly rotationScaleMatrix, Tuple3DReadOnly translation)
-   {
-      getRotation().set(rotationScaleMatrix.getRotationMatrix());
       getTranslation().set(translation);
    }
 

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -432,27 +431,6 @@ public class RotationVectorConversionTest
          EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
          // Assert the parameter that does get modified
          assertTrue(rotationMatrix.equals(rotationMatrixCopy));
-      }
-
-      // Test with a RotationScaleMatrix
-      for (int i = 0; i < 1000; i++)
-      {
-         RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         RotationScaleMatrix rotationScaleMatrixCopy = new RotationScaleMatrix(rotationScaleMatrix);
-         m00 = rotationScaleMatrix.getRotationMatrix().getM00();
-         m01 = rotationScaleMatrix.getRotationMatrix().getM01();
-         m02 = rotationScaleMatrix.getRotationMatrix().getM02();
-         m10 = rotationScaleMatrix.getRotationMatrix().getM10();
-         m11 = rotationScaleMatrix.getRotationMatrix().getM11();
-         m12 = rotationScaleMatrix.getRotationMatrix().getM12();
-         m20 = rotationScaleMatrix.getRotationMatrix().getM20();
-         m21 = rotationScaleMatrix.getRotationMatrix().getM21();
-         m22 = rotationScaleMatrix.getRotationMatrix().getM22();
-         RotationVectorConversion.convertMatrixToRotationVector(rotationScaleMatrix, actualRotationVector);
-         RotationVectorConversion.convertMatrixToRotationVectorImpl(m00, m01, m02, m10, m11, m12, m20, m21, m22, expectedRotationVector);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedRotationVector, actualRotationVector, EPSILON);
-         // Assert the parameter that does get modified
-         assertTrue(rotationScaleMatrix.equals(rotationScaleMatrixCopy));
       }
    }
 

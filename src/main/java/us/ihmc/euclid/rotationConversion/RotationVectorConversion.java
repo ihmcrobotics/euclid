@@ -2,7 +2,6 @@ package us.ihmc.euclid.rotationConversion;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -152,29 +151,6 @@ public class RotationVectorConversion
    }
 
    /**
-    * Converts the rotation part of the given rotation-scale matrix into a rotation vector.
-    * <p>
-    * After calling this method, the rotation matrix and the rotation vector represent the same
-    * orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, the rotation vector is set
-    * to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix  a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                             orientation part is used during the conversion. Not modified.
-    * @param rotationVectorToPack the vector in which the result is stored. Modified.
-    */
-   public static void convertMatrixToRotationVector(RotationScaleMatrixReadOnly rotationScaleMatrix, Vector3DBasics rotationVectorToPack)
-   {
-      convertMatrixToRotationVector(rotationScaleMatrix.getRotationMatrix(), rotationVectorToPack);
-   }
-
-   /**
     * Converts the given rotation matrix into a rotation vector.
     * <p>
     * After calling this method, the rotation matrix and the rotation vector represent the same
@@ -210,8 +186,7 @@ public class RotationVectorConversion
     * Converts the given rotation matrix into a rotation vector.
     * <p>
     * <b> This method is for internal use. Use
-    * {@link #convertMatrixToRotationVector(RotationMatrixReadOnly, Vector3DBasics)} or
-    * {@link #convertMatrixToRotationVector(RotationScaleMatrixReadOnly, Vector3DBasics)} instead. </b>
+    * {@link #convertMatrixToRotationVector(RotationMatrixReadOnly, Vector3DBasics)} instead. </b>
     * </p>
     * <p>
     * After calling this method, the rotation matrix and the rotation vector represent the same

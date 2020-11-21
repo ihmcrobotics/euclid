@@ -16,8 +16,6 @@ import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -431,22 +429,6 @@ public class Matrix3DToolsTest
          Matrix3DTools.multiplyInvertLeft(m1, m2, matrixActual);
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
-
-      // Test with a rotation scale matrix against multiply
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         // Fill some random data in matrixActual
-         matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
-         RotationScaleMatrixReadOnly m1 = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 20.0);
-         Matrix3D m2 = EuclidCoreRandomTools.nextMatrix3D(random);
-
-         Matrix3D m1Inverse = new Matrix3D();
-         m1Inverse.setAndInvert(m1);
-
-         Matrix3DTools.multiply(m1Inverse, m2, matrixExpected);
-         Matrix3DTools.multiplyInvertLeft(m1, m2, matrixActual);
-         EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
-      }
    }
 
    @Test
@@ -543,22 +525,6 @@ public class Matrix3DToolsTest
          matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
          RotationMatrix m2 = EuclidCoreRandomTools.nextRotationMatrix(random);
-
-         Matrix3D m2Inverse = new Matrix3D();
-         m2Inverse.setAndInvert(m2);
-
-         Matrix3DTools.multiply(m1, m2Inverse, matrixExpected);
-         Matrix3DTools.multiplyInvertRight(m1, m2, matrixActual);
-         EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
-      }
-
-      // Test with a rotation scale matrix against multiply
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         // Fill some random data in matrixActual
-         matrixActual = EuclidCoreRandomTools.nextMatrix3D(random);
-         Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
-         RotationScaleMatrixReadOnly m2 = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 20.0);
 
          Matrix3D m2Inverse = new Matrix3D();
          m2Inverse.setAndInvert(m2);
@@ -1213,18 +1179,6 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertTuple3DEquals(tupleExpected, tupleActual, EPS);
       }
 
-      // Test with rotation scale matrix
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RotationScaleMatrixReadOnly rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         matrix.set(rotationScaleMatrix);
-         tupleOriginal = EuclidCoreRandomTools.nextVector3D(random);
-
-         Matrix3DTools.inverseTransform(matrix, tupleOriginal, tupleExpected);
-         Matrix3DTools.inverseTransform(rotationScaleMatrix, tupleOriginal, tupleActual);
-         EuclidCoreTestTools.assertTuple3DEquals(tupleExpected, tupleActual, EPS);
-      }
-
       // Test transform in-place
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -1287,20 +1241,6 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertTuple2DEquals(tupleExpected, tupleActual, EPS);
       }
 
-      // Test with rotation scale matrix
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         rotationScaleMatrix.setToYawMatrix(2.0 * Math.PI * random.nextDouble());
-         rotationScaleMatrix.setScale(10.0 * random.nextDouble(), 10.0 * random.nextDouble(), 10.0 * random.nextDouble());
-         matrix.set(rotationScaleMatrix);
-         tupleOriginal = EuclidCoreRandomTools.nextVector2D(random);
-
-         Matrix3DTools.inverseTransform(matrix, tupleOriginal, tupleExpected, false);
-         Matrix3DTools.inverseTransform(rotationScaleMatrix, tupleOriginal, tupleActual, false);
-         EuclidCoreTestTools.assertTuple2DEquals(tupleExpected, tupleActual, EPS);
-      }
-
       // Test transform in-place
       for (int i = 0; i < ITERATIONS; i++)
       {
@@ -1329,17 +1269,6 @@ public class Matrix3DToolsTest
       try
       {
          Matrix3DTools.inverseTransform(rotationMatrix, tupleActual, tupleActual, true);
-         fail("Should have thrown a " + NotAMatrix2DException.class.getSimpleName());
-      }
-      catch (NotAMatrix2DException e)
-      {
-         // good
-      }
-
-      RotationScaleMatrixReadOnly rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-      try
-      {
-         Matrix3DTools.inverseTransform(rotationScaleMatrix, tupleActual, tupleActual, true);
          fail("Should have thrown a " + NotAMatrix2DException.class.getSimpleName());
       }
       catch (NotAMatrix2DException e)
@@ -1403,18 +1332,6 @@ public class Matrix3DToolsTest
 
          Matrix3DTools.inverseTransform(matrix, vectorOriginal, vectorExpected);
          Matrix3DTools.inverseTransform(rotationMatrix, vectorOriginal, vectorActual);
-         EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
-      }
-
-      // Test with rotation scale matrix
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RotationScaleMatrixReadOnly rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         matrix.set(rotationScaleMatrix);
-         vectorOriginal = EuclidCoreRandomTools.nextVector4D(random);
-
-         Matrix3DTools.inverseTransform(matrix, vectorOriginal, vectorExpected);
-         Matrix3DTools.inverseTransform(rotationScaleMatrix, vectorOriginal, vectorActual);
          EuclidCoreTestTools.assertTuple4DEquals(vectorExpected, vectorActual, EPS);
       }
 

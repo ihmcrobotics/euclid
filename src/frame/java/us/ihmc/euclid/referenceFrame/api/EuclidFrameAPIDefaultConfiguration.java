@@ -5,8 +5,6 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
@@ -71,6 +69,5 @@ public class EuclidFrameAPIDefaultConfiguration implements EuclidFrameAPITestCon
       testerToConfigure.registerFramelessReadOnlyType(Axis2D.class);
       testerToConfigure.registerFramelessReadOnlyType(Axis3D.class);
       testerToConfigure.registerFramelessTypesSmart(AxisAngleBasics.class, RigidBodyTransformBasics.class);
-      testerToConfigure.registerFramelessType(RotationScaleMatrix.class, RotationScaleMatrixReadOnly.class);
    }
 }

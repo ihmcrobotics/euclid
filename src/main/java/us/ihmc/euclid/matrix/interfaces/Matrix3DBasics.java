@@ -1220,24 +1220,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    /**
     * Performs a matrix multiplication on this.
     * <p>
-    * this = this * other<sup>-1</sup>
-    * </p>
-    * <p>
-    * This operation uses the property: <br>
-    * (R * S)<sup>-1</sup> = S<sup>-1</sup> * R<sup>T</sup> </br>
-    * of the rotation-scale matrix preventing to actually compute its inverse.
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   default void multiplyInvertOther(RotationScaleMatrixReadOnly other)
-   {
-      Matrix3DTools.multiplyInvertRight(this, other, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
     * this = other * this
     * </p>
     *
@@ -1329,24 +1311,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     * @param other the other matrix to multiply this by. Not modified.
     */
    default void preMultiplyInvertOther(RotationMatrixReadOnly other)
-   {
-      Matrix3DTools.multiplyInvertLeft(other, this, this);
-   }
-
-   /**
-    * Performs a matrix multiplication on this.
-    * <p>
-    * this = other<sup>-1</sup> * this
-    * </p>
-    * <p>
-    * This operation uses the property: <br>
-    * (R * S)<sup>-1</sup> = S<sup>-1</sup> * R<sup>T</sup> </br>
-    * of the rotation-scale matrix preventing to actually compute its inverse.
-    * </p>
-    *
-    * @param other the other matrix to multiply this by. Not modified.
-    */
-   default void preMultiplyInvertOther(RotationScaleMatrixReadOnly other)
    {
       Matrix3DTools.multiplyInvertLeft(other, this, this);
    }

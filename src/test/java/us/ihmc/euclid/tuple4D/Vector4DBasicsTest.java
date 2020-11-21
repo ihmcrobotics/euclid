@@ -10,7 +10,6 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -836,9 +835,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         AffineTransform transform = new AffineTransform(new RotationScaleMatrix(EuclidCoreRandomTools.nextRotationMatrix(random),
-                                                                                 EuclidCoreRandomTools.nextDouble(random, 0.01, 10.0)),
-                                                         EuclidCoreRandomTools.nextPoint3D(random, 10.0));
+         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          T original = createRandomTuple(random);
          T expected = createEmptyTuple();
          T actual = createEmptyTuple();

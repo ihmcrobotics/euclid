@@ -2,13 +2,11 @@ package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -491,36 +489,6 @@ public interface Orientation3DReadOnly
    }
 
    /**
-    * Transforms the given rotation-scale matrix by this orientation.
-    * <p>
-    * The operation is equivalent to prepend this orientation to the rotation part of the given
-    * rotation-scale matrix.
-    * </p>
-    *
-    * @param matrixToTransform the rotation-scale matrix to be transformed. Modified.
-    */
-   default void transform(RotationScaleMatrix matrixToTransform)
-   {
-      transform(matrixToTransform.getRotationMatrix());
-   }
-
-   /**
-    * Transforms the given {@code matrixOriginal} and stores the result in {@code matrixTransformed}.
-    * <p>
-    * The operation is equivalent to prepend this orientation to the rotation part of
-    * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
-    * </p>
-    *
-    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
-    * @param matrixTransformed the result of the original matrix after transformation. Modified.
-    */
-   default void transform(RotationScaleMatrixReadOnly matrixOriginal, RotationScaleMatrix matrixTransformed)
-   {
-      matrixTransformed.set(matrixOriginal);
-      transform(matrixOriginal.getRotationMatrix(), matrixTransformed.getRotationMatrix());
-   }
-
-   /**
     * Transforms the given {@code orientationToTransform} by this orientation.
     * <p>
     * The operation is equivalent to prepend this orientation to the given
@@ -744,37 +712,6 @@ public interface Orientation3DReadOnly
    default void inverseTransform(RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixTransformed)
    {
       RotationMatrixTools.multiply(this, true, matrixOriginal, false, matrixTransformed);
-   }
-
-   /**
-    * Performs the inverse of the transform to the given rotation-scale matrix by this orientation.
-    * <p>
-    * The operation is equivalent to prepend the inverse of this orientation to the rotation part of
-    * the given rotation-scale matrix.
-    * </p>
-    *
-    * @param matrixToTransform the rotation-scale matrix to be transformed. Modified.
-    */
-   default void inverseTransform(RotationScaleMatrix matrixToTransform)
-   {
-      inverseTransform(matrixToTransform.getRotationMatrix());
-   }
-
-   /**
-    * Performs the inverse of the transform to the given {@code matrixOriginal} and stores the result
-    * in {@code matrixTransformed}.
-    * <p>
-    * The operation is equivalent to prepend the inverse of this orientation to the rotation part of
-    * {@code matrixOriginal} and store the result in {@code matrixTransformed}.
-    * </p>
-    *
-    * @param matrixOriginal    the original value of the matrix to be transformed. Not modified.
-    * @param matrixTransformed the result of the original matrix after transformation. Modified.
-    */
-   default void inverseTransform(RotationScaleMatrixReadOnly matrixOriginal, RotationScaleMatrix matrixTransformed)
-   {
-      matrixTransformed.set(matrixOriginal);
-      inverseTransform(matrixOriginal.getRotationMatrix(), matrixTransformed.getRotationMatrix());
    }
 
    /**
