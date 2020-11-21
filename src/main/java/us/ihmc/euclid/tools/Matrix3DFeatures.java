@@ -512,6 +512,38 @@ public class Matrix3DFeatures
       return false;
    }
 
+   public static double maxElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.max(m00, m01, m02);
+      double r1 = EuclidCoreTools.max(m10, m11, m12);
+      double r2 = EuclidCoreTools.max(m20, m21, m22);
+      return EuclidCoreTools.max(r0, r1, r2);
+   }
+
+   public static double maxAbsElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.max(Math.abs(m00), Math.abs(m01), Math.abs(m02));
+      double r1 = EuclidCoreTools.max(Math.abs(m10), Math.abs(m11), Math.abs(m12));
+      double r2 = EuclidCoreTools.max(Math.abs(m20), Math.abs(m21), Math.abs(m22));
+      return EuclidCoreTools.max(r0, r1, r2);
+   }
+
+   public static double minElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.min(m00, m01, m02);
+      double r1 = EuclidCoreTools.min(m10, m11, m12);
+      double r2 = EuclidCoreTools.min(m20, m21, m22);
+      return EuclidCoreTools.min(r0, r1, r2);
+   }
+
+   public static double minAbsElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.min(Math.abs(m00), Math.abs(m01), Math.abs(m02));
+      double r1 = EuclidCoreTools.min(Math.abs(m10), Math.abs(m11), Math.abs(m12));
+      double r2 = EuclidCoreTools.min(Math.abs(m20), Math.abs(m21), Math.abs(m22));
+      return EuclidCoreTools.min(r0, r1, r2);
+   }
+
    /**
     * Tests on a per component basis if the two given matrices are equal to an {@code epsilon}.
     *

@@ -7,7 +7,6 @@ import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -384,7 +383,8 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void multiply(AffineTransformReadOnly other)
    {
-      Matrix3DTools.addTransform(getLinearTransform(), other.getTranslation(), getTranslation());
+      if (other.hasTranslation())
+         getLinearTransform().addTransform(other.getTranslation(), getTranslation());
       getLinearTransform().multiply(other.getLinearTransform());
    }
 
@@ -402,7 +402,8 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void multiply(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      Matrix3DTools.addTransform(getLinearTransform(), rigidBodyTransform.getTranslation(), getTranslation());
+      if (rigidBodyTransform.hasTranslation())
+         getLinearTransform().addTransform(rigidBodyTransform.getTranslation(), getTranslation());
       getLinearTransform().appendRotation(rigidBodyTransform.getRotation());
    }
 
@@ -421,8 +422,10 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void multiplyInvertThis(AffineTransformReadOnly other)
    {
       getTranslation().sub(other.getTranslation(), getTranslation());
-      getLinearTransform().inverseTransform(getTranslation(), getTranslation());
-      getLinearTransform().multiplyInvertThis(other.getLinearTransform());
+
+      getLinearTransform().invert();
+      getLinearTransform().transform(getTranslation());
+      getLinearTransform().multiply(other.getLinearTransform());
    }
 
    /**
@@ -440,7 +443,9 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void multiplyInvertOther(AffineTransformReadOnly other)
    {
       getLinearTransform().multiplyInvertOther(other.getLinearTransform());
-      Matrix3DTools.subTransform(getLinearTransform(), other.getTranslation(), getTranslation());
+
+      if (other.hasTranslation())
+         getLinearTransform().subTransform(other.getTranslation(), getTranslation());
    }
 
    /**
@@ -458,8 +463,10 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void multiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       getTranslation().sub(rigidBodyTransform.getTranslation(), getTranslation());
-      getLinearTransform().inverseTransform(getTranslation(), getTranslation());
-      getLinearTransform().appendRotationInvertThis(rigidBodyTransform.getRotation());
+
+      getLinearTransform().invert();
+      getLinearTransform().transform(getTranslation());
+      getLinearTransform().appendRotation(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -477,7 +484,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void multiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       getLinearTransform().appendRotationInvertOther(rigidBodyTransform.getRotation());
-      Matrix3DTools.subTransform(getLinearTransform(), rigidBodyTransform.getTranslation(), getTranslation());
+      getLinearTransform().subTransform(rigidBodyTransform.getTranslation(), getTranslation());
    }
 
    /**

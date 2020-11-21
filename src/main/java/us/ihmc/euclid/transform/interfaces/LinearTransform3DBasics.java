@@ -10,6 +10,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 
 public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matrix3DBasics
 {
+   @Override
    default void setToZero()
    {
       setIdentity();

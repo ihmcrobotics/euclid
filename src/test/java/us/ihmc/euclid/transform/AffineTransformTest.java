@@ -622,7 +622,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       // Test against invert
       for (int i = 0; i < ITERATIONS; i++)
       {
-         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+         AffineTransform transform = new AffineTransform(EuclidCoreRandomTools.nextMatrix3D(random, 0.1, 5.0), EuclidCoreRandomTools.nextVector3D(random, 1.0));
          AffineTransform inverse = new AffineTransform(transform);
          inverse.invert();
 
@@ -875,13 +875,12 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          RigidBodyTransform multipliedWith = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          AffineTransform affineMultipliedWith = new AffineTransform(multipliedWith);
-
          expected.set(original);
          expected.multiplyInvertThis(affineMultipliedWith);
 
          actual.set(original);
          actual.multiplyInvertThis(multipliedWith);
-         EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
+         EuclidCoreTestTools.assertAffineTransformEquals("Iteration " + i, expected, actual, EPS);
       }
    }
 
@@ -1401,15 +1400,15 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
    {
       Random random = new Random(2342L);
       AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
-      RotationMatrix matrixOriginal = EuclidCoreRandomTools.nextRotationMatrix(random);
-      RotationMatrix matrixExpected = new RotationMatrix();
-      RotationMatrix matrixActual = new RotationMatrix();
+      RotationMatrix original = EuclidCoreRandomTools.nextRotationMatrix(random);
+      RotationMatrix expected = new RotationMatrix();
+      RotationMatrix actual = new RotationMatrix();
 
-      transform.getLinearTransform().getAsQuaternion().transform(matrixOriginal, matrixExpected);
+      transform.getLinearTransform().getAsQuaternion().transform(original, expected);
 
-      matrixActual.set(matrixOriginal);
-      transform.transform(matrixActual);
-      EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
+      actual.set(original);
+      transform.transform(actual);
+      EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
    }
 
    @Test

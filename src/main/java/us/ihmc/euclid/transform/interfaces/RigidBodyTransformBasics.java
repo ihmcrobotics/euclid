@@ -684,7 +684,8 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void multiply(AffineTransformReadOnly affineTransform)
    {
-      getRotation().addTransform(affineTransform.getTranslation(), getTranslation());
+      if (affineTransform.hasTranslation())
+         getRotation().addTransform(affineTransform.getTranslation(), getTranslation());
       getRotation().append(affineTransform.getLinearTransform().getAsQuaternion());
    }
 

@@ -603,6 +603,26 @@ public interface Matrix3DReadOnly
       return Matrix3DFeatures.isMatrixSkewSymmetric(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
    }
 
+   default double maxElement()
+   {
+      return Matrix3DFeatures.maxElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
+   default double maxAbsElement()
+   {
+      return Matrix3DFeatures.maxAbsElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
+   default double minElement()
+   {
+      return Matrix3DFeatures.minElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
+   default double minAbsElement()
+   {
+      return Matrix3DFeatures.minAbsElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
    /**
     * Transforms the given tuple by this matrix.
     * <p>
@@ -657,6 +677,34 @@ public interface Matrix3DReadOnly
    default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       Matrix3DTools.addTransform(this, tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple by this matrix and subtracts the result to the tuple.
+    * <p>
+    * tupleToTransform = tupleToTransform - this * tupleToTransform
+    * </p>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void subTransform(Tuple3DBasics tupleToTransform)
+   {
+      subTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and subtracts the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = tupleTransformed - this * tupleOriginal
+    * </p>
+    *
+    * @param tupleOriginal    the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to subtract the result to. Modified.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      Matrix3DTools.subTransform(this, tupleOriginal, tupleTransformed);
    }
 
    /**

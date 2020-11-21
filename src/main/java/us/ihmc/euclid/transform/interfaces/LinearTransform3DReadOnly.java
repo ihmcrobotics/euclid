@@ -50,7 +50,7 @@ public interface LinearTransform3DReadOnly extends Matrix3DReadOnly
 
    default void transform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)
    {
-      getAsQuaternion().inverseTransform(orientationOriginal, orientationTransformed);
+      getAsQuaternion().transform(orientationOriginal, orientationTransformed);
    }
 
    default void inverseTransform(Orientation3DReadOnly orientationOriginal, Orientation3DBasics orientationTransformed)

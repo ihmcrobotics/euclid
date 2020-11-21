@@ -15,6 +15,7 @@ import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.transform.AffineTransform;
+import us.ihmc.euclid.transform.LinearTransform3D;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -454,6 +455,21 @@ public class EuclidCoreRandomTools
          }
       }
       return matrix3D;
+   }
+
+   public static LinearTransform3D nextLinearTransform3D(Random random)
+   {
+      return nextLinearTransform3D(random, 1.0);
+   }
+
+   public static LinearTransform3D nextLinearTransform3D(Random random, double minMaxValue)
+   {
+      return nextLinearTransform3D(random, -minMaxValue, minMaxValue);
+   }
+
+   public static LinearTransform3D nextLinearTransform3D(Random random, double minValue, double maxValue)
+   {
+      return new LinearTransform3D(nextMatrix3D(random, minValue, maxValue));
    }
 
    /**
