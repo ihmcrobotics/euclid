@@ -66,9 +66,9 @@ public class SingularValueDecomposition3DTest
             euclidTotalTime += end - start;
             double varEpsilon = Math.max(1.0, Math.abs(A.determinant())) * EPSILON;
 
-            Matrix3DReadOnly Ueuclid = svd3d.getUMatrix();
+            Matrix3DReadOnly Ueuclid = new RotationMatrix(svd3d.getU());
             Matrix3DReadOnly Weuclid = svd3d.getW(null);
-            Matrix3DReadOnly Veuclid = svd3d.getVMatrix();
+            Matrix3DReadOnly Veuclid = new RotationMatrix(svd3d.getV());
 
             assertTrue(Ueuclid.isRotationMatrix(EPSILON));
             assertTrue(Veuclid.isRotationMatrix(EPSILON));
@@ -201,17 +201,16 @@ public class SingularValueDecomposition3DTest
       for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D diag = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 10.0);
-         RotationMatrix Vmat = EuclidCoreRandomTools.nextRotationMatrix(random);
-         Quaternion Vquat = new Quaternion(Vmat);
+         Quaternion V = EuclidCoreRandomTools.nextQuaternion(random);
 
          Matrix3D originalB = new Matrix3D();
-         Matrix3DTools.multiply(diag, Vmat, originalB);
+         Matrix3DTools.multiply(diag, new RotationMatrix(V), originalB);
 
          Matrix3D sortedB = new Matrix3D(originalB);
-         SingularValueDecomposition3D.sortBColumns(sortedB, Vmat, Vquat);
+         SingularValueDecomposition3D.sortBColumns(sortedB, V);
 
          Matrix3D recomputedB = new Matrix3D();
-         Matrix3DTools.multiply(diag, Vmat, recomputedB);
+         Matrix3DTools.multiply(diag, new RotationMatrix(V), recomputedB);
          EuclidCoreTestTools.assertMatrix3DEquals(sortedB, recomputedB, EPSILON);
          Vector3D[] cols = {new Vector3D(), new Vector3D(), new Vector3D()};
          sortedB.getColumn(0, cols[0]);
@@ -219,8 +218,6 @@ public class SingularValueDecomposition3DTest
          sortedB.getColumn(2, cols[2]);
          assertTrue(cols[0].length() > cols[1].length());
          assertTrue(cols[1].length() > cols[2].length());
-
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(new Quaternion(Vmat), Vquat, EPSILON);
       }
    }
 

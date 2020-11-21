@@ -1,10 +1,9 @@
 package us.ihmc.euclid.tools;
 
 import us.ihmc.euclid.matrix.Matrix3D;
-import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -66,7 +65,7 @@ public class SingularValueDecomposition3D
 
       int iteration = 0;
 
-      output.Vquat.setToZero();
+      output.V.setToZero();
 
       for (; iteration < maxIterations; iteration++)
       {
@@ -81,13 +80,13 @@ public class SingularValueDecomposition3D
             {
                if (a_01_abs < tolerance)
                   break;
-               approxGivensQuaternion(0, 1, S, output.Vquat);
+               approxGivensQuaternion(0, 1, S, output.V);
             }
             else
             {
                if (a_12_abs < tolerance)
                   break;
-               approxGivensQuaternion(1, 2, S, output.Vquat);
+               approxGivensQuaternion(1, 2, S, output.V);
             }
          }
          else
@@ -96,26 +95,19 @@ public class SingularValueDecomposition3D
             {
                if (a_02_abs < tolerance)
                   break;
-               approxGivensQuaternion(0, 2, S, output.Vquat);
+               approxGivensQuaternion(0, 2, S, output.V);
             }
             else
             {
                if (a_12_abs < tolerance)
                   break;
-               approxGivensQuaternion(1, 2, S, output.Vquat);
+               approxGivensQuaternion(1, 2, S, output.V);
             }
          }
       }
 
       if (iteration > 0)
-      {
-         output.Vquat.normalize();
-         toRotationMatrix(output.Vquat, output.Vmat);
-      }
-      else
-      {
-         output.Vmat.setIdentity();
-      }
+         output.V.normalize();
    }
 
    private static void approxGivensQuaternion(int p, int q, Matrix3DBasics SToUpdate, QuaternionBasics QToUpdate)
@@ -186,45 +178,73 @@ public class SingularValueDecomposition3D
    private void computeUW(Matrix3DReadOnly A)
    {
       Matrix3D B = temp;
-      Matrix3DTools.multiply(A, output.Vmat, B);
-      sortBColumns(B, output.Vmat, output.Vquat);
-      output.Uquat.setToZero();
+      computeB(A, output.V, B);
+      sortBColumns(B, output.V);
+      output.U.setToZero();
 
       boolean isUquatInitialized = false;
 
       if (!EuclidCoreTools.isZero(B.getM10(), tolerance) || B.getM00() < 0.0)
       {
-         qrGivensQuaternion(1, 0, B, output.Uquat, tolerance);
+         qrGivensQuaternion(1, 0, B, output.U, tolerance);
          isUquatInitialized = true;
       }
 
       if (!EuclidCoreTools.isZero(B.getM20(), tolerance) || B.getM11() < 0.0)
       {
-         qrGivensQuaternion(2, 0, B, output.Uquat, tolerance);
+         qrGivensQuaternion(2, 0, B, output.U, tolerance);
          isUquatInitialized = true;
       }
 
       if (!EuclidCoreTools.isZero(B.getM21(), tolerance) || B.getM11() < 0.0)
       {
-         qrGivensQuaternion(2, 1, B, output.Uquat, tolerance);
+         qrGivensQuaternion(2, 1, B, output.U, tolerance);
          isUquatInitialized = true;
       }
 
-      output.sigma0 = B.getM00();
-      output.sigma1 = B.getM11();
-      output.sigma2 = B.getM22();
+      output.W.set(B.getM00(), B.getM11(), B.getM22());
 
       if (isUquatInitialized)
-      {
-         output.Uquat.normalize();
-         toRotationMatrix(output.Uquat, output.Umat);
-      }
-      else
-      {
-         output.Umat.setIdentity();
-         output.Uquat.setToZero();
-      }
+         output.U.normalize();
+   }
 
+   private static void computeB(Matrix3DReadOnly A, QuaternionReadOnly V, Matrix3DBasics BToPack)
+   {
+      double qx = V.getX();
+      double qy = V.getY();
+      double qz = V.getZ();
+      double qs = V.getS();
+
+      double yy2 = 2.0 * qy * qy;
+      double zz2 = 2.0 * qz * qz;
+      double xx2 = 2.0 * qx * qx;
+      double xy2 = 2.0 * qx * qy;
+      double sz2 = 2.0 * qs * qz;
+      double xz2 = 2.0 * qx * qz;
+      double sy2 = 2.0 * qs * qy;
+      double yz2 = 2.0 * qy * qz;
+      double sx2 = 2.0 * qs * qx;
+
+      double m00 = 1.0 - yy2 - zz2;
+      double m01 = xy2 - sz2;
+      double m02 = xz2 + sy2;
+      double m10 = xy2 + sz2;
+      double m11 = 1.0 - xx2 - zz2;
+      double m12 = yz2 - sx2;
+      double m20 = xz2 - sy2;
+      double m21 = yz2 + sx2;
+      double m22 = 1.0 - xx2 - yy2;
+
+      double b00 = A.getM00() * m00 + A.getM01() * m10 + A.getM02() * m20;
+      double b01 = A.getM00() * m01 + A.getM01() * m11 + A.getM02() * m21;
+      double b02 = A.getM00() * m02 + A.getM01() * m12 + A.getM02() * m22;
+      double b10 = A.getM10() * m00 + A.getM11() * m10 + A.getM12() * m20;
+      double b11 = A.getM10() * m01 + A.getM11() * m11 + A.getM12() * m21;
+      double b12 = A.getM10() * m02 + A.getM11() * m12 + A.getM12() * m22;
+      double b20 = A.getM20() * m00 + A.getM21() * m10 + A.getM22() * m20;
+      double b21 = A.getM20() * m01 + A.getM21() * m11 + A.getM22() * m21;
+      double b22 = A.getM20() * m02 + A.getM21() * m12 + A.getM22() * m22;
+      BToPack.set(b00, b01, b02, b10, b11, b12, b20, b21, b22);
    }
 
    private static void qrGivensQuaternion(int p, int q, Matrix3DBasics B, QuaternionBasics UToUpdate, double epsilon)
@@ -463,7 +483,7 @@ public class SingularValueDecomposition3D
       U.setUnsafe(ux * ch + uy * sh, uy * ch - ux * sh, us * sh + uz * ch, us * ch - uz * sh);
    }
 
-   static void sortBColumns(Matrix3DBasics B, RotationMatrixBasics Vmat, QuaternionBasics Vquat)
+   static void sortBColumns(Matrix3DBasics B, QuaternionBasics Vquat)
    {
       double rho0 = EuclidCoreTools.normSquared(B.getM00(), B.getM10(), B.getM20());
       double rho1 = EuclidCoreTools.normSquared(B.getM01(), B.getM11(), B.getM21());
@@ -488,9 +508,6 @@ public class SingularValueDecomposition3D
                B.set(B.getM00(), B.getM02(), -B.getM01(),
                      B.getM10(), B.getM12(), -B.getM11(),
                      B.getM20(), B.getM22(), -B.getM21());
-               Vmat.setUnsafe(Vmat.getM00(), Vmat.getM02(), -Vmat.getM01(),
-                              Vmat.getM10(), Vmat.getM12(), -Vmat.getM11(),
-                              Vmat.getM20(), Vmat.getM22(), -Vmat.getM21());
                Vquat.setUnsafe(sqrtTwoOverTwo * (qs + qx),
                                sqrtTwoOverTwo * (qy + qz),
                                sqrtTwoOverTwo * (qz - qy),
@@ -502,9 +519,6 @@ public class SingularValueDecomposition3D
             B.set(B.getM02(), B.getM00(), B.getM01(),
                   B.getM12(), B.getM10(), B.getM11(),
                   B.getM22(), B.getM20(), B.getM21());
-            Vmat.setUnsafe(Vmat.getM02(), Vmat.getM00(), Vmat.getM01(),
-                           Vmat.getM12(), Vmat.getM10(), Vmat.getM11(),
-                           Vmat.getM22(), Vmat.getM20(), Vmat.getM21());
             Vquat.setUnsafe(0.5 * (-qs + qx - qy + qz),
                             0.5 * (-qs + qx + qy - qz),
                             0.5 * (-qs - qx + qy + qz),
@@ -520,9 +534,6 @@ public class SingularValueDecomposition3D
                B.set(B.getM01(), -B.getM00(), B.getM02(),
                      B.getM11(), -B.getM10(), B.getM12(),
                      B.getM21(), -B.getM20(), B.getM22());
-               Vmat.setUnsafe(Vmat.getM01(), -Vmat.getM00(), Vmat.getM02(),
-                              Vmat.getM11(), -Vmat.getM10(), Vmat.getM12(),
-                              Vmat.getM21(), -Vmat.getM20(), Vmat.getM22());
                Vquat.setUnsafe(sqrtTwoOverTwo * (qx + qy),
                                sqrtTwoOverTwo * (qy - qx),
                                sqrtTwoOverTwo * (qs + qz),
@@ -533,9 +544,6 @@ public class SingularValueDecomposition3D
                B.set(B.getM01(), B.getM02(), B.getM00(),
                      B.getM11(), B.getM12(), B.getM10(),
                      B.getM21(), B.getM22(), B.getM20());
-               Vmat.setUnsafe(Vmat.getM01(), Vmat.getM02(), Vmat.getM00(),
-                              Vmat.getM11(), Vmat.getM12(), Vmat.getM10(),
-                              Vmat.getM21(), Vmat.getM22(), Vmat.getM20());
                Vquat.setUnsafe(0.5 * (qs + qx + qy - qz),
                                0.5 * (qs - qx + qy + qz),
                                0.5 * (qs + qx - qy + qz),
@@ -547,9 +555,6 @@ public class SingularValueDecomposition3D
             B.set(B.getM02(), B.getM01(), -B.getM00(),
                   B.getM12(), B.getM11(), -B.getM10(),
                   B.getM22(), B.getM21(), -B.getM20());
-            Vmat.setUnsafe(Vmat.getM02(), Vmat.getM01(), -Vmat.getM00(),
-                           Vmat.getM12(), Vmat.getM11(), -Vmat.getM10(),
-                           Vmat.getM22(), Vmat.getM21(), -Vmat.getM20());
             Vquat.setUnsafe(sqrtTwoOverTwo * (qx + qz),
                             sqrtTwoOverTwo * (qy - qs),
                             sqrtTwoOverTwo * (qz - qx),
@@ -559,63 +564,19 @@ public class SingularValueDecomposition3D
       // @formatter:on
    }
 
-   private static void toRotationMatrix(QuaternionReadOnly quaternion, RotationMatrixBasics rotationMatrix)
-   {
-      double qx = quaternion.getX();
-      double qy = quaternion.getY();
-      double qz = quaternion.getZ();
-      double qs = quaternion.getS();
-
-      double yy2 = 2.0 * qy * qy;
-      double zz2 = 2.0 * qz * qz;
-      double xx2 = 2.0 * qx * qx;
-      double xy2 = 2.0 * qx * qy;
-      double sz2 = 2.0 * qs * qz;
-      double xz2 = 2.0 * qx * qz;
-      double sy2 = 2.0 * qs * qy;
-      double yz2 = 2.0 * qy * qz;
-      double sx2 = 2.0 * qs * qx;
-
-      double m00 = 1.0 - yy2 - zz2;
-      double m01 = xy2 - sz2;
-      double m02 = xz2 + sy2;
-      double m10 = xy2 + sz2;
-      double m11 = 1.0 - xx2 - zz2;
-      double m12 = yz2 - sx2;
-      double m20 = xz2 - sy2;
-      double m21 = yz2 + sx2;
-      double m22 = 1.0 - xx2 - yy2;
-      rotationMatrix.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-   }
-
    public SVD3DOutput getOutput()
    {
       return output;
    }
 
-   public RotationMatrix getUMatrix()
+   public Quaternion getU()
    {
-      return output.getUMatrix();
+      return output.getU();
    }
 
-   public Quaternion getUQuaternion()
+   public Vector3D getW()
    {
-      return output.getUQuaternion();
-   }
-
-   public double getSigma0()
-   {
-      return output.getSigma0();
-   }
-
-   public double getSigma1()
-   {
-      return output.getSigma1();
-   }
-
-   public double getSigma2()
-   {
-      return output.getSigma2();
+      return output.getW();
    }
 
    public Matrix3DBasics getW(Matrix3DBasics W)
@@ -623,14 +584,9 @@ public class SingularValueDecomposition3D
       return output.getW(W);
    }
 
-   public RotationMatrix getVMatrix()
+   public Quaternion getV()
    {
-      return output.getVMatrix();
-   }
-
-   public Quaternion getVQuaternion()
-   {
-      return output.getVQuaternion();
+      return output.getV();
    }
 
    public double getTolerance()
@@ -640,142 +596,68 @@ public class SingularValueDecomposition3D
 
    public static class SVD3DOutput
    {
-      private final Quaternion Uquat = new Quaternion();
-      private final RotationMatrix Umat = new RotationMatrix();
-
-      private double sigma0, sigma1, sigma2;
-
-      private final Quaternion Vquat = new Quaternion();
-      private final RotationMatrix Vmat = new RotationMatrix();
+      private final Quaternion U = new Quaternion();
+      private final Vector3D W = new Vector3D();
+      private final Quaternion V = new Quaternion();
 
       public void set(SVD3DOutput other)
       {
-         Uquat.set(other.Uquat);
-         Umat.set(other.Umat);
-
-         sigma0 = other.sigma0;
-         sigma1 = other.sigma1;
-         sigma2 = other.sigma2;
-
-         Vquat.set(other.Vquat);
-         Vmat.set(other.Vmat);
+         U.set(other.U);
+         W.set(other.W);
+         V.set(other.V);
       }
 
       public void setIdentity()
       {
-         Uquat.setToZero();
-         Umat.setIdentity();
-
-         sigma0 = 1.0;
-         sigma1 = 1.0;
-         sigma2 = 1.0;
-
-         Vquat.setToZero();
-         Vmat.setIdentity();
+         U.setToZero();
+         W.set(1.0, 1.0, 1.0);
+         V.setToZero();
       }
 
       public void setToNaN()
       {
-         Uquat.setToNaN();
-         Umat.setToNaN();
-
-         sigma0 = Double.NaN;
-         sigma1 = Double.NaN;
-         sigma2 = Double.NaN;
-
-         Vquat.setToNaN();
-         Vmat.setToNaN();
+         U.setToNaN();
+         W.setToNaN();
+         V.setToNaN();
       }
 
       public void transpose()
       {
-         {
-            double vx = Vquat.getX();
-            double vy = Vquat.getY();
-            double vz = Vquat.getZ();
-            double vs = Vquat.getS();
-            Vquat.set(Uquat);
-            Uquat.setUnsafe(vx, vy, vz, vs);
-         }
-
-         {
-            double v00 = Vmat.getM00();
-            double v01 = Vmat.getM01();
-            double v02 = Vmat.getM02();
-            double v10 = Vmat.getM10();
-            double v11 = Vmat.getM11();
-            double v12 = Vmat.getM12();
-            double v20 = Vmat.getM20();
-            double v21 = Vmat.getM21();
-            double v22 = Vmat.getM22();
-            Vmat.set(Umat);
-            Umat.setUnsafe(v00, v01, v02, v10, v11, v12, v20, v21, v22);
-         }
+         double vx = V.getX();
+         double vy = V.getY();
+         double vz = V.getZ();
+         double vs = V.getS();
+         V.set(U);
+         U.setUnsafe(vx, vy, vz, vs);
       }
 
-      public void setSigmas(double sigma0, double sigma1, double sigma2)
+      public Quaternion getU()
       {
-         this.sigma0 = sigma0;
-         this.sigma1 = sigma1;
-         this.sigma2 = sigma2;
+         return U;
       }
 
-      public void setSigma0(double sigma0)
+      public Vector3D getW()
       {
-         this.sigma0 = sigma0;
-      }
-
-      public void setSigma1(double sigma1)
-      {
-         this.sigma1 = sigma1;
-      }
-
-      public void setSigma2(double sigma2)
-      {
-         this.sigma2 = sigma2;
-      }
-
-      public RotationMatrix getUMatrix()
-      {
-         return Umat;
-      }
-
-      public Quaternion getUQuaternion()
-      {
-         return Uquat;
-      }
-
-      public double getSigma0()
-      {
-         return sigma0;
-      }
-
-      public double getSigma1()
-      {
-         return sigma1;
-      }
-
-      public double getSigma2()
-      {
-         return sigma2;
+         return W;
       }
 
       public Matrix3DBasics getW(Matrix3DBasics W)
       {
          if (W == null)
             W = new Matrix3D();
-         W.setToDiagonal(sigma0, sigma1, sigma2);
+         W.setToDiagonal(this.W);
          return W;
       }
 
-      public RotationMatrix getVMatrix()
+      public Quaternion getV()
       {
-         return Vmat;
+         return V;
       }
 
-      public Quaternion getVQuaternion()
+      @Override
+      public String toString()
       {
-         return Vquat;
+         return "U = " + U + ", W = " + W + ", V = " + V;
       }
    }
 }
