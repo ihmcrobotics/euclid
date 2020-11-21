@@ -35,6 +35,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * </p>
  *
  * @author Sylvain Bertrand
+ * @deprecated
  */
 public interface RotationScaleMatrixReadOnly extends Matrix3DReadOnly
 {

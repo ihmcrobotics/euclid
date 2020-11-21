@@ -9,9 +9,9 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -95,7 +95,7 @@ public class EuclidCoreIOTools
     * @param affineTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getAffineTransformString(AffineTransform affineTransform)
+   public static String getAffineTransformString(AffineTransformReadOnly affineTransform)
    {
       return getAffineTransformString(DEFAULT_FORMAT, affineTransform);
    }
@@ -117,12 +117,12 @@ public class EuclidCoreIOTools
     * @param affineTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getAffineTransformString(String format, AffineTransform affineTransform)
+   public static String getAffineTransformString(String format, AffineTransformReadOnly affineTransform)
    {
       if (affineTransform == null)
          return "null";
       else
-         return getHomogeneousTransformString(format, affineTransform.getRotationScaleMatrix(), affineTransform.getTranslationVector());
+         return getHomogeneousTransformString(format, affineTransform.getLinearTransform(), affineTransform.getTranslation());
    }
 
    private static String getHomogeneousTransformString(String format, Matrix3DReadOnly matrix, Tuple3DReadOnly translation)
@@ -679,6 +679,27 @@ public class EuclidCoreIOTools
          ret += suffix;
 
       return ret;
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of doubles given specific prefix, suffix,
+    * separator.
+    * <p>
+    * Using {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    *  0.123, -0.480,  1.457
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param format    the format to use for each number.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, double... values)
+   {
+      return getStringOf(separator, DEFAULT_FORMAT, values);
    }
 
    /**

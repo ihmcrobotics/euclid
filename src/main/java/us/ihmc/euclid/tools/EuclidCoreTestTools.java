@@ -24,6 +24,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -2333,7 +2334,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformEquals(AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
       assertAffineTransformEquals(null, expected, actual, epsilon);
    }
@@ -2352,7 +2353,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
       assertAffineTransformEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -2373,7 +2374,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon, String format)
+   public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -2652,7 +2653,7 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, AffineTransform expected, AffineTransform actual, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, String format)
    {
       String expectedAsString = getAffineTransformString(format, expected);
       String actualAsString = getAffineTransformString(format, actual);

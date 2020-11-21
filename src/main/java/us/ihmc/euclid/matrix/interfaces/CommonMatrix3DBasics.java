@@ -3,6 +3,7 @@ package us.ihmc.euclid.matrix.interfaces;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -33,6 +34,16 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     * @param m22 the new 3rd row 3rd column coefficient for this matrix.
     */
    public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22);
+
+   default void set(Orientation3DReadOnly orientation3D)
+   {
+      orientation3D.get(this);
+   }
+
+   default void set(RotationMatrixReadOnly rotationMatrix)
+   {
+      set((Matrix3DReadOnly) rotationMatrix);
+   }
 
    @Override
    default void setToZero()
@@ -68,6 +79,14 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    default void normalize()
    {
       Matrix3DTools.normalize(this);
+   }
+
+   /**
+    * Transposes this matrix: m = m<sup>T</sup>.
+    */
+   default void transpose()
+   {
+      set(getM00(), getM10(), getM20(), getM01(), getM11(), getM21(), getM02(), getM12(), getM22());
    }
 
    /**

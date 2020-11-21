@@ -627,23 +627,9 @@ public class EuclidCoreRandomTools
       return new QuaternionBasedTransform(nextQuaternion(random), nextVector3D(random));
    }
 
-   /**
-    * Generates a random affine transform.
-    * <p>
-    * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-<i>pi</i>; <i>pi</i>].
-    * <li>Each scale factor is in ]0.0; 10.0].
-    * <li>Each component of the translation part is in [-1.0; 1.0].
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @return the random affine transform.
-    */
    public static AffineTransform nextAffineTransform(Random random)
    {
-      return new AffineTransform(nextRotationScaleMatrix(random, 10.0), nextVector3D(random));
+      return new AffineTransform(nextMatrix3D(random, 10.0), nextVector3D(random));
    }
 
    /**
@@ -915,6 +901,22 @@ public class EuclidCoreRandomTools
       Vector3D vector = new Vector3D();
       randomizeTuple3D(random, min, max, vector);
       return vector;
+   }
+
+   /**
+    * Generates a random vector.
+    * <p>
+    * {@code vector}<sub>i</sub> &in; [{@code -minMax}; {@code minMax}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each component.
+    * @return the random vector.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static Vector3D nextVector3D(Random random, double minMax)
+   {
+      return nextVector3D(random, -minMax, minMax);
    }
 
    /**

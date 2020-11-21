@@ -896,7 +896,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix actual = new RotationMatrix();
 
          expected.set(original);
-         expected.preMultiply(transform.getRotationMatrix());
+         expected.prepend(transform.getLinearTransform().getAsQuaternion());
          actual.set(original);
          actual.applyTransform(transform);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);

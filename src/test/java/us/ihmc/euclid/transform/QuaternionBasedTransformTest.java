@@ -1661,13 +1661,13 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
 
       AffineTransform original = new AffineTransform(originalRigidBodyTransform);
-      original.setScale(scale);
+      original.appendScale(scale);
       AffineTransform expected = new AffineTransform();
       AffineTransform actual = new AffineTransform();
 
       transform.transform(originalRigidBodyTransform, expectedRigidBodyTransform);
       expected.set(expectedRigidBodyTransform);
-      expected.setScale(scale);
+      expected.appendScale(scale);
       transform.transform(original, actual);
 
       EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);

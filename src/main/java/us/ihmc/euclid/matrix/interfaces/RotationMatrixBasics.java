@@ -44,14 +44,6 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Transposes this matrix: m = m<sup>T</sup>.
-    */
-   default void transpose()
-   {
-      set(getM00(), getM10(), getM20(), getM01(), getM11(), getM21(), getM02(), getM12(), getM22());
-   }
-
-   /**
     * Inverts this rotation matrix.
     * <p>
     * This operation uses the property: <br>
@@ -377,7 +369,6 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
       RotationMatrixTools.multiplyTransposeRight(this, other, this);
    }
 
-   /** {@inheritDoc} */
    @Override
    default void appendInvertOther(Orientation3DReadOnly orientation)
    {

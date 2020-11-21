@@ -3,6 +3,7 @@ package us.ihmc.euclid.orientation.interfaces;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.RotationScaleMatrix;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -147,7 +148,7 @@ public interface Orientation3DReadOnly
     * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
     *                             Modified.
     */
-   void get(RotationMatrixBasics rotationMatrixToPack);
+   void get(CommonMatrix3DBasics rotationMatrixToPack);
 
    /**
     * Converts, if necessary, and packs this orientation into an axis-angle.

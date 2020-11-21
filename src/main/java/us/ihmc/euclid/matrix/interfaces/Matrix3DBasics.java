@@ -2,7 +2,7 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
-import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -163,14 +163,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
       setM20(m20);
       setM21(m21);
       setM22(m22);
-   }
-
-   /**
-    * Transposes this matrix: m = m<sup>T</sup>.
-    */
-   default void transpose()
-   {
-      set(getM00(), getM10(), getM20(), getM01(), getM11(), getM21(), getM02(), getM12(), getM22());
    }
 
    /**
@@ -375,20 +367,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToYawMatrix(double yaw)
    {
-      double sinYaw = EuclidCoreTools.sin(yaw);
-      double cosYaw = EuclidCoreTools.cos(yaw);
-
-      setM00(cosYaw);
-      setM01(-sinYaw);
-      setM02(0.0);
-
-      setM10(sinYaw);
-      setM11(cosYaw);
-      setM12(0.0);
-
-      setM20(0.0);
-      setM21(0.0);
-      setM22(1.0);
+      RotationMatrixConversion.computeYawMatrix(yaw, this);
    }
 
    /**
@@ -405,20 +384,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToPitchMatrix(double pitch)
    {
-      double sinPitch = EuclidCoreTools.sin(pitch);
-      double cosPitch = EuclidCoreTools.cos(pitch);
-
-      setM00(cosPitch);
-      setM01(0.0);
-      setM02(sinPitch);
-
-      setM10(0.0);
-      setM11(1.0);
-      setM12(0.0);
-
-      setM20(-sinPitch);
-      setM21(0.0);
-      setM22(cosPitch);
+      RotationMatrixConversion.computePitchMatrix(pitch, this);
    }
 
    /**
@@ -435,19 +401,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void setToRollMatrix(double roll)
    {
-      double sinRoll = EuclidCoreTools.sin(roll);
-      double cosRoll = EuclidCoreTools.cos(roll);
-      setM00(1.0);
-      setM01(0.0);
-      setM02(0.0);
-
-      setM10(0.0);
-      setM11(cosRoll);
-      setM12(-sinRoll);
-
-      setM20(0.0);
-      setM21(sinRoll);
-      setM22(cosRoll);
+      RotationMatrixConversion.computeRollMatrix(roll, this);
    }
 
    /**

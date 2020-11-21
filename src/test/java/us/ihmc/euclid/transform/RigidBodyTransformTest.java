@@ -2397,7 +2397,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.setScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          expected.multiply(multipliedWithRigidBody);
@@ -2788,7 +2788,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.setScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          expected.invert();
@@ -2825,7 +2825,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
          inverseOfMultipliedWithRigidBody.invert();
          AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.setScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          expected.multiply(inverseOfMultipliedWithRigidBody);
@@ -3054,7 +3054,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.getScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          expected.preMultiply(multipliedWithRigidBody);
@@ -3436,7 +3436,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
 
          RigidBodyTransform multipliedWithRigidBody = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.setScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          expected.invert();
@@ -3508,7 +3508,7 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          RigidBodyTransform inverseOfMultipliedWithRigidBody = new RigidBodyTransform(multipliedWithRigidBody);
          inverseOfMultipliedWithRigidBody.invert();
          AffineTransform multipliedWith = new AffineTransform(multipliedWithRigidBody);
-         multipliedWith.setScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         multipliedWith.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          expected.preMultiply(inverseOfMultipliedWithRigidBody);
@@ -3853,13 +3853,13 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
 
       AffineTransform original = new AffineTransform(originalRigidBodyTransform);
-      original.setScale(scale);
+      original.appendScale(scale);
       AffineTransform expected = new AffineTransform();
       AffineTransform actual = new AffineTransform();
 
       transform.transform(originalRigidBodyTransform, expectedRigidBodyTransform);
       expected.set(expectedRigidBodyTransform);
-      expected.setScale(scale);
+      expected.appendScale(scale);
       transform.transform(original, actual);
 
       EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);

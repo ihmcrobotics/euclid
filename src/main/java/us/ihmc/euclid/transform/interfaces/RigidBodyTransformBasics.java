@@ -8,7 +8,6 @@ import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.RotationMatrixTools;
-import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -153,6 +152,12 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    {
       getRotation().set(other.getRotation());
       getTranslation().set(other.getTranslation());
+   }
+
+   default void set(AffineTransformReadOnly affineTransform)
+   {
+      getRotation().set(affineTransform.getLinearTransform().getAsQuaternion());
+      getTranslation().set(affineTransform.getTranslation());
    }
 
    /**
@@ -697,10 +702,10 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param affineTransform the affine transform to multiply this with. Not modified.
     */
-   default void multiply(AffineTransform affineTransform)
+   default void multiply(AffineTransformReadOnly affineTransform)
    {
-      getRotation().addTransform(affineTransform.getTranslationVector(), getTranslation());
-      getRotation().append(affineTransform.getRotationMatrix());
+      getRotation().addTransform(affineTransform.getTranslation(), getTranslation());
+      getRotation().append(affineTransform.getLinearTransform().getAsQuaternion());
    }
 
    /**
@@ -750,11 +755,11 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param affineTransform the affine transform to multiply this with. Not modified.
     */
-   default void multiplyInvertThis(AffineTransform affineTransform)
+   default void multiplyInvertThis(AffineTransformReadOnly affineTransform)
    {
-      getTranslation().sub(affineTransform.getTranslationVector(), getTranslation());
+      getTranslation().sub(affineTransform.getTranslation(), getTranslation());
       getRotation().inverseTransform(getTranslation());
-      getRotation().appendInvertThis(affineTransform.getRotationMatrix());
+      getRotation().appendInvertThis(affineTransform.getLinearTransform().getAsQuaternion());
    }
 
    /**
@@ -771,10 +776,10 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param affineTransform the affine transform to multiply this with. Not modified.
     */
-   default void multiplyInvertOther(AffineTransform affineTransform)
+   default void multiplyInvertOther(AffineTransformReadOnly affineTransform)
    {
-      getRotation().appendInvertOther(affineTransform.getRotationMatrix());
-      getRotation().subTransform(affineTransform.getTranslationVector(), getTranslation());
+      getRotation().appendInvertOther(affineTransform.getLinearTransform().getAsQuaternion());
+      getRotation().subTransform(affineTransform.getTranslation(), getTranslation());
    }
 
    /**
@@ -919,11 +924,11 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param affineTransform the affine transform to multiply this with. Not modified.
     */
-   default void preMultiply(AffineTransform affineTransform)
+   default void preMultiply(AffineTransformReadOnly affineTransform)
    {
-      affineTransform.getRotationMatrix().transform(getTranslation());
-      getTranslation().add(affineTransform.getTranslationVector());
-      getRotation().prepend(affineTransform.getRotationMatrix());
+      affineTransform.getLinearTransform().getAsQuaternion().transform(getTranslation());
+      getTranslation().add(affineTransform.getTranslation());
+      getRotation().prepend(affineTransform.getLinearTransform().getAsQuaternion());
    }
 
    /**
@@ -976,11 +981,11 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param affineTransform the affine transform to multiply this with. Not modified.
     */
-   default void preMultiplyInvertThis(AffineTransform affineTransform)
+   default void preMultiplyInvertThis(AffineTransformReadOnly affineTransform)
    {
-      getRotation().prependInvertThis(affineTransform.getRotationMatrix());
+      getRotation().prependInvertThis(affineTransform.getLinearTransform().getAsQuaternion());
       getRotation().transform(getTranslation());
-      getTranslation().sub(affineTransform.getTranslationVector(), getTranslation());
+      getTranslation().sub(affineTransform.getTranslation(), getTranslation());
    }
 
    /**
@@ -997,11 +1002,11 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     *
     * @param affineTransform the affine transform to multiply this with. Not modified.
     */
-   default void preMultiplyInvertOther(AffineTransform affineTransform)
+   default void preMultiplyInvertOther(AffineTransformReadOnly affineTransform)
    {
-      getTranslation().sub(affineTransform.getTranslationVector());
-      affineTransform.getRotationMatrix().inverseTransform(getTranslation());
-      getRotation().prependInvertOther(affineTransform.getRotationMatrix());
+      getTranslation().sub(affineTransform.getTranslation());
+      affineTransform.getLinearTransform().getAsQuaternion().inverseTransform(getTranslation());
+      getRotation().prependInvertOther(affineTransform.getLinearTransform().getAsQuaternion());
    }
 
    /**

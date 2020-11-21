@@ -1,10 +1,11 @@
 package us.ihmc.euclid.yawPitchRoll.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.YawPitchRollTools;
@@ -164,9 +165,9 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default void get(RotationMatrixBasics rotationMatrixToPack)
+   default void get(CommonMatrix3DBasics rotationMatrixToPack)
    {
-      rotationMatrixToPack.setYawPitchRoll(getYaw(), getPitch(), getRoll());
+      RotationMatrixConversion.convertYawPitchRollToMatrix(this, rotationMatrixToPack);
    }
 
    /** {@inheritDoc} */

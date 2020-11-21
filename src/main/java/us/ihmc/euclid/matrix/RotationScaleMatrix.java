@@ -52,6 +52,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  * </p>
  *
  * @author Sylvain Bertrand
+ * @deprecated
  */
 public class RotationScaleMatrix implements CommonMatrix3DBasics, RotationScaleMatrixReadOnly, Settable<RotationScaleMatrix>,
       EpsilonComparable<RotationScaleMatrix>, GeometricallyComparable<RotationScaleMatrix>
