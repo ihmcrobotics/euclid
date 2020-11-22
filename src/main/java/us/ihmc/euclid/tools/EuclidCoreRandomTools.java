@@ -474,15 +474,20 @@ public class EuclidCoreRandomTools
 
    public static LinearTransform3D nextNonSingularLinearTransform3D(Random random)
    {
+      return nextNonSingularLinearTransform3D(random, 0.25, 10.0);
+   }
+
+   public static LinearTransform3D nextNonSingularLinearTransform3D(Random random, double minAbsScale, double maxAbsScale)
+   {
       LinearTransform3D next = new LinearTransform3D();
       next.appendRotation(nextQuaternion(random));
-      Vector3D scale = nextVector3D(random, 10.0);
+      Vector3D scale = nextVector3D(random, maxAbsScale);
       for (int i = 0; i < 3; i++)
       {
          if (scale.getElement(i) >= 0.0)
-            scale.setElement(i, Math.max(0.05, scale.getElement(i)));
+            scale.setElement(i, Math.max(minAbsScale, scale.getElement(i)));
          else
-            scale.setElement(i, Math.min(-0.05, scale.getElement(i)));
+            scale.setElement(i, Math.min(-minAbsScale, scale.getElement(i)));
       }
       next.appendScale(scale);
       next.appendRotation(nextQuaternion(random));
