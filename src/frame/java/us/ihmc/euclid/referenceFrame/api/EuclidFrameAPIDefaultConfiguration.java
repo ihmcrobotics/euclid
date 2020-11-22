@@ -5,14 +5,19 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.geometry.exceptions.BoundingBoxException;
 import us.ihmc.euclid.geometry.tools.EuclidGeometryRandomTools;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameCommonMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameBoundingBox3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameCommonMatrix3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameConvexPolygon2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLine3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameLineSegment3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DBasics;
+import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
@@ -56,6 +61,11 @@ public class EuclidFrameAPIDefaultConfiguration implements EuclidFrameAPITestCon
       testerToConfigure.registerFrameTypesSmart(FrameTuple4DBasics.class, FrameVector4DBasics.class, FrameQuaternionBasics.class);
       testerToConfigure.registerFrameTypeSmart(FrameYawPitchRollBasics.class);
       testerToConfigure.registerFrameTypesSmart(FrameRotationMatrixBasics.class, FrameMatrix3DBasics.class);
+      testerToConfigure.registerFrameType(FrameCommonMatrix3DBasics.class,
+                                          FixedFrameCommonMatrix3DBasics.class,
+                                          FrameMatrix3DReadOnly.class,
+                                          CommonMatrix3DBasics.class,
+                                          Matrix3DReadOnly.class);
       testerToConfigure.registerFrameTypesSmart(FrameOrientation2DBasics.class, FrameOrientation3DBasics.class);
       testerToConfigure.registerFrameTypesSmart(FramePose2DBasics.class, FramePose3DBasics.class);
       testerToConfigure.registerFrameTypesSmart(FrameLine2DBasics.class, FrameLine3DBasics.class);
