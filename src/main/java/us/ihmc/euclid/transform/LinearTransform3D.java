@@ -49,7 +49,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
 
             double ux = U.getX(), uy = U.getY(), uz = U.getZ(), us = U.getS();
 
-            if (isRotation)
+            if (isRotationMatrix())
             {
                x = ux;
                y = uy;
@@ -206,7 +206,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
    @Override
    public void resetScale()
    {
-      if (isIdentity() || isRotation)
+      if (isIdentity() || isRotationMatrix())
          return;
 
       // Using directly the svdOutput fields to avoid triggering listeners.
@@ -246,7 +246,44 @@ public class LinearTransform3D implements LinearTransform3DBasics
       m12 = m21;
       m21 = temp;
 
-      svd3D.transpose();
+      if (!svdDirty)
+         svd3D.transpose();
+   }
+
+   @Override
+   public void invert()
+   {
+      if (isIdentity())
+         return;
+
+      boolean invertSVDOutput = !svdDirty;
+
+      if (isRotationMatrix())
+      {
+         double temp;
+
+         temp = m01;
+         m01 = m10;
+         m10 = temp;
+
+         temp = m02;
+         m02 = m20;
+         m20 = temp;
+
+         temp = m12;
+         m12 = m21;
+         m21 = temp;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.invert();
+      }
+
+      if (invertSVDOutput)
+      {
+         svdOutput.invert();
+         svdDirty = false;
+      }
    }
 
    @Override

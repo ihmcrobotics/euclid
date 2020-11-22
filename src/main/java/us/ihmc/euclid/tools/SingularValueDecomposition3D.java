@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tools;
 
+import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -629,6 +630,16 @@ public class SingularValueDecomposition3D
          double vs = V.getS();
          V.set(U);
          U.setUnsafe(vx, vy, vz, vs);
+      }
+
+      public void invert()
+      {
+         if (W.getX() < Matrix3DTools.EPS_INVERT || W.getY() < Matrix3DTools.EPS_INVERT || Math.abs(W.getZ()) < Matrix3DTools.EPS_INVERT)
+            throw new SingularMatrixException(W.getX(), 0, 0, 0, W.getY(), 0, 0, 0, W.getZ());
+         transpose();
+         W.setX(1.0 / W.getX());
+         W.setY(1.0 / W.getY());
+         W.setZ(1.0 / W.getZ());
       }
 
       public Quaternion getU()
