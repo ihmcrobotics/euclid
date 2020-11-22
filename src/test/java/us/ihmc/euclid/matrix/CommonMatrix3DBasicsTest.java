@@ -1,5 +1,6 @@
 package us.ihmc.euclid.matrix;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
@@ -114,6 +115,29 @@ public abstract class CommonMatrix3DBasicsTest<T extends CommonMatrix3DBasics> e
          T actualMatrix = createEmptyMatrix();
          actualMatrix.set(startRow, startColumn, denseMatrix);
          EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
+      }
+   }
+
+   @Test
+   public void testTranspose() throws Exception
+   {
+      Random random = new Random(65451L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         T matrix = createRandomMatrix(random);
+         T matrixTranspose = createEmptyMatrix();
+
+         matrixTranspose.set(matrix);
+         matrixTranspose.transpose();
+
+         for (int row = 0; row < 3; row++)
+         {
+            for (int column = 0; column < 3; column++)
+            {
+               assertEquals(matrix.getElement(row, column), matrixTranspose.getElement(column, row), SMALL_EPS);
+            }
+         }
       }
    }
 }

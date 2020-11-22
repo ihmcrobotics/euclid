@@ -614,6 +614,8 @@ public abstract class Matrix3DBasicsTest<T extends Matrix3DBasics> extends Commo
    @Test
    public void testTranspose() throws Exception
    {
+      super.testTranspose();
+
       Random random = new Random(65451L);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -621,18 +623,6 @@ public abstract class Matrix3DBasicsTest<T extends Matrix3DBasics> extends Commo
          T matrix = createRandomMatrix(random);
          T matrixTranspose = createEmptyMatrix();
 
-         matrixTranspose.set(matrix);
-         matrixTranspose.transpose();
-
-         for (int row = 0; row < 3; row++)
-         {
-            for (int column = 0; column < 3; column++)
-            {
-               assertEquals(matrix.getElement(row, column), matrixTranspose.getElement(column, row), SMALL_EPS);
-            }
-         }
-
-         matrix = createRandomMatrix(random);
          matrixTranspose.setAndTranspose(matrix);
 
          for (int row = 0; row < 3; row++)
