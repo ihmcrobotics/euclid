@@ -9,9 +9,10 @@ import java.util.Random;
 import org.ejml.data.DMatrix;
 import org.junit.jupiter.api.Test;
 
-import us.ihmc.euclid.matrix.CommonMatrix3DBasicsTest;
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.Matrix3DBasicsTest;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -19,7 +20,7 @@ import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
-public class LinearTransform3DTest extends CommonMatrix3DBasicsTest<LinearTransform3D>
+public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
 {
    private static final double EPSILON = 1.0e-12;
    private static final int ITERATIONS = 1000;
@@ -81,8 +82,10 @@ public class LinearTransform3DTest extends CommonMatrix3DBasicsTest<LinearTransf
    }
 
    @Test
-   public void testSetIdentity()
+   public void testSetIdentity() throws Exception
    {
+      super.testSetIdentity();
+
       Random random = new Random(76435);
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -154,6 +157,71 @@ public class LinearTransform3DTest extends CommonMatrix3DBasicsTest<LinearTransf
          assertEquals(expectedOrientation, linearTransform3D.getAsQuaternion());
          assertEquals(expectedPreScaleOrientation, linearTransform3D.getPreScaleQuaternion());
          assertEquals(expectedPostScaleOrientation, linearTransform3D.getPostScaleQuaternion());
+      }
+   }
+
+   @Test
+   @Override
+   public void testSetters() throws Exception
+   {
+      super.testSetters();
+
+      Random random = new Random(2342L);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Matrix3DReadOnly other)
+         Matrix3DReadOnly expectedMatrix = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
+         LinearTransform3D actualMatrix = createEmptyMatrix();
+         actualMatrix.set(expectedMatrix);
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Matrix3DReadOnly other)
+         LinearTransform3D expectedMatrix = EuclidCoreRandomTools.nextLinearTransform3D(random, 10.0);
+         LinearTransform3D actualMatrix = createEmptyMatrix();
+         actualMatrix.set(expectedMatrix);
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // set(Orientation3D orientation3D)
+         RotationMatrix expectedMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         LinearTransform3D actualMatrix = createEmptyMatrix();
+         actualMatrix.set(new Quaternion(expectedMatrix));
+         EuclidCoreTestTools.assertMatrix3DEquals(expectedMatrix, actualMatrix, SMALL_EPS);
+      }
+   }
+
+   @Test
+   public void testSetRotationVector()
+   {
+      Random random = new Random(32546);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D rotationVector = EuclidCoreRandomTools.nextRotationVector(random);
+         RotationMatrix expected = new RotationMatrix();
+         expected.setRotationVector(rotationVector);
+         LinearTransform3D actual = new LinearTransform3D();
+         actual.setRotationVector(rotationVector);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);
+      }
+   }
+
+   @Test
+   public void testSetEuler()
+   {
+      Random random = new Random(32546);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D euler = EuclidCoreRandomTools.nextRotationVector(random);
+         RotationMatrix expected = new RotationMatrix();
+         expected.setEuler(euler);
+         LinearTransform3D actual = new LinearTransform3D();
+         actual.setEuler(euler);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);
       }
    }
 }

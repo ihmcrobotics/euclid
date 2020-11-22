@@ -472,6 +472,23 @@ public class EuclidCoreRandomTools
       return new LinearTransform3D(nextMatrix3D(random, minValue, maxValue));
    }
 
+   public static LinearTransform3D nextNonSingularLinearTransform3D(Random random)
+   {
+      LinearTransform3D next = new LinearTransform3D();
+      next.appendRotation(nextQuaternion(random));
+      Vector3D scale = nextVector3D(random, 10.0);
+      for (int i = 0; i < 3; i++)
+      {
+         if (scale.getElement(i) >= 0.0)
+            scale.setElement(i, Math.max(0.05, scale.getElement(i)));
+         else
+            scale.setElement(i, Math.min(-0.05, scale.getElement(i)));
+      }
+      next.appendScale(scale);
+      next.appendRotation(nextQuaternion(random));
+      return next;
+   }
+
    /**
     * Generates a random quaternion uniformly distributed on the unit-sphere.
     * <p>
@@ -645,6 +662,11 @@ public class EuclidCoreRandomTools
    public static AffineTransform nextAffineTransform(Random random)
    {
       return new AffineTransform(nextMatrix3D(random, 10.0), nextVector3D(random));
+   }
+
+   public static AffineTransform nextNonSingularAffineTransform(Random random)
+   {
+      return new AffineTransform(nextNonSingularLinearTransform3D(random), nextVector3D(random));
    }
 
    /**

@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
@@ -917,7 +918,9 @@ public class EuclidCoreTestTools
 
       if (!Matrix3DFeatures.epsilonEquals(expected, actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         Matrix3D difference = new Matrix3D();
+         difference.sub(expected, actual);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.maxAbsElement(), format);
       }
    }
 
@@ -2374,7 +2377,8 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon, String format)
+   public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon,
+                                                  String format)
    {
       if (expected == null && actual == null)
          return;

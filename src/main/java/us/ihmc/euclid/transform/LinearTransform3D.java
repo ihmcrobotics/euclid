@@ -302,9 +302,9 @@ public class LinearTransform3D implements LinearTransform3DBasics
    }
 
    @Override
-   public void set(Orientation3DReadOnly orientation3d)
+   public void set(Orientation3DReadOnly orientation3D)
    {
-      LinearTransform3DBasics.super.set(orientation3d);
+      LinearTransform3DBasics.super.set(orientation3D);
       isRotation = true;
       rotationDirty = false;
    }
