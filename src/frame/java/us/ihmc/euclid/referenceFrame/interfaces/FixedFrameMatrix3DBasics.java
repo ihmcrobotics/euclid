@@ -139,6 +139,12 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
       Matrix3DBasics.super.setAndMultiplyOuter(other);
    }
 
+   default void setAndMultiplyInner(FrameMatrix3DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      Matrix3DBasics.super.setAndMultiplyInner(other);
+   }
+
    /**
     * Set this matrix to the inverse of the other matrix.
     * <p>

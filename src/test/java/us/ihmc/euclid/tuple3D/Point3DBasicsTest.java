@@ -235,7 +235,7 @@ public abstract class Point3DBasicsTest<T extends Point3DBasics> extends Tuple3D
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+         AffineTransform transform = EuclidCoreRandomTools.nextNonSingularAffineTransform(random);
 
          T original = createRandomTuple(random);
          T expected = createEmptyTuple();

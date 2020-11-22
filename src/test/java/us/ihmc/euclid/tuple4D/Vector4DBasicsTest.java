@@ -835,7 +835,7 @@ public abstract class Vector4DBasicsTest<T extends Vector4DBasics> extends Tuple
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+         AffineTransform transform = EuclidCoreRandomTools.nextNonSingularAffineTransform(random);
          T original = createRandomTuple(random);
          T expected = createEmptyTuple();
          T actual = createEmptyTuple();

@@ -22,7 +22,6 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
@@ -2404,7 +2403,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformGeometricallyEquals(AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
       assertAffineTransformGeometricallyEquals(null, expected, actual, epsilon);
    }
@@ -2422,7 +2421,8 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual,
+                                                               double epsilon)
    {
       assertAffineTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -2442,8 +2442,8 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon,
-                                                               String format)
+   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual,
+                                                               double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;

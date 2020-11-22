@@ -20,6 +20,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -923,7 +924,7 @@ public class EuclidCoreTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertAffineTransformEquals";
-      Class<AffineTransform> argumentsClass = AffineTransform.class;
+      Class<AffineTransformReadOnly> argumentsClass = AffineTransformReadOnly.class;
 
       {
          AffineTransform expected = null;
@@ -961,7 +962,7 @@ public class EuclidCoreTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertAffineTransformGeometricallyEquals";
-      Class<AffineTransform> argumentsClass = AffineTransform.class;
+      Class<AffineTransformReadOnly> argumentsClass = AffineTransformReadOnly.class;
 
       {
          AffineTransform expected = null;
