@@ -12,13 +12,10 @@ import java.util.Random;
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
-import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
-import org.ejml.interfaces.decomposition.SingularValueDecomposition_F64;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -1461,11 +1458,11 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       expected.set(expectedRigidBodyTransform);
       transform.transform(original, actual);
 
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
 
       actual.set(original);
       transform.transform(actual);
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
 
       RigidBodyTransform inverse = new RigidBodyTransform();
       inverse.set(transform);
@@ -1473,10 +1470,10 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
       inverse.transform(original, expected);
       transform.inverseTransform(original, actual);
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
       actual.set(original);
       transform.inverseTransform(actual);
-      EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
    }
 
    @Test
@@ -1651,7 +1648,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       Object t2AsObject = t2;
       assertTrue(t1.equals(t2AsObject));
 
-      double smallestEpsilon = 1.0e-16;
+      double smallestEpsilon = 1.0e-15;
       double[] coeffs = new double[16];
 
       for (int row = 0; row < 3; row++)
@@ -1785,57 +1782,49 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       double big_dy = d.getY();
       double big_dz = d.getZ();
 
-      assertTrue(t.epsilonEquals(createTransform(m00 + small, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01 + small, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02 + small, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10 + small, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11 + small, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12 + small, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 + small, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 + small, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 + small, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx + small_dx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty + small_dy, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz + small_dz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00 + small, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01 + small, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02 + small, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10 + small, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11 + small, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12 + small, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 + small, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 + small, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 + small, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx + small_dx, ty + small_dy, tz + small_dz), EPS));
 
-      assertTrue(t.epsilonEquals(createTransform(m00 - small, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01 - small, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02 - small, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10 - small, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11 - small, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12 - small, m20, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 - small, m21, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 - small, m22, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 - small, tx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx - small_dx, ty, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty - small_dy, tz), EPS));
-      assertTrue(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz - small_dz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00 - small, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01 - small, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02 - small, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10 - small, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11 - small, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12 - small, m20, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 - small, m21, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 - small, m22, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 - small, tx, ty, tz), EPS));
+      assertTrue(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx - small_dx, ty - small_dy, tz - small_dz), EPS));
 
-      assertFalse(t.epsilonEquals(createTransform(m00 + big, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01 + big, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02 + big, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10 + big, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11 + big, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12 + big, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 + big, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 + big, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 + big, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx + big_dx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty + big_dy, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz + big_dz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00 + big, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01 + big, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02 + big, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10 + big, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11 + big, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12 + big, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 + big, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 + big, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 + big, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx + big_dx, ty + big_dy, tz + big_dz), EPS));
 
-      assertFalse(t.epsilonEquals(createTransform(m00 - big, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01 - big, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02 - big, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10 - big, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11 - big, m12, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12 - big, m20, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 - big, m21, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 - big, m22, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 - big, tx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx - big_dx, ty, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty - big_dy, tz), EPS));
-      assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz - big_dz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00 - big, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01 - big, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02 - big, m10, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10 - big, m11, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11 - big, m12, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12 - big, m20, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20 - big, m21, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21 - big, m22, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22 - big, tx, ty, tz), EPS));
+      assertFalse(t.geometricallyEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx - big_dx, ty - big_dy, tz - big_dz), EPS));
    }
 
    @Test
@@ -1884,47 +1873,6 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          assertEquals(affA.toString(), affB.toString());
       }
-   }
-
-   @Test
-   public void testStuff()
-   {
-      Random random = new Random(47657);
-
-      RotationMatrix r1 = EuclidCoreRandomTools.nextRotationMatrix(random);
-      RotationMatrix r2 = EuclidCoreRandomTools.nextRotationMatrix(random);
-      Matrix3D s1 = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, -10.0, 10.0);
-      Matrix3D input = multiply(r1, s1, r2);
-      System.out.println("Matrix:\n" + input);
-      System.out.println("Rotation part:\n" + multiply(r1, r2));
-
-      DMatrixRMaj dMatrixRMaj = new DMatrixRMaj(3, 3);
-      input.get(dMatrixRMaj);
-      SingularValueDecomposition_F64<DMatrixRMaj> svd = DecompositionFactory_DDRM.svd(3, 3, true, true, false);
-      svd.decompose(dMatrixRMaj);
-      Matrix3D U = new Matrix3D(svd.getU(null, false));
-      Matrix3D W = new Matrix3D(svd.getW(null));
-      Matrix3D Vt = new Matrix3D(svd.getV(null, true));
-
-      System.out.println("R1:\n" + r1);
-      System.out.println("S1:\n" + s1);
-      System.out.println("R2:\n" + r2);
-
-      System.out.println("U:\n" + U);
-      System.out.println("W:\n" + W);
-      System.out.println("V:\n" + Vt);
-
-      System.out.println("Matrix:\n" + multiply(U, W, Vt));
-      System.out.println("Rotation part:\n" + multiply(U, Vt));
-   }
-
-   private static Matrix3D multiply(Matrix3DReadOnly... matrices)
-   {
-      Matrix3D output = new Matrix3D();
-      output.setIdentity();
-      for (Matrix3DReadOnly m : matrices)
-         output.multiply(m);
-      return output;
    }
 
    @Override
