@@ -12,11 +12,14 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.Matrix3DBasicsTest;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
@@ -222,6 +225,342 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D();
          actual.setEuler(euler);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);
+      }
+   }
+
+   @Test
+   public void testAppendRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Orientation3DReadOnly orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, new RotationMatrix(orientation), false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendRotation(orientation);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAppendRotationInvertThis()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Orientation3DReadOnly orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, true, new RotationMatrix(orientation), false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendRotationInvertThis(orientation);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAppendRotationInvertOther()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Orientation3DReadOnly orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, new RotationMatrix(orientation), false, true, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendRotationInvertOther(orientation);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAppendYawRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, new RotationMatrix(yaw, 0, 0), false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendYawRotation(yaw);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAppendPitchRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, new RotationMatrix(0, pitch, 0), false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendPitchRotation(pitch);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAppendRollRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, new RotationMatrix(0, 0, roll), false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendRollRotation(roll);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAppendScale()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double scale = EuclidCoreRandomTools.nextDouble(random, 10.0);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, new Matrix3D(scale, 0, 0, 0, scale, 0, 0, 0, scale), false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendScale(scale);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Matrix3D scale = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 10.0);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, scale, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendScale(new Vector3D(scale.getM00(), scale.getM11(), scale.getM22()));
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Matrix3D scale = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 10.0);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(original, false, false, scale, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.appendScale(scale.getM00(), scale.getM11(), scale.getM22());
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPrependRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Orientation3DReadOnly orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(new RotationMatrix(orientation), false, false, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependRotation(orientation);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPrependRotationInvertThis()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Orientation3DReadOnly orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(new RotationMatrix(orientation), false, false, original, false, true, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependRotationInvertThis(orientation);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPrependRotationInvertOther()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Orientation3DReadOnly orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(new RotationMatrix(orientation), false, true, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependRotationInvertOther(orientation);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPrependYawRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double yaw = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(new RotationMatrix(yaw, 0, 0), false, false, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependYawRotation(yaw);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPrependPitchRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double pitch = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(new RotationMatrix(0, pitch, 0), false, false, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependPitchRotation(pitch);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPrependRollRotation()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double roll = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(new RotationMatrix(0, 0, roll), false, false, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependRollRotation(roll);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testPrependScale()
+   {
+      Random random = new Random(34676);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         double scale = EuclidCoreRandomTools.nextDouble(random, 10.0);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(new Matrix3D(scale, 0, 0, 0, scale, 0, 0, 0, scale), false, false, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependScale(scale);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Matrix3D scale = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 10.0);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(scale, false, false, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependScale(new Vector3D(scale.getM00(), scale.getM11(), scale.getM22()));
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         CommonMatrix3DBasics original = EuclidCoreRandomTools.nextCommonMatrix3DBasics(random);
+         Matrix3D scale = EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 10.0);
+
+         Matrix3D expected = new Matrix3D(original);
+         Matrix3DTools.multiply(scale, false, false, original, false, false, expected);
+
+         LinearTransform3D actual = new LinearTransform3D(original);
+         actual.prependScale(scale.getM00(), scale.getM11(), scale.getM22());
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
       }
    }
 }

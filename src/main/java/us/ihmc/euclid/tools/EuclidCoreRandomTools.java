@@ -11,6 +11,7 @@ import us.ihmc.euclid.axisAngle.AxisAngle32;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -269,6 +270,27 @@ public class EuclidCoreRandomTools
       AxisAngle32 axisAngle = new AxisAngle32();
       randomizeAxisAngle(random, minMaxAngle, axisAngle);
       return axisAngle;
+   }
+
+   public static CommonMatrix3DBasics nextCommonMatrix3DBasics(Random random)
+   {
+      switch (random.nextInt(3))
+      {
+         case 0:
+            switch (random.nextInt(3))
+            {
+               case 0:
+                  return nextDiagonalMatrix3D(random);
+               case 1:
+                  return nextSymmetricMatrix3D(random);
+               default:
+                  return nextMatrix3D(random);
+            }
+         case 1:
+            return nextRotationMatrix(random);
+         default:
+            return nextNonSingularLinearTransform3D(random);
+      }
    }
 
    /**

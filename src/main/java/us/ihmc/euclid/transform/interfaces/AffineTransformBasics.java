@@ -652,7 +652,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    {
       rigidBodyTransform.transform(getTranslation());
       getTranslation().add(rigidBodyTransform.getTranslation());
-      getLinearTransform().prepend(rigidBodyTransform.getRotation());
+      getLinearTransform().prependRotation(rigidBodyTransform.getRotation());
    }
 
    /**
@@ -707,7 +707,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void preMultiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      getLinearTransform().prependInvertThis(rigidBodyTransform.getRotation());
+      getLinearTransform().prependRotationInvertThis(rigidBodyTransform.getRotation());
       getLinearTransform().transform(getTranslation());
       getTranslation().sub(rigidBodyTransform.getTranslation(), getTranslation());
    }
@@ -727,7 +727,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    {
       getTranslation().sub(rigidBodyTransform.getTranslation());
       rigidBodyTransform.getRotation().inverseTransform(getTranslation());
-      getLinearTransform().prependInvertOther(rigidBodyTransform.getRotation());
+      getLinearTransform().prependRotationInvertOther(rigidBodyTransform.getRotation());
    }
 
    /**

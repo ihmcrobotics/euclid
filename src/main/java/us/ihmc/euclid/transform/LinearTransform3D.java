@@ -164,6 +164,15 @@ public class LinearTransform3D implements LinearTransform3DBasics
    }
 
    @Override
+   public double determinant()
+   {
+      if (svdDirty)
+         return LinearTransform3DBasics.super.determinant();
+      else
+         return svdOutput.getW().getX() * svdOutput.getW().getY() * svdOutput.getW().getZ();
+   }
+
+   @Override
    public void setIdentity()
    {
       m00 = 1.0;
@@ -284,6 +293,24 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdOutput.invert();
          svdDirty = false;
       }
+   }
+
+   @Override
+   public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      this.m00 = m00;
+      this.m01 = m01;
+      this.m02 = m02;
+      this.m10 = m10;
+      this.m11 = m11;
+      this.m12 = m12;
+      this.m20 = m20;
+      this.m21 = m21;
+      this.m22 = m22;
+
+      svdDirty = true;
+      identityDirty = true;
+      rotationDirty = true;
    }
 
    @Override

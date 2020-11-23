@@ -109,12 +109,12 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
       scaleColumns(x, y, z);
    }
 
-   default void prepend(Orientation3DReadOnly orientation)
+   default void prependRotation(Orientation3DReadOnly orientation)
    {
       Matrix3DTools.multiply(orientation, false, this, false, false, this);
    }
 
-   default void prependInvertThis(Orientation3DReadOnly orientation)
+   default void prependRotationInvertThis(Orientation3DReadOnly orientation)
    {
       if (isRotationMatrix())
          Matrix3DTools.multiply(orientation, false, this, true, false, this);
@@ -122,7 +122,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
          Matrix3DTools.multiply(orientation, false, this, false, true, this);
    }
 
-   default void prependInvertOther(Orientation3DReadOnly orientation)
+   default void prependRotationInvertOther(Orientation3DReadOnly orientation)
    {
       Matrix3DTools.multiply(orientation, true, this, false, false, this);
    }
