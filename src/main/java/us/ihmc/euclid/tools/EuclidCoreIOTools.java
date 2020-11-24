@@ -620,7 +620,7 @@ public class EuclidCoreIOTools
     */
    public static String getYawPitchRollString(String format, double yaw, double pitch, double roll)
    {
-      return getStringOf("yaw-pitch-roll: (", ")", ", ", yaw, pitch, roll);
+      return getStringOf("yaw-pitch-roll: (", ")", ", ", format, yaw, pitch, roll);
    }
 
    /**
