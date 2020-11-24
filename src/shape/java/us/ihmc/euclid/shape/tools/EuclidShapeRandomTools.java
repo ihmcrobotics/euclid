@@ -28,6 +28,7 @@ import us.ihmc.euclid.shape.primitives.Sphere3D;
 import us.ihmc.euclid.shape.primitives.Torus3D;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
+import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -819,7 +820,11 @@ public class EuclidShapeRandomTools
    public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax, int recursionLevel, double radiusMin, double radiusMax)
    {
       TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
-      icoSphere.applyTransform(EuclidCoreRandomTools.nextRigidBodyTransform(random));
+      AffineTransform transform = new AffineTransform();
+      transform.setLinearTransform(EuclidCoreRandomTools.nextAxisAngle(random));
+      transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
+      transform.appendScale(EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax));
+      icoSphere.applyTransform(transform);
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(icoSphere.getVertices()));
    }
 
