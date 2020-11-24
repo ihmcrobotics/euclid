@@ -36,7 +36,7 @@ public class FrameExpandingPolytopeAlgorithmTest
    @Test
    public void testCompareAgainstFramelessEPA()
    {
-      Random random = new Random(3406);
+      Random random = new Random(3407);
       EuclidShape3DCollisionResult expectedResult = new EuclidShape3DCollisionResult();
       EuclidFrameShape3DCollisionResult actualResult = new EuclidFrameShape3DCollisionResult();
 

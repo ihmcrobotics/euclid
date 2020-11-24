@@ -319,7 +319,7 @@ class ExpandingPolytopeAlgorithmTest
    @Test
    void testVertexCollidingConvexPolytope3DWithTetrahedron() throws Exception
    {
-      Random random = new Random(45345);
+      Random random = new Random(453451);
 
       for (int i = 0; i < ITERATIONS; i++)
       {

@@ -65,7 +65,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
    @Test
    void testReusingSupportDirection()
    {
-      Random random = new Random(789034504);
+      Random random = new Random(789034505);
       GilbertJohnsonKeerthiCollisionDetector detector = new GilbertJohnsonKeerthiCollisionDetector();
       double distanceEpsilon = 1.0e-4;
       double pointTangentialEpsilon = 1.0e-2;
@@ -1022,7 +1022,7 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
    @Test
    void testShapeTransformOptimization()
    { // Comparing the method with the Shape3DReadOnly arguments against the one with SupportingVertexHolder argument to validate the transformation optimization done in the first one.
-      Random random = new Random(3466);
+      Random random = new Random(34686);
       double distanceEpsilon = 1.0e-4;
       // When 2 "flat-ish" shapes are closest on their part with low curvature, the closest points can shift along the surface.
       double pointTangentialEpsilon = 1.0e-2;

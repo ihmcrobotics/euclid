@@ -1689,7 +1689,7 @@ public class ConvexPolytope3DTest
    @Test
    void testEvaluatePoint3DCollision() throws Exception
    {
-      Random random = new Random(34535);
+      Random random = new Random(3435);
       Point3D expectedClosestPoint = new Point3D();
       Vector3D expectedNormal = new Vector3D();
       Point3D actualClosestPoint = new Point3D();
