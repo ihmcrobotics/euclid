@@ -21,11 +21,16 @@ import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
 {
-   private static final double EPSILON = 1.0e-12;
+   private static final double SMALL_EPSILON = 1.0e-12;
+   private static final double MID_EPSILON = 1.0e-9;
+   private static final double LARGE_EPSILON = 1.0e-7;
    private static final int ITERATIONS = 1000;
 
    @Override
@@ -66,21 +71,21 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
       { // Test LinearTransform3D(Matrix3DReadOnly matrix3D)
          Matrix3D matrix3D = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
          LinearTransform3D linearTransform3D = new LinearTransform3D(matrix3D);
-         EuclidCoreTestTools.assertMatrix3DEquals(matrix3D, linearTransform3D, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(matrix3D, linearTransform3D, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test LinearTransform3D(DMatrix matrix)
          DMatrix matrix = EuclidCoreRandomTools.nextDMatrixRMaj(random, 3, 3, 10.0);
          LinearTransform3D linearTransform3D = new LinearTransform3D(matrix);
-         EuclidCoreTestTools.assertMatrix3DEquals(new Matrix3D(matrix), linearTransform3D, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(new Matrix3D(matrix), linearTransform3D, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
       { // Test LinearTransform3D(Orientation3DReadOnly orientation)
          Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
          LinearTransform3D linearTransform3D = new LinearTransform3D(orientation);
-         EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(orientation), linearTransform3D, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(new RotationMatrix(orientation), linearTransform3D, SMALL_EPSILON);
       }
    }
 
@@ -152,14 +157,12 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
       {
          LinearTransform3D linearTransform3D = EuclidCoreRandomTools.nextLinearTransform3D(random, 10.0);
          Quaternion expectedOrientation = new Quaternion(linearTransform3D.getAsQuaternion());
-         Quaternion expectedPreScaleOrientation = new Quaternion(linearTransform3D.getPreScaleQuaternion());
-         Quaternion expectedPostScaleOrientation = new Quaternion(linearTransform3D.getPostScaleQuaternion());
 
          linearTransform3D.resetScale();
          assertEquals(new Vector3D(1, 1, 1), linearTransform3D.getScaleVector());
-         assertEquals(expectedOrientation, linearTransform3D.getAsQuaternion());
-         assertEquals(expectedPreScaleOrientation, linearTransform3D.getPreScaleQuaternion());
-         assertEquals(expectedPostScaleOrientation, linearTransform3D.getPostScaleQuaternion());
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expectedOrientation, linearTransform3D.getAsQuaternion(), SMALL_EPSILON);
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expectedOrientation, linearTransform3D.getPreScaleQuaternion(), SMALL_EPSILON);
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), SMALL_EPSILON);
       }
    }
 
@@ -244,7 +247,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendRotation(orientation);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -264,7 +267,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendRotationInvertThis(orientation);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -284,7 +287,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendRotationInvertOther(orientation);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -304,7 +307,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendYawRotation(yaw);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -324,7 +327,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendPitchRotation(pitch);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -344,7 +347,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendRollRotation(roll);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -364,7 +367,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendScale(scale);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -378,7 +381,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendScale(new Vector3D(scale.getM00(), scale.getM11(), scale.getM22()));
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -392,7 +395,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.appendScale(scale.getM00(), scale.getM11(), scale.getM22());
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -412,7 +415,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependRotation(orientation);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -432,7 +435,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependRotationInvertThis(orientation);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -452,7 +455,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependRotationInvertOther(orientation);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -472,7 +475,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependYawRotation(yaw);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -492,7 +495,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependPitchRotation(pitch);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -512,7 +515,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependRollRotation(roll);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
    }
 
@@ -532,7 +535,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependScale(scale);
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -546,7 +549,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependScale(new Vector3D(scale.getM00(), scale.getM11(), scale.getM22()));
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
       }
 
       for (int i = 0; i < ITERATIONS; i++)
@@ -560,7 +563,212 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          LinearTransform3D actual = new LinearTransform3D(original);
          actual.prependScale(scale.getM00(), scale.getM11(), scale.getM22());
 
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPSILON);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPSILON);
+      }
+   }
+
+   @Test
+   public void testGetOrientation()
+   {
+      Random random = new Random(74534);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix r1 = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 0.5, 10.0);
+         RotationMatrix r2 = EuclidCoreRandomTools.nextRotationMatrix(random);
+
+         RotationMatrix expected = new RotationMatrix();
+         expected.set(r1);
+         expected.append(r2);
+
+         LinearTransform3D linearTransform3D = new LinearTransform3D();
+         linearTransform3D.set(r1);
+         linearTransform3D.appendScale(scale);
+         linearTransform3D.appendRotation(r2);
+
+         { // RotationMatrix
+            RotationMatrix actual = new RotationMatrix();
+            linearTransform3D.getOrientation(actual);
+            EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, MID_EPSILON);
+         }
+
+         { // Quaternion
+            Quaternion actual = new Quaternion();
+            linearTransform3D.getOrientation(actual);
+            EuclidCoreTestTools.assertQuaternionGeometricallyEquals(new Quaternion(expected), actual, MID_EPSILON);
+         }
+
+         { // YawPitchRoll
+            YawPitchRoll actual = new YawPitchRoll();
+            linearTransform3D.getOrientation(actual);
+            EuclidCoreTestTools.assertYawPitchRollEquals(new YawPitchRoll(expected), actual, MID_EPSILON);
+         }
+      }
+   }
+
+   @Test
+   public void testGetRotationVector()
+   {
+      Random random = new Random(74534);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix r1 = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 0.5, 10.0);
+         RotationMatrix r2 = EuclidCoreRandomTools.nextRotationMatrix(random);
+
+         RotationMatrix rotationMatrix = new RotationMatrix();
+         rotationMatrix.set(r1);
+         rotationMatrix.append(r2);
+         Vector3D expected = new Vector3D();
+         rotationMatrix.getRotationVector(expected);
+
+         LinearTransform3D linearTransform3D = new LinearTransform3D();
+         linearTransform3D.set(r1);
+         linearTransform3D.appendScale(scale);
+         linearTransform3D.appendRotation(r2);
+
+         Vector3D actual = new Vector3D();
+         linearTransform3D.getRotationVector(actual);
+         EuclidCoreTestTools.assertRotationVectorGeometricallyEquals(expected, actual, MID_EPSILON);
+      }
+   }
+
+   @Test
+   public void testGetEuler()
+   {
+      Random random = new Random(74534);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix r1 = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 0.5, 10.0);
+         RotationMatrix r2 = EuclidCoreRandomTools.nextRotationMatrix(random);
+
+         RotationMatrix rotationMatrix = new RotationMatrix();
+         rotationMatrix.set(r1);
+         rotationMatrix.append(r2);
+         Vector3D expected = new Vector3D();
+         rotationMatrix.getEuler(expected);
+
+         LinearTransform3D linearTransform3D = new LinearTransform3D();
+         linearTransform3D.set(r1);
+         linearTransform3D.appendScale(scale);
+         linearTransform3D.appendRotation(r2);
+
+         Vector3D actual = new Vector3D();
+         linearTransform3D.getEuler(actual);
+         EuclidCoreTestTools.assertTuple3DEquals(expected, actual, MID_EPSILON);
+      }
+   }
+
+   @Test
+   public void testGetScaleComponents()
+   {
+      Random random = new Random(74534);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix r1 = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 0.5, 10.0);
+         double maxScale = EuclidCoreTools.max(scale.getX(), scale.getY(), scale.getZ());
+         double medScale = EuclidCoreTools.med(scale.getX(), scale.getY(), scale.getZ());
+         double minScale = EuclidCoreTools.min(scale.getX(), scale.getY(), scale.getZ());
+         scale.set(maxScale, medScale, minScale);
+         RotationMatrix r2 = EuclidCoreRandomTools.nextRotationMatrix(random);
+
+         LinearTransform3D linearTransform3D = new LinearTransform3D();
+         linearTransform3D.set(r1);
+         linearTransform3D.appendScale(scale);
+         linearTransform3D.appendRotation(r2);
+
+         assertEquals(maxScale, linearTransform3D.getScaleX(), SMALL_EPS);
+         assertEquals(medScale, linearTransform3D.getScaleY(), SMALL_EPS);
+         assertEquals(minScale, linearTransform3D.getScaleZ(), SMALL_EPS);
+      }
+   }
+
+   @Test
+   public void testGetAsQuaternion()
+   {
+      Random random = new Random(34536);
+
+      LinearTransform3D linearTransform3D = new LinearTransform3D();
+      QuaternionReadOnly actual = linearTransform3D.getAsQuaternion();
+      Quaternion expected = new Quaternion();
+
+      EuclidCoreTestTools.assertQuaternionEquals(expected, actual, SMALL_EPSILON);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         linearTransform3D.appendRotation(rotationMatrix);
+         expected.append(rotationMatrix);
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals("Iteration: " + i, expected, actual, MID_EPSILON);
+
+         linearTransform3D.appendScale(EuclidCoreRandomTools.nextVector3D(random, 0.75, 1.25));
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals("Iteration: " + i, expected, actual, MID_EPSILON);
+
+         rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         linearTransform3D.appendRotation(rotationMatrix);
+         expected.append(rotationMatrix);
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals("Iteration: " + i, expected, actual, MID_EPSILON);
+
+         linearTransform3D.resetScale();
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(expected, actual, MID_EPSILON);
+         expected.set(actual);
+      }
+   }
+
+   @Test
+   public void testGetPrePostQuaternionAndScale()
+   {
+      Random random = new Random(678658);
+
+      LinearTransform3D linearTransform3D = new LinearTransform3D();
+      QuaternionReadOnly actualPreScale = linearTransform3D.getPreScaleQuaternion();
+      Vector3DReadOnly actualScale = linearTransform3D.getScaleVector();
+      QuaternionReadOnly actualPostScale = linearTransform3D.getPostScaleQuaternion();
+
+      Quaternion expectedPreScale = new Quaternion();
+      Vector3D expectedScale = new Vector3D(1, 1, 1);
+      Quaternion expectedPostScale = new Quaternion();
+
+      EuclidCoreTestTools.assertQuaternionEquals(expectedPreScale, actualPreScale, SMALL_EPSILON);
+      EuclidCoreTestTools.assertTuple3DEquals(expectedScale, actualScale, SMALL_EPSILON);
+      EuclidCoreTestTools.assertQuaternionEquals(expectedPostScale, actualPostScale, SMALL_EPSILON);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         expectedPreScale.set(EuclidCoreRandomTools.nextQuaternion(random));
+         expectedScale.set(EuclidCoreRandomTools.nextVector3D(random, 0.5, 10.0));
+         double maxScale = EuclidCoreTools.max(expectedScale.getX(), expectedScale.getY(), expectedScale.getZ());
+         double midScale = EuclidCoreTools.med(expectedScale.getX(), expectedScale.getY(), expectedScale.getZ());
+         double minScale = EuclidCoreTools.min(expectedScale.getX(), expectedScale.getY(), expectedScale.getZ());
+         expectedScale.set(maxScale, midScale, random.nextBoolean() ? +minScale : -minScale);
+         expectedPostScale.set(EuclidCoreRandomTools.nextQuaternion(random));
+
+         linearTransform3D.set(expectedPreScale);
+         linearTransform3D.appendScale(expectedScale);
+         linearTransform3D.appendRotation(expectedPostScale);
+
+         if (expectedPreScale.geometricallyEquals(actualPreScale, LARGE_EPSILON))
+         {
+            EuclidCoreTestTools.assertQuaternionGeometricallyEquals("Iteration: " + i, expectedPostScale, actualPostScale, LARGE_EPSILON);
+         }
+         else
+         {
+            double distance = expectedPreScale.distancePrecise(actualPreScale);
+            assertEquals(Math.PI, distance, LARGE_EPSILON);
+
+            Quaternion difference = new Quaternion();
+            difference.difference(expectedPreScale, actualPreScale);
+            difference.conjugate();
+            expectedPostScale.prepend(difference);
+            EuclidCoreTestTools.assertQuaternionGeometricallyEquals("Iteration: " + i, expectedPostScale, actualPostScale, LARGE_EPSILON);
+         }
+         EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedScale, actualScale, SMALL_EPSILON);
       }
    }
 }

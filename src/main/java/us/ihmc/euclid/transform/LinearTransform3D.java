@@ -6,7 +6,6 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.QuaternionConversion;
-import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tools.EuclidCoreFactories;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -188,6 +187,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       rotationDirty = false;
       isIdentity = true;
       identityDirty = false;
+      quaternionViewDirty = true;
       svdDirty = false;
       svdOutput.setIdentity();
    }
@@ -208,6 +208,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       rotationDirty = false;
       isIdentity = false;
       identityDirty = false;
+      quaternionViewDirty = true;
       svdDirty = false;
       svdOutput.setToNaN();
    }
@@ -218,11 +219,14 @@ public class LinearTransform3D implements LinearTransform3DBasics
       if (isIdentity() || isRotationMatrix())
          return;
 
-      // Using directly the svdOutput fields to avoid triggering listeners.
-      RotationMatrixConversion.convertQuaternionToMatrix(quaternionView, this);
-      svdDirty = false;
+      updateSVD();
       svdOutput.getW().set(1.0, 1.0, 1.0);
+      svdOutput.getU().appendInvertOther(svdOutput.getV());
+      svdOutput.getV().setToZero();
+      svdOutput.getU().get(this);
+      rotationDirty = false;
       isRotation = true;
+      quaternionViewDirty = true;
    }
 
    @Override
@@ -255,6 +259,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       m12 = m21;
       m21 = temp;
 
+      quaternionViewDirty = true;
       if (!svdDirty)
          svd3D.transpose();
    }
@@ -287,6 +292,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       {
          LinearTransform3DBasics.super.invert();
       }
+      quaternionViewDirty = true;
 
       if (invertSVDOutput)
       {
@@ -311,6 +317,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       svdDirty = true;
       identityDirty = true;
       rotationDirty = true;
+      quaternionViewDirty = true;
    }
 
    @Override
@@ -341,6 +348,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       rotationDirty = false;
       identityDirty = rotationMatrix.isDirty();
       isIdentity = identityDirty ? false : rotationMatrix.isIdentity();
+      quaternionViewDirty = true;
       svdDirty = true;
    }
 
@@ -360,6 +368,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       rotationDirty = other.rotationDirty;
       isIdentity = other.isIdentity;
       identityDirty = other.identityDirty;
+      quaternionViewDirty = true;
       svdDirty = other.svdDirty;
       if (!svdDirty)
          svdOutput.set(other.svdOutput);
@@ -371,6 +380,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       LinearTransform3DBasics.super.set(orientation3D);
       isRotation = true;
       rotationDirty = false;
+      quaternionViewDirty = true;
    }
 
    @Override
@@ -379,6 +389,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       LinearTransform3DBasics.super.setRotationVector(rotationVector);
       isRotation = true;
       rotationDirty = false;
+      quaternionViewDirty = true;
    }
 
    @Override
@@ -387,6 +398,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       LinearTransform3DBasics.super.setEuler(eulerAngles);
       isRotation = true;
       rotationDirty = false;
+      quaternionViewDirty = true;
    }
 
    /** {@inheritDoc} */
@@ -398,6 +410,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m00 = m00;
       }
    }
@@ -411,6 +424,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m01 = m01;
       }
    }
@@ -424,6 +438,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m02 = m02;
       }
    }
@@ -437,6 +452,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m10 = m10;
       }
    }
@@ -450,6 +466,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m11 = m11;
       }
    }
@@ -463,6 +480,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m12 = m12;
       }
    }
@@ -476,6 +494,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m20 = m20;
       }
    }
@@ -489,6 +508,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m21 = m21;
       }
    }
@@ -502,6 +522,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdDirty = true;
          identityDirty = true;
          rotationDirty = true;
+         quaternionViewDirty = true;
          this.m22 = m22;
       }
    }
