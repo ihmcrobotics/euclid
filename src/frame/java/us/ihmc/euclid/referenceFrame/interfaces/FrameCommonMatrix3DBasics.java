@@ -3,6 +3,8 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -66,6 +68,71 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
     * @param other the other matrix to copy the values and reference frame from. Not modified.
     */
    default void setIncludingFrame(FrameMatrix3DReadOnly other)
+   {
+      setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this rotation matrix to {@code rotationMatrix} and copies the dirty and identity flags from
+    * the other matrix and sets its reference frame.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(RotationMatrixReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the argument is expressed.
+    * @param rotationMatrix the other rotation matrix to copy. Not modified.
+    */
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrix)
+   {
+      setReferenceFrame(referenceFrame);
+      set(rotationMatrix);
+   }
+
+   /**
+    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
+    * matrix.
+    * <p>
+    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
+    * {@link #set(RotationMatrixReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
+    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which the argument is expressed.
+    * @param other          the other rotation matrix to copy. Not modified.
+    */
+   default void setIncludingFrame(FrameRotationMatrixReadOnly other)
+   {
+      setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this frame orientation to the same orientation described by the given
+    * {@code orientation3DReadOnly} and sets the frame to the given {@code referenceFrame}.
+    *
+    * @param referenceFrame        the new reference frame for this frame orientation.
+    * @param orientation3DReadOnly the orientation used to set this orientation. Not modified.
+    */
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(orientation3DReadOnly);
+   }
+
+   /**
+    * Sets this frame orientation to {@code other}.
+    *
+    * @param other the other frame orientation to copy the values and reference frame from. Not
+    *              modified.
+    */
+   default void setIncludingFrame(FrameOrientation3DReadOnly other)
    {
       setIncludingFrame(other.getReferenceFrame(), other);
    }

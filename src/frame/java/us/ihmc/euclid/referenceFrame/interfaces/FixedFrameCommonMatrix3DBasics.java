@@ -2,6 +2,8 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -73,6 +75,62 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
    {
       checkReferenceFrameMatch(other);
       CommonMatrix3DBasics.super.setAndNormalize(other);
+   }
+
+   /**
+    * Sets this frame quaternion to {@code orientation} and checks that its current frame equals
+    * {@code referenceFrame}.
+    *
+    * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
+    *                       expressed.
+    * @param orientation    the orientation to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(orientation);
+   }
+
+   /**
+    * Converts, if necessary, and sets this orientation to represents the same orientation as
+    * {@code orientation}.
+    *
+    * @param orientation the new orientation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
+   default void set(FrameOrientation3DReadOnly orientation)
+   {
+      set(orientation.getReferenceFrame(), orientation);
+   }
+
+   /**
+    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
+    * matrix.
+    *
+    * @param referenceFrame the reference frame in which the argument is expressed.
+    * @param other          the other rotation matrix to copy. Not modified.
+    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void set(ReferenceFrame referenceFrame, RotationMatrixReadOnly other)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      set(other);
+   }
+
+   /**
+    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
+    * matrix.
+    *
+    * @param other the other rotation matrix to copy. Not modified.
+    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void set(FrameRotationMatrixReadOnly other)
+   {
+      set(other.getReferenceFrame(), (RotationMatrixReadOnly) other);
    }
 
    /**

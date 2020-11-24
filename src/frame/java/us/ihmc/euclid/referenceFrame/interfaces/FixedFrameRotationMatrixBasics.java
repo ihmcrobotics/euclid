@@ -58,6 +58,13 @@ public interface FixedFrameRotationMatrixBasics
       RotationMatrixBasics.super.setAndNormalize(other);
    }
 
+   /** {@inheritDoc} */
+   @Override
+   default void setAndNormalize(FrameOrientation3DReadOnly orientation)
+   {
+      FixedFrameOrientation3DBasics.super.setAndNormalize(orientation);
+   }
+
    /**
     * {@inheritDoc}
     * <p>
@@ -117,34 +124,6 @@ public interface FixedFrameRotationMatrixBasics
    }
 
    /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
-    * matrix.
-    *
-    * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param other          the other rotation matrix to copy. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void set(ReferenceFrame referenceFrame, RotationMatrixReadOnly other)
-   {
-      checkReferenceFrameMatch(referenceFrame);
-      set(other);
-   }
-
-   /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
-    * matrix.
-    *
-    * @param other the other rotation matrix to copy. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void set(FrameRotationMatrixReadOnly other)
-   {
-      set(other.getReferenceFrame(), (RotationMatrixReadOnly) other);
-   }
-
-   /**
     * Sets this rotation matrix to the invert of the given {@code matrix}.
     * <p>
     * This operation uses the property: <br>
@@ -179,6 +158,13 @@ public interface FixedFrameRotationMatrixBasics
    {
       checkReferenceFrameMatch(other);
       RotationMatrixBasics.super.setAndInvert(other);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void setAndInvert(FrameOrientation3DReadOnly orientation)
+   {
+      FixedFrameOrientation3DBasics.super.setAndInvert(orientation);
    }
 
    /**

@@ -228,6 +228,76 @@ public interface FrameMatrix3DReadOnly extends Matrix3DReadOnly, ReferenceFrameH
    }
 
    /**
+    * Transforms the given tuple by this matrix and subtract the result to the tuple.
+    * <p>
+    * tupleToTransform = tupleToTransform - this * tupleToTransform
+    * </p>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    * @throws ReferenceFrameMismatchException if {@code tupleToTransform} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
+   default void subTransform(FixedFrameTuple3DBasics tupleToTransform)
+   {
+      subTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and subtract the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = tupleTransformed - this * tupleOriginal
+    * </p>
+    *
+    * @param tupleOriginal    the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to subtract the result to. Modified.
+    * @throws ReferenceFrameMismatchException if {@code tupleOriginal} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      Matrix3DReadOnly.super.subTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and subtract the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = tupleTransformed - this * tupleOriginal
+    * </p>
+    *
+    * @param tupleOriginal    the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to subtract the result to. Modified.
+    * @throws ReferenceFrameMismatchException if {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      Matrix3DReadOnly.super.subTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and subtract the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = tupleTransformed - this * tupleOriginal
+    * </p>
+    *
+    * @param tupleOriginal    the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to subtract the result to. Modified.
+    * @throws ReferenceFrameMismatchException if either {@code tupleOriginal} or
+    *                                         {@code tupleTransformed} is not expressed in the same
+    *                                         reference frame as {@code this}.
+    */
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
+      Matrix3DReadOnly.super.subTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /**
     * Transforms the given tuple by this matrix.
     * <p>
     * tupleToTransform = this * tupleToTransform
