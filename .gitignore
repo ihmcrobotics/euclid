@@ -4,6 +4,7 @@
 /out
 /target
 /build
+/pit-reports
 
 # Top level directories in sub-projects
 */target
