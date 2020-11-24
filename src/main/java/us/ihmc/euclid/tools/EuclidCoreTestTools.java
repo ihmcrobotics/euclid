@@ -42,6 +42,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
@@ -176,7 +177,14 @@ public class EuclidCoreTestTools
 
       if (!expected.epsilonEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         YawPitchRoll difference = new YawPitchRoll();
+         difference.set(expected);
+         difference.addYaw(-actual.getYaw());
+         difference.addPitch(-actual.getPitch());
+         difference.addRoll(-actual.getRoll());
+         difference.absolute();
+         double maxDifference = EuclidCoreTools.max(difference.getYaw(), difference.getPitch(), difference.getRoll());
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Max difference of: " + Double.toString(maxDifference), format);
       }
    }
 
@@ -243,7 +251,7 @@ public class EuclidCoreTestTools
       {
          double difference = expected.distance(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -327,9 +335,9 @@ public class EuclidCoreTestTools
       }
       catch (AssertionError e)
       {
-         double difference = expectedQuaternion.distance(actualQuaternion);
+         double difference = expectedQuaternion.distancePrecise(actualQuaternion);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -395,7 +403,7 @@ public class EuclidCoreTestTools
       {
          Vector2D difference = new Vector2D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -459,7 +467,7 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, expected.distance(actual), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
    }
 
@@ -525,7 +533,7 @@ public class EuclidCoreTestTools
       {
          Vector2D difference = new Vector2D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -591,7 +599,7 @@ public class EuclidCoreTestTools
       {
          Vector3D difference = new Vector3D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -655,7 +663,7 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, expected.distance(actual), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
    }
 
@@ -721,7 +729,7 @@ public class EuclidCoreTestTools
       {
          Vector3D difference = new Vector3D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -787,7 +795,7 @@ public class EuclidCoreTestTools
       {
          Vector4D difference = new Vector4D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.norm(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.norm()), format);
       }
    }
 
@@ -853,7 +861,7 @@ public class EuclidCoreTestTools
       {
          Vector4D difference = new Vector4D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.norm(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.norm()), format);
       }
    }
 
@@ -919,7 +927,7 @@ public class EuclidCoreTestTools
       {
          Matrix3D difference = new Matrix3D();
          difference.sub(expected, actual);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.maxAbsElement(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Max difference of: " + Double.toString(difference.maxAbsElement()), format);
       }
    }
 
@@ -985,7 +993,7 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, expected.distance(actual), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
    }
 
@@ -1356,9 +1364,9 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         double difference = expected.distance(actual);
+         double difference = expected.distancePrecise(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -1487,7 +1495,7 @@ public class EuclidCoreTestTools
       {
          double difference = expected.distance(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -2572,12 +2580,12 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double difference,
+   private static void throwNotEqualAssertionError(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, String difference,
                                                    String format)
    {
       String expectedAsString = getYawPitchRollString(format, expected);
       String actualAsString = getYawPitchRollString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, String format)
@@ -2587,11 +2595,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getTuple2DString(format, expected);
       String actualAsString = getTuple2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, String format)
@@ -2601,11 +2609,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getTuple3DString(format, expected);
       String actualAsString = getTuple3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, String format)
@@ -2615,11 +2623,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getTuple4DString(format, expected);
       String actualAsString = getTuple4DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, String format)
@@ -2629,11 +2637,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, String difference, String format)
    {
       String expectedAsString = getAxisAngleString(format, expected);
       String actualAsString = getAxisAngleString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, String format)
@@ -2650,11 +2658,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getMatrix3DString(format, expected);
       String actualAsString = getMatrix3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, String format)
@@ -2718,7 +2726,7 @@ public class EuclidCoreTestTools
    {
       String errorMessage = addPrefixToMessage(messagePrefix, "expected:\n" + expectedAsString + "\n but was:\n" + actualAsString);
       if (differenceAsString != null)
-         errorMessage += "\nDifference of: " + differenceAsString;
+         errorMessage += "\n" + differenceAsString;
 
       throw new AssertionError(errorMessage);
    }
