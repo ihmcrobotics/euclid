@@ -1429,6 +1429,10 @@ public class QuaternionTools
       double s = q1.getS() * q2.getS() + q1.getX() * q2.getX() + q1.getY() * q2.getY() + q1.getZ() * q2.getZ();
 
       double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
-      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
+
+      if (EuclidCoreTools.epsilonEquals(1.0, s, EPS))
+         return 2.0 * sinHalfTheta / s;
+      else
+         return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
    }
 }
