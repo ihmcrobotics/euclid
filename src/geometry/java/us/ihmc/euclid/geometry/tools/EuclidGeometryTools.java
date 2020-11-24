@@ -8781,7 +8781,7 @@ public class EuclidGeometryTools
       if (gammaSquared < 0.0 || !Double.isFinite(gammaSquared))
          return false; // The radius of the sphere is too small, or the problem is degenerate.
 
-      double gamma = Math.sqrt(gammaSquared);
+      double gamma = EuclidCoreTools.squareRoot(gammaSquared);
 
       double px = p1.getX() + alpha * ux + beta * vx + gamma * wx;
       double py = p1.getY() + alpha * uy + beta * vy + gamma * wy;
@@ -8923,7 +8923,7 @@ public class EuclidGeometryTools
       // From https://en.wikipedia.org/wiki/Triangle#Circumradius_and_inradius
       double circumradiusSquared = lengthA * lengthA * lengthB * lengthB * lengthC * lengthC;
       circumradiusSquared /= (lengthA + lengthB + lengthC) * (-lengthA + lengthB + lengthC) * (lengthA - lengthB + lengthC) * (lengthA + lengthB - lengthC);
-      return Math.sqrt(circumradiusSquared);
+      return EuclidCoreTools.squareRoot(circumradiusSquared);
    }
 
    /**
@@ -8945,7 +8945,7 @@ public class EuclidGeometryTools
       if (baseLength < 0.0)
          throw new IllegalArgumentException("The base cannot have a negative length, baseLength = " + baseLength);
 
-      return Math.sqrt(legLength * legLength - 0.25 * baseLength * baseLength);
+      return EuclidCoreTools.squareRoot(legLength * legLength - 0.25 * baseLength * baseLength);
    }
 
    /**

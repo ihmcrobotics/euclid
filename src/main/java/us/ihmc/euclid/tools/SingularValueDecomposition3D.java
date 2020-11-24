@@ -23,10 +23,10 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public class SingularValueDecomposition3D
 {
-   static final double gamma = 3.0 + 2.0 * Math.sqrt(2.0);
-   static final double cosPiOverEight = Math.cos(Math.PI / 8.0);
-   static final double sinPiOverEight = Math.sin(Math.PI / 8.0);
-   static final double sqrtTwoOverTwo = Math.sqrt(2.0) / 2.0;
+   static final double gamma = 3.0 + 2.0 * EuclidCoreTools.squareRoot(2.0);
+   static final double cosPiOverEight = EuclidCoreTools.cos(Math.PI / 8.0);
+   static final double sinPiOverEight = EuclidCoreTools.sin(Math.PI / 8.0);
+   static final double sqrtTwoOverTwo = EuclidCoreTools.squareRoot(2.0) / 2.0;
 
    private final Matrix3D temp = new Matrix3D();
    private final SVD3DOutput output = new SVD3DOutput();
@@ -146,7 +146,7 @@ public class SingularValueDecomposition3D
           * TODO The square root does not need to be accurate. In the paper, the authors suggest using the
           * SSE RSQRTPS, need to look into it.
           */
-         double omega = 1.0 / Math.sqrt(ch * ch + sh * sh);
+         double omega = 1.0 / EuclidCoreTools.squareRoot(ch * ch + sh * sh);
          ch *= omega;
          sh *= omega;
       }
@@ -253,7 +253,7 @@ public class SingularValueDecomposition3D
       double a1 = B.getElement(q, q);
       double a2 = B.getElement(p, q);
 
-      double rho = Math.sqrt(a1 * a1 + a2 * a2);
+      double rho = EuclidCoreTools.squareRoot(a1 * a1 + a2 * a2);
       double ch;
       double sh;
 
@@ -269,7 +269,7 @@ public class SingularValueDecomposition3D
 
       }
 
-      double omega = 1.0 / Math.sqrt(ch * ch + sh * sh);
+      double omega = 1.0 / EuclidCoreTools.squareRoot(ch * ch + sh * sh);
       ch *= omega;
       sh *= omega;
 
