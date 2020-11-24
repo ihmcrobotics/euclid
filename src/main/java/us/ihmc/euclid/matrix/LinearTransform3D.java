@@ -1,7 +1,8 @@
-package us.ihmc.euclid.transform;
+package us.ihmc.euclid.matrix;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.matrix.interfaces.LinearTransform3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -13,7 +14,6 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.SingularValueDecomposition3D;
 import us.ihmc.euclid.tools.SingularValueDecomposition3D.SVD3DOutput;
-import us.ihmc.euclid.transform.interfaces.LinearTransform3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;

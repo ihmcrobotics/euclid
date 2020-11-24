@@ -1,6 +1,5 @@
-package us.ihmc.euclid.transform.interfaces;
+package us.ihmc.euclid.matrix.interfaces;
 
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
