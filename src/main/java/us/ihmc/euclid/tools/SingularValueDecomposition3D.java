@@ -63,10 +63,14 @@ public class SingularValueDecomposition3D
    {
       Matrix3D S = temp;
       Matrix3DTools.multiplyTransposeLeft(A, A, S);
+      computeV(S, output.V, maxIterations, tolerance);
+   }
 
+   static void computeV(Matrix3DBasics S, QuaternionBasics V, int maxIterations, double tolerance)
+   {
       int iteration = 0;
 
-      output.V.setToZero();
+      V.setToZero();
 
       for (; iteration < maxIterations; iteration++)
       {
@@ -81,13 +85,13 @@ public class SingularValueDecomposition3D
             {
                if (a_01_abs < tolerance)
                   break;
-               approxGivensQuaternion(0, 1, S, output.V);
+               approxGivensQuaternion(0, 1, S, V);
             }
             else
             {
                if (a_12_abs < tolerance)
                   break;
-               approxGivensQuaternion(1, 2, S, output.V);
+               approxGivensQuaternion(1, 2, S, V);
             }
          }
          else
@@ -96,22 +100,22 @@ public class SingularValueDecomposition3D
             {
                if (a_02_abs < tolerance)
                   break;
-               approxGivensQuaternion(0, 2, S, output.V);
+               approxGivensQuaternion(0, 2, S, V);
             }
             else
             {
                if (a_12_abs < tolerance)
                   break;
-               approxGivensQuaternion(1, 2, S, output.V);
+               approxGivensQuaternion(1, 2, S, V);
             }
          }
       }
 
       if (iteration > 0)
-         output.V.normalize();
+         V.normalize();
    }
 
-   private static void approxGivensQuaternion(int p, int q, Matrix3DBasics SToUpdate, QuaternionBasics QToUpdate)
+   static void approxGivensQuaternion(int p, int q, Matrix3DBasics SToUpdate, QuaternionBasics QToUpdate)
    {
       double s_pp, s_pq, s_qq;
 
@@ -484,16 +488,16 @@ public class SingularValueDecomposition3D
       U.setUnsafe(ux * ch + uy * sh, uy * ch - ux * sh, us * sh + uz * ch, us * ch - uz * sh);
    }
 
-   static void sortBColumns(Matrix3DBasics B, QuaternionBasics Vquat)
+   static void sortBColumns(Matrix3DBasics B, QuaternionBasics V)
    {
       double rho0 = EuclidCoreTools.normSquared(B.getM00(), B.getM10(), B.getM20());
       double rho1 = EuclidCoreTools.normSquared(B.getM01(), B.getM11(), B.getM21());
       double rho2 = EuclidCoreTools.normSquared(B.getM02(), B.getM12(), B.getM22());
 
-      double qx = Vquat.getX();
-      double qy = Vquat.getY();
-      double qz = Vquat.getZ();
-      double qs = Vquat.getS();
+      double qx = V.getX();
+      double qy = V.getY();
+      double qz = V.getZ();
+      double qs = V.getS();
 
       // @formatter:off
       if (rho0 > rho1)
@@ -509,10 +513,10 @@ public class SingularValueDecomposition3D
                B.set(B.getM00(), B.getM02(), -B.getM01(),
                      B.getM10(), B.getM12(), -B.getM11(),
                      B.getM20(), B.getM22(), -B.getM21());
-               Vquat.setUnsafe(sqrtTwoOverTwo * (qs + qx),
-                               sqrtTwoOverTwo * (qy + qz),
-                               sqrtTwoOverTwo * (qz - qy),
-                               sqrtTwoOverTwo * (qs - qx));
+               V.setUnsafe(sqrtTwoOverTwo * (qs + qx),
+                           sqrtTwoOverTwo * (qy + qz),
+                           sqrtTwoOverTwo * (qz - qy),
+                           sqrtTwoOverTwo * (qs - qx));
             }
          }
          else
@@ -520,10 +524,10 @@ public class SingularValueDecomposition3D
             B.set(B.getM02(), B.getM00(), B.getM01(),
                   B.getM12(), B.getM10(), B.getM11(),
                   B.getM22(), B.getM20(), B.getM21());
-            Vquat.setUnsafe(0.5 * (-qs + qx - qy + qz),
-                            0.5 * (-qs + qx + qy - qz),
-                            0.5 * (-qs - qx + qy + qz),
-                            0.5 * ( qs + qx + qy + qz));
+            V.setUnsafe(0.5 * (-qs + qx - qy + qz),
+                        0.5 * (-qs + qx + qy - qz),
+                        0.5 * (-qs - qx + qy + qz),
+                        0.5 * ( qs + qx + qy + qz));
          }
       }
       else
@@ -535,20 +539,20 @@ public class SingularValueDecomposition3D
                B.set(B.getM01(), -B.getM00(), B.getM02(),
                      B.getM11(), -B.getM10(), B.getM12(),
                      B.getM21(), -B.getM20(), B.getM22());
-               Vquat.setUnsafe(sqrtTwoOverTwo * (qx + qy),
-                               sqrtTwoOverTwo * (qy - qx),
-                               sqrtTwoOverTwo * (qs + qz),
-                               sqrtTwoOverTwo * (qs - qz));
+               V.setUnsafe(sqrtTwoOverTwo * (qx + qy),
+                           sqrtTwoOverTwo * (qy - qx),
+                           sqrtTwoOverTwo * (qs + qz),
+                           sqrtTwoOverTwo * (qs - qz));
             }
             else
             { // 1 > 2 > 0
                B.set(B.getM01(), B.getM02(), B.getM00(),
                      B.getM11(), B.getM12(), B.getM10(),
                      B.getM21(), B.getM22(), B.getM20());
-               Vquat.setUnsafe(0.5 * (qs + qx + qy - qz),
-                               0.5 * (qs - qx + qy + qz),
-                               0.5 * (qs + qx - qy + qz),
-                               0.5 * (qs - qx - qy - qz));
+               V.setUnsafe(0.5 * (qs + qx + qy - qz),
+                           0.5 * (qs - qx + qy + qz),
+                           0.5 * (qs + qx - qy + qz),
+                           0.5 * (qs - qx - qy - qz));
             }
          }
          else
@@ -556,10 +560,10 @@ public class SingularValueDecomposition3D
             B.set(B.getM02(), B.getM01(), -B.getM00(),
                   B.getM12(), B.getM11(), -B.getM10(),
                   B.getM22(), B.getM21(), -B.getM20());
-            Vquat.setUnsafe(sqrtTwoOverTwo * (qx + qz),
-                            sqrtTwoOverTwo * (qy - qs),
-                            sqrtTwoOverTwo * (qz - qx),
-                            sqrtTwoOverTwo * (qs + qy));
+            V.setUnsafe(sqrtTwoOverTwo * (qx + qz),
+                        sqrtTwoOverTwo * (qy - qs),
+                        sqrtTwoOverTwo * (qz - qx),
+                        sqrtTwoOverTwo * (qs + qy));
          }
       }
       // @formatter:on

@@ -106,14 +106,13 @@ public class SingularValueDecomposition3DTest
             String messagePrefix = "Iteration: " + i + ", generator: " + generator.get().getValue();
             try
             {
-
-               asertMatrix3DEquals(messagePrefix, A, A_output, varEpsilon);
+               EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, A, A_output, varEpsilon);
                assertArrayEquals(singularValuesEJML, singularValuesEuclid, varEpsilon, messagePrefix);
                if (!EuclidCoreTools.epsilonEquals(singularValuesEJML[0], singularValuesEJML[1], EPSILON)
                      && !EuclidCoreTools.epsilonEquals(singularValuesEJML[0], singularValuesEJML[2], EPSILON))
                { // Can't really compare when singular values are equal, since that pretty much implies an infinite number of solutions.
-                  asertMatrix3DEquals(messagePrefix, Uejml, Ueuclid, varEpsilon);
-                  asertMatrix3DEquals(messagePrefix, Vejml, Veuclid, varEpsilon);
+                  EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, Uejml, Ueuclid, varEpsilon);
+                  EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, Vejml, Veuclid, varEpsilon);
                }
             }
             catch (Throwable e)
@@ -141,22 +140,7 @@ public class SingularValueDecomposition3DTest
                                        Double.toString(euclidAverageMilllis)));
    }
 
-   private static void asertMatrix3DEquals(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, double epsilon)
-   {
-      double maxError = 0.0;
-
-      for (int row = 0; row < 3; row++)
-      {
-         for (int col = 0; col < 3; col++)
-         {
-            maxError = Math.max(maxError, Math.abs(expected.getElement(row, col) - actual.getElement(row, col)));
-         }
-      }
-
-      EuclidCoreTestTools.assertMatrix3DEquals(EuclidCoreTestTools.addPrefixToMessage(messagePrefix, "max error: " + maxError), expected, actual, epsilon);
-   }
-
-   private static double columnDot(int col, Matrix3DReadOnly a, Matrix3DReadOnly b)
+   static double columnDot(int col, Matrix3DReadOnly a, Matrix3DReadOnly b)
    {
       double dot = 0.0;
       for (int row = 0; row < 3; row++)
@@ -166,7 +150,7 @@ public class SingularValueDecomposition3DTest
       return dot;
    }
 
-   private static void negateColumn(int col, Matrix3DBasics m)
+   static void negateColumn(int col, Matrix3DBasics m)
    {
       for (int row = 0; row < 3; row++)
       {
