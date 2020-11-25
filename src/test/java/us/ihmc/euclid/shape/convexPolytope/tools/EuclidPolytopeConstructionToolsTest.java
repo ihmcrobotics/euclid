@@ -10,7 +10,6 @@ import java.util.stream.IntStream;
 
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
-import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.Axis3D;
@@ -22,6 +21,7 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.shape.tools.EuclidShapeRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
+import us.ihmc.euclid.tools.SymmetricEigenDecomposition3D;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -51,7 +51,7 @@ public class EuclidPolytopeConstructionToolsTest
                                          .collect(Collectors.toList());
          points.stream().filter(p -> random.nextBoolean()).forEach(Point3D::negate);
 
-         DMatrixRMaj actualCovariance = new DMatrixRMaj(3, 3);
+         Matrix3D actualCovariance = new Matrix3D();
          EuclidPolytopeConstructionTools.computeCovariance3D(points, null, actualCovariance);
 
          Vector3D actualNormal = new Vector3D(1.0, 1.0, 1.0);
@@ -63,7 +63,7 @@ public class EuclidPolytopeConstructionToolsTest
          assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 0.30), errorMessage);
 
          actualNormal = new Vector3D(-1.0, -1.0, -1.0);
-         EuclidPolytopeConstructionTools.updateFace3DNormal(DecompositionFactory_DDRM.eig(3, true, true), actualCovariance, actualNormal);
+         EuclidPolytopeConstructionTools.updateFace3DNormal(new SymmetricEigenDecomposition3D(), actualCovariance, actualNormal);
 
          expectedNormal.negate();
 
@@ -84,15 +84,34 @@ public class EuclidPolytopeConstructionToolsTest
 
          for (int j = 3; j <= vertices.size(); j++)
          {
-            DMatrixRMaj actualCovariance = new DMatrixRMaj(3, 3);
-            Vector3D actualNormal = new Vector3D();
+            Matrix3D actualCovariance = new Matrix3D();
+            Vector3D actualNormal = new Vector3D(expectedNormal);
             EuclidPolytopeConstructionTools.computeCovariance3D(vertices.subList(0, j), null, actualCovariance);
-            EuclidPolytopeConstructionTools.updateFace3DNormal(actualCovariance, actualNormal);
+            EuclidPolytopeConstructionTools.updateFace3DNormal(new SymmetricEigenDecomposition3D(1.0e-16), actualCovariance, actualNormal);
 
             String errorMessage = "Iteration" + i + ", nPoints: " + j + ", angle: " + expectedNormal.angle(actualNormal);
             assertTrue(EuclidGeometryTools.areVector3DsParallel(expectedNormal, actualNormal, 1.0e-5), errorMessage);
          }
       }
+   }
+
+   @Test
+   public void testEigenVectorBug2() throws Exception
+   { // Reproducing a bug where eigenValue.getY() < eigenValue.getZ()
+
+      Vector3D expectedNormal = new Vector3D(-0.7049187675308247, 0.4022247557105953, 0.5842129552452384);
+      Matrix3D covariance = new Matrix3D(0.2991963714095545,
+                                         0.27863404057179947,
+                                         0.16917739943062554,
+                                         0.27863404057179947,
+                                         0.5887317541092697,
+                                         -0.06913253316457282,
+                                         0.16917739943062554,
+                                         -0.06913253316457282,
+                                         0.25172865278680445);
+      Vector3D actualNormal = new Vector3D(-0.7049187675308248, 0.40222475571059535, 0.5842129552452384);
+      assertTrue(EuclidPolytopeConstructionTools.updateFace3DNormal(covariance, actualNormal));
+      EuclidCoreTestTools.assertTuple3DEquals(expectedNormal, actualNormal, EPSILON);
    }
 
    @Test
@@ -110,7 +129,7 @@ public class EuclidPolytopeConstructionToolsTest
                                          .mapToObj(h -> EuclidCoreRandomTools.nextPoint3D(random, maxAbsoluteX, maxAbsoluteY, maxAbsoluteZ))
                                          .collect(Collectors.toList());
 
-         DMatrixRMaj actualCovariance = new DMatrixRMaj(3, 3);
+         Matrix3D actualCovariance = new Matrix3D();
          EuclidPolytopeConstructionTools.computeCovariance3D(points, null, actualCovariance);
          Matrix3D expectedCovariance = computeCovarianceMatrix(points);
 
