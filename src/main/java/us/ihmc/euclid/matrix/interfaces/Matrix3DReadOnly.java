@@ -603,6 +603,16 @@ public interface Matrix3DReadOnly
       return Matrix3DFeatures.isMatrixSkewSymmetric(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
    }
 
+   default boolean isMatrixSymmetric()
+   {
+      return isMatrixSymmetric(Matrix3DFeatures.EPS_CHECK_SYMMETRIC);
+   }
+
+   default boolean isMatrixSymmetric(double epsilon)
+   {
+      return Matrix3DFeatures.isMatrixSymmetric(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
+   }
+
    default double maxElement()
    {
       return Matrix3DFeatures.maxElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());

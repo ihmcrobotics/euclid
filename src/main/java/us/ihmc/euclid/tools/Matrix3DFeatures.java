@@ -30,6 +30,10 @@ public class Matrix3DFeatures
     * Default tolerance for determining whether a matrix 3D is skew symmetric or not.
     */
    public static final double EPS_CHECK_SKEW = 1.0e-8;
+   /**
+    * Default tolerance for determining whether a matrix 3D is symmetric or not.
+    */
+   public static final double EPS_CHECK_SYMMETRIC = 1.0e-8;
 
    private Matrix3DFeatures()
    {
@@ -510,6 +514,23 @@ public class Matrix3DFeatures
             return true;
       }
       return false;
+   }
+
+   public static boolean isMatrixSymmetric(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      return isMatrixSymmetric(m00, m01, m02, m10, m11, m12, m20, m21, m22, EPS_CHECK_SYMMETRIC);
+   }
+
+   public static boolean isMatrixSymmetric(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                           double epsilon)
+   {
+      if (Math.abs(m01 - m10) > epsilon)
+         return false;
+      if (Math.abs(m02 - m20) > epsilon)
+         return false;
+      if (Math.abs(m12 - m21) > epsilon)
+         return false;
+      return true;
    }
 
    public static double maxElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
