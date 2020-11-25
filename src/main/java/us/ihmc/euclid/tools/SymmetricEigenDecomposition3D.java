@@ -1,6 +1,5 @@
 package us.ihmc.euclid.tools;
 
-import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -18,11 +17,22 @@ public class SymmetricEigenDecomposition3D
    private final Quaternion Qquat = new Quaternion();
    private final Eigen3DOutput output = new Eigen3DOutput();
 
-   private int maxIterations = 10000;
-   private double tolerance = 1.0e-12;
+   private int maxIterations = 25;
+   private double tolerance = 1.0e-13;
 
    public SymmetricEigenDecomposition3D()
    {
+   }
+
+   public SymmetricEigenDecomposition3D(double tolerance)
+   {
+      setTolerance(tolerance);
+   }
+
+   public SymmetricEigenDecomposition3D(double tolerance, int maxIterations)
+   {
+      setTolerance(tolerance);
+      setMaxIterations(maxIterations);
    }
 
    public void setMaxIterations(int maxIterations)
@@ -46,7 +56,7 @@ public class SymmetricEigenDecomposition3D
       computeQ(A_internal);
       output.eigenValues.set(A_internal.getM00(), A_internal.getM11(), A_internal.getM22());
       sortEigenValues(output.eigenValues, Qquat);
-      toMatrix3D(Qquat, output.eigenVectors);
+      toMatrix3D(Qquat, output.eigenVector0, output.eigenVector1, output.eigenVector2);
       output.eigenValues.scale(max);
       return true;
    }
@@ -127,7 +137,7 @@ public class SymmetricEigenDecomposition3D
       // @formatter:on
    }
 
-   private static void toMatrix3D(QuaternionReadOnly q, Matrix3DBasics m)
+   private static void toMatrix3D(QuaternionReadOnly q, Vector3DBasics v0, Vector3DBasics v1, Vector3DBasics v2)
    {
       double qx = q.getX();
       double qy = q.getY();
@@ -153,32 +163,24 @@ public class SymmetricEigenDecomposition3D
       double m20 = xz2 - sy2;
       double m21 = yz2 + sx2;
       double m22 = 1.0 - xx2 - yy2;
-      m.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      v0.set(m00, m10, m20);
+      v1.set(m01, m11, m21);
+      v2.set(m02, m12, m22);
    }
 
-   public Matrix3D getEigenVectors()
+   public Matrix3DBasics getEigenVectors(Matrix3DBasics eigenVectorsToPack)
    {
-      return output.getEigenVectors();
+      return output.getEigenVectors(eigenVectorsToPack);
    }
 
-   public Vector3DBasics getEigenVector(Axis3D axis, Vector3DBasics eigenVectorToPack)
+   public Vector3D getEigenVector(int index)
    {
-      return output.getEigenVector(axis, eigenVectorToPack);
-   }
-
-   public Vector3DBasics getEigenVector(int index, Vector3DBasics eigenVectorToPack)
-   {
-      return output.getEigenVector(index, eigenVectorToPack);
+      return output.getEigenVector(index);
    }
 
    public Vector3D getEigenValues()
    {
       return output.getEigenValues();
-   }
-
-   public double getEigenValue(Axis3D axis)
-   {
-      return output.getEigenValue(axis);
    }
 
    public double getEigenValue(int index)
@@ -188,35 +190,28 @@ public class SymmetricEigenDecomposition3D
 
    public static class Eigen3DOutput
    {
-      private final Matrix3D eigenVectors = new Matrix3D();
       private final Vector3D eigenValues = new Vector3D();
+      private final Vector3D eigenVector0 = new Vector3D();
+      private final Vector3D eigenVector1 = new Vector3D();
+      private final Vector3D eigenVector2 = new Vector3D();
+      private final Vector3D[] eigenVectors = {eigenVector0, eigenVector1, eigenVector2};
 
-      public Matrix3D getEigenVectors()
+      public Matrix3DBasics getEigenVectors(Matrix3DBasics eigenVectorsToPack)
       {
-         return eigenVectors;
+         if (eigenVectorsToPack == null)
+            eigenVectorsToPack = new Matrix3D();
+         eigenVectorsToPack.setColumns(eigenVector0, eigenVector1, eigenVector2);
+         return eigenVectorsToPack;
       }
 
-      public Vector3DBasics getEigenVector(Axis3D axis, Vector3DBasics eigenVectorToPack)
+      public Vector3D getEigenVector(int index)
       {
-         return getEigenVector(axis.ordinal(), eigenVectorToPack);
-      }
-
-      public Vector3DBasics getEigenVector(int index, Vector3DBasics eigenVectorToPack)
-      {
-         if (eigenVectorToPack == null)
-            eigenVectorToPack = new Vector3D();
-         eigenVectors.getColumn(index, eigenVectorToPack);
-         return eigenVectorToPack;
+         return eigenVectors[index];
       }
 
       public Vector3D getEigenValues()
       {
          return eigenValues;
-      }
-
-      public double getEigenValue(Axis3D axis)
-      {
-         return eigenValues.getElement(axis);
       }
 
       public double getEigenValue(int index)

@@ -7,7 +7,6 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * SVD decomposition of a 3D matrix <tt>A</tt> as:
@@ -31,8 +30,8 @@ public class SingularValueDecomposition3D
    private final Matrix3D temp = new Matrix3D();
    private final SVD3DOutput output = new SVD3DOutput();
 
-   private int maxIterations = 10000;
-   private double tolerance = 1.0e-9;
+   private int maxIterations = 25;
+   private double tolerance = 1.0e-12;
 
    public SingularValueDecomposition3D()
    {
@@ -50,8 +49,19 @@ public class SingularValueDecomposition3D
 
    public void decompose(Matrix3DReadOnly A)
    {
-      computeV(A);
-      computeUW(A);
+      double scale = A.maxAbsElement();
+      double a00 = A.getM00() / scale;
+      double a01 = A.getM01() / scale;
+      double a02 = A.getM02() / scale;
+      double a10 = A.getM10() / scale;
+      double a11 = A.getM11() / scale;
+      double a12 = A.getM12() / scale;
+      double a20 = A.getM20() / scale;
+      double a21 = A.getM21() / scale;
+      double a22 = A.getM22() / scale;
+      computeV(a00, a01, a02, a10, a11, a12, a20, a21, a22);
+      computeUW(a00, a01, a02, a10, a11, a12, a20, a21, a22);
+      output.W.scale(scale);
    }
 
    public void transpose()
@@ -59,10 +69,11 @@ public class SingularValueDecomposition3D
       output.transpose();
    }
 
-   private void computeV(Matrix3DReadOnly A)
+   private void computeV(double a00, double a01, double a02, double a10, double a11, double a12, double a20, double a21, double a22)
    {
       Matrix3D S = temp;
-      Matrix3DTools.multiplyTransposeLeft(A, A, S);
+      S.set(a00, a01, a02, a10, a11, a12, a20, a21, a22);
+      Matrix3DTools.multiplyTransposeLeft(S, S, S);
       computeV(S, output.V, maxIterations, tolerance);
    }
 
@@ -83,13 +94,13 @@ public class SingularValueDecomposition3D
          {
             if (a_01_abs > a_12_abs)
             {
-               if (a_01_abs < tolerance)
+               if (a_01_abs < tolerance * Math.abs(S.getM00()) * Math.abs(S.getM11()))
                   break;
                approxGivensQuaternion(0, 1, S, V);
             }
             else
             {
-               if (a_12_abs < tolerance)
+               if (a_12_abs < tolerance * Math.abs(S.getM11()) * Math.abs(S.getM22()))
                   break;
                approxGivensQuaternion(1, 2, S, V);
             }
@@ -98,13 +109,13 @@ public class SingularValueDecomposition3D
          {
             if (a_02_abs > a_12_abs)
             {
-               if (a_02_abs < tolerance)
+               if (a_02_abs < tolerance * Math.abs(S.getM00()) * Math.abs(S.getM22()))
                   break;
                approxGivensQuaternion(0, 2, S, V);
             }
             else
             {
-               if (a_12_abs < tolerance)
+               if (a_12_abs < tolerance * Math.abs(S.getM11()) * Math.abs(S.getM22()))
                   break;
                approxGivensQuaternion(1, 2, S, V);
             }
@@ -180,28 +191,28 @@ public class SingularValueDecomposition3D
       }
    }
 
-   private void computeUW(Matrix3DReadOnly A)
+   private void computeUW(double a00, double a01, double a02, double a10, double a11, double a12, double a20, double a21, double a22)
    {
       Matrix3D B = temp;
-      computeB(A, output.V, B);
+      computeB(a00, a01, a02, a10, a11, a12, a20, a21, a22, output.V, B);
       sortBColumns(B, output.V);
       output.U.setToZero();
 
       boolean isUquatInitialized = false;
 
-      if (!EuclidCoreTools.isZero(B.getM10(), tolerance) || B.getM00() < 0.0)
+      if (!EuclidCoreTools.isZero(B.getM10(), tolerance * Math.abs(B.getM00()) * Math.abs(B.getM11())) || B.getM00() < 0.0)
       {
          qrGivensQuaternion(1, 0, B, output.U, tolerance);
          isUquatInitialized = true;
       }
 
-      if (!EuclidCoreTools.isZero(B.getM20(), tolerance) || B.getM11() < 0.0)
+      if (!EuclidCoreTools.isZero(B.getM20(), tolerance * Math.abs(B.getM22()) * Math.abs(B.getM00())) || B.getM11() < 0.0)
       {
          qrGivensQuaternion(2, 0, B, output.U, tolerance);
          isUquatInitialized = true;
       }
 
-      if (!EuclidCoreTools.isZero(B.getM21(), tolerance) || B.getM11() < 0.0)
+      if (!EuclidCoreTools.isZero(B.getM21(), tolerance * Math.abs(B.getM22()) * Math.abs(B.getM11())) || B.getM11() < 0.0)
       {
          qrGivensQuaternion(2, 1, B, output.U, tolerance);
          isUquatInitialized = true;
@@ -213,7 +224,8 @@ public class SingularValueDecomposition3D
          output.U.normalize();
    }
 
-   private static void computeB(Matrix3DReadOnly A, QuaternionReadOnly V, Matrix3DBasics BToPack)
+   private void computeB(double a00, double a01, double a02, double a10, double a11, double a12, double a20, double a21, double a22, Quaternion V,
+                         Matrix3D BToPack)
    {
       double qx = V.getX();
       double qy = V.getY();
@@ -240,15 +252,15 @@ public class SingularValueDecomposition3D
       double m21 = yz2 + sx2;
       double m22 = 1.0 - xx2 - yy2;
 
-      double b00 = A.getM00() * m00 + A.getM01() * m10 + A.getM02() * m20;
-      double b01 = A.getM00() * m01 + A.getM01() * m11 + A.getM02() * m21;
-      double b02 = A.getM00() * m02 + A.getM01() * m12 + A.getM02() * m22;
-      double b10 = A.getM10() * m00 + A.getM11() * m10 + A.getM12() * m20;
-      double b11 = A.getM10() * m01 + A.getM11() * m11 + A.getM12() * m21;
-      double b12 = A.getM10() * m02 + A.getM11() * m12 + A.getM12() * m22;
-      double b20 = A.getM20() * m00 + A.getM21() * m10 + A.getM22() * m20;
-      double b21 = A.getM20() * m01 + A.getM21() * m11 + A.getM22() * m21;
-      double b22 = A.getM20() * m02 + A.getM21() * m12 + A.getM22() * m22;
+      double b00 = a00 * m00 + a01 * m10 + a02 * m20;
+      double b01 = a00 * m01 + a01 * m11 + a02 * m21;
+      double b02 = a00 * m02 + a01 * m12 + a02 * m22;
+      double b10 = a10 * m00 + a11 * m10 + a12 * m20;
+      double b11 = a10 * m01 + a11 * m11 + a12 * m21;
+      double b12 = a10 * m02 + a11 * m12 + a12 * m22;
+      double b20 = a20 * m00 + a21 * m10 + a22 * m20;
+      double b21 = a20 * m01 + a21 * m11 + a22 * m21;
+      double b22 = a20 * m02 + a21 * m12 + a22 * m22;
       BToPack.set(b00, b01, b02, b10, b11, b12, b20, b21, b22);
    }
 

@@ -18,7 +18,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 public class SymmetricEigenDecomposition3DTest
 {
    private static final int ITERATIONS = 10000;
-   private static final double EPSILON = 5.0e-9;
+   private static final double EPSILON = 1.0e-12;
 
    @Test
    public void test()
@@ -44,8 +44,8 @@ public class SymmetricEigenDecomposition3DTest
          euclidTotalTime += end - start;
          double varEpsilon = Math.max(1.0, Math.abs(A.determinant())) * EPSILON;
 
-         Matrix3D Qeuclid = eigenEuclid.getEigenVectors();
-         Vector3D lambdaeuclid = eigenEuclid.getEigenValues();
+         Matrix3DBasics Qeuclid = eigenEuclid.getEigenVectors(null);
+         Vector3DBasics lambdaeuclid = eigenEuclid.getEigenValues();
 
          Matrix3D Qejml = new Matrix3D();
          Vector3D lambdaejml = new Vector3D();
@@ -77,8 +77,8 @@ public class SymmetricEigenDecomposition3DTest
       assertTrue(eigenEuclid.decompose(A));
       double varEpsilon = Math.max(1.0, Math.abs(A.determinant())) * EPSILON;
 
-      Matrix3D Qeuclid = eigenEuclid.getEigenVectors();
-      Vector3D lambdaeuclid = eigenEuclid.getEigenValues();
+      Matrix3DBasics Qeuclid = eigenEuclid.getEigenVectors(null);
+      Vector3DBasics lambdaeuclid = eigenEuclid.getEigenValues();
 
       Matrix3D Qejml = new Matrix3D();
       Vector3D lambdaejml = new Vector3D();
@@ -86,7 +86,32 @@ public class SymmetricEigenDecomposition3DTest
       performAssertions(0, A, Qeuclid, lambdaeuclid, Qejml, lambdaejml, varEpsilon);
    }
 
-   private void performAssertions(int i, Matrix3D A, Matrix3D Qeuclid, Vector3D lambdaeuclid, Matrix3D Qejml, Vector3D lambdaejml, double epsilon)
+   @Test
+   public void testBug2()
+   {
+      Matrix3D A = new Matrix3D(1.8570857023973861E-6,
+                                -5.783382514121337E-6,
+                                0.0,
+                                -5.783382514121337E-6,
+                                1.801075376406469E-5,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.003445569794329082);
+      SymmetricEigenDecomposition3D eigenEuclid = new SymmetricEigenDecomposition3D();
+      assertTrue(eigenEuclid.decompose(A));
+
+      Matrix3DBasics Qeuclid = eigenEuclid.getEigenVectors(null);
+      Vector3DBasics lambdaeuclid = eigenEuclid.getEigenValues();
+
+      Matrix3D Qejml = new Matrix3D();
+      Vector3D lambdaejml = new Vector3D();
+      ejmlEigenDecomposition(A, Qejml, lambdaejml);
+      performAssertions(0, A, Qeuclid, lambdaeuclid, Qejml, lambdaejml, EPSILON);
+   }
+
+   private void performAssertions(int i, Matrix3DReadOnly A, Matrix3DBasics Qeuclid, Vector3DBasics lambdaeuclid, Matrix3DBasics Qejml,
+                                  Vector3DBasics lambdaejml, double epsilon)
    {
       for (int col = 0; col < 3; col++)
       {

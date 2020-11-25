@@ -31,7 +31,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 public class SingularValueDecomposition3DTest
 {
    private static final int ITERATIONS = 10000;
-   private static final double EPSILON = 1.0e-10;
+   private static final double EPSILON = 1.0e-11;
 
    @Test
    public void test()
