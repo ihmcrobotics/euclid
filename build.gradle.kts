@@ -46,6 +46,6 @@ testDependencies {
    api(ihmc.sourceSetProject("frame-shape"))
 
    api("org.ejml:ejml-ddense:0.39")
-   api("org.pitest:pitest:1.4.3")
-   api("org.pitest:pitest-command-line:1.4.3")
+   api("org.pitest:pitest:1.5.2")
+   api("org.pitest:pitest-command-line:1.5.2")
 }
