@@ -835,6 +835,16 @@ public class SingularValueDecomposition3D
       }
 
       /**
+       * Resets {@code U} and {@code V} to neutral quaternions and {@code W} to (0, 0, 0).
+       */
+      public void setToZero()
+      {
+         U.setToZero();
+         W.setToZero();
+         V.setToZero();
+      }
+
+      /**
        * Sets {@code U}, {@code W}, and {@code V} to NaN.
        */
       public void setToNaN()

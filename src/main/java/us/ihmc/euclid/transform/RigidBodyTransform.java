@@ -39,11 +39,11 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  * <p>
  * A few special cases to keep in mind:
  * <ul>
- * <li>when transforming a {@link QuaternionBasics}, the rotation part of this transform is prepend
- * to the quaternion, such that the output remains a proper unit-quaternion that still only
- * describes a rotation.
- * <li>when transforming a {@link RotationMatrix}, the rotation part of this transform is prepend to
- * the rotation matrix, such that the output remains a proper rotation matrix.
+ * <li>when transforming a {@link QuaternionBasics}, the rotation part of this transform is
+ * prepended to the quaternion, such that the output remains a proper unit-quaternion that still
+ * only describes a rotation.
+ * <li>when transforming a {@link RotationMatrix}, the rotation part of this transform is prepended
+ * to the rotation matrix, such that the output remains a proper rotation matrix.
  * <li>when applying this transform on a {@link Point3DBasics} or {@link Point2DBasics}, this object
  * is, in order, rotated and then translated.
  * <li>when applying this transform on a {@link Vector3DBasics} or {@link Vector2DBasics}, this
@@ -1131,10 +1131,14 @@ public class RigidBodyTransform
    }
 
    /**
-    * Provides a {@code String} representation of this transform as follows: <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
+    * Provides a {@code String} representation of this transform as follows:
+    * 
+    * <pre>
+    *  0.596  0.630  0.930 | -0.435
+    * -0.264  0.763  0.575 | -0.464
+    * -0.430 -0.188 -0.048 |  0.611
+    *  0.000  0.000  0.000 |  1.000
+    * </pre>
     *
     * @return the {@code String} representing this transform.
     */

@@ -499,6 +499,9 @@ public class EuclidPolytopeTools
     * WARNING: This method generates garbage.
     * </p>
     *
+    *
+    * @param <F> the type of face. 
+    * @param <E> the type half-edge.
     * @param query      the coordinates of the query. Not modified.
     * @param silhouette the list of the half-edges to navigate. Not modified.
     * @param epsilon    the tolerance used for determining whether the query is close to a face support

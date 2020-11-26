@@ -8,6 +8,7 @@ import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -15,11 +16,36 @@ import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.AffineTransformBasics;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
+import us.ihmc.euclid.tuple2D.interfaces.Vector2DBasics;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * A {@code AffineTransform} represents a 4-by-4 transformation matrix that can rotate, scale,
+ * shear, and translate.
+ * <p>
+ * The {@code AffineTransform} is composed of {@link LinearTransform3D} to rotate, scale, shear, and
+ * a {@link Vector3D} to translate.
+ * </p>
+ * <p>
+ * A few special cases to keep in mind:
+ * <ul>
+ * <li>when transforming a {@link Orientation3DBasics}, only the rotation part of the
+ * {@link LinearTransform3D} is prepended to the quaternion, such that the output remains a proper
+ * unit-quaternion that still only describes a rotation.
+ * <li>when applying this transform on a {@link Point3DBasics} or {@link Point2DBasics}, this object
+ * is, in order, transformed with the {@link LinearTransform3D} and then translated.
+ * <li>when applying this transform on a {@link Vector3DBasics} or {@link Vector2DBasics}, this
+ * object is transformed with the {@link LinearTransform3D}. It is NOT translated.
+ * </ul>
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public class AffineTransform
       implements AffineTransformBasics, EpsilonComparable<AffineTransform>, GeometricallyComparable<AffineTransform>, Settable<AffineTransform>
 {
@@ -36,6 +62,7 @@ public class AffineTransform
     */
    public AffineTransform()
    {
+      setIdentity();
    }
 
    /**
@@ -50,9 +77,6 @@ public class AffineTransform
 
    /**
     * Creates a new affine transform and sets it to {@code rigidBodyTransform}.
-    * <p>
-    * This affine transform has no scaling (1.0, 1.0, 1.0).
-    * </p>
     *
     * @param rigidBodyTransform the rigid-body transform to copy. Not modified.
     */
@@ -62,10 +86,11 @@ public class AffineTransform
    }
 
    /**
-    * Creates a new affine transform and initializes it from the given rotation-scale matrix and the
-    * given translation.
+    * Creates a new affine transform and initializes it from the given 3D matrix and the given
+    * translation.
     *
-    * @param linearTransform the rotation-scale matrix to copy. Not modified.
+    * @param linearTransform the matrix used to initialize the linear part of the transform. Not
+    *                        modified.
     * @param translation     the translation to copy. Not modified.
     */
    public AffineTransform(Matrix3DReadOnly linearTransform, Tuple3DReadOnly translation)
@@ -73,16 +98,40 @@ public class AffineTransform
       set(linearTransform, translation);
    }
 
+   /**
+    * Creates a new affine transform and initializes it from the given 3D matrix and the given
+    * translation.
+    *
+    * @param linearTransform the matrix used to initialize the linear part of the transform. Not
+    *                        modified.
+    * @param translation     the translation to copy. Not modified.
+    */
    public AffineTransform(DMatrix linearTransform, Tuple3DReadOnly translation)
    {
       set(linearTransform, translation);
    }
 
+   /**
+    * Creates a new affine transform and initializes it from the given rotation matrix and the given
+    * translation.
+    *
+    * @param rotationMatrix the matrix used to initialize the linear part of the transform. Not
+    *                       modified.
+    * @param translation    the translation to copy. Not modified.
+    */
    public AffineTransform(RotationMatrix rotationMatrix, Tuple3DReadOnly translation)
    {
       set(rotationMatrix, translation);
    }
 
+   /**
+    * Creates a new affine transform and initializes it from the given orientation and the given
+    * translation.
+    *
+    * @param orientation the orientation used to initialize the linear part of the transform. Not
+    *                    modified.
+    * @param translation the translation to copy. Not modified.
+    */
    public AffineTransform(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
    {
       set(orientation, translation);
@@ -99,15 +148,25 @@ public class AffineTransform
       set((AffineTransformReadOnly) other);
    }
 
+   /**
+    * Returns the read-only view of the linear part of this transform as a pure orientation.
+    * <p>
+    * The orientation represents the same transformation as {@link #getLinearTransform()} with the
+    * scales set to 1. The returned quaternion is linked to this transform, i.e. it is automatically
+    * updated when this transform is modified.
+    * </p>
+    * 
+    * @return the read-only view of the linear part of this transform as a pure orientation.
+    */
    public QuaternionReadOnly getRotationView()
    {
       return linearTransform.getAsQuaternion();
    }
 
    /**
-    * Gets the read-only reference to the rotation-scale part of this transform.
+    * Gets the read-only reference to the linear part of this transform.
     *
-    * @return the rotation-scale part of this transform.
+    * @return the linear part of this transform.
     */
    @Override
    public LinearTransform3D getLinearTransform()
@@ -346,10 +405,26 @@ public class AffineTransform
    }
 
    /**
-    * Tests separately and on a per component basis if the rotation part, the scale part, and the
-    * translation part of this transform and {@code other} are equal to an {@code epsilon}.
+    * Two affine transforms are considered geometrically equal if both the linear transform and
+    * translation vector are geometrically equal.
     *
-    * @param other the other affine transform to compare against this. Not modified.
+    * @param other   the other affine transform to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean geometricallyEquals(AffineTransform other, double epsilon)
+   {
+      return AffineTransformBasics.super.geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Tests on a per component basis if this transform and {@code other} are equal to an
+    * {@code epsilon}.
+    *
+    * @param epsilon tolerance to use when comparing each component.
+    * @param other   the other affine transform to compare against this. Not modified.
+    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(AffineTransform other, double epsilon)
@@ -375,24 +450,14 @@ public class AffineTransform
    }
 
    /**
-    * Two affine transforms are considered geometrically equal if both the rotation-scale matrices and
-    * translation vectors are equal.
-    *
-    * @param other   the other affine transform to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(AffineTransform other, double epsilon)
-   {
-      return AffineTransformBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Provides a {@code String} representation of this transform as follows: <br>
-    * m00, m01, m02 | m03 <br>
-    * m10, m11, m12 | m13 <br>
-    * m20, m21, m22 | m23
+    * Provides a {@code String} representation of this transform as follows:
+    * 
+    * <pre>
+    *  0.596  0.630  0.930 | -0.435
+    * -0.264  0.763  0.575 | -0.464
+    * -0.430 -0.188 -0.048 |  0.611
+    *  0.000  0.000  0.000 |  1.000
+    * </pre>
     *
     * @return the {@code String} representing this transform.
     */

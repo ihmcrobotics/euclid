@@ -279,6 +279,28 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
 
    /** {@inheritDoc} */
    @Override
+   public void setToZero()
+   {
+      m00 = 0.0;
+      m01 = 0.0;
+      m02 = 0.0;
+      m10 = 0.0;
+      m11 = 0.0;
+      m12 = 0.0;
+      m20 = 0.0;
+      m21 = 0.0;
+      m22 = 0.0;
+      isRotation = false;
+      rotationDirty = false;
+      isIdentity = false;
+      identityDirty = false;
+      quaternionViewDirty = true;
+      svdDirty = false;
+      svdOutput.setToZero();
+   }
+
+   /** {@inheritDoc} */
+   @Override
    public void setToNaN()
    {
       m00 = Double.NaN;

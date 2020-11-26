@@ -139,6 +139,16 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
       Matrix3DBasics.super.setAndMultiplyOuter(other);
    }
 
+   /**
+    * Sets this matrix to be equal to the inner-product of {@code other}.
+    * <p>
+    * this = <sup>T<sup>other * other
+    * </p>
+    *
+    * @param other the other matrix used for this operation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
    default void setAndMultiplyInner(FrameMatrix3DReadOnly other)
    {
       checkReferenceFrameMatch(other);

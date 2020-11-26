@@ -382,8 +382,8 @@ public interface AffineTransformReadOnly extends Transform
    }
 
    /**
-    * Tests separately and on a per component basis if the rotation part, the scale part, and the
-    * translation part of this transform and {@code other} are equal to an {@code epsilon}.
+    * Tests on a per component basis if this transform and {@code other} are equal to an
+    * {@code epsilon}.
     *
     * @param epsilon tolerance to use when comparing each component.
     * @param other   the other affine transform to compare against this. Not modified.
