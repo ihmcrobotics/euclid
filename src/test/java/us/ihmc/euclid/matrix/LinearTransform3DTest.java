@@ -116,13 +116,13 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
       {
          LinearTransform3D linearTransform3D = EuclidCoreRandomTools.nextLinearTransform3D(random, 10.0);
          linearTransform3D.setToZero();
-         EuclidCoreTestTools.assertMatrix3DEquals(EuclidCoreTools.identityMatrix3D, linearTransform3D, 0);
+         EuclidCoreTestTools.assertMatrix3DEquals(EuclidCoreTools.zeroMatrix3D, linearTransform3D, 0);
          EuclidCoreTestTools.assertTuple4DEquals(new Quaternion(), linearTransform3D.getAsQuaternion(), 0);
          EuclidCoreTestTools.assertTuple4DEquals(new Quaternion(), linearTransform3D.getPreScaleQuaternion(), 0);
          EuclidCoreTestTools.assertTuple4DEquals(new Quaternion(), linearTransform3D.getPostScaleQuaternion(), 0);
-         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(1, 1, 1), linearTransform3D.getScaleVector(), 0);
-         assertTrue(linearTransform3D.isIdentity());
-         assertTrue(linearTransform3D.isRotationMatrix());
+         EuclidCoreTestTools.assertTuple3DEquals(new Vector3D(0, 0, 0), linearTransform3D.getScaleVector(), 0);
+         assertFalse(linearTransform3D.isIdentity());
+         assertFalse(linearTransform3D.isRotationMatrix());
       }
    }
 
