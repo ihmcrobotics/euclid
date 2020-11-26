@@ -682,8 +682,7 @@ public class EuclidCoreIOTools
    }
 
    /**
-    * Gets a representative {@code String} of a series of doubles given specific prefix, suffix,
-    * separator.
+    * Gets a representative {@code String} of a series of doubles given a specific separator.
     * <p>
     * Using {@code separator = ", "}, this provides a {@code String} as follows:
     *
@@ -693,7 +692,6 @@ public class EuclidCoreIOTools
     * </p>
     *
     * @param separator the {@code String} to insert between two values.
-    * @param format    the format to use for each number.
     * @param values    the values to get the {@code String} of.
     * @return the representative {@code String}.
     */
@@ -703,8 +701,8 @@ public class EuclidCoreIOTools
    }
 
    /**
-    * Gets a representative {@code String} of a series of doubles given specific prefix, suffix,
-    * separator, and format to use.
+    * Gets a representative {@code String} of a series of doubles given a specific separator, and
+    * format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT} and {@code separator = ", "}, this provides a
     * {@code String} as follows:
@@ -741,6 +739,7 @@ public class EuclidCoreIOTools
     * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the array elements.
     * @param prefix                  the {@code String} to prepend to the result.
     * @param suffix                  the {@code String} to append to the result.
     * @param separator               the {@code String} used to separate elements of the array.
@@ -766,6 +765,7 @@ public class EuclidCoreIOTools
     * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the array elements.
     * @param separator               the {@code String} used to separate elements of the array.
     * @param array                   the array of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative
@@ -786,6 +786,7 @@ public class EuclidCoreIOTools
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the collection elements.
     * @param prefix                  the {@code String} to prepend to the result.
     * @param suffix                  the {@code String} to append to the result.
     * @param separator               the {@code String} used to separate elements of the collection.
@@ -820,6 +821,7 @@ public class EuclidCoreIOTools
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the collection elements.
     * @param separator               the {@code String} used to separate elements of the collection.
     * @param collection              the series of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative

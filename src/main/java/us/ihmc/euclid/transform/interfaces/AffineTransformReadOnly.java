@@ -22,8 +22,22 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
+/**
+ * Read-only interface for an affine transform.
+ * <p>
+ * An affine transform represents a transform that can rotate, scale, shear, and/or translate
+ * geometries.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface AffineTransformReadOnly extends Transform
 {
+   /**
+    * Gets the read-only reference of the linear part of this transform, such as rotation and scaling.
+    * 
+    * @return the read-only reference of the linear part of this transform.
+    */
    LinearTransform3DReadOnly getLinearTransform();
 
    /**
@@ -33,6 +47,16 @@ public interface AffineTransformReadOnly extends Transform
     */
    Vector3DReadOnly getTranslation();
 
+   /**
+    * Requests whether this transform's linear part is to be considered or not.
+    * <p>
+    * If the linear part of the transform is equal to the identity matrix, it can then be ignored when
+    * performing operations such as multiplications and transforms.
+    * </p>
+    *
+    * @return {@code true} if the linear part is non-negligible, {@code false} if the rotation part is
+    *         equal to the identity matrix and can be ignored when transforming an object.
+    */
    default boolean hasLinearTransform()
    {
       return !getLinearTransform().isIdentity();
@@ -345,12 +369,12 @@ public interface AffineTransformReadOnly extends Transform
    }
 
    /**
-    * Two affine transforms are considered geometrically equal if both the rotation-scale matrices and
-    * translation vectors are equal.
+    * Two affine transforms are considered geometrically equal if both the linear transform and
+    * translation vector are geometrically equal.
     *
     * @param other   the other affine transform to compare against this. Not modified.
     * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
+    * @return {@code true} if the two transforms are equal, {@code false} otherwise.
     */
    default boolean geometricallyEquals(AffineTransformReadOnly other, double epsilon)
    {
@@ -361,7 +385,9 @@ public interface AffineTransformReadOnly extends Transform
     * Tests separately and on a per component basis if the rotation part, the scale part, and the
     * translation part of this transform and {@code other} are equal to an {@code epsilon}.
     *
-    * @param other the other affine transform to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @param other   the other affine transform to compare against this. Not modified.
+    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
    default boolean epsilonEquals(AffineTransformReadOnly other, double epsilon)
    {

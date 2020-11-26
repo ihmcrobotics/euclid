@@ -231,6 +231,21 @@ public class Matrix3DTools
       multiply(m1, false, false, m2, true, false, matrixToPack);
    }
 
+   /**
+    * General method to perform a multiplication of two matrices, i.e. {@code m1 * m2}, while offering
+    * to transpose and/or invert each matrix beforehand and stores the result in {@code matrixToPack}.
+    * <p>
+    * All the matrices can be the same object.
+    * </p>
+    * 
+    * @param m1           the left matrix in the multiplication. Not modified.
+    * @param transpose1   whether to transpose {@code m1} before performing the multiplication.
+    * @param invert1      whether to invert {@code m1} before performing the multiplication.
+    * @param m2           the right matrix in the multiplication. Not modified.
+    * @param transpose2   whether to transpose {@code m2} before performing the multiplication.
+    * @param invert2      whether to invert {@code m2} before performing the multiplication.
+    * @param matrixToPack the matrix in which the result is stored. Modified.
+    */
    public static void multiply(Matrix3DReadOnly m1, boolean transpose1, boolean invert1, Matrix3DReadOnly m2, boolean transpose2, boolean invert2,
                                CommonMatrix3DBasics matrixToPack)
    {
@@ -344,6 +359,21 @@ public class Matrix3DTools
       matrixToPack.set(c00, c01, c02, c10, c11, c12, c20, c21, c22);
    }
 
+   /**
+    * General method to append an orientation to a matrix, while offering to transpose and/or invert
+    * the matrix and/or invert the orientation beforehand and stores the result in
+    * {@code matrixToPack}.
+    * <p>
+    * All the parameters can be the same object.
+    * </p>
+    * 
+    * @param matrix            the matrix to append the orientation to. Not modified.
+    * @param transposeMatrix   whether to transpose the matrix before performing the operation.
+    * @param invertMatrix      whether to invert the matrix before performing the operation.
+    * @param orientation       the orientation to append to the matrix. Not modified.
+    * @param invertOrientation whether to invert the orientation before performing the operation.
+    * @param matrixToPack      the matrix in which the result is stored. Modified.
+    */
    public static void multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation,
                                boolean invertOrientation, CommonMatrix3DBasics matrixToPack)
    {
@@ -354,30 +384,6 @@ public class Matrix3DTools
       }
 
       double a00, a01, a02, a10, a11, a12, a20, a21, a22;
-      if (transposeMatrix)
-      {
-         a00 = matrix.getM00();
-         a01 = matrix.getM10();
-         a02 = matrix.getM20();
-         a10 = matrix.getM01();
-         a11 = matrix.getM11();
-         a12 = matrix.getM21();
-         a20 = matrix.getM02();
-         a21 = matrix.getM12();
-         a22 = matrix.getM22();
-      }
-      else
-      {
-         a00 = matrix.getM00();
-         a01 = matrix.getM01();
-         a02 = matrix.getM02();
-         a10 = matrix.getM10();
-         a11 = matrix.getM11();
-         a12 = matrix.getM12();
-         a20 = matrix.getM20();
-         a21 = matrix.getM21();
-         a22 = matrix.getM22();
-      }
 
       if (invertMatrix)
       {
@@ -396,6 +402,35 @@ public class Matrix3DTools
          a21 = -(matrix.getM00() * matrix.getM21() - matrix.getM20() * matrix.getM01()) * det;
          a22 = (matrix.getM00() * matrix.getM11() - matrix.getM10() * matrix.getM01()) * det;
       }
+      else
+      {
+         a00 = matrix.getM00();
+         a01 = matrix.getM01();
+         a02 = matrix.getM02();
+         a10 = matrix.getM10();
+         a11 = matrix.getM11();
+         a12 = matrix.getM12();
+         a20 = matrix.getM20();
+         a21 = matrix.getM21();
+         a22 = matrix.getM22();
+      }
+
+      if (transposeMatrix)
+      {
+         double temp;
+
+         temp = a01;
+         a01 = a10;
+         a10 = temp;
+
+         temp = a02;
+         a02 = a20;
+         a20 = temp;
+
+         temp = a12;
+         a12 = a21;
+         a21 = temp;
+      }
 
       matrixToPack.set(orientation);
 
@@ -403,41 +438,56 @@ public class Matrix3DTools
 
       if (invertOrientation)
       {
-         b00 = matrix.getM00();
-         b01 = matrix.getM10();
-         b02 = matrix.getM20();
-         b10 = matrix.getM01();
-         b11 = matrix.getM11();
-         b12 = matrix.getM21();
-         b20 = matrix.getM02();
-         b21 = matrix.getM12();
-         b22 = matrix.getM22();
+         b00 = matrixToPack.getM00();
+         b01 = matrixToPack.getM10();
+         b02 = matrixToPack.getM20();
+         b10 = matrixToPack.getM01();
+         b11 = matrixToPack.getM11();
+         b12 = matrixToPack.getM21();
+         b20 = matrixToPack.getM02();
+         b21 = matrixToPack.getM12();
+         b22 = matrixToPack.getM22();
       }
       else
       {
-         b00 = matrix.getM00();
-         b01 = matrix.getM01();
-         b02 = matrix.getM02();
-         b10 = matrix.getM10();
-         b11 = matrix.getM11();
-         b12 = matrix.getM12();
-         b20 = matrix.getM20();
-         b21 = matrix.getM21();
-         b22 = matrix.getM22();
+         b00 = matrixToPack.getM00();
+         b01 = matrixToPack.getM01();
+         b02 = matrixToPack.getM02();
+         b10 = matrixToPack.getM10();
+         b11 = matrixToPack.getM11();
+         b12 = matrixToPack.getM12();
+         b20 = matrixToPack.getM20();
+         b21 = matrixToPack.getM21();
+         b22 = matrixToPack.getM22();
       }
 
-      double m00 = a00 * b00 + a01 * b10 + a02 * b20;
-      double m01 = a00 * b01 + a01 * b11 + a02 * b21;
-      double m02 = a00 * b02 + a01 * b12 + a02 * b22;
-      double m10 = a10 * b00 + a11 * b10 + a12 * b20;
-      double m11 = a10 * b01 + a11 * b11 + a12 * b21;
-      double m12 = a10 * b02 + a11 * b12 + a12 * b22;
-      double m20 = a20 * b00 + a21 * b10 + a22 * b20;
-      double m21 = a20 * b01 + a21 * b11 + a22 * b21;
-      double m22 = a20 * b02 + a21 * b12 + a22 * b22;
-      matrixToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      double c00 = a00 * b00 + a01 * b10 + a02 * b20;
+      double c01 = a00 * b01 + a01 * b11 + a02 * b21;
+      double c02 = a00 * b02 + a01 * b12 + a02 * b22;
+      double c10 = a10 * b00 + a11 * b10 + a12 * b20;
+      double c11 = a10 * b01 + a11 * b11 + a12 * b21;
+      double c12 = a10 * b02 + a11 * b12 + a12 * b22;
+      double c20 = a20 * b00 + a21 * b10 + a22 * b20;
+      double c21 = a20 * b01 + a21 * b11 + a22 * b21;
+      double c22 = a20 * b02 + a21 * b12 + a22 * b22;
+      matrixToPack.set(c00, c01, c02, c10, c11, c12, c20, c21, c22);
    }
 
+   /**
+    * General method to prepend an orientation to a matrix, while offering to transpose and/or invert
+    * the matrix and/or invert the orientation beforehand and stores the result in
+    * {@code matrixToPack}.
+    * <p>
+    * All the parameters can be the same object.
+    * </p>
+    * 
+    * @param orientation       the orientation to append the matrix to. Not modified.
+    * @param invertOrientation whether to invert the orientation before performing the operation.
+    * @param matrix            the matrix to append to the orientation. Not modified.
+    * @param transposeMatrix   whether to transpose the matrix before performing the operation.
+    * @param invertMatrix      whether to invert the matrix before performing the operation.
+    * @param matrixToPack      the matrix in which the result is stored. Modified.
+    */
    public static void multiply(Orientation3DReadOnly orientation, boolean invertOrientation, Matrix3DReadOnly matrix, boolean transposeMatrix,
                                boolean invertMatrix, CommonMatrix3DBasics matrixToPack)
    {
@@ -448,30 +498,6 @@ public class Matrix3DTools
       }
 
       double b00, b01, b02, b10, b11, b12, b20, b21, b22;
-      if (transposeMatrix)
-      {
-         b00 = matrix.getM00();
-         b01 = matrix.getM10();
-         b02 = matrix.getM20();
-         b10 = matrix.getM01();
-         b11 = matrix.getM11();
-         b12 = matrix.getM21();
-         b20 = matrix.getM02();
-         b21 = matrix.getM12();
-         b22 = matrix.getM22();
-      }
-      else
-      {
-         b00 = matrix.getM00();
-         b01 = matrix.getM01();
-         b02 = matrix.getM02();
-         b10 = matrix.getM10();
-         b11 = matrix.getM11();
-         b12 = matrix.getM12();
-         b20 = matrix.getM20();
-         b21 = matrix.getM21();
-         b22 = matrix.getM22();
-      }
 
       if (invertMatrix)
       {
@@ -490,6 +516,35 @@ public class Matrix3DTools
          b21 = -(matrix.getM00() * matrix.getM21() - matrix.getM20() * matrix.getM01()) * det;
          b22 = (matrix.getM00() * matrix.getM11() - matrix.getM10() * matrix.getM01()) * det;
       }
+      else
+      {
+         b00 = matrix.getM00();
+         b01 = matrix.getM01();
+         b02 = matrix.getM02();
+         b10 = matrix.getM10();
+         b11 = matrix.getM11();
+         b12 = matrix.getM12();
+         b20 = matrix.getM20();
+         b21 = matrix.getM21();
+         b22 = matrix.getM22();
+      }
+
+      if (transposeMatrix)
+      {
+         double temp;
+
+         temp = b01;
+         b01 = b10;
+         b10 = temp;
+
+         temp = b02;
+         b02 = b20;
+         b20 = temp;
+
+         temp = b12;
+         b12 = b21;
+         b21 = temp;
+      }
 
       matrixToPack.set(orientation);
 
@@ -497,27 +552,27 @@ public class Matrix3DTools
 
       if (invertOrientation)
       {
-         a00 = matrix.getM00();
-         a01 = matrix.getM10();
-         a02 = matrix.getM20();
-         a10 = matrix.getM01();
-         a11 = matrix.getM11();
-         a12 = matrix.getM21();
-         a20 = matrix.getM02();
-         a21 = matrix.getM12();
-         a22 = matrix.getM22();
+         a00 = matrixToPack.getM00();
+         a01 = matrixToPack.getM10();
+         a02 = matrixToPack.getM20();
+         a10 = matrixToPack.getM01();
+         a11 = matrixToPack.getM11();
+         a12 = matrixToPack.getM21();
+         a20 = matrixToPack.getM02();
+         a21 = matrixToPack.getM12();
+         a22 = matrixToPack.getM22();
       }
       else
       {
-         a00 = matrix.getM00();
-         a01 = matrix.getM01();
-         a02 = matrix.getM02();
-         a10 = matrix.getM10();
-         a11 = matrix.getM11();
-         a12 = matrix.getM12();
-         a20 = matrix.getM20();
-         a21 = matrix.getM21();
-         a22 = matrix.getM22();
+         a00 = matrixToPack.getM00();
+         a01 = matrixToPack.getM01();
+         a02 = matrixToPack.getM02();
+         a10 = matrixToPack.getM10();
+         a11 = matrixToPack.getM11();
+         a12 = matrixToPack.getM12();
+         a20 = matrixToPack.getM20();
+         a21 = matrixToPack.getM21();
+         a22 = matrixToPack.getM22();
       }
 
       double m00 = a00 * b00 + a01 * b10 + a02 * b20;

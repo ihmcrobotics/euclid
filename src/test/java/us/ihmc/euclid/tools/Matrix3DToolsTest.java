@@ -16,6 +16,7 @@ import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -214,6 +215,70 @@ public class Matrix3DToolsTest
 
          Matrix3DTools.multiply(m1, m2, matrixActual);
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test multiply(Matrix3DReadOnly m1, boolean transpose1, boolean invert1, Matrix3DReadOnly m2, boolean transpose2, boolean invert2, CommonMatrix3DBasics matrixToPack)
+         Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
+         Matrix3D m2 = EuclidCoreRandomTools.nextMatrix3D(random);
+         boolean transpose1 = random.nextBoolean();
+         boolean invert1 = random.nextBoolean();
+         boolean transpose2 = random.nextBoolean();
+         boolean invert2 = random.nextBoolean();
+
+         m1.get(dm1);
+         m2.get(dm2);
+
+         if (transpose1)
+            CommonOps_DDRM.transpose(dm1);
+         if (invert1)
+            CommonOps_DDRM.invert(dm1);
+
+         if (transpose2)
+            CommonOps_DDRM.transpose(dm2);
+         if (invert2)
+            CommonOps_DDRM.invert(dm2);
+
+         CommonOps_DDRM.mult(dm1, dm2, dmResult);
+         matrixExpected.set(dmResult);
+
+         Matrix3DTools.multiply(m1, transpose1, invert1, m2, transpose2, invert2, matrixActual);
+         if (invert1 || invert2)
+            EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, 10.0 * EPS);
+         else
+            EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation, boolean invertOrientation, CommonMatrix3DBasics matrixToPack)
+         Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         boolean transposeMatrix = random.nextBoolean();
+         boolean invertMatrix = random.nextBoolean();
+         boolean invertOrientation = random.nextBoolean();
+
+         Matrix3D expected = new Matrix3D();
+         RotationMatrix rotationMatrix = new RotationMatrix(orientation);
+         Matrix3DTools.multiply(matrix, transposeMatrix, invertMatrix, rotationMatrix, invertOrientation, false, expected);
+         Matrix3D actual = new Matrix3D();
+         Matrix3DTools.multiply(matrix, transposeMatrix, invertMatrix, orientation, invertOrientation, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+      }
+
+      for (int i = 0; i < ITERATIONS; i++)
+      { // Test multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation, boolean invertOrientation, CommonMatrix3DBasics matrixToPack)
+         Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         boolean transposeMatrix = random.nextBoolean();
+         boolean invertMatrix = random.nextBoolean();
+         boolean invertOrientation = random.nextBoolean();
+
+         Matrix3D expected = new Matrix3D();
+         RotationMatrix rotationMatrix = new RotationMatrix(orientation);
+         Matrix3DTools.multiply(matrix, transposeMatrix, invertMatrix, rotationMatrix, invertOrientation, false, expected);
+         Matrix3D actual = new Matrix3D();
+         Matrix3DTools.multiply(matrix, transposeMatrix, invertMatrix, orientation, invertOrientation, actual);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
 

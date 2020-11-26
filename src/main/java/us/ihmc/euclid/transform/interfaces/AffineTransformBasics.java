@@ -2,7 +2,7 @@ package us.ihmc.euclid.transform.interfaces;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.exceptions.NotARotationScaleMatrixException;
+import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.matrix.interfaces.LinearTransform3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -12,11 +12,32 @@ import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
+/**
+ * Write and read interface for an affine transform.
+ * <p>
+ * An affine transform represents a transform that can rotate, scale, shear, and/or translate
+ * geometries.
+ * </p>
+ * 
+ * @author Sylvain Bertrand
+ */
 public interface AffineTransformBasics extends AffineTransformReadOnly, Clearable
 {
+
+   /**
+    * Gets the write and read reference of the linear part of this transform, such as rotation and
+    * scaling.
+    * 
+    * @return the write and read reference of the linear part of this transform.
+    */
    @Override
    LinearTransform3DBasics getLinearTransform();
 
+   /**
+    * Gets the write and read reference of the translation part of this transform.
+    *
+    * @return the write and read reference of the translation part of this transform.
+    */
    @Override
    Vector3DBasics getTranslation();
 
@@ -44,7 +65,10 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       setIdentity();
    }
 
-   default void setLinearTransformToZero()
+   /**
+    * Sets the linear part of this transform to identity.
+    */
+   default void setLinearTransformToIdentity()
    {
       getLinearTransform().setIdentity();
    }
@@ -87,6 +111,11 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       return getLinearTransform().containsNaN() || getTranslation().containsNaN();
    }
 
+   /**
+    * Inverts this transform.
+    * 
+    * @throws SingularMatrixException if this transform is not invertible.
+    */
    default void invert()
    {
       if (hasLinearTransform())
@@ -113,8 +142,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * @param m21 the 3rd row 2nd column component of the rotation-scale part of this transform.
     * @param m22 the 3rd row 3rd column component of the rotation-scale part of this transform.
     * @param m23 the z-component of the translation part of this transform.
-    * @throws NotARotationScaleMatrixException if the components for the rotation-scale part do not
-    *                                          represent a rotation-scale matrix.
     */
    default void set(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22,
                     double m23)
@@ -123,6 +150,11 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       getTranslation().set(m03, m13, m23);
    }
 
+   /**
+    * Sets this affine transform to {@code other}.
+    *
+    * @param other the other affine transform to copy the values from. Not modified.
+    */
    default void set(AffineTransformReadOnly other)
    {
       getLinearTransform().set(other.getLinearTransform());
@@ -132,7 +164,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets this affine transform to the given rigid-body transform.
     * <p>
-    * The scaling part of this transform will be reset.
+    * The scaling part of this transform is reset.
     * </p>
     *
     * @param rigidBodyTransform the rigid-body transform to copy the values from. Not modified.
@@ -146,7 +178,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the raw components of this affine transform from the given {@code matrix}.
     * <p>
-    * The rotation-scale part M is set as follows:
+    * The linear part M of the transform is set as follows:
     *
     * <pre>
     *     / matrix.get(0, 0) matrix.get(0, 1) matrix.get(0, 2) \
@@ -164,8 +196,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * </p>
     *
     * @param matrix the matrix to get this transform's components from. Not modified.
-    * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
-    *                                          this transform is not a rotation-scale matrix.
     */
    default void set(DMatrix matrix)
    {
@@ -176,7 +206,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the raw components of this affine transform from the given {@code matrix}.
     * <p>
-    * The rotation-scale part M is set as follows:
+    * The linear part M of the transform is set as follows:
     *
     * <pre>
     *     / matrix.get(startRow + 0, startColumn + 0) matrix.get(startRow + 0, startColumn + 1) matrix.get(startRow + 0, startColumn + 2) \
@@ -196,8 +226,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * @param matrix      the matrix to get this transform's components from. Not modified.
     * @param startRow    the row index of the first component to read.
     * @param startColumn the column index of the first component to read.
-    * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
-    *                                          this transform is not a rotation-scale matrix.
     */
    default void set(DMatrix matrix, int startRow, int startColumn)
    {
@@ -208,7 +236,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the raw components of this affine transform from the given {@code transformArray}.
     * <p>
-    * The rotation-scale part M is set as follows:
+    * The linear part M of the transform is set as follows:
     *
     * <pre>
     *     / transformArray[0] transformArray[1] transformArray[ 2] \
@@ -227,8 +255,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     *
     * @param transformArray the 1D row-major array to get this transform's components from. Not
     *                       modified.
-    * @throws NotARotationScaleMatrixException if the resulting matrix for the rotation-scale part of
-    *                                          this transform is not a rotation-scale matrix.
     */
    default void set(double[] transformArray)
    {
@@ -250,14 +276,11 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    }
 
    /**
-    * Sets the rotation-scale and translation parts of this transform separately.
+    * Sets the linear and translation parts of this transform separately.
     *
-    * @param linearTransform the matrix used to set the rotation-scale part of this transform. Not
-    *                        modified.
+    * @param linearTransform the matrix used to set the linear part of this transform. Not modified.
     * @param translation     the tuple used to set the translation part of this transform. Not
     *                        modified.
-    * @throws NotARotationScaleMatrixException if the given {@code rotationScaleMatrix} is not a
-    *                                          rotation-scale matrix.
     */
    default void set(Matrix3DReadOnly linearTransform, Tuple3DReadOnly translation)
    {
@@ -265,18 +288,38 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       getTranslation().set(translation);
    }
 
+   /**
+    * Sets the linear and translation parts of this transform separately.
+    *
+    * @param linearTransform the matrix used to set the linear part of this transform. Not modified.
+    * @param translation     the tuple used to set the translation part of this transform. Not
+    *                        modified.
+    */
    default void set(DMatrix linearTransform, Tuple3DReadOnly translation)
    {
       getLinearTransform().set(linearTransform);
       getTranslation().set(translation);
    }
 
+   /**
+    * Sets the linear and translation parts of this transform separately.
+    *
+    * @param rotationMatrix the rotation matrix used to set the linear part of this transform. Not
+    *                       modified.
+    * @param translation    the tuple used to set the translation part of this transform. Not modified.
+    */
    default void set(RotationMatrixReadOnly rotationMatrix, Tuple3DReadOnly translation)
    {
       getLinearTransform().set(rotationMatrix);
       getTranslation().set(translation);
    }
 
+   /**
+    * Sets the linear and translation parts of this transform separately.
+    *
+    * @param orientation the orientation used to set the linear part of this transform. Not modified.
+    * @param translation the tuple used to set the translation part of this transform. Not modified.
+    */
    default void set(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
    {
       getLinearTransform().set(orientation);
@@ -286,7 +329,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the x-component of the translation part of this transform.
     * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
+    * This method does not affect the linear part of this transform.
     * </p>
     *
     * @param x the x-component of the translation part.
@@ -299,7 +342,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the y-component of the translation part of this transform.
     * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
+    * This method does not affect the linear part of this transform.
     * </p>
     *
     * @param y the y-component of the translation part.
@@ -312,7 +355,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the z-component of the translation part of this transform.
     * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
+    * This method does not affect the linear part of this transform.
     * </p>
     *
     * @param z the z-component of the translation part.
@@ -325,7 +368,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the translation part of this transform.
     * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
+    * This method does not affect the linear part of this transform.
     * </p>
     *
     * @param x the x-component of the translation part.
@@ -340,7 +383,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Sets the translation part of this transform.
     * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
+    * This method does not affect the linear part of this transform.
     * </p>
     *
     * @param translation tuple used to set the translation part of this transform. Not modified.
@@ -350,21 +393,54 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       getTranslation().set(translation);
    }
 
+   /**
+    * Sets the linear part of this transform.
+    * <p>
+    * This method does not affect the translation part of this transform.
+    * </p>
+    * 
+    * @param linearTransform the matrix used to set the linear part of this transform. Not modified.
+    */
    default void setLinearTransform(Matrix3DReadOnly linearTransform)
    {
       getLinearTransform().set(linearTransform);
    }
 
+   /**
+    * Sets the linear part of this transform.
+    * <p>
+    * This method does not affect the translation part of this transform.
+    * </p>
+    * 
+    * @param linearTransform the matrix used to set the linear part of this transform. Not modified.
+    */
    default void setLinearTransform(DMatrix linearTransform)
    {
       getLinearTransform().set(linearTransform);
    }
 
+   /**
+    * Sets the linear part of this transform.
+    * <p>
+    * This method does not affect the translation part of this transform.
+    * </p>
+    * 
+    * @param rotationMatrix the rotation matrix used to set the linear part of this transform. Not
+    *                       modified.
+    */
    default void setLinearTransform(RotationMatrixReadOnly rotationMatrix)
    {
       getLinearTransform().set(rotationMatrix);
    }
 
+   /**
+    * Sets the linear part of this transform.
+    * <p>
+    * This method does not affect the translation part of this transform.
+    * </p>
+    * 
+    * @param orientation the orientation used to set the linear part of this transform. Not modified.
+    */
    default void setLinearTransform(Orientation3DReadOnly orientation)
    {
       getLinearTransform().set(orientation);
@@ -372,10 +448,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Performs the multiplication of this with the given {@code other}.
-    * <p>
-    * Note: the scale part of either affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
     * <p>
     * this = this * other
     * </p>
@@ -392,10 +464,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Performs the multiplication of this with the given {@code rigidBodyTransform}.
     * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
     * this = this * rigidBodyTransform
     * </p>
     *
@@ -411,10 +479,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Performs the multiplication of the inverse of this with the given {@code other}.
     * <p>
-    * Note: the scale part of the either affine transform is not used when performing the
-    * multiplication. This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
     * this = this<sup>-1</sup> * other
     * </p>
     *
@@ -422,19 +486,12 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void multiplyInvertThis(AffineTransformReadOnly other)
    {
-      getTranslation().sub(other.getTranslation(), getTranslation());
-
-      getLinearTransform().invert();
-      getLinearTransform().transform(getTranslation());
-      getLinearTransform().multiply(other.getLinearTransform());
+      invert();
+      multiply(other);
    }
 
    /**
     * Performs the multiplication of this with the inverse of the given {@code other}.
-    * <p>
-    * Note: the scale part of the either affine transform is not used when performing the
-    * multiplication. This operation does not affect the scale of this transform.
-    * </p>
     * <p>
     * this = this * other<sup>-1</sup>
     * </p>
@@ -452,10 +509,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Performs the multiplication of the inverse of this with the given {@code rigidBodyTransform}.
     * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
     * this = this<sup>-1</sup> * rigidBodyTransform
     * </p>
     *
@@ -463,19 +516,12 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void multiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      getTranslation().sub(rigidBodyTransform.getTranslation(), getTranslation());
-
-      getLinearTransform().invert();
-      getLinearTransform().transform(getTranslation());
-      getLinearTransform().appendRotation(rigidBodyTransform.getRotation());
+      invert();
+      multiply(rigidBodyTransform);
    }
 
    /**
     * Performs the multiplication of this with the inverse of the given {@code rigidBodyTransform}.
-    * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
     * <p>
     * this = this * rigidBodyTransform<sup>-1</sup>
     * </p>
@@ -489,10 +535,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    }
 
    /**
-    * Append a translation transform to this transform.
-    * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * </p>
+    * Appends a translation transform to this transform.
     *
     * <pre>
     *               / 1 0 0 translation.x \
@@ -500,9 +543,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     *               | 0 0 1 translation.z |
     *               \ 0 0 0      1        /
     * </pre>
-    * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
-    * </p>
     *
     * @param translation the translation to append to this transform. Not modified.
     */
@@ -512,10 +552,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    }
 
    /**
-    * Append a translation transform to this transform.
-    * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * </p>
+    * Appends a translation transform to this transform.
     *
     * <pre>
     *               / 1 0 0 x \
@@ -523,9 +560,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     *               | 0 0 1 z |
     *               \ 0 0 0 1 /
     * </pre>
-    * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
-    * </p>
     *
     * @param x the translation along the x-axis to apply.
     * @param y the translation along the y-axis to apply.
@@ -542,6 +576,11 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       getTranslation().add(thisX, thisY, thisZ);
    }
 
+   /**
+    * Appends the orientation to the linear part of this transform.
+    * 
+    * @param orientation the orientation to append. Not modified.
+    */
    default void appendOrientation(Orientation3DReadOnly orientation)
    {
       getLinearTransform().appendRotation(orientation);
@@ -551,13 +590,11 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * Append a rotation about the z-axis to the rotation part of this transform.
     *
     * <pre>
-    *         / cos(yaw) -sin(yaw) 0 \
-    * R = R * | sin(yaw)  cos(yaw) 0 |
-    *         \    0         0     1 /
+    *               / cos(yaw) -sin(yaw)  0   0 \
+    * this = this * | sin(yaw)  cos(yaw)  0   0 |
+    *               |    0         0      1   0 |
+    *               \    0         0      0   1 /
     * </pre>
-    * <p>
-    * This method does not affect the scale part nor the translation part of this transform.
-    * </p>
     *
     * @param yaw the angle to rotate about the z-axis.
     */
@@ -570,13 +607,11 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * Append a rotation about the y-axis to the rotation part of this transform.
     *
     * <pre>
-    *         /  cos(pitch) 0 sin(pitch) \
-    * R = R * |      0      1     0      |
-    *         \ -sin(pitch) 0 cos(pitch) /
+    *               /  cos(pitch) 0 sin(pitch)  0 \
+    * this = this * |      0      1     0       0 |
+    *               | -sin(pitch) 0 cos(pitch)  0 |
+    *               \      0      0     0       1 /
     * </pre>
-    * <p>
-    * This method does not affect the scale part nor the translation part of this transform.
-    * </p>
     *
     * @param pitch the angle to rotate about the y-axis.
     */
@@ -589,13 +624,11 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * Append a rotation about the x-axis to the rotation part of this transform.
     *
     * <pre>
-    *         / 1     0          0     \
-    * R = R * | 0 cos(roll) -sin(roll) |
-    *         \ 0 sin(roll)  cos(roll) /
+    *               / 1     0          0     0 \
+    * this = this * | 0 cos(roll) -sin(roll) 0 |
+    *               | 0 sin(roll)  cos(roll) 0 |
+    *               \ 0     0          0     1 /
     * </pre>
-    * <p>
-    * This method does not affect the scale part nor the translation part of this transform.
-    * </p>
     *
     * @param roll the angle to rotate about the x-axis.
     */
@@ -604,16 +637,54 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       getLinearTransform().appendRollRotation(roll);
    }
 
+   /**
+    * Appends the given scale to the linear part of this transform.
+    * 
+    * <pre>
+    *               / scale   0     0   0 \
+    * this = this * |   0   scale   0   0 |
+    *               |   0     0   scale 0 |
+    *               \   0     0     0   1 /
+    * </pre>
+    * 
+    * @param scale the scale to append.
+    */
    default void appendScale(double scale)
    {
       appendScale(scale, scale, scale);
    }
 
+   /**
+    * Appends a scale to the linear part of this transform.
+    * 
+    * <pre>
+    *               / scale.getX()      0            0       0 \
+    * this = this * |      0       scale.getY()      0       0 |
+    *               |      0            0       scale.getZ() 0 |
+    *               \      0            0            0       1 /
+    * </pre>
+    * 
+    * @param scale the scale to append. Not modified
+    */
    default void appendScale(Tuple3DReadOnly scale)
    {
       appendScale(scale.getX(), scale.getY(), scale.getZ());
    }
 
+   /**
+    * Appends a scale to the linear part of this transform.
+    * 
+    * <pre>
+    *               / x 0 0 0 \
+    * this = this * | 0 y 0 0 |
+    *               | 0 0 z 0 |
+    *               \ 0 0 0 1 /
+    * </pre>
+    *
+    * @param x the scale factor along the x-axis.
+    * @param y the scale factor along the y-axis.
+    * @param z the scale factor along the z-axis.
+    */
    default void appendScale(double x, double y, double z)
    {
       getLinearTransform().appendScale(x, y, z);
@@ -621,10 +692,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Performs the multiplication of {@code other} with this transform.
-    * <p>
-    * Note: the scale part of either affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
     * <p>
     * this = other * this
     * </p>
@@ -641,9 +708,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Performs the multiplication of {@code rigidBodyTransform} with this transform.
     * <p>
-    * Note: this operation does not affect the scale of this transform.
-    * </p>
-    * <p>
     * this = rigidBodyTransform * this
     * </p>
     *
@@ -658,10 +722,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
 
    /**
     * Performs the multiplication of {@code other} with the inverse of this transform.
-    * <p>
-    * Note: the scale part of either affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
     * <p>
     * this = other * this<sup>-1</sup>
     * </p>
@@ -678,10 +738,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Performs the multiplication of the inverse of {@code other} with this transform.
     * <p>
-    * Note: the scale part of either affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
     * this = other<sup>-1</sup> * this
     * </p>
     *
@@ -697,10 +753,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    /**
     * Performs the multiplication of {@code rigidBodyTransform} with the inverse of this transform.
     * <p>
-    * Note: the scale part of this affine transform is not used when performing the multiplication.
-    * This operation does not affect the scale of this transform.
-    * </p>
-    * <p>
     * this = rigidBodyTransform * this<sup>-1</sup>
     * </p>
     *
@@ -708,16 +760,12 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void preMultiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      getLinearTransform().prependRotationInvertThis(rigidBodyTransform.getRotation());
-      getLinearTransform().transform(getTranslation());
-      getTranslation().sub(rigidBodyTransform.getTranslation(), getTranslation());
+      invert();
+      preMultiply(rigidBodyTransform);
    }
 
    /**
     * Performs the multiplication of the inverse of {@code rigidBodyTransform} with this transform.
-    * <p>
-    * Note: this operation does not affect the scale of this transform.
-    * </p>
     * <p>
     * this = rigidBodyTransform<sup>-1</sup> * this
     * </p>
@@ -740,9 +788,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     *        | 0 0 1 translation.z |
     *        \ 0 0 0      1        /
     * </pre>
-    * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
-    * </p>
     *
     * @param translation the translation to prepend to this transform. Not modified.
     */
@@ -760,9 +805,6 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     *        | 0 0 1 z |
     *        \ 0 0 0 1 /
     * </pre>
-    * <p>
-    * This method does not affect the rotation part nor the scale part of this transform.
-    * </p>
     *
     * @param x the translation along the x-axis to apply.
     * @param y the translation along the y-axis to apply.
@@ -774,12 +816,19 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    }
 
    /**
-    * Prepend a rotation about the z-axis to the rotation part of this transform.
+    * Prepends the orientation to the linear part of this transform.
+    * 
+    * @param orientation the orientation to append. Not modified.
+    */
+   default void prependOrientation(Orientation3DReadOnly orientation)
+   {
+      getLinearTransform().prependRotation(orientation);
+   }
+
+   /**
+    * Prepends a rotation about the z-axis to the rotation part of this transform.
     * <p>
-    * Note that the scale part of this transform is not used for this operation.
-    * </p>
-    * <p>
-    * This method first rotates the translation part and then prepend the yaw-rotation to the rotation
+    * This method first rotates the translation part and then prepend the yaw-rotation to the linear
     * part of this transform.
     * </p>
     *
@@ -799,13 +848,10 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    }
 
    /**
-    * Prepend a rotation about the y-axis to this transform.
+    * Prepends a rotation about the y-axis to this transform.
     * <p>
-    * Note that the scale part of this transform is not used for this operation.
-    * </p>
-    * <p>
-    * This method first rotates the translation part and then prepend the pitch-rotation to the
-    * rotation part of this transform.
+    * This method first rotates the translation part and then prepend the pitch-rotation to the linear
+    * part of this transform.
     * </p>
     *
     * <pre>
@@ -824,12 +870,9 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    }
 
    /**
-    * Prepend a rotation about the x-axis to this transform.
+    * Prepends a rotation about the x-axis to this transform.
     * <p>
-    * Note that the scale part of this transform is not used for this operation.
-    * </p>
-    * <p>
-    * This method first rotates the translation part and then prepend the roll-rotation to the rotation
+    * This method first rotates the translation part and then prepend the roll-rotation to the linear
     * part of this transform.
     * </p>
     *
@@ -848,16 +891,54 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
       getLinearTransform().prependRollRotation(roll);
    }
 
+   /**
+    * Prepends the given scale to the linear part of this transform.
+    * 
+    * <pre>
+    *        / scale   0     0   0 \
+    * this = |   0   scale   0   0 | * this
+    *        |   0     0   scale 0 |
+    *        \   0     0     0   1 /
+    * </pre>
+    * 
+    * @param scale the scale to append.
+    */
    default void prependScale(double scale)
    {
       prependScale(scale, scale, scale);
    }
 
+   /**
+    * Prepends a scale to the linear part of this transform.
+    * 
+    * <pre>
+    *        / scale.getX()      0            0       0 \
+    * this = |      0       scale.getY()      0       0 | * this
+    *        |      0            0       scale.getZ() 0 |
+    *        \      0            0            0       1 /
+    * </pre>
+    * 
+    * @param scale the scale to append. Not modified
+    */
    default void prependScale(Tuple3DReadOnly scale)
    {
       prependScale(scale.getX(), scale.getY(), scale.getZ());
    }
 
+   /**
+    * Prepends a scale to the linear part of this transform.
+    * 
+    * <pre>
+    *        / x 0 0 0 \
+    * this = | 0 y 0 0 | * this
+    *        | 0 0 z 0 |
+    *        \ 0 0 0 1 /
+    * </pre>
+    *
+    * @param x the scale factor along the x-axis.
+    * @param y the scale factor along the y-axis.
+    * @param z the scale factor along the z-axis.
+    */
    default void prependScale(double x, double y, double z)
    {
       getTranslation().scale(x, y, z);

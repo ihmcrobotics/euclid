@@ -854,7 +854,7 @@ public interface Transform
    /**
     * Performs the inverse of the transform on the given {@code affineTransformToTransform}.
     * <p>
-    * This is equivalent to calling {@link #transform(AffineTransform)} with the inverse of this
+    * This is equivalent to calling {@link #transform(AffineTransformBasics)} with the inverse of this
     * transform.
     * </p>
     * <p>
@@ -872,8 +872,8 @@ public interface Transform
     * Performs the inverse of the transform on the given {@code original} and stores the result in
     * {@code transformed}.
     * <p>
-    * This is equivalent to calling {@link #transform(AffineTransformReadOnly, AffineTransform)} with the
-    * inverse of this transform.
+    * This is equivalent to calling {@link #transform(AffineTransformReadOnly, AffineTransformBasics)}
+    * with the inverse of this transform.
     * </p>
     * <p>
     * The given transform is only rotated and translated, no scaling is applied.

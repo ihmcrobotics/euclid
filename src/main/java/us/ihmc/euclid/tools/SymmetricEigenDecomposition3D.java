@@ -9,6 +9,18 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
+/**
+ * Calculator for computing the eigenvalues and eigenvectors of a symmetric 3D matrix <tt>A</tt>.
+ * Eigenvalues and eigenvectors have the following property:
+ * 
+ * <pre>
+ * A*v = &lambda;*v
+ * </pre>
+ * 
+ * where A is a square matrix and v is an eigenvector associated with the eigenvalue &lambda;.
+ * 
+ * @author Sylvain Bertrand
+ */
 public class SymmetricEigenDecomposition3D
 {
    static final double sqrtTwoOverTwo = EuclidCoreTools.squareRoot(2.0) / 2.0;
@@ -20,31 +32,45 @@ public class SymmetricEigenDecomposition3D
    private int maxIterations = 25;
    private double tolerance = 1.0e-13;
 
+   /**
+    * Creates a new calculator ready to be used.
+    */
    public SymmetricEigenDecomposition3D()
    {
    }
 
-   public SymmetricEigenDecomposition3D(double tolerance)
-   {
-      setTolerance(tolerance);
-   }
-
-   public SymmetricEigenDecomposition3D(double tolerance, int maxIterations)
-   {
-      setTolerance(tolerance);
-      setMaxIterations(maxIterations);
-   }
-
+   /**
+    * Sets the maximum number of iterations for the first stage of the decomposition.
+    *
+    * @param maxIterations the new maximum number of iterations for the next decompositions. Default
+    *                      value is {@code 25}.
+    */
    public void setMaxIterations(int maxIterations)
    {
       this.maxIterations = maxIterations;
    }
 
+   /**
+    * Sets the tolerance used internally, lower value means higher accuracy but more iterations.
+    *
+    * @param tolerance the new tolerance to used for the next decompositions. Default value
+    *                  {@code 1.0e-13}.
+    */
    public void setTolerance(double tolerance)
    {
       this.tolerance = tolerance;
    }
 
+   /**
+    * Performs a decomposition of the given symmetric matrix {@code A}.
+    * <p>
+    * If the given matrix is not symmetric, the decomposition automatically fails and returns
+    * {@code false}.
+    * </p>
+    *
+    * @param A the matrix to be decomposed. Not modified.
+    * @return whether the algorithm succeeded or not.
+    */
    public boolean decompose(Matrix3DReadOnly A)
    {
       if (!A.isMatrixSymmetric(tolerance))
@@ -61,11 +87,22 @@ public class SymmetricEigenDecomposition3D
       return true;
    }
 
+   /**
+    * Redirection to
+    * {@link SingularValueDecomposition3D#computeV(Matrix3DBasics, QuaternionBasics, int, double)} to
+    * decompose the matrix.
+    * 
+    * @param A the matrix to decompose. Modified.
+    */
    private void computeQ(Matrix3DBasics A)
    {
       SingularValueDecomposition3D.computeV(A, Qquat, maxIterations, tolerance);
    }
 
+   /**
+    * Sorts the eigen values stored in {@code lambda} in descending order and update {@code Q} to
+    * maintain the equality <tt>A = Q &Lambda; Q<sup>T</sup></tt>.
+    */
    private static void sortEigenValues(Vector3DBasics lambda, QuaternionBasics Qquat)
    {
       double rho0 = Math.abs(lambda.getX());
@@ -168,26 +205,61 @@ public class SymmetricEigenDecomposition3D
       v2.set(m02, m12, m22);
    }
 
-   public Matrix3DBasics getEigenVectors(Matrix3DBasics eigenVectorsToPack)
-   {
-      return output.getEigenVectors(eigenVectorsToPack);
-   }
-
+   /**
+    * Returns the i<sup>th</sup> eigenvector.
+    * 
+    * @param index the index&in;[0;2] of the eigenvector to get.
+    * @return the i<sup>th</sup> eigenvector.
+    */
    public Vector3D getEigenVector(int index)
    {
       return output.getEigenVector(index);
    }
 
-   public Vector3D getEigenValues()
+   /**
+    * Returns the three eigenvectors in a matrix format where each column represents an eigenvector.
+    * 
+    * @param eigenVectorsToPack the matrix used to store the eigenvectors. If {@code null}, a new
+    *                           matrix is created and returned.
+    * @return the eigenvectors in a matrix format.
+    */
+   public Matrix3DBasics getEigenVectors(Matrix3DBasics eigenVectorsToPack)
    {
-      return output.getEigenValues();
+      return output.getEigenVectors(eigenVectorsToPack);
    }
 
+   /**
+    * Returns the i<sup>th</sup> eigenvalue.
+    * <p>
+    * Note that the eigenvalues are sorted in descending order.
+    * </p>
+    * 
+    * @param index the index&in;[0;2] of the eigenvalue to get.
+    * @return the i<sup>th</sup> eigenvalue.
+    */
    public double getEigenValue(int index)
    {
       return output.getEigenValue(index);
    }
 
+   /**
+    * Returns the three eigenvalues in a vector format.
+    * <p>
+    * Note that the eigenvalues are sorted in descending order.
+    * </p>
+    * 
+    * @return the eigenvalues in a vector format.
+    */
+   public Vector3D getEigenValues()
+   {
+      return output.getEigenValues();
+   }
+
+   /**
+    * Class used to package the result of the decomposition.
+    *
+    * @author Sylvain Bertrand
+    */
    public static class Eigen3DOutput
    {
       private final Vector3D eigenValues = new Vector3D();
@@ -196,6 +268,59 @@ public class SymmetricEigenDecomposition3D
       private final Vector3D eigenVector2 = new Vector3D();
       private final Vector3D[] eigenVectors = {eigenVector0, eigenVector1, eigenVector2};
 
+      /**
+       * Performs a deep copy of {@code other} into {@code this}.
+       *
+       * @param other the other output to copy. Not modified.
+       */
+      public void set(Eigen3DOutput other)
+      {
+         eigenValues.set(other.eigenValues);
+         eigenVector0.set(other.eigenVector0);
+         eigenVector1.set(other.eigenVector1);
+         eigenVector2.set(other.eigenVector2);
+      }
+
+      /**
+       * Resets this output such that <tt>Q &Lambda; Q<sup>T</sup> = I</tt>.
+       */
+      public void setIdentity()
+      {
+         eigenValues.set(1.0, 1.0, 1.0);
+         eigenVector0.set(1.0, 0.0, 0.0);
+         eigenVector1.set(0.0, 1.0, 0.0);
+         eigenVector2.set(0.0, 0.0, 1.0);
+      }
+
+      /**
+       * Sets eigenvalues and eigenvectors to NaN.
+       */
+      public void setToNaN()
+      {
+         eigenValues.setToNaN();
+         eigenVector0.setToNaN();
+         eigenVector1.setToNaN();
+         eigenVector2.setToNaN();
+      }
+
+      /**
+       * Returns the i<sup>th</sup> eigenvector.
+       * 
+       * @param index the index&in;[0;2] of the eigenvector to get.
+       * @return the i<sup>th</sup> eigenvector.
+       */
+      public Vector3D getEigenVector(int index)
+      {
+         return eigenVectors[index];
+      }
+
+      /**
+       * Returns the three eigenvectors in a matrix format where each column represents an eigenvector.
+       * 
+       * @param eigenVectorsToPack the matrix used to store the eigenvectors. If {@code null}, a new
+       *                           matrix is created and returned.
+       * @return the eigenvectors in a matrix format.
+       */
       public Matrix3DBasics getEigenVectors(Matrix3DBasics eigenVectorsToPack)
       {
          if (eigenVectorsToPack == null)
@@ -204,19 +329,31 @@ public class SymmetricEigenDecomposition3D
          return eigenVectorsToPack;
       }
 
-      public Vector3D getEigenVector(int index)
-      {
-         return eigenVectors[index];
-      }
-
-      public Vector3D getEigenValues()
-      {
-         return eigenValues;
-      }
-
+      /**
+       * Returns the i<sup>th</sup> eigenvalue.
+       * <p>
+       * Note that the eigenvalues are sorted in descending order.
+       * </p>
+       * 
+       * @param index the index&in;[0;2] of the eigenvalue to get.
+       * @return the i<sup>th</sup> eigenvalue.
+       */
       public double getEigenValue(int index)
       {
          return eigenValues.getElement(index);
+      }
+
+      /**
+       * Returns the three eigenvalues in a vector format.
+       * <p>
+       * Note that the eigenvalues are sorted in descending order.
+       * </p>
+       * 
+       * @return the eigenvalues in a vector format.
+       */
+      public Vector3D getEigenValues()
+      {
+         return eigenValues;
       }
    }
 }

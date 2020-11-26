@@ -181,10 +181,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    @Override
    default void set(Orientation3DReadOnly orientation3DReadOnly)
    {
-      if (orientation3DReadOnly instanceof RotationMatrixReadOnly)
-         set((RotationMatrixReadOnly) orientation3DReadOnly);
-      else
-         orientation3DReadOnly.get(this);
+      CommonMatrix3DBasics.super.set(orientation3DReadOnly);
    }
 
    /**
@@ -389,7 +386,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Append a rotation about the z-axis to this rotation matrix.
+    * Appends a rotation about the z-axis to this rotation matrix.
     *
     * <pre>
     *               / cos(yaw) -sin(yaw) 0 \
@@ -406,7 +403,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Append a rotation about the y-axis to this rotation matrix.
+    * Appends a rotation about the y-axis to this rotation matrix.
     *
     * <pre>
     *               /  cos(pitch) 0 sin(pitch) \
@@ -423,7 +420,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Append a rotation about the x-axis to this rotation matrix.
+    * Appends a rotation about the x-axis to this rotation matrix.
     *
     * <pre>
     *               / 1     0          0     \
@@ -505,7 +502,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Prepend a rotation about the z-axis to this rotation matrix.
+    * Prepends a rotation about the z-axis to this rotation matrix.
     *
     * <pre>
     *        / cos(yaw) -sin(yaw) 0 \
@@ -522,7 +519,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Prepend a rotation about the y-axis to this rotation matrix.
+    * Prepends a rotation about the y-axis to this rotation matrix.
     *
     * <pre>
     *        /  cos(pitch) 0 sin(pitch) \
@@ -539,7 +536,7 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
    }
 
    /**
-    * Append a rotation about the x-axis to this rotation matrix.
+    * Prepends a rotation about the x-axis to this rotation matrix.
     *
     * <pre>
     *        / 1     0          0     \

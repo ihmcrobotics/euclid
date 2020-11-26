@@ -58,7 +58,7 @@ public interface RigidBodyTransformReadOnly extends Transform
     * Requests whether this transform has a non-zero rotation or not.
     *
     * @return {@code true} if the rotation part is not zero, {@code false} if the rotation part is zero
-    *         and can be ignore when transforming an object.
+    *         and can be ignored when transforming an object.
     */
    default boolean hasRotation()
    {

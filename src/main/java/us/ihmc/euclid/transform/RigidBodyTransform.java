@@ -1069,7 +1069,9 @@ public class RigidBodyTransform
     * Tests separately and on a per component basis if the rotation part and the translation part of
     * this transform and {@code other} are equal to an {@code epsilon}.
     *
-    * @param other the other rigid-body transform to compare against this. Not modified.
+    * @param epsilon tolerance to use when comparing each component.
+    * @param other   the other rigid-body transform to compare against this. Not modified.
+    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
     */
    @Override
    public boolean epsilonEquals(RigidBodyTransform other, double epsilon)

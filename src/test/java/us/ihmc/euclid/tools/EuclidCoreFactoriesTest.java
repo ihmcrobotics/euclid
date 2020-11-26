@@ -329,6 +329,26 @@ public class EuclidCoreFactoriesTest
    }
 
    @Test
+   public void testNewConjugateLinkedQuaternion()
+   {
+      Random random = new Random(349653);
+
+      { // Test newConjugateLinkedQuaternion(QuaternionReadOnly original)
+         Quaternion originalQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         QuaternionReadOnly actual = EuclidCoreFactories.newConjugateLinkedQuaternion(originalQuaternion);
+
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            originalQuaternion.set(EuclidCoreRandomTools.nextQuaternion(random));
+
+            Quaternion expected = new Quaternion();
+            expected.setAndConjugate(originalQuaternion);
+            thoroughAssertionsTuple4D(expected, actual);
+         }
+      }
+   }
+
+   @Test
    public void testNewTransposeLinkedMatrix3DReadOnly()
    {
       Random random = new Random(43634677);

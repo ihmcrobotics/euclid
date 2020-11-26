@@ -509,7 +509,7 @@ public interface Orientation3DBasics extends Orientation3DReadOnly, Clearable, T
    void prependPitchRotation(double pitch);
 
    /**
-    * Appends a rotation {@code R(roll)} about the x-axis to this orientation.
+    * Prepends a rotation {@code R(roll)} about the x-axis to this orientation.
     *
     * <pre>
     *           / 1     0          0     \

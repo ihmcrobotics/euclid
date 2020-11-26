@@ -2,6 +2,7 @@ package us.ihmc.euclid.transform.interfaces;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -94,9 +95,8 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
 
    /**
     * Sets all the components of the rotation matrix to {@link Double#NaN}.
-    * <p>
-    * See {@link RotationScaleMatrix#setToNaN()}.
-    * </p>
+    * 
+    * @see {@link RotationMatrix#setToNaN()}.
     */
    default void setRotationToNaN()
    {
@@ -152,6 +152,11 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
       getTranslation().set(other.getTranslation());
    }
 
+   /**
+    * Sets this rigid-body transform to the given {@code affineTransform} stripped of any scaling.
+    * 
+    * @param affineTransform the affine transform to copy. Not modified.
+    */
    default void set(AffineTransformReadOnly affineTransform)
    {
       getRotation().set(affineTransform.getLinearTransform().getAsQuaternion());
@@ -699,11 +704,8 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void multiplyInvertThis(RigidBodyTransformReadOnly other)
    {
-      getTranslation().sub(other.getTranslation(), getTranslation());
-
-      getRotation().invert();
-      getRotation().transform(getTranslation());
-      getRotation().append(other.getRotation());
+      invert();
+      multiply(other);
    }
 
    /**
@@ -738,9 +740,8 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void multiplyInvertThis(AffineTransformReadOnly affineTransform)
    {
-      getTranslation().sub(affineTransform.getTranslation(), getTranslation());
-      getRotation().inverseTransform(getTranslation());
-      getRotation().appendInvertThis(affineTransform.getLinearTransform().getAsQuaternion());
+      invert();
+      multiply(affineTransform);
    }
 
    /**
@@ -764,7 +765,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Append a translation transform to this transform.
+    * Appends a translation transform to this transform.
     *
     * <pre>
     *               / 1 0 0 translation.x \
@@ -784,7 +785,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Append a translation transform to this transform.
+    * Appends a translation transform to this transform.
     *
     * <pre>
     *               / 1 0 0 x \
@@ -812,12 +813,23 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Append a rotation about the z-axis to the rotation part of this transform.
+    * Appends the orientation to the rotation part of this transform.
+    * 
+    * @param orientation the orientation to append. Not modified.
+    */
+   default void appendOrientation(Orientation3DReadOnly orientation)
+   {
+      getRotation().append(orientation);
+   }
+
+   /**
+    * Appends a rotation about the z-axis to the rotation part of this transform.
     *
     * <pre>
-    *         / cos(yaw) -sin(yaw) 0 \
-    * R = R * | sin(yaw)  cos(yaw) 0 |
-    *         \    0         0     1 /
+    *               / cos(yaw) -sin(yaw)  0   0 \
+    * this = this * | sin(yaw)  cos(yaw)  0   0 |
+    *               |    0         0      1   0 |
+    *               \    0         0      0   1 /
     * </pre>
     * <p>
     * This method does not affect the translation part of this transform.
@@ -831,12 +843,13 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Append a rotation about the y-axis to the rotation part of this transform.
+    * Appends a rotation about the y-axis to the rotation part of this transform.
     *
     * <pre>
-    *         /  cos(pitch) 0 sin(pitch) \
-    * R = R * |      0      1     0      |
-    *         \ -sin(pitch) 0 cos(pitch) /
+    *               /  cos(pitch) 0 sin(pitch)  0 \
+    * this = this * |      0      1     0       0 |
+    *               | -sin(pitch) 0 cos(pitch)  0 |
+    *               \      0      0     0       1 /
     * </pre>
     * <p>
     * This method does not affect the translation part of this transform.
@@ -850,12 +863,13 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Append a rotation about the x-axis to the rotation part of this transform.
+    * Appends a rotation about the x-axis to the rotation part of this transform.
     *
     * <pre>
-    *         / 1     0          0     \
-    * R = R * | 0 cos(roll) -sin(roll) |
-    *         \ 0 sin(roll)  cos(roll) /
+    *               / 1     0          0     0 \
+    * this = this * | 0 cos(roll) -sin(roll) 0 |
+    *               | 0 sin(roll)  cos(roll) 0 |
+    *               \ 0     0          0     1 /
     * </pre>
     * <p>
     * This method does not affect the translation part of this transform.
@@ -922,12 +936,8 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void preMultiplyInvertThis(RigidBodyTransformReadOnly other)
    {
-      getRotation().invert();
-      getRotation().prepend(other.getRotation());
-
-      if (hasTranslation())
-         getRotation().transform(getTranslation());
-      getTranslation().sub(other.getTranslation(), getTranslation());
+      invert();
+      preMultiply(other);
    }
 
    /**
@@ -964,9 +974,8 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void preMultiplyInvertThis(AffineTransformReadOnly affineTransform)
    {
-      getRotation().prependInvertThis(affineTransform.getLinearTransform().getAsQuaternion());
-      getRotation().transform(getTranslation());
-      getTranslation().sub(affineTransform.getTranslation(), getTranslation());
+      invert();
+      preMultiply(affineTransform);
    }
 
    /**
@@ -991,7 +1000,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Prepend a translation transform to this transform.
+    * Prepends a translation transform to this transform.
     *
     * <pre>
     *        / 1 0 0 translation.x \
@@ -1011,7 +1020,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Prepend a translation transform to this transform.
+    * Prepends a translation transform to this transform.
     *
     * <pre>
     *        / 1 0 0 x \
@@ -1033,7 +1042,17 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Prepend a rotation about the z-axis to this transform.
+    * Prepends the orientation to the rotation part of this transform.
+    * 
+    * @param orientation the orientation to append. Not modified.
+    */
+   default void prependOrientation(Orientation3DReadOnly orientation)
+   {
+      getRotation().prepend(orientation);
+   }
+
+   /**
+    * Prepends a rotation about the z-axis to this transform.
     * <p>
     * This method first rotates the translation part and then prepend the yaw-rotation to the rotation
     * part of this transform.
@@ -1055,7 +1074,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Prepend a rotation about the y-axis to this transform.
+    * Prepends a rotation about the y-axis to this transform.
     * <p>
     * This method first rotates the translation part and then prepend the pitch-rotation to the
     * rotation part of this transform.
@@ -1077,7 +1096,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
    }
 
    /**
-    * Prepend a rotation about the x-axis to this transform.
+    * Prepends a rotation about the x-axis to this transform.
     * <p>
     * This method first rotates the translation part and then prepend the roll-rotation to the rotation
     * part of this transform.

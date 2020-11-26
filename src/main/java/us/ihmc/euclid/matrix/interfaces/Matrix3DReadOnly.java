@@ -603,31 +603,89 @@ public interface Matrix3DReadOnly
       return Matrix3DFeatures.isMatrixSkewSymmetric(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
    }
 
+   /**
+    * Tests if this matrix is symmetric:
+    * 
+    * <pre>
+    *     | a x y |
+    * m = | x b z |
+    *     | y z c |
+    * </pre>
+    * <p>
+    * This matrix is considered to be symmetric if:
+    * <ul>
+    * <li>the difference for each pair of cross-diagonal coefficients ({@code m10}, {@code m01}),
+    * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/-
+    * {@link Matrix3DFeatures#EPS_CHECK_SYMMETRIC}.
+    * </ul>
+    * </p>
+    * 
+    * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
+    */
    default boolean isMatrixSymmetric()
    {
       return isMatrixSymmetric(Matrix3DFeatures.EPS_CHECK_SYMMETRIC);
    }
 
+   /**
+    * Tests if this matrix is symmetric:
+    * 
+    * <pre>
+    *     | a x y |
+    * m = | x b z |
+    *     | y z c |
+    * </pre>
+    * <p>
+    * This matrix is considered to be symmetric if:
+    * <ul>
+    * <li>the difference for each pair of cross-diagonal coefficients ({@code m10}, {@code m01}),
+    * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/- {@code epsilon}.
+    * </ul>
+    * </p>
+    * 
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
+    */
    default boolean isMatrixSymmetric(double epsilon)
    {
       return Matrix3DFeatures.isMatrixSymmetric(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
    }
 
+   /**
+    * Returns the value of the element that has the maximum value.
+    * 
+    * @return the value of the element that has the maximum value.
+    */
    default double maxElement()
    {
       return Matrix3DFeatures.maxElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
    }
 
+   /**
+    * Returns the value of the element that has the maximum absolute value.
+    * 
+    * @return the value of the element that has the maximum absolute value.
+    */
    default double maxAbsElement()
    {
       return Matrix3DFeatures.maxAbsElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
    }
 
+   /**
+    * Returns the value of the element that has the minimum value.
+    * 
+    * @return the value of the element that has the minimum value.
+    */
    default double minElement()
    {
       return Matrix3DFeatures.minElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
    }
 
+   /**
+    * Returns the value of the element that has the minimum absolute value.
+    * 
+    * @return the value of the element that has the minimum absolute value.
+    */
    default double minAbsElement()
    {
       return Matrix3DFeatures.minAbsElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());

@@ -2,7 +2,9 @@ package us.ihmc.euclid.matrix;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.LinearTransform3DBasics;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -18,23 +20,59 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
-public class LinearTransform3D implements LinearTransform3DBasics
+/**
+ * A {@link LinearTransform3DBasics} is a 3-by-3 matrix used to perform any linear transformations
+ * such as: rotation, scale, shear.
+ * <p>
+ * A linear transform matrix behaves mostly like a regular 3D matrix. In addition to the base
+ * features from {@link Matrix3DBasics}, the linear transform can be decomposed, using a singular
+ * value decomposition, into:
+ *
+ * <pre>
+ * A = U W V
+ * </pre>
+ *
+ * where:
+ * <ul>
+ * <li><tt>A</tt> is this 3D linear transform.
+ * <li><tt>U</tt> is the 3D pre-scale rotation.
+ * <li><tt>W</tt> is the 3D scale.
+ * <li><tt>U</tt> is the 3D post-scale rotation.
+ * </ul>
+ * </p>
+ *
+ * @see SingularValueDecomposition3D
+ * @author Sylvain Bertrand
+ */
+public class LinearTransform3D implements LinearTransform3DBasics, GeometryObject<LinearTransform3D>
 {
+   /** The matrix coefficients. */
    private double m00, m01, m02, m10, m11, m12, m20, m21, m22;
 
+   /** Flag to keep track of whether this linear transform represents a pure rotation. */
    private boolean isRotation = true;
+   /** Flag used to mark {@link #isRotation} as out-of-date. */
    private boolean rotationDirty = true;
+   /** Flag to keep track of whether this linear transform represents the identity matrix. */
    private boolean isIdentity = true;
+   /** Flag used to mark {@link #isIdentity} as out-of-date. */
    private boolean identityDirty = true;
-
+   /** Flag used to mark {@link #svdOutput} as out-of-date. */
    private boolean svdDirty = true;
+   /** The internal calculator for the SVD decomposition. */
    private final SingularValueDecomposition3D svd3D = new SingularValueDecomposition3D();
+   /** The output of {@link #svd3D} holding onto the last decomposition result. */
    private final SVD3DOutput svdOutput = svd3D.getOutput();
+   /** Linked quaternion of the pre-scale rotation. */
    private final QuaternionReadOnly U = EuclidCoreFactories.newObservableQuaternionReadOnly(i -> updateSVD(), svdOutput.getU());
+   /** Linked vector of the scale. */
+   private final Vector3DReadOnly scaleView = EuclidCoreFactories.newObservableVector3DReadOnly(a -> updateSVD(), svdOutput.getW());
+   /** Linked quaternion of the post-scale rotation. */
    private final QuaternionReadOnly Vt = EuclidCoreFactories.newObservableQuaternionReadOnly(i -> updateSVD(),
                                                                                              EuclidCoreFactories.newConjugateLinkedQuaternion(svdOutput.getV()));
-
+   /** Flag used to mark {@link #quaternionView} as out-of-date. */
    private boolean quaternionViewDirty = true;
+   /** Linked quaternion that represents the pre-scale and post-scale rotations concatenated. */
    private final QuaternionReadOnly quaternionView = new QuaternionReadOnly()
    {
       private double x, y, z, s;
@@ -116,31 +154,76 @@ public class LinearTransform3D implements LinearTransform3DBasics
       }
    };
 
-   private final Vector3DReadOnly scaleView = EuclidCoreFactories.newObservableVector3DReadOnly(a -> updateSVD(), svdOutput.getW());
-
+   /**
+    * Create a new linear transform initialized to identity.
+    */
    public LinearTransform3D()
    {
       setIdentity();
    }
 
-   public LinearTransform3D(Matrix3DReadOnly matrix3D)
+   /**
+    * Creates a new linear transform and initializes it from the given 9 coefficients.
+    *
+    * @param m00 the 1st row 1st column coefficient for this matrix.
+    * @param m01 the 1st row 2nd column coefficient for this matrix.
+    * @param m02 the 1st row 3rd column coefficient for this matrix.
+    * @param m10 the 2nd row 1st column coefficient for this matrix.
+    * @param m11 the 2nd row 2nd column coefficient for this matrix.
+    * @param m12 the 2nd row 3rd column coefficient for this matrix.
+    * @param m20 the 3rd row 1st column coefficient for this matrix.
+    * @param m21 the 3rd row 2nd column coefficient for this matrix.
+    * @param m22 the 3rd row 3rd column coefficient for this matrix.
+    */
+   public LinearTransform3D(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
-      set(matrix3D);
+      set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
+   /**
+    * Creates a new linear transform and initializes it from the given array.
+    *
+    * <pre>
+    *        / matrixArray[0]  matrixArray[1]  matrixArray[2] \
+    * this = | matrixArray[3]  matrixArray[4]  matrixArray[5] |
+    *        \ matrixArray[6]  matrixArray[7]  matrixArray[8] /
+    * </pre>
+    *
+    * @param matrixArray the array containing the values for this matrix. Not modified.
+    */
+   public LinearTransform3D(double[] matrixArray)
+   {
+      set(matrixArray);
+   }
+
+   /**
+    * Creates a new linear transform that is the same as {@code matrix}.
+    *
+    * @param matrix the other 3D matrix to copy the values from. Not modified.
+    */
    public LinearTransform3D(DMatrix matrix)
    {
       set(matrix);
    }
 
+   /**
+    * Creates a new linear transform that is the same as {@code matrix3D}.
+    *
+    * @param matrix3D the other 3D matrix to copy the values from. Not modified.
+    */
+   public LinearTransform3D(Matrix3DReadOnly matrix3D)
+   {
+      set(matrix3D);
+   }
+
+   /**
+    * Creates a new linear transform that represents the given orientation.
+    *
+    * @param orientation the orientation used to initialize this linear transform. Not modified.
+    */
    public LinearTransform3D(Orientation3DReadOnly orientation)
    {
       set(orientation);
-   }
-
-   public LinearTransform3D(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    private void updateSVD()
@@ -162,6 +245,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       }
    }
 
+   /** {@inheritDoc} */
    @Override
    public double determinant()
    {
@@ -171,6 +255,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          return svdOutput.getW().getX() * svdOutput.getW().getY() * svdOutput.getW().getZ();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setIdentity()
    {
@@ -192,6 +277,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       svdOutput.setIdentity();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setToNaN()
    {
@@ -213,6 +299,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       svdOutput.setToNaN();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void resetScale()
    {
@@ -229,6 +316,28 @@ public class LinearTransform3D implements LinearTransform3DBasics
       quaternionViewDirty = true;
    }
 
+   /** {@inheritDoc} */
+   @Override
+   public boolean isRotationMatrix()
+   {
+      if (rotationDirty)
+      {
+         rotationDirty = false;
+         if (!svdDirty)
+         {
+            isRotation = EuclidCoreTools.epsilonEquals(1.0, getScaleX(), Matrix3DFeatures.EPS_CHECK_ROTATION)
+                  && EuclidCoreTools.epsilonEquals(1.0, getScaleY(), Matrix3DFeatures.EPS_CHECK_ROTATION)
+                  && EuclidCoreTools.epsilonEquals(1.0, getScaleZ(), Matrix3DFeatures.EPS_CHECK_ROTATION);
+         }
+         else
+         {
+            isRotation = LinearTransform3DBasics.super.isRotationMatrix();
+         }
+      }
+      return isRotation;
+   }
+
+   /** {@inheritDoc} */
    @Override
    public boolean isIdentity()
    {
@@ -242,6 +351,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       return isIdentity;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void transpose()
    {
@@ -261,9 +371,10 @@ public class LinearTransform3D implements LinearTransform3DBasics
 
       quaternionViewDirty = true;
       if (!svdDirty)
-         svd3D.transpose();
+         svdOutput.transpose();
    }
 
+   /** {@inheritDoc} */
    @Override
    public void invert()
    {
@@ -301,6 +412,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       }
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
@@ -320,6 +432,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       quaternionViewDirty = true;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(Matrix3DReadOnly matrix3D)
    {
@@ -331,6 +444,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          LinearTransform3DBasics.super.set(matrix3D);
    }
 
+   /** {@inheritDoc} */
    @Override
    public void set(RotationMatrixReadOnly rotationMatrix)
    {
@@ -352,6 +466,12 @@ public class LinearTransform3D implements LinearTransform3DBasics
       svdDirty = true;
    }
 
+   /**
+    * Sets this linear transform to equal the given one {@code other}.
+    *
+    * @param other the other linear transform to copy the values from. Not modified.
+    */
+   @Override
    public void set(LinearTransform3D other)
    {
       m00 = other.m00;
@@ -374,15 +494,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
          svdOutput.set(other.svdOutput);
    }
 
-   @Override
-   public void set(Orientation3DReadOnly orientation3D)
-   {
-      LinearTransform3DBasics.super.set(orientation3D);
-      isRotation = true;
-      rotationDirty = false;
-      quaternionViewDirty = true;
-   }
-
+   /** {@inheritDoc} */
    @Override
    public void setRotationVector(Vector3DReadOnly rotationVector)
    {
@@ -392,6 +504,7 @@ public class LinearTransform3D implements LinearTransform3DBasics
       quaternionViewDirty = true;
    }
 
+   /** {@inheritDoc} */
    @Override
    public void setEuler(Tuple3DReadOnly eulerAngles)
    {
@@ -527,32 +640,14 @@ public class LinearTransform3D implements LinearTransform3DBasics
       }
    }
 
-   @Override
-   public boolean isRotationMatrix()
-   {
-      if (rotationDirty)
-      {
-         rotationDirty = false;
-         if (!svdDirty)
-         {
-            isRotation = EuclidCoreTools.epsilonEquals(1.0, getScaleX(), Matrix3DFeatures.EPS_CHECK_ROTATION)
-                  && EuclidCoreTools.epsilonEquals(1.0, getScaleY(), Matrix3DFeatures.EPS_CHECK_ROTATION)
-                  && EuclidCoreTools.epsilonEquals(1.0, getScaleZ(), Matrix3DFeatures.EPS_CHECK_ROTATION);
-         }
-         else
-         {
-            isRotation = LinearTransform3DBasics.super.isRotationMatrix();
-         }
-      }
-      return isRotation;
-   }
-
+   /** {@inheritDoc} */
    @Override
    public QuaternionReadOnly getAsQuaternion()
    {
       return quaternionView;
    }
 
+   /** {@inheritDoc} */
    @Override
    public QuaternionReadOnly getPreScaleQuaternion()
    {
@@ -560,12 +655,14 @@ public class LinearTransform3D implements LinearTransform3DBasics
       return U;
    }
 
+   /** {@inheritDoc} */
    @Override
    public Vector3DReadOnly getScaleVector()
    {
       return scaleView;
    }
 
+   /** {@inheritDoc} */
    @Override
    public QuaternionReadOnly getPostScaleQuaternion()
    {
@@ -651,6 +748,29 @@ public class LinearTransform3D implements LinearTransform3DBasics
          return equals((Matrix3DReadOnly) object);
       else
          return false;
+   }
+
+   /**
+    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
+    * {@code epsilon}.
+    *
+    * @param other   the other matrix to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
+   @Override
+   public boolean epsilonEquals(LinearTransform3D other, double epsilon)
+   {
+      return LinearTransform3DBasics.super.epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Redirects to {@link #epsilonEquals(LinearTransform3D, double)}.
+    */
+   @Override
+   public boolean geometricallyEquals(LinearTransform3D other, double epsilon)
+   {
+      return LinearTransform3DBasics.super.epsilonEquals(other, epsilon);
    }
 
    /**

@@ -9,9 +9,7 @@ import java.util.function.ToDoubleFunction;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -525,32 +523,39 @@ public class EuclidCoreFactories
       };
    }
 
-   public static QuaternionReadOnly newConjugateLinkedQuaternion(QuaternionReadOnly original)
+   /**
+    * Creates a new quaternion that is a read-only view of the given {@code original} conjugated.
+    * 
+    * @param originalQuaternion the original quaternion to create the linked conjugated quaternion for.
+    *                           Not modified.
+    * @return the conjugated read-only view of {@code original}.
+    */
+   public static QuaternionReadOnly newConjugateLinkedQuaternion(QuaternionReadOnly originalQuaternion)
    {
       return new QuaternionReadOnly()
       {
          @Override
          public double getX()
          {
-            return -original.getX();
+            return -originalQuaternion.getX();
          }
 
          @Override
          public double getY()
          {
-            return -original.getY();
+            return -originalQuaternion.getY();
          }
 
          @Override
          public double getZ()
          {
-            return -original.getZ();
+            return -originalQuaternion.getZ();
          }
 
          @Override
          public double getS()
          {
-            return original.getS();
+            return originalQuaternion.getS();
          }
 
          @Override
@@ -2547,224 +2552,5 @@ public class EuclidCoreFactories
             return EuclidCoreIOTools.getTuple4DString(this);
          }
       };
-   }
-
-   public static Matrix3DBasics newObservableMatrix3DBasics(ObjObjDoubleConsumer<Axis3D, Axis3D> valueChangedListener,
-                                                            BiConsumer<Axis3D, Axis3D> valueAccessedListener)
-   {
-      return newObservableMatrix3DBasics(valueChangedListener, valueAccessedListener, new Matrix3D());
-   }
-
-   public static Matrix3DBasics newObservableMatrix3DBasics(ObjObjDoubleConsumer<Axis3D, Axis3D> valueChangedListener,
-                                                            BiConsumer<Axis3D, Axis3D> valueAccessedListener, Matrix3DBasics source)
-   {
-      return new Matrix3DBasics()
-      {
-         private boolean isNotifying = false;
-
-         @Override
-         public void setM00(double m00)
-         {
-            if (m00 != source.getM00())
-            {
-               source.setM00(m00);
-               notifyChangeListener(Axis3D.X, Axis3D.X, m00);
-            }
-         }
-
-         @Override
-         public void setM01(double m01)
-         {
-            if (m01 != source.getM01())
-            {
-               source.setM01(m01);
-               notifyChangeListener(Axis3D.X, Axis3D.Y, m01);
-            }
-         }
-
-         @Override
-         public void setM02(double m02)
-         {
-            if (m02 != source.getM02())
-            {
-               source.setM02(m02);
-               notifyChangeListener(Axis3D.X, Axis3D.Z, m02);
-            }
-         }
-
-         @Override
-         public void setM10(double m10)
-         {
-            if (m10 != source.getM10())
-            {
-               source.setM10(m10);
-               notifyChangeListener(Axis3D.Y, Axis3D.X, m10);
-            }
-         }
-
-         @Override
-         public void setM11(double m11)
-         {
-            if (m11 != source.getM11())
-            {
-               source.setM11(m11);
-               notifyChangeListener(Axis3D.Y, Axis3D.Y, m11);
-            }
-         }
-
-         @Override
-         public void setM12(double m12)
-         {
-            if (m12 != source.getM12())
-            {
-               source.setM12(m12);
-               notifyChangeListener(Axis3D.Y, Axis3D.Z, m12);
-            }
-         }
-
-         @Override
-         public void setM20(double m20)
-         {
-            if (m20 != source.getM20())
-            {
-               source.setM20(m20);
-               notifyChangeListener(Axis3D.Z, Axis3D.X, m20);
-            }
-         }
-
-         @Override
-         public void setM21(double m21)
-         {
-            if (m21 != source.getM21())
-            {
-               source.setM21(m21);
-               notifyChangeListener(Axis3D.Z, Axis3D.Y, m21);
-            }
-         }
-
-         @Override
-         public void setM22(double m22)
-         {
-            if (m22 != source.getM22())
-            {
-               source.setM22(m22);
-               notifyChangeListener(Axis3D.Z, Axis3D.Z, m22);
-            }
-         }
-
-         @Override
-         public double getM00()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.X);
-            return source.getM00();
-         }
-
-         @Override
-         public double getM01()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.Y);
-            return source.getM01();
-         }
-
-         @Override
-         public double getM02()
-         {
-            notifyAccessListener(Axis3D.X, Axis3D.Z);
-            return source.getM02();
-         }
-
-         @Override
-         public double getM10()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.X);
-            return source.getM10();
-         }
-
-         @Override
-         public double getM11()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.Y);
-            return source.getM11();
-         }
-
-         @Override
-         public double getM12()
-         {
-            notifyAccessListener(Axis3D.Y, Axis3D.Z);
-            return source.getM12();
-         }
-
-         @Override
-         public double getM20()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.X);
-            return source.getM20();
-         }
-
-         @Override
-         public double getM21()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.Y);
-            return source.getM21();
-         }
-
-         @Override
-         public double getM22()
-         {
-            notifyAccessListener(Axis3D.Z, Axis3D.Z);
-            return source.getM22();
-         }
-
-         private void notifyChangeListener(Axis3D row, Axis3D col, double newValue)
-         {
-            if (valueChangedListener == null)
-               return;
-
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueChangedListener.accept(row, col, newValue);
-            isNotifying = false;
-         }
-
-         private void notifyAccessListener(Axis3D row, Axis3D col)
-         {
-            if (valueAccessedListener == null)
-               return;
-            if (isNotifying)
-               return;
-
-            isNotifying = true;
-            valueAccessedListener.accept(row, col);
-            isNotifying = false;
-         }
-
-         @Override
-         public int hashCode()
-         {
-            return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
-         }
-
-         @Override
-         public boolean equals(Object object)
-         {
-            if (object instanceof Matrix3DReadOnly)
-               return equals((Matrix3DReadOnly) object);
-            else
-               return false;
-         }
-
-         @Override
-         public String toString()
-         {
-            return EuclidCoreIOTools.getMatrix3DString(this);
-         }
-      };
-   }
-
-   public static interface ObjObjDoubleConsumer<T, U>
-   {
-      void accept(T t, U u, double value);
    }
 }

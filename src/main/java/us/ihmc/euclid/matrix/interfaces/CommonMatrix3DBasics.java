@@ -35,16 +35,37 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     */
    public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22);
 
+   /**
+    * Sets this matrix by converting the given orientation.
+    * 
+    * @param orientation3D the orientation to convert into a 3D matrix. Not modified.
+    */
    default void set(Orientation3DReadOnly orientation3D)
    {
-      orientation3D.get(this);
+      if (orientation3D instanceof RotationMatrixReadOnly)
+         set((RotationMatrixReadOnly) orientation3D);
+      else
+         orientation3D.get(this);
    }
 
+   /**
+    * Sets this matrix to the given rotation matrix.
+    * 
+    * @param rotationMatrix the rotation matrix to copy. Not modified.
+    */
    default void set(RotationMatrixReadOnly rotationMatrix)
    {
       set((Matrix3DReadOnly) rotationMatrix);
    }
 
+   /**
+    * Resets the values of this matrix coefficients.
+    * <p>
+    * The default implementation sets all the coefficients to zero, but some implementations, e.g.
+    * {@link RotationMatrixBasics}, overrides this method to reset this matrix to be an identity
+    * matrix.
+    * </p>
+    */
    @Override
    default void setToZero()
    {

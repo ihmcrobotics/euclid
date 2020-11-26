@@ -161,13 +161,13 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
    }
 
    @Test
-   public void testLinearTransformToZero() throws Exception
+   public void testLinearTransformToIdentity() throws Exception
    {
       Random random = new Random(42353L);
       AffineTransform original = EuclidCoreRandomTools.nextAffineTransform(random);
       AffineTransform transform = new AffineTransform(original);
 
-      transform.setLinearTransformToZero();
+      transform.setLinearTransformToIdentity();
 
       for (int row = 0; row < 4; row++)
       {
