@@ -531,7 +531,10 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void multiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       getLinearTransform().appendRotationInvertOther(rigidBodyTransform.getRotation());
-      getLinearTransform().subTransform(rigidBodyTransform.getTranslation(), getTranslation());
+      if (rigidBodyTransform.hasTranslation())
+         getLinearTransform().subTransform(rigidBodyTransform.getTranslation(), getTranslation());
+      else
+         getTranslation().negate();
    }
 
    /**
@@ -567,13 +570,20 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void appendTranslation(double x, double y, double z)
    {
-      double thisX = getTranslation().getX();
-      double thisY = getTranslation().getY();
-      double thisZ = getTranslation().getZ();
+      if (getLinearTransform().isIdentity())
+      {
+         getTranslation().add(x, y, z);
+      }
+      else
+      {
+         double thisX = getTranslation().getX();
+         double thisY = getTranslation().getY();
+         double thisZ = getTranslation().getZ();
 
-      getTranslation().set(x, y, z);
-      getLinearTransform().transform(getTranslation());
-      getTranslation().add(thisX, thisY, thisZ);
+         getTranslation().set(x, y, z);
+         getLinearTransform().transform(getTranslation());
+         getTranslation().add(thisX, thisY, thisZ);
+      }
    }
 
    /**
@@ -700,7 +710,8 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void preMultiply(AffineTransformReadOnly other)
    {
-      other.getLinearTransform().transform(getTranslation());
+      if (hasTranslation())
+         other.getLinearTransform().transform(getTranslation());
       getTranslation().add(other.getTranslation());
       getLinearTransform().preMultiply(other.getLinearTransform());
    }
@@ -715,7 +726,8 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void preMultiply(RigidBodyTransformReadOnly rigidBodyTransform)
    {
-      rigidBodyTransform.transform(getTranslation());
+      if (hasTranslation())
+         rigidBodyTransform.transform(getTranslation());
       getTranslation().add(rigidBodyTransform.getTranslation());
       getLinearTransform().prependRotation(rigidBodyTransform.getRotation());
    }
@@ -731,7 +743,8 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void preMultiplyInvertThis(AffineTransformReadOnly other)
    {
       getLinearTransform().preMultiplyInvertThis(other.getLinearTransform());
-      getLinearTransform().transform(getTranslation());
+      if (hasTranslation())
+         getLinearTransform().transform(getTranslation());
       getTranslation().sub(other.getTranslation(), getTranslation());
    }
 
@@ -746,7 +759,8 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void preMultiplyInvertOther(AffineTransformReadOnly other)
    {
       getTranslation().sub(other.getTranslation());
-      other.getLinearTransform().inverseTransform(getTranslation());
+      if (hasTranslation())
+         other.getLinearTransform().inverseTransform(getTranslation());
       getLinearTransform().preMultiplyInvertOther(other.getLinearTransform());
    }
 
@@ -775,7 +789,8 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    default void preMultiplyInvertOther(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       getTranslation().sub(rigidBodyTransform.getTranslation());
-      rigidBodyTransform.getRotation().inverseTransform(getTranslation());
+      if (hasTranslation())
+         rigidBodyTransform.getRotation().inverseTransform(getTranslation());
       getLinearTransform().prependRotationInvertOther(rigidBodyTransform.getRotation());
    }
 

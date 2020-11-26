@@ -374,32 +374,20 @@ public class RotationMatrixTools
       if (a.isZeroOrientation())
       {
          if (b.isZeroOrientation())
-         {
             matrixToPack.setToZero();
-         }
          else if (transposeB)
-         {
-            matrixToPack.set(b);
-            matrixToPack.transpose();
-         }
+            matrixToPack.setAndTranspose(b);
          else
-         {
             matrixToPack.set(b);
-         }
 
          return;
       }
       else if (b.isZeroOrientation())
       {
          if (transposeA)
-         {
-            matrixToPack.set(a);
-            matrixToPack.transpose();
-         }
+            matrixToPack.setAndTranspose(a);
          else
-         {
             matrixToPack.set(a);
-         }
 
          return;
       }

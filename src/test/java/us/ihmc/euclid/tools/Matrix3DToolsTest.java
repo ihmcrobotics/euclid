@@ -217,10 +217,16 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      for (int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < 4 * ITERATIONS; i++)
       { // Test multiply(Matrix3DReadOnly m1, boolean transpose1, boolean invert1, Matrix3DReadOnly m2, boolean transpose2, boolean invert2, CommonMatrix3DBasics matrixToPack)
          Matrix3D m1 = EuclidCoreRandomTools.nextMatrix3D(random);
          Matrix3D m2 = EuclidCoreRandomTools.nextMatrix3D(random);
+
+         if (random.nextBoolean())
+            m1.setIdentity();
+         if (random.nextBoolean())
+            m2.setIdentity();
+
          boolean transpose1 = random.nextBoolean();
          boolean invert1 = random.nextBoolean();
          boolean transpose2 = random.nextBoolean();
@@ -244,15 +250,21 @@ public class Matrix3DToolsTest
 
          Matrix3DTools.multiply(m1, transpose1, invert1, m2, transpose2, invert2, matrixActual);
          if (invert1 || invert2)
-            EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, 10.0 * EPS);
+            EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, 20.0 * EPS);
          else
             EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
       }
 
-      for (int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < 4 * ITERATIONS; i++)
       { // Test multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation, boolean invertOrientation, CommonMatrix3DBasics matrixToPack)
          Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         if (random.nextBoolean())
+            matrix.setIdentity();
+         if (random.nextBoolean())
+            orientation.setToZero();
+
          boolean transposeMatrix = random.nextBoolean();
          boolean invertMatrix = random.nextBoolean();
          boolean invertOrientation = random.nextBoolean();
@@ -265,10 +277,16 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
 
-      for (int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < 4 * ITERATIONS; i++)
       { // Test multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation, boolean invertOrientation, CommonMatrix3DBasics matrixToPack)
          Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         
+         if (random.nextBoolean())
+            matrix.setIdentity();
+         if (random.nextBoolean())
+            orientation.setToZero();
+         
          boolean transposeMatrix = random.nextBoolean();
          boolean invertMatrix = random.nextBoolean();
          boolean invertOrientation = random.nextBoolean();

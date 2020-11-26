@@ -249,6 +249,27 @@ public class Matrix3DTools
    public static void multiply(Matrix3DReadOnly m1, boolean transpose1, boolean invert1, Matrix3DReadOnly m2, boolean transpose2, boolean invert2,
                                CommonMatrix3DBasics matrixToPack)
    {
+      if (m1.isIdentity())
+      {
+         if (invert2)
+            matrixToPack.setAndInvert(m2);
+         else
+            matrixToPack.set(m2);
+         if (transpose2)
+            matrixToPack.transpose();
+         return;
+      }
+      else if (m2.isIdentity())
+      {
+         if (invert1)
+            matrixToPack.setAndInvert(m1);
+         else
+            matrixToPack.set(m1);
+         if (transpose1)
+            matrixToPack.transpose();
+         return;
+      }
+
       double a00, a01, a02, a10, a11, a12, a20, a21, a22;
 
       if (invert1)
@@ -383,6 +404,31 @@ public class Matrix3DTools
          return;
       }
 
+      if (matrix.isIdentity())
+      {
+         if (orientation.isZeroOrientation())
+         {
+            matrixToPack.setIdentity();
+         }
+         else
+         {
+            matrixToPack.set(orientation);
+            if (invertOrientation)
+               matrixToPack.transpose();
+         }
+         return;
+      }
+      else if (orientation.isZeroOrientation())
+      {
+         if (invertMatrix)
+            matrixToPack.setAndInvert(matrix);
+         else
+            matrixToPack.set(matrix);
+         if (transposeMatrix)
+            matrixToPack.transpose();
+         return;
+      }
+
       double a00, a01, a02, a10, a11, a12, a20, a21, a22;
 
       if (invertMatrix)
@@ -494,6 +540,31 @@ public class Matrix3DTools
       if (orientation instanceof RotationMatrixReadOnly)
       {
          multiply((Matrix3DReadOnly) orientation, invertOrientation, false, matrix, transposeMatrix, invertMatrix, matrixToPack);
+         return;
+      }
+
+      if (orientation.isZeroOrientation())
+      {
+         if (matrix.isIdentity())
+         {
+            matrixToPack.setIdentity();
+         }
+         else
+         {
+            if (invertMatrix)
+               matrixToPack.setAndInvert(matrix);
+            else
+               matrixToPack.set(matrix);
+            if (transposeMatrix)
+               matrixToPack.transpose();
+         }
+         return;
+      }
+      else if (matrix.isIdentity())
+      {
+         matrixToPack.set(orientation);
+         if (invertOrientation)
+            matrixToPack.transpose();
          return;
       }
 

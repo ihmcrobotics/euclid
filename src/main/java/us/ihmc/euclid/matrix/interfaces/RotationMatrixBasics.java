@@ -223,20 +223,6 @@ public interface RotationMatrixBasics extends CommonMatrix3DBasics, RotationMatr
       setAndTranspose(other);
    }
 
-   /**
-    * Sets this matrix to equal the other matrix and then transposes this.
-    * <p>
-    * this = other<sup>T</sup>
-    * </p>
-    *
-    * @param other the other matrix used to update this matrix. Not modified.
-    */
-   default void setAndTranspose(Matrix3DReadOnly other)
-   {
-      set(other);
-      transpose();
-   }
-
    @Override
    default void setAxisAngle(double x, double y, double z, double angle)
    {

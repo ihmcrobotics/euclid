@@ -2,6 +2,8 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.exceptions.NotARotationMatrixException;
+import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -103,6 +105,21 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    }
 
    /**
+    * Invert this matrix.
+    * <p>
+    * this = this<sup>-1</sup>
+    * </p>
+    *
+    * @throws SingularMatrixException if the matrix is not invertible.
+    */
+   default void invert()
+   {
+      boolean success = Matrix3DTools.invert(this);
+      if (!success)
+         throw new SingularMatrixException(this);
+   }
+
+   /**
     * Transposes this matrix: m = m<sup>T</sup>.
     */
    default void transpose()
@@ -132,6 +149,35 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    default void set(Matrix3DReadOnly other)
    {
       set(other.getM00(), other.getM01(), other.getM02(), other.getM10(), other.getM11(), other.getM12(), other.getM20(), other.getM21(), other.getM22());
+   }
+
+   /**
+    * Sets this matrix to equal the other matrix and then inverts this.
+    * <p>
+    * this = other<sup>-1</sup>
+    * </p>
+    *
+    * @param other the matrix to copy the values from. Not modified.
+    * @throws NotARotationMatrixException if {@code other} is not a rotation matrix.
+    */
+   default void setAndInvert(Matrix3DReadOnly other)
+   {
+      set(other);
+      invert();
+   }
+
+   /**
+    * Sets this matrix to equal the other matrix and then transposes this.
+    * <p>
+    * this = other<sup>T</sup>
+    * </p>
+    *
+    * @param other the other matrix used to update this matrix. Not modified.
+    */
+   default void setAndTranspose(Matrix3DReadOnly other)
+   {
+      set(other);
+      transpose();
    }
 
    /**

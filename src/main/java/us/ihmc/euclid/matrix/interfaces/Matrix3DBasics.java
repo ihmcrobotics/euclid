@@ -188,21 +188,6 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
    }
 
    /**
-    * Invert this matrix.
-    * <p>
-    * this = this<sup>-1</sup>
-    * </p>
-    *
-    * @throws SingularMatrixException if the matrix is not invertible.
-    */
-   default void invert()
-   {
-      boolean success = Matrix3DTools.invert(this);
-      if (!success)
-         throw new SingularMatrixException(this);
-   }
-
-   /**
     * Negates each component of this matrix.
     */
    default void negate()
