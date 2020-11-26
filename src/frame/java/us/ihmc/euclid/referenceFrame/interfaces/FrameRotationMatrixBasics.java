@@ -1,8 +1,5 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
-import us.ihmc.euclid.exceptions.NotARotationMatrixException;
-import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 
@@ -26,40 +23,6 @@ import us.ihmc.euclid.referenceFrame.ReferenceFrame;
  */
 public interface FrameRotationMatrixBasics extends FixedFrameRotationMatrixBasics, FrameCommonMatrix3DBasics, FrameOrientation3DBasics
 {
-   /**
-    * Sets this matrix to {@code other} and sets its current frame to {@code referenceFrame}.
-    * <p>
-    * If the argument implements {@link RotationMatrixReadOnly}, a redirection
-    * {@link #set(RotationMatrixReadOnly)} is done.
-    * </p>
-    *
-    * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param matrix         the matrix to copy the values of. Not modified.
-    * @throws NotARotationMatrixException if the argument is not a rotation matrix.
-    */
-   @Override
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix)
-   {
-      setReferenceFrame(referenceFrame);
-      set(matrix);
-   }
-
-   /**
-    * Sets this matrix to {@code other}.
-    * <p>
-    * If the argument implements {@link FrameRotationMatrixReadOnly}, a redirection
-    * {@link #set(FrameRotationMatrixReadOnly)} is done.
-    * </p>
-    *
-    * @param matrix the matrix to copy the values of. Not modified.
-    * @throws NotARotationMatrixException if the argument is not a rotation matrix.
-    */
-   @Override
-   default void setIncludingFrame(FrameMatrix3DReadOnly matrix)
-   {
-      setIncludingFrame(matrix.getReferenceFrame(), matrix);
-   }
-
    /** {@inheritDoc} */
    @Override
    default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3dReadOnly)

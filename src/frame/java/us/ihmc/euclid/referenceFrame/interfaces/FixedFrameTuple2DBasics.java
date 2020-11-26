@@ -85,8 +85,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void set(FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      Tuple2DBasics.super.set(other);
+      set(other.getReferenceFrame(), other);
    }
 
    /**
@@ -98,8 +97,28 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void set(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
-      checkReferenceFrameMatch(frameTuple3DReadOnly);
-      Tuple2DBasics.super.set(frameTuple3DReadOnly);
+      set(frameTuple3DReadOnly.getReferenceFrame(), frameTuple3DReadOnly);
+   }
+
+   /**
+    * Sets this frame tuple to {@code tuple2DReadOnly}.
+    * <p>
+    * If {@code tuple2DReadOnly} is expressed in the frame as {@code this}, then this method is
+    * equivalent to {@link #set(FrameTuple2DReadOnly)}.
+    * </p>
+    * <p>
+    * If {@code tuple2DReadOnly} is expressed in a different frame than {@code this}, then {@code this}
+    * is set to {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * </p>
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param tuple2DReadOnly the other tuple to set this to. Not modified.
+    */
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      Tuple2DBasics.super.set(tuple2DReadOnly);
+      referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
    /**
@@ -117,8 +136,21 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void setMatchingFrame(FrameTuple2DReadOnly other)
    {
-      Tuple2DBasics.super.set(other);
-      other.getReferenceFrame().transformFromThisToDesiredFrame(getReferenceFrame(), this);
+      setMatchingFrame(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this frame tuple to {@code tuple2DReadOnly} and then calls {@link #absolute()}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndAbsolute(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndAbsolute(tuple2DReadOnly);
    }
 
    /**
@@ -130,8 +162,21 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void setAndAbsolute(FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      Tuple2DBasics.super.setAndAbsolute(other);
+      setAndAbsolute(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this frame tuple to {@code tuple2DReadOnly} and then calls {@link #negate()}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndNegate(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndNegate(tuple2DReadOnly);
    }
 
    /**
@@ -143,8 +188,22 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void setAndNegate(FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      Tuple2DBasics.super.setAndNegate(other);
+      setAndNegate(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this frame tuple to {@code tuple2DReadOnly} and then calls {@link #scale(double)}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param scalar          the scale factor to use on this frame tuple.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndScale(double scalar, ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndScale(scalar, tuple2DReadOnly);
    }
 
    /**
@@ -162,6 +221,21 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    }
 
    /**
+    * Sets this frame tuple to {@code tuple2DReadOnly} and then calls {@link #clipToMax(double)}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param max             the maximum value for each component of this frame tuple.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndClipToMax(double max, ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndClipToMax(max, tuple2DReadOnly);
+   }
+
+   /**
     * Sets this frame tuple to {@code other} and then calls {@link #clipToMax(double)}.
     *
     * @param max   the maximum value for each component of this frame tuple.
@@ -171,8 +245,22 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void setAndClipToMax(double max, FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      Tuple2DBasics.super.setAndClipToMax(max, other);
+      setAndClipToMax(max, other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this frame tuple to {@code tuple2DReadOnly} and then calls {@link #clipToMin(double)}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param min             the minimum value for each component of this frame tuple.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndClipToMin(double min, ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      Tuple2DBasics.super.setAndClipToMin(min, tuple2DReadOnly);
    }
 
    /**
@@ -185,8 +273,24 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void setAndClipToMin(double min, FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      Tuple2DBasics.super.setAndClipToMin(min, other);
+      setAndClipToMin(min, other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this frame tuple to {@code tuple2DReadOnly} and then calls
+    * {@link #clipToMinMax(double, double)}.
+    *
+    * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
+    *                        expressed.
+    * @param min             the minimum value for each component of this frame tuple.
+    * @param max             the maximum value for each component of this frame tuple.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
+    */
+   default void setAndClipToMinMax(double min, double max, ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      Tuple2DBasics.super.setAndClipToMinMax(min, max, tuple2DReadOnly);
    }
 
    /**
@@ -200,8 +304,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     */
    default void setAndClipToMinMax(double min, double max, FrameTuple2DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      Tuple2DBasics.super.setAndClipToMinMax(min, max, other);
+      setAndClipToMinMax(min, max, other.getReferenceFrame(), other);
    }
 
    /**

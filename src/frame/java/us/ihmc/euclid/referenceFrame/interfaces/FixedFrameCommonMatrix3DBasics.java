@@ -1,5 +1,6 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
+import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -73,8 +74,73 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
     */
    default void setAndNormalize(FrameMatrix3DReadOnly other)
    {
-      checkReferenceFrameMatch(other);
-      CommonMatrix3DBasics.super.setAndNormalize(other);
+      setAndNormalize(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Set this matrix to the inverse of the other matrix.
+    * <p>
+    * this = other<sup>-1</sup>
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which {@code other} is expressed.
+    * @param other          the other matrix. Not modified.
+    * @throws SingularMatrixException         if the matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void setAndInvert(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndInvert(other);
+   }
+
+   /**
+    * Set this matrix to the inverse of the other matrix.
+    * <p>
+    * this = other<sup>-1</sup>
+    * </p>
+    *
+    * @param other the other matrix. Not modified.
+    * @throws SingularMatrixException         if the matrix is not invertible.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void setAndInvert(FrameMatrix3DReadOnly other)
+   {
+      setAndInvert(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this matrix to equal the other matrix and then transposes this.
+    * <p>
+    * this = other<sup>T</sup>
+    * </p>
+    *
+    * @param referenceFrame the reference frame in which {@code other} is expressed.
+    * @param other          the other matrix used to update this matrix. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void setAndTranspose(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
+   {
+      checkReferenceFrameMatch(referenceFrame);
+      setAndTranspose(other);
+   }
+
+   /**
+    * Sets this matrix to equal the other matrix and then transposes this.
+    * <p>
+    * this = other<sup>T</sup>
+    * </p>
+    *
+    * @param other the other matrix used to update this matrix. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void setAndTranspose(FrameMatrix3DReadOnly other)
+   {
+      setAndTranspose(other.getReferenceFrame(), other);
    }
 
    /**
@@ -130,7 +196,7 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
     */
    default void set(FrameRotationMatrixReadOnly other)
    {
-      set(other.getReferenceFrame(), (RotationMatrixReadOnly) other);
+      set(other.getReferenceFrame(), other);
    }
 
    /**
