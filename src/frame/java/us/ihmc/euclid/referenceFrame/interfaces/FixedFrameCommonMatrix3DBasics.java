@@ -30,8 +30,7 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
     *
     * @param referenceFrame the reference frame in which {@code other} is expressed.
     * @param other          the other frame matrix to copy the values of. Not modified.
-    * @throws ReferenceFrameMismatchException if the matrix is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
    {
@@ -56,8 +55,7 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
     *
     * @param referenceFrame the reference frame in which {@code other} is expressed.
     * @param other          the other matrix used to update this matrix. Not modified.
-    * @throws ReferenceFrameMismatchException if the matrix is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndNormalize(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
    {
@@ -86,8 +84,7 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
     * @param referenceFrame the reference frame in which {@code other} is expressed.
     * @param other          the other matrix. Not modified.
     * @throws SingularMatrixException         if the matrix is not invertible.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndInvert(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
    {
@@ -119,8 +116,7 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
     *
     * @param referenceFrame the reference frame in which {@code other} is expressed.
     * @param other          the other matrix used to update this matrix. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndTranspose(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
    {
@@ -144,12 +140,11 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
    }
 
    /**
-    * Sets this frame quaternion to {@code orientation} and checks that its current frame equals
+    * Sets this matrix by converting the given orientation and checks that its current frame equals
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the coordinate system in which the given {@code quaternionReadOnly} is
-    *                       expressed.
-    * @param orientation    the orientation to copy the values from. Not modified.
+    * @param referenceFrame the coordinate system in which the given {@code orientation} is expressed.
+    * @param orientation    the orientation to convert into a 3D matrix. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation)
@@ -159,10 +154,10 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
    }
 
    /**
-    * Converts, if necessary, and sets this orientation to represents the same orientation as
-    * {@code orientation}.
+    * Sets this matrix by converting the given orientation and checks that its current frame equals
+    * {@code orientation.getReferenceFrame()}.
     *
-    * @param orientation the new orientation. Not modified.
+    * @param orientation the orientation to convert into a 3D matrix. Not modified.
     * @throws ReferenceFrameMismatchException if {@code orientation} is not expressed in the same
     *                                         reference frame as {@code this}.
     */
@@ -172,31 +167,30 @@ public interface FixedFrameCommonMatrix3DBasics extends FrameMatrix3DReadOnly, C
    }
 
    /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
-    * matrix.
+    * Sets this matrix to {@code rotationMatrix} and checks that its current frame equals
+    * {@code referenceFrame}.
     *
     * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param other          the other rotation matrix to copy. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @param rotationMatrix the rotation matrix to copy. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
-   default void set(ReferenceFrame referenceFrame, RotationMatrixReadOnly other)
+   default void set(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrix)
    {
       checkReferenceFrameMatch(referenceFrame);
-      set(other);
+      set(rotationMatrix);
    }
 
    /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
-    * matrix.
+    * Sets this matrix to {@code rotationMatrix} and checks that its current frame equals
+    * {@code rotationMatrix.getReference()}.
     *
-    * @param other the other rotation matrix to copy. Not modified.
+    * @param rotationMatrix the rotation matrix to copy. Not modified.
     * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
     *                                         frame as {@code this}.
     */
-   default void set(FrameRotationMatrixReadOnly other)
+   default void set(FrameRotationMatrixReadOnly rotationMatrix)
    {
-      set(other.getReferenceFrame(), other);
+      set(rotationMatrix.getReferenceFrame(), rotationMatrix);
    }
 
    /**
