@@ -53,13 +53,13 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
     * Sets this matrix to {@code matrix3DReadOnly} and sets its reference frame to
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param matrix         the other matrix to copy the values of. Not modified.
+    * @param referenceFrame   the new reference frame to be associated with this matrix.
+    * @param matrix3DReadOnly the other matrix to copy the values of. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set(matrix);
+      set(matrix3DReadOnly);
    }
 
    /**
@@ -73,44 +73,26 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    }
 
    /**
-    * Sets this rotation matrix to {@code rotationMatrix} and copies the dirty and identity flags from
-    * the other matrix and sets its reference frame.
-    * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(RotationMatrixReadOnly)}.
-    * </p>
-    * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
-    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
-    * </p>
+    * Sets this matrix to {@code rotationMatrixReadOnly}.
     *
-    * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param rotationMatrix the other rotation matrix to copy. Not modified.
+    * @param referenceFrame         the reference frame in which the argument is expressed.
+    * @param rotationMatrixReadOnly the rotation matrix to copy the values of. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrixReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set(rotationMatrix);
+      set(rotationMatrixReadOnly);
    }
 
    /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
-    * matrix.
-    * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(RotationMatrixReadOnly)}.
-    * </p>
-    * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
-    * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
-    * </p>
+    * Sets this matrix to {@code other}.
     *
-    * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param other          the other rotation matrix to copy. Not modified.
+    * @param frameRotationMatrixReadOnly the other matrix to copy the values and reference frame from.
+    *                                    Not modified.
     */
-   default void setIncludingFrame(FrameRotationMatrixReadOnly other)
+   default void setIncludingFrame(FrameRotationMatrixReadOnly frameRotationMatrixReadOnly)
    {
-      setIncludingFrame(other.getReferenceFrame(), other);
+      setIncludingFrame(frameRotationMatrixReadOnly.getReferenceFrame(), frameRotationMatrixReadOnly);
    }
 
    /**
@@ -127,14 +109,14 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    }
 
    /**
-    * Sets this frame orientation to {@code other}.
+    * Sets this matrix to {@code frameOrientation3DReadOnly}.
     *
-    * @param other the other frame orientation to copy the values and reference frame from. Not
-    *              modified.
+    * @param frameOrientation3DReadOnly the orientation to copy the values and reference frame from.
+    *                                   Not modified.
     */
-   default void setIncludingFrame(FrameOrientation3DReadOnly other)
+   default void setIncludingFrame(FrameOrientation3DReadOnly frameOrientation3DReadOnly)
    {
-      setIncludingFrame(other.getReferenceFrame(), other);
+      setIncludingFrame(frameOrientation3DReadOnly.getReferenceFrame(), frameOrientation3DReadOnly);
    }
 
    /**

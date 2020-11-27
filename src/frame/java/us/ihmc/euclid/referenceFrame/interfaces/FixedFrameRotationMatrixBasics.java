@@ -43,13 +43,6 @@ public interface FixedFrameRotationMatrixBasics
       RotationMatrixBasics.super.setAndNormalize(other);
    }
 
-   /** {@inheritDoc} */
-   @Override
-   default void setAndNormalize(FrameOrientation3DReadOnly orientation)
-   {
-      FixedFrameOrientation3DBasics.super.setAndNormalize(orientation);
-   }
-
    /**
     * {@inheritDoc}
     * <p>

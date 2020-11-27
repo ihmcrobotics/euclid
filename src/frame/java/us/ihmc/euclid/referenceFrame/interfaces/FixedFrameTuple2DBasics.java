@@ -35,8 +35,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
     *                        expressed.
-    * @param tuple2DReadOnly the geometry object used to update the geometry object in {@code this}.
-    *                        Not modified.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
@@ -51,8 +50,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
     *                        expressed.
-    * @param tuple3DReadOnly the geometry object used to update the geometry object in {@code this}.
-    *                        Not modified.
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void set(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -79,7 +77,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
    /**
     * Sets this frame tuple to {@code other}.
     *
-    * @param other the other frame tuple to set this to. Not modified.
+    * @param other the other frame tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
     *                                         {@code this}.
     */
@@ -104,16 +102,17 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * Sets this frame tuple to {@code tuple2DReadOnly}.
     * <p>
     * If {@code tuple2DReadOnly} is expressed in the frame as {@code this}, then this method is
-    * equivalent to {@link #set(FrameTuple2DReadOnly)}.
+    * equivalent to {@link #set(ReferenceFrame, Tuple2DReadOnly)}.
     * </p>
     * <p>
     * If {@code tuple2DReadOnly} is expressed in a different frame than {@code this}, then {@code this}
-    * is set to {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
+    * is set to {@code tuple2DReadOnly} and then transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
     * </p>
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple2DReadOnly} is
     *                        expressed.
-    * @param tuple2DReadOnly the other tuple to set this to. Not modified.
+    * @param tuple2DReadOnly the other tuple to copy the values from. Not modified.
     */
    default void setMatchingFrame(ReferenceFrame referenceFrame, Tuple2DReadOnly tuple2DReadOnly)
    {
@@ -132,7 +131,7 @@ public interface FixedFrameTuple2DBasics extends FrameTuple2DReadOnly, Tuple2DBa
     * {@code other} and then transformed to be expressed in {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param other the other frame tuple to set this to. Not modified.
+    * @param other the other frame tuple to copy the values from. Not modified.
     */
    default void setMatchingFrame(FrameTuple2DReadOnly other)
    {

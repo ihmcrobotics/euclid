@@ -51,22 +51,23 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    }
 
    /**
-    * Sets this matrix to {@code other}.
+    * Sets this matrix to {@code matrix3DReadOnly}.
     * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(FrameMatrix3DReadOnly)}.
+    * If {@code matrix3DReadOnly} is expressed in the frame as {@code this}, then this method is
+    * equivalent to {@link #set(ReferenceFrame, Matrix3DReadOnly)}.
     * </p>
     * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
-    * {@code other} once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * If {@code matrix3DReadOnly} is expressed in a different frame than {@code this}, then
+    * {@code this} is set to {@code matrix3DReadOnly} once transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param referenceFrame the reference frame in which {@code other} is expressed.
-    * @param other          the other frame matrix to set this to. Not modified.
+    * @param referenceFrame   the reference frame in which {@code matrix3DReadOnly} is expressed.
+    * @param matrix3DReadOnly the other frame matrix to set this to. Not modified.
     */
-   default void setMatchingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
-      Matrix3DBasics.super.set(other);
+      Matrix3DBasics.super.set(matrix3DReadOnly);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
@@ -99,8 +100,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     *
     * @param referenceFrame  the reference frame in which {@code tuple3DReadOnly} is expressed.
     * @param tuple3DReadOnly the tuple to use to create its tilde form. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code tuple3DReadOnly} is not expressed in the same
-    *                                         reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setToTildeForm(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
    {
@@ -139,8 +139,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     *
     * @param referenceFrame  the reference frame in which {@code tuple3DReadOnly} is expressed.
     * @param tuple3DReadOnly the tuple used to set this matrix diagonal elements. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code tuple3DReadOnly} is not expressed in the same
-    *                                         reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setToDiagonal(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
    {
@@ -169,20 +168,19 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    }
 
    /**
-    * Sets this matrix to be equal to the outer-product of {@code other}.
+    * Sets this matrix to be equal to the outer-product of {@code matrix3DReadOnly}.
     * <p>
-    * this = other * other<sup>T<sup>
+    * this = matrix3DReadOnly * matrix3DReadOnly<sup>T<sup>
     * </p>
     *
-    * @param referenceFrame the reference frame in which {@code other} is expressed.
-    * @param other          the other matrix used for this operation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @param referenceFrame   the reference frame in which {@code matrix3DReadOnly} is expressed.
+    * @param matrix3DReadOnly the other matrix used for this operation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
-   default void setAndMultiplyOuter(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
+   default void setAndMultiplyOuter(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
-      setAndMultiplyOuter(other);
+      setAndMultiplyOuter(matrix3DReadOnly);
    }
 
    /**
@@ -201,20 +199,19 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    }
 
    /**
-    * Sets this matrix to be equal to the inner-product of {@code other}.
+    * Sets this matrix to be equal to the inner-product of {@code matrix3DReadOnly}.
     * <p>
-    * this = <sup>T<sup>other * other
+    * this = <sup>T<sup>matrix3DReadOnly * matrix3DReadOnly
     * </p>
     *
-    * @param referenceFrame the reference frame in which {@code other} is expressed.
-    * @param other          the other matrix used for this operation. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @param referenceFrame   the reference frame in which {@code matrix3DReadOnly} is expressed.
+    * @param matrix3DReadOnly the other matrix used for this operation. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
-   default void setAndMultiplyInner(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
+   default void setAndMultiplyInner(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
-      setAndMultiplyInner(other);
+      setAndMultiplyInner(matrix3DReadOnly);
    }
 
    /**
@@ -233,17 +230,16 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    }
 
    /**
-    * Sets this matrix to {@code other} and then calls {@link #negate()}.
+    * Sets this matrix to {@code matrix3DReadOnly} and then calls {@link #negate()}.
     *
-    * @param referenceFrame the reference frame in which {@code other} is expressed.
-    * @param other          the other matrix used to update this matrix. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
+    * @param referenceFrame   the reference frame in which {@code matrix3DReadOnly} is expressed.
+    * @param matrix3DReadOnly the other matrix used to update this matrix. Not modified.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
-   default void setAndNegate(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
+   default void setAndNegate(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       checkReferenceFrameMatch(referenceFrame);
-      setAndNegate(other);
+      setAndNegate(matrix3DReadOnly);
    }
 
    /**
@@ -266,8 +262,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     * @param referenceFrame the reference frame in which {@code rowValues} is expressed.
     * @param rowValues      the tuple containing the new values for the row. Not modified.
     * @throws ArrayIndexOutOfBoundsException  if {@code row} &notin; [0, 2].
-    * @throws ReferenceFrameMismatchException if {@code rowValues} is not expressed in the same
-    *                                         reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setRow(int row, ReferenceFrame referenceFrame, Tuple3DReadOnly rowValues)
    {
@@ -298,8 +293,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
     * @param referenceFrame the reference frame in which {@code other} is expressed.
     * @param columnValues   the tuple containing the new values for the column. Not modified.
     * @throws ArrayIndexOutOfBoundsException  if {@code column} &notin; [0, 2].
-    * @throws ReferenceFrameMismatchException if {@code columnValues} is not expressed in the same
-    *                                         reference frame as {@code this}.
+    * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setColumn(int column, ReferenceFrame referenceFrame, Tuple3DReadOnly columnValues)
    {

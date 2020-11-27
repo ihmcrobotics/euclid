@@ -142,12 +142,12 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * Sets the x and y components of this frame tuple with the x and y components of the given
     * {@code tuple2DReadOnly} and the z-component to the given {@code z}.
     * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(ReferenceFrame, Tuple2DReadOnly, double)}.
+    * If {@code tuple2DReadOnly} is expressed in the frame as {@code this}, then this method is
+    * equivalent to {@link #set(ReferenceFrame, Tuple2DReadOnly, double)}.
     * </p>
     * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set
-    * with {@code tuple2DReadOnly} and {@code z}, and then transformed to be expressed in
+    * If {@code tuple2DReadOnly} is expressed in a different frame than {@code this}, then {@code this}
+    * is set with {@code tuple2DReadOnly} and {@code z}, and then transformed to be expressed in
     * {@code this.getReferenceFrame()}.
     * </p>
     *
@@ -166,13 +166,13 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * Sets the x and y components of this frame tuple with the x and y components of the given
     * {@code frameTuple2DReadOnly} and the z-component to the given {@code z}.
     * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(FrameTuple2DReadOnly, double)}.
+    * If {@code frameTuple2DReadOnly} is expressed in the frame as {@code this}, then this method is
+    * equivalent to {@link #set(FrameTuple2DReadOnly, double)}.
     * </p>
     * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set
-    * with {@code frameTuple2DReadOnly} and {@code z}, and then transformed to be expressed in
-    * {@code this.getReferenceFrame()}.
+    * If {@code frameTuple2DReadOnly} is expressed in a different frame than {@code this}, then
+    * {@code this} is set with {@code frameTuple2DReadOnly} and {@code z}, and then transformed to be
+    * expressed in {@code this.getReferenceFrame()}.
     * </p>
     *
     * @param frameTuple2DReadOnly the frame tuple to copy the values from. Not modified.
@@ -184,23 +184,24 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
    }
 
    /**
-    * Sets this frame tuple to {@code other}.
+    * Sets this frame tuple to {@code tuple3DReadOnly}.
     * <p>
-    * If {@code other} is expressed in the frame as {@code this}, then this method is equivalent to
-    * {@link #set(ReferenceFrame, Tuple3DReadOnly)}.
+    * If {@code tuple3DReadOnly} is expressed in the frame as {@code this}, then this method is
+    * equivalent to {@link #set(ReferenceFrame, Tuple3DReadOnly)}.
     * </p>
     * <p>
-    * If {@code other} is expressed in a different frame than {@code this}, then {@code this} is set to
-    * {@code other} once transformed to be expressed in {@code this.getReferenceFrame()}.
+    * If {@code tuple3DReadOnly} is expressed in a different frame than {@code this}, then {@code this}
+    * is set to {@code tuple3DReadOnly} once transformed to be expressed in
+    * {@code this.getReferenceFrame()}.
     * </p>
     *
-    * @param referenceFrame the coordinate system in which the given {@code tuple3DReadOnly} is
-    *                       expressed.
-    * @param other          the other frame tuple to set this to. Not modified.
+    * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
+    *                        expressed.
+    * @param tuple3DReadOnly the other tuple to set this to. Not modified.
     */
-   default void setMatchingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly other)
+   default void setMatchingFrame(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
    {
-      Tuple3DBasics.super.set(other);
+      Tuple3DBasics.super.set(tuple3DReadOnly);
       referenceFrame.transformFromThisToDesiredFrame(getReferenceFrame(), this);
    }
 
@@ -227,7 +228,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
     *                        expressed.
-    * @param tuple3DReadOnly the other frame tuple to copy the values from. Not modified.
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndAbsolute(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -253,7 +254,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *
     * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
     *                        expressed.
-    * @param tuple3DReadOnly the other frame tuple to copy the values from. Not modified.
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndNegate(ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -280,7 +281,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
     *                        expressed.
     * @param scalar          the scale factor to use on this frame tuple.
-    * @param tuple3DReadOnly the other frame tuple to copy the values from. Not modified.
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndScale(double scalar, ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -308,7 +309,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
     *                        expressed.
     * @param max             the maximum value for each component of this frame tuple.
-    * @param tuple3DReadOnly the other frame tuple to copy the values from. Not modified.
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndClipToMax(double max, ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -336,7 +337,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     * @param referenceFrame  the coordinate system in which the given {@code tuple3DReadOnly} is
     *                        expressed.
     * @param min             the minimum value for each component of this frame tuple.
-    * @param tuple3DReadOnly the other frame tuple to copy the values from. Not modified.
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndClipToMin(double min, ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
@@ -366,7 +367,7 @@ public interface FixedFrameTuple3DBasics extends FrameTuple3DReadOnly, Tuple3DBa
     *                        expressed.
     * @param min             the minimum value for each component of this frame tuple.
     * @param max             the maximum value for each component of this frame tuple.
-    * @param tuple3DReadOnly the other frame tuple to copy the values from. Not modified.
+    * @param tuple3DReadOnly the other tuple to copy the values from. Not modified.
     * @throws ReferenceFrameMismatchException if {@code this.referenceFrame != referenceFrame}.
     */
    default void setAndClipToMinMax(double min, double max, ReferenceFrame referenceFrame, Tuple3DReadOnly tuple3DReadOnly)
