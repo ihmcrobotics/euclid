@@ -15,7 +15,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  * A = U W V<sup>T</sup>
  * </pre>
  * <p>
- * The algorithm is based on the paper: <i>Computing the Singular Value Decomposition of 3 × 3
+ * The algorithm is based on the paper: <i>Computing the Singular Value Decomposition of 3 x 3
  * matrices with minimal branching and elementary floating point operations</i>.
  * </p>
  *

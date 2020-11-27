@@ -38,6 +38,17 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    }
 
    /**
+    * Sets all this matrix to identity and sets the current reference frame to {@code referenceFrame}.
+    *
+    * @param referenceFrame the new reference frame to be associated with this matrix.
+    */
+   default void setIdentity(ReferenceFrame referenceFrame)
+   {
+      setReferenceFrame(referenceFrame);
+      setIdentity();
+   }
+
+   /**
     * Sets all the coefficients of this matrix to {@link Double#NaN} and sets the current reference
     * frame to {@code referenceFrame}.
     *

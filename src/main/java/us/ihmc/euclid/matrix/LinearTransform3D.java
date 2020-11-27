@@ -39,6 +39,9 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * <li><tt>W</tt> is the 3D scale.
  * <li><tt>U</tt> is the 3D post-scale rotation.
  * </ul>
+ * The SVD decomposition allows for instance to easily obtain a view of this matrix as a pure
+ * rotation transform, i.e. ignoring the scale matrix {@code W}, and use this view to perform
+ * operations with other rotations.
  * </p>
  *
  * @see SingularValueDecomposition3D
@@ -224,6 +227,14 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    public LinearTransform3D(Orientation3DReadOnly orientation)
    {
       set(orientation);
+   }
+
+   private void markDirty()
+   {
+      svdDirty = true;
+      identityDirty = true;
+      rotationDirty = true;
+      quaternionViewDirty = true;
    }
 
    private void updateSVD()
@@ -448,10 +459,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
       this.m21 = m21;
       this.m22 = m22;
 
-      svdDirty = true;
-      identityDirty = true;
-      rotationDirty = true;
-      quaternionViewDirty = true;
+      markDirty();
    }
 
    /** {@inheritDoc} */
@@ -523,7 +531,6 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
       LinearTransform3DBasics.super.setRotationVector(rotationVector);
       isRotation = true;
       rotationDirty = false;
-      quaternionViewDirty = true;
    }
 
    /** {@inheritDoc} */
@@ -533,7 +540,6 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
       LinearTransform3DBasics.super.setEuler(eulerAngles);
       isRotation = true;
       rotationDirty = false;
-      quaternionViewDirty = true;
    }
 
    /** {@inheritDoc} */
@@ -542,10 +548,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m00 != m00)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m00 = m00;
       }
    }
@@ -556,10 +559,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m01 != m01)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m01 = m01;
       }
    }
@@ -570,10 +570,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m02 != m02)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m02 = m02;
       }
    }
@@ -584,10 +581,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m10 != m10)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m10 = m10;
       }
    }
@@ -598,10 +592,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m11 != m11)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m11 = m11;
       }
    }
@@ -612,10 +603,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m12 != m12)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m12 = m12;
       }
    }
@@ -626,10 +614,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m20 != m20)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m20 = m20;
       }
    }
@@ -640,10 +625,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m21 != m21)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m21 = m21;
       }
    }
@@ -654,10 +636,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    {
       if (this.m22 != m22)
       {
-         svdDirty = true;
-         identityDirty = true;
-         rotationDirty = true;
-         quaternionViewDirty = true;
+         markDirty();
          this.m22 = m22;
       }
    }
@@ -673,7 +652,6 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    @Override
    public QuaternionReadOnly getPreScaleQuaternion()
    {
-      updateSVD();
       return U;
    }
 
@@ -688,7 +666,6 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    @Override
    public QuaternionReadOnly getPostScaleQuaternion()
    {
-      updateSVD();
       return Vt;
    }
 

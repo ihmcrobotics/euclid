@@ -76,15 +76,28 @@ public class SymmetricEigenDecomposition3D
       if (!A.isMatrixSymmetric(tolerance))
          return false;
 
-      A_internal.set(A);
-      double max = A_internal.maxAbsElement();
-      A_internal.scale(1.0 / max);
+      double max = A.maxAbsElement();
+      initialize(A, 1.0 / max);
       computeQ(A_internal);
       output.eigenValues.set(A_internal.getM00(), A_internal.getM11(), A_internal.getM22());
       sortEigenValues(output.eigenValues, Qquat);
       toMatrix3D(Qquat, output.eigenVector0, output.eigenVector1, output.eigenVector2);
       output.eigenValues.scale(max);
       return true;
+   }
+
+   private void initialize(Matrix3DReadOnly A, double scale)
+   {
+      double a00 = A.getM00() * scale;
+      double a11 = A.getM11() * scale;
+      double a22 = A.getM22() * scale;
+
+      double offScale = 0.5 * scale;
+      double a01 = offScale * (A.getM01() + A.getM10());
+      double a02 = offScale * (A.getM02() + A.getM20());
+      double a12 = offScale * (A.getM12() + A.getM21());
+
+      A_internal.set(a00, a01, a02, a01, a11, a12, a02, a12, a22);
    }
 
    /**

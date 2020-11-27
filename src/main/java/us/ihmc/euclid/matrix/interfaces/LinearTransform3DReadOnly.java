@@ -26,6 +26,9 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * <li><tt>W</tt> is the 3D scale.
  * <li><tt>U</tt> is the 3D post-scale rotation.
  * </ul>
+ * The SVD decomposition allows for instance to easily obtain a view of this matrix as a pure
+ * rotation transform, i.e. ignoring the scale matrix {@code W}, and use this view to perform
+ * operations with other rotations.
  * </p>
  * 
  * @see SingularValueDecomposition3D

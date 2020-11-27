@@ -483,6 +483,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * </p>
     *
     * @param other the other transform to multiply this with. Not modified.
+    * @throws SingularMatrixException if this transform is not invertible.
     */
    default void multiplyInvertThis(AffineTransformReadOnly other)
    {
@@ -513,6 +514,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * </p>
     *
     * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
+    * @throws SingularMatrixException if this transform is not invertible.
     */
    default void multiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {
@@ -739,6 +741,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * </p>
     *
     * @param other the other transform to multiply this with. Not modified.
+    * @throws SingularMatrixException if this transform is not invertible.
     */
    default void preMultiplyInvertThis(AffineTransformReadOnly other)
    {
@@ -771,6 +774,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * </p>
     *
     * @param rigidBodyTransform the rigid-body transform to multiply this with. Not modified.
+    * @throws SingularMatrixException if this transform is not invertible.
     */
    default void preMultiplyInvertThis(RigidBodyTransformReadOnly rigidBodyTransform)
    {

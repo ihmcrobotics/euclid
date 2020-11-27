@@ -119,7 +119,9 @@ public class RotationMatrixTools
       if (orientation1.isZeroOrientation())
       {
          if (orientation2.isZeroOrientation())
-            matrixToPack.setToZero();
+         {
+            matrixToPack.setIdentity();
+         }
          else if (inverse2)
          {
             matrixToPack.set(orientation2);
@@ -219,7 +221,7 @@ public class RotationMatrixTools
       {
          if (orientation2.isZeroOrientation())
          {
-            matrixToPack.setToZero();
+            matrixToPack.setIdentity();
          }
          else if (inverse2)
          {
@@ -302,7 +304,7 @@ public class RotationMatrixTools
       {
          if (orientation2.isZeroOrientation())
          {
-            matrixToPack.setToZero();
+            matrixToPack.setIdentity();
          }
          else if (inverse2)
          {
@@ -374,7 +376,7 @@ public class RotationMatrixTools
       if (a.isZeroOrientation())
       {
          if (b.isZeroOrientation())
-            matrixToPack.setToZero();
+            matrixToPack.setIdentity();
          else if (transposeB)
             matrixToPack.setAndTranspose(b);
          else
@@ -851,7 +853,7 @@ public class RotationMatrixTools
    {
       if (r0.isZeroOrientation() && rf.isZeroOrientation())
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
          return;
       }
 

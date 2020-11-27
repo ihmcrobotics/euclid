@@ -2,7 +2,6 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -105,7 +104,7 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    }
 
    /**
-    * Invert this matrix.
+    * Inverts this matrix.
     * <p>
     * this = this<sup>-1</sup>
     * </p>
@@ -158,7 +157,7 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     * </p>
     *
     * @param other the matrix to copy the values from. Not modified.
-    * @throws NotARotationMatrixException if {@code other} is not a rotation matrix.
+    * @throws SingularMatrixException if the matrix is not invertible.
     */
    default void setAndInvert(Matrix3DReadOnly other)
    {

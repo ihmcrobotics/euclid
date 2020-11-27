@@ -1,5 +1,6 @@
 package us.ihmc.euclid.matrix.interfaces;
 
+import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
@@ -28,6 +29,9 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
  * <li><tt>W</tt> is the 3D scale.
  * <li><tt>U</tt> is the 3D post-scale rotation.
  * </ul>
+ * The SVD decomposition allows for instance to easily obtain a view of this matrix as a pure
+ * rotation transform, i.e. ignoring the scale matrix {@code W}, and use this view to perform
+ * operations with other rotations.
  * </p>
  * 
  * @see SingularValueDecomposition3D
@@ -113,6 +117,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * </p>
     * 
     * @param orientation the orientation to append to this linear transform. Not modified.
+    * @throws SingularMatrixException if this linear transform is not invertible.
     */
    default void appendRotationInvertThis(Orientation3DReadOnly orientation)
    {
@@ -131,6 +136,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * 
     * @param orientation the orientation which the inverse is to be appended to this linear transform.
     *                    Not modified.
+    * @throws SingularMatrixException if this linear transform is not invertible.
     */
    default void appendRotationInvertBoth(Orientation3DReadOnly orientation)
    {
@@ -278,6 +284,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * </p>
     * 
     * @param orientation the orientation to prepend to this linear transform. Not modified.
+    * @throws SingularMatrixException if this linear transform is not invertible.
     */
    default void prependRotationInvertThis(Orientation3DReadOnly orientation)
    {
@@ -296,6 +303,7 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * 
     * @param orientation the orientation which the inverse is to be prepended to this linear transform.
     *                    Not modified.
+    * @throws SingularMatrixException if this linear transform is not invertible.
     */
    default void prependRotationInvertBoth(Orientation3DReadOnly orientation)
    {
