@@ -18,6 +18,12 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  * The algorithm is based on the paper: <i>Computing the Singular Value Decomposition of 3 x 3
  * matrices with minimal branching and elementary floating point operations</i>.
  * </p>
+ * <p>
+ * The main particularity of the algorithm used in this calculator is the guarantee for <tt>U</tt>
+ * and <tt>V</tt> to represent pure rotations and they are computed directly as quaternions. To
+ * permit that, the sign of the third singular value, i.e. W<sub>3,3</sub>, matches the sign the
+ * determinant of <tt>A</tt>.
+ * </p>
  *
  * @author Sylvain Bertrand
  */
@@ -32,7 +38,8 @@ public class SingularValueDecomposition3D
    private final SVD3DOutput output = new SVD3DOutput();
 
    private int maxIterations = 25;
-   private double tolerance = 1.0e-12;
+   private double tolerance = 1.0e-13;
+   private boolean sortDescendingOrder = true;
 
    private int iterations = -1;
 
@@ -63,6 +70,25 @@ public class SingularValueDecomposition3D
    public void setTolerance(double tolerance)
    {
       this.tolerance = tolerance;
+   }
+
+   /**
+    * Specifies whether the singular values should be sorted in descending order, i.e.:
+    * 
+    * <pre>
+    * W.getX() &geq; W.getY() &geq; |W.getZ()|
+    * </pre>
+    * 
+    * Note that regardless of the state of this flag, the two first singular values are always positive
+    * and the sign of the third singular value is the same as the determinant of the matrix being
+    * decomposed.
+    * 
+    * @param sortDescendingOrder {@code true} for sorting the singular values in descending,
+    *                            {@code false} for skipping sorting. Default value {@code true}.
+    */
+   public void setSortDescendingOrder(boolean sortDescendingOrder)
+   {
+      this.sortDescendingOrder = sortDescendingOrder;
    }
 
    /**
@@ -112,8 +138,8 @@ public class SingularValueDecomposition3D
    {
       Matrix3D S = temp;
       S.set(a00, a01, a02, a10, a11, a12, a20, a21, a22);
-      Matrix3DTools.multiplyTransposeLeft(S, S, S);
-      computeV(S, output.V, maxIterations, tolerance);
+      S.multiplyInner();
+      iterations = computeV(S, output.V, maxIterations, tolerance);
       return iterations < maxIterations;
    }
 
@@ -262,7 +288,8 @@ public class SingularValueDecomposition3D
       // B = A V
       computeB(a00, a01, a02, a10, a11, a12, a20, a21, a22, output.V, B);
       // Sorting the columns of B as described in Algorithm 3
-      sortBColumns(B, output.V);
+      if (sortDescendingOrder)
+         sortBColumns(B, output.V);
       output.U.setToZero();
 
       boolean isUquatInitialized = false;
@@ -711,16 +738,6 @@ public class SingularValueDecomposition3D
    }
 
    /**
-    * Returns the number of iterations taken in the last decomposition.
-    *
-    * @return the number of iterations taken in the last decomposition.
-    */
-   public int getIterations()
-   {
-      return iterations;
-   }
-
-   /**
     * Returns the output of this algorithm packaged as {@link SVD3DOutput}. It is updated every time a
     * decomposition is performed.
     *
@@ -799,6 +816,26 @@ public class SingularValueDecomposition3D
    public int getMaxIterations()
    {
       return maxIterations;
+   }
+
+   /**
+    * Returns the number of iterations taken in the last decomposition.
+    *
+    * @return the number of iterations taken in the last decomposition.
+    */
+   public int getIterations()
+   {
+      return iterations;
+   }
+
+   /**
+    * Returns whether this calculator is sorting the singular values in descending order.
+    * 
+    * @return whether this calculator is sorting the singular values in descending order.
+    */
+   public boolean getSortDescendingOrder()
+   {
+      return sortDescendingOrder;
    }
 
    /**

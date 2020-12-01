@@ -23,6 +23,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
+import us.ihmc.euclid.tools.SingularValueDecomposition3D.SVD3DOutput;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
@@ -34,10 +35,10 @@ public class SingularValueDecomposition3DTest
    private static final double EPSILON = 1.0e-11;
 
    @Test
-   public void test()
+   public void testDefaultConfiguration()
    {
       Random random = new Random(36456);
-      SingularValueDecomposition3D svd3d = new SingularValueDecomposition3D();
+      SingularValueDecomposition3D svd = new SingularValueDecomposition3D();
 
       long ejmlTotalTime = 0;
       long euclidTotalTime = 0;
@@ -51,8 +52,8 @@ public class SingularValueDecomposition3DTest
 
       for (int i = 0; i < 5 * ITERATIONS; i++)
       { // warmup
-         new SingularValueDecomposition3D().decompose(EuclidCoreRandomTools.nextMatrix3D(random));
-         ejmlSVDDecomposition(EuclidCoreRandomTools.nextMatrix3D(random), new Matrix3D(), new Matrix3D(), new Matrix3D());
+         svd.decompose(EuclidCoreRandomTools.nextMatrix3D(random));
+         ejmlSVDDecomposition(EuclidCoreRandomTools.nextMatrix3D(random), new Matrix3D(), new Matrix3D(), new Matrix3D(), true);
       }
 
       for (Supplier<Pair<Matrix3D, String>> generator : generators)
@@ -61,27 +62,19 @@ public class SingularValueDecomposition3DTest
          {
             Matrix3D A = generator.get().getKey();
             long start = System.nanoTime();
-            svd3d.decompose(A);
+            svd.decompose(A);
             long end = System.nanoTime();
             euclidTotalTime += end - start;
             double varEpsilon = Math.max(1.0, Math.abs(A.determinant())) * EPSILON;
 
-            Matrix3DReadOnly Ueuclid = new RotationMatrix(svd3d.getU());
-            Matrix3DReadOnly Weuclid = svd3d.getW(null);
-            Matrix3DReadOnly Veuclid = new RotationMatrix(svd3d.getV());
-
-            assertTrue(Ueuclid.isRotationMatrix(EPSILON));
-            assertTrue(Veuclid.isRotationMatrix(EPSILON));
-
-            Matrix3D A_output = new Matrix3D();
-            A_output.set(Ueuclid);
-            A_output.multiply(Weuclid);
-            A_output.multiplyTransposeOther(Veuclid);
+            Matrix3DReadOnly Ueuclid = new RotationMatrix(svd.getU());
+            Matrix3DReadOnly Weuclid = svd.getW(null);
+            Matrix3DReadOnly Veuclid = new RotationMatrix(svd.getV());
 
             Matrix3D Wejml = new Matrix3D();
             Matrix3D Uejml = new Matrix3D();
             Matrix3D Vejml = new Matrix3D();
-            ejmlTotalTime += ejmlSVDDecomposition(A, Uejml, Wejml, Vejml);
+            ejmlTotalTime += ejmlSVDDecomposition(A, Uejml, Wejml, Vejml, true);
 
             double[] singularValuesEJML = {Wejml.getM00(), Wejml.getM11(), Wejml.getM22()};
             double[] singularValuesEuclid = {Weuclid.getM00(), Weuclid.getM11(), Math.abs(Weuclid.getM22())};
@@ -106,7 +99,7 @@ public class SingularValueDecomposition3DTest
             String messagePrefix = "Iteration: " + i + ", generator: " + generator.get().getValue();
             try
             {
-               EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, A, A_output, varEpsilon);
+               performGeneralAssertions(messagePrefix, A, svd.getOutput(), true, EPSILON);
                assertArrayEquals(singularValuesEJML, singularValuesEuclid, varEpsilon, messagePrefix);
                if (!EuclidCoreTools.epsilonEquals(singularValuesEJML[0], singularValuesEJML[1], EPSILON)
                      && !EuclidCoreTools.epsilonEquals(singularValuesEJML[0], singularValuesEJML[2], EPSILON))
@@ -140,6 +133,86 @@ public class SingularValueDecomposition3DTest
                                        Double.toString(euclidAverageMilllis)));
    }
 
+   public static void performGeneralAssertions(String messagePrefix, Matrix3DReadOnly A, SVD3DOutput outputToTest, boolean sorted, double epsilon)
+   {
+
+      Matrix3D A_output = new Matrix3D();
+      outputToTest.getW(A_output);
+      Matrix3DTools.multiply(outputToTest.getU(), false, A_output, false, false, A_output);
+      Matrix3DTools.multiply(A_output, false, false, outputToTest.getV(), true, A_output);
+      EuclidCoreTestTools.assertMatrix3DEquals(messagePrefix, A, A_output, Math.max(1.0, A.maxAbsElement()) * epsilon);
+
+      Vector3D W = outputToTest.getW();
+      assertTrue(W.getX() >= 0.0);
+      assertTrue(W.getY() >= 0.0);
+
+      assertTrue(A.determinant() * W.getZ() >= 0.0);
+
+      if (sorted)
+      {
+         assertTrue(EuclidCoreTools.epsilonEquals(W.getX(), W.getY(), epsilon) || W.getX() > W.getY());
+         assertTrue(EuclidCoreTools.epsilonEquals(W.getY(), Math.abs(W.getZ()), epsilon) || W.getY() > Math.abs(W.getZ()));
+      }
+   }
+
+   @Test
+   public void testUnsorted()
+   {
+      Random random = new Random(36456);
+      SingularValueDecomposition3D svd = new SingularValueDecomposition3D();
+      svd.setSortDescendingOrder(false);
+
+      long euclidTotalTime = 0;
+
+      List<Supplier<Pair<Matrix3D, String>>> generators = new ArrayList<>();
+      generators.add(() -> new Pair<>(new Matrix3D(RandomMatrices_DDRM.symmetric(3, -100.0, 100.0, random)), "Symmetric matrix"));
+      generators.add(() -> new Pair<>(new Matrix3D(EuclidCoreRandomTools.nextRotationMatrix(random, Math.PI)), "Rotation matrix"));
+      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 100.0), "Diagonal matrix"));
+      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextMatrix3D(random, 10.0), "General matrix"));
+      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextMatrix3D(random, 10000.0), "Large values matrix"));
+
+      for (int i = 0; i < 5 * ITERATIONS; i++)
+      { // warmup
+         svd.decompose(EuclidCoreRandomTools.nextMatrix3D(random));
+      }
+
+      for (Supplier<Pair<Matrix3D, String>> generator : generators)
+      {
+         for (int i = 0; i < ITERATIONS; i++)
+         {
+            Matrix3D A = generator.get().getKey();
+            long start = System.nanoTime();
+            svd.decompose(A);
+            long end = System.nanoTime();
+            euclidTotalTime += end - start;
+
+            Matrix3DReadOnly Ueuclid = new RotationMatrix(svd.getU());
+            Matrix3DReadOnly Weuclid = svd.getW(null);
+            Matrix3DReadOnly Veuclid = new RotationMatrix(svd.getV());
+
+            String messagePrefix = "Iteration: " + i + ", generator: " + generator.get().getValue();
+            try
+            {
+               performGeneralAssertions(messagePrefix, A, svd.getOutput(), false, EPSILON);
+            }
+            catch (Throwable e)
+            {
+               System.out.println(messagePrefix);
+               System.out.println("epsilon: " + Math.max(1.0, A.maxAbsElement()) * EPSILON);
+               System.out.println("A:\n" + A);
+               System.out.println("U Euclid:\n" + Ueuclid);
+               System.out.println("W Euclid:\n" + Weuclid);
+               System.out.println("V Euclid:\n" + Veuclid);
+
+               throw e;
+            }
+         }
+      }
+
+      double euclidAverageMilllis = euclidTotalTime / 1.0e6 / ITERATIONS / generators.size();
+      System.out.println(String.format("Average time in millisec:\n\t-Euclid:%s", Double.toString(euclidAverageMilllis)));
+   }
+
    static double columnDot(int col, Matrix3DReadOnly a, Matrix3DReadOnly b)
    {
       double dot = 0.0;
@@ -158,22 +231,27 @@ public class SingularValueDecomposition3DTest
       }
    }
 
-   private static long ejmlSVDDecomposition(Matrix3DReadOnly A, Matrix3DBasics U, Matrix3DBasics W, Matrix3DBasics V)
+   private static long ejmlSVDDecomposition(Matrix3DReadOnly A, Matrix3DBasics U, Matrix3DBasics W, Matrix3DBasics V, boolean sort)
    {
       DMatrixRMaj A_ejml = new DMatrixRMaj(3, 3);
       A.get(A_ejml);
+      DMatrixRMaj U_ejml = new DMatrixRMaj(3, 3);
+      DMatrixRMaj W_ejml = new DMatrixRMaj(3, 3);
+      DMatrixRMaj V_ejml = new DMatrixRMaj(3, 3);
       SvdImplicitQrDecompose_DDRM svdEJML = new SvdImplicitQrDecompose_DDRM(false, true, true, false);
       long start = System.nanoTime();
       svdEJML.decompose(A_ejml);
-      long end = System.nanoTime();
-      DMatrixRMaj U_ejml = svdEJML.getU(null, false);
-      DMatrixRMaj W_ejml = svdEJML.getW(null);
-      DMatrixRMaj V_ejml = svdEJML.getV(null, false);
-      SingularOps_DDRM.descendingOrder(U_ejml, false, W_ejml, V_ejml, false);
+      svdEJML.getU(U_ejml, false);
+      svdEJML.getW(W_ejml);
+      svdEJML.getV(V_ejml, false);
+      if (sort)
+         SingularOps_DDRM.descendingOrder(U_ejml, false, W_ejml, V_ejml, false);
 
       U.set(U_ejml);
       W.set(W_ejml);
       V.set(V_ejml);
+      long end = System.nanoTime();
+
       return end - start;
    }
 

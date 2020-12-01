@@ -31,6 +31,9 @@ public class SymmetricEigenDecomposition3D
 
    private int maxIterations = 25;
    private double tolerance = 1.0e-13;
+   private boolean sortDescendingOrder = true;
+
+   private int iterations = -1;
 
    /**
     * Creates a new calculator ready to be used.
@@ -62,6 +65,21 @@ public class SymmetricEigenDecomposition3D
    }
 
    /**
+    * Specifies whether the eigenvalues should be sorted in descending order, i.e.:
+    * 
+    * <pre>
+    * |&lambda;<sub>1</sub>| > |&lambda;<sub>2</sub>| > |&lambda;<sub>3</sub>|
+    * </pre>
+    * 
+    * @param sortDescendingOrder {@code true} for sorting the eigenvalues in descending, {@code false}
+    *                            for skipping sorting. Default value {@code true}.
+    */
+   public void setSortDescendingOrder(boolean sortDescendingOrder)
+   {
+      this.sortDescendingOrder = sortDescendingOrder;
+   }
+
+   /**
     * Performs a decomposition of the given symmetric matrix {@code A}.
     * <p>
     * If the given matrix is not symmetric, the decomposition automatically fails and returns
@@ -73,15 +91,17 @@ public class SymmetricEigenDecomposition3D
     */
    public boolean decompose(Matrix3DReadOnly A)
    {
-      if (!A.isMatrixSymmetric(tolerance))
+      double max = A.maxAbsElement();
+
+      if (!A.isMatrixSymmetric(max * tolerance))
          return false;
 
-      double max = A.maxAbsElement();
       initialize(A, 1.0 / max);
       computeQ(A_internal);
       output.eigenValues.set(A_internal.getM00(), A_internal.getM11(), A_internal.getM22());
-      sortEigenValues(output.eigenValues, Qquat);
-      toMatrix3D(Qquat, output.eigenVector0, output.eigenVector1, output.eigenVector2);
+      if (sortDescendingOrder)
+         sortEigenValues(output.eigenValues, Qquat);
+      toEigenVectors(Qquat, output.eigenVector0, output.eigenVector1, output.eigenVector2);
       output.eigenValues.scale(max);
       return true;
    }
@@ -106,10 +126,12 @@ public class SymmetricEigenDecomposition3D
     * decompose the matrix.
     * 
     * @param A the matrix to decompose. Modified.
+    * @return whether the algorithm succeeded or not.
     */
-   private void computeQ(Matrix3DBasics A)
+   private boolean computeQ(Matrix3DBasics A)
    {
-      SingularValueDecomposition3D.computeV(A, Qquat, maxIterations, tolerance);
+      iterations = SingularValueDecomposition3D.computeV(A, Qquat, maxIterations, tolerance);
+      return iterations < maxIterations;
    }
 
    /**
@@ -187,7 +209,7 @@ public class SymmetricEigenDecomposition3D
       // @formatter:on
    }
 
-   private static void toMatrix3D(QuaternionReadOnly q, Vector3DBasics v0, Vector3DBasics v1, Vector3DBasics v2)
+   private static void toEigenVectors(QuaternionReadOnly q, Vector3DBasics v0, Vector3DBasics v1, Vector3DBasics v2)
    {
       double qx = q.getX();
       double qy = q.getY();
@@ -266,6 +288,46 @@ public class SymmetricEigenDecomposition3D
    public Vector3D getEigenValues()
    {
       return output.getEigenValues();
+   }
+
+   /**
+    * Returns the tolerance used by this calculator.
+    *
+    * @return the tolerance used by this calculator.
+    */
+   public double getTolerance()
+   {
+      return tolerance;
+   }
+
+   /**
+    * Returns the maximum number of iterations allowed for the decomposition.
+    *
+    * @return the maximum number of iterations allowed for the decomposition.
+    */
+   public int getMaxIterations()
+   {
+      return maxIterations;
+   }
+
+   /**
+    * Returns the number of iterations taken in the last decomposition.
+    *
+    * @return the number of iterations taken in the last decomposition.
+    */
+   public int getIterations()
+   {
+      return iterations;
+   }
+
+   /**
+    * Returns whether this calculator is sorting the eigenvalues in descending order.
+    * 
+    * @return whether this calculator is sorting the eigenvalues in descending order.
+    */
+   public boolean getSortDescendingOrder()
+   {
+      return sortDescendingOrder;
    }
 
    /**
