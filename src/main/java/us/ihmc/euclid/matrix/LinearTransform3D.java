@@ -16,7 +16,6 @@ import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tools.SingularValueDecomposition3D;
 import us.ihmc.euclid.tools.SingularValueDecomposition3D.SVD3DOutput;
-import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
@@ -63,9 +62,9 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    /** Flag used to mark {@link #svdOutput} as out-of-date. */
    private boolean svdDirty = true;
    /** The internal calculator for the SVD decomposition. */
-   private final SingularValueDecomposition3D svd3D = new SingularValueDecomposition3D();
-   /** The output of {@link #svd3D} holding onto the last decomposition result. */
-   private final SVD3DOutput svdOutput = svd3D.getOutput();
+   private final SingularValueDecomposition3D svd = new SingularValueDecomposition3D();
+   /** The output of {@link #svd} holding onto the last decomposition result. */
+   private final SVD3DOutput svdOutput = svd.getOutput();
    /** Linked quaternion of the pre-scale rotation. */
    private final QuaternionReadOnly U = EuclidCoreFactories.newObservableQuaternionReadOnly(i -> updateSVD(), svdOutput.getU());
    /** Linked vector of the scale. */
@@ -242,16 +241,24 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
       if (svdDirty)
       {
          if (isRotationMatrix())
-         { // Abusing the SVD output to store this matrix as a quaternion
+         {
             svdDirty = false;
-            QuaternionConversion.convertMatrixToQuaternion(m00, m01, m02, m10, m11, m12, m20, m21, m22, svdOutput.getU());
-            svdOutput.getW().set(1.0, 1.0, 1.0);
-            svdOutput.getV().setToZero();
+            if (isIdentity())
+            {
+               svdOutput.setIdentity();
+            }
+            else
+            {
+               // Abusing the SVD output to store this matrix as a quaternion in svdOutput.getU()
+               QuaternionConversion.convertMatrixToQuaternion(m00, m01, m02, m10, m11, m12, m20, m21, m22, svdOutput.getU());
+               svdOutput.getW().set(1.0, 1.0, 1.0);
+               svdOutput.getV().setToZero();
+            }
          }
          else
          {
             svdDirty = false;
-            svd3D.decompose(this);
+            svd.decompose(this);
          }
       }
    }
@@ -356,6 +363,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
       if (rotationDirty)
       {
          rotationDirty = false;
+
          if (!svdDirty)
          {
             isRotation = EuclidCoreTools.epsilonEquals(1.0, getScaleX(), Matrix3DFeatures.EPS_CHECK_ROTATION)
@@ -368,6 +376,26 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
          }
       }
       return isRotation;
+   }
+
+   /**
+    * Performs a lazy test for whether this transform represents a rotation or not.
+    * <p>
+    * This test avoids is thorough evaluation, in which case it returns {@code false}.
+    * </p>
+    * 
+    * @return {@code true} if this transform represents a pure rotation, {@code false} if this
+    *         transform is not a pure rotation or if it is too expensive to conduct the test.
+    */
+   public boolean isRotationMatrixLazy()
+   {
+      if (!rotationDirty && isRotation)
+         return true;
+
+      if (!svdDirty)// The SVD is up-to-date, testing this matrix is pretty cheap.
+         return isRotationMatrix();
+
+      return false;
    }
 
    /** {@inheritDoc} */
@@ -414,9 +442,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
       if (isIdentity())
          return;
 
-      boolean invertSVDOutput = !svdDirty;
-
-      if (isRotationMatrix())
+      if (isRotationMatrixLazy())
       {
          double temp;
 
@@ -431,18 +457,22 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
          temp = m12;
          m12 = m21;
          m21 = temp;
+
+         if (!svdDirty)
+            svdOutput.getU().conjugate();
       }
       else
       {
          LinearTransform3DBasics.super.invert();
-      }
-      quaternionViewDirty = true;
 
-      if (invertSVDOutput)
-      {
-         svdOutput.invert();
-         svdDirty = false;
+         if (!svdDirty)
+         {
+            svdOutput.invert();
+            svdDirty = false;
+         }
       }
+
+      quaternionViewDirty = true;
    }
 
    /** {@inheritDoc} */
@@ -535,11 +565,347 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
 
    /** {@inheritDoc} */
    @Override
-   public void setEuler(Tuple3DReadOnly eulerAngles)
+   public void setEuler(double rotX, double rotY, double rotZ)
    {
-      LinearTransform3DBasics.super.setEuler(eulerAngles);
+      LinearTransform3DBasics.super.setEuler(rotX, rotY, rotZ);
       isRotation = true;
       rotationDirty = false;
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void setScale(double x, double y, double z)
+   {
+      if (EuclidCoreTools.areAllZero(x, y, z, Matrix3DFeatures.EPS_CHECK_IDENTITY))
+      {
+         setToZero();
+         return;
+      }
+
+      resetScale();
+
+      if (!EuclidCoreTools.epsilonEquals(1.0, x, Matrix3DFeatures.EPS_CHECK_IDENTITY)
+            || !EuclidCoreTools.epsilonEquals(1.0, y, Matrix3DFeatures.EPS_CHECK_IDENTITY)
+            || !EuclidCoreTools.epsilonEquals(1.0, z, Matrix3DFeatures.EPS_CHECK_IDENTITY))
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getW().set(x, y, z);
+            scaleColumns(x, y, z);
+            isRotation = false;
+            rotationDirty = false;
+            svdDirty = false;
+            isIdentity = false;
+            identityDirty = false;
+         }
+         else if (isRotationMatrixLazy())
+         {
+            svdOutput.getU().setRotationMatrix(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+            svdOutput.getW().set(x, y, z);
+            svdOutput.getV().setToZero();
+            scaleColumns(x, y, z);
+            isRotation = false;
+            rotationDirty = false;
+            svdDirty = false;
+            isIdentity = false;
+            identityDirty = false;
+         }
+         else
+         {
+            scaleColumns(x, y, z);
+         }
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void appendRotation(Orientation3DReadOnly orientation)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().append(orientation);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.appendRotation(orientation);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.appendRotation(orientation);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void appendRotationInvertOther(Orientation3DReadOnly orientation)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().appendInvertOther(orientation);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.appendRotationInvertOther(orientation);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.appendRotationInvertOther(orientation);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void appendYawRotation(double yaw)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().appendYawRotation(yaw);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.appendYawRotation(yaw);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.appendYawRotation(yaw);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void appendPitchRotation(double pitch)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().appendPitchRotation(pitch);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.appendPitchRotation(pitch);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.appendPitchRotation(pitch);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void appendRollRotation(double roll)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().appendRollRotation(roll);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.appendRollRotation(roll);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.appendRollRotation(roll);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void appendScale(double x, double y, double z)
+   {
+      if (EuclidCoreTools.areAllZero(x, y, z, Matrix3DFeatures.EPS_CHECK_IDENTITY))
+      {
+         setToZero();
+      }
+      else if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getW().scale(x, y, z);
+            LinearTransform3DBasics.super.appendScale(x, y, z);
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.appendScale(x, y, z);
+            isRotation = EuclidCoreTools.epsilonEquals(1.0, x, Matrix3DFeatures.EPS_CHECK_ROTATION)
+                  && EuclidCoreTools.epsilonEquals(1.0, y, Matrix3DFeatures.EPS_CHECK_ROTATION)
+                  && EuclidCoreTools.epsilonEquals(1.0, z, Matrix3DFeatures.EPS_CHECK_ROTATION);
+            rotationDirty = false;
+         }
+      }
+      else
+      {
+         LinearTransform3DBasics.super.appendScale(x, y, z);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void prependRotation(Orientation3DReadOnly orientation)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().prepend(orientation);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.prependRotation(orientation);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.prependRotation(orientation);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void prependRotationInvertOther(Orientation3DReadOnly orientation)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().prependInvertOther(orientation);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.prependRotationInvertOther(orientation);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.prependRotationInvertOther(orientation);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void prependYawRotation(double yaw)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().prependYawRotation(yaw);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.prependYawRotation(yaw);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.prependYawRotation(yaw);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void prependPitchRotation(double pitch)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().prependPitchRotation(pitch);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.prependPitchRotation(pitch);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.prependPitchRotation(pitch);
+      }
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   public void prependRollRotation(double roll)
+   {
+      if (isRotationMatrixLazy())
+      {
+         if (!svdDirty)
+         {
+            svdOutput.getU().prependRollRotation(roll);
+            set(svdOutput.getU());
+            svdDirty = false;
+         }
+         else
+         {
+            LinearTransform3DBasics.super.prependRollRotation(roll);
+         }
+
+         isRotation = true;
+         rotationDirty = false;
+      }
+      else
+      {
+         LinearTransform3DBasics.super.prependRollRotation(roll);
+      }
    }
 
    /** {@inheritDoc} */

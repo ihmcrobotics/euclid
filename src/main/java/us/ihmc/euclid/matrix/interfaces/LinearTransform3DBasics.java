@@ -74,7 +74,55 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     */
    default void setEuler(Tuple3DReadOnly eulerAngles)
    {
-      RotationMatrixConversion.convertYawPitchRollToMatrix(eulerAngles.getZ(), eulerAngles.getY(), eulerAngles.getX(), this);
+      setEuler(eulerAngles.getX(), eulerAngles.getY(), eulerAngles.getZ());
+   }
+
+   /**
+    * Sets this linear transform to be a pure rotation transform representing the same rotation as the
+    * given Euler angles once converted.
+    * <p>
+    * This is equivalent to {@link #set(Orientation3DReadOnly)} with a {@code yaw = rotZ},
+    * {@code pitch = rotY}, and {@code roll = rotX}.
+    * </p>
+    *
+    * @param eulerAngles the Euler angles to set this linear transform. Not modified.
+    */
+   default void setEuler(double rotX, double rotY, double rotZ)
+   {
+      RotationMatrixConversion.convertYawPitchRollToMatrix(rotZ, rotY, rotX, this);
+   }
+
+   /**
+    * Resets any scale currently held by this transform and appends a new scale.
+    *
+    * @param scale the scale factor along the three axes.
+    */
+   default void setScale(double scale)
+   {
+      setScale(scale, scale, scale);
+   }
+
+   /**
+    * Resets any scale currently held by this transform and appends a new scale.
+    * 
+    * @param scale the tuple holding the scale factors along each axis. Not modified.
+    */
+   default void setScale(Tuple3DReadOnly scale)
+   {
+      setScale(scale.getX(), scale.getY(), scale.getZ());
+   }
+
+   /**
+    * Resets any scale currently held by this transform and appends a new scale.
+    * 
+    * @param x the scale factor along the x-axis.
+    * @param y the scale factor along the y-axis.
+    * @param z the scale factor along the z-axis.
+    */
+   default void setScale(double x, double y, double z)
+   {
+      resetScale();
+      appendScale(x, y, z);
    }
 
    /**
