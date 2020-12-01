@@ -381,6 +381,74 @@ public class Matrix3DTools
    }
 
    /**
+    * Computes the outer product of {@code matrix} and stores the result in {@code matrixToPack}:
+    * 
+    * <pre>
+    * matrixToPack = matrix * matrix<sup>T</sup>
+    * </pre>
+    * <p>
+    * Both matrices can be the same object.
+    * </p>
+    * 
+    * @param matrix       the input used to compute the outer product of. Not modified.
+    * @param matrixToPack the output used to store the result. Modified.
+    */
+   public static void multiplyOuter(Matrix3DReadOnly matrix, CommonMatrix3DBasics matrixToPack)
+   {
+      double m00 = matrix.getM00();
+      double m01 = matrix.getM01();
+      double m02 = matrix.getM02();
+      double m10 = matrix.getM10();
+      double m11 = matrix.getM11();
+      double m12 = matrix.getM12();
+      double m20 = matrix.getM20();
+      double m21 = matrix.getM21();
+      double m22 = matrix.getM22();
+
+      double c00 = m00 * m00 + m01 * m01 + m02 * m02;
+      double c01 = m00 * m10 + m01 * m11 + m02 * m12;
+      double c02 = m00 * m20 + m01 * m21 + m02 * m22;
+      double c11 = m10 * m10 + m11 * m11 + m12 * m12;
+      double c12 = m10 * m20 + m11 * m21 + m12 * m22;
+      double c22 = m20 * m20 + m21 * m21 + m22 * m22;
+      matrixToPack.set(c00, c01, c02, c01, c11, c12, c02, c12, c22);
+   }
+
+   /**
+    * Computes the inner product of {@code matrix} and stores the result in {@code matrixToPack}:
+    * 
+    * <pre>
+    * matrixToPack = matrix<sup>T</sup> * matrix
+    * </pre>
+    * <p>
+    * Both matrices can be the same object.
+    * </p>
+    * 
+    * @param matrix       the input used to compute the inner product of. Not modified.
+    * @param matrixToPack the output used to store the result. Modified.
+    */
+   public static void multiplyInner(Matrix3DReadOnly matrix, CommonMatrix3DBasics matrixToPack)
+   {
+      double m00 = matrix.getM00();
+      double m01 = matrix.getM01();
+      double m02 = matrix.getM02();
+      double m10 = matrix.getM10();
+      double m11 = matrix.getM11();
+      double m12 = matrix.getM12();
+      double m20 = matrix.getM20();
+      double m21 = matrix.getM21();
+      double m22 = matrix.getM22();
+
+      double c00 = m00 * m00 + m10 * m10 + m20 * m20;
+      double c01 = m00 * m01 + m10 * m11 + m20 * m21;
+      double c02 = m00 * m02 + m10 * m12 + m20 * m22;
+      double c11 = m01 * m01 + m11 * m11 + m21 * m21;
+      double c12 = m01 * m02 + m11 * m12 + m21 * m22;
+      double c22 = m02 * m02 + m12 * m12 + m22 * m22;
+      matrixToPack.set(c00, c01, c02, c01, c11, c12, c02, c12, c22);
+   }
+
+   /**
     * General method to append an orientation to a matrix, while offering to transpose and/or invert
     * the matrix and/or invert the orientation beforehand and stores the result in
     * {@code matrixToPack}.

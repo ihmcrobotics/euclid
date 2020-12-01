@@ -173,7 +173,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void multiplyOuter()
    {
-      Matrix3DTools.multiplyTransposeRight(this, this, this);
+      Matrix3DTools.multiplyOuter(this, this);
    }
 
    /**
@@ -184,7 +184,7 @@ public interface Matrix3DBasics extends CommonMatrix3DBasics, Transformable
     */
    default void multiplyInner()
    {
-      Matrix3DTools.multiplyTransposeLeft(this, this, this);
+      Matrix3DTools.multiplyInner(this, this);
    }
 
    /**

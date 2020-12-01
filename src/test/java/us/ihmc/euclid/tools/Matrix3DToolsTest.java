@@ -281,12 +281,12 @@ public class Matrix3DToolsTest
       { // Test multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation, boolean invertOrientation, CommonMatrix3DBasics matrixToPack)
          Matrix3D matrix = EuclidCoreRandomTools.nextMatrix3D(random);
          Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
-         
+
          if (random.nextBoolean())
             matrix.setIdentity();
          if (random.nextBoolean())
             orientation.setToZero();
-         
+
          boolean transposeMatrix = random.nextBoolean();
          boolean invertMatrix = random.nextBoolean();
          boolean invertOrientation = random.nextBoolean();
@@ -615,6 +615,40 @@ public class Matrix3DToolsTest
          Matrix3DTools.multiply(m1, m2Inverse, matrixExpected);
          Matrix3DTools.multiplyInvertRight(m1, m2, matrixActual);
          EuclidCoreTestTools.assertMatrix3DEquals(matrixExpected, matrixActual, EPS);
+      }
+   }
+
+   @Test
+   public void testMultiplyInner()
+   {
+      Random random = new Random(3245);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
+         Matrix3D expected = new Matrix3D();
+         Matrix3DTools.multiplyTransposeLeft(original, original, expected);
+         Matrix3D actual = new Matrix3D();
+         Matrix3DTools.multiplyInner(original, actual);
+
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
+      }
+   }
+   
+   @Test
+   public void testMultiplyOuter()
+   {
+      Random random = new Random(3245);
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
+         Matrix3D expected = new Matrix3D();
+         Matrix3DTools.multiplyTransposeRight(original, original, expected);
+         Matrix3D actual = new Matrix3D();
+         Matrix3DTools.multiplyOuter(original, actual);
+         
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
 
