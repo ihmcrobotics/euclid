@@ -9,7 +9,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
 /**
@@ -89,7 +89,7 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
     * @param position    tuple used to initialize the position part of this pose. Not modified.
     * @param orientation used to initialize the orientation part of this pose. Not modified.
     */
-   public Pose3D(Point3DReadOnly position, Orientation3DReadOnly orientation)
+   public Pose3D(Tuple3DReadOnly position, Orientation3DReadOnly orientation)
    {
       this.orientation.set(orientation);
       this.position.set(position);

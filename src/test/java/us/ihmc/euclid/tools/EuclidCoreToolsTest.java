@@ -11,8 +11,28 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
+import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
+
 public class EuclidCoreToolsTest
 {
+   @Test
+   public void testConstants()
+   {
+      assertEquals(new Point2D(), EuclidCoreTools.origin2D);
+      assertEquals(new Point3D(), EuclidCoreTools.origin3D);
+      assertEquals(new Vector2D(), EuclidCoreTools.zeroVector2D);
+      assertEquals(new Vector3D(), EuclidCoreTools.zeroVector3D);
+      Matrix3D expected = new Matrix3D();
+      expected.setToZero();
+      assertEquals(expected, EuclidCoreTools.zeroMatrix3D);
+      expected.setIdentity();
+      assertEquals(expected, EuclidCoreTools.identityMatrix3D);
+   }
+
    @Test
    public void testFastSquareRoot() throws Exception
    {

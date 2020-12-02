@@ -90,7 +90,7 @@ public class EuclidFrameIOTools
       if (tuple == null)
          return "null";
       else
-         return getTuple2DString(tuple) + " - " + tuple.getReferenceFrame();
+         return getTuple2DString(format, tuple) + " - " + tuple.getReferenceFrame();
    }
 
    /**
@@ -127,7 +127,7 @@ public class EuclidFrameIOTools
       if (tuple == null)
          return "null";
       else
-         return getTuple3DString(tuple) + " - " + tuple.getReferenceFrame();
+         return getTuple3DString(format, tuple) + " - " + tuple.getReferenceFrame();
    }
 
    /**
@@ -164,7 +164,7 @@ public class EuclidFrameIOTools
       if (tuple == null)
          return "null";
       else
-         return getTuple4DString(tuple) + " - " + tuple.getReferenceFrame();
+         return getTuple4DString(format, tuple) + " - " + tuple.getReferenceFrame();
    }
 
    /**

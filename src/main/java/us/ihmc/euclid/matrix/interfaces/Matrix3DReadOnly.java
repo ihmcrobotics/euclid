@@ -444,6 +444,37 @@ public interface Matrix3DReadOnly
    }
 
    /**
+    * Tests if this matrix is equal to the zero matrix.
+    * <p>
+    * The assertion is done on a per coefficient basis using
+    * {@link Matrix3DFeatures#EPS_CHECK_IDENTITY} as the tolerance.
+    * </p>
+    *
+    * @param epsilon the tolerance as shown above.
+    * @return {@code true} if the given matrix is considered to be equal to the zero matrix,
+    *         {@code false} otherwise.
+    */
+   default boolean isZero()
+   {
+      return isZero(Matrix3DFeatures.EPS_CHECK_IDENTITY);
+   }
+
+   /**
+    * Tests if this matrix is equal to the zero matrix.
+    * <p>
+    * The assertion is done on a per coefficient basis using {@code epsilon} as the tolerance.
+    * </p>
+    *
+    * @param epsilon the tolerance as shown above.
+    * @return {@code true} if the given matrix is considered to be equal to the zero matrix,
+    *         {@code false} otherwise.
+    */
+   default boolean isZero(double epsilon)
+   {
+      return Matrix3DFeatures.isZero(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
+   }
+
+   /**
     * Tests if this matrix is a rotation matrix.
     * <p>
     * This matrix is a rotation matrix if:
