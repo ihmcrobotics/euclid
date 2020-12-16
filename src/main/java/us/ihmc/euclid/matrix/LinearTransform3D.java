@@ -508,6 +508,12 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
    @Override
    public void set(RotationMatrixReadOnly rotationMatrix)
    {
+      if (!rotationMatrix.isDirty() && rotationMatrix.isIdentity())
+      {
+         setIdentity();
+         return;
+      }
+
       m00 = rotationMatrix.getM00();
       m01 = rotationMatrix.getM01();
       m02 = rotationMatrix.getM02();
@@ -521,7 +527,7 @@ public class LinearTransform3D implements LinearTransform3DBasics, GeometryObjec
       isRotation = true;
       rotationDirty = false;
       identityDirty = rotationMatrix.isDirty();
-      isIdentity = identityDirty ? false : rotationMatrix.isIdentity();
+      isIdentity = false;
       quaternionViewDirty = true;
       svdDirty = true;
    }

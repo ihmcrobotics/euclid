@@ -825,4 +825,19 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          EuclidCoreTestTools.assertTuple3DEquals("Iteration: " + i, expectedScale, actualScale, SMALL_EPSILON);
       }
    }
+
+   @Test
+   public void testBugScaleNotUpdated()
+   {
+      LinearTransform3D linearTransform3D = new LinearTransform3D();
+      RotationMatrix rotation = new RotationMatrix();
+      Vector3D scale = new Vector3D(0.3, 0.3, 0.0);
+
+      linearTransform3D.setIdentity();
+      linearTransform3D.set(rotation);
+      linearTransform3D.appendScale(scale);
+
+      EuclidCoreTestTools.assertQuaternionGeometricallyEquals(new Quaternion(rotation), linearTransform3D.getAsQuaternion(), MID_EPSILON);
+      EuclidCoreTestTools.assertTuple3DEquals(scale, linearTransform3D.getScaleVector(), SMALL_EPSILON);
+   }
 }
