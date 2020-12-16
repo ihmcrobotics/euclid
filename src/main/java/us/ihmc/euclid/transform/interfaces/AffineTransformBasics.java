@@ -54,15 +54,13 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
    }
 
    /**
-    * Resets this affine transform to identity.
-    * <p>
-    * When set to identity, this transform has no effect when transforming a geometry object.
-    * </p>
+    * Resets this affine transform to zero transform.
     */
    @Override
    default void setToZero()
    {
-      setIdentity();
+      getLinearTransform().setToZero();
+      getTranslation().setToZero();
    }
 
    /**

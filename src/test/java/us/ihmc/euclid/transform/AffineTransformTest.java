@@ -115,7 +115,7 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       {
          for (int column = 0; column < 4; column++)
          {
-            if (row == column)
+            if (row == 3 && column == 3)
                assertTrue(transform.getElement(row, column) == 1.0);
             else
                assertTrue(transform.getElement(row, column) == 0.0);
