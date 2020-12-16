@@ -160,13 +160,13 @@ public class SingularValueDecomposition3D
          {
             if (a_01_abs > a_12_abs)
             {
-               if (a_01_abs < tolerance * Math.abs(S.getM00()) * Math.abs(S.getM11()))
+               if (a_01_abs <= tolerance * Math.abs(S.getM00()) * Math.abs(S.getM11()))
                   break;
                approxGivensQuaternion(0, 1, S, V);
             }
             else
             {
-               if (a_12_abs < tolerance * Math.abs(S.getM11()) * Math.abs(S.getM22()))
+               if (a_12_abs <= tolerance * Math.abs(S.getM11()) * Math.abs(S.getM22()))
                   break;
                approxGivensQuaternion(1, 2, S, V);
             }
@@ -175,13 +175,13 @@ public class SingularValueDecomposition3D
          {
             if (a_02_abs > a_12_abs)
             {
-               if (a_02_abs < tolerance * Math.abs(S.getM00()) * Math.abs(S.getM22()))
+               if (a_02_abs <= tolerance * Math.abs(S.getM00()) * Math.abs(S.getM22()))
                   break;
                approxGivensQuaternion(0, 2, S, V);
             }
             else
             {
-               if (a_12_abs < tolerance * Math.abs(S.getM11()) * Math.abs(S.getM22()))
+               if (a_12_abs <= tolerance * Math.abs(S.getM11()) * Math.abs(S.getM22()))
                   break;
                approxGivensQuaternion(1, 2, S, V);
             }
@@ -668,11 +668,11 @@ public class SingularValueDecomposition3D
       double qs = V.getS();
 
       // @formatter:off
-      if (rho0 > rho1)
+      if (rho0 >= rho1)
       {
-         if (rho0 > rho2)
+         if (rho0 >= rho2)
          {
-            if (rho1 > rho2)
+            if (rho1 >= rho2)
             { // 0 > 1 > 2
               // Do nothing
             }
@@ -700,9 +700,9 @@ public class SingularValueDecomposition3D
       }
       else
       {
-         if (rho1 > rho2)
+         if (rho1 >= rho2)
          {
-            if (rho0 > rho2)
+            if (rho0 >= rho2)
             { // 1 > 0 > 2
                B.set(B.getM01(), -B.getM00(), B.getM02(),
                      B.getM11(), -B.getM10(), B.getM12(),

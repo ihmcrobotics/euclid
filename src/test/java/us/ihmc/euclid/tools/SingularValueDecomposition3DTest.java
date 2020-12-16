@@ -420,6 +420,20 @@ public class SingularValueDecomposition3DTest
       }
    }
 
+   @Test
+   public void testBug20201215()
+   {
+      Matrix3D A = new Matrix3D();
+      A.setToDiagonal(0.3, 0.3, 0.0);
+      SingularValueDecomposition3D svd = new SingularValueDecomposition3D();
+      assertTrue(svd.decompose(A));
+      assertEquals(A.getM00(), svd.getW().getX());
+      assertEquals(A.getM11(), svd.getW().getY());
+      assertEquals(A.getM22(), svd.getW().getZ());
+      EuclidCoreTestTools.assertQuaternionEquals(new Quaternion(), svd.getU(), EPSILON);
+      EuclidCoreTestTools.assertQuaternionEquals(new Quaternion(), svd.getV(), EPSILON);
+   }
+
    static void applyJacobiGivensRotation(Axis3D rotationAxis, double ch, double sh, Matrix3DBasics S)
    {
       switch (rotationAxis)
