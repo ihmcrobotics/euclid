@@ -82,3 +82,4 @@
 **/gradlew
 **/gradlew.bat
 **/generatedTestSuites/*TestSuite.java
+**/rebel.xml
