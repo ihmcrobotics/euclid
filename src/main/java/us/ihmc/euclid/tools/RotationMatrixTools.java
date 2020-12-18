@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tools;
 
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
@@ -35,7 +37,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiply(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
+   public static void multiply(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, CommonMatrix3DBasics matrixToPack)
    {
       multiplyImpl(m1, false, m2, false, matrixToPack);
    }
@@ -51,7 +53,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiplyTransposeBoth(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
+   public static void multiplyTransposeBoth(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, CommonMatrix3DBasics matrixToPack)
    {
       multiplyImpl(m1, true, m2, true, matrixToPack);
    }
@@ -67,7 +69,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiplyTransposeLeft(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
+   public static void multiplyTransposeLeft(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, CommonMatrix3DBasics matrixToPack)
    {
       multiplyImpl(m1, true, m2, false, matrixToPack);
    }
@@ -83,7 +85,7 @@ public class RotationMatrixTools
     * @param m2           the second matrix. Not modified.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiplyTransposeRight(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, RotationMatrixBasics matrixToPack)
+   public static void multiplyTransposeRight(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2, CommonMatrix3DBasics matrixToPack)
    {
       multiplyImpl(m1, false, m2, true, matrixToPack);
    }
@@ -106,7 +108,7 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
-                               RotationMatrixBasics matrixToPack)
+                               CommonMatrix3DBasics matrixToPack)
    {
       if (orientation1 instanceof RotationMatrixReadOnly)
       {
@@ -117,20 +119,32 @@ public class RotationMatrixTools
       if (orientation1.isZeroOrientation())
       {
          if (orientation2.isZeroOrientation())
-            matrixToPack.setToZero();
+         {
+            matrixToPack.setIdentity();
+         }
          else if (inverse2)
-            matrixToPack.setAndInvert(orientation2);
-         else
+         {
             matrixToPack.set(orientation2);
+            matrixToPack.transpose();
+         }
+         else
+         {
+            matrixToPack.set(orientation2);
+         }
 
          return;
       }
       else if (orientation2.isZeroOrientation())
       {
          if (inverse1)
-            matrixToPack.setAndInvert(orientation1);
-         else
+         {
             matrixToPack.set(orientation1);
+            matrixToPack.transpose();
+         }
+         else
+         {
+            matrixToPack.set(orientation1);
+         }
 
          return;
       }
@@ -195,7 +209,7 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, RotationMatrixReadOnly orientation2, boolean inverse2,
-                               RotationMatrixBasics matrixToPack)
+                               CommonMatrix3DBasics matrixToPack)
    {
       if (orientation1 instanceof RotationMatrixReadOnly)
       {
@@ -206,20 +220,32 @@ public class RotationMatrixTools
       if (orientation1.isZeroOrientation())
       {
          if (orientation2.isZeroOrientation())
-            matrixToPack.setToZero();
+         {
+            matrixToPack.setIdentity();
+         }
          else if (inverse2)
-            matrixToPack.setAndInvert(orientation2);
-         else
+         {
             matrixToPack.set(orientation2);
+            matrixToPack.transpose();
+         }
+         else
+         {
+            matrixToPack.set(orientation2);
+         }
 
          return;
       }
       else if (orientation2.isZeroOrientation())
       {
          if (inverse1)
-            matrixToPack.setAndInvert(orientation1);
-         else
+         {
             matrixToPack.set(orientation1);
+            matrixToPack.transpose();
+         }
+         else
+         {
+            matrixToPack.set(orientation1);
+         }
 
          return;
       }
@@ -266,7 +292,7 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    public static void multiply(RotationMatrixReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
-                               RotationMatrixBasics matrixToPack)
+                               CommonMatrix3DBasics matrixToPack)
    {
       if (orientation2 instanceof RotationMatrixReadOnly)
       {
@@ -277,20 +303,32 @@ public class RotationMatrixTools
       if (orientation1.isZeroOrientation())
       {
          if (orientation2.isZeroOrientation())
-            matrixToPack.setToZero();
+         {
+            matrixToPack.setIdentity();
+         }
          else if (inverse2)
-            matrixToPack.setAndInvert(orientation2);
-         else
+         {
             matrixToPack.set(orientation2);
+            matrixToPack.transpose();
+         }
+         else
+         {
+            matrixToPack.set(orientation2);
+         }
 
          return;
       }
       else if (orientation2.isZeroOrientation())
       {
          if (inverse1)
-            matrixToPack.setAndInvert(orientation1);
-         else
+         {
             matrixToPack.set(orientation1);
+            matrixToPack.transpose();
+         }
+         else
+         {
+            matrixToPack.set(orientation1);
+         }
 
          return;
       }
@@ -333,14 +371,14 @@ public class RotationMatrixTools
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
    private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB,
-                                    RotationMatrixBasics matrixToPack)
+                                    CommonMatrix3DBasics matrixToPack)
    {
       if (a.isZeroOrientation())
       {
          if (b.isZeroOrientation())
-            matrixToPack.setToZero();
+            matrixToPack.setIdentity();
          else if (transposeB)
-            matrixToPack.setAndInvert(b);
+            matrixToPack.setAndTranspose(b);
          else
             matrixToPack.set(b);
 
@@ -349,7 +387,7 @@ public class RotationMatrixTools
       else if (b.isZeroOrientation())
       {
          if (transposeA)
-            matrixToPack.setAndInvert(a);
+            matrixToPack.setAndTranspose(a);
          else
             matrixToPack.set(a);
 
@@ -381,7 +419,7 @@ public class RotationMatrixTools
 
    private static void multiplyImpl(double a00, double a01, double a02, double a10, double a11, double a12, double a20, double a21, double a22,
                                     boolean transposeA, double b00, double b01, double b02, double b10, double b11, double b12, double b20, double b21,
-                                    double b22, boolean transposeB, RotationMatrixBasics matrixToPack)
+                                    double b22, boolean transposeB, CommonMatrix3DBasics matrixToPack)
    {
       double c00, c01, c02, c10, c11, c12, c20, c21, c22;
 
@@ -460,9 +498,9 @@ public class RotationMatrixTools
     * @param matrixOriginal the matrix on which the yaw rotation is appended. Not modified.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void prependYawRotation(double yaw, RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixToPack)
+   public static void prependYawRotation(double yaw, Matrix3DReadOnly matrixOriginal, CommonMatrix3DBasics matrixToPack)
    {
-      if (matrixOriginal.isZeroOrientation())
+      if (matrixOriginal.isIdentity())
       {
          RotationMatrixConversion.computeYawMatrix(yaw, matrixToPack);
          return;
@@ -501,9 +539,9 @@ public class RotationMatrixTools
     * @param yaw            the angle to rotate about the z-axis.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void appendYawRotation(RotationMatrixReadOnly matrixOriginal, double yaw, RotationMatrixBasics matrixToPack)
+   public static void appendYawRotation(Matrix3DReadOnly matrixOriginal, double yaw, CommonMatrix3DBasics matrixToPack)
    {
-      if (matrixOriginal.isZeroOrientation())
+      if (matrixOriginal.isIdentity())
       {
          RotationMatrixConversion.computeYawMatrix(yaw, matrixToPack);
          return;
@@ -541,9 +579,9 @@ public class RotationMatrixTools
     * @param matrixOriginal the matrix on which the pitch rotation is appended. Not modified.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void prependPitchRotation(double pitch, RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixToPack)
+   public static void prependPitchRotation(double pitch, Matrix3DReadOnly matrixOriginal, CommonMatrix3DBasics matrixToPack)
    {
-      if (matrixOriginal.isZeroOrientation())
+      if (matrixOriginal.isIdentity())
       {
          RotationMatrixConversion.computePitchMatrix(pitch, matrixToPack);
          return;
@@ -581,9 +619,9 @@ public class RotationMatrixTools
     * @param pitch          the angle to rotate about the y-axis.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void appendPitchRotation(RotationMatrixReadOnly matrixOriginal, double pitch, RotationMatrixBasics matrixToPack)
+   public static void appendPitchRotation(Matrix3DReadOnly matrixOriginal, double pitch, CommonMatrix3DBasics matrixToPack)
    {
-      if (matrixOriginal.isZeroOrientation())
+      if (matrixOriginal.isIdentity())
       {
          RotationMatrixConversion.computePitchMatrix(pitch, matrixToPack);
          return;
@@ -621,9 +659,9 @@ public class RotationMatrixTools
     * @param matrixOriginal the matrix on which the roll rotation is appended. Not modified.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void prependRollRotation(double roll, RotationMatrixReadOnly matrixOriginal, RotationMatrixBasics matrixToPack)
+   public static void prependRollRotation(double roll, Matrix3DReadOnly matrixOriginal, CommonMatrix3DBasics matrixToPack)
    {
-      if (matrixOriginal.isZeroOrientation())
+      if (matrixOriginal.isIdentity())
       {
          RotationMatrixConversion.computeRollMatrix(roll, matrixToPack);
          return;
@@ -661,9 +699,9 @@ public class RotationMatrixTools
     * @param roll           the angle to rotate about the x-axis.
     * @param matrixToPack   the matrix in which the result is stored. Modified.
     */
-   public static void appendRollRotation(RotationMatrixReadOnly matrixOriginal, double roll, RotationMatrixBasics matrixToPack)
+   public static void appendRollRotation(Matrix3DReadOnly matrixOriginal, double roll, CommonMatrix3DBasics matrixToPack)
    {
-      if (matrixOriginal.isZeroOrientation())
+      if (matrixOriginal.isIdentity())
       {
          RotationMatrixConversion.computeRollMatrix(roll, matrixToPack);
          return;
@@ -815,7 +853,7 @@ public class RotationMatrixTools
    {
       if (r0.isZeroOrientation() && rf.isZeroOrientation())
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
          return;
       }
 

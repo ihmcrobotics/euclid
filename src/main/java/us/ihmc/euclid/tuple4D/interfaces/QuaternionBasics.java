@@ -433,7 +433,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
    }
 
    /**
-    * Append a rotation about the z-axis to this quaternion.
+    * Appends a rotation about the z-axis to this quaternion.
     *
     * <pre>
     *               / qx =     0      \
@@ -451,7 +451,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
    }
 
    /**
-    * Append a rotation about the y-axis to this quaternion.
+    * Appends a rotation about the y-axis to this quaternion.
     *
     * <pre>
     *               / qx =      0       \
@@ -469,7 +469,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
    }
 
    /**
-    * Append a rotation about the x-axis to this quaternion.
+    * Appends a rotation about the x-axis to this quaternion.
     *
     * <pre>
     *               / qx = sin(roll/2) \
@@ -554,7 +554,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
    }
 
    /**
-    * Prepend a rotation about the z-axis to this quaternion.
+    * Prepends a rotation about the z-axis to this quaternion.
     *
     * <pre>
     *        / qx =     0      \
@@ -572,7 +572,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
    }
 
    /**
-    * Prepend a rotation about the y-axis to this quaternion.
+    * Prepends a rotation about the y-axis to this quaternion.
     *
     * <pre>
     *        / qx =      0       \
@@ -590,7 +590,7 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
    }
 
    /**
-    * Prepend a rotation about the x-axis to this quaternion.
+    * Prepends a rotation about the x-axis to this quaternion.
     *
     * <pre>
     *        / qx = sin(roll/2) \

@@ -820,11 +820,11 @@ public class EuclidShapeRandomTools
    public static ConvexPolytope3D nextIcoSphereBasedConvexPolytope3D(Random random, double centerMinMax, int recursionLevel, double radiusMin, double radiusMax)
    {
       TriangleMesh3D icoSphere = IcoSphereFactory.newIcoSphere(recursionLevel);
-      AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
+      AffineTransform transform = new AffineTransform();
+      transform.setLinearTransform(EuclidCoreRandomTools.nextAxisAngle(random));
       transform.setTranslation(EuclidCoreRandomTools.nextPoint3D(random, centerMinMax));
-      transform.setScale(EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax));
+      transform.appendScale(EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax));
       icoSphere.applyTransform(transform);
-
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(icoSphere.getVertices()));
    }
 

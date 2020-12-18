@@ -1,6 +1,7 @@
 package us.ihmc.euclid.rotationConversion;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
@@ -50,17 +51,20 @@ public class RotationMatrixConversion
     * @param yaw          the angle to rotate about the z-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void computeYawMatrix(double yaw, RotationMatrixBasics matrixToPack)
+   public static void computeYawMatrix(double yaw, CommonMatrix3DBasics matrixToPack)
    {
       if (EuclidCoreTools.isAngleZero(yaw, EPS))
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
       }
       else
       {
          double sinYaw = EuclidCoreTools.sin(yaw);
          double cosYaw = EuclidCoreTools.cos(yaw);
-         matrixToPack.setUnsafe(cosYaw, -sinYaw, 0.0, sinYaw, cosYaw, 0.0, 0.0, 0.0, 1.0);
+         if (matrixToPack instanceof RotationMatrixBasics)
+            ((RotationMatrixBasics) matrixToPack).setUnsafe(cosYaw, -sinYaw, 0.0, sinYaw, cosYaw, 0.0, 0.0, 0.0, 1.0);
+         else
+            matrixToPack.set(cosYaw, -sinYaw, 0.0, sinYaw, cosYaw, 0.0, 0.0, 0.0, 1.0);
       }
    }
 
@@ -77,17 +81,20 @@ public class RotationMatrixConversion
     * @param pitch        the angle to rotate about the y-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void computePitchMatrix(double pitch, RotationMatrixBasics matrixToPack)
+   public static void computePitchMatrix(double pitch, CommonMatrix3DBasics matrixToPack)
    {
       if (EuclidCoreTools.isAngleZero(pitch, EPS))
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
       }
       else
       {
          double sinPitch = EuclidCoreTools.sin(pitch);
          double cosPitch = EuclidCoreTools.cos(pitch);
-         matrixToPack.setUnsafe(cosPitch, 0.0, sinPitch, 0.0, 1.0, 0.0, -sinPitch, 0.0, cosPitch);
+         if (matrixToPack instanceof RotationMatrixBasics)
+            ((RotationMatrixBasics) matrixToPack).setUnsafe(cosPitch, 0.0, sinPitch, 0.0, 1.0, 0.0, -sinPitch, 0.0, cosPitch);
+         else
+            matrixToPack.set(cosPitch, 0.0, sinPitch, 0.0, 1.0, 0.0, -sinPitch, 0.0, cosPitch);
       }
    }
 
@@ -104,17 +111,20 @@ public class RotationMatrixConversion
     * @param roll         the angle to rotate about the x-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void computeRollMatrix(double roll, RotationMatrixBasics matrixToPack)
+   public static void computeRollMatrix(double roll, CommonMatrix3DBasics matrixToPack)
    {
       if (EuclidCoreTools.isAngleZero(roll, EPS))
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
       }
       else
       {
          double sinRoll = EuclidCoreTools.sin(roll);
          double cosRoll = EuclidCoreTools.cos(roll);
-         matrixToPack.setUnsafe(1.0, 0.0, 0.0, 0.0, cosRoll, -sinRoll, 0.0, sinRoll, cosRoll);
+         if (matrixToPack instanceof RotationMatrixBasics)
+            ((RotationMatrixBasics) matrixToPack).setUnsafe(1.0, 0.0, 0.0, 0.0, cosRoll, -sinRoll, 0.0, sinRoll, cosRoll);
+         else
+            matrixToPack.set(1.0, 0.0, 0.0, 0.0, cosRoll, -sinRoll, 0.0, sinRoll, cosRoll);
       }
    }
 
@@ -135,7 +145,7 @@ public class RotationMatrixConversion
     * @param axisAngle    the axis-angle to use for the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertAxisAngleToMatrix(AxisAngleReadOnly axisAngle, RotationMatrixBasics matrixToPack)
+   public static void convertAxisAngleToMatrix(AxisAngleReadOnly axisAngle, CommonMatrix3DBasics matrixToPack)
    {
       convertAxisAngleToMatrix(axisAngle.getX(), axisAngle.getY(), axisAngle.getZ(), axisAngle.getAngle(), matrixToPack);
    }
@@ -160,7 +170,7 @@ public class RotationMatrixConversion
     * @param angle        the angle of the axis-angle to use for the conversion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertAxisAngleToMatrix(double ux, double uy, double uz, double angle, RotationMatrixBasics matrixToPack)
+   public static void convertAxisAngleToMatrix(double ux, double uy, double uz, double angle, CommonMatrix3DBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
       {
@@ -170,7 +180,7 @@ public class RotationMatrixConversion
 
       if (EuclidCoreTools.isAngleZero(angle, EPS))
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
          return;
       }
 
@@ -204,7 +214,10 @@ public class RotationMatrixConversion
          double m20 = t * xz - sinTheta * ay;
          double m21 = t * yz + sinTheta * ax;
          double m22 = t * az * az + cosTheta;
-         matrixToPack.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         if (matrixToPack instanceof RotationMatrixBasics)
+            ((RotationMatrixBasics) matrixToPack).setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         else
+            matrixToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       }
    }
 
@@ -225,7 +238,7 @@ public class RotationMatrixConversion
     * @param quaternion   the quaternion to use for the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertQuaternionToMatrix(QuaternionReadOnly quaternion, RotationMatrixBasics matrixToPack)
+   public static void convertQuaternionToMatrix(QuaternionReadOnly quaternion, CommonMatrix3DBasics matrixToPack)
    {
       double qx = quaternion.getX();
       double qy = quaternion.getY();
@@ -255,7 +268,7 @@ public class RotationMatrixConversion
     * @param qs           the s-component of the quaternion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertQuaternionToMatrix(double qx, double qy, double qz, double qs, RotationMatrixBasics matrixToPack)
+   public static void convertQuaternionToMatrix(double qx, double qy, double qz, double qs, CommonMatrix3DBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(qx, qy, qz, qs))
       {
@@ -265,7 +278,7 @@ public class RotationMatrixConversion
 
       if (QuaternionTools.isNeutralQuaternion(qx, qy, qz, qs, EPS))
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
          return;
       }
 
@@ -302,7 +315,10 @@ public class RotationMatrixConversion
       double m20 = xz2 - sy2;
       double m21 = yz2 + sx2;
       double m22 = 1.0 - xx2 - yy2;
-      matrixToPack.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      if (matrixToPack instanceof RotationMatrixBasics)
+         ((RotationMatrixBasics) matrixToPack).setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      else
+         matrixToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    /**
@@ -337,7 +353,7 @@ public class RotationMatrixConversion
     * @param yawPitchRoll the yaw-pitch-roll angles to use in the conversion. Not modified.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertYawPitchRollToMatrix(YawPitchRollReadOnly yawPitchRoll, RotationMatrixBasics matrixToPack)
+   public static void convertYawPitchRollToMatrix(YawPitchRollReadOnly yawPitchRoll, CommonMatrix3DBasics matrixToPack)
    {
       convertYawPitchRollToMatrix(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), matrixToPack);
    }
@@ -376,7 +392,7 @@ public class RotationMatrixConversion
     * @param roll         the angle to rotate about the x-axis.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertYawPitchRollToMatrix(double yaw, double pitch, double roll, RotationMatrixBasics matrixToPack)
+   public static void convertYawPitchRollToMatrix(double yaw, double pitch, double roll, CommonMatrix3DBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
       {
@@ -386,7 +402,7 @@ public class RotationMatrixConversion
 
       if (YawPitchRollTools.isZero(yaw, pitch, roll, EPS))
       {
-         matrixToPack.setToZero();
+         matrixToPack.setIdentity();
          return;
       }
 
@@ -409,7 +425,11 @@ public class RotationMatrixConversion
       double m20 = -sinb;
       double m21 = cosb * sina;
       double m22 = cosb * cosa;
-      matrixToPack.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      if (matrixToPack instanceof RotationMatrixBasics)
+         ((RotationMatrixBasics) matrixToPack).setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      else
+         matrixToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+
    }
 
    /**
@@ -434,7 +454,7 @@ public class RotationMatrixConversion
     * @param rotationVector the rotation vector to use in the conversion. Not modified.
     * @param matrixToPack   the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertRotationVectorToMatrix(Vector3DReadOnly rotationVector, RotationMatrixBasics matrixToPack)
+   public static void convertRotationVectorToMatrix(Vector3DReadOnly rotationVector, CommonMatrix3DBasics matrixToPack)
    {
       convertRotationVectorToMatrix(rotationVector.getX(), rotationVector.getY(), rotationVector.getZ(), matrixToPack);
    }
@@ -463,7 +483,7 @@ public class RotationMatrixConversion
     * @param rz           the z-component of the rotation vector to use in the conversion.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void convertRotationVectorToMatrix(double rx, double ry, double rz, RotationMatrixBasics matrixToPack)
+   public static void convertRotationVectorToMatrix(double rx, double ry, double rz, CommonMatrix3DBasics matrixToPack)
    {
       if (EuclidCoreTools.containsNaN(rx, ry, rz))
       {
@@ -501,7 +521,10 @@ public class RotationMatrixConversion
          double m20 = t * xz - sinTheta * ay;
          double m21 = t * yz + sinTheta * ax;
          double m22 = t * az * az + cosTheta;
-         matrixToPack.setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         if (matrixToPack instanceof RotationMatrixBasics)
+            ((RotationMatrixBasics) matrixToPack).setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         else
+            matrixToPack.set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
       }
    }
 }

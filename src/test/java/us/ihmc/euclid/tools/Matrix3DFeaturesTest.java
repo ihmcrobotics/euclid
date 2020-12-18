@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
+import java.util.stream.DoubleStream;
 
 import org.ejml.MatrixDimensionException;
 import org.ejml.data.DMatrixRMaj;
@@ -846,6 +847,137 @@ public class Matrix3DFeaturesTest
       for (int row = 0; row < 3; row++)
          for (int column = 0; column < 3; column++)
             assertTrue(Double.compare(matrix.getElement(row, column), matrixCopy.getElement(row, column)) == 0);
+   }
+
+   @Test
+   public void testIsMatrixSymmetric()
+   {
+      Random random = new Random(43676);
+      Matrix3D matrix = new Matrix3D();
+      Matrix3D matrixCorrupted = new Matrix3D();
+
+      // Test with a zero matrix
+      matrix.setToZero();
+      testAllIsMatrixSymmetrixMethods(matrix, true);
+
+      // Test with identity
+      matrix.setIdentity();
+      testAllIsMatrixSymmetrixMethods(matrix, true);
+
+      // Test with NaN
+      matrix.setToNaN();
+      testAllIsMatrixSymmetrixMethods(matrix, false);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         matrix.setM01(EuclidCoreRandomTools.nextDouble(random));
+         matrix.setM02(EuclidCoreRandomTools.nextDouble(random));
+         matrix.setM12(EuclidCoreRandomTools.nextDouble(random));
+         matrix.setM10(matrix.getM01());
+         matrix.setM20(matrix.getM02());
+         matrix.setM21(matrix.getM12());
+
+         testAllIsMatrixSymmetrixMethods(matrix, true);
+
+         double delta = EuclidCoreRandomTools.nextDouble(random, 10.0 * Matrix3DFeatures.EPS_CHECK_SYMMETRIC);
+         boolean isSymmetric = Math.abs(delta) < Matrix3DFeatures.EPS_CHECK_SYMMETRIC;
+
+         matrixCorrupted.set(matrix);
+         matrixCorrupted.setM01(matrixCorrupted.getM01() + delta);
+         testAllIsMatrixSymmetrixMethods(matrixCorrupted, isSymmetric);
+
+         matrixCorrupted.set(matrix);
+         matrixCorrupted.setM02(matrixCorrupted.getM02() + delta);
+         testAllIsMatrixSymmetrixMethods(matrixCorrupted, isSymmetric);
+
+         matrixCorrupted.set(matrix);
+         matrixCorrupted.setM12(matrixCorrupted.getM12() + delta);
+         testAllIsMatrixSymmetrixMethods(matrixCorrupted, isSymmetric);
+
+         matrixCorrupted.set(matrix);
+         matrixCorrupted.setM10(matrixCorrupted.getM10() + delta);
+         testAllIsMatrixSymmetrixMethods(matrixCorrupted, isSymmetric);
+
+         matrixCorrupted.set(matrix);
+         matrixCorrupted.setM20(matrixCorrupted.getM20() + delta);
+         testAllIsMatrixSymmetrixMethods(matrixCorrupted, isSymmetric);
+
+         matrixCorrupted.set(matrix);
+         matrixCorrupted.setM21(matrixCorrupted.getM21() + delta);
+         testAllIsMatrixSymmetrixMethods(matrixCorrupted, isSymmetric);
+      }
+   }
+
+   private void testAllIsMatrixSymmetrixMethods(Matrix3DReadOnly matrix, boolean isSymmetric)
+   {
+      Matrix3D matrixCopy = new Matrix3D(matrix);
+
+      double m00 = matrix.getM00();
+      double m01 = matrix.getM01();
+      double m02 = matrix.getM02();
+      double m10 = matrix.getM10();
+      double m11 = matrix.getM11();
+      double m12 = matrix.getM12();
+      double m20 = matrix.getM20();
+      double m21 = matrix.getM21();
+      double m22 = matrix.getM22();
+
+      assertTrue(Matrix3DFeatures.isMatrixSymmetric(m00, m01, m02, m10, m11, m12, m20, m21, m22) == isSymmetric);
+      assertTrue(Matrix3DFeatures.isMatrixSymmetric(m00, m01, m02, m10, m11, m12, m20, m21, m22, Matrix3DFeatures.EPS_CHECK_SYMMETRIC) == isSymmetric);
+
+      assertTrue(matrix.isMatrixSymmetric(Matrix3DFeatures.EPS_CHECK_SKEW) == isSymmetric);
+
+      for (int row = 0; row < 3; row++)
+         for (int column = 0; column < 3; column++)
+            assertTrue(Double.compare(matrix.getElement(row, column), matrixCopy.getElement(row, column)) == 0);
+   }
+
+   @Test
+   public void testMaxElement()
+   {
+      Random random = new Random(4566735);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double[] coeffs = random.doubles(9, -100.0, 100.0).toArray();
+         assertEquals(DoubleStream.of(coeffs).max().getAsDouble(), new Matrix3D(coeffs).maxElement());
+      }
+   }
+
+   @Test
+   public void testMaxAbsElement()
+   {
+      Random random = new Random(4566735);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double[] coeffs = random.doubles(9, -100.0, 100.0).toArray();
+         assertEquals(DoubleStream.of(coeffs).map(Math::abs).max().getAsDouble(), new Matrix3D(coeffs).maxAbsElement());
+      }
+   }
+
+   @Test
+   public void testMinElement()
+   {
+      Random random = new Random(4566735);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double[] coeffs = random.doubles(9, -100.0, 100.0).toArray();
+         assertEquals(DoubleStream.of(coeffs).min().getAsDouble(), new Matrix3D(coeffs).minElement());
+      }
+   }
+
+   @Test
+   public void testMinAbsElement()
+   {
+      Random random = new Random(4566735);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         double[] coeffs = random.doubles(9, -100.0, 100.0).toArray();
+         assertEquals(DoubleStream.of(coeffs).map(Math::abs).min().getAsDouble(), new Matrix3D(coeffs).minAbsElement());
+      }
    }
 
    @Test

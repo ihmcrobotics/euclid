@@ -604,6 +604,94 @@ public interface Matrix3DReadOnly
    }
 
    /**
+    * Tests if this matrix is symmetric:
+    * 
+    * <pre>
+    *     | a x y |
+    * m = | x b z |
+    *     | y z c |
+    * </pre>
+    * <p>
+    * This matrix is considered to be symmetric if:
+    * <ul>
+    * <li>the difference for each pair of cross-diagonal coefficients ({@code m10}, {@code m01}),
+    * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/-
+    * {@link Matrix3DFeatures#EPS_CHECK_SYMMETRIC}.
+    * </ul>
+    * </p>
+    * 
+    * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
+    */
+   default boolean isMatrixSymmetric()
+   {
+      return isMatrixSymmetric(Matrix3DFeatures.EPS_CHECK_SYMMETRIC);
+   }
+
+   /**
+    * Tests if this matrix is symmetric:
+    * 
+    * <pre>
+    *     | a x y |
+    * m = | x b z |
+    *     | y z c |
+    * </pre>
+    * <p>
+    * This matrix is considered to be symmetric if:
+    * <ul>
+    * <li>the difference for each pair of cross-diagonal coefficients ({@code m10}, {@code m01}),
+    * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/- {@code epsilon}.
+    * </ul>
+    * </p>
+    * 
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the matrix is symmetric, {@code false} otherwise.
+    */
+   default boolean isMatrixSymmetric(double epsilon)
+   {
+      return Matrix3DFeatures.isMatrixSymmetric(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22(), epsilon);
+   }
+
+   /**
+    * Returns the value of the element that has the maximum value.
+    * 
+    * @return the value of the element that has the maximum value.
+    */
+   default double maxElement()
+   {
+      return Matrix3DFeatures.maxElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
+   /**
+    * Returns the value of the element that has the maximum absolute value.
+    * 
+    * @return the value of the element that has the maximum absolute value.
+    */
+   default double maxAbsElement()
+   {
+      return Matrix3DFeatures.maxAbsElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
+   /**
+    * Returns the value of the element that has the minimum value.
+    * 
+    * @return the value of the element that has the minimum value.
+    */
+   default double minElement()
+   {
+      return Matrix3DFeatures.minElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
+   /**
+    * Returns the value of the element that has the minimum absolute value.
+    * 
+    * @return the value of the element that has the minimum absolute value.
+    */
+   default double minAbsElement()
+   {
+      return Matrix3DFeatures.minAbsElement(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+   }
+
+   /**
     * Transforms the given tuple by this matrix.
     * <p>
     * tupleToTransform = this * tupleToTransform
@@ -657,6 +745,34 @@ public interface Matrix3DReadOnly
    default void addTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
    {
       Matrix3DTools.addTransform(this, tupleOriginal, tupleTransformed);
+   }
+
+   /**
+    * Transforms the given tuple by this matrix and subtracts the result to the tuple.
+    * <p>
+    * tupleToTransform = tupleToTransform - this * tupleToTransform
+    * </p>
+    *
+    * @param tupleToTransform the tuple to transform. Modified.
+    */
+   default void subTransform(Tuple3DBasics tupleToTransform)
+   {
+      subTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /**
+    * Transforms the given tuple {@code tupleOriginal} by this matrix and subtracts the result to
+    * {@code tupleTransformed}.
+    * <p>
+    * tupleTransformed = tupleTransformed - this * tupleOriginal
+    * </p>
+    *
+    * @param tupleOriginal    the tuple to transform. Not modified.
+    * @param tupleTransformed the tuple to subtract the result to. Modified.
+    */
+   default void subTransform(Tuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      Matrix3DTools.subTransform(this, tupleOriginal, tupleTransformed);
    }
 
    /**

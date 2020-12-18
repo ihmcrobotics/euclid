@@ -524,6 +524,64 @@ public class EuclidCoreFactories
    }
 
    /**
+    * Creates a new quaternion that is a read-only view of the given {@code original} conjugated.
+    * 
+    * @param originalQuaternion the original quaternion to create the linked conjugated quaternion for.
+    *                           Not modified.
+    * @return the conjugated read-only view of {@code original}.
+    */
+   public static QuaternionReadOnly newConjugateLinkedQuaternion(QuaternionReadOnly originalQuaternion)
+   {
+      return new QuaternionReadOnly()
+      {
+         @Override
+         public double getX()
+         {
+            return -originalQuaternion.getX();
+         }
+
+         @Override
+         public double getY()
+         {
+            return -originalQuaternion.getY();
+         }
+
+         @Override
+         public double getZ()
+         {
+            return -originalQuaternion.getZ();
+         }
+
+         @Override
+         public double getS()
+         {
+            return originalQuaternion.getS();
+         }
+
+         @Override
+         public int hashCode()
+         {
+            return EuclidHashCodeTools.toIntHashCode(getX(), getY(), getZ(), getS());
+         }
+
+         @Override
+         public boolean equals(Object object)
+         {
+            if (object instanceof QuaternionReadOnly)
+               return equals((QuaternionReadOnly) object);
+            else
+               return false;
+         }
+
+         @Override
+         public String toString()
+         {
+            return EuclidCoreIOTools.getTuple4DString(this);
+         }
+      };
+   }
+
+   /**
     * Creates a new matrix 3D that is a read-only view of the transpose of the given {@code original}.
     *
     * @param original the original matrix to create linked transpose matrix for. Not modified.

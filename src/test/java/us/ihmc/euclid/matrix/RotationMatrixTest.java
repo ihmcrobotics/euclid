@@ -896,7 +896,7 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          RotationMatrix actual = new RotationMatrix();
 
          expected.set(original);
-         expected.preMultiply(transform.getRotationMatrix());
+         expected.prepend(transform.getLinearTransform().getAsQuaternion());
          actual.set(original);
          actual.applyTransform(transform);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, SMALL_EPS);
@@ -1603,38 +1603,6 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
       }
    }
 
-   @Test
-   public void testTransformRotationScaleMatrix() throws Exception
-   {
-      Random random = new Random(435L);
-      RotationScaleMatrix actual = new RotationScaleMatrix();
-      RotationScaleMatrix expected = new RotationScaleMatrix();
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RotationMatrix matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrix originalRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrix expectedRotation = new RotationMatrix();
-         Vector3D scales = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
-         RotationScaleMatrix original = new RotationScaleMatrix(originalRotation, scales);
-
-         matrix.transform(originalRotation, expectedRotation);
-         expected.set(expectedRotation, scales);
-         matrix.transform(original, actual);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-
-         actual.set(original);
-         matrix.transform(actual);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-
-         matrix.setToZero();
-         matrix.transform(originalRotation, expectedRotation);
-         expected.set(expectedRotation, scales);
-         matrix.transform(original, actual);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-      }
-   }
-
    @Override
    @Test
    public void testInverseTransform() throws Exception
@@ -1907,32 +1875,6 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          rotationMatrix.setToZero();
          RotationMatrixTools.multiplyTransposeLeft(rotationMatrix, original, expected);
          rotationMatrix.inverseTransform(original, actual);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-      }
-
-      for (int i = 0; i < ITERATIONS; i++)
-      { // inverseTransform(RotationScaleMatrixReadOnly matrixOriginal, RotationScaleMatrix matrixTransformed)
-         RotationScaleMatrix actual = new RotationScaleMatrix();
-         RotationScaleMatrix expected = new RotationScaleMatrix();
-         RotationMatrix matrix = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrix originalRotation = EuclidCoreRandomTools.nextRotationMatrix(random);
-         RotationMatrix expectedRotation = new RotationMatrix();
-         Vector3D scales = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
-         RotationScaleMatrix original = new RotationScaleMatrix(originalRotation, scales);
-
-         matrix.inverseTransform(originalRotation, expectedRotation);
-         expected.set(expectedRotation, scales);
-         matrix.inverseTransform(original, actual);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-
-         actual.set(original);
-         matrix.inverseTransform(actual);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
-
-         matrix.setToZero();
-         matrix.inverseTransform(originalRotation, expectedRotation);
-         expected.set(expectedRotation, scales);
-         matrix.inverseTransform(original, actual);
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }

@@ -9,12 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.ejml.data.DMatrix;
-import org.ejml.data.DMatrixRMaj;
-import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
-import org.ejml.interfaces.decomposition.EigenDecomposition_F64;
-
 import us.ihmc.euclid.geometry.tools.EuclidGeometryTools;
+import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.ConvexPolytope3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractFace3D;
 import us.ihmc.euclid.shape.convexPolytope.impl.AbstractHalfEdge3D;
@@ -25,6 +23,7 @@ import us.ihmc.euclid.shape.convexPolytope.interfaces.Face3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.HalfEdge3DReadOnly;
 import us.ihmc.euclid.shape.convexPolytope.interfaces.Vertex3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
+import us.ihmc.euclid.tools.SymmetricEigenDecomposition3D;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
@@ -502,7 +501,7 @@ public class EuclidPolytopeConstructionTools
     */
    public static boolean updateFace3DNormal(List<? extends Point3DReadOnly> vertices, Point3DBasics averageToPack, Vector3DBasics normalToUpdate)
    {
-      DMatrixRMaj covarianceMatrix = new DMatrixRMaj(3, 3);
+      Matrix3D covarianceMatrix = new Matrix3D();
       computeCovariance3D(vertices, averageToPack, covarianceMatrix);
       return updateFace3DNormal(covarianceMatrix, normalToUpdate);
    }
@@ -518,9 +517,9 @@ public class EuclidPolytopeConstructionTools
     *                         {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
-   public static boolean updateFace3DNormal(DMatrixRMaj covarianceMatrix, Vector3DBasics normalToUpdate)
+   public static boolean updateFace3DNormal(Matrix3DReadOnly covarianceMatrix, Vector3DBasics normalToUpdate)
    {
-      return updateFace3DNormal(DecompositionFactory_DDRM.eig(3, true, true), covarianceMatrix, normalToUpdate);
+      return updateFace3DNormal(new SymmetricEigenDecomposition3D(), covarianceMatrix, normalToUpdate);
    }
 
    /**
@@ -535,50 +534,19 @@ public class EuclidPolytopeConstructionTools
     *                           {@code oldNormal.dot(newNormal) > 0.0}. Modified.
     * @return whether the method succeeded or not.
     */
-   public static boolean updateFace3DNormal(EigenDecomposition_F64<DMatrixRMaj> eigenDecomposition, DMatrixRMaj covarianceMatrix, Vector3DBasics normalToUpdate)
+   public static boolean updateFace3DNormal(SymmetricEigenDecomposition3D eigenDecomposition, Matrix3DReadOnly covarianceMatrix, Vector3DBasics normalToUpdate)
    {
       if (!eigenDecomposition.decompose(covarianceMatrix))
          return false;
 
-      double eigenValue0 = eigenDecomposition.getEigenvalue(0).getReal();
-      double eigenValue1 = eigenDecomposition.getEigenvalue(1).getReal();
-      double eigenValue2 = eigenDecomposition.getEigenvalue(2).getReal();
+      Vector3D newNormal = eigenDecomposition.getEigenVector(2);
 
-      int smallEigenValueIndex;
+      boolean negate = newNormal.dot(normalToUpdate) < 0.0;
 
-      if (eigenValue0 > eigenValue1)
-      {
-         if (eigenValue1 > eigenValue2)
-         { // (eigenValue0 > eigenValue1 > eigenValue2)
-            smallEigenValueIndex = 2;
-         }
-         else
-         { // (// eigenValue0 > eigenValue2 > eigenValue1) or (eigenValue2 > eigenValue0 > eigenValue1)
-            smallEigenValueIndex = 1;
-         }
-      }
-      else
-      {
-         if (eigenValue0 > eigenValue2)
-         { // (eigenValue1 > eigenValue0 > eigenValue2)
-            smallEigenValueIndex = 2;
-         }
-         else
-         { // (eigenValue1 > eigenValue2 > eigenValue0) or (eigenValue2 > eigenValue1 > eigenValue0)
-            smallEigenValueIndex = 0;
-         }
-      }
-
-      DMatrix eigenVector = eigenDecomposition.getEigenVector(smallEigenValueIndex);
-      double newX = eigenVector.get(0, 0);
-      double newY = eigenVector.get(1, 0);
-      double newZ = eigenVector.get(2, 0);
-
-      boolean negate = TupleTools.dot(newX, newY, newZ, normalToUpdate) < 0.0;
-
-      normalToUpdate.set(eigenVector);
       if (negate)
-         normalToUpdate.negate();
+         normalToUpdate.setAndNegate(newNormal);
+      else
+         normalToUpdate.set(newNormal);
 
       return true;
    }
@@ -590,7 +558,7 @@ public class EuclidPolytopeConstructionTools
     *                         modified.
     * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
     */
-   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, DMatrixRMaj covarianceToPack)
+   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Matrix3DBasics covarianceToPack)
    {
       computeCovariance3D(input, null, covarianceToPack);
    }
@@ -604,7 +572,7 @@ public class EuclidPolytopeConstructionTools
     *                         {@code null}.
     * @param covarianceToPack the matrix in which the 3-by-3 covariance matrix is stored. Modified.
     */
-   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, DMatrixRMaj covarianceToPack)
+   public static void computeCovariance3D(List<? extends Tuple3DReadOnly> input, Tuple3DBasics averageToPack, Matrix3DBasics covarianceToPack)
    {
       double meanX = 0.0;
       double meanY = 0.0;
@@ -648,16 +616,7 @@ public class EuclidPolytopeConstructionTools
 
       }
 
-      covarianceToPack.reshape(3, 3);
-      covarianceToPack.set(0, covXX);
-      covarianceToPack.set(1, covXY);
-      covarianceToPack.set(2, covXZ);
-      covarianceToPack.set(3, covXY);
-      covarianceToPack.set(4, covYY);
-      covarianceToPack.set(5, covYZ);
-      covarianceToPack.set(6, covXZ);
-      covarianceToPack.set(7, covYZ);
-      covarianceToPack.set(8, covZZ);
+      covarianceToPack.set(covXX, covXY, covXZ, covXY, covYY, covYZ, covXZ, covYZ, covZZ);
    }
 
    /**

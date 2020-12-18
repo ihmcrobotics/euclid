@@ -30,6 +30,10 @@ public class Matrix3DFeatures
     * Default tolerance for determining whether a matrix 3D is skew symmetric or not.
     */
    public static final double EPS_CHECK_SKEW = 1.0e-8;
+   /**
+    * Default tolerance for determining whether a matrix 3D is symmetric or not.
+    */
+   public static final double EPS_CHECK_SYMMETRIC = 1.0e-8;
 
    private Matrix3DFeatures()
    {
@@ -321,7 +325,7 @@ public class Matrix3DFeatures
    }
 
    /**
-    * Verify if the given coefficients describe a rotation matrix.
+    * Tests if the given coefficients describe a rotation matrix.
     * <p>
     * The given matrix is a rotation matrix if:
     * <ul>
@@ -348,7 +352,7 @@ public class Matrix3DFeatures
    }
 
    /**
-    * Verify if the given coefficients describe a rotation matrix.
+    * Tests if the given coefficients describe a rotation matrix.
     * <p>
     * The given matrix is a rotation matrix if:
     * <ul>
@@ -411,7 +415,7 @@ public class Matrix3DFeatures
    }
 
    /**
-    * Verify the matrix described by the 9 given coefficients is a transformation in the XY plane.
+    * Tests the matrix described by the 9 given coefficients is a transformation in the XY plane.
     * <p>
     * The matrix is considered to be a 2D transformation in the XY plane if:
     * <ul>
@@ -440,7 +444,7 @@ public class Matrix3DFeatures
    }
 
    /**
-    * Verify if the matrix described by the 9 given coefficients is skew symmetric:
+    * Tests if the matrix described by the 9 given coefficients is skew symmetric:
     *
     * <pre>
     *     |  0 -z  y |
@@ -473,7 +477,7 @@ public class Matrix3DFeatures
    }
 
    /**
-    * Verify if the matrix described by the 9 given coefficients is skew symmetric:
+    * Tests if the matrix described by the 9 given coefficients is skew symmetric:
     *
     * <pre>
     *     |  0 -z  y |
@@ -510,6 +514,161 @@ public class Matrix3DFeatures
             return true;
       }
       return false;
+   }
+
+   /**
+    * Tests if the matrix described by the 9 given coefficients is symmetric:
+    *
+    * <pre>
+    *     | a x y |
+    * m = | x b z |
+    *     | y z c |
+    * </pre>
+    * <p>
+    * The given matrix is considered to be symmetric if:
+    * <ul>
+    * <li>the difference for each pair of cross-diagonal coefficients ({@code m10}, {@code m01}),
+    * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/-
+    * {@link Matrix3DFeatures#EPS_CHECK_SYMMETRIC}.
+    * </ul>
+    * </p>
+    *
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @return {@code true} if the matrix is skew symmetric, {@code false} otherwise.
+    */
+   public static boolean isMatrixSymmetric(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      return isMatrixSymmetric(m00, m01, m02, m10, m11, m12, m20, m21, m22, EPS_CHECK_SYMMETRIC);
+   }
+
+   /**
+    * Tests if the matrix described by the 9 given coefficients is symmetric:
+    *
+    * <pre>
+    *     | a x y |
+    * m = | x b z |
+    *     | y z c |
+    * </pre>
+    * <p>
+    * The given matrix is considered to be symmetric if:
+    * <ul>
+    * <li>the difference for each pair of cross-diagonal coefficients ({@code m10}, {@code m01}),
+    * ({@code m12}, {@code m21}), and ({@code m20}, {@code m02}) is equal to 0.0 +/- {@code epsilon}.
+    * </ul>
+    * </p>
+    *
+    * @param m00     first matrix element in the first row.
+    * @param m01     second matrix element in the first row.
+    * @param m02     third matrix element in the first row.
+    * @param m10     first matrix element in the second row.
+    * @param m11     second matrix element in the second row.
+    * @param m12     third matrix element in the second row.
+    * @param m20     first matrix element in the third row.
+    * @param m21     second matrix element in the third row.
+    * @param m22     third matrix element in the third row.
+    * @param epsilon the tolerance used as shown above.
+    * @return {@code true} if the matrix is skew symmetric, {@code false} otherwise.
+    */
+   public static boolean isMatrixSymmetric(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+                                           double epsilon)
+   {
+      return Math.abs(m01 - m10) <= epsilon && Math.abs(m02 - m20) <= epsilon && Math.abs(m12 - m21) <= epsilon;
+   }
+
+   /**
+    * Finds and returns the value of the element that has the maximum value.
+    * 
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @return the value of the element that has the maximum value.
+    */
+   public static double maxElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.max(m00, m01, m02);
+      double r1 = EuclidCoreTools.max(m10, m11, m12);
+      double r2 = EuclidCoreTools.max(m20, m21, m22);
+      return EuclidCoreTools.max(r0, r1, r2);
+   }
+
+   /**
+    * Finds and returns the value of the element that has the maximum absolute value.
+    * 
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @return the value of the element that has the maximum absolute value.
+    */
+   public static double maxAbsElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.max(Math.abs(m00), Math.abs(m01), Math.abs(m02));
+      double r1 = EuclidCoreTools.max(Math.abs(m10), Math.abs(m11), Math.abs(m12));
+      double r2 = EuclidCoreTools.max(Math.abs(m20), Math.abs(m21), Math.abs(m22));
+      return EuclidCoreTools.max(r0, r1, r2);
+   }
+
+   /**
+    * Finds and returns the value of the element that has the minimum value.
+    * 
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @return the value of the element that has the minimum value.
+    */
+   public static double minElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.min(m00, m01, m02);
+      double r1 = EuclidCoreTools.min(m10, m11, m12);
+      double r2 = EuclidCoreTools.min(m20, m21, m22);
+      return EuclidCoreTools.min(r0, r1, r2);
+   }
+
+   /**
+    * Finds and returns the value of the element that has the minimum absolute value.
+    * 
+    * @param m00 first matrix element in the first row.
+    * @param m01 second matrix element in the first row.
+    * @param m02 third matrix element in the first row.
+    * @param m10 first matrix element in the second row.
+    * @param m11 second matrix element in the second row.
+    * @param m12 third matrix element in the second row.
+    * @param m20 first matrix element in the third row.
+    * @param m21 second matrix element in the third row.
+    * @param m22 third matrix element in the third row.
+    * @return the value of the element that has the minimum absolute value.
+    */
+   public static double minAbsElement(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
+      double r0 = EuclidCoreTools.min(Math.abs(m00), Math.abs(m01), Math.abs(m02));
+      double r1 = EuclidCoreTools.min(Math.abs(m10), Math.abs(m11), Math.abs(m12));
+      double r2 = EuclidCoreTools.min(Math.abs(m20), Math.abs(m21), Math.abs(m22));
+      return EuclidCoreTools.min(r0, r1, r2);
    }
 
    /**

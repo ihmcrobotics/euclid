@@ -30,21 +30,6 @@ public interface FixedFrameRotationMatrixBasics
       extends FrameRotationMatrixReadOnly, RotationMatrixBasics, FixedFrameCommonMatrix3DBasics, FixedFrameOrientation3DBasics
 {
    /**
-    * Sets this rotation matrix to equal the 3D matrix {@code matrix} and then normalizes {@code this}.
-    *
-    * @param matrix the matrix to copy the values from. Not modified.
-    * @throws NotARotationMatrixException     if the normalization failed.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   default void setAndNormalize(FrameMatrix3DReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      RotationMatrixBasics.super.setAndNormalize(other);
-   }
-
-   /**
     * Sets this rotation matrix to equal the given {@code other} and then normalizes {@code this}.
     *
     * @param other the rotation matrix to copy the values from. Not modified.
@@ -56,37 +41,6 @@ public interface FixedFrameRotationMatrixBasics
    {
       checkReferenceFrameMatch(other);
       RotationMatrixBasics.super.setAndNormalize(other);
-   }
-
-   /**
-    * {@inheritDoc}
-    * <p>
-    * If the argument implements {@link RotationMatrixReadOnly}, a redirection
-    * {@link #set(RotationMatrixReadOnly)} is done.
-    * </p>
-    *
-    * @throws NotARotationMatrixException if the argument is not a rotation matrix.
-    */
-   @Override
-   default void set(ReferenceFrame referenceFrame, Matrix3DReadOnly other)
-   {
-      checkReferenceFrameMatch(referenceFrame);
-      RotationMatrixBasics.super.set(other);
-   }
-
-   /**
-    * {@inheritDoc}
-    * <p>
-    * If the argument implements {@link FrameRotationMatrixReadOnly}, a redirection
-    * {@link #set(FrameRotationMatrixReadOnly)} is done.
-    * </p>
-    *
-    * @throws NotARotationMatrixException if the argument is not a rotation matrix.
-    */
-   @Override
-   default void set(FrameMatrix3DReadOnly other)
-   {
-      set(other.getReferenceFrame(), other);
    }
 
    /**
@@ -117,53 +71,6 @@ public interface FixedFrameRotationMatrixBasics
    }
 
    /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
-    * matrix.
-    *
-    * @param referenceFrame the reference frame in which the argument is expressed.
-    * @param other          the other rotation matrix to copy. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void set(ReferenceFrame referenceFrame, RotationMatrixReadOnly other)
-   {
-      checkReferenceFrameMatch(referenceFrame);
-      set(other);
-   }
-
-   /**
-    * Sets this rotation matrix to {@code other} and copies the dirty and identity flags from the other
-    * matrix.
-    *
-    * @param other the other rotation matrix to copy. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void set(FrameRotationMatrixReadOnly other)
-   {
-      set(other.getReferenceFrame(), (RotationMatrixReadOnly) other);
-   }
-
-   /**
-    * Sets this rotation matrix to the invert of the given {@code matrix}.
-    * <p>
-    * This operation uses the property: <br>
-    * R<sup>-1</sup> = R<sup>T</sup> </br>
-    * of a rotation matrix preventing to actually compute the inverse of the matrix.
-    * </p>
-    *
-    * @param matrix the matrix to copy the values from. Not modified.
-    * @throws NotARotationMatrixException     if {@code matrix} is not a rotation matrix.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void setAndInvert(FrameMatrix3DReadOnly matrix)
-   {
-      checkReferenceFrameMatch(matrix);
-      RotationMatrixBasics.super.setAndInvert(matrix);
-   }
-
-   /**
     * Sets this rotation matrix to the invert of the given one {@code other}.
     * <p>
     * This operation uses the property: <br>
@@ -181,20 +88,11 @@ public interface FixedFrameRotationMatrixBasics
       RotationMatrixBasics.super.setAndInvert(other);
    }
 
-   /**
-    * Sets this matrix to equal the other matrix and then transposes this.
-    * <p>
-    * this = other<sup>T</sup>
-    * </p>
-    *
-    * @param other the other matrix used to update this matrix. Not modified.
-    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   default void setAndTranspose(FrameMatrix3DReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default void setAndInvert(FrameOrientation3DReadOnly orientation)
    {
-      checkReferenceFrameMatch(other);
-      RotationMatrixBasics.super.setAndTranspose(other);
+      FixedFrameOrientation3DBasics.super.setAndInvert(orientation);
    }
 
    /**

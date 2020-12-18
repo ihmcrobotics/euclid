@@ -150,7 +150,7 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
    @Test
    public void testCompareAgainstFramelessGJK()
    {
-      Random random = new Random(34306);
+      Random random = new Random(34307);
       EuclidShape3DCollisionResult expectedResult = new EuclidShape3DCollisionResult();
       EuclidFrameShape3DCollisionResult actualResult = new EuclidFrameShape3DCollisionResult();
 

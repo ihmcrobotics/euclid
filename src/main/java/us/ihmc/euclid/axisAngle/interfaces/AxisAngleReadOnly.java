@@ -1,9 +1,10 @@
 package us.ihmc.euclid.axisAngle.interfaces;
 
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.AxisAngleTools;
@@ -195,9 +196,9 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
    /** {@inheritDoc} */
    @Override
-   default void get(RotationMatrixBasics rotationMatrixToPack)
+   default void get(CommonMatrix3DBasics rotationMatrixToPack)
    {
-      rotationMatrixToPack.setAxisAngle(getX(), getY(), getZ(), getAngle());
+      RotationMatrixConversion.convertAxisAngleToMatrix(this, rotationMatrixToPack);
    }
 
    /** {@inheritDoc} */

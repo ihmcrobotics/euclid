@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -355,19 +354,6 @@ public class QuaternionConversionTest
       rotationMatrix.setUnsafe(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.NaN);
       QuaternionConversion.convertMatrixToQuaternion(rotationMatrix, actualQuaternion);
       EuclidCoreTestTools.assertTuple4DContainsOnlyNaN(actualQuaternion);
-
-      // Test with a RotationScaleMatrix
-      for (int i = 0; i < 1000; i++)
-      {
-         RotationScaleMatrix rotationScaleMatrix = EuclidCoreRandomTools.nextRotationScaleMatrix(random, 10.0);
-         RotationScaleMatrix rotationScaleMatrixCopy = new RotationScaleMatrix(rotationScaleMatrix);
-         QuaternionConversion.convertMatrixToQuaternion(rotationScaleMatrix, actualQuaternion);
-         QuaternionConversion.convertMatrixToQuaternion(rotationScaleMatrix.getRotationMatrix(), expectedQuaternion);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPSILON);
-         EuclidCoreTestTools.assertQuaternionIsUnitary(actualQuaternion, EPSILON);
-         // Assert the parameter does not get modified
-         assertTrue(rotationScaleMatrix.equals(rotationScaleMatrixCopy));
-      }
    }
 
    @Test

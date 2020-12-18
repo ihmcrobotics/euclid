@@ -9,9 +9,10 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.AxisAngle32;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
@@ -272,6 +273,36 @@ public class EuclidCoreRandomTools
    }
 
    /**
+    * Generates a common 3D matrix which both value and type are random.
+    * <p>
+    * The type can be either: general matrix 3D, rotation matrix, or linear transform 3D.
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random common 3D matrix.
+    */
+   public static CommonMatrix3DBasics nextCommonMatrix3DBasics(Random random)
+   {
+      switch (random.nextInt(3))
+      {
+         case 0:
+            switch (random.nextInt(3))
+            {
+               case 0:
+                  return nextDiagonalMatrix3D(random);
+               case 1:
+                  return nextSymmetricMatrix3D(random);
+               default:
+                  return nextMatrix3D(random);
+            }
+         case 1:
+            return nextRotationMatrix(random);
+         default:
+            return nextNonSingularLinearTransform3D(random);
+      }
+   }
+
+   /**
     * Generates a random diagonal 3-by-3 matrix.
     * <p>
     * <ul>
@@ -330,6 +361,69 @@ public class EuclidCoreRandomTools
       Matrix3D matrix3D = new Matrix3D();
       for (int i = 0; i < 3; i++)
          matrix3D.setElement(i, i, nextDouble(random, minValue, maxValue));
+      return matrix3D;
+   }
+
+   /**
+    * Generates a random symmetric 3-by-3 matrix.
+    * <ul>
+    * <li>{@code matrix}<sub>ij</sub> &in; [-1.0; 1.0].
+    * <li>{@code matrix}<sub>ij</sub> == {@code matrix}<sub>ji</sub>.
+    * </ul>
+    * 
+    * @param random the random generator to use.
+    * @return the random symmetric matrix.
+    */
+   public static Matrix3D nextSymmetricMatrix3D(Random random)
+   {
+      return nextSymmetricMatrix3D(random, 1.0);
+   }
+
+   /**
+    * Generates a random symmetric 3-by-3 matrix.
+    * <ul>
+    * <li>{@code matrix}<sub>ij</sub> &in; [-{@code minMaxValue}; {@code minMaxValue}].
+    * <li>{@code matrix}<sub>ij</sub> == {@code matrix}<sub>ji</sub>.
+    * </ul>
+    * 
+    * @param random      the random generator to use.
+    * @param minMaxValue the maximum absolute value for each element.
+    * @return the random symmetric matrix.
+    * @throws RuntimeException if {@code minMaxValue < 0}.
+    */
+   public static Matrix3D nextSymmetricMatrix3D(Random random, double minMaxValue)
+   {
+      return nextSymmetricMatrix3D(random, -minMaxValue, minMaxValue);
+   }
+
+   /**
+    * Generates a random symmetric 3-by-3 matrix.
+    * <ul>
+    * <li>{@code matrix}<sub>ij</sub> &in; [{@code minValue}; {@code maxValue}].
+    * <li>{@code matrix}<sub>ij</sub> == {@code matrix}<sub>ji</sub>.
+    * </ul>
+    * 
+    * @param random   the random generator to use.
+    * @param minValue the minimum value for each element.
+    * @param maxValue the maximum value for each element.
+    * @return the random symmetric matrix.
+    * @throws RuntimeException if {@code minValue > maxValue}.
+    */
+   public static Matrix3D nextSymmetricMatrix3D(Random random, double minValue, double maxValue)
+   {
+      Matrix3D matrix3D = new Matrix3D();
+      for (int row = 0; row < 3; row++)
+      {
+         double value = nextDouble(random, minValue, maxValue);
+         matrix3D.setElement(row, row, value);
+
+         for (int col = row + 1; col < 3; col++)
+         {
+            value = nextDouble(random, minValue, maxValue);
+            matrix3D.setElement(row, col, value);
+            matrix3D.setElement(col, row, value);
+         }
+      }
       return matrix3D;
    }
 
@@ -427,6 +521,101 @@ public class EuclidCoreRandomTools
          }
       }
       return matrix3D;
+   }
+
+   /**
+    * Generates a random linear transform 3D.
+    * <p>
+    * This is a redirection to {@link #nextMatrix3D(Random)}.
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random linear transform 3D.
+    * @see #nextMatrix3D(Random)
+    */
+   public static LinearTransform3D nextLinearTransform3D(Random random)
+   {
+      return nextLinearTransform3D(random, 1.0);
+   }
+
+   /**
+    * Generates a random linear transform 3D.
+    * <p>
+    * This is a redirection to {@link #nextMatrix3D(Random, double)}.
+    * </p>
+    * 
+    * @param random      the random generator to use.
+    * @param minMaxValue the maximum absolute value for each element.
+    * @return the random linear transform 3D.
+    * @throws RuntimeException if {@code minMaxValue < 0}.
+    * @see #nextMatrix3D(Random, double)
+    */
+   public static LinearTransform3D nextLinearTransform3D(Random random, double minMaxValue)
+   {
+      return nextLinearTransform3D(random, -minMaxValue, minMaxValue);
+   }
+
+   /**
+    * Generates a random linear transform 3D.
+    * <p>
+    * This is a redirection to {@link #nextMatrix3D(Random, double, double)}.
+    * </p>
+    * 
+    * @param random   the random generator to use.
+    * @param minValue the minimum value for each element.
+    * @param maxValue the maximum value for each element.
+    * @return the random linear transform 3D.
+    * @throws RuntimeException if {@code minValue > maxValue}.
+    * @see #nextMatrix3D(Random, double, double)
+    */
+   public static LinearTransform3D nextLinearTransform3D(Random random, double minValue, double maxValue)
+   {
+      return new LinearTransform3D(nextMatrix3D(random, minValue, maxValue));
+   }
+
+   /**
+    * Generates a random linear transform 3D which is guaranteed to not be singular.
+    * <p>
+    * The matrix is constructed such that the absolute value of each of its eigen values is in [0.25;
+    * 10.0].
+    * </p>
+    * 
+    * @param random the random generator to use.
+    * @return the random linear transform 3D.
+    */
+   public static LinearTransform3D nextNonSingularLinearTransform3D(Random random)
+   {
+      return nextNonSingularLinearTransform3D(random, 0.25, 10.0);
+   }
+
+   /**
+    * Generates a random linear transform 3D which is guaranteed to not be singular.
+    * <p>
+    * The matrix is constructed such that the absolute value of each of its eigen values is in
+    * [{@code minAbsScale}; {@code maxAbsScale}].
+    * </p>
+    * 
+    * @param random      the random generator to use.
+    * @param minAbsScale the minimum absolute value for each eigen value.
+    * @param maxAbsScale the maximum absolute value for each eigen value.
+    * @return the random linear transform 3D.
+    * @throws RuntimeException if {@code minAbsScale > maxAbsScale}.
+    */
+   public static LinearTransform3D nextNonSingularLinearTransform3D(Random random, double minAbsScale, double maxAbsScale)
+   {
+      LinearTransform3D next = new LinearTransform3D();
+      next.appendRotation(nextQuaternion(random));
+      Vector3D scale = nextVector3D(random, maxAbsScale);
+      for (int i = 0; i < 3; i++)
+      {
+         if (scale.getElement(i) >= 0.0)
+            scale.setElement(i, Math.max(minAbsScale, scale.getElement(i)));
+         else
+            scale.setElement(i, Math.min(-minAbsScale, scale.getElement(i)));
+      }
+      next.appendScale(scale);
+      next.appendRotation(nextQuaternion(random));
+      return next;
    }
 
    /**
@@ -601,21 +790,34 @@ public class EuclidCoreRandomTools
 
    /**
     * Generates a random affine transform.
-    * <p>
     * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-<i>pi</i>; <i>pi</i>].
-    * <li>Each scale factor is in ]0.0; 10.0].
-    * <li>Each component of the translation part is in [-1.0; 1.0].
+    * <li>The linear transform part is generated with {@link #nextMatrix3D(Random, double)} and
+    * {@code minMaxValue = 10.0}.
+    * <li>The translation part is generated with {@link #nextVector3D(Random)}.
     * </ul>
-    * </p>
-    *
+    * 
     * @param random the random generator to use.
     * @return the random affine transform.
     */
    public static AffineTransform nextAffineTransform(Random random)
    {
-      return new AffineTransform(nextRotationScaleMatrix(random, 10.0), nextVector3D(random));
+      return new AffineTransform(nextMatrix3D(random, 10.0), nextVector3D(random));
+   }
+
+   /**
+    * Generates a random affine transform which is guaranteed to not be singular.
+    * <ul>
+    * <li>The linear transform part is generated with
+    * {@link #nextNonSingularLinearTransform3D(Random)}.
+    * <li>The translation part is generated with {@link #nextVector3D(Random)}.
+    * </ul>
+    * 
+    * @param random the random generator to use.
+    * @return the random affine transform.
+    */
+   public static AffineTransform nextNonSingularAffineTransform(Random random)
+   {
+      return new AffineTransform(nextNonSingularLinearTransform3D(random), nextVector3D(random));
    }
 
    /**
@@ -642,70 +844,6 @@ public class EuclidCoreRandomTools
    {
       AxisAngle randomRotation = nextAxisAngle(random, minMaxAngle);
       return new RotationMatrix(randomRotation);
-   }
-
-   /**
-    * Generates a random rotation-scale matrix.
-    * <p>
-    * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-<i>pi</i>; <i>pi</i>].
-    * <li>Each scale factor is in ]0.0; 10.0].
-    * </ul>
-    * </p>
-    *
-    * @param random the random generator to use.
-    * @return the random rotation-scale matrix.
-    * @throws RuntimeException if {@code maxScale < 0}.
-    */
-   public static RotationScaleMatrix nextRotationScaleMatrix(Random random)
-   {
-      return nextRotationScaleMatrix(random, 10.0);
-   }
-
-   /**
-    * Generates a random rotation-scale matrix.
-    * <p>
-    * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-<i>pi</i>; <i>pi</i>].
-    * <li>Each scale factor is in ]0.0; {@code maxScale}].
-    * </ul>
-    * </p>
-    *
-    * @param random   the random generator to use.
-    * @param maxScale the maximum scale value used for each scale factor.
-    * @return the random rotation-scale matrix.
-    * @throws RuntimeException if {@code maxScale < 0}.
-    */
-   public static RotationScaleMatrix nextRotationScaleMatrix(Random random, double maxScale)
-   {
-      return nextRotationScaleMatrix(random, Math.PI, maxScale);
-   }
-
-   /**
-    * Generates a random rotation-scale matrix.
-    * <p>
-    * <ul>
-    * <li>The rotation part is uniformly distributed on the unit sphere and describes an rotation angle
-    * in [-{@code minMaxAngle}; {@code minMaxAngle}].
-    * <li>Each scale factor is in ]0.0; {@code maxScale}].
-    * </ul>
-    * </p>
-    *
-    * @param random      the random generator to use.
-    * @param minMaxAngle the maximum absolute angle value that describes the generated rotation-scale
-    *                    matrix.
-    * @param maxScale    the maximum scale value used for each scale factor.
-    * @return the random rotation-scale matrix.
-    * @throws RuntimeException if {@code minMaxAngle < 0}.
-    * @throws RuntimeException if {@code maxScale < 0}.
-    */
-   public static RotationScaleMatrix nextRotationScaleMatrix(Random random, double minMaxAngle, double maxScale)
-   {
-      AxisAngle randomRotation = nextAxisAngle(random, minMaxAngle);
-      Vector3D randomScales = nextVector3D(random, new Vector3D(0.0, 0.0, 0.0), new Vector3D(maxScale, maxScale, maxScale));
-      return new RotationScaleMatrix(randomRotation, randomScales);
    }
 
    /**
@@ -887,6 +1025,22 @@ public class EuclidCoreRandomTools
       Vector3D vector = new Vector3D();
       randomizeTuple3D(random, min, max, vector);
       return vector;
+   }
+
+   /**
+    * Generates a random vector.
+    * <p>
+    * {@code vector}<sub>i</sub> &in; [{@code -minMax}; {@code minMax}].
+    * </p>
+    *
+    * @param random the random generator to use.
+    * @param minMax the maximum absolute value for each component.
+    * @return the random vector.
+    * @throws RuntimeException if {@code minMax < 0}.
+    */
+   public static Vector3D nextVector3D(Random random, double minMax)
+   {
+      return nextVector3D(random, -minMax, minMax);
    }
 
    /**

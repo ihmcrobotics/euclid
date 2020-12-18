@@ -2,7 +2,6 @@ package us.ihmc.euclid.rotationConversion;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
@@ -214,86 +213,6 @@ public class YawPitchRollConversion
    }
 
    /**
-    * Computes the yaw from the rotation part of a rotation-scale matrix.
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, this method returns
-    * {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @return the yaw angle.
-    */
-   public static double computeYaw(RotationScaleMatrixReadOnly rotationScaleMatrix)
-   {
-      return computeYaw(rotationScaleMatrix.getRotationMatrix());
-   }
-
-   /**
-    * Computes the pitch angle from the rotation part of a rotation-scale matrix.
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, this method returns
-    * {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @return the pitch angle.
-    */
-   public static double computePitch(RotationScaleMatrixReadOnly rotationScaleMatrix)
-   {
-      return computePitch(rotationScaleMatrix.getRotationMatrix());
-   }
-
-   /**
-    * Computes the roll from the rotation part of a rotation-scale matrix.
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, this method returns
-    * {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @return the roll angle.
-    */
-   public static double computeRoll(RotationScaleMatrixReadOnly rotationScaleMatrix)
-   {
-      return computeRoll(rotationScaleMatrix.getRotationMatrix());
-   }
-
-   /**
-    * Converts the rotation part of the given rotation-scale matrix into yaw-pitch-roll.
-    * <p>
-    * After calling this method, the rotation part of the rotation-scale matrix and the yaw-pitch-roll
-    * angles represent the same orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, the yaw-pitch-roll angles
-    * are set to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @param yawPitchRollToPack  the yaw-pitch-roll used to store the orientation. Modified.
-    */
-   public static void convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly rotationScaleMatrix, YawPitchRollBasics yawPitchRollToPack)
-   {
-      convertMatrixToYawPitchRoll(rotationScaleMatrix.getRotationMatrix(), yawPitchRollToPack);
-   }
-
-   /**
     * Converts the rotation matrix into yaw-pitch-roll.
     * <p>
     * After calling this method, the rotation matrix and the yaw-pitch-roll angles represent the same
@@ -357,30 +276,6 @@ public class YawPitchRollConversion
       double pitch = computePitchImpl(m20);
       double roll = computeRollImpl(m21, m22);
       yawPitchRollToPack.set(yaw, pitch, roll);
-   }
-
-   /**
-    * Converts the rotation part of the given rotation-scale matrix into yaw-pitch-roll.
-    * <p>
-    * After calling this method, the rotation part of the rotation-scale matrix and the yaw-pitch-roll
-    * angles represent the same orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, the yaw-pitch-roll angles
-    * are set to {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @param eulerAnglesToPack   the tuple in which the yaw-pitch-roll angles are stored, i.e.
-    *                            {@code eulerAnglesToPack.set(roll, pitch, yaw)}. Modified.
-    */
-   public static void convertMatrixToYawPitchRoll(RotationScaleMatrixReadOnly rotationScaleMatrix, Tuple3DBasics eulerAnglesToPack)
-   {
-      convertMatrixToYawPitchRoll(rotationScaleMatrix.getRotationMatrix(), eulerAnglesToPack);
    }
 
    /**

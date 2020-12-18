@@ -497,7 +497,7 @@ public interface Transform
     *
     * @param affineTransformToTransform the affine transform to transform. Modified.
     */
-   default void transform(AffineTransform affineTransformToTransform)
+   default void transform(AffineTransformBasics affineTransformToTransform)
    {
       transform(affineTransformToTransform, affineTransformToTransform);
    }
@@ -512,7 +512,7 @@ public interface Transform
     * @param original    the affine transform to transform. Not modified.
     * @param transformed the affine transform in which the result is stored. Modified.
     */
-   void transform(AffineTransform original, AffineTransform transformed);
+   void transform(AffineTransformReadOnly original, AffineTransformBasics transformed);
 
    /**
     * Performs the inverse of the transform on the given point {@code pointToTransform}.
@@ -854,7 +854,7 @@ public interface Transform
    /**
     * Performs the inverse of the transform on the given {@code affineTransformToTransform}.
     * <p>
-    * This is equivalent to calling {@link #transform(AffineTransform)} with the inverse of this
+    * This is equivalent to calling {@link #transform(AffineTransformBasics)} with the inverse of this
     * transform.
     * </p>
     * <p>
@@ -863,7 +863,7 @@ public interface Transform
     *
     * @param affineTransformToTransform the affine transform to transform. Modified.
     */
-   default void inverseTransform(AffineTransform affineTransformToTransform)
+   default void inverseTransform(AffineTransformBasics affineTransformToTransform)
    {
       inverseTransform(affineTransformToTransform, affineTransformToTransform);
    }
@@ -872,8 +872,8 @@ public interface Transform
     * Performs the inverse of the transform on the given {@code original} and stores the result in
     * {@code transformed}.
     * <p>
-    * This is equivalent to calling {@link #transform(AffineTransform, AffineTransform)} with the
-    * inverse of this transform.
+    * This is equivalent to calling {@link #transform(AffineTransformReadOnly, AffineTransformBasics)}
+    * with the inverse of this transform.
     * </p>
     * <p>
     * The given transform is only rotated and translated, no scaling is applied.
@@ -882,5 +882,5 @@ public interface Transform
     * @param original    the affine transform to transform. Not modified.
     * @param transformed the affine transform in which the result is stored. Modified.
     */
-   void inverseTransform(AffineTransform original, AffineTransform transformed);
+   void inverseTransform(AffineTransformReadOnly original, AffineTransformBasics transformed);
 }

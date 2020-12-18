@@ -1593,7 +1593,7 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          T actual = createEmptyTuple();
 
          expected.set(original);
-         expected.prepend(transform.getRotationMatrix());
+         expected.prepend(transform.getLinearTransform().getAsQuaternion());
          actual.set(original);
          actual.applyTransform(transform);
          EuclidCoreTestTools.assertTuple4DEquals(expected, actual, getEpsilon());
