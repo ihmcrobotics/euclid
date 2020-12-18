@@ -402,7 +402,7 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
    }
 
    /**
-    * Append a translation transform to this pose.
+    * Appends a translation transform to this pose.
     *
     * <pre>
     *               / 1 0 0 translation.x \
@@ -425,7 +425,20 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
    }
 
    /**
-    * Prepend a translation transform to this pose.
+    * Appends the orientation to this pose.
+    * 
+    * @param orientation the orientation to append. Not modified.
+    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void appendOrientation(FrameOrientation3DReadOnly orientation)
+   {
+      checkReferenceFrameMatch(orientation);
+      getRotation().append(orientation);
+   }
+
+   /**
+    * Prepends a translation transform to this pose.
     *
     * <pre>
     *        / 1 0 0 translation.x \
@@ -445,6 +458,19 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
    {
       checkReferenceFrameMatch(translation);
       Shape3DPoseBasics.super.prependTranslation(translation);
+   }
+
+   /**
+    * Prepends the orientation to this pose.
+    * 
+    * @param orientation the orientation to prepend. Not modified.
+    * @throws ReferenceFrameMismatchException if the argument is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default void prependOrientation(FrameOrientation3DReadOnly orientation)
+   {
+      checkReferenceFrameMatch(orientation);
+      getRotation().prepend(orientation);
    }
 
    /**

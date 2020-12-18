@@ -9,9 +9,9 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
@@ -95,7 +95,7 @@ public class EuclidCoreIOTools
     * @param affineTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getAffineTransformString(AffineTransform affineTransform)
+   public static String getAffineTransformString(AffineTransformReadOnly affineTransform)
    {
       return getAffineTransformString(DEFAULT_FORMAT, affineTransform);
    }
@@ -117,12 +117,12 @@ public class EuclidCoreIOTools
     * @param affineTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getAffineTransformString(String format, AffineTransform affineTransform)
+   public static String getAffineTransformString(String format, AffineTransformReadOnly affineTransform)
    {
       if (affineTransform == null)
          return "null";
       else
-         return getHomogeneousTransformString(format, affineTransform.getRotationScaleMatrix(), affineTransform.getTranslationVector());
+         return getHomogeneousTransformString(format, affineTransform.getLinearTransform(), affineTransform.getTranslation());
    }
 
    private static String getHomogeneousTransformString(String format, Matrix3DReadOnly matrix, Tuple3DReadOnly translation)
@@ -620,7 +620,7 @@ public class EuclidCoreIOTools
     */
    public static String getYawPitchRollString(String format, double yaw, double pitch, double roll)
    {
-      return getStringOf("yaw-pitch-roll: (", ")", ", ", yaw, pitch, roll);
+      return getStringOf("yaw-pitch-roll: (", ")", ", ", format, yaw, pitch, roll);
    }
 
    /**
@@ -682,8 +682,27 @@ public class EuclidCoreIOTools
    }
 
    /**
-    * Gets a representative {@code String} of a series of doubles given specific prefix, suffix,
-    * separator, and format to use.
+    * Gets a representative {@code String} of a series of doubles given a specific separator.
+    * <p>
+    * Using {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    *  0.123, -0.480,  1.457
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, double... values)
+   {
+      return getStringOf(separator, DEFAULT_FORMAT, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of doubles given a specific separator, and
+    * format to use.
     * <p>
     * Using the default format {@link #DEFAULT_FORMAT} and {@code separator = ", "}, this provides a
     * {@code String} as follows:
@@ -720,6 +739,7 @@ public class EuclidCoreIOTools
     * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the array elements.
     * @param prefix                  the {@code String} to prepend to the result.
     * @param suffix                  the {@code String} to append to the result.
     * @param separator               the {@code String} used to separate elements of the array.
@@ -745,6 +765,7 @@ public class EuclidCoreIOTools
     * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the array elements.
     * @param separator               the {@code String} used to separate elements of the array.
     * @param array                   the array of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative
@@ -765,6 +786,7 @@ public class EuclidCoreIOTools
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the collection elements.
     * @param prefix                  the {@code String} to prepend to the result.
     * @param suffix                  the {@code String} to append to the result.
     * @param separator               the {@code String} used to separate elements of the collection.
@@ -799,6 +821,7 @@ public class EuclidCoreIOTools
     * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
     *
+    * @param <T>                     the type of the collection elements.
     * @param separator               the {@code String} used to separate elements of the collection.
     * @param collection              the series of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative

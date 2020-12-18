@@ -2,7 +2,9 @@ package us.ihmc.euclid.matrix.interfaces;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.exceptions.SingularMatrixException;
 import us.ihmc.euclid.interfaces.Clearable;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -34,6 +36,37 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
     */
    public void set(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22);
 
+   /**
+    * Sets this matrix by converting the given orientation.
+    * 
+    * @param orientation3D the orientation to convert into a 3D matrix. Not modified.
+    */
+   default void set(Orientation3DReadOnly orientation3D)
+   {
+      if (orientation3D instanceof RotationMatrixReadOnly)
+         set((RotationMatrixReadOnly) orientation3D);
+      else
+         orientation3D.get(this);
+   }
+
+   /**
+    * Sets this matrix to the given rotation matrix.
+    * 
+    * @param rotationMatrix the rotation matrix to copy. Not modified.
+    */
+   default void set(RotationMatrixReadOnly rotationMatrix)
+   {
+      set((Matrix3DReadOnly) rotationMatrix);
+   }
+
+   /**
+    * Resets the values of this matrix coefficients.
+    * <p>
+    * The default implementation sets all the coefficients to zero, but some implementations, e.g.
+    * {@link RotationMatrixBasics}, overrides this method to reset this matrix to be an identity
+    * matrix.
+    * </p>
+    */
    @Override
    default void setToZero()
    {
@@ -71,6 +104,29 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    }
 
    /**
+    * Inverts this matrix.
+    * <p>
+    * this = this<sup>-1</sup>
+    * </p>
+    *
+    * @throws SingularMatrixException if the matrix is not invertible.
+    */
+   default void invert()
+   {
+      boolean success = Matrix3DTools.invert(this);
+      if (!success)
+         throw new SingularMatrixException(this);
+   }
+
+   /**
+    * Transposes this matrix: m = m<sup>T</sup>.
+    */
+   default void transpose()
+   {
+      set(getM00(), getM10(), getM20(), getM01(), getM11(), getM21(), getM02(), getM12(), getM22());
+   }
+
+   /**
     * Sets this matrix to identity:
     *
     * <pre>
@@ -92,6 +148,35 @@ public interface CommonMatrix3DBasics extends Matrix3DReadOnly, Clearable
    default void set(Matrix3DReadOnly other)
    {
       set(other.getM00(), other.getM01(), other.getM02(), other.getM10(), other.getM11(), other.getM12(), other.getM20(), other.getM21(), other.getM22());
+   }
+
+   /**
+    * Sets this matrix to equal the other matrix and then inverts this.
+    * <p>
+    * this = other<sup>-1</sup>
+    * </p>
+    *
+    * @param other the matrix to copy the values from. Not modified.
+    * @throws SingularMatrixException if the matrix is not invertible.
+    */
+   default void setAndInvert(Matrix3DReadOnly other)
+   {
+      set(other);
+      invert();
+   }
+
+   /**
+    * Sets this matrix to equal the other matrix and then transposes this.
+    * <p>
+    * this = other<sup>T</sup>
+    * </p>
+    *
+    * @param other the other matrix used to update this matrix. Not modified.
+    */
+   default void setAndTranspose(Matrix3DReadOnly other)
+   {
+      set(other);
+      transpose();
    }
 
    /**

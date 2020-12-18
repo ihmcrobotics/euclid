@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
+import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -41,8 +42,8 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * Converts, if necessary, and packs this orientation in a quaternion.
     *
     * @param quaternionToPack the quaternion into which this orientation is to be stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code frameQuaternionToPack} is not expressed in the
-    *                                         same frame as this.
+    * @throws ReferenceFrameMismatchException if {@code quaternionToPack} is not expressed in the same
+    *                                         frame as this.
     */
    default void get(FixedFrameQuaternionBasics quaternionToPack)
    {
@@ -66,8 +67,8 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param yawPitchRollToPack the yaw-pitch-roll into which this orientation is to be stored.
     *                           Modified.
-    * @throws ReferenceFrameMismatchException if {@code frameYawPitchRollToPack} is not expressed in
-    *                                         the same frame as this.
+    * @throws ReferenceFrameMismatchException if {@code yawPitchRollToPack} is not expressed in the
+    *                                         same frame as this.
     */
    default void get(FixedFrameYawPitchRollBasics yawPitchRollToPack)
    {
@@ -92,13 +93,13 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     *
     * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
     *                             Modified.
-    * @throws ReferenceFrameMismatchException if {@code frameYawPitchRollToPack} is not expressed in
-    *                                         the same frame as this.
+    * @throws ReferenceFrameMismatchException if {@code rotationMatrixToPack} is not expressed in the
+    *                                         same frame as this.
     */
-   default void get(FixedFrameRotationMatrixBasics rotationMatrixToPack)
+   default void get(FixedFrameCommonMatrix3DBasics rotationMatrixToPack)
    {
       checkReferenceFrameMatch(rotationMatrixToPack);
-      get((RotationMatrixBasics) rotationMatrixToPack);
+      get((CommonMatrix3DBasics) rotationMatrixToPack);
    }
 
    /**
@@ -107,10 +108,10 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * @param rotationMatrixToPack the rotation matrix into which this orientation is to be stored.
     *                             Modified.
     */
-   default void get(FrameRotationMatrixBasics rotationMatrixToPack)
+   default void get(FrameCommonMatrix3DBasics rotationMatrixToPack)
    {
       rotationMatrixToPack.setReferenceFrame(getReferenceFrame());
-      get((RotationMatrixBasics) rotationMatrixToPack);
+      get((CommonMatrix3DBasics) rotationMatrixToPack);
    }
 
    /**
@@ -157,8 +158,8 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
     * </p>
     *
     * @param eulerAnglesToPack the tuple in which the Euler angles are stored. Modified.
-    * @throws ReferenceFrameMismatchException if {@code frameEulerAnglesToPack} is not expressed in the
-    *                                         same frame as this.
+    * @throws ReferenceFrameMismatchException if {@code eulerAnglesToPack} is not expressed in the same
+    *                                         frame as this.
     */
    default void getEuler(FixedFrameTuple3DBasics eulerAnglesToPack)
    {

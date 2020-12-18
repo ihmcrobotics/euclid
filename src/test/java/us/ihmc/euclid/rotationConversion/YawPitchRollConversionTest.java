@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
@@ -56,67 +55,6 @@ public class YawPitchRollConversionTest
                assertEquals(pitch, actualPitch, EPSILON);
 
                actualRoll = YawPitchRollConversion.computeRoll(matrix);
-               assertEquals(roll, actualRoll, EPSILON);
-
-               YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualYawPitchRoll);
-               assertEquals(yaw, actualYawPitchRoll.getYaw(), EPSILON);
-               assertEquals(pitch, actualYawPitchRoll.getPitch(), EPSILON);
-               assertEquals(roll, actualYawPitchRoll.getRoll(), EPSILON);
-
-               YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualEulerAngles);
-               assertEquals(yaw, actualEulerAngles.getZ(), EPSILON);
-               assertEquals(pitch, actualEulerAngles.getY(), EPSILON);
-               assertEquals(roll, actualEulerAngles.getX(), EPSILON);
-            }
-         }
-      }
-
-      double actualYaw = YawPitchRollConversion.computeYawImpl(1.0, 0.0);
-      assertTrue(actualYaw == 0.0);
-      actualYaw = YawPitchRollConversion.computeYawImpl(Double.NaN, 0.0);
-      assertTrue(Double.isNaN(actualYaw));
-      actualYaw = YawPitchRollConversion.computeYawImpl(0.0, Double.NaN);
-      assertTrue(Double.isNaN(actualYaw));
-
-      double actualPitch = YawPitchRollConversion.computePitchImpl(0.0);
-      assertTrue(actualPitch == 0.0);
-      actualPitch = YawPitchRollConversion.computePitchImpl(Double.NaN);
-      assertTrue(Double.isNaN(actualPitch));
-
-      double actualRoll = YawPitchRollConversion.computeRollImpl(0.0, 1.0);
-      assertTrue(actualRoll == 0.0);
-      actualRoll = YawPitchRollConversion.computeRollImpl(Double.NaN, 0.0);
-      assertTrue(Double.isNaN(actualRoll));
-      actualRoll = YawPitchRollConversion.computeRollImpl(0.0, Double.NaN);
-      assertTrue(Double.isNaN(actualRoll));
-   }
-
-   @Test
-   public void testRotationScaleMatrixToYawPitchRoll() throws Exception
-   {
-      Random random = new Random(23423L);
-      RotationScaleMatrix matrix = new RotationScaleMatrix();
-      YawPitchRoll actualYawPitchRoll = new YawPitchRoll();
-      Vector3D actualEulerAngles = new Vector3D();
-
-      double deltaAngle = 0.05 * Math.PI;
-
-      for (double yaw = -Math.PI; yaw <= Math.PI; yaw += deltaAngle)
-      {
-         for (double roll = -Math.PI; roll <= Math.PI; roll += deltaAngle)
-         {
-            for (double pitch = -Math.PI / 2.0; pitch <= Math.PI / 2.0; pitch += deltaAngle)
-            {
-               matrix.setScale(EuclidCoreRandomTools.nextPoint3D(random, 0.0, 10.0));
-               matrix.setYawPitchRoll(yaw, pitch, roll);
-
-               double actualYaw = YawPitchRollConversion.computeYaw(matrix);
-               assertEquals(yaw, actualYaw, EPSILON);
-
-               double actualPitch = YawPitchRollConversion.computePitch(matrix);
-               assertEquals(pitch, actualPitch, EPSILON);
-
-               double actualRoll = YawPitchRollConversion.computeRoll(matrix);
                assertEquals(roll, actualRoll, EPSILON);
 
                YawPitchRollConversion.convertMatrixToYawPitchRoll(matrix, actualYawPitchRoll);

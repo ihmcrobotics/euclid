@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -522,16 +521,6 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          RotationMatrix rotationMatrix = new RotationMatrix();
          transform.get(rotationMatrix, actualTranslation);
          actualQuaternion.set(rotationMatrix);
-         EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPS);
-         EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTranslation, EPS);
-      }
-
-      { // Test get(RotationScaleMatrix rotationMarixToPack, TupleBasics translationToPack)
-         Quaternion actualQuaternion = new Quaternion();
-         Vector3D actualTranslation = new Vector3D();
-         RotationScaleMatrix rotationScaleMatrix = new RotationScaleMatrix();
-         transform.get(rotationScaleMatrix, actualTranslation);
-         rotationScaleMatrix.getRotation(actualQuaternion);
          EuclidCoreTestTools.assertQuaternionEquals(expectedQuaternion, actualQuaternion, EPS);
          EuclidCoreTestTools.assertTuple3DEquals(expectedTranslation, actualTranslation, EPS);
       }
@@ -1661,13 +1650,13 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
       Vector3D scale = EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0);
 
       AffineTransform original = new AffineTransform(originalRigidBodyTransform);
-      original.setScale(scale);
+      original.appendScale(scale);
       AffineTransform expected = new AffineTransform();
       AffineTransform actual = new AffineTransform();
 
       transform.transform(originalRigidBodyTransform, expectedRigidBodyTransform);
       expected.set(expectedRigidBodyTransform);
-      expected.setScale(scale);
+      expected.appendScale(scale);
       transform.transform(original, actual);
 
       EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);

@@ -8,10 +8,8 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.EuclidTestConstants;
-import us.ihmc.euclid.matrix.RotationScaleMatrix;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.api.EuclidFrameAPITester;
@@ -36,7 +34,6 @@ public class FixedFrameShape3DPoseTest
    {
       EuclidFrameAPITester tester = new EuclidFrameAPITester(new EuclidFrameShapeAPIDefaultConfiguration());
       List<MethodSignature> signaturesToIgnore = new ArrayList<>();
-      signaturesToIgnore.add(new MethodSignature("get", RotationScaleMatrix.class, Tuple3DBasics.class));
       // Deprecated methods in RigidBodyTransformReadOnly
       signaturesToIgnore.add(new MethodSignature("getRotation", Orientation3DBasics.class));
       signaturesToIgnore.add(new MethodSignature("getRotation", RotationMatrixBasics.class));
@@ -46,7 +43,6 @@ public class FixedFrameShape3DPoseTest
       Predicate<Method> methodFilter = EuclidFrameAPITester.methodFilterFromSignature(signaturesToIgnore);
       tester.assertOverloadingWithFrameObjects(FrameShape3DPoseReadOnly.class, Shape3DPoseReadOnly.class, false, 1, methodFilter);
 
-      signaturesToIgnore.add(new MethodSignature("set", RotationScaleMatrixReadOnly.class, Tuple3DReadOnly.class));
       // Deprecated methods in RigidBodyTransformBasics
       signaturesToIgnore.add(new MethodSignature("setRotation", Vector3DReadOnly.class));
       signaturesToIgnore.add(new MethodSignature("setRotation", RotationMatrixReadOnly.class));

@@ -4,6 +4,7 @@
 /out
 /target
 /build
+/pit-reports
 
 # Top level directories in sub-projects
 */target
@@ -82,3 +83,4 @@
 **/gradlew
 **/gradlew.bat
 **/generatedTestSuites/*TestSuite.java
+**/rebel.xml

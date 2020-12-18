@@ -3,6 +3,8 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -36,6 +38,17 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    }
 
    /**
+    * Sets all this matrix to identity and sets the current reference frame to {@code referenceFrame}.
+    *
+    * @param referenceFrame the new reference frame to be associated with this matrix.
+    */
+   default void setIdentity(ReferenceFrame referenceFrame)
+   {
+      setReferenceFrame(referenceFrame);
+      setIdentity();
+   }
+
+   /**
     * Sets all the coefficients of this matrix to {@link Double#NaN} and sets the current reference
     * frame to {@code referenceFrame}.
     *
@@ -51,13 +64,13 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
     * Sets this matrix to {@code matrix3DReadOnly} and sets its reference frame to
     * {@code referenceFrame}.
     *
-    * @param referenceFrame the new reference frame to be associated with this matrix.
-    * @param matrix         the other matrix to copy the values of. Not modified.
+    * @param referenceFrame   the new reference frame to be associated with this matrix.
+    * @param matrix3DReadOnly the other matrix to copy the values of. Not modified.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix)
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Matrix3DReadOnly matrix3DReadOnly)
    {
       setReferenceFrame(referenceFrame);
-      set(matrix);
+      set(matrix3DReadOnly);
    }
 
    /**
@@ -68,6 +81,53 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
    default void setIncludingFrame(FrameMatrix3DReadOnly other)
    {
       setIncludingFrame(other.getReferenceFrame(), other);
+   }
+
+   /**
+    * Sets this matrix to {@code rotationMatrixReadOnly}.
+    *
+    * @param referenceFrame         the reference frame in which the argument is expressed.
+    * @param rotationMatrixReadOnly the rotation matrix to copy the values of. Not modified.
+    */
+   default void setIncludingFrame(ReferenceFrame referenceFrame, RotationMatrixReadOnly rotationMatrixReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(rotationMatrixReadOnly);
+   }
+
+   /**
+    * Sets this matrix to {@code other}.
+    *
+    * @param frameRotationMatrixReadOnly the other matrix to copy the values and reference frame from.
+    *                                    Not modified.
+    */
+   default void setIncludingFrame(FrameRotationMatrixReadOnly frameRotationMatrixReadOnly)
+   {
+      setIncludingFrame(frameRotationMatrixReadOnly.getReferenceFrame(), frameRotationMatrixReadOnly);
+   }
+
+   /**
+    * Sets this frame orientation to the same orientation described by the given
+    * {@code orientation3DReadOnly} and sets the frame to the given {@code referenceFrame}.
+    *
+    * @param referenceFrame        the new reference frame for this frame orientation.
+    * @param orientation3DReadOnly the orientation used to set this orientation. Not modified.
+    */
+   default void setIncludingFrame(ReferenceFrame referenceFrame, Orientation3DReadOnly orientation3DReadOnly)
+   {
+      setReferenceFrame(referenceFrame);
+      set(orientation3DReadOnly);
+   }
+
+   /**
+    * Sets this matrix to {@code frameOrientation3DReadOnly}.
+    *
+    * @param frameOrientation3DReadOnly the orientation to copy the values and reference frame from.
+    *                                   Not modified.
+    */
+   default void setIncludingFrame(FrameOrientation3DReadOnly frameOrientation3DReadOnly)
+   {
+      setIncludingFrame(frameOrientation3DReadOnly.getReferenceFrame(), frameOrientation3DReadOnly);
    }
 
    /**

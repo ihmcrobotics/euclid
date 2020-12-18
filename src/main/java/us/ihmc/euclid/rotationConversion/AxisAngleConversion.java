@@ -2,7 +2,6 @@ package us.ihmc.euclid.rotationConversion;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DFeatures;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
@@ -34,29 +33,6 @@ public class AxisAngleConversion
    private AxisAngleConversion()
    {
       // Suppresses default constructor, ensuring non-instantiability.
-   }
-
-   /**
-    * Converts the rotation part of the given rotation-scale matrix into an axis-angle.
-    * <p>
-    * After calling this method, the orientation represented by the axis-angle is the same as the given
-    * rotation part of the rotation-scale matrix.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, the axis-angle is set to
-    * {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @param axisAngleToPack     the axis-angle in which the result is stored. Modified.
-    */
-   public static void convertMatrixToAxisAngle(RotationScaleMatrixReadOnly rotationScaleMatrix, AxisAngleBasics axisAngleToPack)
-   {
-      convertMatrixToAxisAngle(rotationScaleMatrix.getRotationMatrix(), axisAngleToPack);
    }
 
    /**

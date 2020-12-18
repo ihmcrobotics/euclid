@@ -324,8 +324,8 @@ public class QuaternionTools
     * @param conjugateQ2       whether to conjugate {@code q2} or not.
     * @param orientationToPack the orientation in which the result is stored. Modified.
     */
-   static void multiplyImpl(double q1x, double q1y, double q1z, double q1s, boolean conjugateQ1, double q2x, double q2y, double q2z, double q2s,
-                            boolean conjugateQ2, Orientation3DBasics orientationToPack)
+   public static void multiplyImpl(double q1x, double q1y, double q1z, double q1s, boolean conjugateQ1, double q2x, double q2y, double q2z, double q2s,
+                                   boolean conjugateQ2, Orientation3DBasics orientationToPack)
    {
       if (conjugateQ1)
       {
@@ -459,8 +459,8 @@ public class QuaternionTools
     * @param conjugateT2  whether to conjugate {@code t2} or not.
     * @param vectorToPack the vector in which the result is stores. Modified.
     */
-   private static void multiplyImpl(double x1, double y1, double z1, double s1, boolean conjugateT1, double x2, double y2, double z2, double s2,
-                                    boolean conjugateT2, Vector4DBasics vectorToPack)
+   public static void multiplyImpl(double x1, double y1, double z1, double s1, boolean conjugateT1, double x2, double y2, double z2, double s2,
+                                   boolean conjugateT2, Vector4DBasics vectorToPack)
    {
       if (conjugateT1)
       {
@@ -1429,6 +1429,10 @@ public class QuaternionTools
       double s = q1.getS() * q2.getS() + q1.getX() * q2.getX() + q1.getY() * q2.getY() + q1.getZ() * q2.getZ();
 
       double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
-      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
+
+      if (EuclidCoreTools.epsilonEquals(1.0, s, EPS))
+         return 2.0 * sinHalfTheta / s;
+      else
+         return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
    }
 }

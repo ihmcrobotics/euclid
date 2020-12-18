@@ -78,6 +78,37 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
 
    /** {@inheritDoc} */
    @Override
+   default void subTransform(FixedFrameTuple3DBasics tupleToTransform)
+   {
+      subTransform(tupleToTransform, tupleToTransform);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, Tuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal);
+      RotationMatrixReadOnly.super.subTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void subTransform(Tuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleTransformed);
+      RotationMatrixReadOnly.super.subTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default void subTransform(FrameTuple3DReadOnly tupleOriginal, FixedFrameTuple3DBasics tupleTransformed)
+   {
+      checkReferenceFrameMatch(tupleOriginal, tupleTransformed);
+      RotationMatrixReadOnly.super.subTransform(tupleOriginal, tupleTransformed);
+   }
+
+   /** {@inheritDoc} */
+   @Override
    default void transform(FixedFrameTuple3DBasics tupleToTransform)
    {
       checkReferenceFrameMatch(tupleToTransform);

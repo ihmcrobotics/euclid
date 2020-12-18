@@ -786,7 +786,7 @@ public abstract class Matrix3DReadOnlyTest<T extends Matrix3DReadOnly>
          Matrix3D matrixInverse = new Matrix3D();
          matrixInverse.setAndInvert(matrix);
          matrixInverse.transform(original, expected);
-         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, epsilonMatrix);
+         EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, Math.max(1, expected.maxAbsElement()) * epsilonMatrix);
       }
 
       for (int i = 0; i < ITERATIONS; i++)

@@ -2,7 +2,6 @@ package us.ihmc.euclid.rotationConversion;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.matrix.interfaces.RotationScaleMatrixReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
@@ -138,29 +137,6 @@ public class QuaternionConversion
          double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
          quaternionToPack.setUnsafe(ux * sinHalfTheta, uy * sinHalfTheta, uz * sinHalfTheta, cosHalfTheta);
       }
-   }
-
-   /**
-    * Converts the given rotation part of the given rotation-scale matrix into a quaternion.
-    * <p>
-    * After calling this method, the rotation part of the rotation-scale matrix and the quaternion
-    * represent the same orientation.
-    * </p>
-    * <p>
-    * Edge case:
-    * <ul>
-    * <li>if the rotation matrix contains at least one {@link Double#NaN}, the quaternion is set to
-    * {@link Double#NaN}.
-    * </ul>
-    * </p>
-    *
-    * @param rotationScaleMatrix a 3-by-3 matrix representing an orientation and a scale. Only the
-    *                            orientation part is used during the conversion. Not modified.
-    * @param quaternionToPack    the quaternion in which the result is stored.
-    */
-   public static void convertMatrixToQuaternion(RotationScaleMatrixReadOnly rotationScaleMatrix, QuaternionBasics quaternionToPack)
-   {
-      convertMatrixToQuaternion(rotationScaleMatrix.getRotationMatrix(), quaternionToPack);
    }
 
    /**

@@ -18,12 +18,13 @@ import java.util.stream.Stream;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
-import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -41,6 +42,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
@@ -175,7 +177,14 @@ public class EuclidCoreTestTools
 
       if (!expected.epsilonEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         YawPitchRoll difference = new YawPitchRoll();
+         difference.set(expected);
+         difference.addYaw(-actual.getYaw());
+         difference.addPitch(-actual.getPitch());
+         difference.addRoll(-actual.getRoll());
+         difference.absolute();
+         double maxDifference = EuclidCoreTools.max(difference.getYaw(), difference.getPitch(), difference.getRoll());
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Max difference of: " + Double.toString(maxDifference), format);
       }
    }
 
@@ -242,7 +251,7 @@ public class EuclidCoreTestTools
       {
          double difference = expected.distance(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -326,9 +335,9 @@ public class EuclidCoreTestTools
       }
       catch (AssertionError e)
       {
-         double difference = expectedQuaternion.distance(actualQuaternion);
+         double difference = expectedQuaternion.distancePrecise(actualQuaternion);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -394,7 +403,7 @@ public class EuclidCoreTestTools
       {
          Vector2D difference = new Vector2D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -458,7 +467,7 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, expected.distance(actual), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
    }
 
@@ -524,7 +533,7 @@ public class EuclidCoreTestTools
       {
          Vector2D difference = new Vector2D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -590,7 +599,7 @@ public class EuclidCoreTestTools
       {
          Vector3D difference = new Vector3D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -654,7 +663,7 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, expected.distance(actual), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
    }
 
@@ -720,7 +729,7 @@ public class EuclidCoreTestTools
       {
          Vector3D difference = new Vector3D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.length(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.length()), format);
       }
    }
 
@@ -786,7 +795,7 @@ public class EuclidCoreTestTools
       {
          Vector4D difference = new Vector4D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.norm(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.norm()), format);
       }
    }
 
@@ -852,7 +861,7 @@ public class EuclidCoreTestTools
       {
          Vector4D difference = new Vector4D(actual);
          difference.sub(expected);
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference.norm(), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference.norm()), format);
       }
    }
 
@@ -916,7 +925,9 @@ public class EuclidCoreTestTools
 
       if (!Matrix3DFeatures.epsilonEquals(expected, actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         Matrix3D difference = new Matrix3D();
+         difference.sub(expected, actual);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Max difference of: " + Double.toString(difference.maxAbsElement()), format);
       }
    }
 
@@ -982,7 +993,7 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, expected.distance(actual), format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
    }
 
@@ -1353,9 +1364,9 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         double difference = expected.distance(actual);
+         double difference = expected.distancePrecise(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -1484,7 +1495,7 @@ public class EuclidCoreTestTools
       {
          double difference = expected.distance(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, difference, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -2333,7 +2344,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformEquals(AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
       assertAffineTransformEquals(null, expected, actual, epsilon);
    }
@@ -2352,7 +2363,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
       assertAffineTransformEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -2373,7 +2384,8 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon, String format)
+   public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon,
+                                                  String format)
    {
       if (expected == null && actual == null)
          return;
@@ -2399,7 +2411,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformGeometricallyEquals(AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon)
    {
       assertAffineTransformGeometricallyEquals(null, expected, actual, epsilon);
    }
@@ -2417,7 +2429,8 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon)
+   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual,
+                                                               double epsilon)
    {
       assertAffineTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -2437,8 +2450,8 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransform expected, AffineTransform actual, double epsilon,
-                                                               String format)
+   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual,
+                                                               double epsilon, String format)
    {
       if (expected == null && actual == null)
          return;
@@ -2567,12 +2580,12 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double difference,
+   private static void throwNotEqualAssertionError(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, String difference,
                                                    String format)
    {
       String expectedAsString = getYawPitchRollString(format, expected);
       String actualAsString = getYawPitchRollString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, String format)
@@ -2582,11 +2595,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getTuple2DString(format, expected);
       String actualAsString = getTuple2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, String format)
@@ -2596,11 +2609,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getTuple3DString(format, expected);
       String actualAsString = getTuple3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, String format)
@@ -2610,11 +2623,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getTuple4DString(format, expected);
       String actualAsString = getTuple4DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, String format)
@@ -2624,11 +2637,11 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, String difference, String format)
    {
       String expectedAsString = getAxisAngleString(format, expected);
       String actualAsString = getAxisAngleString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, String format)
@@ -2645,14 +2658,14 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, double difference, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String difference, String format)
    {
       String expectedAsString = getMatrix3DString(format, expected);
       String actualAsString = getMatrix3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, Double.toString(difference));
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, AffineTransform expected, AffineTransform actual, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, String format)
    {
       String expectedAsString = getAffineTransformString(format, expected);
       String actualAsString = getAffineTransformString(format, actual);
@@ -2713,7 +2726,7 @@ public class EuclidCoreTestTools
    {
       String errorMessage = addPrefixToMessage(messagePrefix, "expected:\n" + expectedAsString + "\n but was:\n" + actualAsString);
       if (differenceAsString != null)
-         errorMessage += "\nDifference of: " + differenceAsString;
+         errorMessage += "\n" + differenceAsString;
 
       throw new AssertionError(errorMessage);
    }

@@ -449,7 +449,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Append a rotation about the z-axis to this axis-angle.
+    * Appends a rotation about the z-axis to this axis-angle.
     *
     * <pre>
     *               / ux    =  0  \
@@ -467,7 +467,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Append a rotation about the y-axis to this axis-angle.
+    * Appends a rotation about the y-axis to this axis-angle.
     *
     * <pre>
     *               / ux    =  0    \
@@ -485,7 +485,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Append a rotation about the x-axis to this axis-angle.
+    * Appends a rotation about the x-axis to this axis-angle.
     *
     * <pre>
     *               / ux    =  1   \
@@ -570,7 +570,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Prepend a rotation about the z-axis to this axis-angle.
+    * Prepends a rotation about the z-axis to this axis-angle.
     *
     * <pre>
     *        / ux    =  0  \
@@ -588,7 +588,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Prepend a rotation about the y-axis to this axis-angle.
+    * Prepends a rotation about the y-axis to this axis-angle.
     *
     * <pre>
     *        / ux    =  0    \
@@ -606,7 +606,7 @@ public interface AxisAngleBasics extends AxisAngleReadOnly, Orientation3DBasics,
    }
 
    /**
-    * Prepend a rotation about the x-axis to this axis-angle.
+    * Prepends a rotation about the x-axis to this axis-angle.
     *
     * <pre>
     *        / ux    =  1   \
