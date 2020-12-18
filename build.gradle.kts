@@ -5,7 +5,7 @@ plugins {
 
 ihmc {
    group = "us.ihmc"
-   version = "0.15.2"
+   version = "0.16.0"
    vcsUrl = "https://github.com/ihmcrobotics/euclid"
    openSource = true
 
