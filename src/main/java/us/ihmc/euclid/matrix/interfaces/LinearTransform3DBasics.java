@@ -85,7 +85,9 @@ public interface LinearTransform3DBasics extends LinearTransform3DReadOnly, Matr
     * {@code pitch = rotY}, and {@code roll = rotX}.
     * </p>
     *
-    * @param eulerAngles the Euler angles to set this linear transform. Not modified.
+    * @param rotX the angle to rotate about the x-axis.
+    * @param rotY the angle to rotate about the y-axis.
+    * @param rotZ the angle to rotate about the z-axis.
     */
    default void setEuler(double rotX, double rotY, double rotZ)
    {
