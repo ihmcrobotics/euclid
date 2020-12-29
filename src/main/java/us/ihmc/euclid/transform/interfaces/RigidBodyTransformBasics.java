@@ -1048,6 +1048,7 @@ public interface RigidBodyTransformBasics extends RigidBodyTransformReadOnly, Cl
     */
    default void prependOrientation(Orientation3DReadOnly orientation)
    {
+      orientation.transform(getTranslation());
       getRotation().prepend(orientation);
    }
 

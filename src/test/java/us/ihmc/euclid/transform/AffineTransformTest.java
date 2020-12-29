@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
@@ -461,6 +462,29 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
    }
 
    @Test
+   public void testAppendOrientation() throws Exception
+   {
+      Random random = new Random(3456);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         AffineTransform original = EuclidCoreRandomTools.nextAffineTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         AffineTransform orientationTransform = new AffineTransform(orientation, new Vector3D());
+
+         AffineTransform expected = new AffineTransform();
+         expected.set(original);
+         expected.multiply(orientationTransform);
+
+         AffineTransform actual = new AffineTransform();
+         actual.set(original);
+         actual.appendOrientation(orientation);
+
+         EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
+      }
+   }
+
+   @Test
    public void testAppendYawPitchRoll() throws Exception
    {
       Random random = new Random(35454L);
@@ -547,6 +571,29 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
 
          actual.set(original);
          actual.prependTranslation(translation);
+
+         EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
+      }
+   }
+
+   @Test
+   public void testPrependOrientation() throws Exception
+   {
+      Random random = new Random(3456);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         AffineTransform original = EuclidCoreRandomTools.nextAffineTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         AffineTransform orientationTransform = new AffineTransform(orientation, new Vector3D());
+
+         AffineTransform expected = new AffineTransform();
+         expected.set(original);
+         expected.preMultiply(orientationTransform);
+
+         AffineTransform actual = new AffineTransform();
+         actual.set(original);
+         actual.prependOrientation(orientation);
 
          EuclidCoreTestTools.assertAffineTransformEquals(expected, actual, EPS);
       }
