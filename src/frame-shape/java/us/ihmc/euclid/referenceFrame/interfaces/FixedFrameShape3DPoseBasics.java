@@ -470,7 +470,7 @@ public interface FixedFrameShape3DPoseBasics extends Shape3DPoseBasics, FrameSha
    default void prependOrientation(FrameOrientation3DReadOnly orientation)
    {
       checkReferenceFrameMatch(orientation);
-      getRotation().prepend(orientation);
+      Shape3DPoseBasics.super.prependOrientation(orientation);
    }
 
    /**

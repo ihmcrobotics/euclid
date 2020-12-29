@@ -21,6 +21,7 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -1251,6 +1252,29 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   public void testAppendOrientation() throws Exception
+   {
+      Random random = new Random(46575);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         RigidBodyTransform orientationTransform = new RigidBodyTransform(orientation, new Vector3D());
+
+         RigidBodyTransform expected = new RigidBodyTransform();
+         expected.set(original);
+         expected.multiply(orientationTransform);
+
+         RigidBodyTransform actual = new RigidBodyTransform();
+         actual.set(original);
+         actual.appendOrientation(orientation);
+
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
+      }
+   }
+
+   @Test
    public void testAppendYawPitchRoll() throws Exception
    {
       Random random = new Random(35454L);
@@ -1458,6 +1482,29 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
          assertTrue(actual.hasTranslation());
          actual.prependTranslation(negateTranslation);
          assertFalse(actual.hasTranslation());
+      }
+   }
+
+   @Test
+   public void testPrependOrientation() throws Exception
+   {
+      Random random = new Random(3456);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         RigidBodyTransform original = EuclidCoreRandomTools.nextRigidBodyTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         RigidBodyTransform orientationTransform = new RigidBodyTransform(orientation, new Vector3D());
+
+         RigidBodyTransform expected = new RigidBodyTransform();
+         expected.set(original);
+         expected.preMultiply(orientationTransform);
+
+         RigidBodyTransform actual = new RigidBodyTransform();
+         actual.set(original);
+         actual.prependOrientation(orientation);
+
+         EuclidCoreTestTools.assertRigidBodyTransformEquals(expected, actual, EPS);
       }
    }
 

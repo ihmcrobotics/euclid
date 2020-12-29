@@ -839,6 +839,7 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     */
    default void prependOrientation(Orientation3DReadOnly orientation)
    {
+      orientation.transform(getTranslation());
       getLinearTransform().prependRotation(orientation);
    }
 

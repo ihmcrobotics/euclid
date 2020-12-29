@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidCoreTestTools;
 import us.ihmc.euclid.tuple2D.Point2D;
@@ -697,6 +698,29 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
    }
 
    @Test
+   public void testAppendOrientation() throws Exception
+   {
+      Random random = new Random(46575);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         QuaternionBasedTransform orientationTransform = new QuaternionBasedTransform(orientation, new Vector3D());
+
+         QuaternionBasedTransform expected = new QuaternionBasedTransform();
+         expected.set(original);
+         expected.multiply(orientationTransform);
+
+         QuaternionBasedTransform actual = new QuaternionBasedTransform();
+         actual.set(original);
+         actual.appendOrientation(orientation);
+
+         EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
+      }
+   }
+
+   @Test
    public void testAppendYawPitchRoll() throws Exception
    {
       Random random = new Random(35454L);
@@ -785,6 +809,29 @@ public class QuaternionBasedTransformTest extends TransformTest<QuaternionBasedT
          actual.prependTranslation(translation);
 
          EuclidCoreTestTools.assertQuaternionBasedTransformGeometricallyEquals(expected, actual, EPS);
+      }
+   }
+
+   @Test
+   public void testPrependOrientation() throws Exception
+   {
+      Random random = new Random(3456);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         QuaternionBasedTransform original = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         QuaternionBasedTransform orientationTransform = new QuaternionBasedTransform(orientation, new Vector3D());
+
+         QuaternionBasedTransform expected = new QuaternionBasedTransform();
+         expected.set(original);
+         expected.preMultiply(orientationTransform);
+
+         QuaternionBasedTransform actual = new QuaternionBasedTransform();
+         actual.set(original);
+         actual.prependOrientation(orientation);
+
+         EuclidCoreTestTools.assertQuaternionBasedTransformEquals(expected, actual, EPS);
       }
    }
 

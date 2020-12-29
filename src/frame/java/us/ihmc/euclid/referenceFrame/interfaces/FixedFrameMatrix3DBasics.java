@@ -201,7 +201,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    /**
     * Sets this matrix to be equal to the inner-product of {@code matrix3DReadOnly}.
     * <p>
-    * this = <sup>T<sup>matrix3DReadOnly * matrix3DReadOnly
+    * this = matrix3DReadOnly<sup>T<sup> * matrix3DReadOnly
     * </p>
     *
     * @param referenceFrame   the reference frame in which {@code matrix3DReadOnly} is expressed.
@@ -217,7 +217,7 @@ public interface FixedFrameMatrix3DBasics extends FrameMatrix3DReadOnly, Matrix3
    /**
     * Sets this matrix to be equal to the inner-product of {@code other}.
     * <p>
-    * this = <sup>T<sup>other * other
+    * this = other<sup>T<sup> * other
     * </p>
     *
     * @param other the other matrix used for this operation. Not modified.
