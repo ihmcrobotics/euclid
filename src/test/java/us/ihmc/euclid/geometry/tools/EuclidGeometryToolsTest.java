@@ -37,6 +37,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class EuclidGeometryToolsTest
 {
@@ -721,6 +722,29 @@ public class EuclidGeometryToolsTest
       assertEquals(expectedReturn21, actualReturn21, EPSILON, "return value");
       assertEquals(expectedReturn22, actualReturn22, EPSILON, "return value");
       assertEquals(expectedReturn23, actualReturn23, EPSILON, "return value");
+   }
+
+   @Test
+   public void testOrientation3DFromZUpToVector3D() throws Exception
+   {
+      Random random = new Random(3465764);
+
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D vector = new Vector3D(Axis3D.Z);
+         double expectedAngle = EuclidCoreRandomTools.nextDouble(random, 0.0, Math.PI);
+         Vector3D expectedAxis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, vector, true);
+         Quaternion expectedQuaternion = new Quaternion();
+         expectedQuaternion.set(new AxisAngle(expectedAxis, expectedAngle));
+         expectedQuaternion.transform(vector);
+
+         vector.scale(EuclidCoreRandomTools.nextDouble(random, 0.5, 10.0));
+
+         Quaternion actualQuaternion = new Quaternion();
+         EuclidGeometryTools.orientation3DFromZUpToVector3D(vector, actualQuaternion);
+
+         EuclidCoreTestTools.assertTuple4DEquals(expectedQuaternion, actualQuaternion, EPSILON);
+      }
    }
 
    @Test
