@@ -849,7 +849,9 @@ public class EuclidGeometryTools
       }
 
       double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY + firstVectorZ * secondVectorZ;
-      rotationToPack.setQuaternion(axisX, axisY, axisZ, 1.0 + dotProduct);
+      double qs = 1.0 + dotProduct;
+      double norm = 1.0 / EuclidCoreTools.norm(axisX, axisY, axisZ, qs);
+      rotationToPack.setQuaternion(axisX * norm, axisY * norm, axisZ * norm, qs * norm);
    }
 
    /**
