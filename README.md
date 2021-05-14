@@ -1,5 +1,6 @@
 # ![Euclid](logo/Euclid.png)
-[ ![euclid](https://api.bintray.com/packages/ihmcrobotics/maven-release/euclid/images/download.svg) ](https://bintray.com/ihmcrobotics/maven-release/euclid/_latestVersion)
+
+[ ![euclid](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid/badge.svg)](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid/badge.svg)
 [ ![buildstatus](https://bamboo.ihmc.us/plugins/servlet/wittified/build-status/LIBS-EUCLID)](https://bamboo.ihmc.us/plugins/servlet/wittified/build-status/LIBS-EUCLID)
 
 ## Minutiae
@@ -104,19 +105,14 @@ For more information about the static tools, see [Wiki- Static tools summary](ht
 This module expands the shapes defined in the shape module to include the reference frame framework. The Gilbert-Johnson-Keerthi and Expanding polytope algorithms are also expanded to handle shapes expressed in different reference frames.
 
 ## Using Euclid from .jar releases with Maven/Gradle
-The releases .jars for Euclid are hosted on Bintray.
-You can browse the IHMC release packages at https://bintray.com/ihmcrobotics/maven-release.
-Instructions for adding the Maven repository and identifying the artifacts can also be found on Bintray for each package.
+The releases .jars for Euclid are hosted on Maven repository.
+You can browse the IHMC release packages at https://mvnrepository.com/artifact/us.ihmc.
 
 At a minimum, you will need to have the following repository declared in your build script to use the Euclid .jars:
 
 ```gradle
 repositories {
-   maven {
-      url  "https://dl.bintray.com/ihmcrobotics/maven-release" // IHMC Code releases
-   }
-
-   /* You will also need to add either jcenter() or mavenCentral() or both, depending on your preference */
+   mavenCentral()
 }
 ```
 
