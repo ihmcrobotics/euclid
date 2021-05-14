@@ -1,6 +1,6 @@
 # ![Euclid](logo/Euclid.png)
 
-[ ![euclid](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid/badge.svg)](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid/badge.svg)
+[ ![euclid](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/us.ihmc/euclid)
 [ ![buildstatus](https://bamboo.ihmc.us/plugins/servlet/wittified/build-status/LIBS-EUCLID)](https://bamboo.ihmc.us/plugins/servlet/wittified/build-status/LIBS-EUCLID)
 
 ## Minutiae
