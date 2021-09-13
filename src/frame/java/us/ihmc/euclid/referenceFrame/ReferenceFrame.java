@@ -54,7 +54,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 public abstract class ReferenceFrame
 {
    /** A string used to separate frame names in the {@link #nameId} of the reference frame */
-   private static final String SEPARATOR = ":";
+   public static final String SEPARATOR = ":";
 
    /** The name of this reference frame. The name should preferably be unique. */
    private final String frameName;
@@ -522,6 +522,12 @@ public abstract class ReferenceFrame
    {
       checkIfRemoved();
       return frameName;
+   }
+
+   public String getNameId()
+   {
+      checkIfRemoved();
+      return nameId;
    }
 
    /**
