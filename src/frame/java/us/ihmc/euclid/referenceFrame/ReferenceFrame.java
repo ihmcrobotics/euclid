@@ -6,6 +6,7 @@ import java.util.List;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
+import us.ihmc.euclid.referenceFrame.ReferenceFrameChangedListener.Change;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
@@ -171,6 +172,12 @@ public abstract class ReferenceFrame
     * Whether this frame is rigid attached to its parent such that its transform is immutable.
     */
    private final boolean isFixedInParent;
+
+   /**
+    * List of active listeners currently attached to this frame. Only instantiated when adding the
+    * first listener.
+    */
+   private List<ReferenceFrameChangedListener> changedListeners = null;
 
    /**
     * Creates a new root reference frame.
@@ -370,6 +377,8 @@ public abstract class ReferenceFrame
          this.isAStationaryFrame = isAStationaryFrame;
          this.isZupFrame = isZupFrame;
          this.isFixedInParent = isFixedInparent;
+
+         notifyListeners(ChangeType.FRAME_ADDED, this, parentFrame);
       }
    }
 
@@ -1051,6 +1060,8 @@ public abstract class ReferenceFrame
    {
       if (!hasBeenRemoved && parentFrame != null)
       {
+         parentFrame.updateChildren();
+
          for (int i = 0; i < parentFrame.children.size(); i++)
          {
             if (parentFrame.children.get(i).get() == this)
@@ -1060,16 +1071,25 @@ public abstract class ReferenceFrame
             }
          }
          disableRecursivly();
+         notifyListeners(ChangeType.FRAME_REMOVED, this, parentFrame);
       }
    }
 
    private void updateChildren()
    {
+      boolean hasChildBeenGCed = false;
+
       for (int i = children.size() - 1; i >= 0; i--)
       {
          if (children.get(i).get() == null)
+         {
             children.remove(i);
+            hasChildBeenGCed = true;
+         }
       }
+
+      if (hasChildBeenGCed)
+         notifyListeners(ChangeType.FRAME_GCED, null, this);
    }
 
    /**
@@ -1144,5 +1164,107 @@ public abstract class ReferenceFrame
    public static ReferenceFrame getWorldFrame()
    {
       return ReferenceFrameTools.getWorldFrame();
+   }
+
+   /**
+    * Adds a listener to this reference frame.
+    *
+    * @param listener the listener for listening to changes done on this frame and its descendants.
+    */
+   public void addListener(ReferenceFrameChangedListener listener)
+   {
+      if (changedListeners == null)
+         changedListeners = new ArrayList<>();
+      changedListeners.add(listener);
+   }
+
+   /**
+    * Removes all listeners previously added to this reference frame.
+    */
+   public void removeListeners()
+   {
+      changedListeners = null;
+   }
+
+   /**
+    * Tries to remove a listener from this reference frame. If the listener could not be found and
+    * removed, nothing happens.
+    *
+    * @param listener the listener to remove.
+    * @return {@code true} if the listener was removed, {@code false} if the listener was not found and
+    *         nothing happened.
+    */
+   public boolean removeListener(ReferenceFrameChangedListener listener)
+   {
+      if (changedListeners == null)
+         return false;
+      return changedListeners.remove(listener);
+   }
+
+   private void notifyListeners(ChangeType type, ReferenceFrame target, ReferenceFrame targetParent)
+   {
+      if (changedListeners != null)
+      {
+         FrameChange change = new FrameChange(type, target, targetParent);
+         for (int i = 0; i < changedListeners.size(); i++)
+            changedListeners.get(i).changed(change);
+      }
+
+      if (parentFrame != null)
+         parentFrame.notifyListeners(type, target, targetParent);
+   }
+
+   private enum ChangeType
+   {
+      FRAME_ADDED, FRAME_REMOVED, FRAME_GCED
+   };
+
+   private class FrameChange implements Change
+   {
+      private final ChangeType type;
+      private final ReferenceFrame target, targetParent;
+
+      public FrameChange(ChangeType type, ReferenceFrame target, ReferenceFrame targetParent)
+      {
+         this.type = type;
+         this.target = target;
+         this.targetParent = targetParent;
+      }
+
+      @Override
+      public boolean wasAdded()
+      {
+         return type == ChangeType.FRAME_ADDED;
+      }
+
+      @Override
+      public boolean wasRemoved()
+      {
+         return type == ChangeType.FRAME_REMOVED;
+      }
+
+      @Override
+      public boolean wasGarbageCollected()
+      {
+         return type == ChangeType.FRAME_GCED;
+      }
+
+      @Override
+      public ReferenceFrame getSource()
+      {
+         return ReferenceFrame.this;
+      }
+
+      @Override
+      public ReferenceFrame getTarget()
+      {
+         return target;
+      }
+
+      @Override
+      public ReferenceFrame getTargetParent()
+      {
+         return targetParent;
+      }
    }
 }
