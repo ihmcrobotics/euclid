@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import us.ihmc.euclid.referenceFrame.FixedReferenceFrame;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -92,13 +93,13 @@ public class ReferenceFrameTools
     *                            parent frame to this frame. Not modified.
     * @return the new reference frame.
     */
-   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
+   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName,
+                                                                                ReferenceFrame parentFrame,
                                                                                 RigidBodyTransformReadOnly transformFromParent)
    {
       RigidBodyTransform transformToParent = new RigidBodyTransform(transformFromParent);
       transformToParent.invert();
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
+      return new FixedReferenceFrame(frameName, parentFrame, transformToParent);
    }
 
    /**
@@ -113,13 +114,11 @@ public class ReferenceFrameTools
     *                                    expressed in the parent frame. Not modified.
     * @return the new reference frame.
     */
-   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
+   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName,
+                                                                                  ReferenceFrame parentFrame,
                                                                                   Tuple3DReadOnly translationOffsetFromParent)
    {
-      RigidBodyTransform transformToParent = new RigidBodyTransform();
-      transformToParent.getTranslation().set(translationOffsetFromParent);
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
+      return new FixedReferenceFrame(frameName, parentFrame, translationOffsetFromParent);
    }
 
    /**
@@ -135,21 +134,11 @@ public class ReferenceFrameTools
     *                          frame to its parent frame. Not modified.
     * @return the new reference frame.
     */
-   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
+   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName,
+                                                                              ReferenceFrame parentFrame,
                                                                               RigidBodyTransformReadOnly transformToParent)
    {
-      boolean isZupFrame = parentFrame.isZupFrame() && transformToParent.isRotation2D();
-      boolean isAStationaryFrame = parentFrame.isAStationaryFrame();
-
-      ReferenceFrame ret = new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
-      {
-         @Override
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
-         {
-         }
-      };
-
-      return ret;
+      return new FixedReferenceFrame(frameName, parentFrame, transformToParent);
    }
 
    /**

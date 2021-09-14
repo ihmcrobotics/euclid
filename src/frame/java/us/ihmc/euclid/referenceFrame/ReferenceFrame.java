@@ -10,6 +10,7 @@ import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.ReferenceFrameHolder;
 import us.ihmc.euclid.referenceFrame.tools.ReferenceFrameTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 
 /**
@@ -528,7 +529,7 @@ public abstract class ReferenceFrame
     * @param transformToPack the transform in which this frame's transform to its parent frame is
     *                        stored. Modified.
     */
-   public void getTransformToParent(RigidBodyTransform transformToPack)
+   public void getTransformToParent(RigidBodyTransformBasics transformToPack)
    {
       checkIfRemoved();
       transformToPack.set(transformToParent);
@@ -597,7 +598,7 @@ public abstract class ReferenceFrame
     *                        is stored. Modified.
     * @param desiredFrame    the goal frame.
     */
-   public void getTransformToDesiredFrame(RigidBodyTransform transformToPack, ReferenceFrame desiredFrame)
+   public void getTransformToDesiredFrame(RigidBodyTransformBasics transformToPack, ReferenceFrame desiredFrame)
    {
       checkIfRemoved();
 
@@ -605,7 +606,7 @@ public abstract class ReferenceFrame
       {
          if (this == desiredFrame)
          { // Check for trivial case
-            transformToPack.setIdentity();
+            transformToPack.setToZero();
             return;
          }
 
