@@ -166,6 +166,10 @@ public abstract class ReferenceFrame
     * frame remains aligned with the z-axis of the root frame.
     */
    private final boolean isZupFrame;
+   /**
+    * Whether this frame is rigid attached to its parent such that its transform is immutable.
+    */
+   private final boolean isFixedInParent;
 
    /**
     * Creates a new root reference frame.
@@ -298,8 +302,21 @@ public abstract class ReferenceFrame
     * @throws IllegalArgumentException if {@code isAStationaryFrame} is {@code true} and the
     *                                  {@code parentFrame} is not a stationary frame.
     */
-   public ReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent, boolean isAStationaryFrame,
+   public ReferenceFrame(String frameName,
+                         ReferenceFrame parentFrame,
+                         RigidBodyTransformReadOnly transformToParent,
+                         boolean isAStationaryFrame,
                          boolean isZupFrame)
+   {
+      this(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame, false);
+   }
+
+   public ReferenceFrame(String frameName,
+                         ReferenceFrame parentFrame,
+                         RigidBodyTransformReadOnly transformToParent,
+                         boolean isAStationaryFrame,
+                         boolean isZupFrame,
+                         boolean isFixedInparent)
    {
       if (frameName.contains(SEPARATOR))
       {
@@ -321,6 +338,7 @@ public abstract class ReferenceFrame
 
          this.isAStationaryFrame = true;
          this.isZupFrame = true;
+         this.isFixedInParent = true;
       }
       else
       {
@@ -350,6 +368,7 @@ public abstract class ReferenceFrame
 
          this.isAStationaryFrame = isAStationaryFrame;
          this.isZupFrame = isZupFrame;
+         this.isFixedInParent = isFixedInparent;
       }
    }
 
@@ -410,6 +429,12 @@ public abstract class ReferenceFrame
    {
       checkIfRemoved();
       return isZupFrame;
+   }
+
+   public boolean isFixedInParent()
+   {
+      checkIfRemoved();
+      return isFixedInParent;
    }
 
    /**
