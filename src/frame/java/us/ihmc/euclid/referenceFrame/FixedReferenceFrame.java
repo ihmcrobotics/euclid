@@ -7,14 +7,14 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
 public class FixedReferenceFrame extends ReferenceFrame
 {
-   public FixedReferenceFrame(String name, ReferenceFrame parentFrame, Tuple3DReadOnly translationOffsetFromParent)
+   public FixedReferenceFrame(String frameName, ReferenceFrame parentFrame, Tuple3DReadOnly translationOffsetFromParent)
    {
-      this(name, parentFrame, new RigidBodyTransform(EuclidCoreTools.neutralQuaternion, translationOffsetFromParent));
+      this(frameName, parentFrame, new RigidBodyTransform(EuclidCoreTools.neutralQuaternion, translationOffsetFromParent));
    }
 
-   public FixedReferenceFrame(String name, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent)
+   public FixedReferenceFrame(String frameName, ReferenceFrame parentFrame, RigidBodyTransformReadOnly transformToParent)
    {
-      super(name, parentFrame, transformToParent, parentFrame.isAStationaryFrame(), parentFrame.isZupFrame() && transformToParent.isRotation2D(), true);
+      super(frameName, parentFrame, transformToParent, parentFrame.isAStationaryFrame(), parentFrame.isZupFrame() && transformToParent.isRotation2D(), true);
    }
 
    @Override
