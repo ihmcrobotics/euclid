@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import us.ihmc.euclid.referenceFrame.FixedReferenceFrame;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
@@ -193,18 +194,36 @@ public class ReferenceFrameTools
     * Will create a collection of all reference frames in the frame tree that the provided frame is
     * part of.
     *
-    * @param frame in the reference frame tree of interest
-    * @return all frames in the reference frame tree
+    * @param frame in the reference frame tree of interest.
+    * @return all frames in the reference frame tree.
     */
    public static Collection<ReferenceFrame> getAllFramesInTree(ReferenceFrame frame)
    {
       Collection<ReferenceFrame> frames = new ArrayList<>();
       frames.add(frame.getRootFrame());
-      getAllChildren(frame.getRootFrame(), frames);
+      collectAllDescendants(frame.getRootFrame(), frames);
       return frames;
    }
 
-   private static void getAllChildren(ReferenceFrame frame, Collection<ReferenceFrame> collectionToPack)
+   /**
+    * Gets a list that contains all the reference frames, including {@code start}, of the subtree that
+    * starts at {@code start}.
+    * <p>
+    * This method generates garbage.
+    * </p>
+    *
+    * @param start ancestor of the subtree frames to collect.
+    * @return the new subtree list.
+    */
+   public static List<ReferenceFrame> collectFramesInSubtree(ReferenceFrame start)
+   {
+      List<ReferenceFrame> frames = new ArrayList<>();
+      frames.add(start);
+      collectAllDescendants(start, frames);
+      return frames;
+   }
+
+   private static void collectAllDescendants(ReferenceFrame frame, Collection<ReferenceFrame> collectionToPack)
    {
       for (int i = 0; i < frame.getNumberOfChildren(); i++)
       {
@@ -212,7 +231,7 @@ public class ReferenceFrameTools
          if (child != null)
          {
             collectionToPack.add(child);
-            getAllChildren(child, collectionToPack);
+            collectAllDescendants(child, collectionToPack);
          }
       }
    }
