@@ -1074,7 +1074,7 @@ public abstract class ReferenceFrame
       this.additionalNameBasedHashCode = additionalNameBasedHashCode;
    }
 
-   private void checkIfRemoved()
+   protected void checkIfRemoved()
    {
       if (hasBeenRemoved)
       {
@@ -1151,7 +1151,7 @@ public abstract class ReferenceFrame
    {
       hasBeenRemoved = true;
       children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
-      removeListeners();
+      changedListeners = null;
    }
 
    /**
@@ -1216,6 +1216,7 @@ public abstract class ReferenceFrame
     */
    public void setTreeUpdateCondition(Predicate<ReferenceFrame> treeUpdateCondition)
    {
+      checkIfRemoved();
       getRootFrame().treeUpdateCondition = treeUpdateCondition;
    }
 
@@ -1226,6 +1227,7 @@ public abstract class ReferenceFrame
     */
    public void addListener(ReferenceFrameChangedListener listener)
    {
+      checkIfRemoved();
       if (changedListeners == null)
          changedListeners = new ArrayList<>();
       changedListeners.add(listener);
@@ -1236,6 +1238,7 @@ public abstract class ReferenceFrame
     */
    public void removeListeners()
    {
+      checkIfRemoved();
       changedListeners = null;
    }
 
@@ -1249,6 +1252,7 @@ public abstract class ReferenceFrame
     */
    public boolean removeListener(ReferenceFrameChangedListener listener)
    {
+      checkIfRemoved();
       if (changedListeners == null)
          return false;
       return changedListeners.remove(listener);

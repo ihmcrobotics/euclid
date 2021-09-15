@@ -49,6 +49,7 @@ public class FixedReferenceFrame extends ReferenceFrame
    @Override
    public void update()
    {
+      checkIfRemoved();
       // Since it is fixed, the transform does not change.
    }
 
