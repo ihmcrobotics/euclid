@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
 import us.ihmc.euclid.interfaces.Transformable;
@@ -156,6 +157,9 @@ public abstract class ReferenceFrame
     * </p>
     */
    private final RigidBodyTransform transformToRoot;
+   private boolean accessingTransformToRoot = false;
+   /** Condition for the root frame only. */
+   private Predicate<ReferenceFrame> treeUpdateCondition = null;
 
    /**
     * Field initialized at construction time that specifies if this reference frame represents a
@@ -829,6 +833,11 @@ public abstract class ReferenceFrame
 
    private void efficientComputeTransform()
    {
+      Predicate<ReferenceFrame> treeUpdateCondition = framesStartingWithRootEndingWithThis[0].treeUpdateCondition;
+
+      if (treeUpdateCondition != null && !treeUpdateCondition.test(this))
+         return;
+
       checkIfRemoved();
 
       int chainLength = framesStartingWithRootEndingWithThis.length;
@@ -853,20 +862,47 @@ public abstract class ReferenceFrame
          {
             if (referenceFrame.parentFrame != null)
             {
-               RigidBodyTransform parentsTransformToRoot = referenceFrame.parentFrame.transformToRoot;
-               if (parentsTransformToRoot != null)
-               {
-                  referenceFrame.transformToRoot.set(parentsTransformToRoot);
-               }
-               else
-               {
-                  referenceFrame.transformToRoot.setIdentity();
+               if (referenceFrame.accessingTransformToRoot)
+               { // We have concurrent access of the transform to root, let's abort the update.
+                  return;
                }
 
-               referenceFrame.transformToRoot.multiply(referenceFrame.transformToParent);
-               referenceFrame.transformToRoot.normalizeRotationPart();
+               try
+               {
+                  referenceFrame.accessingTransformToRoot = true;
 
-               referenceFrame.transformToRootID = nextTransformToRootID;
+                  RigidBodyTransform parentsTransformToRoot = referenceFrame.parentFrame.transformToRoot;
+
+                  if (parentsTransformToRoot != null)
+                  {
+                     if (referenceFrame.parentFrame.accessingTransformToRoot)
+                     { // We have concurrent access of the transform to root, let's abort the update.
+                        return;
+                     }
+
+                     referenceFrame.parentFrame.accessingTransformToRoot = true;
+                     try
+                     {
+                        referenceFrame.transformToRoot.set(parentsTransformToRoot);
+                     }
+                     finally
+                     {
+                        referenceFrame.parentFrame.accessingTransformToRoot = false;
+                     }
+                     referenceFrame.transformToRoot.multiply(referenceFrame.transformToParent);
+                     referenceFrame.transformToRoot.normalizeRotationPart();
+                  }
+                  else
+                  {
+                     referenceFrame.transformToRoot.set(referenceFrame.transformToParent);
+                  }
+
+                  referenceFrame.transformToRootID = nextTransformToRootID;
+               }
+               finally
+               {
+                  referenceFrame.accessingTransformToRoot = false;
+               }
             }
          }
 
@@ -1165,6 +1201,22 @@ public abstract class ReferenceFrame
    public static ReferenceFrame getWorldFrame()
    {
       return ReferenceFrameTools.getWorldFrame();
+   }
+
+   /**
+    * Sets a predicate that restricts when the transform to root can be updated.
+    * <p>
+    * The condition applies to all reference frame that belongs the same tree as this reference frame.
+    * </p>
+    * <p>
+    * This predicate can be used to restrict the update to be done only by one thread for instance.
+    * </p>
+    * 
+    * @param treeUpdateCondition the filtering condition for the update of the transform to root.
+    */
+   public void setTreeUpdateCondition(Predicate<ReferenceFrame> treeUpdateCondition)
+   {
+      getRootFrame().treeUpdateCondition = treeUpdateCondition;
    }
 
    /**

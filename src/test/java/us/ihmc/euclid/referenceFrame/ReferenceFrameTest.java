@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -129,7 +130,9 @@ public class ReferenceFrameTest
       return nextRandomlyChangingFrameTree(frameNamePrefix, random, worldFrame, numberOfReferenceFrames);
    }
 
-   private static RandomlyChangingFrame[] nextRandomlyChangingFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame,
+   private static RandomlyChangingFrame[] nextRandomlyChangingFrameTree(String frameNamePrefix,
+                                                                        Random random,
+                                                                        ReferenceFrame rootFrame,
                                                                         int numberOfReferenceFrames)
    {
       RandomlyChangingFrame[] referenceFrames = new RandomlyChangingFrame[numberOfReferenceFrames];
@@ -496,7 +499,7 @@ public class ReferenceFrameTest
       assertEquals(0L, ReferenceFrameTools.getWorldFrame().getFrameIndex());
 
       int position = 0;
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          ReferenceFrame[] frameTree = EuclidFrameRandomTools.nextReferenceFrameTree(random);
@@ -506,7 +509,7 @@ public class ReferenceFrameTest
             {
                continue;
             }
-            
+
             long frameIndex = referenceFrame.getFrameIndex();
             assertEquals(frameIndices.get(position++), frameIndex);
          }
@@ -610,6 +613,25 @@ public class ReferenceFrameTest
             }
          }
       }
+   }
+
+   @Test
+   public void testEfficientComputeTransformMultiThreaded()
+   {
+      Random random = new Random(343);
+
+      int numberOfFrames = 100;
+      ReferenceFrame[] frames = EuclidFrameRandomTools.nextReferenceFrameTree(random, numberOfFrames);
+      Thread mainThread = Thread.currentThread();
+      ReferenceFrame.getWorldFrame().setTreeUpdateCondition(f -> Thread.currentThread() == mainThread);
+
+      // If there's a concurrent modification, the following will throw a NoARotationMatrixException.
+      IntStream.range(0, 10000000).parallel().forEach(i ->
+      {
+         ReferenceFrame.nextTransformToRootID++;
+         ReferenceFrame.getWorldFrame().update();
+         frames[random.nextInt(numberOfFrames)].getTransformToRoot();
+      });
    }
 
    public static void main(String[] args)
