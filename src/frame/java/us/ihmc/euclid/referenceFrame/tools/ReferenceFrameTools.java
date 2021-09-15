@@ -145,38 +145,35 @@ public class ReferenceFrameTools
    /**
     * Creates a reference frame with the transform from it's parent maintained by the user.
     * <p>
-    *     * The {@code transformFromParent} should describe the pose of the parent frame expressed in this
-    *     * new frame.
-    *     * </p>
-    * <p>
-    *    Note: It <strong>is</strong> necessary to call update on this reference frame.
+    * The {@code transformFromParent} should describe the pose of the parent frame expressed in this
+    * new frame.
     * </p>
-    *
+    * <p>
+    * Note: <strong>{@code ReferenceFrame.update()} has to be called every time the given
+    * {@code transformFromParent} is modified to reflect the new transform value.</strong>
+    * </p>
     *
     * @param frameName           the name of the new frame.
     * @param parentFrame         the parent frame of the new reference frame.
     * @param transformFromParent the transform that can be used to transform a geometry object the new
-    *                            frame from the parent frame to this frame. Not modified.
+    *                            frame from the parent frame to this frame. Not modified the reference
+    *                            is saved and later used when updating the new frame.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithChangingTransformFromParent(String frameName,
                                                                               ReferenceFrame parentFrame,
                                                                               RigidBodyTransformReadOnly transformFromParent)
    {
-      RigidBodyTransform transformToParent = new RigidBodyTransform(transformFromParent);
-      transformToParent.invert();
-      boolean isZupFrame = parentFrame.isZupFrame() && transformToParent.isRotation2D();
-      boolean isAStationaryFrame = parentFrame.isAStationaryFrame();
-
-      return new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
+      ReferenceFrame frame = new ReferenceFrame(frameName, parentFrame)
       {
          @Override
          protected void updateTransformToParent(RigidBodyTransform transformToParentToUpdate)
          {
-            transformToParentToUpdate.set(transformFromParent);
-            transformToParentToUpdate.invert();
+            transformToParentToUpdate.setAndInvert(transformFromParent);
          }
       };
+      frame.update();
+      return frame;
    }
 
    /**
@@ -186,24 +183,22 @@ public class ReferenceFrameTools
     * frame.
     * </p>
     * <p>
-    *    Note: It <strong>is</strong> necessary to call update on this reference frame.
+    * Note: <strong>{@code ReferenceFrame.update()} has to be called every time the given
+    * {@code transformFromParent} is modified to reflect the new transform value.</strong>
     * </p>
-    *
     *
     * @param frameName         the name of the new frame.
     * @param parentFrame       the parent frame of the new reference frame.
     * @param transformToParent the transform that can be used to transform a geometry object the new
-    *                          frame to its parent frame. Not modified.
+    *                          frame to its parent frame. Not modified the reference is saved and later
+    *                          used when updating the new frame.
     * @return the new reference frame.
     */
    public static ReferenceFrame constructFrameWithChangingTransformToParent(String frameName,
                                                                             ReferenceFrame parentFrame,
                                                                             RigidBodyTransformReadOnly transformToParent)
    {
-      boolean isZupFrame = parentFrame.isZupFrame() && transformToParent.isRotation2D();
-      boolean isAStationaryFrame = parentFrame.isAStationaryFrame();
-
-      return new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
+      ReferenceFrame frame = new ReferenceFrame(frameName, parentFrame)
       {
          @Override
          protected void updateTransformToParent(RigidBodyTransform transformToParentToUpdate)
@@ -211,6 +206,8 @@ public class ReferenceFrameTools
             transformToParentToUpdate.set(transformToParent);
          }
       };
+      frame.update();
+      return frame;
    }
 
    /**
