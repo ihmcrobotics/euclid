@@ -223,7 +223,11 @@ public class ReflectionBasedBuilder
       {
          Class<? extends Object> parameterType = parametersToClone[i].getClass();
 
-         if (parameterType.isPrimitive() || parametersToClone[i] instanceof Number || parametersToClone[i] instanceof Boolean)
+         if (ReferenceFrame.class.isAssignableFrom(parameterType))
+         {
+            clone[i] = parametersToClone[i];
+         }
+         else if (parameterType.isPrimitive() || parametersToClone[i] instanceof Number || parametersToClone[i] instanceof Boolean)
          {
             clone[i] = parametersToClone[i];
          }
