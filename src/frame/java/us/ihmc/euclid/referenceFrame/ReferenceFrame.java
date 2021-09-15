@@ -324,7 +324,7 @@ public abstract class ReferenceFrame
                          RigidBodyTransformReadOnly transformToParent,
                          boolean isAStationaryFrame,
                          boolean isZupFrame,
-                         boolean isFixedInparent)
+                         boolean isFixedInParent)
    {
       if (frameName.contains(SEPARATOR))
       {
@@ -376,7 +376,7 @@ public abstract class ReferenceFrame
 
          this.isAStationaryFrame = isAStationaryFrame;
          this.isZupFrame = isZupFrame;
-         this.isFixedInParent = isFixedInparent;
+         this.isFixedInParent = isFixedInParent;
 
          notifyListeners(ChangeType.FRAME_ADDED, this, parentFrame);
       }
@@ -607,7 +607,7 @@ public abstract class ReferenceFrame
     *                        is stored. Modified.
     * @param desiredFrame    the goal frame.
     */
-   public void getTransformToDesiredFrame(RigidBodyTransformBasics transformToPack, ReferenceFrame desiredFrame)
+   public void getTransformToDesiredFrame(RigidBodyTransform transformToPack, ReferenceFrame desiredFrame)
    {
       checkIfRemoved();
 
@@ -1070,8 +1070,8 @@ public abstract class ReferenceFrame
                break;
             }
          }
-         disableRecursivly();
          notifyListeners(ChangeType.FRAME_REMOVED, this, parentFrame);
+         disableRecursivly();
       }
    }
 
@@ -1115,6 +1115,7 @@ public abstract class ReferenceFrame
    {
       hasBeenRemoved = true;
       children.stream().map(WeakReference::get).filter(child -> child != null).forEach(child -> child.disableRecursivly());
+      removeListeners();
    }
 
    /**
