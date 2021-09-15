@@ -3,7 +3,9 @@ package us.ihmc.euclid.referenceFrame.tools;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import us.ihmc.euclid.referenceFrame.FixedReferenceFrame;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -92,13 +94,13 @@ public class ReferenceFrameTools
     *                            parent frame to this frame. Not modified.
     * @return the new reference frame.
     */
-   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName, ReferenceFrame parentFrame,
+   public static ReferenceFrame constructFrameWithUnchangingTransformFromParent(String frameName,
+                                                                                ReferenceFrame parentFrame,
                                                                                 RigidBodyTransformReadOnly transformFromParent)
    {
       RigidBodyTransform transformToParent = new RigidBodyTransform(transformFromParent);
       transformToParent.invert();
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
+      return new FixedReferenceFrame(frameName, parentFrame, transformToParent);
    }
 
    /**
@@ -113,13 +115,11 @@ public class ReferenceFrameTools
     *                                    expressed in the parent frame. Not modified.
     * @return the new reference frame.
     */
-   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName, ReferenceFrame parentFrame,
+   public static ReferenceFrame constructFrameWithUnchangingTranslationFromParent(String frameName,
+                                                                                  ReferenceFrame parentFrame,
                                                                                   Tuple3DReadOnly translationOffsetFromParent)
    {
-      RigidBodyTransform transformToParent = new RigidBodyTransform();
-      transformToParent.getTranslation().set(translationOffsetFromParent);
-
-      return constructFrameWithUnchangingTransformToParent(frameName, parentFrame, transformToParent);
+      return new FixedReferenceFrame(frameName, parentFrame, translationOffsetFromParent);
    }
 
    /**
@@ -135,21 +135,79 @@ public class ReferenceFrameTools
     *                          frame to its parent frame. Not modified.
     * @return the new reference frame.
     */
-   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName, ReferenceFrame parentFrame,
+   public static ReferenceFrame constructFrameWithUnchangingTransformToParent(String frameName,
+                                                                              ReferenceFrame parentFrame,
                                                                               RigidBodyTransformReadOnly transformToParent)
    {
-      boolean isZupFrame = parentFrame.isZupFrame() && transformToParent.isRotation2D();
-      boolean isAStationaryFrame = parentFrame.isAStationaryFrame();
+      return new FixedReferenceFrame(frameName, parentFrame, transformToParent);
+   }
 
-      ReferenceFrame ret = new ReferenceFrame(frameName, parentFrame, transformToParent, isAStationaryFrame, isZupFrame)
+   /**
+    * Creates a reference frame with the transform from it's parent maintained by the user.
+    * <p>
+    * The {@code transformFromParent} should describe the pose of the parent frame expressed in this
+    * new frame.
+    * </p>
+    * <p>
+    * Note: <strong>{@code ReferenceFrame.update()} has to be called every time the given
+    * {@code transformFromParent} is modified to reflect the new transform value.</strong>
+    * </p>
+    *
+    * @param frameName           the name of the new frame.
+    * @param parentFrame         the parent frame of the new reference frame.
+    * @param transformFromParent the transform that can be used to transform a geometry object the new
+    *                            frame from the parent frame to this frame. Not modified the reference
+    *                            is saved and later used when updating the new frame.
+    * @return the new reference frame.
+    */
+   public static ReferenceFrame constructFrameWithChangingTransformFromParent(String frameName,
+                                                                              ReferenceFrame parentFrame,
+                                                                              RigidBodyTransformReadOnly transformFromParent)
+   {
+      ReferenceFrame frame = new ReferenceFrame(frameName, parentFrame)
       {
          @Override
-         protected void updateTransformToParent(RigidBodyTransform transformToParent)
+         protected void updateTransformToParent(RigidBodyTransform transformToParentToUpdate)
          {
+            transformToParentToUpdate.setAndInvert(transformFromParent);
          }
       };
+      frame.update();
+      return frame;
+   }
 
-      return ret;
+   /**
+    * Creates a reference frame with the transform to it's parent maintained by the user.
+    * <p>
+    * The {@code transformToParent} should describe the pose of the new frame expressed in its parent
+    * frame.
+    * </p>
+    * <p>
+    * Note: <strong>{@code ReferenceFrame.update()} has to be called every time the given
+    * {@code transformFromParent} is modified to reflect the new transform value.</strong>
+    * </p>
+    *
+    * @param frameName         the name of the new frame.
+    * @param parentFrame       the parent frame of the new reference frame.
+    * @param transformToParent the transform that can be used to transform a geometry object the new
+    *                          frame to its parent frame. Not modified the reference is saved and later
+    *                          used when updating the new frame.
+    * @return the new reference frame.
+    */
+   public static ReferenceFrame constructFrameWithChangingTransformToParent(String frameName,
+                                                                            ReferenceFrame parentFrame,
+                                                                            RigidBodyTransformReadOnly transformToParent)
+   {
+      ReferenceFrame frame = new ReferenceFrame(frameName, parentFrame)
+      {
+         @Override
+         protected void updateTransformToParent(RigidBodyTransform transformToParentToUpdate)
+         {
+            transformToParentToUpdate.set(transformToParent);
+         }
+      };
+      frame.update();
+      return frame;
    }
 
    /**
@@ -204,18 +262,36 @@ public class ReferenceFrameTools
     * Will create a collection of all reference frames in the frame tree that the provided frame is
     * part of.
     *
-    * @param frame in the reference frame tree of interest
-    * @return all frames in the reference frame tree
+    * @param frame in the reference frame tree of interest.
+    * @return all frames in the reference frame tree.
     */
    public static Collection<ReferenceFrame> getAllFramesInTree(ReferenceFrame frame)
    {
       Collection<ReferenceFrame> frames = new ArrayList<>();
       frames.add(frame.getRootFrame());
-      getAllChildren(frame.getRootFrame(), frames);
+      collectAllDescendants(frame.getRootFrame(), frames);
       return frames;
    }
 
-   private static void getAllChildren(ReferenceFrame frame, Collection<ReferenceFrame> collectionToPack)
+   /**
+    * Gets a list that contains all the reference frames, including {@code start}, of the subtree that
+    * starts at {@code start}.
+    * <p>
+    * This method generates garbage.
+    * </p>
+    *
+    * @param start ancestor of the subtree frames to collect.
+    * @return the new subtree list.
+    */
+   public static List<ReferenceFrame> collectFramesInSubtree(ReferenceFrame start)
+   {
+      List<ReferenceFrame> frames = new ArrayList<>();
+      frames.add(start);
+      collectAllDescendants(start, frames);
+      return frames;
+   }
+
+   private static void collectAllDescendants(ReferenceFrame frame, Collection<ReferenceFrame> collectionToPack)
    {
       for (int i = 0; i < frame.getNumberOfChildren(); i++)
       {
@@ -223,7 +299,7 @@ public class ReferenceFrameTools
          if (child != null)
          {
             collectionToPack.add(child);
-            getAllChildren(child, collectionToPack);
+            collectAllDescendants(child, collectionToPack);
          }
       }
    }

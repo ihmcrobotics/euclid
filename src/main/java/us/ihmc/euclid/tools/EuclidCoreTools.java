@@ -10,6 +10,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Vector2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 
 /**
  * This class provides a variety of generic tools such as fast square-root algorithm
@@ -219,6 +220,57 @@ public class EuclidCoreTools
       public String toString()
       {
          return EuclidCoreIOTools.getTuple3DString(this);
+      }
+   };
+
+   /**
+    * Constant representing the neutral quaternion: (x=0, y=0, z=0, s=0).
+    */
+   public static final QuaternionReadOnly neutralQuaternion = new QuaternionReadOnly()
+   {
+      @Override
+      public double getX()
+      {
+         return 0;
+      }
+
+      @Override
+      public double getY()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getZ()
+      {
+         return 0.0;
+      }
+
+      @Override
+      public double getS()
+      {
+         return 1.0;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         return EuclidHashCodeTools.toIntHashCode(0.0, 0.0, 0.0, 1.0);
+      }
+
+      @Override
+      public boolean equals(Object object)
+      {
+         if (object instanceof QuaternionReadOnly)
+            return equals((QuaternionReadOnly) object);
+         else
+            return false;
+      }
+
+      @Override
+      public String toString()
+      {
+         return EuclidCoreIOTools.getTuple4DString(this);
       }
    };
 

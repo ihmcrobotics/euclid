@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.ejml.dense.row.SingularOps_DDRM;
 import org.ejml.dense.row.decomposition.svd.SvdImplicitQrDecompose_DDRM;
 import org.junit.jupiter.api.Test;
 
-import javafx.util.Pair;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
@@ -44,11 +44,11 @@ public class SingularValueDecomposition3DTest
       long euclidTotalTime = 0;
 
       List<Supplier<Pair<Matrix3D, String>>> generators = new ArrayList<>();
-      generators.add(() -> new Pair<>(new Matrix3D(RandomMatrices_DDRM.symmetric(3, -100.0, 100.0, random)), "Symmetric matrix"));
-      generators.add(() -> new Pair<>(new Matrix3D(EuclidCoreRandomTools.nextRotationMatrix(random, Math.PI)), "Rotation matrix"));
-      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 100.0), "Diagonal matrix"));
-      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextMatrix3D(random, 10.0), "General matrix"));
-      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextMatrix3D(random, 10000.0), "Large values matrix"));
+      generators.add(() -> Pair.of(new Matrix3D(RandomMatrices_DDRM.symmetric(3, -100.0, 100.0, random)), "Symmetric matrix"));
+      generators.add(() -> Pair.of(new Matrix3D(EuclidCoreRandomTools.nextRotationMatrix(random, Math.PI)), "Rotation matrix"));
+      generators.add(() -> Pair.of(EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 100.0), "Diagonal matrix"));
+      generators.add(() -> Pair.of(EuclidCoreRandomTools.nextMatrix3D(random, 10.0), "General matrix"));
+      generators.add(() -> Pair.of(EuclidCoreRandomTools.nextMatrix3D(random, 10000.0), "Large values matrix"));
 
       for (int i = 0; i < 5 * ITERATIONS; i++)
       { // warmup
@@ -165,11 +165,11 @@ public class SingularValueDecomposition3DTest
       long euclidTotalTime = 0;
 
       List<Supplier<Pair<Matrix3D, String>>> generators = new ArrayList<>();
-      generators.add(() -> new Pair<>(new Matrix3D(RandomMatrices_DDRM.symmetric(3, -100.0, 100.0, random)), "Symmetric matrix"));
-      generators.add(() -> new Pair<>(new Matrix3D(EuclidCoreRandomTools.nextRotationMatrix(random, Math.PI)), "Rotation matrix"));
-      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 100.0), "Diagonal matrix"));
-      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextMatrix3D(random, 10.0), "General matrix"));
-      generators.add(() -> new Pair<>(EuclidCoreRandomTools.nextMatrix3D(random, 10000.0), "Large values matrix"));
+      generators.add(() -> Pair.of(new Matrix3D(RandomMatrices_DDRM.symmetric(3, -100.0, 100.0, random)), "Symmetric matrix"));
+      generators.add(() -> Pair.of(new Matrix3D(EuclidCoreRandomTools.nextRotationMatrix(random, Math.PI)), "Rotation matrix"));
+      generators.add(() -> Pair.of(EuclidCoreRandomTools.nextDiagonalMatrix3D(random, 100.0), "Diagonal matrix"));
+      generators.add(() -> Pair.of(EuclidCoreRandomTools.nextMatrix3D(random, 10.0), "General matrix"));
+      generators.add(() -> Pair.of(EuclidCoreRandomTools.nextMatrix3D(random, 10000.0), "Large values matrix"));
 
       for (int i = 0; i < 5 * ITERATIONS; i++)
       { // warmup
