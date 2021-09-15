@@ -542,6 +542,24 @@ public abstract class ReferenceFrame
     * @param transformToPack the transform in which this frame's transform to its parent frame is
     *                        stored. Modified.
     */
+   // TODO For backward compatibility. Remove me in future release.
+   public void getTransformToParent(RigidBodyTransform transformToPack)
+   {
+      checkIfRemoved();
+      transformToPack.set(transformToParent);
+   }
+
+   /**
+    * packs this reference frame's transform to parent into the given transform
+    * {@code transformToPack}.
+    * <p>
+    * This transform can be applied to a vector defined in this frame in order to obtain the equivalent
+    * vector in the parent frame.
+    * </p>
+    *
+    * @param transformToPack the transform in which this frame's transform to its parent frame is
+    *                        stored. Modified.
+    */
    public void getTransformToParent(RigidBodyTransformBasics transformToPack)
    {
       checkIfRemoved();
@@ -611,7 +629,21 @@ public abstract class ReferenceFrame
     *                        is stored. Modified.
     * @param desiredFrame    the goal frame.
     */
+   // TODO For backward compatibility. Remove me in future release.
    public void getTransformToDesiredFrame(RigidBodyTransform transformToPack, ReferenceFrame desiredFrame)
+   {
+      getTransformToDesiredFrame((RigidBodyTransformBasics) transformToPack, desiredFrame);
+   }
+
+   /**
+    * Packs the transform that can be used to transform a geometry object defined in this frame to
+    * obtain its equivalent expressed in the {@code desiredFrame} into {@code transformToPack}.
+    *
+    * @param transformToPack the transform in which this frame's transform to the {@code desiredFrame}
+    *                        is stored. Modified.
+    * @param desiredFrame    the goal frame.
+    */
+   public void getTransformToDesiredFrame(RigidBodyTransformBasics transformToPack, ReferenceFrame desiredFrame)
    {
       checkIfRemoved();
 
