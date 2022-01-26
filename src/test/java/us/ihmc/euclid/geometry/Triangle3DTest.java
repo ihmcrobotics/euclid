@@ -4,15 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
-
 import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
+import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
 {
-   private static final double maxRandomValue = 1.0e5;
 
    @Override
    public Triangle3D newEmptyTriangle3D()
@@ -25,9 +24,9 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
    public Triangle3D newRandomTriangle3D(Random random)
    {
       // Return new Random Triangle3D
-      Point3D pointA = randomPoint (random);
-      Point3D pointB = randomPoint (random);
-      Point3D pointC = randomPoint (random);
+      Point3D pointA = EuclidCoreRandomTools.nextPoint3D(random);
+      Point3D pointB = EuclidCoreRandomTools.nextPoint3D(random);
+      Point3D pointC = EuclidCoreRandomTools.nextPoint3D(random);
       
       return new Triangle3D(pointA, pointB, pointC);
    }
@@ -43,21 +42,6 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
    public double getEpsilon() 
    {
       return 1.0e-5;
-   }
-
-   private double randomDouble(Random random, double maxRandomValue)
-   {
-      return random.nextDouble() * maxRandomValue * 2.0 - maxRandomValue;
-   }
-
-   private double randomDouble(Random random)
-   {
-      return randomDouble(random, maxRandomValue);
-   }
-
-   private Point3D randomPoint(Random random)
-   {
-      return new Point3D(randomDouble(random), randomDouble(random), randomDouble(random));
    }
 
    @Test
@@ -80,9 +64,9 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D pointA = randomPoint (random);
-         Point3D pointB = randomPoint (random);
-         Point3D pointC = randomPoint (random);
+         Point3D pointA = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointB = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointC = EuclidCoreRandomTools.nextPoint3D(random);
          
          // Test Triangle3D(Point3DReadOnly a, Point3DReadOnly b, Point3DReadOnly c)
          Triangle3D triangle3DbyPointPointPoint = new Triangle3D(pointA, pointB, pointC);
@@ -105,9 +89,9 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
    public void testEpsilonEquals() throws Exception
    {
       Random random = new Random(1000L);
-      Point3D pointA = randomPoint (random);
-      Point3D pointB = randomPoint (random);
-      Point3D pointC = randomPoint (random);
+      Point3D pointA = EuclidCoreRandomTools.nextPoint3D(random);
+      Point3D pointB = EuclidCoreRandomTools.nextPoint3D(random);
+      Point3D pointC = EuclidCoreRandomTools.nextPoint3D(random);
 
       Triangle3D original = new Triangle3D(pointA, pointB, pointC);
       Triangle3D same = new Triangle3D(original);
@@ -115,9 +99,9 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
       
       for (int i = 0; i < ITERATIONS; i++)
       {
-         pointA = randomPoint (random);
-         pointB = randomPoint (random);
-         pointC = randomPoint (random);
+         pointA = EuclidCoreRandomTools.nextPoint3D(random);
+         pointB = EuclidCoreRandomTools.nextPoint3D(random);
+         pointC = EuclidCoreRandomTools.nextPoint3D(random);
          
          original = new Triangle3D(pointA, pointB, pointC);
          
@@ -167,9 +151,9 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
       
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D pointA = randomPoint (random);
-         Point3D pointB = randomPoint (random);
-         Point3D pointC = randomPoint (random);
+         Point3D pointA = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointB = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointC = EuclidCoreRandomTools.nextPoint3D(random);
    
          Triangle3D original = new Triangle3D(pointA, pointB, pointC);
          Triangle3D expected = new Triangle3D(original);
@@ -235,6 +219,53 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
          expected = new Triangle3D(pointC, pointB, pointB);
          assertFalse(original.geometricallyEquals(expected, getEpsilon()));
       }
+      
+      //Test Epsilon is working correctly for geometricallyEquals method
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Point3D pointA = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointB = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointC = EuclidCoreRandomTools.nextPoint3D(random);
+         
+         Triangle3D original = new Triangle3D(pointA, pointB, pointC);
+         
+         Point3D pointAChanged = new Point3D(pointA);
+         Point3D pointBChanged = new Point3D(pointB);
+         Point3D pointCChanged = new Point3D(pointC);
+         
+         //Point A above epsilon
+         pointAChanged.setElement(i % 3, pointAChanged.getElement(i % 3) - 1.01 * getEpsilon());
+         Triangle3D changedA = new Triangle3D(pointAChanged, pointB, pointC);
+         assertFalse(changedA.geometricallyEquals(original, getEpsilon()));
+         
+         //Point A below epsilon
+         pointAChanged.set(pointA);
+         pointAChanged.setElement(i % 3, pointAChanged.getElement(i % 3) - 0.99 * getEpsilon());
+         changedA = new Triangle3D(pointAChanged, pointB, pointC);
+         assertTrue(changedA.geometricallyEquals(original, getEpsilon()));
+         
+         //Point B above epsilon
+         pointBChanged.setElement(i % 3, pointBChanged.getElement(i % 3) - 1.01 * getEpsilon());
+         Triangle3D changedB = new Triangle3D(pointA, pointBChanged, pointC);
+         assertFalse(changedB.geometricallyEquals(original, getEpsilon()));
+         
+         //Point B below epsilon
+         pointBChanged.set(pointB);
+         pointBChanged.setElement(i % 3, pointBChanged.getElement(i % 3) - 0.99 * getEpsilon());
+         changedB = new Triangle3D(pointA, pointBChanged, pointC);
+         assertTrue(changedB.geometricallyEquals(original, getEpsilon()));   
+         
+         //Point C above epsilon
+         pointCChanged.setElement(i % 3, pointCChanged.getElement(i % 3) - 1.01 * getEpsilon());
+         Triangle3D changedC = new Triangle3D(pointA, pointB, pointCChanged);
+         assertFalse(changedC.geometricallyEquals(original, getEpsilon()));
+         
+         //Point C below epsilon
+         pointCChanged.set(pointC);
+         pointCChanged.setElement(i % 3, pointCChanged.getElement(i % 3) - 0.99 * getEpsilon());
+         changedC = new Triangle3D(pointA, pointB, pointCChanged);
+         assertTrue(changedC.geometricallyEquals(original, getEpsilon()));           
+      }   
    }
 
    @Test
@@ -244,9 +275,9 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
       
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D pointA = randomPoint (random);
-         Point3D pointB = randomPoint (random);
-         Point3D pointC = randomPoint (random);
+         Point3D pointA = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointB = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointC = EuclidCoreRandomTools.nextPoint3D(random);
          
          Point3D pointAChanged = new Point3D(pointA);
          Point3D pointBChanged = new Point3D(pointB);
@@ -287,9 +318,9 @@ public class Triangle3DTest extends Triangle3DBasicsTest<Triangle3D>
       
       for (int i = 0; i < ITERATIONS; i++)
       {
-         Point3D pointA = randomPoint (random);
-         Point3D pointB = randomPoint (random);
-         Point3D pointC = randomPoint (random);
+         Point3D pointA = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointB = EuclidCoreRandomTools.nextPoint3D(random);
+         Point3D pointC = EuclidCoreRandomTools.nextPoint3D(random);
          
          Triangle3D triangle = new Triangle3D(pointA, pointB, pointC);
          
