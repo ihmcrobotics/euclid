@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tools;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -643,6 +644,78 @@ public class EuclidHashCodeTools
    }
 
    /**
+    * Calls {@link #combineHashCode(long, long)} after casting {@code value} to a long.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param value    byte value to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, byte value)
+   {
+      return combineHashCode(hashCode, (long) value);
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} after casting {@code value} to a long.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param value    short value to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, short value)
+   {
+      return combineHashCode(hashCode, (long) value);
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} after casting {@code value} to a long.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param value    char value to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, char value)
+   {
+      return combineHashCode(hashCode, (long) value);
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} after casting {@code value} to a long.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param value    int value to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, int value)
+   {
+      return combineHashCode(hashCode, (long) value);
+   }
+
+   /**
+    * Simple redirection to {@link #combineHashCode(long, long)}.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param value    long value to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, long value)
+   {
+      return combineHashCode(hashCode, value);
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} after casting {@code value} to a long.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param value    int value to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, boolean value)
+   {
+      return combineHashCode(hashCode, (long) Boolean.hashCode(value));
+   }
+
+   /**
     * Calls {@link #combineHashCode(long, long)} using the given {@code object}'s hash-code.
     *
     * @param hashCode long hash code bit stream to add to.
@@ -652,6 +725,114 @@ public class EuclidHashCodeTools
    public static long addToHashCode(long hashCode, Object object)
    {
       return combineHashCode(hashCode, Objects.hashCode(object));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of doubles to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, double[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of floats to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, float[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of bytes to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, byte[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of shorts to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, short[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of chars to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, char[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of ints to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, int[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of longs to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, long[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of booleans to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, boolean[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
+   }
+
+   /**
+    * Calls {@link #combineHashCode(long, long)} using the given {@code array}'s hash-code.
+    *
+    * @param hashCode long hash code bit stream to add to.
+    * @param array    the array of objects to add to the hash code.
+    * @return new hash code bit stream
+    */
+   public static long addToHashCode(long hashCode, Object[] array)
+   {
+      return combineHashCode(hashCode, Arrays.hashCode(array));
    }
 
    /**
