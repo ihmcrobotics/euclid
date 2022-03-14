@@ -474,7 +474,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two line segment 2Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertLineSegment2DEquals(String messagePrefix, LineSegment2DReadOnly expected, LineSegment2DReadOnly actual, double epsilon,
+   public static void assertLineSegment2DEquals(String messagePrefix,
+                                                LineSegment2DReadOnly expected,
+                                                LineSegment2DReadOnly actual,
+                                                double epsilon,
                                                 String format)
    {
       if (expected == null && actual == null)
@@ -539,7 +542,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two line segment 2Ds do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertLineSegment2DGeometricallyEquals(String messagePrefix, LineSegment2DReadOnly expected, LineSegment2DReadOnly actual, double epsilon,
+   public static void assertLineSegment2DGeometricallyEquals(String messagePrefix,
+                                                             LineSegment2DReadOnly expected,
+                                                             LineSegment2DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -602,7 +608,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two line segment 3Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertLineSegment3DEquals(String messagePrefix, LineSegment3DReadOnly expected, LineSegment3DReadOnly actual, double epsilon,
+   public static void assertLineSegment3DEquals(String messagePrefix,
+                                                LineSegment3DReadOnly expected,
+                                                LineSegment3DReadOnly actual,
+                                                double epsilon,
                                                 String format)
    {
       if (expected == null && actual == null)
@@ -667,7 +676,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two line segment 3Ds do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertLineSegment3DGeometricallyEquals(String messagePrefix, LineSegment3DReadOnly expected, LineSegment3DReadOnly actual, double epsilon,
+   public static void assertLineSegment3DGeometricallyEquals(String messagePrefix,
+                                                             LineSegment3DReadOnly expected,
+                                                             LineSegment3DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -730,7 +742,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 2Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertBoundingBox2DEquals(String messagePrefix, BoundingBox2DReadOnly expected, BoundingBox2DReadOnly actual, double epsilon,
+   public static void assertBoundingBox2DEquals(String messagePrefix,
+                                                BoundingBox2DReadOnly expected,
+                                                BoundingBox2DReadOnly actual,
+                                                double epsilon,
                                                 String format)
    {
       if (expected == null && actual == null)
@@ -798,7 +813,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 2Ds do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertBoundingBox2DGeometricallyEquals(String messagePrefix, BoundingBox2DReadOnly expected, BoundingBox2DReadOnly actual, double epsilon,
+   public static void assertBoundingBox2DGeometricallyEquals(String messagePrefix,
+                                                             BoundingBox2DReadOnly expected,
+                                                             BoundingBox2DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -863,7 +881,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertBoundingBox3DEquals(String messagePrefix, BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon,
+   public static void assertBoundingBox3DEquals(String messagePrefix,
+                                                BoundingBox3DReadOnly expected,
+                                                BoundingBox3DReadOnly actual,
+                                                double epsilon,
                                                 String format)
    {
       if (expected == null && actual == null)
@@ -931,7 +952,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two bounding box 3Ds do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertBoundingBox3DGeometricallyEquals(String messagePrefix, BoundingBox3DReadOnly expected, BoundingBox3DReadOnly actual, double epsilon,
+   public static void assertBoundingBox3DGeometricallyEquals(String messagePrefix,
+                                                             BoundingBox3DReadOnly expected,
+                                                             BoundingBox3DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -1008,7 +1032,10 @@ public class EuclidGeometryTestTools
     *             instead
     */
    @Deprecated
-   public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
+   public static void assertOrientation2DEquals(String messagePrefix,
+                                                Orientation2DReadOnly expected,
+                                                Orientation2DReadOnly actual,
+                                                double epsilon,
                                                 String format)
    {
       EuclidCoreTestTools.assertOrientation2DEquals(messagePrefix, expected, actual, epsilon, format);
@@ -1076,7 +1103,10 @@ public class EuclidGeometryTestTools
     *             instead
     */
    @Deprecated
-   public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
+   public static void assertOrientation2DGeometricallyEquals(String messagePrefix,
+                                                             Orientation2DReadOnly expected,
+                                                             Orientation2DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       EuclidCoreTestTools.assertOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, format);
@@ -1516,7 +1546,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two convex polygon 2D are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertConvexPolygon2DEquals(String messagePrefix, ConvexPolygon2DReadOnly expected, ConvexPolygon2DReadOnly actual, double epsilon,
+   public static void assertConvexPolygon2DEquals(String messagePrefix,
+                                                  ConvexPolygon2DReadOnly expected,
+                                                  ConvexPolygon2DReadOnly actual,
+                                                  double epsilon,
                                                   String format)
    {
       if (expected == null && actual == null)
@@ -1561,7 +1594,9 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two convex polygon 2D do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertConvexPolygon2DGeometricallyEquals(String messagePrefix, ConvexPolygon2DReadOnly expected, ConvexPolygon2DReadOnly actual,
+   public static void assertConvexPolygon2DGeometricallyEquals(String messagePrefix,
+                                                               ConvexPolygon2DReadOnly expected,
+                                                               ConvexPolygon2DReadOnly actual,
                                                                double epsilon)
    {
       assertConvexPolygon2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1582,8 +1617,11 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two convex polygon 2D do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertConvexPolygon2DGeometricallyEquals(String messagePrefix, ConvexPolygon2DReadOnly expected, ConvexPolygon2DReadOnly actual,
-                                                               double epsilon, String format)
+   public static void assertConvexPolygon2DGeometricallyEquals(String messagePrefix,
+                                                               ConvexPolygon2DReadOnly expected,
+                                                               ConvexPolygon2DReadOnly actual,
+                                                               double epsilon,
+                                                               String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1711,7 +1749,10 @@ public class EuclidGeometryTestTools
     * @throws AssertionError if the two triangle 3D do not represent the same geometry. If only one of
     *                        the arguments is equal to {@code null}.
     */
-   public static void assertTriangle3DGeometricallyEquals(String messagePrefix, Triangle3DReadOnly expected, Triangle3DReadOnly actual, double epsilon,
+   public static void assertTriangle3DGeometricallyEquals(String messagePrefix,
+                                                          Triangle3DReadOnly expected,
+                                                          Triangle3DReadOnly actual,
+                                                          double epsilon,
                                                           String format)
    {
       if (expected == null && actual == null)

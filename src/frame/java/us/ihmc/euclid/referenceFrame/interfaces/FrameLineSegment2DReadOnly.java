@@ -1108,7 +1108,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *                                         same reference frame.
     * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon,
+                                FixedFramePoint2DBasics firstIntersectionToPack,
                                 Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(convexPolygon, firstIntersectionToPack);
@@ -1189,7 +1190,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *                                         same reference frame.
     * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, Point2DBasics firstIntersectionToPack,
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon,
+                                Point2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(convexPolygon, secondIntersectionToPack);
@@ -1250,7 +1252,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *                                         same reference frame.
     * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWith(ConvexPolygon2DReadOnly convexPolygon,
+                                FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(firstIntersectionToPack, secondIntersectionToPack);
@@ -1273,7 +1276,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *                                         same reference frame.
     * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon,
+                                FixedFramePoint2DBasics firstIntersectionToPack,
                                 FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(convexPolygon, firstIntersectionToPack, secondIntersectionToPack);
@@ -1313,7 +1317,8 @@ public interface FrameLineSegment2DReadOnly extends LineSegment2DReadOnly, Refer
     *                                         expressed in the same reference frame.
     * @see #intersectionWith(ConvexPolygon2DReadOnly, Point2DBasics, Point2DBasics)
     */
-   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWith(FrameConvexPolygon2DReadOnly convexPolygon,
+                                FramePoint2DBasics firstIntersectionToPack,
                                 FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(convexPolygon);

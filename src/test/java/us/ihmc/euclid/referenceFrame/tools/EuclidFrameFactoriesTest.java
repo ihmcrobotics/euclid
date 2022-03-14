@@ -1779,7 +1779,8 @@ public class EuclidFrameFactoriesTest
             accessTraceMap.put(bound, new boolean[] {false, false});
          }
          FrameBoundingBox2D source = new FrameBoundingBox2D();
-         FixedFrameBoundingBox2DBasics observable = EuclidFrameFactories.newObservableFixedFrameBoundingBox2DBasics((axis, bound,
+         FixedFrameBoundingBox2DBasics observable = EuclidFrameFactories.newObservableFixedFrameBoundingBox2DBasics((axis,
+                                                                                                                     bound,
                                                                                                                      newValue) -> changeTraceMap.get(bound)[axis.ordinal()] = true,
                                                                                                                     (axis,
                                                                                                                      bound) -> accessTraceMap.get(bound)[axis.ordinal()] = true,
@@ -1848,7 +1849,8 @@ public class EuclidFrameFactoriesTest
             accessTraceMap.put(bound, new boolean[] {false, false, false});
          }
          FrameBoundingBox3D source = new FrameBoundingBox3D();
-         FixedFrameBoundingBox3DBasics observable = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics((axis, bound,
+         FixedFrameBoundingBox3DBasics observable = EuclidFrameFactories.newObservableFixedFrameBoundingBox3DBasics((axis,
+                                                                                                                     bound,
                                                                                                                      newValue) -> changeTraceMap.get(bound)[axis.ordinal()] = true,
                                                                                                                     (axis,
                                                                                                                      bound) -> accessTraceMap.get(bound)[axis.ordinal()] = true,

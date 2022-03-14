@@ -513,8 +513,11 @@ class ExpandingPolytopeAlgorithmTest
       }
    }
 
-   public static void performAssertionsOnEPA(Random random, ConvexPolytope3DReadOnly polytopeA, ConvexPolytope3DReadOnly polytopeB,
-                                             Point3DReadOnly expectedPointOnA, Point3DReadOnly expectedPointOnB)
+   public static void performAssertionsOnEPA(Random random,
+                                             ConvexPolytope3DReadOnly polytopeA,
+                                             ConvexPolytope3DReadOnly polytopeB,
+                                             Point3DReadOnly expectedPointOnA,
+                                             Point3DReadOnly expectedPointOnB)
    {
       ExpandingPolytopeAlgorithm epa = new ExpandingPolytopeAlgorithm();
       EuclidShape3DCollisionResult result = epa.evaluateCollision(polytopeA, polytopeB);

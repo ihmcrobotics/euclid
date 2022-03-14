@@ -634,12 +634,12 @@ public class Matrix3DToolsTest
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }
-   
+
    @Test
    public void testMultiplyOuter()
    {
       Random random = new Random(3245);
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          Matrix3D original = EuclidCoreRandomTools.nextMatrix3D(random, 10.0);
@@ -647,7 +647,7 @@ public class Matrix3DToolsTest
          Matrix3DTools.multiplyTransposeRight(original, original, expected);
          Matrix3D actual = new Matrix3D();
          Matrix3DTools.multiplyOuter(original, actual);
-         
+
          EuclidCoreTestTools.assertMatrix3DEquals(expected, actual, EPS);
       }
    }

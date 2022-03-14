@@ -270,7 +270,11 @@ public class YawPitchRollTools
       inverseTransform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), tupleOriginal, tupleTransformed);
    }
 
-   private static void transformImpl(double yaw, double pitch, double roll, boolean inverseTransform, Tuple3DReadOnly tupleOriginal,
+   private static void transformImpl(double yaw,
+                                     double pitch,
+                                     double roll,
+                                     boolean inverseTransform,
+                                     Tuple3DReadOnly tupleOriginal,
                                      Tuple3DBasics tupleTransformed)
    {
       if (isZero(yaw, pitch, roll, ZERO_EPS))
@@ -376,7 +380,11 @@ public class YawPitchRollTools
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
     *                               does not represent a transformation in the XY plane.
     */
-   public static void transform(double yaw, double pitch, double roll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   public static void transform(double yaw,
+                                double pitch,
+                                double roll,
+                                Tuple2DReadOnly tupleOriginal,
+                                Tuple2DBasics tupleTransformed,
                                 boolean checkIfTransformInXYPlane)
    {
       transformImpl(yaw, pitch, roll, false, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
@@ -397,7 +405,9 @@ public class YawPitchRollTools
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
     *                               does not represent a transformation in the XY plane.
     */
-   public static void transform(YawPitchRollReadOnly yawPitchRoll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   public static void transform(YawPitchRollReadOnly yawPitchRoll,
+                                Tuple2DReadOnly tupleOriginal,
+                                Tuple2DBasics tupleTransformed,
                                 boolean checkIfTransformInXYPlane)
    {
       transform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
@@ -425,7 +435,11 @@ public class YawPitchRollTools
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
     *                               does not represent a transformation in the XY plane.
     */
-   public static void inverseTransform(double yaw, double pitch, double roll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   public static void inverseTransform(double yaw,
+                                       double pitch,
+                                       double roll,
+                                       Tuple2DReadOnly tupleOriginal,
+                                       Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
    {
       transformImpl(yaw, pitch, roll, true, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
@@ -451,14 +465,21 @@ public class YawPitchRollTools
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the yaw-pitch-roll
     *                               does not represent a transformation in the XY plane.
     */
-   public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll,
+                                       Tuple2DReadOnly tupleOriginal,
+                                       Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
    {
       inverseTransform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
    }
 
-   private static void transformImpl(double yaw, double pitch, double roll, boolean inverseTransform, Tuple2DReadOnly tupleOriginal,
-                                     Tuple2DBasics tupleTransformed, boolean checkIfTransformInXYPlane)
+   private static void transformImpl(double yaw,
+                                     double pitch,
+                                     double roll,
+                                     boolean inverseTransform,
+                                     Tuple2DReadOnly tupleOriginal,
+                                     Tuple2DBasics tupleTransformed,
+                                     boolean checkIfTransformInXYPlane)
    {
       if (isZero(yaw, pitch, roll, ZERO_EPS))
       {
@@ -598,7 +619,11 @@ public class YawPitchRollTools
       inverseTransform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), matrixOriginal, matrixTransformed);
    }
 
-   private static void transformImpl(double yaw, double pitch, double roll, boolean inverseTransform, Matrix3DReadOnly matrixOriginal,
+   private static void transformImpl(double yaw,
+                                     double pitch,
+                                     double roll,
+                                     boolean inverseTransform,
+                                     Matrix3DReadOnly matrixOriginal,
                                      Matrix3DBasics matrixTransformed)
    {
       if (isZero(yaw, pitch, roll, ZERO_EPS))
@@ -693,7 +718,10 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal,
+   public static void transform(double yaw,
+                                double pitch,
+                                double roll,
+                                RotationMatrixReadOnly rotationMatrixOriginal,
                                 RotationMatrixBasics rotationMatrixTransformed)
    {
       transformImpl(yaw, pitch, roll, false, rotationMatrixOriginal, rotationMatrixTransformed);
@@ -719,7 +747,8 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void transform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal,
+   public static void transform(YawPitchRollReadOnly yawPitchRoll,
+                                RotationMatrixReadOnly rotationMatrixOriginal,
                                 RotationMatrixBasics rotationMatrixTransformed)
    {
       transform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), rotationMatrixOriginal, rotationMatrixTransformed);
@@ -751,7 +780,10 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(double yaw, double pitch, double roll, RotationMatrixReadOnly rotationMatrixOriginal,
+   public static void inverseTransform(double yaw,
+                                       double pitch,
+                                       double roll,
+                                       RotationMatrixReadOnly rotationMatrixOriginal,
                                        RotationMatrixBasics rotationMatrixTransformed)
    {
       transformImpl(yaw, pitch, roll, true, rotationMatrixOriginal, rotationMatrixTransformed);
@@ -782,13 +814,18 @@ public class YawPitchRollTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrixOriginal,
+   public static void inverseTransform(YawPitchRollReadOnly yawPitchRoll,
+                                       RotationMatrixReadOnly rotationMatrixOriginal,
                                        RotationMatrixBasics rotationMatrixTransformed)
    {
       inverseTransform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), rotationMatrixOriginal, rotationMatrixTransformed);
    }
 
-   private static void transformImpl(double yaw, double pitch, double roll, boolean inverseTransform, RotationMatrixReadOnly rotationMatrixOriginal,
+   private static void transformImpl(double yaw,
+                                     double pitch,
+                                     double roll,
+                                     boolean inverseTransform,
+                                     RotationMatrixReadOnly rotationMatrixOriginal,
                                      RotationMatrixBasics rotationMatrixTransformed)
    {
       if (isZero(yaw, pitch, roll, ZERO_EPS))
@@ -930,7 +967,11 @@ public class YawPitchRollTools
       inverseTransform(yawPitchRoll.getYaw(), yawPitchRoll.getPitch(), yawPitchRoll.getRoll(), vectorOriginal, vectorTransformed);
    }
 
-   private static void transformImpl(double yaw, double pitch, double roll, boolean inverseTransform, Vector4DReadOnly vectorOriginal,
+   private static void transformImpl(double yaw,
+                                     double pitch,
+                                     double roll,
+                                     boolean inverseTransform,
+                                     Vector4DReadOnly vectorOriginal,
                                      Vector4DBasics vectorTransformed)
    {
       if (isZero(yaw, pitch, roll, ZERO_EPS))
@@ -1000,7 +1041,10 @@ public class YawPitchRollTools
     *                           multiplication.
     * @param yawPitchRollToPack the yaw-pitch-roll in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
+   public static void multiply(Orientation3DReadOnly orientation1,
+                               boolean inverse1,
+                               Orientation3DReadOnly orientation2,
+                               boolean inverse2,
                                YawPitchRollBasics yawPitchRollToPack)
    {
       double q1s, q1x, q1y, q1z;

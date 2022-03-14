@@ -717,7 +717,9 @@ public interface BoundingBox3DReadOnly
     * @return the number of intersections between the line and this bounding box. It is either equal to
     *         0 or 2.
     */
-   default int intersectionWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+   default int intersectionWithLine3D(Point3DReadOnly pointOnLine,
+                                      Vector3DReadOnly lineDirection,
+                                      Point3DBasics firstIntersectionToPack,
                                       Point3DBasics secondIntersectionToPack)
    {
       return intersectionBetweenLine3DAndBoundingBox3D(getMinPoint(),
@@ -787,7 +789,9 @@ public interface BoundingBox3DReadOnly
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
     */
-   default int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart,
+                                             Point3DReadOnly lineSegmentEnd,
+                                             Point3DBasics firstIntersectionToPack,
                                              Point3DBasics secondIntersectionToPack)
    {
       return intersectionBetweenLineSegment3DAndBoundingBox3D(getMinPoint(),
@@ -823,7 +827,9 @@ public interface BoundingBox3DReadOnly
     * @return the number of intersections between the ray and this bounding box. It is either equal to
     *         0, 1, or 2.
     */
-   default int intersectionWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
+   default int intersectionWithRay3D(Point3DReadOnly rayOrigin,
+                                     Vector3DReadOnly rayDirection,
+                                     Point3DBasics firstIntersectionToPack,
                                      Point3DBasics secondIntersectionToPack)
    {
       return intersectionBetweenRay3DAndBoundingBox3D(getMinPoint(), getMaxPoint(), rayOrigin, rayDirection, firstIntersectionToPack, secondIntersectionToPack);

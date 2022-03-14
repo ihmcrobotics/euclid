@@ -270,7 +270,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *                                         {@code closestPointOnThisLineToPack} are not expressed in
     *                                         the same reference frame.
     */
-   default double closestPointsWith(FrameLine3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
+   default double closestPointsWith(FrameLine3DReadOnly otherLine,
+                                    FixedFramePoint3DBasics closestPointOnThisLineToPack,
                                     Point3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(otherLine, closestPointOnThisLineToPack);
@@ -313,7 +314,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *                                         {@code closestPointOnOtherLineToPack} are not expressed
     *                                         in the same reference frame.
     */
-   default double closestPointsWith(FrameLine3DReadOnly otherLine, Point3DBasics closestPointOnThisLineToPack,
+   default double closestPointsWith(FrameLine3DReadOnly otherLine,
+                                    Point3DBasics closestPointOnThisLineToPack,
                                     FixedFramePoint3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(otherLine, closestPointOnOtherLineToPack);
@@ -357,7 +359,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *                                         {@code closestPointOnOtherLineToPack} are not expressed
     *                                         in the same reference frame.
     */
-   default double closestPointsWith(FrameLine3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
+   default double closestPointsWith(FrameLine3DReadOnly otherLine,
+                                    FixedFramePoint3DBasics closestPointOnThisLineToPack,
                                     FixedFramePoint3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(otherLine, closestPointOnThisLineToPack, closestPointOnOtherLineToPack);
@@ -378,7 +381,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     * @throws ReferenceFrameMismatchException if {@code this} and {@code otherLine} are not expressed
     *                                         in the same reference frame.
     */
-   default double closestPointsWith(FrameLine3DReadOnly otherLine, FramePoint3DBasics closestPointOnThisLineToPack,
+   default double closestPointsWith(FrameLine3DReadOnly otherLine,
+                                    FramePoint3DBasics closestPointOnThisLineToPack,
                                     FramePoint3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(otherLine);
@@ -402,7 +406,8 @@ public interface FrameLine3DReadOnly extends Line3DReadOnly, ReferenceFrameHolde
     *                                         and {@code closestPointOnOtherLineToPack} are not
     *                                         expressed in the same reference frame.
     */
-   default double closestPointsWith(Line3DReadOnly otherLine, FixedFramePoint3DBasics closestPointOnThisLineToPack,
+   default double closestPointsWith(Line3DReadOnly otherLine,
+                                    FixedFramePoint3DBasics closestPointOnThisLineToPack,
                                     FixedFramePoint3DBasics closestPointOnOtherLineToPack)
    {
       checkReferenceFrameMatch(closestPointOnThisLineToPack, closestPointOnOtherLineToPack);

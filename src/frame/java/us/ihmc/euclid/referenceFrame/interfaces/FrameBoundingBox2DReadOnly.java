@@ -438,7 +438,8 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLine2D(FrameLine2DReadOnly line2D, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLine2D(FrameLine2DReadOnly line2D,
+                                      FixedFramePoint2DBasics firstIntersectionToPack,
                                       FixedFramePoint2DBasics secondIntersectionToPack)
    {
       return intersectionWithLine2D(line2D.getPoint(), line2D.getDirection(), firstIntersectionToPack, secondIntersectionToPack);
@@ -465,7 +466,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection, Point2DBasics firstIntersectionToPack,
+   default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine,
+                                      FrameVector2DReadOnly lineDirection,
+                                      Point2DBasics firstIntersectionToPack,
                                       Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -493,7 +496,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLine2D(Point2DReadOnly pointOnLine,
+                                      Vector2DReadOnly lineDirection,
+                                      FixedFramePoint2DBasics firstIntersectionToPack,
                                       FixedFramePoint2DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -521,7 +526,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     *         0 or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
-   default int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLine2D(Point2DReadOnly pointOnLine,
+                                      Vector2DReadOnly lineDirection,
+                                      FramePoint2DBasics firstIntersectionToPack,
                                       FramePoint2DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -552,7 +559,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine,
+                                      FrameVector2DReadOnly lineDirection,
+                                      FixedFramePoint2DBasics firstIntersectionToPack,
                                       FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -585,7 +594,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     *                                         not expressed in the same reference frame as
     *                                         {@code this}.
     */
-   default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLine2D(FramePoint2DReadOnly pointOnLine,
+                                      FrameVector2DReadOnly lineDirection,
+                                      FramePoint2DBasics firstIntersectionToPack,
                                       FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -625,7 +636,8 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(FrameLineSegment2DReadOnly lineSegment2D, Point2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(FrameLineSegment2DReadOnly lineSegment2D,
+                                             Point2DBasics firstIntersectionToPack,
                                              Point2DBasics secondIntersectionToPack)
    {
       return intersectionWithLineSegment2D(lineSegment2D.getFirstEndpoint(),
@@ -660,7 +672,8 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     *         equal to 0, 1, or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
-   default int intersectionWithLineSegment2D(LineSegment2DReadOnly lineSegment2D, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(LineSegment2DReadOnly lineSegment2D,
+                                             FramePoint2DBasics firstIntersectionToPack,
                                              FramePoint2DBasics secondIntersectionToPack)
    {
       return intersectionWithLineSegment2D(lineSegment2D.getFirstEndpoint(),
@@ -698,7 +711,8 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(LineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(LineSegment2DReadOnly lineSegment2D,
+                                             FixedFramePoint2DBasics firstIntersectionToPack,
                                              FixedFramePoint2DBasics secondIntersectionToPack)
    {
       return intersectionWithLineSegment2D(lineSegment2D.getFirstEndpoint(),
@@ -736,7 +750,8 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code lineSegment2D} is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(FrameLineSegment2DReadOnly lineSegment2D, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(FrameLineSegment2DReadOnly lineSegment2D,
+                                             FramePoint2DBasics firstIntersectionToPack,
                                              FramePoint2DBasics secondIntersectionToPack)
    {
       return intersectionWithLineSegment2D(lineSegment2D.getFirstEndpoint(),
@@ -774,7 +789,8 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(FrameLineSegment2DReadOnly lineSegment2D, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(FrameLineSegment2DReadOnly lineSegment2D,
+                                             FixedFramePoint2DBasics firstIntersectionToPack,
                                              FixedFramePoint2DBasics secondIntersectionToPack)
    {
       return intersectionWithLineSegment2D(lineSegment2D.getFirstEndpoint(),
@@ -813,7 +829,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd, Point2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart,
+                                             FramePoint2DReadOnly lineSegmentEnd,
+                                             Point2DBasics firstIntersectionToPack,
                                              Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -850,7 +868,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart,
+                                             Point2DReadOnly lineSegmentEnd,
+                                             FixedFramePoint2DBasics firstIntersectionToPack,
                                              FixedFramePoint2DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -887,7 +907,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     *         equal to 0, 1, or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
-   default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart,
+                                             Point2DReadOnly lineSegmentEnd,
+                                             FramePoint2DBasics firstIntersectionToPack,
                                              FramePoint2DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -927,8 +949,10 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                             FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart,
+                                             FramePoint2DReadOnly lineSegmentEnd,
+                                             FixedFramePoint2DBasics firstIntersectionToPack,
+                                             FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
       if (firstIntersectionToPack != null)
@@ -969,8 +993,10 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     *                                         {@code lineSegmentEnd} is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                             FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   default int intersectionWithLineSegment2D(FramePoint2DReadOnly lineSegmentStart,
+                                             FramePoint2DReadOnly lineSegmentEnd,
+                                             FramePoint2DBasics firstIntersectionToPack,
+                                             FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
       if (firstIntersectionToPack != null)
@@ -1009,7 +1035,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection, Point2DBasics firstIntersectionToPack,
+   default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin,
+                                     FrameVector2DReadOnly rayDirection,
+                                     Point2DBasics firstIntersectionToPack,
                                      Point2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);
@@ -1042,7 +1070,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     *         0, 1, or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
-   default int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithRay2D(Point2DReadOnly rayOrigin,
+                                     Vector2DReadOnly rayDirection,
+                                     FramePoint2DBasics firstIntersectionToPack,
                                      FramePoint2DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -1081,7 +1111,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithRay2D(Point2DReadOnly rayOrigin,
+                                     Vector2DReadOnly rayDirection,
+                                     FixedFramePoint2DBasics firstIntersectionToPack,
                                      FixedFramePoint2DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -1121,7 +1153,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     *                                         not expressed in the same reference frame as
     *                                         {@code this}.
     */
-   default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection, FramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin,
+                                     FrameVector2DReadOnly rayDirection,
+                                     FramePoint2DBasics firstIntersectionToPack,
                                      FramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);
@@ -1161,7 +1195,9 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection, FixedFramePoint2DBasics firstIntersectionToPack,
+   default int intersectionWithRay2D(FramePoint2DReadOnly rayOrigin,
+                                     FrameVector2DReadOnly rayDirection,
+                                     FixedFramePoint2DBasics firstIntersectionToPack,
                                      FixedFramePoint2DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);

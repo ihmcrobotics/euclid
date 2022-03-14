@@ -238,7 +238,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two yaw-pitch-roll do not represent the same geometry. If only one
     *                        of the arguments is equal to {@code null}.
     */
-   public static void assertYawPitchRollGeometricallyEquals(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, double epsilon,
+   public static void assertYawPitchRollGeometricallyEquals(String messagePrefix,
+                                                            YawPitchRollReadOnly expected,
+                                                            YawPitchRollReadOnly actual,
+                                                            double epsilon,
                                                             String format)
    {
       if (expected == null && actual == null)
@@ -317,7 +320,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rotation vectors do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertRotationVectorGeometricallyEquals(String messagePrefix, Vector3DReadOnly expected, Vector3DReadOnly actual, double epsilon,
+   public static void assertRotationVectorGeometricallyEquals(String messagePrefix,
+                                                              Vector3DReadOnly expected,
+                                                              Vector3DReadOnly actual,
+                                                              double epsilon,
                                                               String format)
    {
       if (expected == null && actual == null)
@@ -961,7 +967,9 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rotation matrices do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertRotationMatrixGeometricallyEquals(String messagePrefix, RotationMatrixReadOnly expected, RotationMatrixReadOnly actual,
+   public static void assertRotationMatrixGeometricallyEquals(String messagePrefix,
+                                                              RotationMatrixReadOnly expected,
+                                                              RotationMatrixReadOnly actual,
                                                               double epsilon)
    {
       assertRotationMatrixGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -982,8 +990,11 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rotation matrices do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertRotationMatrixGeometricallyEquals(String messagePrefix, RotationMatrixReadOnly expected, RotationMatrixReadOnly actual,
-                                                              double epsilon, String format)
+   public static void assertRotationMatrixGeometricallyEquals(String messagePrefix,
+                                                              RotationMatrixReadOnly expected,
+                                                              RotationMatrixReadOnly actual,
+                                                              double epsilon,
+                                                              String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1353,7 +1364,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two quaternions do not represent the same geometry. If only one of
     *                        the arguments is equal to {@code null}.
     */
-   public static void assertQuaternionGeometricallyEquals(String messagePrefix, QuaternionReadOnly expected, QuaternionReadOnly actual, double epsilon,
+   public static void assertQuaternionGeometricallyEquals(String messagePrefix,
+                                                          QuaternionReadOnly expected,
+                                                          QuaternionReadOnly actual,
+                                                          double epsilon,
                                                           String format)
    {
       if (expected == null && actual == null)
@@ -1482,7 +1496,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two axis-angles do not represent the same geometry. If only one of
     *                        the arguments is equal to {@code null}.
     */
-   public static void assertAxisAngleGeometricallyEquals(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, double epsilon,
+   public static void assertAxisAngleGeometricallyEquals(String messagePrefix,
+                                                         AxisAngleReadOnly expected,
+                                                         AxisAngleReadOnly actual,
+                                                         double epsilon,
                                                          String format)
    {
       if (expected == null && actual == null)
@@ -1549,7 +1566,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two orientation 2Ds are not equal. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertOrientation2DEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
+   public static void assertOrientation2DEquals(String messagePrefix,
+                                                Orientation2DReadOnly expected,
+                                                Orientation2DReadOnly actual,
+                                                double epsilon,
                                                 String format)
    {
       if (expected == null && actual == null)
@@ -1614,7 +1634,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two orientation 2Ds do not represent the same geometry. If only one
     *                        of the arguments is equal to {@code null}.
     */
-   public static void assertOrientation2DGeometricallyEquals(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, double epsilon,
+   public static void assertOrientation2DGeometricallyEquals(String messagePrefix,
+                                                             Orientation2DReadOnly expected,
+                                                             Orientation2DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -2110,7 +2133,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rigid-body transforms are not equal. If only one of the
     *                        arguments is equal to {@code null}.
     */
-   public static void assertRigidBodyTransformEquals(String messagePrefix, RigidBodyTransform expected, RigidBodyTransform actual, double epsilon,
+   public static void assertRigidBodyTransformEquals(String messagePrefix,
+                                                     RigidBodyTransform expected,
+                                                     RigidBodyTransform actual,
+                                                     double epsilon,
                                                      String format)
    {
       if (expected == null && actual == null)
@@ -2178,7 +2204,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rigid-body transforms do not represent the same geometry. If
     *                        only one of the arguments is equal to {@code null}.
     */
-   public static void assertRigidBodyTransformGeometricallyEquals(String messagePrefix, RigidBodyTransform expected, RigidBodyTransform actual, double epsilon,
+   public static void assertRigidBodyTransformGeometricallyEquals(String messagePrefix,
+                                                                  RigidBodyTransform expected,
+                                                                  RigidBodyTransform actual,
+                                                                  double epsilon,
                                                                   String format)
    {
       if (expected == null && actual == null)
@@ -2225,7 +2254,9 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two quaternion-based transforms are not equal. If only one of the
     *                        arguments is equal to {@code null}.
     */
-   public static void assertQuaternionBasedTransformEquals(String messagePrefix, QuaternionBasedTransform expected, QuaternionBasedTransform actual,
+   public static void assertQuaternionBasedTransformEquals(String messagePrefix,
+                                                           QuaternionBasedTransform expected,
+                                                           QuaternionBasedTransform actual,
                                                            double epsilon)
    {
       assertQuaternionBasedTransformEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -2247,8 +2278,11 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two quaternion-based transforms are not equal. If only one of the
     *                        arguments is equal to {@code null}.
     */
-   public static void assertQuaternionBasedTransformEquals(String messagePrefix, QuaternionBasedTransform expected, QuaternionBasedTransform actual,
-                                                           double epsilon, String format)
+   public static void assertQuaternionBasedTransformEquals(String messagePrefix,
+                                                           QuaternionBasedTransform expected,
+                                                           QuaternionBasedTransform actual,
+                                                           double epsilon,
+                                                           String format)
    {
       if (expected == null && actual == null)
          return;
@@ -2294,8 +2328,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two quaternion-based transforms do not represent the same geometry.
     *                        If only one of the arguments is equal to {@code null}.
     */
-   public static void assertQuaternionBasedTransformGeometricallyEquals(String messagePrefix, QuaternionBasedTransform expected,
-                                                                        QuaternionBasedTransform actual, double epsilon)
+   public static void assertQuaternionBasedTransformGeometricallyEquals(String messagePrefix,
+                                                                        QuaternionBasedTransform expected,
+                                                                        QuaternionBasedTransform actual,
+                                                                        double epsilon)
    {
       assertQuaternionBasedTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -2316,8 +2352,11 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two quaternion-based transforms do not represent the same geometry.
     *                        If only one of the arguments is equal to {@code null}.
     */
-   public static void assertQuaternionBasedTransformGeometricallyEquals(String messagePrefix, QuaternionBasedTransform expected,
-                                                                        QuaternionBasedTransform actual, double epsilon, String format)
+   public static void assertQuaternionBasedTransformGeometricallyEquals(String messagePrefix,
+                                                                        QuaternionBasedTransform expected,
+                                                                        QuaternionBasedTransform actual,
+                                                                        double epsilon,
+                                                                        String format)
    {
       if (expected == null && actual == null)
          return;
@@ -2384,7 +2423,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertAffineTransformEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, double epsilon,
+   public static void assertAffineTransformEquals(String messagePrefix,
+                                                  AffineTransformReadOnly expected,
+                                                  AffineTransformReadOnly actual,
+                                                  double epsilon,
                                                   String format)
    {
       if (expected == null && actual == null)
@@ -2429,7 +2471,9 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual,
+   public static void assertAffineTransformGeometricallyEquals(String messagePrefix,
+                                                               AffineTransformReadOnly expected,
+                                                               AffineTransformReadOnly actual,
                                                                double epsilon)
    {
       assertAffineTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -2450,8 +2494,11 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two affine transforms do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertAffineTransformGeometricallyEquals(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual,
-                                                               double epsilon, String format)
+   public static void assertAffineTransformGeometricallyEquals(String messagePrefix,
+                                                               AffineTransformReadOnly expected,
+                                                               AffineTransformReadOnly actual,
+                                                               double epsilon,
+                                                               String format)
    {
       if (expected == null && actual == null)
          return;
@@ -2580,7 +2627,10 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, String difference,
+   private static void throwNotEqualAssertionError(String messagePrefix,
+                                                   YawPitchRollReadOnly expected,
+                                                   YawPitchRollReadOnly actual,
+                                                   String difference,
                                                    String format)
    {
       String expectedAsString = getYawPitchRollString(format, expected);

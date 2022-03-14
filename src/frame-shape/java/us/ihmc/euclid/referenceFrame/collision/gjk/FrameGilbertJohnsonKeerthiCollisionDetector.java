@@ -291,7 +291,8 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
-   public boolean evaluateCollision(SupportingFrameVertexHolder shapeA, SupportingFrameVertexHolder shapeB,
+   public boolean evaluateCollision(SupportingFrameVertexHolder shapeA,
+                                    SupportingFrameVertexHolder shapeB,
                                     EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
       shapeA.getReferenceFrame().getTransformToDesiredFrame(transform, shapeB.getReferenceFrame());
@@ -301,21 +302,28 @@ public class FrameGilbertJohnsonKeerthiCollisionDetector
       return areColliding;
    }
 
-   private boolean evaluateCollision(ReferenceFrame detectorFrame, SupportingVertexHolder shapeA, SupportingVertexHolder shapeB,
-                                     RigidBodyTransformReadOnly transformFromAToB, EuclidFrameShape3DCollisionResultBasics resultToPack)
+   private boolean evaluateCollision(ReferenceFrame detectorFrame,
+                                     SupportingVertexHolder shapeA,
+                                     SupportingVertexHolder shapeB,
+                                     RigidBodyTransformReadOnly transformFromAToB,
+                                     EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
       supportingVertexTransformer.initialize(shapeA, transformFromAToB);
       return evaluateCollision(detectorFrame, supportingVertexTransformer, shapeB, resultToPack);
    }
 
-   private boolean evaluateCollision(ReferenceFrame detectorFrame, SupportingVertexHolder shapeA, SupportingVertexHolder shapeB,
+   private boolean evaluateCollision(ReferenceFrame detectorFrame,
+                                     SupportingVertexHolder shapeA,
+                                     SupportingVertexHolder shapeB,
                                      EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
       initializeGJK(detectorFrame);
       return gjkCollisionDetector.evaluateCollision(shapeA, shapeB, resultToPack);
    }
 
-   private boolean evaluateCollision(ReferenceFrame detectorFrame, Shape3DReadOnly shapeA, Shape3DReadOnly shapeB,
+   private boolean evaluateCollision(ReferenceFrame detectorFrame,
+                                     Shape3DReadOnly shapeA,
+                                     Shape3DReadOnly shapeB,
                                      EuclidFrameShape3DCollisionResultBasics resultToPack)
    {
       initializeGJK(detectorFrame);

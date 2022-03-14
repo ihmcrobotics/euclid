@@ -275,7 +275,10 @@ public class EuclidFrameAPITester
     * @param framelessMutableType    the geometry with: mutable values and no frame information.
     * @param framelessReadOnlyType   the geometry with: immutable values and no frame information.
     */
-   public void registerFrameType(Class<?> mutableFrameMutableType, Class<?> fixedFrameMutableType, Class<?> frameReadOnlyType, Class<?> framelessMutableType,
+   public void registerFrameType(Class<?> mutableFrameMutableType,
+                                 Class<?> fixedFrameMutableType,
+                                 Class<?> frameReadOnlyType,
+                                 Class<?> framelessMutableType,
                                  Class<?> framelessReadOnlyType)
    {
       Objects.requireNonNull(framelessReadOnlyType, "Frameless read-only type cannot be null.");
@@ -386,7 +389,9 @@ public class EuclidFrameAPITester
     * @param minNumberOfFramelessArguments threshold used to filter out methods to assert in
     *                                      {@code typeWithFramelessMethods}.
     */
-   public void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
+   public void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods,
+                                                 Class<?> typeWithFramelessMethods,
+                                                 boolean assertAllCombinations,
                                                  int minNumberOfFramelessArguments)
    {
       assertOverloadingWithFrameObjects(typeWithFrameMethods, typeWithFramelessMethods, assertAllCombinations, minNumberOfFramelessArguments, m -> true);
@@ -453,8 +458,11 @@ public class EuclidFrameAPITester
     *                                      {@code framelessMethodFilter.test(method)} returns
     *                                      {@code true}.
     */
-   public void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods, Class<?> typeWithFramelessMethods, boolean assertAllCombinations,
-                                                 int minNumberOfFramelessArguments, Predicate<Method> framelessMethodFilter)
+   public void assertOverloadingWithFrameObjects(Class<?> typeWithFrameMethods,
+                                                 Class<?> typeWithFramelessMethods,
+                                                 boolean assertAllCombinations,
+                                                 int minNumberOfFramelessArguments,
+                                                 Predicate<Method> framelessMethodFilter)
    {
       // The frame methods are all the methods from 'typeWithFramelessMethods' that have at least one geometry argument.
       Predicate<Method> filter = framelessMethodFilter.and(atLeastNFramelessParameters(minNumberOfFramelessArguments));
@@ -473,8 +481,10 @@ public class EuclidFrameAPITester
       }
    }
 
-   private void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods, Class<?> typeWithOriginalMethods,
-                                                            MethodSignature originalSignature, MethodSignature overloadingSignature)
+   private void assertMethodOverloadedWithSpecificSignature(Class<?> typeWithOverloadingMethods,
+                                                            Class<?> typeWithOriginalMethods,
+                                                            MethodSignature originalSignature,
+                                                            MethodSignature overloadingSignature)
          throws SecurityException
    {
       try
@@ -1280,7 +1290,8 @@ public class EuclidFrameAPITester
     * @param numberOfIterations number of iterations to perform for each method.
     * @throws Throwable if an unexpected throwable has been thrown by a method at invocation time.
     */
-   public void assertMethodsOfReferenceFrameHolderCheckReferenceFrame(RandomFrameTypeBuilder frameTypeBuilder, Predicate<Method> methodFilter,
+   public void assertMethodsOfReferenceFrameHolderCheckReferenceFrame(RandomFrameTypeBuilder frameTypeBuilder,
+                                                                      Predicate<Method> methodFilter,
                                                                       int numberOfIterations)
          throws Throwable
    {
@@ -1463,13 +1474,17 @@ public class EuclidFrameAPITester
       }
    }
 
-   private void assertSetIncludingFrameChecksFrames(RandomFrameTypeBuilder frameTypeBuilder, Method setIncludingFrameMethod, ReferenceFrame frameA,
+   private void assertSetIncludingFrameChecksFrames(RandomFrameTypeBuilder frameTypeBuilder,
+                                                    Method setIncludingFrameMethod,
+                                                    ReferenceFrame frameA,
                                                     ReferenceFrame frameB)
    { // For reference frame check, it should behave the same as setMatchingFrame.
       assertSetMatchingFrameChecksFrames(frameTypeBuilder, setIncludingFrameMethod, frameA, frameB);
    }
 
-   private void assertSetMatchingFrameChecksFrames(RandomFrameTypeBuilder frameTypeBuilder, Method setMatchingFrameMethod, ReferenceFrame frameA,
+   private void assertSetMatchingFrameChecksFrames(RandomFrameTypeBuilder frameTypeBuilder,
+                                                   Method setMatchingFrameMethod,
+                                                   ReferenceFrame frameA,
                                                    ReferenceFrame frameB)
    {
       ReferenceFrameHolder frameObject = frameTypeBuilder.newInstance(random, frameA);
@@ -1580,7 +1595,9 @@ public class EuclidFrameAPITester
     *                                   returns {@code true}.
     * @param numberOfIterations         number of iterations to perform for each method.
     */
-   public void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods, Predicate<Method> methodFilter,
+   public void assertStaticMethodsPreserveFunctionality(Class<?> typeWithFrameMethodsToTest,
+                                                        Class<?> typeWithFramelessMethods,
+                                                        Predicate<Method> methodFilter,
                                                         int numberOfIterations)
    {
       List<Method> frameMethods = Stream.of(typeWithFrameMethodsToTest.getMethods()).filter(methodFilter).collect(Collectors.toList());
@@ -1708,8 +1725,10 @@ public class EuclidFrameAPITester
     *                             {@code true}.
     * @param numberOfIterations   number of iterations to perform for each method.
     */
-   public void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
-                                                                    Predicate<Method> methodFilter, int numberOfIterations)
+   public void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier,
+                                                                    RandomFramelessTypeBuilder framelessTypeBuilber,
+                                                                    Predicate<Method> methodFilter,
+                                                                    int numberOfIterations)
    {
       assertFrameMethodsOfFrameHolderPreserveFunctionality(frameTypeCopier, framelessTypeBuilber, methodFilter, numberOfIterations, EPSILON);
    }
@@ -1734,8 +1753,11 @@ public class EuclidFrameAPITester
     * @param epsilon              the tolerance to use when comparing geometries.
     * @param numberOfIterations   number of iterations to perform for each method.
     */
-   public void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier, RandomFramelessTypeBuilder framelessTypeBuilber,
-                                                                    Predicate<Method> methodFilter, int numberOfIterations, double epsilon)
+   public void assertFrameMethodsOfFrameHolderPreserveFunctionality(FrameTypeCopier frameTypeCopier,
+                                                                    RandomFramelessTypeBuilder framelessTypeBuilber,
+                                                                    Predicate<Method> methodFilter,
+                                                                    int numberOfIterations,
+                                                                    double epsilon)
    {
       Class<?> frameTypeToTest = frameTypeCopier.newInstance(worldFrame, framelessTypeBuilber.newInstance(random)).getClass();
       if (frameTypeToTest.isAnonymousClass())
@@ -1891,7 +1913,9 @@ public class EuclidFrameAPITester
       failToThrowReferenceFrameMismatchException(typeDeclaringMethod, frameMethod, parameters, null);
    }
 
-   private static void failToThrowReferenceFrameMismatchException(Class<?> typeDeclaringMethod, Method frameMethod, Object[] parameters,
+   private static void failToThrowReferenceFrameMismatchException(Class<?> typeDeclaringMethod,
+                                                                  Method frameMethod,
+                                                                  Object[] parameters,
                                                                   Throwable exceptionThrownInstead)
          throws AssertionError
    {
@@ -1919,7 +1943,9 @@ public class EuclidFrameAPITester
       }
    }
 
-   private static void debugNoSuchMethodException(Class<?> typeWithFrameMethodsToTest, Class<?> typeWithFramelessMethods, Method frameMethod,
+   private static void debugNoSuchMethodException(Class<?> typeWithFrameMethodsToTest,
+                                                  Class<?> typeWithFramelessMethods,
+                                                  Method frameMethod,
                                                   Class<?>[] framelessMethodParameterTypes)
    {
       if (DEBUG)
@@ -1957,8 +1983,12 @@ public class EuclidFrameAPITester
       throw new AssertionError(message);
    }
 
-   private void reportInconsistentArguments(Method frameMethod, Method framelessMethod, Object[] frameMethodParameters, Object[] framelessMethodParameters,
-                                            Object framelessParameter, Object frameParameter)
+   private void reportInconsistentArguments(Method frameMethod,
+                                            Method framelessMethod,
+                                            Object[] frameMethodParameters,
+                                            Object[] framelessMethodParameters,
+                                            Object framelessParameter,
+                                            Object frameParameter)
          throws AssertionError
    {
       String message = "";

@@ -69,8 +69,11 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean areLine2DsCollinear(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
-                                             FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon,
+   public static boolean areLine2DsCollinear(FramePoint2DReadOnly firstPointOnLine1,
+                                             FramePoint2DReadOnly secondPointOnLine1,
+                                             FramePoint2DReadOnly firstPointOnLine2,
+                                             FramePoint2DReadOnly secondPointOnLine2,
+                                             double angleEpsilon,
                                              double distanceEpsilon)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
@@ -106,8 +109,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly firstPointOnLine2,
-                                             FramePoint2DReadOnly secondPointOnLine2, double angleEpsilon, double distanceEpsilon)
+   public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1,
+                                             FrameVector2DReadOnly lineDirection1,
+                                             FramePoint2DReadOnly firstPointOnLine2,
+                                             FramePoint2DReadOnly secondPointOnLine2,
+                                             double angleEpsilon,
+                                             double distanceEpsilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, firstPointOnLine2, secondPointOnLine2);
       return EuclidGeometryTools.areLine2DsCollinear(pointOnLine1, lineDirection1, firstPointOnLine2, secondPointOnLine2, angleEpsilon, distanceEpsilon);
@@ -137,8 +144,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1, FramePoint2DReadOnly pointOnLine2,
-                                             FrameVector2DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
+   public static boolean areLine2DsCollinear(FramePoint2DReadOnly pointOnLine1,
+                                             FrameVector2DReadOnly lineDirection1,
+                                             FramePoint2DReadOnly pointOnLine2,
+                                             FrameVector2DReadOnly lineDirection2,
+                                             double angleEpsilon,
+                                             double distanceEpsilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
       return EuclidGeometryTools.areLine2DsCollinear(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, angleEpsilon, distanceEpsilon);
@@ -168,8 +179,11 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean areLine3DsCollinear(FramePoint3DReadOnly firstPointOnLine1, FramePoint3DReadOnly secondPointOnLine1,
-                                             FramePoint3DReadOnly firstPointOnLine2, FramePoint3DReadOnly secondPointOnLine2, double angleEpsilon,
+   public static boolean areLine3DsCollinear(FramePoint3DReadOnly firstPointOnLine1,
+                                             FramePoint3DReadOnly secondPointOnLine1,
+                                             FramePoint3DReadOnly firstPointOnLine2,
+                                             FramePoint3DReadOnly secondPointOnLine2,
+                                             double angleEpsilon,
                                              double distanceEpsilon)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
@@ -205,8 +219,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean areLine3DsCollinear(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1, FramePoint3DReadOnly pointOnLine2,
-                                             FrameVector3DReadOnly lineDirection2, double angleEpsilon, double distanceEpsilon)
+   public static boolean areLine3DsCollinear(FramePoint3DReadOnly pointOnLine1,
+                                             FrameVector3DReadOnly lineDirection1,
+                                             FramePoint3DReadOnly pointOnLine2,
+                                             FrameVector3DReadOnly lineDirection2,
+                                             double angleEpsilon,
+                                             double distanceEpsilon)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
       return EuclidGeometryTools.areLine3DsCollinear(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2, angleEpsilon, distanceEpsilon);
@@ -241,8 +259,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean arePlane3DsCoincident(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1, FramePoint3DReadOnly pointOnPlane2,
-                                               FrameVector3DReadOnly planeNormal2, double angleEpsilon, double distanceEpsilon)
+   public static boolean arePlane3DsCoincident(FramePoint3DReadOnly pointOnPlane1,
+                                               FrameVector3DReadOnly planeNormal1,
+                                               FramePoint3DReadOnly pointOnPlane2,
+                                               FrameVector3DReadOnly planeNormal2,
+                                               double angleEpsilon,
+                                               double distanceEpsilon)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1, pointOnPlane2, planeNormal2);
       return EuclidGeometryTools.arePlane3DsCoincident(pointOnPlane1, planeNormal1, pointOnPlane2, planeNormal2, angleEpsilon, distanceEpsilon);
@@ -409,7 +431,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector,
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector,
+                                                             FrameVector3DReadOnly secondVector,
                                                              Orientation3DBasics rotationToPack)
    {
       firstVector.checkReferenceFrameMatch(secondVector);
@@ -448,7 +471,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector,
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector,
+                                                             FrameVector3DReadOnly secondVector,
                                                              FixedFrameOrientation3DBasics rotationToPack)
    {
       firstVector.checkReferenceFrameMatch(secondVector, rotationToPack);
@@ -487,7 +511,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector, FrameVector3DReadOnly secondVector,
+   public static void orientation3DFromFirstToSecondVector3D(FrameVector3DReadOnly firstVector,
+                                                             FrameVector3DReadOnly secondVector,
                                                              FrameOrientation3DBasics rotationToPack)
    {
       firstVector.checkReferenceFrameMatch(secondVector);
@@ -620,9 +645,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double closestPoint3DsBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1,
-                                                         FramePoint3DReadOnly pointOnLine2, FrameVector3DReadOnly lineDirection2,
-                                                         FixedFramePoint3DBasics closestPointOnLine1ToPack, FixedFramePoint3DBasics closestPointOnLine2ToPack)
+   public static double closestPoint3DsBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1,
+                                                         FrameVector3DReadOnly lineDirection1,
+                                                         FramePoint3DReadOnly pointOnLine2,
+                                                         FrameVector3DReadOnly lineDirection2,
+                                                         FixedFramePoint3DBasics closestPointOnLine1ToPack,
+                                                         FixedFramePoint3DBasics closestPointOnLine2ToPack)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
       if (closestPointOnLine1ToPack != null)
@@ -654,9 +682,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static double closestPoint3DsBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1,
-                                                         FramePoint3DReadOnly pointOnLine2, FrameVector3DReadOnly lineDirection2,
-                                                         FramePoint3DBasics closestPointOnLine1ToPack, FramePoint3DBasics closestPointOnLine2ToPack)
+   public static double closestPoint3DsBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1,
+                                                         FrameVector3DReadOnly lineDirection1,
+                                                         FramePoint3DReadOnly pointOnLine2,
+                                                         FrameVector3DReadOnly lineDirection2,
+                                                         FramePoint3DBasics closestPointOnLine1ToPack,
+                                                         FramePoint3DBasics closestPointOnLine2ToPack)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
       if (closestPointOnLine1ToPack != null)
@@ -693,8 +724,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                                FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1,
+                                                                FramePoint2DReadOnly lineSegmentEnd1,
+                                                                FramePoint2DReadOnly lineSegmentStart2,
+                                                                FramePoint2DReadOnly lineSegmentEnd2,
                                                                 FixedFramePoint2DBasics closestPointOnLineSegment1ToPack,
                                                                 FixedFramePoint2DBasics closestPointOnLineSegment2ToPack)
    {
@@ -733,8 +766,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                                FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+   public static double closestPoint2DsBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1,
+                                                                FramePoint2DReadOnly lineSegmentEnd1,
+                                                                FramePoint2DReadOnly lineSegmentStart2,
+                                                                FramePoint2DReadOnly lineSegmentEnd2,
                                                                 FramePoint2DBasics closestPointOnLineSegment1ToPack,
                                                                 FramePoint2DBasics closestPointOnLineSegment2ToPack)
    {
@@ -773,8 +808,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static double closestPoint3DsBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
-                                                                FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2,
+   public static double closestPoint3DsBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1,
+                                                                FramePoint3DReadOnly lineSegmentEnd1,
+                                                                FramePoint3DReadOnly lineSegmentStart2,
+                                                                FramePoint3DReadOnly lineSegmentEnd2,
                                                                 FixedFramePoint3DBasics closestPointOnLineSegment1ToPack,
                                                                 FixedFramePoint3DBasics closestPointOnLineSegment2ToPack)
    {
@@ -813,8 +850,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double closestPoint3DsBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
-                                                                FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2,
+   public static double closestPoint3DsBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1,
+                                                                FramePoint3DReadOnly lineSegmentEnd1,
+                                                                FramePoint3DReadOnly lineSegmentStart2,
+                                                                FramePoint3DReadOnly lineSegmentEnd2,
                                                                 FramePoint3DBasics closestPointOnLineSegment1ToPack,
                                                                 FramePoint3DBasics closestPointOnLineSegment2ToPack)
    {
@@ -888,7 +927,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean triangleCircumcenter(FramePoint2DReadOnly A, FramePoint2DReadOnly B, FramePoint2DReadOnly C,
+   public static boolean triangleCircumcenter(FramePoint2DReadOnly A,
+                                              FramePoint2DReadOnly B,
+                                              FramePoint2DReadOnly C,
                                               FixedFramePoint2DBasics circumcenterToPack)
    {
       circumcenterToPack.checkReferenceFrameMatch(A, B, C);
@@ -942,7 +983,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean triangleCircumcenter(FramePoint3DReadOnly A, FramePoint3DReadOnly B, FramePoint3DReadOnly C,
+   public static boolean triangleCircumcenter(FramePoint3DReadOnly A,
+                                              FramePoint3DReadOnly B,
+                                              FramePoint3DReadOnly C,
                                               FixedFramePoint3DBasics circumcenterToPack)
    {
       circumcenterToPack.checkReferenceFrameMatch(A, B, C);
@@ -988,7 +1031,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1, FrameVector3DReadOnly lineDirection1, FramePoint3DReadOnly pointOnLine2,
+   public static double distanceBetweenTwoLine3Ds(FramePoint3DReadOnly pointOnLine1,
+                                                  FrameVector3DReadOnly lineDirection1,
+                                                  FramePoint3DReadOnly pointOnLine2,
                                                   FrameVector3DReadOnly lineDirection2)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
@@ -1007,8 +1052,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                         FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
+   public static double distanceBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1,
+                                                         FramePoint2DReadOnly lineSegmentEnd1,
+                                                         FramePoint2DReadOnly lineSegmentStart2,
+                                                         FramePoint2DReadOnly lineSegmentEnd2)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
       return EuclidGeometryTools.closestPoint2DsBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, null, null);
@@ -1026,8 +1073,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1, FramePoint3DReadOnly lineSegmentEnd1,
-                                                         FramePoint3DReadOnly lineSegmentStart2, FramePoint3DReadOnly lineSegmentEnd2)
+   public static double distanceBetweenTwoLineSegment3Ds(FramePoint3DReadOnly lineSegmentStart1,
+                                                         FramePoint3DReadOnly lineSegmentEnd1,
+                                                         FramePoint3DReadOnly lineSegmentStart2,
+                                                         FramePoint3DReadOnly lineSegmentEnd2)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
       return EuclidGeometryTools.closestPoint3DsBetweenTwoLineSegment3Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2, null, null);
@@ -1152,7 +1201,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceFromPoint2DToLineSegment2D(double pointX, double pointY, FramePoint2DReadOnly lineSegmentStart,
+   public static double distanceFromPoint2DToLineSegment2D(double pointX,
+                                                           double pointY,
+                                                           FramePoint2DReadOnly lineSegmentStart,
                                                            FramePoint2DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -1177,7 +1228,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceFromPoint2DToLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart,
+   public static double distanceFromPoint2DToLineSegment2D(FramePoint2DReadOnly point,
+                                                           FramePoint2DReadOnly lineSegmentStart,
                                                            FramePoint2DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -1316,7 +1368,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
+   public static double distanceFromPoint3DToLineSegment3D(double pointX,
+                                                           double pointY,
+                                                           double pointZ,
+                                                           FramePoint3DReadOnly lineSegmentStart,
                                                            FramePoint3DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -1341,7 +1396,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceFromPoint3DToLineSegment3D(FramePoint3DReadOnly point, FramePoint3DReadOnly lineSegmentStart,
+   public static double distanceFromPoint3DToLineSegment3D(FramePoint3DReadOnly point,
+                                                           FramePoint3DReadOnly lineSegmentStart,
                                                            FramePoint3DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -1360,7 +1416,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+   public static double distanceFromPoint3DToPlane3D(double pointX,
+                                                     double pointY,
+                                                     double pointZ,
+                                                     FramePoint3DReadOnly pointOnPlane,
                                                      FrameVector3DReadOnly planeNormal)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
@@ -1398,7 +1457,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX,
+                                                           double pointY,
+                                                           double pointZ,
+                                                           FramePoint3DReadOnly pointOnPlane,
                                                            FrameVector3DReadOnly planeNormal)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
@@ -1440,8 +1502,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double signedDistanceFromPoint3DToPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
-                                                           FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   public static double signedDistanceFromPoint3DToPlane3D(double pointX,
+                                                           double pointY,
+                                                           double pointZ,
+                                                           FramePoint3DReadOnly pointOnPlane,
+                                                           FrameVector3DReadOnly planeFirstTangent,
+                                                           FrameVector3DReadOnly planeSecondTangent)
    {
       pointOnPlane.checkReferenceFrameMatch(planeFirstTangent, planeSecondTangent);
       return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent);
@@ -1461,8 +1527,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double signedDistanceFromPoint3DToPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane,
-                                                           FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   public static double signedDistanceFromPoint3DToPlane3D(FramePoint3DReadOnly point,
+                                                           FramePoint3DReadOnly pointOnPlane,
+                                                           FrameVector3DReadOnly planeFirstTangent,
+                                                           FrameVector3DReadOnly planeSecondTangent)
    {
       point.checkReferenceFrameMatch(pointOnPlane, planeFirstTangent, planeSecondTangent);
       return EuclidGeometryTools.signedDistanceFromPoint3DToPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent);
@@ -1487,7 +1555,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceSquaredFromPoint2DToLineSegment2D(double pointX, double pointY, FramePoint2DReadOnly lineSegmentStart,
+   public static double distanceSquaredFromPoint2DToLineSegment2D(double pointX,
+                                                                  double pointY,
+                                                                  FramePoint2DReadOnly lineSegmentStart,
                                                                   FramePoint2DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -1512,7 +1582,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceSquaredFromPoint2DToLineSegment2D(FramePoint2DReadOnly point, FramePoint2DReadOnly lineSegmentStart,
+   public static double distanceSquaredFromPoint2DToLineSegment2D(FramePoint2DReadOnly point,
+                                                                  FramePoint2DReadOnly lineSegmentStart,
                                                                   FramePoint2DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -1539,7 +1610,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceSquaredFromPoint3DToLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
+   public static double distanceSquaredFromPoint3DToLineSegment3D(double pointX,
+                                                                  double pointY,
+                                                                  double pointZ,
+                                                                  FramePoint3DReadOnly lineSegmentStart,
                                                                   FramePoint3DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -1564,7 +1638,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double distanceSquaredFromPoint3DToLineSegment3D(FramePoint3DReadOnly point, FramePoint3DReadOnly lineSegmentStart,
+   public static double distanceSquaredFromPoint3DToLineSegment3D(FramePoint3DReadOnly point,
+                                                                  FramePoint3DReadOnly lineSegmentStart,
                                                                   FramePoint3DReadOnly lineSegmentEnd)
    {
       point.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -1590,8 +1665,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean doesLineSegment3DIntersectPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                           FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
+   public static boolean doesLineSegment3DIntersectPlane3D(FramePoint3DReadOnly pointOnPlane,
+                                                           FrameVector3DReadOnly planeNormal,
+                                                           FramePoint3DReadOnly lineSegmentStart,
+                                                           FramePoint3DReadOnly lineSegmentEnd)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal, lineSegmentStart, lineSegmentEnd);
       return EuclidGeometryTools.doesLineSegment3DIntersectPlane3D(pointOnPlane, planeNormal, lineSegmentStart, lineSegmentEnd);
@@ -1620,8 +1697,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean doLine2DAndLineSegment2DIntersect(double pointOnLineX, double pointOnLineY, double lineDirectionX, double lineDirectionY,
-                                                           FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+   public static boolean doLine2DAndLineSegment2DIntersect(double pointOnLineX,
+                                                           double pointOnLineY,
+                                                           double lineDirectionX,
+                                                           double lineDirectionY,
+                                                           FramePoint2DReadOnly lineSegmentStart,
+                                                           FramePoint2DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       return EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLineX,
@@ -1653,8 +1734,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean doLine2DAndLineSegment2DIntersect(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                           FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+   public static boolean doLine2DAndLineSegment2DIntersect(FramePoint2DReadOnly pointOnLine,
+                                                           FrameVector2DReadOnly lineDirection,
+                                                           FramePoint2DReadOnly lineSegmentStart,
+                                                           FramePoint2DReadOnly lineSegmentEnd)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection, lineSegmentStart, lineSegmentEnd);
       return EuclidGeometryTools.doLine2DAndLineSegment2DIntersect(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd);
@@ -1680,8 +1763,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean doLineSegment2DsIntersect(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                   FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
+   public static boolean doLineSegment2DsIntersect(FramePoint2DReadOnly lineSegmentStart1,
+                                                   FramePoint2DReadOnly lineSegmentEnd1,
+                                                   FramePoint2DReadOnly lineSegmentStart2,
+                                                   FramePoint2DReadOnly lineSegmentEnd2)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
       return EuclidGeometryTools.doLineSegment2DsIntersect(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
@@ -1707,8 +1792,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean doRay2DAndLineSegment2DIntersect(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
-                                                          FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+   public static boolean doRay2DAndLineSegment2DIntersect(FramePoint2DReadOnly rayOrigin,
+                                                          FrameVector2DReadOnly rayDirection,
+                                                          FramePoint2DReadOnly lineSegmentStart,
+                                                          FramePoint2DReadOnly lineSegmentEnd)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection, lineSegmentStart, lineSegmentEnd);
       return EuclidGeometryTools.doRay2DAndLineSegment2DIntersect(rayOrigin, rayDirection, lineSegmentStart, lineSegmentEnd);
@@ -1789,8 +1876,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                               FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
+   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                               FramePoint2DReadOnly boundingBoxMax,
+                                                               FramePoint2DReadOnly firstPointOnLine,
+                                                               FramePoint2DReadOnly secondPointOnLine,
                                                                FixedFramePoint2DBasics firstIntersectionToPack,
                                                                FixedFramePoint2DBasics secondIntersectionToPack)
    {
@@ -1842,9 +1931,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                               FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
-                                                               FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                               FramePoint2DReadOnly boundingBoxMax,
+                                                               FramePoint2DReadOnly firstPointOnLine,
+                                                               FramePoint2DReadOnly secondPointOnLine,
+                                                               FramePoint2DBasics firstIntersectionToPack,
+                                                               FramePoint2DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, firstPointOnLine, secondPointOnLine);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin,
@@ -1893,8 +1985,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                               FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
+   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                               FramePoint2DReadOnly boundingBoxMax,
+                                                               FramePoint2DReadOnly pointOnLine,
+                                                               FrameVector2DReadOnly lineDirection,
                                                                FixedFramePoint2DBasics firstIntersectionToPack,
                                                                FixedFramePoint2DBasics secondIntersectionToPack)
    {
@@ -1943,9 +2037,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                               FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                               FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                               FramePoint2DReadOnly boundingBoxMax,
+                                                               FramePoint2DReadOnly pointOnLine,
+                                                               FrameVector2DReadOnly lineDirection,
+                                                               FramePoint2DBasics firstIntersectionToPack,
+                                                               FramePoint2DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, pointOnLine, lineDirection);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine2DAndBoundingBox2D(boundingBoxMin,
@@ -1990,8 +2087,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint2D intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                                        FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+   public static FramePoint2D intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine,
+                                                                        FrameVector2DReadOnly lineDirection,
+                                                                        FramePoint2DReadOnly lineSegmentStart,
+                                                                        FramePoint2DReadOnly lineSegmentEnd)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection, lineSegmentStart, lineSegmentEnd);
       Point2D intersection = EuclidGeometryTools.intersectionBetweenLine2DAndLineSegment2D(pointOnLine, lineDirection, lineSegmentStart, lineSegmentEnd);
@@ -2027,8 +2126,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                                   FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+   public static boolean intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine,
+                                                                   FrameVector2DReadOnly lineDirection,
+                                                                   FramePoint2DReadOnly lineSegmentStart,
+                                                                   FramePoint2DReadOnly lineSegmentEnd,
                                                                    FixedFramePoint2DBasics intersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection, lineSegmentStart, lineSegmentEnd);
@@ -2069,8 +2170,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
-                                                                   FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+   public static boolean intersectionBetweenLine2DAndLineSegment2D(FramePoint2DReadOnly pointOnLine,
+                                                                   FrameVector2DReadOnly lineDirection,
+                                                                   FramePoint2DReadOnly lineSegmentStart,
+                                                                   FramePoint2DReadOnly lineSegmentEnd,
                                                                    FramePoint2DBasics intersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection, lineSegmentStart, lineSegmentEnd);
@@ -2119,8 +2222,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                               FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
+   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                               FramePoint3DReadOnly boundingBoxMax,
+                                                               FramePoint3DReadOnly firstPointOnLine,
+                                                               FramePoint3DReadOnly secondPointOnLine,
                                                                FixedFramePoint3DBasics firstIntersectionToPack,
                                                                FixedFramePoint3DBasics secondIntersectionToPack)
    {
@@ -2172,9 +2277,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                               FramePoint3DReadOnly firstPointOnLine, FramePoint3DReadOnly secondPointOnLine,
-                                                               FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                               FramePoint3DReadOnly boundingBoxMax,
+                                                               FramePoint3DReadOnly firstPointOnLine,
+                                                               FramePoint3DReadOnly secondPointOnLine,
+                                                               FramePoint3DBasics firstIntersectionToPack,
+                                                               FramePoint3DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, firstPointOnLine, secondPointOnLine);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
@@ -2222,8 +2330,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                               FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
+   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                               FramePoint3DReadOnly boundingBoxMax,
+                                                               FramePoint3DReadOnly pointOnLine,
+                                                               FrameVector3DReadOnly lineDirection,
                                                                FixedFramePoint3DBasics firstIntersectionToPack,
                                                                FixedFramePoint3DBasics secondIntersectionToPack)
    {
@@ -2271,9 +2381,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                               FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
-                                                               FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLine3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                               FramePoint3DReadOnly boundingBoxMax,
+                                                               FramePoint3DReadOnly pointOnLine,
+                                                               FrameVector3DReadOnly lineDirection,
+                                                               FramePoint3DBasics firstIntersectionToPack,
+                                                               FramePoint3DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, pointOnLine, lineDirection);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLine3DAndBoundingBox3D(boundingBoxMin,
@@ -2326,9 +2439,15 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX,
-                                                               double boundingBoxMaxY, double boundingBoxMaxZ, FramePoint3DReadOnly pointOnLine,
-                                                               FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX,
+                                                               double boundingBoxMinY,
+                                                               double boundingBoxMinZ,
+                                                               double boundingBoxMaxX,
+                                                               double boundingBoxMaxY,
+                                                               double boundingBoxMaxZ,
+                                                               FramePoint3DReadOnly pointOnLine,
+                                                               FrameVector3DReadOnly lineDirection,
+                                                               FixedFramePoint3DBasics firstIntersectionToPack,
                                                                FixedFramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
@@ -2384,9 +2503,15 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX,
-                                                               double boundingBoxMaxY, double boundingBoxMaxZ, FramePoint3DReadOnly pointOnLine,
-                                                               FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndBoundingBox3D(double boundingBoxMinX,
+                                                               double boundingBoxMinY,
+                                                               double boundingBoxMinZ,
+                                                               double boundingBoxMaxX,
+                                                               double boundingBoxMaxY,
+                                                               double boundingBoxMaxZ,
+                                                               FramePoint3DReadOnly pointOnLine,
+                                                               FrameVector3DReadOnly lineDirection,
+                                                               FramePoint3DBasics firstIntersectionToPack,
                                                                FramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
@@ -2444,9 +2569,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly firstPointOnLine,
-                                                            FramePoint3DReadOnly secondPointOnLine, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength,
+                                                            double cylinderRadius,
+                                                            FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis,
+                                                            FramePoint3DReadOnly firstPointOnLine,
+                                                            FramePoint3DReadOnly secondPointOnLine,
+                                                            FixedFramePoint3DBasics firstIntersectionToPack,
                                                             FixedFramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, firstPointOnLine, secondPointOnLine);
@@ -2501,9 +2630,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly firstPointOnLine,
-                                                            FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength,
+                                                            double cylinderRadius,
+                                                            FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis,
+                                                            FramePoint3DReadOnly firstPointOnLine,
+                                                            FramePoint3DReadOnly secondPointOnLine,
+                                                            FramePoint3DBasics firstIntersectionToPack,
                                                             FramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, firstPointOnLine, secondPointOnLine);
@@ -2559,9 +2692,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly pointOnLine,
-                                                            FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength,
+                                                            double cylinderRadius,
+                                                            FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis,
+                                                            FramePoint3DReadOnly pointOnLine,
+                                                            FrameVector3DReadOnly lineDirection,
+                                                            FixedFramePoint3DBasics firstIntersectionToPack,
                                                             FixedFramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, pointOnLine, lineDirection);
@@ -2615,9 +2752,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                            FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly pointOnLine,
-                                                            FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndCylinder3D(double cylinderLength,
+                                                            double cylinderRadius,
+                                                            FramePoint3DReadOnly cylinderPosition,
+                                                            FrameVector3DReadOnly cylinderAxis,
+                                                            FramePoint3DReadOnly pointOnLine,
+                                                            FrameVector3DReadOnly lineDirection,
+                                                            FramePoint3DBasics firstIntersectionToPack,
                                                             FramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, pointOnLine, lineDirection);
@@ -2673,8 +2814,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly firstPointOnLine,
-                                                             FramePoint3DReadOnly secondPointOnLine, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
+                                                             double radiusY,
+                                                             double radiusZ,
+                                                             FramePoint3DReadOnly firstPointOnLine,
+                                                             FramePoint3DReadOnly secondPointOnLine,
+                                                             FixedFramePoint3DBasics firstIntersectionToPack,
                                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
@@ -2727,8 +2872,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly firstPointOnLine,
-                                                             FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
+                                                             double radiusY,
+                                                             double radiusZ,
+                                                             FramePoint3DReadOnly firstPointOnLine,
+                                                             FramePoint3DReadOnly secondPointOnLine,
+                                                             FramePoint3DBasics firstIntersectionToPack,
                                                              FramePoint3DBasics secondIntersectionToPack)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
@@ -2783,8 +2932,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly pointOnLine,
-                                                             FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
+                                                             double radiusY,
+                                                             double radiusZ,
+                                                             FramePoint3DReadOnly pointOnLine,
+                                                             FrameVector3DReadOnly lineDirection,
+                                                             FixedFramePoint3DBasics firstIntersectionToPack,
                                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
@@ -2837,8 +2990,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly pointOnLine,
-                                                             FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLine3DAndEllipsoid3D(double radiusX,
+                                                             double radiusY,
+                                                             double radiusZ,
+                                                             FramePoint3DReadOnly pointOnLine,
+                                                             FrameVector3DReadOnly lineDirection,
+                                                             FramePoint3DBasics firstIntersectionToPack,
                                                              FramePoint3DBasics secondIntersectionToPack)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
@@ -2881,8 +3038,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint3D intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                                  FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection)
+   public static FramePoint3D intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane,
+                                                                  FrameVector3DReadOnly planeNormal,
+                                                                  FramePoint3DReadOnly pointOnLine,
+                                                                  FrameVector3DReadOnly lineDirection)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal, pointOnLine, lineDirection);
 
@@ -2913,8 +3072,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                             FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
+   public static boolean intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane,
+                                                             FrameVector3DReadOnly planeNormal,
+                                                             FramePoint3DReadOnly pointOnLine,
+                                                             FrameVector3DReadOnly lineDirection,
                                                              FixedFramePoint3DBasics intersectionToPack)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal, pointOnLine, lineDirection);
@@ -2942,8 +3103,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                             FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection,
+   public static boolean intersectionBetweenLine3DAndPlane3D(FramePoint3DReadOnly pointOnPlane,
+                                                             FrameVector3DReadOnly planeNormal,
+                                                             FramePoint3DReadOnly pointOnLine,
+                                                             FrameVector3DReadOnly lineDirection,
                                                              FramePoint3DBasics intersectionToPack)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal, pointOnLine, lineDirection);
@@ -2994,8 +3157,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLineSegment2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                                      FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+   public static int intersectionBetweenLineSegment2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                                      FramePoint2DReadOnly boundingBoxMax,
+                                                                      FramePoint2DReadOnly lineSegmentStart,
+                                                                      FramePoint2DReadOnly lineSegmentEnd,
                                                                       FixedFramePoint2DBasics firstIntersectionToPack,
                                                                       FixedFramePoint2DBasics secondIntersectionToPack)
    {
@@ -3053,9 +3218,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLineSegment2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                                      FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                                      FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLineSegment2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                                      FramePoint2DReadOnly boundingBoxMax,
+                                                                      FramePoint2DReadOnly lineSegmentStart,
+                                                                      FramePoint2DReadOnly lineSegmentEnd,
+                                                                      FramePoint2DBasics firstIntersectionToPack,
+                                                                      FramePoint2DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, lineSegmentStart, lineSegmentEnd);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment2DAndBoundingBox2D(boundingBoxMin,
@@ -3113,8 +3281,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                                      FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
+   public static int intersectionBetweenLineSegment3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                                      FramePoint3DReadOnly boundingBoxMax,
+                                                                      FramePoint3DReadOnly lineSegmentStart,
+                                                                      FramePoint3DReadOnly lineSegmentEnd,
                                                                       FixedFramePoint3DBasics firstIntersectionToPack,
                                                                       FixedFramePoint3DBasics secondIntersectionToPack)
    {
@@ -3172,9 +3342,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                                      FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                                                      FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenLineSegment3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                                      FramePoint3DReadOnly boundingBoxMax,
+                                                                      FramePoint3DReadOnly lineSegmentStart,
+                                                                      FramePoint3DReadOnly lineSegmentEnd,
+                                                                      FramePoint3DBasics firstIntersectionToPack,
+                                                                      FramePoint3DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, lineSegmentStart, lineSegmentEnd);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenLineSegment3DAndBoundingBox3D(boundingBoxMin,
@@ -3227,9 +3400,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                                   FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly lineSegmentStart,
-                                                                   FramePoint3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength,
+                                                                   double cylinderRadius,
+                                                                   FramePoint3DReadOnly cylinderPosition,
+                                                                   FrameVector3DReadOnly cylinderAxis,
+                                                                   FramePoint3DReadOnly lineSegmentStart,
+                                                                   FramePoint3DReadOnly lineSegmentEnd,
+                                                                   FixedFramePoint3DBasics firstIntersectionToPack,
                                                                    FixedFramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, lineSegmentStart, lineSegmentEnd);
@@ -3283,9 +3460,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                                   FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly lineSegmentStart,
-                                                                   FramePoint3DReadOnly lineSegmentEnd, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLineSegment3DAndCylinder3D(double cylinderLength,
+                                                                   double cylinderRadius,
+                                                                   FramePoint3DReadOnly cylinderPosition,
+                                                                   FrameVector3DReadOnly cylinderAxis,
+                                                                   FramePoint3DReadOnly lineSegmentStart,
+                                                                   FramePoint3DReadOnly lineSegmentEnd,
+                                                                   FramePoint3DBasics firstIntersectionToPack,
                                                                    FramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, lineSegmentStart, lineSegmentEnd);
@@ -3341,8 +3522,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly lineSegmentStart,
-                                                                    FramePoint3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX,
+                                                                    double radiusY,
+                                                                    double radiusZ,
+                                                                    FramePoint3DReadOnly lineSegmentStart,
+                                                                    FramePoint3DReadOnly lineSegmentEnd,
+                                                                    FixedFramePoint3DBasics firstIntersectionToPack,
                                                                     FixedFramePoint3DBasics secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -3395,8 +3580,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly lineSegmentStart,
-                                                                    FramePoint3DReadOnly lineSegmentEnd, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenLineSegment3DAndEllipsoid3D(double radiusX,
+                                                                    double radiusY,
+                                                                    double radiusZ,
+                                                                    FramePoint3DReadOnly lineSegmentStart,
+                                                                    FramePoint3DReadOnly lineSegmentEnd,
+                                                                    FramePoint3DBasics firstIntersectionToPack,
                                                                     FramePoint3DBasics secondIntersectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -3443,8 +3632,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint3D intersectionBetweenLineSegment3DAndPlane3D(FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
-                                                                         FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd)
+   public static FramePoint3D intersectionBetweenLineSegment3DAndPlane3D(FramePoint3DReadOnly pointOnPlane,
+                                                                         FrameVector3DReadOnly planeNormal,
+                                                                         FramePoint3DReadOnly lineSegmentStart,
+                                                                         FramePoint3DReadOnly lineSegmentEnd)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal, lineSegmentStart, lineSegmentEnd);
 
@@ -3497,9 +3688,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenRay2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                              FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
-                                                              FixedFramePoint2DBasics firstIntersectionToPack, FixedFramePoint2DBasics secondIntersectionToPack)
+   public static int intersectionBetweenRay2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                              FramePoint2DReadOnly boundingBoxMax,
+                                                              FramePoint2DReadOnly rayOrigin,
+                                                              FrameVector2DReadOnly rayDirection,
+                                                              FixedFramePoint2DBasics firstIntersectionToPack,
+                                                              FixedFramePoint2DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, rayOrigin, rayDirection);
       if (firstIntersectionToPack != null)
@@ -3554,9 +3748,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenRay2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin, FramePoint2DReadOnly boundingBoxMax,
-                                                              FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
-                                                              FramePoint2DBasics firstIntersectionToPack, FramePoint2DBasics secondIntersectionToPack)
+   public static int intersectionBetweenRay2DAndBoundingBox2D(FramePoint2DReadOnly boundingBoxMin,
+                                                              FramePoint2DReadOnly boundingBoxMax,
+                                                              FramePoint2DReadOnly rayOrigin,
+                                                              FrameVector2DReadOnly rayDirection,
+                                                              FramePoint2DBasics firstIntersectionToPack,
+                                                              FramePoint2DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, rayOrigin, rayDirection);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay2DAndBoundingBox2D(boundingBoxMin,
@@ -3600,8 +3797,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint2D intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
-                                                                       FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd)
+   public static FramePoint2D intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin,
+                                                                       FrameVector2DReadOnly rayDirection,
+                                                                       FramePoint2DReadOnly lineSegmentStart,
+                                                                       FramePoint2DReadOnly lineSegmentEnd)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection, lineSegmentStart, lineSegmentEnd);
 
@@ -3637,8 +3836,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
-                                                                  FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+   public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin,
+                                                                  FrameVector2DReadOnly rayDirection,
+                                                                  FramePoint2DReadOnly lineSegmentStart,
+                                                                  FramePoint2DReadOnly lineSegmentEnd,
                                                                   FixedFramePoint2DBasics intersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection, lineSegmentStart, lineSegmentEnd);
@@ -3679,8 +3880,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin, FrameVector2DReadOnly rayDirection,
-                                                                  FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+   public static boolean intersectionBetweenRay2DAndLineSegment2D(FramePoint2DReadOnly rayOrigin,
+                                                                  FrameVector2DReadOnly rayDirection,
+                                                                  FramePoint2DReadOnly lineSegmentStart,
+                                                                  FramePoint2DReadOnly lineSegmentEnd,
                                                                   FramePoint2DBasics intersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection, lineSegmentStart, lineSegmentEnd);
@@ -3735,9 +3938,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenRay3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                              FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection,
-                                                              FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenRay3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                              FramePoint3DReadOnly boundingBoxMax,
+                                                              FramePoint3DReadOnly rayOrigin,
+                                                              FrameVector3DReadOnly rayDirection,
+                                                              FixedFramePoint3DBasics firstIntersectionToPack,
+                                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, rayOrigin, rayDirection);
       if (firstIntersectionToPack != null)
@@ -3792,9 +3998,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenRay3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin, FramePoint3DReadOnly boundingBoxMax,
-                                                              FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection,
-                                                              FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   public static int intersectionBetweenRay3DAndBoundingBox3D(FramePoint3DReadOnly boundingBoxMin,
+                                                              FramePoint3DReadOnly boundingBoxMax,
+                                                              FramePoint3DReadOnly rayOrigin,
+                                                              FrameVector3DReadOnly rayDirection,
+                                                              FramePoint3DBasics firstIntersectionToPack,
+                                                              FramePoint3DBasics secondIntersectionToPack)
    {
       boundingBoxMin.checkReferenceFrameMatch(boundingBoxMax, rayOrigin, rayDirection);
       int numberOfIntersections = EuclidGeometryTools.intersectionBetweenRay3DAndBoundingBox3D(boundingBoxMin,
@@ -3847,9 +4056,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                           FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly rayOrigin,
-                                                           FrameVector3DReadOnly rayDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength,
+                                                           double cylinderRadius,
+                                                           FramePoint3DReadOnly cylinderPosition,
+                                                           FrameVector3DReadOnly cylinderAxis,
+                                                           FramePoint3DReadOnly rayOrigin,
+                                                           FrameVector3DReadOnly rayDirection,
+                                                           FixedFramePoint3DBasics firstIntersectionToPack,
                                                            FixedFramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, rayOrigin, rayDirection);
@@ -3903,9 +4116,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength, double cylinderRadius, FramePoint3DReadOnly cylinderPosition,
-                                                           FrameVector3DReadOnly cylinderAxis, FramePoint3DReadOnly rayOrigin,
-                                                           FrameVector3DReadOnly rayDirection, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenRay3DAndCylinder3D(double cylinderLength,
+                                                           double cylinderRadius,
+                                                           FramePoint3DReadOnly cylinderPosition,
+                                                           FrameVector3DReadOnly cylinderAxis,
+                                                           FramePoint3DReadOnly rayOrigin,
+                                                           FrameVector3DReadOnly rayDirection,
+                                                           FramePoint3DBasics firstIntersectionToPack,
                                                            FramePoint3DBasics secondIntersectionToPack)
    {
       cylinderPosition.checkReferenceFrameMatch(cylinderAxis, rayOrigin, rayDirection);
@@ -3961,8 +4178,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly rayOrigin,
-                                                            FrameVector3DReadOnly rayDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX,
+                                                            double radiusY,
+                                                            double radiusZ,
+                                                            FramePoint3DReadOnly rayOrigin,
+                                                            FrameVector3DReadOnly rayDirection,
+                                                            FixedFramePoint3DBasics firstIntersectionToPack,
                                                             FixedFramePoint3DBasics secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
@@ -4015,8 +4236,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX, double radiusY, double radiusZ, FramePoint3DReadOnly rayOrigin,
-                                                            FrameVector3DReadOnly rayDirection, FramePoint3DBasics firstIntersectionToPack,
+   public static int intersectionBetweenRay3DAndEllipsoid3D(double radiusX,
+                                                            double radiusY,
+                                                            double radiusZ,
+                                                            FramePoint3DReadOnly rayOrigin,
+                                                            FrameVector3DReadOnly rayDirection,
+                                                            FramePoint3DBasics firstIntersectionToPack,
                                                             FramePoint3DBasics secondIntersectionToPack)
    {
       rayOrigin.checkReferenceFrameMatch(rayDirection);
@@ -4060,8 +4285,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
-                                                            FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2)
+   public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1,
+                                                            FramePoint2DReadOnly secondPointOnLine1,
+                                                            FramePoint2DReadOnly firstPointOnLine2,
+                                                            FramePoint2DReadOnly secondPointOnLine2)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
       Point2D intersection = EuclidGeometryTools.intersectionBetweenTwoLine2Ds(firstPointOnLine1, secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
@@ -4094,8 +4321,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
-                                                       FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2,
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1,
+                                                       FramePoint2DReadOnly secondPointOnLine1,
+                                                       FramePoint2DReadOnly firstPointOnLine2,
+                                                       FramePoint2DReadOnly secondPointOnLine2,
                                                        FixedFramePoint2DBasics intersectionToPack)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
@@ -4130,8 +4359,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1, FramePoint2DReadOnly secondPointOnLine1,
-                                                       FramePoint2DReadOnly firstPointOnLine2, FramePoint2DReadOnly secondPointOnLine2,
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly firstPointOnLine1,
+                                                       FramePoint2DReadOnly secondPointOnLine1,
+                                                       FramePoint2DReadOnly firstPointOnLine2,
+                                                       FramePoint2DReadOnly secondPointOnLine2,
                                                        FramePoint2DBasics intersectionToPack)
    {
       firstPointOnLine1.checkReferenceFrameMatch(secondPointOnLine1, firstPointOnLine2, secondPointOnLine2);
@@ -4168,8 +4399,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
-                                                            FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
+   public static FramePoint2D intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1,
+                                                            FrameVector2DReadOnly lineDirection1,
+                                                            FramePoint2DReadOnly pointOnLine2,
+                                                            FrameVector2DReadOnly lineDirection2)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
 
@@ -4203,8 +4436,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
-                                                       FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2,
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1,
+                                                       FrameVector2DReadOnly lineDirection1,
+                                                       FramePoint2DReadOnly pointOnLine2,
+                                                       FrameVector2DReadOnly lineDirection2,
                                                        FixedFramePoint2DBasics intersectionToPack)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
@@ -4238,8 +4473,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
-                                                       FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2,
+   public static boolean intersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1,
+                                                       FrameVector2DReadOnly lineDirection1,
+                                                       FramePoint2DReadOnly pointOnLine2,
+                                                       FrameVector2DReadOnly lineDirection2,
                                                        FramePoint2DBasics intersectionToPack)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
@@ -4276,8 +4513,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.s
     */
-   public static FramePoint2D intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                                   FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2)
+   public static FramePoint2D intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1,
+                                                                   FramePoint2DReadOnly lineSegmentEnd1,
+                                                                   FramePoint2DReadOnly lineSegmentStart2,
+                                                                   FramePoint2DReadOnly lineSegmentEnd2)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
       Point2D intersection = EuclidGeometryTools.intersectionBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
@@ -4311,8 +4550,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                              FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+   public static boolean intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1,
+                                                              FramePoint2DReadOnly lineSegmentEnd1,
+                                                              FramePoint2DReadOnly lineSegmentStart2,
+                                                              FramePoint2DReadOnly lineSegmentEnd2,
                                                               FixedFramePoint2DBasics intersectionToPack)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
@@ -4351,8 +4592,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1, FramePoint2DReadOnly lineSegmentEnd1,
-                                                              FramePoint2DReadOnly lineSegmentStart2, FramePoint2DReadOnly lineSegmentEnd2,
+   public static boolean intersectionBetweenTwoLineSegment2Ds(FramePoint2DReadOnly lineSegmentStart1,
+                                                              FramePoint2DReadOnly lineSegmentEnd1,
+                                                              FramePoint2DReadOnly lineSegmentStart2,
+                                                              FramePoint2DReadOnly lineSegmentEnd2,
                                                               FramePoint2DBasics intersectionToPack)
    {
       lineSegmentStart1.checkReferenceFrameMatch(lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2);
@@ -4404,9 +4647,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
-                                                        FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2, double angleThreshold,
-                                                        FixedFramePoint3DBasics pointOnIntersectionToPack, FixedFrameVector3DBasics intersectionDirectionToPack)
+   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1,
+                                                        FrameVector3DReadOnly planeNormal1,
+                                                        FramePoint3DReadOnly pointOnPlane2,
+                                                        FrameVector3DReadOnly planeNormal2,
+                                                        double angleThreshold,
+                                                        FixedFramePoint3DBasics pointOnIntersectionToPack,
+                                                        FixedFrameVector3DBasics intersectionDirectionToPack)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1, pointOnPlane2, planeNormal2);
       if (pointOnIntersectionToPack != null)
@@ -4460,9 +4707,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
-                                                        FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2, double angleThreshold,
-                                                        FramePoint3DBasics pointOnIntersectionToPack, FrameVector3DBasics intersectionDirectionToPack)
+   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1,
+                                                        FrameVector3DReadOnly planeNormal1,
+                                                        FramePoint3DReadOnly pointOnPlane2,
+                                                        FrameVector3DReadOnly planeNormal2,
+                                                        double angleThreshold,
+                                                        FramePoint3DBasics pointOnIntersectionToPack,
+                                                        FrameVector3DBasics intersectionDirectionToPack)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1, pointOnPlane2, planeNormal2);
       boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1,
@@ -4511,9 +4762,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
-                                                        FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2,
-                                                        FixedFramePoint3DBasics pointOnIntersectionToPack, FixedFrameVector3DBasics intersectionDirectionToPack)
+   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1,
+                                                        FrameVector3DReadOnly planeNormal1,
+                                                        FramePoint3DReadOnly pointOnPlane2,
+                                                        FrameVector3DReadOnly planeNormal2,
+                                                        FixedFramePoint3DBasics pointOnIntersectionToPack,
+                                                        FixedFrameVector3DBasics intersectionDirectionToPack)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1, pointOnPlane2, planeNormal2);
       if (pointOnIntersectionToPack != null)
@@ -4558,9 +4812,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1, FrameVector3DReadOnly planeNormal1,
-                                                        FramePoint3DReadOnly pointOnPlane2, FrameVector3DReadOnly planeNormal2,
-                                                        FramePoint3DBasics pointOnIntersectionToPack, FrameVector3DBasics intersectionDirectionToPack)
+   public static boolean intersectionBetweenTwoPlane3Ds(FramePoint3DReadOnly pointOnPlane1,
+                                                        FrameVector3DReadOnly planeNormal1,
+                                                        FramePoint3DReadOnly pointOnPlane2,
+                                                        FrameVector3DReadOnly planeNormal2,
+                                                        FramePoint3DBasics pointOnIntersectionToPack,
+                                                        FrameVector3DBasics intersectionDirectionToPack)
    {
       pointOnPlane1.checkReferenceFrameMatch(planeNormal1, pointOnPlane2, planeNormal2);
       boolean success = EuclidGeometryTools.intersectionBetweenTwoPlane3Ds(pointOnPlane1,
@@ -4752,7 +5009,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint2DOnSideOfLine2D(double pointX, double pointY, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
+   public static boolean isPoint2DOnSideOfLine2D(double pointX,
+                                                 double pointY,
+                                                 FramePoint2DReadOnly firstPointOnLine,
+                                                 FramePoint2DReadOnly secondPointOnLine,
                                                  boolean testLeftSide)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
@@ -4783,7 +5043,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint2DOnSideOfLine2D(double pointX, double pointY, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
+   public static boolean isPoint2DOnSideOfLine2D(double pointX,
+                                                 double pointY,
+                                                 FramePoint2DReadOnly pointOnLine,
+                                                 FrameVector2DReadOnly lineDirection,
                                                  boolean testLeftSide)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
@@ -4814,7 +5077,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine, FramePoint2DReadOnly secondPointOnLine,
+   public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point,
+                                                 FramePoint2DReadOnly firstPointOnLine,
+                                                 FramePoint2DReadOnly secondPointOnLine,
                                                  boolean testLeftSide)
    {
       point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
@@ -4844,7 +5109,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection,
+   public static boolean isPoint2DOnSideOfLine2D(FramePoint2DReadOnly point,
+                                                 FramePoint2DReadOnly pointOnLine,
+                                                 FrameVector2DReadOnly lineDirection,
                                                  boolean testLeftSide)
    {
       point.checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -4876,8 +5143,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
-                                                      FrameVector3DReadOnly planeNormal, boolean testForAbove)
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
+                                                      double pointY,
+                                                      double pointZ,
+                                                      FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeNormal,
+                                                      boolean testForAbove)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
       return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, testForAbove);
@@ -4906,7 +5177,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
+   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point,
+                                                      FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeNormal,
                                                       boolean testForAbove)
    {
       point.checkReferenceFrameMatch(pointOnPlane, planeNormal);
@@ -4936,7 +5209,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+   public static boolean isPoint3DAbovePlane3D(double pointX,
+                                               double pointY,
+                                               double pointZ,
+                                               FramePoint3DReadOnly pointOnPlane,
                                                FrameVector3DReadOnly planeNormal)
    {
       return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, true);
@@ -4991,7 +5267,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
+   public static boolean isPoint3DBelowPlane3D(double pointX,
+                                               double pointY,
+                                               double pointZ,
+                                               FramePoint3DReadOnly pointOnPlane,
                                                FrameVector3DReadOnly planeNormal)
    {
       return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeNormal, false);
@@ -5052,8 +5331,13 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
-                                                      FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent, boolean testForAbove)
+   public static boolean isPoint3DAboveOrBelowPlane3D(double pointX,
+                                                      double pointY,
+                                                      double pointZ,
+                                                      FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeFirstTangent,
+                                                      FrameVector3DReadOnly planeSecondTangent,
+                                                      boolean testForAbove)
    {
       pointOnPlane.checkReferenceFrameMatch(planeFirstTangent, planeSecondTangent);
       return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
@@ -5086,8 +5370,11 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
-                                                      FrameVector3DReadOnly planeSecondTangent, boolean testForAbove)
+   public static boolean isPoint3DAboveOrBelowPlane3D(FramePoint3DReadOnly point,
+                                                      FramePoint3DReadOnly pointOnPlane,
+                                                      FrameVector3DReadOnly planeFirstTangent,
+                                                      FrameVector3DReadOnly planeSecondTangent,
+                                                      boolean testForAbove)
    {
       point.checkReferenceFrameMatch(pointOnPlane, planeFirstTangent, planeSecondTangent);
       return EuclidGeometryTools.isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, testForAbove);
@@ -5120,8 +5407,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DAbovePlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
-                                               FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   public static boolean isPoint3DAbovePlane3D(double pointX,
+                                               double pointY,
+                                               double pointZ,
+                                               FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent,
+                                               FrameVector3DReadOnly planeSecondTangent)
    {
       return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
    }
@@ -5151,7 +5442,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DAbovePlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+   public static boolean isPoint3DAbovePlane3D(FramePoint3DReadOnly point,
+                                               FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent,
                                                FrameVector3DReadOnly planeSecondTangent)
    {
       return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, true);
@@ -5184,8 +5477,12 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DBelowPlane3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnPlane,
-                                               FrameVector3DReadOnly planeFirstTangent, FrameVector3DReadOnly planeSecondTangent)
+   public static boolean isPoint3DBelowPlane3D(double pointX,
+                                               double pointY,
+                                               double pointZ,
+                                               FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent,
+                                               FrameVector3DReadOnly planeSecondTangent)
    {
       return isPoint3DAboveOrBelowPlane3D(pointX, pointY, pointZ, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
    }
@@ -5215,7 +5512,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean isPoint3DBelowPlane3D(FramePoint3DReadOnly point, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeFirstTangent,
+   public static boolean isPoint3DBelowPlane3D(FramePoint3DReadOnly point,
+                                               FramePoint3DReadOnly pointOnPlane,
+                                               FrameVector3DReadOnly planeFirstTangent,
                                                FrameVector3DReadOnly planeSecondTangent)
    {
       return isPoint3DAboveOrBelowPlane3D(point, pointOnPlane, planeFirstTangent, planeSecondTangent, false);
@@ -5244,7 +5543,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FrameVector3D normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
+   public static FrameVector3D normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane,
+                                                         FramePoint3DReadOnly secondPointOnPlane,
                                                          FramePoint3DReadOnly thirdPointOnPlane)
    {
       firstPointOnPlane.checkReferenceFrameMatch(secondPointOnPlane, thirdPointOnPlane);
@@ -5276,8 +5576,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
-                                                   FramePoint3DReadOnly thirdPointOnPlane, FixedFrameVector3DBasics normalToPack)
+   public static boolean normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane,
+                                                   FramePoint3DReadOnly secondPointOnPlane,
+                                                   FramePoint3DReadOnly thirdPointOnPlane,
+                                                   FixedFrameVector3DBasics normalToPack)
    {
       firstPointOnPlane.checkReferenceFrameMatch(secondPointOnPlane, thirdPointOnPlane, normalToPack);
       return EuclidGeometryTools.normal3DFromThreePoint3Ds(firstPointOnPlane, secondPointOnPlane, thirdPointOnPlane, normalToPack);
@@ -5301,8 +5603,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane, FramePoint3DReadOnly secondPointOnPlane,
-                                                   FramePoint3DReadOnly thirdPointOnPlane, FrameVector3DBasics normalToPack)
+   public static boolean normal3DFromThreePoint3Ds(FramePoint3DReadOnly firstPointOnPlane,
+                                                   FramePoint3DReadOnly secondPointOnPlane,
+                                                   FramePoint3DReadOnly thirdPointOnPlane,
+                                                   FrameVector3DBasics normalToPack)
    {
       firstPointOnPlane.checkReferenceFrameMatch(secondPointOnPlane, thirdPointOnPlane);
       normalToPack.setReferenceFrame(firstPointOnPlane.getReferenceFrame());
@@ -5331,7 +5635,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
+   public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject,
+                                                           FramePoint2DReadOnly firstPointOnLine,
                                                            FramePoint2DReadOnly secondPointOnLine)
    {
       pointToProject.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
@@ -5363,8 +5668,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
-                                                      FramePoint2DReadOnly secondPointOnLine, FixedFramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject,
+                                                      FramePoint2DReadOnly firstPointOnLine,
+                                                      FramePoint2DReadOnly secondPointOnLine,
+                                                      FixedFramePoint2DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine, projectionToPack);
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, firstPointOnLine, secondPointOnLine, projectionToPack);
@@ -5391,8 +5698,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly firstPointOnLine,
-                                                      FramePoint2DReadOnly secondPointOnLine, FramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject,
+                                                      FramePoint2DReadOnly firstPointOnLine,
+                                                      FramePoint2DReadOnly secondPointOnLine,
+                                                      FramePoint2DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
       projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
@@ -5421,7 +5730,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
+   public static FramePoint2D orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject,
+                                                           FramePoint2DReadOnly pointOnLine,
                                                            FrameVector2DReadOnly lineDirection)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -5454,8 +5764,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
-                                                      FrameVector2DReadOnly lineDirection, FixedFramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject,
+                                                      FramePoint2DReadOnly pointOnLine,
+                                                      FrameVector2DReadOnly lineDirection,
+                                                      FixedFramePoint2DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine, lineDirection, projectionToPack);
       return EuclidGeometryTools.orthogonalProjectionOnLine2D(pointToProject, pointOnLine, lineDirection, projectionToPack);
@@ -5482,8 +5794,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly pointOnLine,
-                                                      FrameVector2DReadOnly lineDirection, FramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLine2D(FramePoint2DReadOnly pointToProject,
+                                                      FramePoint2DReadOnly pointOnLine,
+                                                      FrameVector2DReadOnly lineDirection,
+                                                      FramePoint2DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine, lineDirection);
       projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
@@ -5512,7 +5826,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint3D orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
+   public static FramePoint3D orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject,
+                                                           FramePoint3DReadOnly pointOnLine,
                                                            FrameVector3DReadOnly lineDirection)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -5545,8 +5860,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
-                                                      FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject,
+                                                      FramePoint3DReadOnly pointOnLine,
+                                                      FrameVector3DReadOnly lineDirection,
+                                                      FixedFramePoint3DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine, lineDirection, projectionToPack);
       return EuclidGeometryTools.orthogonalProjectionOnLine3D(pointToProject, pointOnLine, lineDirection, projectionToPack);
@@ -5573,8 +5890,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnLine,
-                                                      FrameVector3DReadOnly lineDirection, FramePoint3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLine3D(FramePoint3DReadOnly pointToProject,
+                                                      FramePoint3DReadOnly pointOnLine,
+                                                      FrameVector3DReadOnly lineDirection,
+                                                      FramePoint3DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnLine, lineDirection);
       projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
@@ -5605,7 +5924,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint2D orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
+   public static FramePoint2D orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject,
+                                                                  FramePoint2DReadOnly lineSegmentStart,
                                                                   FramePoint2DReadOnly lineSegmentEnd)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -5641,8 +5961,11 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX, double pointToProjectY, FramePoint2DReadOnly lineSegmentStart,
-                                                             FramePoint2DReadOnly lineSegmentEnd, FixedFramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX,
+                                                             double pointToProjectY,
+                                                             FramePoint2DReadOnly lineSegmentStart,
+                                                             FramePoint2DReadOnly lineSegmentEnd,
+                                                             FixedFramePoint2DBasics projectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd, projectionToPack);
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProjectX, pointToProjectY, lineSegmentStart, lineSegmentEnd, projectionToPack);
@@ -5672,8 +5995,11 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX, double pointToProjectY, FramePoint2DReadOnly lineSegmentStart,
-                                                             FramePoint2DReadOnly lineSegmentEnd, FramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLineSegment2D(double pointToProjectX,
+                                                             double pointToProjectY,
+                                                             FramePoint2DReadOnly lineSegmentStart,
+                                                             FramePoint2DReadOnly lineSegmentEnd,
+                                                             FramePoint2DBasics projectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
       projectionToPack.setReferenceFrame(lineSegmentStart.getReferenceFrame());
@@ -5703,8 +6029,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
-                                                             FramePoint2DReadOnly lineSegmentEnd, FixedFramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject,
+                                                             FramePoint2DReadOnly lineSegmentStart,
+                                                             FramePoint2DReadOnly lineSegmentEnd,
+                                                             FixedFramePoint2DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd, projectionToPack);
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment2D(pointToProject, lineSegmentStart, lineSegmentEnd, projectionToPack);
@@ -5733,8 +6061,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject, FramePoint2DReadOnly lineSegmentStart,
-                                                             FramePoint2DReadOnly lineSegmentEnd, FramePoint2DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLineSegment2D(FramePoint2DReadOnly pointToProject,
+                                                             FramePoint2DReadOnly lineSegmentStart,
+                                                             FramePoint2DReadOnly lineSegmentEnd,
+                                                             FramePoint2DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
       projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
@@ -5765,7 +6095,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint3D orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
+   public static FramePoint3D orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject,
+                                                                  FramePoint3DReadOnly lineSegmentStart,
                                                                   FramePoint3DReadOnly lineSegmentEnd)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -5799,8 +6130,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
-                                                             FramePoint3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject,
+                                                             FramePoint3DReadOnly lineSegmentStart,
+                                                             FramePoint3DReadOnly lineSegmentEnd,
+                                                             FixedFramePoint3DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd, projectionToPack);
       return EuclidGeometryTools.orthogonalProjectionOnLineSegment3D(pointToProject, lineSegmentStart, lineSegmentEnd, projectionToPack);
@@ -5829,8 +6162,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly lineSegmentStart,
-                                                             FramePoint3DReadOnly lineSegmentEnd, FramePoint3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnLineSegment3D(FramePoint3DReadOnly pointToProject,
+                                                             FramePoint3DReadOnly lineSegmentStart,
+                                                             FramePoint3DReadOnly lineSegmentEnd,
+                                                             FramePoint3DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
       projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
@@ -5855,7 +6190,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FramePoint3D orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
+   public static FramePoint3D orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject,
+                                                            FramePoint3DReadOnly pointOnPlane,
                                                             FrameVector3DReadOnly planeNormal)
    {
       pointToProject.checkReferenceFrameMatch(pointOnPlane, planeNormal);
@@ -5886,8 +6222,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
-                                                       FrameVector3DReadOnly planeNormal, FixedFramePoint3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject,
+                                                       FramePoint3DReadOnly pointOnPlane,
+                                                       FrameVector3DReadOnly planeNormal,
+                                                       FixedFramePoint3DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnPlane, planeNormal, projectionToPack);
       return EuclidGeometryTools.orthogonalProjectionOnPlane3D(pointToProject, pointOnPlane, planeNormal, projectionToPack);
@@ -5913,8 +6251,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject, FramePoint3DReadOnly pointOnPlane,
-                                                       FrameVector3DReadOnly planeNormal, FramePoint3DBasics projectionToPack)
+   public static boolean orthogonalProjectionOnPlane3D(FramePoint3DReadOnly pointToProject,
+                                                       FramePoint3DReadOnly pointOnPlane,
+                                                       FrameVector3DReadOnly planeNormal,
+                                                       FramePoint3DBasics projectionToPack)
    {
       pointToProject.checkReferenceFrameMatch(pointOnPlane, planeNormal);
       projectionToPack.setReferenceFrame(pointToProject.getReferenceFrame());
@@ -5943,7 +6283,11 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean orthogonalProjectionOnPlane3D(double x, double y, double z, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
+   public static boolean orthogonalProjectionOnPlane3D(double x,
+                                                       double y,
+                                                       double z,
+                                                       FramePoint3DReadOnly pointOnPlane,
+                                                       FrameVector3DReadOnly planeNormal,
                                                        FixedFramePoint3DBasics projectionToPack)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal, projectionToPack);
@@ -5972,7 +6316,11 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean orthogonalProjectionOnPlane3D(double x, double y, double z, FramePoint3DReadOnly pointOnPlane, FrameVector3DReadOnly planeNormal,
+   public static boolean orthogonalProjectionOnPlane3D(double x,
+                                                       double y,
+                                                       double z,
+                                                       FramePoint3DReadOnly pointOnPlane,
+                                                       FrameVector3DReadOnly planeNormal,
                                                        FramePoint3DBasics projectionToPack)
    {
       pointOnPlane.checkReferenceFrameMatch(planeNormal);
@@ -6003,8 +6351,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double percentageOfIntersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1, FrameVector2DReadOnly lineDirection1,
-                                                                  FramePoint2DReadOnly pointOnLine2, FrameVector2DReadOnly lineDirection2)
+   public static double percentageOfIntersectionBetweenTwoLine2Ds(FramePoint2DReadOnly pointOnLine1,
+                                                                  FrameVector2DReadOnly lineDirection1,
+                                                                  FramePoint2DReadOnly pointOnLine2,
+                                                                  FrameVector2DReadOnly lineDirection2)
    {
       pointOnLine1.checkReferenceFrameMatch(lineDirection1, pointOnLine2, lineDirection2);
       return EuclidGeometryTools.percentageOfIntersectionBetweenTwoLine2Ds(pointOnLine1, lineDirection1, pointOnLine2, lineDirection2);
@@ -6037,8 +6387,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double percentageOfIntersectionBetweenLineSegment2DAndLine2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                                              FramePoint2DReadOnly pointOnLine, FrameVector2DReadOnly lineDirection)
+   public static double percentageOfIntersectionBetweenLineSegment2DAndLine2D(FramePoint2DReadOnly lineSegmentStart,
+                                                                              FramePoint2DReadOnly lineSegmentEnd,
+                                                                              FramePoint2DReadOnly pointOnLine,
+                                                                              FrameVector2DReadOnly lineDirection)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd, pointOnLine, lineDirection);
       return EuclidGeometryTools.percentageOfIntersectionBetweenLineSegment2DAndLine2D(lineSegmentStart, lineSegmentEnd, pointOnLine, lineDirection);
@@ -6228,7 +6580,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double percentageAlongLine3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly pointOnLine,
+   public static double percentageAlongLine3D(double pointX,
+                                              double pointY,
+                                              double pointZ,
+                                              FramePoint3DReadOnly pointOnLine,
                                               FrameVector3DReadOnly lineDirection)
    {
       pointOnLine.checkReferenceFrameMatch(lineDirection);
@@ -6266,7 +6621,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double percentageAlongLineSegment3D(double pointX, double pointY, double pointZ, FramePoint3DReadOnly lineSegmentStart,
+   public static double percentageAlongLineSegment3D(double pointX,
+                                                     double pointY,
+                                                     double pointZ,
+                                                     FramePoint3DReadOnly lineSegmentStart,
                                                      FramePoint3DReadOnly lineSegmentEnd)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -6331,8 +6689,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean perpendicularBisector2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                 FixedFramePoint2DBasics bisectorStartToPack, FixedFrameVector2DBasics bisectorDirectionToPack)
+   public static boolean perpendicularBisector2D(FramePoint2DReadOnly lineSegmentStart,
+                                                 FramePoint2DReadOnly lineSegmentEnd,
+                                                 FixedFramePoint2DBasics bisectorStartToPack,
+                                                 FixedFrameVector2DBasics bisectorDirectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd, bisectorStartToPack, bisectorDirectionToPack);
       return EuclidGeometryTools.perpendicularBisector2D(lineSegmentStart, lineSegmentEnd, bisectorStartToPack, bisectorDirectionToPack);
@@ -6361,8 +6721,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean perpendicularBisector2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                 FramePoint2DBasics bisectorStartToPack, FrameVector2DBasics bisectorDirectionToPack)
+   public static boolean perpendicularBisector2D(FramePoint2DReadOnly lineSegmentStart,
+                                                 FramePoint2DReadOnly lineSegmentEnd,
+                                                 FramePoint2DBasics bisectorStartToPack,
+                                                 FrameVector2DBasics bisectorDirectionToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd, bisectorStartToPack, bisectorDirectionToPack);
       return EuclidGeometryTools.perpendicularBisector2D(lineSegmentStart, lineSegmentEnd, bisectorStartToPack, bisectorDirectionToPack);
@@ -6400,7 +6762,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static List<Point2D> perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
+   public static List<Point2D> perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart,
+                                                              FramePoint2DReadOnly lineSegmentEnd,
                                                               double bisectorSegmentHalfLength)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -6440,8 +6803,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                        double bisectorSegmentHalfLength, FixedFramePoint2DBasics bisectorSegmentStartToPack,
+   public static boolean perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart,
+                                                        FramePoint2DReadOnly lineSegmentEnd,
+                                                        double bisectorSegmentHalfLength,
+                                                        FixedFramePoint2DBasics bisectorSegmentStartToPack,
                                                         FixedFramePoint2DBasics bisectorSegmentEndToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd, bisectorSegmentStartToPack, bisectorSegmentEndToPack);
@@ -6485,8 +6850,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart, FramePoint2DReadOnly lineSegmentEnd,
-                                                        double bisectorSegmentHalfLength, FramePoint2DBasics bisectorSegmentStartToPack,
+   public static boolean perpendicularBisectorSegment2D(FramePoint2DReadOnly lineSegmentStart,
+                                                        FramePoint2DReadOnly lineSegmentEnd,
+                                                        double bisectorSegmentHalfLength,
+                                                        FramePoint2DBasics bisectorSegmentStartToPack,
                                                         FramePoint2DBasics bisectorSegmentEndToPack)
    {
       lineSegmentStart.checkReferenceFrameMatch(lineSegmentEnd);
@@ -6581,7 +6948,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static FrameVector3D perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
+   public static FrameVector3D perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point,
+                                                                        FramePoint3DReadOnly firstPointOnLine,
                                                                         FramePoint3DReadOnly secondPointOnLine,
                                                                         FixedFramePoint3DBasics orthogonalProjectionToPack)
    {
@@ -6627,8 +6995,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static FrameVector3D perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
-                                                                        FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics orthogonalProjectionToPack)
+   public static FrameVector3D perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point,
+                                                                        FramePoint3DReadOnly firstPointOnLine,
+                                                                        FramePoint3DReadOnly secondPointOnLine,
+                                                                        FramePoint3DBasics orthogonalProjectionToPack)
    {
       point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
       if (orthogonalProjectionToPack != null)
@@ -6671,8 +7041,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
-                                                                  FramePoint3DReadOnly secondPointOnLine, FixedFramePoint3DBasics orthogonalProjectionToPack,
+   public static boolean perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point,
+                                                                  FramePoint3DReadOnly firstPointOnLine,
+                                                                  FramePoint3DReadOnly secondPointOnLine,
+                                                                  FixedFramePoint3DBasics orthogonalProjectionToPack,
                                                                   FixedFrameVector3DBasics perpendicularVectorToPack)
    {
       point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine, perpendicularVectorToPack);
@@ -6713,8 +7085,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static boolean perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point, FramePoint3DReadOnly firstPointOnLine,
-                                                                  FramePoint3DReadOnly secondPointOnLine, FramePoint3DBasics orthogonalProjectionToPack,
+   public static boolean perpendicularVector3DFromLine3DToPoint3D(FramePoint3DReadOnly point,
+                                                                  FramePoint3DReadOnly firstPointOnLine,
+                                                                  FramePoint3DReadOnly secondPointOnLine,
+                                                                  FramePoint3DBasics orthogonalProjectionToPack,
                                                                   FrameVector3DBasics perpendicularVectorToPack)
    {
       point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
@@ -6752,7 +7126,9 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double signedDistanceFromPoint2DToLine2D(double pointX, double pointY, FramePoint2DReadOnly firstPointOnLine,
+   public static double signedDistanceFromPoint2DToLine2D(double pointX,
+                                                          double pointY,
+                                                          FramePoint2DReadOnly firstPointOnLine,
                                                           FramePoint2DReadOnly secondPointOnLine)
    {
       firstPointOnLine.checkReferenceFrameMatch(secondPointOnLine);
@@ -6811,7 +7187,8 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static double signedDistanceFromPoint2DToLine2D(FramePoint2DReadOnly point, FramePoint2DReadOnly firstPointOnLine,
+   public static double signedDistanceFromPoint2DToLine2D(FramePoint2DReadOnly point,
+                                                          FramePoint2DReadOnly firstPointOnLine,
                                                           FramePoint2DReadOnly secondPointOnLine)
    {
       point.checkReferenceFrameMatch(firstPointOnLine, secondPointOnLine);
@@ -6872,7 +7249,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1,
+                                                         FramePoint3DReadOnly p2,
+                                                         FramePoint3DReadOnly p3,
+                                                         double sphere3DRadius,
                                                          FixedFramePoint3DBasics sphere3DPositionToPack)
    {
       p1.checkReferenceFrameMatch(p2, p3, sphere3DPositionToPack);
@@ -6905,7 +7285,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the three points are not all expressed in the same
     *                                         reference frame.
     */
-   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1, FramePoint3DReadOnly p2, FramePoint3DReadOnly p3, double sphere3DRadius,
+   public static boolean sphere3DPositionFromThreePoints(FramePoint3DReadOnly p1,
+                                                         FramePoint3DReadOnly p2,
+                                                         FramePoint3DReadOnly p3,
+                                                         double sphere3DRadius,
                                                          FramePoint3DBasics sphere3DPositionToPack)
    {
       p1.checkReferenceFrameMatch(p2, p3);
@@ -6929,8 +7312,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the arguments are not all expressed in the same
     *                                         reference frame.
     */
-   public static void topVertex3DOfIsoscelesTriangle3D(FramePoint3DReadOnly baseVertexA, FramePoint3DReadOnly baseVertexC,
-                                                       FrameVector3DReadOnly trianglePlaneNormal, double ccwAngleAboutNormalAtTopVertex,
+   public static void topVertex3DOfIsoscelesTriangle3D(FramePoint3DReadOnly baseVertexA,
+                                                       FramePoint3DReadOnly baseVertexC,
+                                                       FrameVector3DReadOnly trianglePlaneNormal,
+                                                       double ccwAngleAboutNormalAtTopVertex,
                                                        FixedFramePoint3DBasics topVertexBToPack)
    {
       baseVertexA.checkReferenceFrameMatch(baseVertexC, trianglePlaneNormal, topVertexBToPack);
@@ -6953,8 +7338,10 @@ public class EuclidFrameTools
     * @throws ReferenceFrameMismatchException if the read-only arguments are not all expressed in the
     *                                         same reference frame.
     */
-   public static void topVertex3DOfIsoscelesTriangle3D(FramePoint3DReadOnly baseVertexA, FramePoint3DReadOnly baseVertexC,
-                                                       FrameVector3DReadOnly trianglePlaneNormal, double ccwAngleAboutNormalAtTopVertex,
+   public static void topVertex3DOfIsoscelesTriangle3D(FramePoint3DReadOnly baseVertexA,
+                                                       FramePoint3DReadOnly baseVertexC,
+                                                       FrameVector3DReadOnly trianglePlaneNormal,
+                                                       double ccwAngleAboutNormalAtTopVertex,
                                                        FramePoint3DBasics topVertexBToPack)
    {
       baseVertexA.checkReferenceFrameMatch(baseVertexC, trianglePlaneNormal);

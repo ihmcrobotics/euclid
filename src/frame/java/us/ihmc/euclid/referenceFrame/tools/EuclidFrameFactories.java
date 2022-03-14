@@ -190,7 +190,8 @@ public class EuclidFrameFactories
     * @param ySupplier            the y-coordinate supplier.
     * @return the new read-only frame point 2D.
     */
-   public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
+   public static FramePoint2DReadOnly newLinkedFramePoint2DReadOnly(ReferenceFrameHolder referenceFrameHolder,
+                                                                    DoubleSupplier xSupplier,
                                                                     DoubleSupplier ySupplier)
    {
       return newLinkedFramePoint2DReadOnly(referenceFrameHolder, newLinkedPoint2DReadOnly(xSupplier, ySupplier));
@@ -205,7 +206,8 @@ public class EuclidFrameFactories
     * @param ySupplier            the y-coordinate supplier.
     * @return the new read-only frame vector 2D.
     */
-   public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
+   public static FrameVector2DReadOnly newLinkedFrameVector2DReadOnly(ReferenceFrameHolder referenceFrameHolder,
+                                                                      DoubleSupplier xSupplier,
                                                                       DoubleSupplier ySupplier)
    {
       return newLinkedFrameVector2DReadOnly(referenceFrameHolder, newLinkedVector2DReadOnly(xSupplier, ySupplier));
@@ -221,8 +223,10 @@ public class EuclidFrameFactories
     * @param zSupplier            the z-coordinate supplier.
     * @return the new read-only frame point 3D.
     */
-   public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
-                                                                    DoubleSupplier ySupplier, DoubleSupplier zSupplier)
+   public static FramePoint3DReadOnly newLinkedFramePoint3DReadOnly(ReferenceFrameHolder referenceFrameHolder,
+                                                                    DoubleSupplier xSupplier,
+                                                                    DoubleSupplier ySupplier,
+                                                                    DoubleSupplier zSupplier)
    {
       return newLinkedFramePoint3DReadOnly(referenceFrameHolder, newLinkedPoint3DReadOnly(xSupplier, ySupplier, zSupplier));
    }
@@ -237,8 +241,10 @@ public class EuclidFrameFactories
     * @param zSupplier            the z-coordinate supplier.
     * @return the new read-only frame vector 3D.
     */
-   public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(ReferenceFrameHolder referenceFrameHolder, DoubleSupplier xSupplier,
-                                                                      DoubleSupplier ySupplier, DoubleSupplier zSupplier)
+   public static FrameVector3DReadOnly newLinkedFrameVector3DReadOnly(ReferenceFrameHolder referenceFrameHolder,
+                                                                      DoubleSupplier xSupplier,
+                                                                      DoubleSupplier ySupplier,
+                                                                      DoubleSupplier zSupplier)
    {
       return newLinkedFrameVector3DReadOnly(referenceFrameHolder, newLinkedVector3DReadOnly(xSupplier, ySupplier, zSupplier));
    }
@@ -1378,7 +1384,9 @@ public class EuclidFrameFactories
     * @param initialZ             the initial value for the z-component of the new vector.
     * @return the new unitary vector.
     */
-   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder, double initialX, double initialY,
+   public static FixedFrameUnitVector3DBasics newFixedFrameUnitVector3DBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                              double initialX,
+                                                                              double initialY,
                                                                               double initialZ)
    {
       return newLinkedFixedFrameUnitVector3DBasics(referenceFrameHolder, new UnitVector3D(initialX, initialY, initialZ));
@@ -2163,7 +2171,8 @@ public class EuclidFrameFactories
     * @return the observable frame point.
     */
    public static FixedFramePoint2DBasics newObservableFixedFramePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
-                                                                              Consumer<Axis2D> valueAccessedListener, FixedFramePoint2DBasics source)
+                                                                              Consumer<Axis2D> valueAccessedListener,
+                                                                              FixedFramePoint2DBasics source)
    {
       return newLinkedFixedFramePoint2DBasics(source, newObservablePoint2DBasics(valueChangedListener, valueAccessedListener, source));
    }
@@ -2205,7 +2214,8 @@ public class EuclidFrameFactories
     * @return the observable frame point.
     */
    public static FixedFramePoint3DBasics newObservableFixedFramePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
-                                                                              Consumer<Axis3D> valueAccessedListener, FixedFramePoint3DBasics source)
+                                                                              Consumer<Axis3D> valueAccessedListener,
+                                                                              FixedFramePoint3DBasics source)
    {
       return newLinkedFixedFramePoint3DBasics(source, newObservablePoint3DBasics(valueChangedListener, valueAccessedListener, source));
    }
@@ -2248,7 +2258,8 @@ public class EuclidFrameFactories
     * @return the observable frame vector.
     */
    public static FixedFrameVector2DBasics newObservableFixedFrameVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
-                                                                                Consumer<Axis2D> valueAccessedListener, FixedFrameVector2DBasics source)
+                                                                                Consumer<Axis2D> valueAccessedListener,
+                                                                                FixedFrameVector2DBasics source)
    {
       return newLinkedFixedFrameVector2DBasics(source, newObservableVector2DBasics(valueChangedListener, valueAccessedListener, source));
    }
@@ -2291,7 +2302,8 @@ public class EuclidFrameFactories
     * @return the observable frame vector.
     */
    public static FixedFrameVector3DBasics newObservableFixedFrameVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
-                                                                                Consumer<Axis3D> valueAccessedListener, FixedFrameVector3DBasics source)
+                                                                                Consumer<Axis3D> valueAccessedListener,
+                                                                                FixedFrameVector3DBasics source)
    {
       return newLinkedFixedFrameVector3DBasics(source, newObservableVector3DBasics(valueChangedListener, valueAccessedListener, source));
    }
@@ -2441,7 +2453,8 @@ public class EuclidFrameFactories
     *                              passed. Can be {@code null}.
     * @return the observable frame quaternion.
     */
-   public static FixedFrameQuaternionBasics newObservableFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder, Runnable valueChangedListener,
+   public static FixedFrameQuaternionBasics newObservableFixedFrameQuaternionBasics(ReferenceFrameHolder referenceFrameHolder,
+                                                                                    Runnable valueChangedListener,
                                                                                     IntConsumer valueAccessedListener)
    {
       return newObservableFixedFrameQuaternionBasics(valueChangedListener, valueAccessedListener, newFixedFrameQuaternionBasics(referenceFrameHolder));
@@ -2460,7 +2473,8 @@ public class EuclidFrameFactories
     *                              linked quaternion interface.
     * @return the observable frame quaternion.
     */
-   public static FixedFrameQuaternionBasics newObservableFixedFrameQuaternionBasics(Runnable valueChangedListener, IntConsumer valueAccessedListener,
+   public static FixedFrameQuaternionBasics newObservableFixedFrameQuaternionBasics(Runnable valueChangedListener,
+                                                                                    IntConsumer valueAccessedListener,
                                                                                     FixedFrameQuaternionBasics source)
    {
       return newLinkedFixedFrameQuaternionBasics(source, newObservableQuaternionBasics(valueChangedListener, valueAccessedListener, source));

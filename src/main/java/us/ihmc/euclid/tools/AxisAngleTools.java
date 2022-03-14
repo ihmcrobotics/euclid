@@ -182,7 +182,9 @@ public class AxisAngleTools
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the axis-angle
     *                               does not represent a transformation in the XY plane.
     */
-   public static void inverseTransform(AxisAngleReadOnly axisAngle, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   public static void inverseTransform(AxisAngleReadOnly axisAngle,
+                                       Tuple2DReadOnly tupleOriginal,
+                                       Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
    {
       transformImpl(axisAngle, true, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
@@ -207,7 +209,10 @@ public class AxisAngleTools
     *                                  a transformation in the XY plane.
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the axis-angle
     */
-   private static void transformImpl(AxisAngleReadOnly axisAngle, boolean negateAngle, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   private static void transformImpl(AxisAngleReadOnly axisAngle,
+                                     boolean negateAngle,
+                                     Tuple2DReadOnly tupleOriginal,
+                                     Tuple2DBasics tupleTransformed,
                                      boolean checkIfTransformInXYPlane)
    {
       if (checkIfTransformInXYPlane)
@@ -488,7 +493,8 @@ public class AxisAngleTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrixOriginal,
+   public static void inverseTransform(AxisAngleReadOnly axisAngle,
+                                       RotationMatrixReadOnly rotationMatrixOriginal,
                                        RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(axisAngle, true, rotationMatrixOriginal, false, rotationMatrixTransformed);
@@ -528,7 +534,10 @@ public class AxisAngleTools
     * @param inverse2        whether the second orientation should be inverted in the multiplication.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
+   public static void multiply(Orientation3DReadOnly orientation1,
+                               boolean inverse1,
+                               Orientation3DReadOnly orientation2,
+                               boolean inverse2,
                                AxisAngleBasics axisAngleToPack)
    {
       if (orientation1 instanceof AxisAngleReadOnly)
@@ -581,7 +590,10 @@ public class AxisAngleTools
     * @param inverse2        whether the second orientation should be inverted in the multiplication.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, AxisAngleReadOnly orientation2, boolean inverse2,
+   public static void multiply(Orientation3DReadOnly orientation1,
+                               boolean inverse1,
+                               AxisAngleReadOnly orientation2,
+                               boolean inverse2,
                                AxisAngleBasics axisAngleToPack)
    {
       if (orientation1 instanceof AxisAngleReadOnly)
@@ -621,7 +633,10 @@ public class AxisAngleTools
     * @param inverse2        whether the second orientation should be inverted in the multiplication.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
-   public static void multiply(AxisAngleReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
+   public static void multiply(AxisAngleReadOnly orientation1,
+                               boolean inverse1,
+                               Orientation3DReadOnly orientation2,
+                               boolean inverse2,
                                AxisAngleBasics axisAngleToPack)
    {
       if (orientation2 instanceof AxisAngleReadOnly)
@@ -730,8 +745,17 @@ public class AxisAngleTools
       multiplyImpl(alpha, u1x, u1y, u1z, inverse1, beta, u2x, u2y, u2z, inverse2, axisAngleToPack);
    }
 
-   private static void multiplyImpl(double alpha, double u1x, double u1y, double u1z, boolean inverse1, double beta, double u2x, double u2y, double u2z,
-                                    boolean inverse2, AxisAngleBasics axisAngleToPack)
+   private static void multiplyImpl(double alpha,
+                                    double u1x,
+                                    double u1y,
+                                    double u1z,
+                                    boolean inverse1,
+                                    double beta,
+                                    double u2x,
+                                    double u2y,
+                                    double u2z,
+                                    boolean inverse2,
+                                    AxisAngleBasics axisAngleToPack)
    {
       double axisNorm1 = EuclidCoreTools.fastNorm(u1x, u1y, u1z);
       if (axisNorm1 < EPS)

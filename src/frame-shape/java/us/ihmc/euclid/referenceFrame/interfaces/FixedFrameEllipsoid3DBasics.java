@@ -401,7 +401,11 @@ public interface FixedFrameEllipsoid3DBasics extends Ellipsoid3DBasics, FrameEll
     * @param radiusZ        radius of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
-   default void setMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY,
+   default void setMatchingFrame(ReferenceFrame referenceFrame,
+                                 Point3DReadOnly position,
+                                 Orientation3DReadOnly orientation,
+                                 double radiusX,
+                                 double radiusY,
                                  double radiusZ)
    {
       set(position, orientation, radiusX, radiusY, radiusZ);

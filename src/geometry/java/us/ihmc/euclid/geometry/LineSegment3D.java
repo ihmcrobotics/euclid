@@ -57,7 +57,11 @@ public class LineSegment3D implements LineSegment3DBasics, GeometryObject<LineSe
     * @param secondEndpointY y-coordinate of the second endpoint of this line segment.
     * @param secondEndpointZ z-coordinate of the second endpoint of this line segment.
     */
-   public LineSegment3D(double firstEndpointX, double firstEndpointY, double firstEndpointZ, double secondEndpointX, double secondEndpointY,
+   public LineSegment3D(double firstEndpointX,
+                        double firstEndpointY,
+                        double firstEndpointZ,
+                        double secondEndpointX,
+                        double secondEndpointY,
                         double secondEndpointZ)
    {
       set(firstEndpointX, firstEndpointY, firstEndpointZ, secondEndpointX, secondEndpointY, secondEndpointZ);

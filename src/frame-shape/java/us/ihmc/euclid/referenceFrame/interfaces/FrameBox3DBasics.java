@@ -53,7 +53,11 @@ public interface FrameBox3DBasics extends FixedFrameBox3DBasics, FrameShape3DBas
     * @param sizeZ          the size along the z-axis.
     * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY,
+   default void setIncludingFrame(ReferenceFrame referenceFrame,
+                                  Point3DReadOnly position,
+                                  Orientation3DReadOnly orientation,
+                                  double sizeX,
+                                  double sizeY,
                                   double sizeZ)
    {
       setReferenceFrame(referenceFrame);

@@ -293,7 +293,10 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two capsules do not represent the same geometry. If only one of the
     *                        arguments is equal to {@code null}.
     */
-   public static void assertCapsule3DGeometricallyEquals(String messagePrefix, Capsule3DReadOnly expected, Capsule3DReadOnly actual, double epsilon,
+   public static void assertCapsule3DGeometricallyEquals(String messagePrefix,
+                                                         Capsule3DReadOnly expected,
+                                                         Capsule3DReadOnly actual,
+                                                         double epsilon,
                                                          String format)
    {
       if (expected == null && actual == null)
@@ -421,7 +424,10 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two cylinders do not represent the same geometry. If only one of
     *                        the arguments is equal to {@code null}.
     */
-   public static void assertCylinder3DGeometricallyEquals(String messagePrefix, Cylinder3DReadOnly expected, Cylinder3DReadOnly actual, double epsilon,
+   public static void assertCylinder3DGeometricallyEquals(String messagePrefix,
+                                                          Cylinder3DReadOnly expected,
+                                                          Cylinder3DReadOnly actual,
+                                                          double epsilon,
                                                           String format)
    {
       if (expected == null && actual == null)
@@ -549,7 +555,10 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two ellipsoids do not represent the same geometry. If only one of
     *                        the arguments is equal to {@code null}.
     */
-   public static void assertEllipsoid3DGeometricallyEquals(String messagePrefix, Ellipsoid3DReadOnly expected, Ellipsoid3DReadOnly actual, double epsilon,
+   public static void assertEllipsoid3DGeometricallyEquals(String messagePrefix,
+                                                           Ellipsoid3DReadOnly expected,
+                                                           Ellipsoid3DReadOnly actual,
+                                                           double epsilon,
                                                            String format)
    {
       if (expected == null && actual == null)
@@ -677,7 +686,10 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two point shapes do not represent the same geometry. If only one of
     *                        the arguments is equal to {@code null}.
     */
-   public static void assertPointShape3DGeometricallyEquals(String messagePrefix, PointShape3DReadOnly expected, PointShape3DReadOnly actual, double epsilon,
+   public static void assertPointShape3DGeometricallyEquals(String messagePrefix,
+                                                            PointShape3DReadOnly expected,
+                                                            PointShape3DReadOnly actual,
+                                                            double epsilon,
                                                             String format)
    {
       if (expected == null && actual == null)
@@ -1083,7 +1095,8 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two collision results are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertEuclidShape3DCollisionResultEquals(EuclidShape3DCollisionResultReadOnly expected, EuclidShape3DCollisionResultReadOnly actual,
+   public static void assertEuclidShape3DCollisionResultEquals(EuclidShape3DCollisionResultReadOnly expected,
+                                                               EuclidShape3DCollisionResultReadOnly actual,
                                                                double epsilon)
    {
       assertEuclidShape3DCollisionResultEquals(null, expected, actual, epsilon);
@@ -1102,8 +1115,10 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two collision results are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                               EuclidShape3DCollisionResultReadOnly actual, double epsilon)
+   public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix,
+                                                               EuclidShape3DCollisionResultReadOnly expected,
+                                                               EuclidShape3DCollisionResultReadOnly actual,
+                                                               double epsilon)
    {
       assertEuclidShape3DCollisionResultEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -1123,8 +1138,11 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two collision results are not equal. If only one of the arguments
     *                        is equal to {@code null}.
     */
-   public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                               EuclidShape3DCollisionResultReadOnly actual, double epsilon, String format)
+   public static void assertEuclidShape3DCollisionResultEquals(String messagePrefix,
+                                                               EuclidShape3DCollisionResultReadOnly expected,
+                                                               EuclidShape3DCollisionResultReadOnly actual,
+                                                               double epsilon,
+                                                               String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1169,7 +1187,8 @@ public class EuclidShapeTestTools
     *                        one of the arguments is equal to {@code null}.
     */
    public static void assertEuclidShape3DCollisionResultGeometricallyEquals(EuclidShape3DCollisionResultReadOnly expected,
-                                                                            EuclidShape3DCollisionResultReadOnly actual, double epsilon)
+                                                                            EuclidShape3DCollisionResultReadOnly actual,
+                                                                            double epsilon)
    {
       assertEuclidShape3DCollisionResultGeometricallyEquals(null, expected, actual, epsilon);
    }
@@ -1194,8 +1213,10 @@ public class EuclidShapeTestTools
     *                        one of the arguments is equal to {@code null}.
     */
    public static void assertEuclidShape3DCollisionResultGeometricallyEquals(EuclidShape3DCollisionResultReadOnly expected,
-                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
-                                                                            double pointTangentialEpsilon, double normalEpsilon)
+                                                                            EuclidShape3DCollisionResultReadOnly actual,
+                                                                            double distanceEpsilon,
+                                                                            double pointTangentialEpsilon,
+                                                                            double normalEpsilon)
    {
       assertEuclidShape3DCollisionResultGeometricallyEquals(null, expected, actual, distanceEpsilon, pointTangentialEpsilon, normalEpsilon, DEFAULT_FORMAT);
    }
@@ -1214,8 +1235,10 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two collision results do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                                            EuclidShape3DCollisionResultReadOnly actual, double epsilon)
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix,
+                                                                            EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual,
+                                                                            double epsilon)
    {
       assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -1240,9 +1263,12 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two collision results do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
-                                                                            double pointTangentialEpsilon, double normalEpsilon)
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix,
+                                                                            EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual,
+                                                                            double distanceEpsilon,
+                                                                            double pointTangentialEpsilon,
+                                                                            double normalEpsilon)
    {
       assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix,
                                                             expected,
@@ -1269,8 +1295,11 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two collision results do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                                            EuclidShape3DCollisionResultReadOnly actual, double epsilon, String format)
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix,
+                                                                            EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual,
+                                                                            double epsilon,
+                                                                            String format)
    {
       assertEuclidShape3DCollisionResultGeometricallyEquals(messagePrefix, expected, actual, epsilon, epsilon, epsilon, format);
    }
@@ -1297,9 +1326,13 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two collision results do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                                            EuclidShape3DCollisionResultReadOnly actual, double distanceEpsilon,
-                                                                            double pointTangentialEpsilon, double normalEpsilon, String format)
+   public static void assertEuclidShape3DCollisionResultGeometricallyEquals(String messagePrefix,
+                                                                            EuclidShape3DCollisionResultReadOnly expected,
+                                                                            EuclidShape3DCollisionResultReadOnly actual,
+                                                                            double distanceEpsilon,
+                                                                            double pointTangentialEpsilon,
+                                                                            double normalEpsilon,
+                                                                            String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1507,7 +1540,10 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two convex polytopes are not equal. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertConvexPolytope3DEquals(String messagePrefix, ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual, double epsilon,
+   public static void assertConvexPolytope3DEquals(String messagePrefix,
+                                                   ConvexPolytope3DReadOnly expected,
+                                                   ConvexPolytope3DReadOnly actual,
+                                                   double epsilon,
                                                    String format)
    {
       if (expected == null && actual == null)
@@ -1552,7 +1588,9 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two convex polytopes do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertConvexPolytope3DGeometricallyEquals(String messagePrefix, ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual,
+   public static void assertConvexPolytope3DGeometricallyEquals(String messagePrefix,
+                                                                ConvexPolytope3DReadOnly expected,
+                                                                ConvexPolytope3DReadOnly actual,
                                                                 double epsilon)
    {
       assertConvexPolytope3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1574,8 +1612,11 @@ public class EuclidShapeTestTools
     * @throws AssertionError if the two convex polytopes do not represent the same geometry. If only
     *                        one of the arguments is equal to {@code null}.
     */
-   public static void assertConvexPolytope3DGeometricallyEquals(String messagePrefix, ConvexPolytope3DReadOnly expected, ConvexPolytope3DReadOnly actual,
-                                                                double epsilon, String format)
+   public static void assertConvexPolytope3DGeometricallyEquals(String messagePrefix,
+                                                                ConvexPolytope3DReadOnly expected,
+                                                                ConvexPolytope3DReadOnly actual,
+                                                                double epsilon,
+                                                                String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1951,14 +1992,19 @@ public class EuclidShapeTestTools
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                   EuclidShape3DCollisionResultReadOnly actual, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix,
+                                                   EuclidShape3DCollisionResultReadOnly expected,
+                                                   EuclidShape3DCollisionResultReadOnly actual,
+                                                   String format)
    {
       throwNotEqualAssertionError(messagePrefix, expected, actual, format, null);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, EuclidShape3DCollisionResultReadOnly expected,
-                                                   EuclidShape3DCollisionResultReadOnly actual, String format, String differenceAsString)
+   private static void throwNotEqualAssertionError(String messagePrefix,
+                                                   EuclidShape3DCollisionResultReadOnly expected,
+                                                   EuclidShape3DCollisionResultReadOnly actual,
+                                                   String format,
+                                                   String differenceAsString)
    {
       String expectedAsString = getEuclidShape3DCollisionResultString(format, expected);
       String actualAsString = getEuclidShape3DCollisionResultString(format, actual);

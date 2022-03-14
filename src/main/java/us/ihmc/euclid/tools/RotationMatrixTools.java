@@ -107,7 +107,10 @@ public class RotationMatrixTools
     * @param inverse2     whether the second orientation should be inverted in the multiplication.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
+   public static void multiply(Orientation3DReadOnly orientation1,
+                               boolean inverse1,
+                               Orientation3DReadOnly orientation2,
+                               boolean inverse2,
                                CommonMatrix3DBasics matrixToPack)
    {
       if (orientation1 instanceof RotationMatrixReadOnly)
@@ -208,7 +211,10 @@ public class RotationMatrixTools
     * @param inverse2     whether the second orientation should be inverted in the multiplication.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, RotationMatrixReadOnly orientation2, boolean inverse2,
+   public static void multiply(Orientation3DReadOnly orientation1,
+                               boolean inverse1,
+                               RotationMatrixReadOnly orientation2,
+                               boolean inverse2,
                                CommonMatrix3DBasics matrixToPack)
    {
       if (orientation1 instanceof RotationMatrixReadOnly)
@@ -291,7 +297,10 @@ public class RotationMatrixTools
     * @param inverse2     whether the second orientation should be inverted in the multiplication.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   public static void multiply(RotationMatrixReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
+   public static void multiply(RotationMatrixReadOnly orientation1,
+                               boolean inverse1,
+                               Orientation3DReadOnly orientation2,
+                               boolean inverse2,
                                CommonMatrix3DBasics matrixToPack)
    {
       if (orientation2 instanceof RotationMatrixReadOnly)
@@ -370,7 +379,10 @@ public class RotationMatrixTools
     * @param transposeB   whether the second matrix should be transposed in the multiplication.
     * @param matrixToPack the rotation matrix in which the result is stored. Modified.
     */
-   private static void multiplyImpl(RotationMatrixReadOnly a, boolean transposeA, RotationMatrixReadOnly b, boolean transposeB,
+   private static void multiplyImpl(RotationMatrixReadOnly a,
+                                    boolean transposeA,
+                                    RotationMatrixReadOnly b,
+                                    boolean transposeB,
                                     CommonMatrix3DBasics matrixToPack)
    {
       if (a.isZeroOrientation())
@@ -417,9 +429,27 @@ public class RotationMatrixTools
                    matrixToPack);
    }
 
-   private static void multiplyImpl(double a00, double a01, double a02, double a10, double a11, double a12, double a20, double a21, double a22,
-                                    boolean transposeA, double b00, double b01, double b02, double b10, double b11, double b12, double b20, double b21,
-                                    double b22, boolean transposeB, CommonMatrix3DBasics matrixToPack)
+   private static void multiplyImpl(double a00,
+                                    double a01,
+                                    double a02,
+                                    double a10,
+                                    double a11,
+                                    double a12,
+                                    double a20,
+                                    double a21,
+                                    double a22,
+                                    boolean transposeA,
+                                    double b00,
+                                    double b01,
+                                    double b02,
+                                    double b10,
+                                    double b11,
+                                    double b12,
+                                    double b20,
+                                    double b21,
+                                    double b22,
+                                    boolean transposeB,
+                                    CommonMatrix3DBasics matrixToPack)
    {
       double c00, c01, c02, c10, c11, c12, c20, c21, c22;
 

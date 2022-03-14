@@ -537,7 +537,8 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLine3D(FrameLine3DReadOnly line3D, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLine3D(FrameLine3DReadOnly line3D,
+                                      FixedFramePoint3DBasics firstIntersectionToPack,
                                       FixedFramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(line3D);
@@ -593,7 +594,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLine3D(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+   default int intersectionWithLine3D(FramePoint3DReadOnly pointOnLine,
+                                      FrameVector3DReadOnly lineDirection,
+                                      Point3DBasics firstIntersectionToPack,
                                       Point3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -618,7 +621,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLine3D(Point3DReadOnly pointOnLine,
+                                      Vector3DReadOnly lineDirection,
+                                      FixedFramePoint3DBasics firstIntersectionToPack,
                                       FixedFramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -644,7 +649,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @return the number of intersections between the line and this bounding box. It is either equal to
     *         0 or 2.
     */
-   default int intersectionWithLine3D(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLine3D(Point3DReadOnly pointOnLine,
+                                      Vector3DReadOnly lineDirection,
+                                      FramePoint3DBasics firstIntersectionToPack,
                                       FramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -672,7 +679,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLine3D(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLine3D(FramePoint3DReadOnly pointOnLine,
+                                      FrameVector3DReadOnly lineDirection,
+                                      FixedFramePoint3DBasics firstIntersectionToPack,
                                       FixedFramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -704,7 +713,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     *                                         not expressed in the same reference frame as
     *                                         {@code this}.
     */
-   default int intersectionWithLine3D(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLine3D(FramePoint3DReadOnly pointOnLine,
+                                      FrameVector3DReadOnly lineDirection,
+                                      FramePoint3DBasics firstIntersectionToPack,
                                       FramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -742,7 +753,8 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if the frame argument is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(FrameLineSegment3DReadOnly lineSegment3D, Point3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(FrameLineSegment3DReadOnly lineSegment3D,
+                                             Point3DBasics firstIntersectionToPack,
                                              Point3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment3D);
@@ -776,7 +788,8 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(LineSegment3DReadOnly lineSegment3D, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(LineSegment3DReadOnly lineSegment3D,
+                                             FixedFramePoint3DBasics firstIntersectionToPack,
                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -811,7 +824,8 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
     */
-   default int intersectionWithLineSegment3D(LineSegment3DReadOnly lineSegment3D, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(LineSegment3DReadOnly lineSegment3D,
+                                             FramePoint3DBasics firstIntersectionToPack,
                                              FramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -848,7 +862,8 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(FrameLineSegment3DReadOnly lineSegment3D, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(FrameLineSegment3DReadOnly lineSegment3D,
+                                             FixedFramePoint3DBasics firstIntersectionToPack,
                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment3D);
@@ -886,7 +901,8 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if {@code lineSegment3D} is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(FrameLineSegment3DReadOnly lineSegment3D, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(FrameLineSegment3DReadOnly lineSegment3D,
+                                             FramePoint3DBasics firstIntersectionToPack,
                                              FramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegment3D);
@@ -925,7 +941,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd, Point3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(FramePoint3DReadOnly lineSegmentStart,
+                                             FramePoint3DReadOnly lineSegmentEnd,
+                                             Point3DBasics firstIntersectionToPack,
                                              Point3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
@@ -960,7 +978,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart,
+                                             Point3DReadOnly lineSegmentEnd,
+                                             FixedFramePoint3DBasics firstIntersectionToPack,
                                              FixedFramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -996,7 +1016,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @return the number of intersections between the line segment and this bounding box. It is either
     *         equal to 0, 1, or 2.
     */
-   default int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart, Point3DReadOnly lineSegmentEnd, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment3D(Point3DReadOnly lineSegmentStart,
+                                             Point3DReadOnly lineSegmentEnd,
+                                             FramePoint3DBasics firstIntersectionToPack,
                                              FramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -1034,8 +1056,10 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                             FixedFramePoint3DBasics firstIntersectionToPack, FixedFramePoint3DBasics secondIntersectionToPack)
+   default int intersectionWithLineSegment3D(FramePoint3DReadOnly lineSegmentStart,
+                                             FramePoint3DReadOnly lineSegmentEnd,
+                                             FixedFramePoint3DBasics firstIntersectionToPack,
+                                             FixedFramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
       if (firstIntersectionToPack != null)
@@ -1074,8 +1098,10 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     *                                         {@code lineSegmentEnd} is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithLineSegment3D(FramePoint3DReadOnly lineSegmentStart, FramePoint3DReadOnly lineSegmentEnd,
-                                             FramePoint3DBasics firstIntersectionToPack, FramePoint3DBasics secondIntersectionToPack)
+   default int intersectionWithLineSegment3D(FramePoint3DReadOnly lineSegmentStart,
+                                             FramePoint3DReadOnly lineSegmentEnd,
+                                             FramePoint3DBasics firstIntersectionToPack,
+                                             FramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(lineSegmentStart, lineSegmentEnd);
       if (firstIntersectionToPack != null)
@@ -1112,7 +1138,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithRay3D(FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection, Point3DBasics firstIntersectionToPack,
+   default int intersectionWithRay3D(FramePoint3DReadOnly rayOrigin,
+                                     FrameVector3DReadOnly rayDirection,
+                                     Point3DBasics firstIntersectionToPack,
                                      Point3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);
@@ -1146,7 +1174,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default int intersectionWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithRay3D(Point3DReadOnly rayOrigin,
+                                     Vector3DReadOnly rayDirection,
+                                     FixedFramePoint3DBasics firstIntersectionToPack,
                                      FixedFramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -1181,7 +1211,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @return the number of intersections between the ray and this bounding box. It is either equal to
     *         0, 1, or 2.
     */
-   default int intersectionWithRay3D(Point3DReadOnly rayOrigin, Vector3DReadOnly rayDirection, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithRay3D(Point3DReadOnly rayOrigin,
+                                     Vector3DReadOnly rayDirection,
+                                     FramePoint3DBasics firstIntersectionToPack,
                                      FramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -1218,7 +1250,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWithRay3D(FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithRay3D(FramePoint3DReadOnly rayOrigin,
+                                     FrameVector3DReadOnly rayDirection,
+                                     FixedFramePoint3DBasics firstIntersectionToPack,
                                      FixedFramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);
@@ -1257,7 +1291,9 @@ public interface FrameBoundingBox3DReadOnly extends BoundingBox3DReadOnly, Refer
     *                                         not expressed in the same reference frame as
     *                                         {@code this}.
     */
-   default int intersectionWithRay3D(FramePoint3DReadOnly rayOrigin, FrameVector3DReadOnly rayDirection, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWithRay3D(FramePoint3DReadOnly rayOrigin,
+                                     FrameVector3DReadOnly rayDirection,
+                                     FramePoint3DBasics firstIntersectionToPack,
                                      FramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(rayOrigin, rayDirection);

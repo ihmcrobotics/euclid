@@ -22,10 +22,9 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
    public abstract T newRandomTriangle3D(Random random);
 
    public abstract T newTriangle3D(Point3DReadOnly A, Point3DReadOnly B, Point3DReadOnly C);
-   
+
    public abstract double getEpsilon();
 
-   
    @Test
    public void testSetter()
    {
@@ -41,14 +40,14 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
          assertFalse(firstTriangle.equals(secondTriangle));
          firstTriangle.set(secondTriangle);
          assertEquals(firstTriangle, secondTriangle);
-         
+
          //Test set by 3 points
          assertFalse(firstTriangle.equals(thirdTriangle));
-         thirdTriangle.set(firstTriangle.getA(),firstTriangle.getB(),firstTriangle.getC());
+         thirdTriangle.set(firstTriangle.getA(), firstTriangle.getB(), firstTriangle.getC());
          assertEquals(firstTriangle, thirdTriangle);
       }
    }
-   
+
    @Test
    public void testSetToZero() throws Exception
    {
@@ -68,7 +67,7 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
       assertTrue(0 == triangle.getB().getZ());
       assertTrue(0 == triangle.getC().getX());
       assertTrue(0 == triangle.getC().getY());
-      assertTrue(0 == triangle.getC().getZ());  
+      assertTrue(0 == triangle.getC().getZ());
    }
 
    @Test
@@ -92,17 +91,17 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
       Point3D pointA = new Point3D(1.0, 2.0, 3.0);
       Point3D pointB = new Point3D(4.0, 5.0, 6.0);
       Point3D pointC = new Point3D(7.0, 8.0, 9.0);
-      
+
       T triangle = newEmptyTriangle3D();
       assertFalse(triangle.containsNaN());
       triangle.set(pointA, pointB, pointC);
       assertFalse(triangle.containsNaN());
-     
+
       //Test containsNan method
       pointA.setX(Double.NaN);
       triangle.set(pointA, pointB, pointC);
       assertTrue(triangle.containsNaN());
-      
+
       pointA.setX(0.0);
       pointA.setY(Double.NaN);
       triangle.set(pointA, pointB, pointC);
@@ -112,12 +111,12 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
       pointA.setZ(Double.NaN);
       triangle.set(pointA, pointB, pointC);
       assertTrue(triangle.containsNaN());
-      
+
       pointA.setZ(1.0);
       pointB.setX(Double.NaN);
       triangle.set(pointA, pointB, pointC);
       assertTrue(triangle.containsNaN());
-      
+
       pointB.setX(0.0);
       pointB.setY(Double.NaN);
       triangle.set(pointA, pointB, pointC);
@@ -127,27 +126,27 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
       pointB.setZ(Double.NaN);
       triangle.set(pointA, pointB, pointC);
       assertTrue(triangle.containsNaN());
-      
+
       pointB.setZ(1.0);
       pointC.setX(Double.NaN);
       triangle.set(pointA, pointB, pointC);
-      assertTrue(triangle.containsNaN());   
+      assertTrue(triangle.containsNaN());
 
       pointC.setX(0.0);
       pointC.setY(Double.NaN);
       triangle.set(pointA, pointB, pointC);
-      assertTrue(triangle.containsNaN());   
-      
+      assertTrue(triangle.containsNaN());
+
       pointC.setY(0.0);
       pointC.setZ(Double.NaN);
       triangle.set(pointA, pointB, pointC);
-      assertTrue(triangle.containsNaN());   
-      
+      assertTrue(triangle.containsNaN());
+
       pointC.setZ(1.0);
       triangle.set(pointA, pointB, pointC);
-      assertFalse(triangle.containsNaN());  
+      assertFalse(triangle.containsNaN());
    }
-   
+
    @Test
    public void testApplyTransform() throws Exception
    {
@@ -158,7 +157,7 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          T original = newRandomTriangle3D(random);
          T expected = newEmptyTriangle3D();
-         
+
          expected.set(original);
          assertEquals(expected, original);
 
@@ -170,13 +169,13 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
          original.applyTransform(transform);
          assertEquals(expected, original);
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          T original = newRandomTriangle3D(random);
          T expected = newEmptyTriangle3D();
-         
+
          expected.set(original);
          assertEquals(expected, original);
 
@@ -188,13 +187,13 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
          original.applyTransform(transform);
          assertEquals(expected, original);
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          T original = newRandomTriangle3D(random);
          T expected = newEmptyTriangle3D();
-         
+
          expected.set(original);
          assertEquals(expected, original);
 
@@ -207,7 +206,7 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
          assertEquals(expected, original);
       }
    }
-   
+
    @Test
    public void testApplyInverseTransform() throws Exception
    {
@@ -218,45 +217,45 @@ public abstract class Triangle3DBasicsTest<T extends Triangle3DBasics>
          RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
          T original = newRandomTriangle3D(random);
          T expected = newEmptyTriangle3D();
-         
+
          expected.set(original);
          assertEquals(original, expected);
-         
+
          expected.applyTransform(transform);
          assertFalse(expected.equals(original));
          expected.applyInverseTransform(transform);
          assertTrue(expected.epsilonEquals(original, getEpsilon()));
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          QuaternionBasedTransform transform = EuclidCoreRandomTools.nextQuaternionBasedTransform(random);
          T original = newRandomTriangle3D(random);
          T expected = newEmptyTriangle3D();
-         
+
          expected.set(original);
          assertEquals(original, expected);
-         
+
          expected.applyTransform(transform);
          assertFalse(expected.equals(original));
          expected.applyInverseTransform(transform);
          assertTrue(expected.epsilonEquals(original, getEpsilon()));
       }
-      
+
       for (int i = 0; i < ITERATIONS; i++)
       {
          AffineTransform transform = EuclidCoreRandomTools.nextAffineTransform(random);
          T original = newRandomTriangle3D(random);
          T expected = newEmptyTriangle3D();
-         
+
          expected.set(original);
          assertEquals(original, expected);
-         
+
          expected.applyTransform(transform);
          assertFalse(expected.equals(original));
          expected.applyInverseTransform(transform);
          assertTrue(expected.epsilonEquals(original, getEpsilon()));
       }
-   }   
+   }
 
 }

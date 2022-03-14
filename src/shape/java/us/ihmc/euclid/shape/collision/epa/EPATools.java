@@ -59,7 +59,10 @@ public class EPATools
     *                      be equal to 3. Modified.
     * @return additional info about the location of the projection and the sanity of the triangle.
     */
-   public static BarycentricCoordinatesOutput barycentricCoordinatesFrom2Simplex(Point3DReadOnly s1, Point3DReadOnly s2, Point3DReadOnly s3, double epsilon,
+   public static BarycentricCoordinatesOutput barycentricCoordinatesFrom2Simplex(Point3DReadOnly s1,
+                                                                                 Point3DReadOnly s2,
+                                                                                 Point3DReadOnly s3,
+                                                                                 double epsilon,
                                                                                  double[] lambdasToPack)
    {
       double s1x = s1.getX(), s1y = s1.getY(), s1z = s1.getZ();
@@ -311,7 +314,9 @@ public class EPATools
     *                    whether a triangle is affinely dependent or not.
     * @return a convex polytope usable to initiate the Expanding Polytope algorithm.
     */
-   public static List<EPAFace3D> newEPAPolytopeFromGJKSimplex(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] gjkVertices,
+   public static List<EPAFace3D> newEPAPolytopeFromGJKSimplex(SupportingVertexHolder shapeA,
+                                                              SupportingVertexHolder shapeB,
+                                                              GJKVertex3D[] gjkVertices,
                                                               double epsilon)
    {
       List<EPAFace3D> epaPolytope = new ArrayList<>();

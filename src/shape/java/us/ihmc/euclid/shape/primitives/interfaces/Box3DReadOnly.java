@@ -241,7 +241,9 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * @return the number of intersections between the line and this box. It is either equal to 0, 1, or
     *         2.
     */
-   default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
       double maxX = 0.5 * getSizeX();

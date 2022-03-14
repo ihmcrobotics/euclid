@@ -1222,7 +1222,10 @@ public class EuclidShapeCollisionToolsTest
       }
    }
 
-   private static void buildPointOutsideAndPerformAssertion(Random random, int iteration, Ramp3DReadOnly ramp3D, Point3DReadOnly pointOnShape,
+   private static void buildPointOutsideAndPerformAssertion(Random random,
+                                                            int iteration,
+                                                            Ramp3DReadOnly ramp3D,
+                                                            Point3DReadOnly pointOnShape,
                                                             Vector3DReadOnly normal)
    {
       double distance = EuclidCoreRandomTools.nextDouble(random, 0.0, 1.0);

@@ -1324,7 +1324,8 @@ public class EuclidCoreFactories
     *                              point interface.
     * @return the observable point.
     */
-   public static Point2DBasics newObservablePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener,
+   public static Point2DBasics newObservablePoint2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                          Consumer<Axis2D> valueAccessedListener,
                                                           Point2DBasics source)
    {
       return new Point2DBasics()
@@ -1446,7 +1447,8 @@ public class EuclidCoreFactories
     *                              point interface.
     * @return the observable point.
     */
-   public static Point3DBasics newObservablePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener, Consumer<Axis3D> valueAccessedListener,
+   public static Point3DBasics newObservablePoint3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                          Consumer<Axis3D> valueAccessedListener,
                                                           Point3DBasics source)
    {
 
@@ -1586,7 +1588,8 @@ public class EuclidCoreFactories
     *                              vector interface.
     * @return the observable vector.
     */
-   public static Vector2DBasics newObservableVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener,
+   public static Vector2DBasics newObservableVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                            Consumer<Axis2D> valueAccessedListener,
                                                             Vector2DBasics source)
    {
       return new Vector2DBasics()
@@ -1708,7 +1711,8 @@ public class EuclidCoreFactories
     *                              vector interface.
     * @return the observable vector.
     */
-   public static Vector3DBasics newObservableVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener, Consumer<Axis3D> valueAccessedListener,
+   public static Vector3DBasics newObservableVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                            Consumer<Axis3D> valueAccessedListener,
                                                             Vector3DBasics source)
    {
       return new Vector3DBasics()
@@ -1847,7 +1851,8 @@ public class EuclidCoreFactories
     *                              vector interface.
     * @return the observable vector.
     */
-   public static UnitVector2DBasics newObservableUnitVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener, Consumer<Axis2D> valueAccessedListener,
+   public static UnitVector2DBasics newObservableUnitVector2DBasics(ObjDoubleConsumer<Axis2D> valueChangedListener,
+                                                                    Consumer<Axis2D> valueAccessedListener,
                                                                     UnitVector2DBasics source)
    {
       return new UnitVector2DBasics()
@@ -2044,7 +2049,8 @@ public class EuclidCoreFactories
     *                              vector interface.
     * @return the observable vector.
     */
-   public static UnitVector3DBasics newObservableUnitVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener, Consumer<Axis3D> valueAccessedListener,
+   public static UnitVector3DBasics newObservableUnitVector3DBasics(ObjDoubleConsumer<Axis3D> valueChangedListener,
+                                                                    Consumer<Axis3D> valueAccessedListener,
                                                                     UnitVector3DBasics source)
    {
       return new UnitVector3DBasics()
@@ -2269,7 +2275,8 @@ public class EuclidCoreFactories
     *                              linked rotation matrix interface.
     * @return the observable rotation matrix.
     */
-   public static RotationMatrixBasics newObservableRotationMatrixBasics(Runnable valueChangedListener, BiConsumer<Axis3D, Axis3D> valueAccessedListener,
+   public static RotationMatrixBasics newObservableRotationMatrixBasics(Runnable valueChangedListener,
+                                                                        BiConsumer<Axis3D, Axis3D> valueAccessedListener,
                                                                         RotationMatrixBasics source)
    {
       return new RotationMatrixBasics()

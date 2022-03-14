@@ -710,7 +710,11 @@ public class EuclidGeometryTestToolsTest
       }
    }
 
-   private static void assertAssertionMethodsBehaveProperly(boolean failExpected, String methodName, Class<?> argumentsClass, Object expected, Object actual,
+   private static void assertAssertionMethodsBehaveProperly(boolean failExpected,
+                                                            String methodName,
+                                                            Class<?> argumentsClass,
+                                                            Object expected,
+                                                            Object actual,
                                                             double epsilon)
          throws Throwable
    {

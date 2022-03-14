@@ -668,15 +668,23 @@ class GilbertJohnsonKeerthiCollisionDetectorTest
       return new ConvexPolytope3D(Vertex3DSupplier.asVertex3DSupplier(vertices));
    }
 
-   public static void performAssertionsTwoCombinations(String messagePrefix, ConvexPolytope3DReadOnly polytopeA, ConvexPolytope3DReadOnly polytopeB,
-                                                       boolean expectedCollisionTestResult, Point3DReadOnly expectedPointOnA, Point3DReadOnly expectedPointOnB)
+   public static void performAssertionsTwoCombinations(String messagePrefix,
+                                                       ConvexPolytope3DReadOnly polytopeA,
+                                                       ConvexPolytope3DReadOnly polytopeB,
+                                                       boolean expectedCollisionTestResult,
+                                                       Point3DReadOnly expectedPointOnA,
+                                                       Point3DReadOnly expectedPointOnB)
    {
       performAssertions(messagePrefix, polytopeA, polytopeB, expectedCollisionTestResult, expectedPointOnA, expectedPointOnB);
       performAssertions(messagePrefix, polytopeB, polytopeA, expectedCollisionTestResult, expectedPointOnB, expectedPointOnA);
    }
 
-   public static void performAssertions(String messagePrefix, ConvexPolytope3DReadOnly polytopeA, ConvexPolytope3DReadOnly polytopeB,
-                                        boolean expectedCollisionTestResult, Point3DReadOnly expectedPointOnA, Point3DReadOnly expectedPointOnB)
+   public static void performAssertions(String messagePrefix,
+                                        ConvexPolytope3DReadOnly polytopeA,
+                                        ConvexPolytope3DReadOnly polytopeB,
+                                        boolean expectedCollisionTestResult,
+                                        Point3DReadOnly expectedPointOnA,
+                                        Point3DReadOnly expectedPointOnB)
    {
       GilbertJohnsonKeerthiCollisionDetector collisionDetector = new GilbertJohnsonKeerthiCollisionDetector();
       EuclidShape3DCollisionResult result = collisionDetector.evaluateCollision(polytopeA, polytopeB);

@@ -192,7 +192,9 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+   default int intersectionWith(FramePoint3DReadOnly pointOnLine,
+                                FrameVector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -216,7 +218,9 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * @return the number of intersections between the line and this cylinder. It is either equal to 0,
     *         1, or 2.
     */
-   default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                FramePoint3DBasics firstIntersectionToPack,
                                 FramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -245,7 +249,9 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                FixedFramePoint3DBasics firstIntersectionToPack,
                                 FixedFramePoint3DBasics secondIntersectionToPack)
    {
       if (firstIntersectionToPack != null)
@@ -275,7 +281,9 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     *                                         not expressed in the same reference frame as
     *                                         {@code this}.
     */
-   default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWith(FramePoint3DReadOnly pointOnLine,
+                                FrameVector3DReadOnly lineDirection,
+                                FramePoint3DBasics firstIntersectionToPack,
                                 FramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);
@@ -303,7 +311,9 @@ public interface FrameCylinder3DReadOnly extends Cylinder3DReadOnly, FrameShape3
     * @return the number of intersections between the line and this cylinder. It is either equal to 0,
     *         1, or 2.
     */
-   default int intersectionWith(FramePoint3DReadOnly pointOnLine, FrameVector3DReadOnly lineDirection, FixedFramePoint3DBasics firstIntersectionToPack,
+   default int intersectionWith(FramePoint3DReadOnly pointOnLine,
+                                FrameVector3DReadOnly lineDirection,
+                                FixedFramePoint3DBasics firstIntersectionToPack,
                                 FixedFramePoint3DBasics secondIntersectionToPack)
    {
       checkReferenceFrameMatch(pointOnLine, lineDirection);

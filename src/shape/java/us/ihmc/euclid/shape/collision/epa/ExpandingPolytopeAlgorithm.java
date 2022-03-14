@@ -182,7 +182,9 @@ public class ExpandingPolytopeAlgorithm
     * @param resultToPack the object in which the collision result is stored. Modified.
     * @return {@code true} if the shapes are colliding, {@code false} otherwise.
     */
-   public boolean evaluateCollision(SupportingVertexHolder shapeA, SupportingVertexHolder shapeB, GJKVertex3D[] simplex,
+   public boolean evaluateCollision(SupportingVertexHolder shapeA,
+                                    SupportingVertexHolder shapeB,
+                                    GJKVertex3D[] simplex,
                                     EuclidShape3DCollisionResultBasics resultToPack)
    {
       PriorityQueue<EPAFace3D> queue = new PriorityQueue<>();
