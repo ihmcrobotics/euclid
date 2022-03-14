@@ -741,6 +741,304 @@ public class EuclidCoreIOTools
    }
 
    /**
+    * Gets a representative {@code String} of a series of floats given a specific separator.
+    * <p>
+    * Using {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    *  0.123, -0.480,  1.457
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, float... values)
+   {
+      return getStringOf(separator, DEFAULT_FORMAT, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of floats given a specific separator, and format
+    * to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT} and {@code separator = ", "}, this provides a
+    * {@code String} as follows:
+    *
+    * <pre>
+    *  0.123, -0.480,  1.457
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param format    the format to use for each number.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, String format, float... values)
+   {
+      return getStringOf(null, null, separator, format, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of floats given specific prefix, suffix, and
+    * separator.
+    * <p>
+    * Using {@code prefix = "("}, {@code suffix = ")"}, and {@code separator = ", "}, this provides a
+    * {@code String} as follows:
+    *
+    * <pre>
+    * ( 0.123, -0.480,  1.457)
+    * </pre>
+    * </p>
+    *
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String prefix, String suffix, String separator, float... values)
+   {
+      return getStringOf(prefix, suffix, separator, DEFAULT_FORMAT, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of floats given specific prefix, suffix,
+    * separator, and format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, {@code prefix = "("}, {@code suffix = ")"}, and
+    * {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * ( 0.123, -0.480,  1.457)
+    * </pre>
+    * </p>
+    *
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
+    * @param separator the {@code String} to insert between two values.
+    * @param format    the format to use for each number.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String prefix, String suffix, String separator, String format, float... values)
+   {
+      if (values == null)
+         return "null";
+
+      StringBuilder sb = new StringBuilder();
+
+      if (prefix != null)
+         sb.append(prefix);
+
+      if (values.length > 0)
+      {
+         sb.append(toString(format, values[0]));
+         for (int i = 1; i < values.length; i++)
+         {
+            sb.append(separator);
+            sb.append(toString(format, values[i]));
+         }
+      }
+
+      if (suffix != null)
+         sb.append(suffix);
+
+      return sb.toString();
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of booleans given a specific separator.
+    * <p>
+    * Using {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * true, false, false
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, boolean... values)
+   {
+      return getStringOf(null, null, separator, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of booleans given specific prefix, suffix, and
+    * separator.
+    * <p>
+    * Using {@code prefix = "("}, {@code suffix = ")"}, and {@code separator = ", "}, this provides a
+    * {@code String} as follows:
+    *
+    * <pre>
+    * (true, false, false)
+    * </pre>
+    * </p>
+    *
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String prefix, String suffix, String separator, boolean... values)
+   {
+      if (values == null)
+         return "null";
+
+      StringBuilder sb = new StringBuilder();
+
+      if (prefix != null)
+         sb.append(prefix);
+
+      if (values.length > 0)
+      {
+         sb.append(Boolean.toString(values[0]));
+         for (int i = 1; i < values.length; i++)
+         {
+            sb.append(separator);
+            sb.append(Boolean.toString(values[i]));
+         }
+      }
+
+      if (suffix != null)
+         sb.append(suffix);
+
+      return sb.toString();
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of integers given a specific separator.
+    * <p>
+    * Using {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * 47, -52200, 9874
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, int... values)
+   {
+      return getStringOf(null, null, separator, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of integers given specific prefix, suffix, and
+    * separator.
+    * <p>
+    * Using {@code prefix = "("}, {@code suffix = ")"}, and {@code separator = ", "}, this provides a
+    * {@code String} as follows:
+    *
+    * <pre>
+    * (47, -52200, 9874)
+    * </pre>
+    * </p>
+    *
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String prefix, String suffix, String separator, int... values)
+   {
+      if (values == null)
+         return "null";
+
+      StringBuilder sb = new StringBuilder();
+
+      if (prefix != null)
+         sb.append(prefix);
+
+      if (values.length > 0)
+      {
+         sb.append(Integer.toString(values[0]));
+         for (int i = 1; i < values.length; i++)
+         {
+            sb.append(separator);
+            sb.append(Integer.toString(values[i]));
+         }
+      }
+
+      if (suffix != null)
+         sb.append(suffix);
+
+      return sb.toString();
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of longs given a specific separator.
+    * <p>
+    * Using {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    * 47, -52200, 9874
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, long... values)
+   {
+      return getStringOf(null, null, separator, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of longs given specific prefix, suffix, and
+    * separator.
+    * <p>
+    * Using {@code prefix = "("}, {@code suffix = ")"}, and {@code separator = ", "}, this provides a
+    * {@code String} as follows:
+    *
+    * <pre>
+    * (47, -52200, 9874)
+    * </pre>
+    * </p>
+    *
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String prefix, String suffix, String separator, long... values)
+   {
+      if (values == null)
+         return "null";
+
+      StringBuilder sb = new StringBuilder();
+
+      if (prefix != null)
+         sb.append(prefix);
+
+      if (values.length > 0)
+      {
+         sb.append(Long.toString(values[0]));
+         for (int i = 1; i < values.length; i++)
+         {
+            sb.append(separator);
+            sb.append(Long.toString(values[i]));
+         }
+      }
+
+      if (suffix != null)
+         sb.append(suffix);
+
+      return sb.toString();
+   }
+
+   /**
     * Gets a representative {@code String} of the elements contained in the given array.
     * <p>
     * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output

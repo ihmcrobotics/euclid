@@ -255,48 +255,161 @@ public class EuclidCoreIOToolsTest
       String separator = "-p-";
       String randomFormat = EuclidCoreIOTools.getStringFormat(8, 7);
 
-      double[] values = random.doubles(3).toArray();
-      expected = " 0.582-p- 0.220-p- 0.985";
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, values));
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, values));
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
+      { // Test generators for double values
+         double[] values = random.doubles(3).map(d -> d - 0.5).toArray();
+         expected = " 0.082-p--0.280-p- 0.485";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
 
-      assertEquals("null", EuclidCoreIOTools.getStringOf(separator, null));
-      assertEquals("null", EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, null));
-      assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, null));
-      assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(separator, (double[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, (double[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, (double[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, (double[]) null));
 
-      assertEquals("", EuclidCoreIOTools.getStringOf(separator, new double[0]));
-      assertEquals("", EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, new double[0]));
-      assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, new double[0]));
-      assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, new double[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(separator, new double[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, new double[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, new double[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, new double[0]));
 
-      expected = "0.5819722-p-0.2202291-p-0.9845304";
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, randomFormat, values));
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, randomFormat, values));
+         expected = "0.0819722-p--0.2797709-p-0.4845304";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, randomFormat, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, randomFormat, values));
 
-      expected = "0.5819722328677369-p-0.22022908009790798-p-0.9845303753357886";
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, null, values));
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, null, values));
+         expected = "0.08197223286773692-p--0.279770919902092-p-0.4845303753357886";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, null, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, null, values));
 
-      String prefix = "!prefix!";
-      String suffix = "?suffix?";
-      expected = "!prefix! 0.582-p- 0.220-p- 0.985?suffix?";
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, values));
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
+         String prefix = "!prefix!";
+         String suffix = "?suffix?";
+         expected = "!prefix! 0.082-p--0.280-p- 0.485?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
 
-      assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, null));
-      assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, (double[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, (double[]) null));
 
-      assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, new double[0]));
-      assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, new double[0]));
+         assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, new double[0]));
+         assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, new double[0]));
 
-      expected = "!prefix!0.5819722-p-0.2202291-p-0.9845304?suffix?";
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, randomFormat, values));
+         expected = "!prefix!0.0819722-p--0.2797709-p-0.4845304?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, randomFormat, values));
 
-      expected = "!prefix!0.5819722328677369-p-0.22022908009790798-p-0.9845303753357886?suffix?";
-      assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, null, values));
+         expected = "!prefix!0.08197223286773692-p--0.279770919902092-p-0.4845303753357886?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, null, values));
+      }
+
+      { // Test generators for float values
+         float[] values = {random.nextFloat() - 0.5f, random.nextFloat() - 0.5f, random.nextFloat() - 0.5f};
+         expected = " 0.014-p- 0.287-p--0.309";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(separator, (float[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, (float[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, (float[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, (float[]) null));
+
+         assertEquals("", EuclidCoreIOTools.getStringOf(separator, new float[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(separator, EuclidCoreIOTools.DEFAULT_FORMAT, new float[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, new float[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, EuclidCoreIOTools.DEFAULT_FORMAT, new float[0]));
+
+         expected = "0.0137517-p-0.2874116-p--0.3094129";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, randomFormat, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, randomFormat, values));
+
+         expected = "0.013751686-p-0.28741163-p--0.3094129";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, null, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, null, values));
+
+         String prefix = "!prefix!";
+         String suffix = "?suffix?";
+         expected = "!prefix! 0.014-p- 0.287-p--0.309?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, (float[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, (float[]) null));
+
+         assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, new float[0]));
+         assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, EuclidCoreIOTools.DEFAULT_FORMAT, new float[0]));
+
+         expected = "!prefix!0.0137517-p-0.2874116-p--0.3094129?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, randomFormat, values));
+
+         expected = "!prefix!0.013751686-p-0.28741163-p--0.3094129?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, null, values));
+      }
+
+      { // Test generators for boolean values
+         boolean[] values = {random.nextBoolean(), random.nextBoolean(), random.nextBoolean(), random.nextBoolean()};
+         expected = "true-p-true-p-true-p-false";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(separator, (boolean[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, (boolean[]) null));
+
+         assertEquals("", EuclidCoreIOTools.getStringOf(separator, new boolean[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, new boolean[0]));
+
+         String prefix = "!prefix!";
+         String suffix = "?suffix?";
+         expected = "!prefix!true-p-true-p-true-p-false?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, (boolean[]) null));
+
+         assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, new boolean[0]));
+      }
+
+      { // Test generators for int values
+         int[] values = {random.nextInt(1000) - 500, random.nextInt(1000) - 500, random.nextInt(1000) - 500, random.nextInt(1000) - 500};
+         expected = "325-p--400-p--255-p--494";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(separator, (int[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, (int[]) null));
+
+         assertEquals("", EuclidCoreIOTools.getStringOf(separator, new int[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, new int[0]));
+
+         String prefix = "!prefix!";
+         String suffix = "?suffix?";
+         expected = "!prefix!325-p--400-p--255-p--494?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, (int[]) null));
+
+         assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, new int[0]));
+      }
+
+      { // Test generators for int values
+         long[] values = {random.nextInt(1000) - 500, random.nextInt(1000) - 500, random.nextInt(1000) - 500, random.nextInt(1000) - 500};
+         expected = "-107-p-104-p-246-p--373";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(separator, values));
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(null, null, separator, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(separator, (long[]) null));
+         assertEquals("null", EuclidCoreIOTools.getStringOf(null, null, separator, (long[]) null));
+
+         assertEquals("", EuclidCoreIOTools.getStringOf(separator, new long[0]));
+         assertEquals("", EuclidCoreIOTools.getStringOf(null, null, separator, new long[0]));
+
+         String prefix = "!prefix!";
+         String suffix = "?suffix?";
+         expected = "!prefix!-107-p-104-p-246-p--373?suffix?";
+         assertEquals(expected, EuclidCoreIOTools.getStringOf(prefix, suffix, separator, values));
+
+         assertEquals("null", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, (long[]) null));
+
+         assertEquals("!prefix!?suffix?", EuclidCoreIOTools.getStringOf(prefix, suffix, separator, new long[0]));
+      }
    }
 
    @Test
