@@ -1466,12 +1466,20 @@ public class QuaternionTools
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     */
-   public static double distancePrecise(QuaternionReadOnly q1, QuaternionReadOnly q2)
+   public static double distance(QuaternionReadOnly q1, QuaternionReadOnly q2)
    {
-      double x = q1.getS() * q2.getX() - q1.getX() * q2.getS() - q1.getY() * q2.getZ() + q1.getZ() * q2.getY();
-      double y = q1.getS() * q2.getY() + q1.getX() * q2.getZ() - q1.getY() * q2.getS() - q1.getZ() * q2.getX();
-      double z = q1.getS() * q2.getZ() - q1.getX() * q2.getY() + q1.getY() * q2.getX() - q1.getZ() * q2.getS();
-      double s = q1.getS() * q2.getS() + q1.getX() * q2.getX() + q1.getY() * q2.getY() + q1.getZ() * q2.getZ();
+      if (q1 == q2)
+         return 0.0;
+      else
+         return distance(q1.getX(), q1.getY(), q1.getZ(), q1.getS(), q2.getX(), q2.getY(), q2.getZ(), q2.getS());
+   }
+
+   private static double distance(double q1x, double q1y, double q1z, double q1s, double q2x, double q2y, double q2z, double q2s)
+   {
+      double x = q1s * q2x - q1x * q2s - q1y * q2z + q1z * q2y;
+      double y = q1s * q2y + q1x * q2z - q1y * q2s - q1z * q2x;
+      double z = q1s * q2z - q1x * q2y + q1y * q2x - q1z * q2s;
+      double s = q1s * q2s + q1x * q2x + q1y * q2y + q1z * q2z;
 
       double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
 

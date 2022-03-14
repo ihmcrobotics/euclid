@@ -38,26 +38,6 @@ public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrie
    }
 
    /**
-    * Computes and returns the distance from this quaternion to {@code other}.
-    * <p>
-    * This method is equivalent to {@link #distance(QuaternionReadOnly)} but is more accurate when
-    * computing the distance between two quaternions that are very close. Note that it is also more
-    * expensive.
-    * </p>
-    *
-    * @param other the other quaternion to measure the distance. Not modified.
-    * @return the angle representing the distance between the two quaternions. It is contained in [0,
-    *         2<i>pi</i>]
-    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
-    *                                         not match.
-    */
-   default double distancePrecise(FrameQuaternionReadOnly other)
-   {
-      checkReferenceFrameMatch(other);
-      return QuaternionReadOnly.super.distancePrecise(other);
-   }
-
-   /**
     * Compares {@code this} to {@code other} to determine if the two frame quaternions are
     * geometrically similar, i.e. the magnitude of their difference is less than or equal to
     * {@code epsilon}.

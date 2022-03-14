@@ -813,7 +813,7 @@ public class LinearTransform3DTest extends Matrix3DBasicsTest<LinearTransform3D>
          }
          else
          {
-            double distance = expectedPreScale.distancePrecise(actualPreScale);
+            double distance = expectedPreScale.distance(actualPreScale);
             assertEquals(Math.PI, distance, LARGE_EPSILON);
 
             Quaternion difference = new Quaternion();
