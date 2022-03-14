@@ -36,6 +36,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
@@ -109,6 +110,29 @@ public class EuclidGeometryToolsTest
                                                                                  secondVector.getZ());
 
          EuclidCoreTestTools.assertAngleEquals(expectedAngle, actualAngle, EPSILON);
+      }
+      
+      for (int i = 0; i < ITERATIONS; i++)
+      {
+         Vector3D firstVector = EuclidCoreRandomTools.nextVector3D(random);
+         firstVector.scale(EuclidCoreRandomTools.nextDouble(random, 2.0));
+         Vector3DBasics axis = EuclidCoreRandomTools.nextOrthogonalVector3D(random, firstVector, true);
+         double expectedAngle = EuclidCoreRandomTools.nextDouble(random, 0.01, Math.PI - 0.01);
+         if (random.nextBoolean())
+            expectedAngle = -expectedAngle;
+
+         Vector3D secondVector = new Vector3D();
+         RotationMatrix rotationMatrix = new RotationMatrix(new AxisAngle(axis, expectedAngle));
+         rotationMatrix.transform(firstVector, secondVector);
+         secondVector.scale(EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0));
+
+         double actualAngle = EuclidGeometryTools.angleFromFirstToSecondVector3D(firstVector.getX(),
+                                                                                 firstVector.getY(),
+                                                                                 firstVector.getZ(),
+                                                                                 secondVector.getX(),
+                                                                                 secondVector.getY(),
+                                                                                 secondVector.getZ());
+         assertEquals(Math.abs(expectedAngle), actualAngle, EPSILON);
       }
    }
 

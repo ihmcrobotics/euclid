@@ -1488,4 +1488,87 @@ public class QuaternionTools
       else
          return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
    }
+
+   /**
+    * Performs a linear interpolation in SO(3) from {@code q0} to {@code qf} given the percentage
+    * {@code alpha}.
+    * <p>
+    * The interpolation method used here is often called a <i>Spherical Linear Interpolation</i> or
+    * SLERP.
+    * </p>
+    *
+    * @param q0    the first quaternion used in the interpolation. Not modified.
+    * @param qf    the second quaternion used in the interpolation. Not modified.
+    * @param alpha the percentage to use for the interpolation. A value of 0 will result in setting
+    *              this quaternion to {@code q0}, while a value of 1 is equivalent to setting this
+    *              quaternion to {@code qf}.
+    */
+   /**
+    * Performs a linear interpolation in SO(3) from {@code q0} to {@code qf} given the percentage
+    * {@code alpha}.
+    * <p>
+    * The interpolation method used here is often called a <i>Spherical Linear Interpolation</i> or
+    * SLERP.
+    * </p>
+    * 
+    * @param q0                  the first quaternion used in the interpolation. Not modified.
+    * @param qf                  the second quaternion used in the interpolation. Not modified.
+    * @param alpha               the percentage to use for the interpolation. A value of 0 will result
+    *                            in setting {@code interpolationToPack} to {@code q0}, while a value of
+    *                            1 is equivalent to setting {@code interpolationToPack} to {@code qf}.
+    * @param interpolationToPack the output of the interpolation. Modified.
+    */
+   public static void interpolate(QuaternionReadOnly q0, QuaternionReadOnly qf, double alpha, QuaternionBasics interpolationToPack)
+   {
+      double q0x = q0.getX();
+      double q0y = q0.getY();
+      double q0z = q0.getZ();
+      double q0s = q0.getS();
+      double qfx = qf.getX();
+      double qfy = qf.getY();
+      double qfz = qf.getZ();
+      double qfs = qf.getS();
+
+      interpolate(q0x, q0y, q0z, q0s, qfx, qfy, qfz, qfs, alpha, interpolationToPack);
+   }
+
+   private static void interpolate(double q0x,
+                                   double q0y,
+                                   double q0z,
+                                   double q0s,
+                                   double qfx,
+                                   double qfy,
+                                   double qfz,
+                                   double qfs,
+                                   double alpha,
+                                   QuaternionBasics interpolationToPack)
+   {
+      double cosHalfTheta = q0x * qfx + q0y * qfy + q0z * qfz + q0s * qfs;
+
+      if (cosHalfTheta < 0.0)
+      {
+         qfx = -qfx;
+         qfy = -qfy;
+         qfz = -qfz;
+         qfs = -qfs;
+         cosHalfTheta = -cosHalfTheta;
+      }
+
+      double alpha0 = 1.0 - alpha;
+      double alphaf = alpha;
+
+      if (1.0 - cosHalfTheta > 1.0e-12)
+      {
+         double sinHalfTheta = EuclidCoreTools.squareRoot(1.0 - cosHalfTheta * cosHalfTheta);
+         double halfTheta = EuclidCoreTools.atan2(sinHalfTheta, cosHalfTheta);
+         alpha0 = EuclidCoreTools.sin(alpha0 * halfTheta) / sinHalfTheta;
+         alphaf = EuclidCoreTools.sin(alphaf * halfTheta) / sinHalfTheta;
+      }
+
+      double qx = alpha0 * q0x + alphaf * qfx;
+      double qy = alpha0 * q0y + alphaf * qfy;
+      double qz = alpha0 * q0z + alphaf * qfz;
+      double qs = alpha0 * q0s + alphaf * qfs;
+      interpolationToPack.set(qx, qy, qz, qs);
+   }
 }

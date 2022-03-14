@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 
 /**
  * Read-only interface for a 3 dimensional vector.
@@ -86,14 +87,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     */
    default double angle(Vector3DReadOnly other)
    {
-      double normalizedDot = dot(other) / (length() * other.length());
-
-      if (normalizedDot < -1.0)
-         normalizedDot = -1.0;
-      else if (normalizedDot > 1.0)
-         normalizedDot = 1.0;
-
-      return EuclidCoreTools.acos(normalizedDot);
+      return TupleTools.angle(this, other);
    }
 
    /**
