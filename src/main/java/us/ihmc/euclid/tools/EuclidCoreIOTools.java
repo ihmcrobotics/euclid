@@ -742,6 +742,67 @@ public class EuclidCoreIOTools
     * Gets a representative {@code String} of the elements contained in the given array.
     * <p>
     * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
+    * can be controller by defining a custom {@code separator}. For instance, with
+    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
+    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param separator               the {@code String} used to separate elements of the array.
+    * @param array                   the array of elements to get the {@code String} of.
+    * @param elementToStringFunction the {@code Function} used to generate a representative
+    *                                {@code String} for each element.
+    * @return the representative {@code String}.
+    */
+   public static String getArrayString(String separator, Object[] array)
+   {
+      return getArrayString(separator, array, Object::toString);
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given array.
+    * <p>
+    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
+    * can be controller by defining a custom {@code separator}. For instance, with
+    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
+    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param <T>                     the type of the array elements.
+    * @param separator               the {@code String} used to separate elements of the array.
+    * @param array                   the array of elements to get the {@code String} of.
+    * @param elementToStringFunction the {@code Function} used to generate a representative
+    *                                {@code String} for each element.
+    * @return the representative {@code String}.
+    */
+   public static <T> String getArrayString(String separator, T[] array, Function<T, String> elementToStringFunction)
+   {
+      return getArrayString(null, null, separator, array, elementToStringFunction);
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given array.
+    * <p>
+    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
+    * can be controlled by defining a custom {@code separator}. For instance, with
+    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
+    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
+    * @param separator the {@code String} used to separate elements of the array.
+    * @param array     the array of elements to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getArrayString(String prefix, String suffix, String separator, Object[] array)
+   {
+      return getArrayString(prefix, suffix, separator, array, Object::toString);
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given array.
+    * <p>
+    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
     * can be controlled by defining a custom {@code separator}. For instance, with
     * {@code separator = \n} the resulting {@code String} is composed of one element per line as
     * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
@@ -765,24 +826,24 @@ public class EuclidCoreIOTools
    }
 
    /**
-    * Gets a representative {@code String} of the elements contained in the given array.
+    * Gets a representative {@code String} of the elements contained in the given {@code Collection}.
     * <p>
-    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
-    * can be controller by defining a custom {@code separator}. For instance, with
-    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
-    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
+    * This provides an alternative to {@link Collection#toString()} where the format of the output can
+    * be controller by defining a custom {@code separator}. For instance, with {@code separator = \n}
+    * the resulting {@code String} is composed of one element per line as opposed to
+    * {@link Collection#toString()} which outputs all the elements in one line.
     * </p>
     *
-    * @param <T>                     the type of the array elements.
-    * @param separator               the {@code String} used to separate elements of the array.
-    * @param array                   the array of elements to get the {@code String} of.
+    * @param <T>                     the type of the collection elements.
+    * @param separator               the {@code String} used to separate elements of the collection.
+    * @param collection              the series of elements to get the {@code String} of.
     * @param elementToStringFunction the {@code Function} used to generate a representative
     *                                {@code String} for each element.
     * @return the representative {@code String}.
     */
-   public static <T> String getArrayString(String separator, T[] array, Function<T, String> elementToStringFunction)
+   public static <T> String getCollectionString(String separator, Collection<? extends T> collection, Function<T, String> elementToStringFunction)
    {
-      return getCollectionString(separator, Arrays.asList(array), elementToStringFunction);
+      return getCollectionString(null, null, separator, collection, elementToStringFunction);
    }
 
    /**
@@ -812,45 +873,27 @@ public class EuclidCoreIOTools
       if (collection == null)
          return "null";
 
-      String ret = getCollectionString(separator, collection, elementToStringFunction);
-
+      StringBuilder sb = new StringBuilder();
       if (prefix != null)
-         ret = prefix + ret;
+         sb.append(prefix);
+
+      if (!collection.isEmpty())
+      {
+         Iterator<? extends T> iterator = collection.iterator();
+         sb.append(elementToStringFunction.apply(iterator.next()));
+
+         while (iterator.hasNext())
+         {
+            T next = iterator.next();
+            sb.append(separator);
+            sb.append(next == null ? "null" : elementToStringFunction.apply(next));
+         }
+      }
 
       if (suffix != null)
-         ret += suffix;
+         sb.append(suffix);
 
-      return ret;
-   }
-
-   /**
-    * Gets a representative {@code String} of the elements contained in the given {@code Collection}.
-    * <p>
-    * This provides an alternative to {@link Collection#toString()} where the format of the output can
-    * be controller by defining a custom {@code separator}. For instance, with {@code separator = \n}
-    * the resulting {@code String} is composed of one element per line as opposed to
-    * {@link Collection#toString()} which outputs all the elements in one line.
-    * </p>
-    *
-    * @param <T>                     the type of the collection elements.
-    * @param separator               the {@code String} used to separate elements of the collection.
-    * @param collection              the series of elements to get the {@code String} of.
-    * @param elementToStringFunction the {@code Function} used to generate a representative
-    *                                {@code String} for each element.
-    * @return the representative {@code String}.
-    */
-   public static <T> String getCollectionString(String separator, Collection<? extends T> collection, Function<T, String> elementToStringFunction)
-   {
-      if (collection == null)
-         return "null";
-      if (collection.isEmpty())
-         return "";
-
-      Iterator<? extends T> iterator = collection.iterator();
-      String ret = elementToStringFunction.apply(iterator.next());
-      while (iterator.hasNext())
-         ret += separator + elementToStringFunction.apply(iterator.next());
-      return ret;
+      return sb.toString();
    }
 
    /**
