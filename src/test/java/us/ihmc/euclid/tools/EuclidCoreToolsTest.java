@@ -557,4 +557,53 @@ public class EuclidCoreToolsTest
          EuclidCoreTestTools.assertExceptionIsThrown(() -> EuclidCoreTools.clamp(0.0, min, min - EuclidCoreTools.CLAMP_EPS - 1.0e-12), RuntimeException.class);
       }
    }
+
+   @Test
+   public void testFastAcos()
+   {
+      double epsilon = 1.0e-14;
+      double maxError = 0.0;
+      double maxErrorX = 0.0;
+      double error;
+      double expected;
+      double actual;
+
+      for (double x = -1.0; x < 1.0; x += 1.0e-6)
+      {
+         expected = Math.acos(x);
+         actual = EuclidCoreTools.fastAcos(x);
+         assertEquals(expected, actual, epsilon, "x=" + x);
+
+         error = Math.abs(actual - expected);
+         if (error > maxError)
+         {
+            maxError = error;
+            maxErrorX = x;
+         }
+      }
+
+      double x = -1.0;
+      expected = Math.acos(x);
+      actual = EuclidCoreTools.fastAcos(x);
+      assertEquals(expected, actual, epsilon, "x=" + x);
+      error = Math.abs(actual - expected);
+      if (error > maxError)
+      {
+         maxError = error;
+         maxErrorX = x;
+      }
+
+      x = 1.0;
+      expected = Math.acos(x);
+      actual = EuclidCoreTools.fastAcos(x);
+      assertEquals(expected, actual, epsilon, "x=" + x);
+      error = Math.abs(actual - expected);
+      if (error > maxError)
+      {
+         maxError = error;
+         maxErrorX = x;
+      }
+
+      System.out.println("EuclidCoreToolsTest.testFastAcos: max error=" + maxError + " at x=" + maxErrorX);
+   }
 }

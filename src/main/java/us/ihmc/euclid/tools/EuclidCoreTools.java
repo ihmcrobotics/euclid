@@ -1146,6 +1146,46 @@ public class EuclidCoreTools
       return StrictMath.acos(a);
    }
 
+
+   /**
+    * Variation of {@link Math#acos(double)} function that relies on the following identity:
+    *
+    * <pre>
+    * acos(cosX) = 2 atan2(&Sqrt;(1 - cosX<sup>2</sup>), 1 + cosX)
+    * </pre>
+    *
+    * @param cosX the value whose arc cosine is to be returned. The value is clamped to be within [-1,
+    *             1].
+    * @return the arc cosine of the argument.
+    */
+   public static double fastAcos(double cosX)
+   {
+      if (cosX == -1.0)
+         return Math.PI;
+      else
+         return 2.0 * atan2(squareRoot(1.0 - cosX * cosX), 1.0 + cosX);
+   }
+
+   /**
+    * Variation of {@link Math#acos(double)} function that relies on the following identity:
+    *
+    * <pre>
+    * acos(cosX) = 2 atan2(&Sqrt;(1 - cosX<sup>2</sup>), 1 + cosX) = 2 atan2(sinX, 1 + cosX)
+    * </pre>
+    *
+    * @param cosX the value whose arc cosine is to be returned. The value is clamped to be within [-1,
+    *             1].
+    * @param sinX the precomputed value of <tt>&Sqrt;(1 - cosX<sup>2</sup>)</tt>.
+    * @return the arc cosine of the argument.
+    */
+   public static double fastAcos(double cosX, double sinX)
+   {
+      if (cosX == -1.0)
+         return Math.PI;
+      else
+         return 2.0 * atan2(sinX, 1.0 + cosX);
+   }
+
    /**
     * Returns the arc sine of a value; the returned angle is in the range -<i>pi</i>/2 through
     * <i>pi</i>/2.
