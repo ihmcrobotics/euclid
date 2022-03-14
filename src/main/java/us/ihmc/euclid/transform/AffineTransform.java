@@ -164,7 +164,7 @@ public class AffineTransform
    }
 
    /**
-    * Gets the read-only reference to the linear part of this transform.
+    * Gets the reference to the linear part of this transform.
     *
     * @return the linear part of this transform.
     */
@@ -175,7 +175,7 @@ public class AffineTransform
    }
 
    /**
-    * Gets the read-only reference of the translation part of this affine transform.
+    * Gets the reference of the translation part of this affine transform.
     *
     * @return the translation part of this transform.
     */
