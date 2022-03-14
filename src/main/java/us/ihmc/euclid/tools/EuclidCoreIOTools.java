@@ -132,11 +132,11 @@ public class EuclidCoreIOTools
       for (int i = 0; i < 3; i++)
       {
          ret += getStringOf(null, " ", " ", format, matrix.getElement(i, 0), matrix.getElement(i, 1), matrix.getElement(i, 2));
-         ret += "| " + String.format(format, translation.getElement(i)) + "\n";
+         ret += "| " + toString(format, translation.getElement(i)) + "\n";
       }
 
       ret += getStringOf(null, " ", " ", format, 0.0, 0.0, 0.0);
-      ret += "| " + String.format(format, 1.0);
+      ret += "| " + toString(format, 1.0);
 
       return ret;
    }
@@ -632,6 +632,47 @@ public class EuclidCoreIOTools
    }
 
    /**
+    * Gets a representative {@code String} of a series of doubles given a specific separator.
+    * <p>
+    * Using {@code separator = ", "}, this provides a {@code String} as follows:
+    *
+    * <pre>
+    *  0.123, -0.480,  1.457
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, double... values)
+   {
+      return getStringOf(separator, DEFAULT_FORMAT, values);
+   }
+
+   /**
+    * Gets a representative {@code String} of a series of doubles given a specific separator, and
+    * format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT} and {@code separator = ", "}, this provides a
+    * {@code String} as follows:
+    *
+    * <pre>
+    *  0.123, -0.480,  1.457
+    * </pre>
+    * </p>
+    *
+    * @param separator the {@code String} to insert between two values.
+    * @param format    the format to use for each number.
+    * @param values    the values to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getStringOf(String separator, String format, double... values)
+   {
+      return getStringOf(null, null, separator, format, values);
+   }
+
+   /**
     * Gets a representative {@code String} of a series of doubles given specific prefix, suffix, and
     * separator.
     * <p>
@@ -678,64 +719,25 @@ public class EuclidCoreIOTools
       if (values == null)
          return "null";
 
-      String ret = getStringOf(separator, format, values);
+      StringBuilder sb = new StringBuilder();
 
       if (prefix != null)
-         ret = prefix + ret;
+         sb.append(prefix);
+
+      if (values.length > 0)
+      {
+         sb.append(toString(format, values[0]));
+         for (int i = 1; i < values.length; i++)
+         {
+            sb.append(separator);
+            sb.append(toString(format, values[i]));
+         }
+      }
 
       if (suffix != null)
-         ret += suffix;
+         sb.append(suffix);
 
-      return ret;
-   }
-
-   /**
-    * Gets a representative {@code String} of a series of doubles given a specific separator.
-    * <p>
-    * Using {@code separator = ", "}, this provides a {@code String} as follows:
-    *
-    * <pre>
-    *  0.123, -0.480,  1.457
-    * </pre>
-    * </p>
-    *
-    * @param separator the {@code String} to insert between two values.
-    * @param values    the values to get the {@code String} of.
-    * @return the representative {@code String}.
-    */
-   public static String getStringOf(String separator, double... values)
-   {
-      return getStringOf(separator, DEFAULT_FORMAT, values);
-   }
-
-   /**
-    * Gets a representative {@code String} of a series of doubles given a specific separator, and
-    * format to use.
-    * <p>
-    * Using the default format {@link #DEFAULT_FORMAT} and {@code separator = ", "}, this provides a
-    * {@code String} as follows:
-    *
-    * <pre>
-    *  0.123, -0.480,  1.457
-    * </pre>
-    * </p>
-    *
-    * @param separator the {@code String} to insert between two values.
-    * @param format    the format to use for each number.
-    * @param values    the values to get the {@code String} of.
-    * @return the representative {@code String}.
-    */
-   public static String getStringOf(String separator, String format, double... values)
-   {
-      if (values == null)
-         return "null";
-
-      if (values.length == 0)
-         return "";
-      String ret = String.format(format, values[0]);
-      for (int i = 1; i < values.length; i++)
-         ret += separator + String.format(format, values[i]);
-      return ret;
+      return sb.toString();
    }
 
    /**
@@ -747,15 +749,33 @@ public class EuclidCoreIOTools
     * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
     * </p>
     *
-    * @param separator               the {@code String} used to separate elements of the array.
-    * @param array                   the array of elements to get the {@code String} of.
-    * @param elementToStringFunction the {@code Function} used to generate a representative
-    *                                {@code String} for each element.
+    * @param separator the {@code String} used to separate elements of the array.
+    * @param array     the array of elements to get the {@code String} of.
     * @return the representative {@code String}.
     */
    public static String getArrayString(String separator, Object[] array)
    {
-      return getArrayString(separator, array, Object::toString);
+      return getArrayString(null, null, separator, array);
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given array.
+    * <p>
+    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
+    * can be controlled by defining a custom {@code separator}. For instance, with
+    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
+    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param prefix    the {@code String} to prepend to the result.
+    * @param suffix    the {@code String} to append to the result.
+    * @param separator the {@code String} used to separate elements of the array.
+    * @param array     the array of elements to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getArrayString(String prefix, String suffix, String separator, Object[] array)
+   {
+      return getArrayString(prefix, suffix, separator, array, Object::toString);
    }
 
    /**
@@ -788,26 +808,6 @@ public class EuclidCoreIOTools
     * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
     * </p>
     *
-    * @param prefix    the {@code String} to prepend to the result.
-    * @param suffix    the {@code String} to append to the result.
-    * @param separator the {@code String} used to separate elements of the array.
-    * @param array     the array of elements to get the {@code String} of.
-    * @return the representative {@code String}.
-    */
-   public static String getArrayString(String prefix, String suffix, String separator, Object[] array)
-   {
-      return getArrayString(prefix, suffix, separator, array, Object::toString);
-   }
-
-   /**
-    * Gets a representative {@code String} of the elements contained in the given array.
-    * <p>
-    * This provides an alternative to {@link Arrays#toString(Object[])} where the format of the output
-    * can be controlled by defining a custom {@code separator}. For instance, with
-    * {@code separator = \n} the resulting {@code String} is composed of one element per line as
-    * opposed to {@link Arrays#toString(Object[])} which outputs all the elements in one line.
-    * </p>
-    *
     * @param <T>                     the type of the array elements.
     * @param prefix                  the {@code String} to prepend to the result.
     * @param suffix                  the {@code String} to append to the result.
@@ -823,6 +823,44 @@ public class EuclidCoreIOTools
          return "null";
       else
          return getCollectionString(prefix, suffix, separator, Arrays.asList(array), elementToStringFunction);
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given {@code Collection}.
+    * <p>
+    * This provides an alternative to {@link Collection#toString()} where the format of the output can
+    * be controller by defining a custom {@code separator}. For instance, with {@code separator = \n}
+    * the resulting {@code String} is composed of one element per line as opposed to
+    * {@link Collection#toString()} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param separator  the {@code String} used to separate elements of the collection.
+    * @param collection the series of elements to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getCollectionString(String separator, Collection<?> collection)
+   {
+      return getCollectionString(null, null, separator, collection);
+   }
+
+   /**
+    * Gets a representative {@code String} of the elements contained in the given {@code Collection}.
+    * <p>
+    * This provides an alternative to {@link Collection#toString()} where the format of the output can
+    * be controller by defining a custom {@code separator}. For instance, with {@code separator = \n}
+    * the resulting {@code String} is composed of one element per line as opposed to
+    * {@link Collection#toString()} which outputs all the elements in one line.
+    * </p>
+    *
+    * @param prefix     the {@code String} to prepend to the result.
+    * @param suffix     the {@code String} to append to the result.
+    * @param separator  the {@code String} used to separate elements of the collection.
+    * @param collection the series of elements to get the {@code String} of.
+    * @return the representative {@code String}.
+    */
+   public static String getCollectionString(String prefix, String suffix, String separator, Collection<?> collection)
+   {
+      return getCollectionString(prefix, suffix, separator, collection, Object::toString);
    }
 
    /**
@@ -894,6 +932,31 @@ public class EuclidCoreIOTools
          sb.append(suffix);
 
       return sb.toString();
+   }
+
+   public static String toString(String format, double value)
+   {
+      return format != null ? String.format(format, value) : Double.toString(value);
+   }
+
+   public static String toString(String format, float value)
+   {
+      return format != null ? String.format(format, value) : Float.toString(value);
+   }
+
+   public static String toString(String format, boolean value)
+   {
+      return format != null ? String.format(format, value) : Boolean.toString(value);
+   }
+
+   public static String toString(String format, int value)
+   {
+      return format != null ? String.format(format, value) : Integer.toString(value);
+   }
+
+   public static String toString(String format, long value)
+   {
+      return format != null ? String.format(format, value) : Long.toString(value);
    }
 
    /**
