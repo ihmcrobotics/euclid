@@ -152,7 +152,10 @@ public class QuaternionTools
     * @param inverse2         whether the second orientation should be inverted in the multiplication.
     * @param quaternionToPack the quaternion in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
+   public static void multiply(Orientation3DReadOnly orientation1,
+                               boolean inverse1,
+                               Orientation3DReadOnly orientation2,
+                               boolean inverse2,
                                QuaternionBasics quaternionToPack)
    {
       if (orientation1 instanceof QuaternionReadOnly)
@@ -205,7 +208,10 @@ public class QuaternionTools
     * @param inverse2         whether the second orientation should be inverted in the multiplication.
     * @param quaternionToPack the quaternion in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation1, boolean inverse1, QuaternionReadOnly orientation2, boolean inverse2,
+   public static void multiply(Orientation3DReadOnly orientation1,
+                               boolean inverse1,
+                               QuaternionReadOnly orientation2,
+                               boolean inverse2,
                                QuaternionBasics quaternionToPack)
    {
       if (orientation1 instanceof QuaternionReadOnly)
@@ -245,7 +251,10 @@ public class QuaternionTools
     * @param inverse2         whether the second orientation should be inverted in the multiplication.
     * @param quaternionToPack the quaternion in which the result is stored. Modified.
     */
-   public static void multiply(QuaternionReadOnly orientation1, boolean inverse1, Orientation3DReadOnly orientation2, boolean inverse2,
+   public static void multiply(QuaternionReadOnly orientation1,
+                               boolean inverse1,
+                               Orientation3DReadOnly orientation2,
+                               boolean inverse2,
                                QuaternionBasics quaternionToPack)
    {
       if (orientation2 instanceof QuaternionReadOnly)
@@ -324,8 +333,17 @@ public class QuaternionTools
     * @param conjugateQ2       whether to conjugate {@code q2} or not.
     * @param orientationToPack the orientation in which the result is stored. Modified.
     */
-   public static void multiplyImpl(double q1x, double q1y, double q1z, double q1s, boolean conjugateQ1, double q2x, double q2y, double q2z, double q2s,
-                                   boolean conjugateQ2, Orientation3DBasics orientationToPack)
+   public static void multiplyImpl(double q1x,
+                                   double q1y,
+                                   double q1z,
+                                   double q1s,
+                                   boolean conjugateQ1,
+                                   double q2x,
+                                   double q2y,
+                                   double q2z,
+                                   double q2s,
+                                   boolean conjugateQ2,
+                                   Orientation3DBasics orientationToPack)
    {
       if (conjugateQ1)
       {
@@ -459,8 +477,17 @@ public class QuaternionTools
     * @param conjugateT2  whether to conjugate {@code t2} or not.
     * @param vectorToPack the vector in which the result is stores. Modified.
     */
-   public static void multiplyImpl(double x1, double y1, double z1, double s1, boolean conjugateT1, double x2, double y2, double z2, double s2,
-                                   boolean conjugateT2, Vector4DBasics vectorToPack)
+   public static void multiplyImpl(double x1,
+                                   double y1,
+                                   double z1,
+                                   double s1,
+                                   boolean conjugateT1,
+                                   double x2,
+                                   double y2,
+                                   double z2,
+                                   double s2,
+                                   boolean conjugateT2,
+                                   Vector4DBasics vectorToPack)
    {
       if (conjugateT1)
       {
@@ -646,7 +673,10 @@ public class QuaternionTools
     * @param tupleOriginal       the tuple to transform. Not modified.
     * @param tupleTransformed    the tuple in which the result is stored. Modified.
     */
-   private static void addTransform(boolean subtract, QuaternionReadOnly quaternion, boolean conjugateQuaternion, Tuple3DReadOnly tupleOriginal,
+   private static void addTransform(boolean subtract,
+                                    QuaternionReadOnly quaternion,
+                                    boolean conjugateQuaternion,
+                                    Tuple3DReadOnly tupleOriginal,
                                     Tuple3DBasics tupleTransformed)
    {
       double qx = quaternion.getX();
@@ -748,7 +778,9 @@ public class QuaternionTools
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the quaternion
     *                               does not represent a transformation in the XY plane.
     */
-   public static void inverseTransform(QuaternionReadOnly quaternion, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   public static void inverseTransform(QuaternionReadOnly quaternion,
+                                       Tuple2DReadOnly tupleOriginal,
+                                       Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
    {
       transformImpl(quaternion, true, tupleOriginal, tupleTransformed, checkIfTransformInXYPlane);
@@ -776,7 +808,10 @@ public class QuaternionTools
     * @throws NotAMatrix2DException if {@code checkIfTransformInXYPlane == true} and the quaternion
     *                               does not represent a transformation in the XY plane.
     */
-   private static void transformImpl(QuaternionReadOnly quaternion, boolean conjugateQuaternion, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   private static void transformImpl(QuaternionReadOnly quaternion,
+                                     boolean conjugateQuaternion,
+                                     Tuple2DReadOnly tupleOriginal,
+                                     Tuple2DBasics tupleTransformed,
                                      boolean checkIfTransformInXYPlane)
    {
       if (checkIfTransformInXYPlane)
@@ -929,7 +964,9 @@ public class QuaternionTools
     * @param vectorOriginal      the vector to transform. Not modified.
     * @param vectorTransformed   the vector in which the result is stored. Modified.
     */
-   private static void transformImpl(QuaternionReadOnly quaternion, boolean conjugateQuaternion, Vector4DReadOnly vectorOriginal,
+   private static void transformImpl(QuaternionReadOnly quaternion,
+                                     boolean conjugateQuaternion,
+                                     Vector4DReadOnly vectorOriginal,
                                      Vector4DBasics vectorTransformed)
    {
       double norm = quaternion.norm();
@@ -1041,7 +1078,9 @@ public class QuaternionTools
     * @param matrixOriginal      the matrix to transform. Not modified.
     * @param matrixTransformed   the matrix in which the result is stored. Modified.
     */
-   private static void transformImpl(QuaternionReadOnly quaternion, boolean conjugateQuaternion, Matrix3DReadOnly matrixOriginal,
+   private static void transformImpl(QuaternionReadOnly quaternion,
+                                     boolean conjugateQuaternion,
+                                     Matrix3DReadOnly matrixOriginal,
                                      Matrix3DBasics matrixTransformed)
    {
       double qx = quaternion.getX();
@@ -1074,7 +1113,12 @@ public class QuaternionTools
     * @param matrixOriginal      the matrix to transform. Not modified.
     * @param matrixTransformed   the matrix in which the result is stored. Modified.
     */
-   static void transformImpl(double qx, double qy, double qz, double qs, boolean conjugateQuaternion, Matrix3DReadOnly matrixOriginal,
+   static void transformImpl(double qx,
+                             double qy,
+                             double qz,
+                             double qs,
+                             boolean conjugateQuaternion,
+                             Matrix3DReadOnly matrixOriginal,
                              Matrix3DBasics matrixTransformed)
    {
       double norm = EuclidCoreTools.fastNorm(qx, qy, qz, qs);
@@ -1191,7 +1235,8 @@ public class QuaternionTools
     * @param rotationMatrixOriginal    the rotation matrix to transform. Not modified.
     * @param rotationMatrixTransformed the rotation matrix in which the result is stored. Modified.
     */
-   public static void inverseTransform(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrixOriginal,
+   public static void inverseTransform(QuaternionReadOnly quaternion,
+                                       RotationMatrixReadOnly rotationMatrixOriginal,
                                        RotationMatrixBasics rotationMatrixTransformed)
    {
       RotationMatrixTools.multiply(quaternion, true, rotationMatrixOriginal, false, rotationMatrixTransformed);

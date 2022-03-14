@@ -49,7 +49,16 @@ public class EuclidFrameShapeTools
    {
       void computeBoundingBoxZeroRotation(T shape, BoundingBox3DBasics boundingBoxToPack);
 
-      void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22, T shape,
+      void computeBoundingBox(double m00,
+                              double m01,
+                              double m02,
+                              double m10,
+                              double m11,
+                              double m12,
+                              double m20,
+                              double m21,
+                              double m22,
+                              T shape,
                               BoundingBox3DBasics boundingBoxToPack);
    }
 
@@ -139,8 +148,17 @@ public class EuclidFrameShapeTools
       }
 
       @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Box3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      public void computeBoundingBox(double m00,
+                                     double m01,
+                                     double m02,
+                                     double m10,
+                                     double m11,
+                                     double m12,
+                                     double m20,
+                                     double m21,
+                                     double m22,
+                                     Box3DReadOnly shape,
+                                     BoundingBox3DBasics boundingBoxToPack)
       {
          double halfSizeX = 0.5 * shape.getSizeX();
          double halfSizeY = 0.5 * shape.getSizeY();
@@ -172,7 +190,9 @@ public class EuclidFrameShapeTools
     * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
     * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
     */
-   public static void boundingBoxCapsule3D(ReferenceFrame capsule3DFrame, Capsule3DReadOnly capsule3D, ReferenceFrame boundingBoxFrame,
+   public static void boundingBoxCapsule3D(ReferenceFrame capsule3DFrame,
+                                           Capsule3DReadOnly capsule3D,
+                                           ReferenceFrame boundingBoxFrame,
                                            BoundingBox3DBasics boundingBoxToPack)
    {
       capsule3DFrame.verifySameRoots(boundingBoxFrame);
@@ -235,8 +255,17 @@ public class EuclidFrameShapeTools
       }
 
       @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Capsule3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      public void computeBoundingBox(double m00,
+                                     double m01,
+                                     double m02,
+                                     double m10,
+                                     double m11,
+                                     double m12,
+                                     double m20,
+                                     double m21,
+                                     double m22,
+                                     Capsule3DReadOnly shape,
+                                     BoundingBox3DBasics boundingBoxToPack)
       {
          double halfLength = shape.getHalfLength();
          double radius = shape.getRadius();
@@ -272,7 +301,9 @@ public class EuclidFrameShapeTools
     * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
     * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
     */
-   public static void boundingBoxCylinder3D(ReferenceFrame cylinder3DFrame, Cylinder3DReadOnly cylinder3D, ReferenceFrame boundingBoxFrame,
+   public static void boundingBoxCylinder3D(ReferenceFrame cylinder3DFrame,
+                                            Cylinder3DReadOnly cylinder3D,
+                                            ReferenceFrame boundingBoxFrame,
                                             BoundingBox3DBasics boundingBoxToPack)
    {
       cylinder3DFrame.verifySameRoots(boundingBoxFrame);
@@ -345,8 +376,17 @@ public class EuclidFrameShapeTools
       }
 
       @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Cylinder3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      public void computeBoundingBox(double m00,
+                                     double m01,
+                                     double m02,
+                                     double m10,
+                                     double m11,
+                                     double m12,
+                                     double m20,
+                                     double m21,
+                                     double m22,
+                                     Cylinder3DReadOnly shape,
+                                     BoundingBox3DBasics boundingBoxToPack)
       {
          double halfLength = shape.getHalfLength();
          double radius = shape.getRadius();
@@ -387,7 +427,9 @@ public class EuclidFrameShapeTools
     * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
     * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
     */
-   public static void boundingBoxEllipsoid3D(ReferenceFrame ellipsoid3DFrame, Ellipsoid3DReadOnly ellipsoid3D, ReferenceFrame boundingBoxFrame,
+   public static void boundingBoxEllipsoid3D(ReferenceFrame ellipsoid3DFrame,
+                                             Ellipsoid3DReadOnly ellipsoid3D,
+                                             ReferenceFrame boundingBoxFrame,
                                              BoundingBox3DBasics boundingBoxToPack)
    {
       ellipsoid3DFrame.verifySameRoots(boundingBoxFrame);
@@ -452,8 +494,17 @@ public class EuclidFrameShapeTools
       }
 
       @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Ellipsoid3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      public void computeBoundingBox(double m00,
+                                     double m01,
+                                     double m02,
+                                     double m10,
+                                     double m11,
+                                     double m12,
+                                     double m20,
+                                     double m21,
+                                     double m22,
+                                     Ellipsoid3DReadOnly shape,
+                                     BoundingBox3DBasics boundingBoxToPack)
       {
          Vector3DReadOnly radii = shape.getRadii();
          double rx = radii.getX() * radii.getX();
@@ -487,7 +538,9 @@ public class EuclidFrameShapeTools
     * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
     * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
     */
-   public static void boundingBoxRamp3D(ReferenceFrame ramp3DFrame, Ramp3DReadOnly ramp3D, ReferenceFrame boundingBoxFrame,
+   public static void boundingBoxRamp3D(ReferenceFrame ramp3DFrame,
+                                        Ramp3DReadOnly ramp3D,
+                                        ReferenceFrame boundingBoxFrame,
                                         BoundingBox3DBasics boundingBoxToPack)
    {
       ramp3DFrame.verifySameRoots(boundingBoxFrame);
@@ -554,8 +607,17 @@ public class EuclidFrameShapeTools
       }
 
       @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     Ramp3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      public void computeBoundingBox(double m00,
+                                     double m01,
+                                     double m02,
+                                     double m10,
+                                     double m11,
+                                     double m12,
+                                     double m20,
+                                     double m21,
+                                     double m22,
+                                     Ramp3DReadOnly shape,
+                                     BoundingBox3DBasics boundingBoxToPack)
       {
          double sizeX = shape.getSizeX();
          double halfSizeY = 0.5 * shape.getSizeY();
@@ -608,7 +670,9 @@ public class EuclidFrameShapeTools
     * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
     * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
     */
-   public static void boundingBoxSphere3D(ReferenceFrame sphere3DFrame, Sphere3DReadOnly sphere3D, ReferenceFrame boundingBoxFrame,
+   public static void boundingBoxSphere3D(ReferenceFrame sphere3DFrame,
+                                          Sphere3DReadOnly sphere3D,
+                                          ReferenceFrame boundingBoxFrame,
                                           BoundingBox3DBasics boundingBoxToPack)
    {
       sphere3DFrame.verifySameRoots(boundingBoxFrame);
@@ -665,7 +729,8 @@ public class EuclidFrameShapeTools
     * @param boundingBoxFrame  the reference frame in which the bounding box is to be evaluated.
     * @param boundingBoxToPack the bounding box in which the result is stored. Modified.
     */
-   public static void boundingBoxConvexPolytope3D(FrameConvexPolytope3DReadOnly convexPolytope3D, ReferenceFrame boundingBoxFrame,
+   public static void boundingBoxConvexPolytope3D(FrameConvexPolytope3DReadOnly convexPolytope3D,
+                                                  ReferenceFrame boundingBoxFrame,
                                                   BoundingBox3DBasics boundingBoxToPack)
    {
       boundingBoxConvexPolytope3D(convexPolytope3D.getReferenceFrame(), convexPolytope3D, boundingBoxFrame, boundingBoxToPack);
@@ -679,8 +744,10 @@ public class EuclidFrameShapeTools
     * @param boundingBoxFrame      the reference frame in which the bounding box is to be evaluated.
     * @param boundingBoxToPack     the bounding box in which the result is stored. Modified.
     */
-   public static void boundingBoxConvexPolytope3D(ReferenceFrame convexPolytope3DFrame, ConvexPolytope3DReadOnly convexPolytope3D,
-                                                  ReferenceFrame boundingBoxFrame, BoundingBox3DBasics boundingBoxToPack)
+   public static void boundingBoxConvexPolytope3D(ReferenceFrame convexPolytope3DFrame,
+                                                  ConvexPolytope3DReadOnly convexPolytope3D,
+                                                  ReferenceFrame boundingBoxFrame,
+                                                  BoundingBox3DBasics boundingBoxToPack)
    {
       convexPolytope3DFrame.verifySameRoots(boundingBoxFrame);
 
@@ -733,8 +800,17 @@ public class EuclidFrameShapeTools
       private final Vector3D supportDirection = new Vector3D();
 
       @Override
-      public void computeBoundingBox(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                     ConvexPolytope3DReadOnly shape, BoundingBox3DBasics boundingBoxToPack)
+      public void computeBoundingBox(double m00,
+                                     double m01,
+                                     double m02,
+                                     double m10,
+                                     double m11,
+                                     double m12,
+                                     double m20,
+                                     double m21,
+                                     double m22,
+                                     ConvexPolytope3DReadOnly shape,
+                                     BoundingBox3DBasics boundingBoxToPack)
       {
          supportDirection.set(m00, m01, m02);
          Vertex3DReadOnly vertexMaxX = shape.getSupportingVertex(supportDirection);
@@ -764,9 +840,15 @@ public class EuclidFrameShapeTools
       }
    };
 
-   private static void addTranslationPartOfTransforms(RotationMatrixReadOnly rotationPart1, Tuple3DReadOnly translationPart1, boolean inverseTransform1,
-                                                      RotationMatrixReadOnly rotationPart2, Tuple3DReadOnly translationPart2, boolean inverseTransform2,
-                                                      RotationMatrixReadOnly rotationPart3, Tuple3DReadOnly translationPart3, boolean inverseTransform3,
+   private static void addTranslationPartOfTransforms(RotationMatrixReadOnly rotationPart1,
+                                                      Tuple3DReadOnly translationPart1,
+                                                      boolean inverseTransform1,
+                                                      RotationMatrixReadOnly rotationPart2,
+                                                      Tuple3DReadOnly translationPart2,
+                                                      boolean inverseTransform2,
+                                                      RotationMatrixReadOnly rotationPart3,
+                                                      Tuple3DReadOnly translationPart3,
+                                                      boolean inverseTransform3,
                                                       BoundingBox3DBasics boundingBoxTransformed)
    {
       if (TupleTools.isTupleZero(translationPart3, EPSILON))
@@ -794,8 +876,12 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static void addTranslationPartOfTransforms(RotationMatrixReadOnly rotationPart1, Tuple3DReadOnly translationPart1, boolean inverseTransform1,
-                                                      RotationMatrixReadOnly rotationPart2, Tuple3DReadOnly translationPart2, boolean inverseTransform2,
+   private static void addTranslationPartOfTransforms(RotationMatrixReadOnly rotationPart1,
+                                                      Tuple3DReadOnly translationPart1,
+                                                      boolean inverseTransform1,
+                                                      RotationMatrixReadOnly rotationPart2,
+                                                      Tuple3DReadOnly translationPart2,
+                                                      boolean inverseTransform2,
                                                       BoundingBox3DBasics boundingBoxTransformed)
    {
       if (TupleTools.isTupleZero(translationPart2, EPSILON))
@@ -815,7 +901,9 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static void addTranslationPartOfTransform(RotationMatrixReadOnly rotationPart, Tuple3DReadOnly translationPart, boolean inverseTransform,
+   private static void addTranslationPartOfTransform(RotationMatrixReadOnly rotationPart,
+                                                     Tuple3DReadOnly translationPart,
+                                                     boolean inverseTransform,
                                                      BoundingBox3DBasics boundingBoxTransformed)
    {
       if (TupleTools.isTupleZero(translationPart, EPSILON))
@@ -858,7 +946,9 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static void addAndTransform(RotationMatrixReadOnly rotationPart, Tuple3DReadOnly translationPart, boolean inverseTransform,
+   private static void addAndTransform(RotationMatrixReadOnly rotationPart,
+                                       Tuple3DReadOnly translationPart,
+                                       boolean inverseTransform,
                                        Point3DBasics pointToTransform)
    {
       if (inverseTransform)
@@ -875,9 +965,13 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(RotationMatrixReadOnly rotation1, boolean inverseTransform1,
-                                                                                  RotationMatrixReadOnly rotation2, boolean inverseTransform2,
-                                                                                  RotationMatrixReadOnly rotation3, boolean inverseTransform3, T shape,
+   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(RotationMatrixReadOnly rotation1,
+                                                                                  boolean inverseTransform1,
+                                                                                  RotationMatrixReadOnly rotation2,
+                                                                                  boolean inverseTransform2,
+                                                                                  RotationMatrixReadOnly rotation3,
+                                                                                  boolean inverseTransform3,
+                                                                                  T shape,
                                                                                   BoundingBoxRotationPartCalculator<T> calculator,
                                                                                   BoundingBox3DBasics boundingBoxToPack)
    {
@@ -967,8 +1061,11 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(RotationMatrixReadOnly rotation1, boolean inverseTransform1,
-                                                                                  RotationMatrixReadOnly rotation2, boolean inverseTransform2, T shape,
+   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(RotationMatrixReadOnly rotation1,
+                                                                                  boolean inverseTransform1,
+                                                                                  RotationMatrixReadOnly rotation2,
+                                                                                  boolean inverseTransform2,
+                                                                                  T shape,
                                                                                   BoundingBoxRotationPartCalculator<T> calculator,
                                                                                   BoundingBox3DBasics boundingBoxToPack)
    {
@@ -996,9 +1093,19 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(double m00, double m01, double m02, double m10, double m11, double m12,
-                                                                                  double m20, double m21, double m22, boolean inverseTransform1,
-                                                                                  RotationMatrixReadOnly rotation2, boolean inverseTransform2, T shape,
+   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(double m00,
+                                                                                  double m01,
+                                                                                  double m02,
+                                                                                  double m10,
+                                                                                  double m11,
+                                                                                  double m12,
+                                                                                  double m20,
+                                                                                  double m21,
+                                                                                  double m22,
+                                                                                  boolean inverseTransform1,
+                                                                                  RotationMatrixReadOnly rotation2,
+                                                                                  boolean inverseTransform2,
+                                                                                  T shape,
                                                                                   BoundingBoxRotationPartCalculator<T> calculator,
                                                                                   BoundingBox3DBasics boundingBoxToPack)
    {
@@ -1083,7 +1190,9 @@ public class EuclidFrameShapeTools
       }
    }
 
-   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(RotationMatrixReadOnly rotation, boolean inverseTransform, T shape,
+   private static <T extends Shape3DReadOnly> void boundingBoxRotationPartGeneric(RotationMatrixReadOnly rotation,
+                                                                                  boolean inverseTransform,
+                                                                                  T shape,
                                                                                   BoundingBoxRotationPartCalculator<T> calculator,
                                                                                   BoundingBox3DBasics boundingBoxToPack)
    {

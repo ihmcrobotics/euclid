@@ -2124,8 +2124,13 @@ public class EuclidGeometryToolsTest
       }
    }
 
-   private void assertDistanceBetweenTwoLineSegment2Ds(int iteration, double expectedDistance, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
-                                                       Point2D lineSegmentStart2, Point2D lineSegmentEnd2, double epsilon)
+   private void assertDistanceBetweenTwoLineSegment2Ds(int iteration,
+                                                       double expectedDistance,
+                                                       Point2D lineSegmentStart1,
+                                                       Point2D lineSegmentEnd1,
+                                                       Point2D lineSegmentStart2,
+                                                       Point2D lineSegmentEnd2,
+                                                       double epsilon)
    {
       assertEquals(expectedDistance,
                    EuclidGeometryTools.distanceBetweenTwoLineSegment2Ds(lineSegmentStart1, lineSegmentEnd1, lineSegmentStart2, lineSegmentEnd2),
@@ -8006,8 +8011,10 @@ public class EuclidGeometryToolsTest
       }
    }
 
-   private void assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(boolean intersectionExist, Point2D rayOrigin,
-                                                                                             Vector2D rayDirection, Point2D lineSegmentStart,
+   private void assertOnlyExistenceOfIntersectionBetweenRay2DAndAllCombinationsOfLineSegment(boolean intersectionExist,
+                                                                                             Point2D rayOrigin,
+                                                                                             Vector2D rayDirection,
+                                                                                             Point2D lineSegmentStart,
                                                                                              Point2D lineSegmentEnd)
    {
       boolean success;
@@ -8043,8 +8050,11 @@ public class EuclidGeometryToolsTest
       assertTrue(actualIntersection != null == intersectionExist);
    }
 
-   private void assertAllCombinationsOfTwoLineSegmentsIntersection(Point2D expectedIntersection, Point2D rayOrigin, Vector2D rayDirection,
-                                                                   Point2D lineSegmentStart, Point2D lineSegmentEnd)
+   private void assertAllCombinationsOfTwoLineSegmentsIntersection(Point2D expectedIntersection,
+                                                                   Point2D rayOrigin,
+                                                                   Vector2D rayDirection,
+                                                                   Point2D lineSegmentStart,
+                                                                   Point2D lineSegmentEnd)
    {
       double epsilon = EuclidGeometryTools.ONE_TRILLIONTH;
 
@@ -9613,8 +9623,11 @@ public class EuclidGeometryToolsTest
       }
    }
 
-   private void assertOnlyExistenceOfTwoLineSegmentsIntersectionAllCombinations(boolean intersectionExist, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
-                                                                                Point2D lineSegmentStart2, Point2D lineSegmentEnd2)
+   private void assertOnlyExistenceOfTwoLineSegmentsIntersectionAllCombinations(boolean intersectionExist,
+                                                                                Point2D lineSegmentStart1,
+                                                                                Point2D lineSegmentEnd1,
+                                                                                Point2D lineSegmentStart2,
+                                                                                Point2D lineSegmentEnd2)
    {
       boolean success;
       Point2D intersectionThatMayContainOnlyNaNs = new Point2D();
@@ -9700,8 +9713,11 @@ public class EuclidGeometryToolsTest
       assertTrue(actualIntersection != null == intersectionExist);
    }
 
-   private void assertAllCombinationsOfTwoLineSegmentsIntersection(Point2D expectedIntersection, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
-                                                                   Point2D lineSegmentStart2, Point2D lineSegmentEnd2)
+   private void assertAllCombinationsOfTwoLineSegmentsIntersection(Point2D expectedIntersection,
+                                                                   Point2D lineSegmentStart1,
+                                                                   Point2D lineSegmentEnd1,
+                                                                   Point2D lineSegmentStart2,
+                                                                   Point2D lineSegmentEnd2)
    {
       double epsilon = EuclidGeometryTools.ONE_TRILLIONTH;
 
@@ -10249,8 +10265,11 @@ public class EuclidGeometryToolsTest
       EXACTLY_ON, ABOVE, BELOW
    }
 
-   private static void performAssertionsForPoint3DOnSideOfPlane3D(Random random, Point3DReadOnly query, Point3DReadOnly pointOnPlane,
-                                                                  Vector3DReadOnly planeNormal, Plane3DSide expected)
+   private static void performAssertionsForPoint3DOnSideOfPlane3D(Random random,
+                                                                  Point3DReadOnly query,
+                                                                  Point3DReadOnly pointOnPlane,
+                                                                  Vector3DReadOnly planeNormal,
+                                                                  Plane3DSide expected)
    {
       double queryX = query.getX();
       double queryY = query.getY();

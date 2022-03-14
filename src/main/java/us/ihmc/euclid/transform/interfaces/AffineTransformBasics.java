@@ -141,7 +141,17 @@ public interface AffineTransformBasics extends AffineTransformReadOnly, Clearabl
     * @param m22 the 3rd row 3rd column component of the rotation-scale part of this transform.
     * @param m23 the z-component of the translation part of this transform.
     */
-   default void set(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22,
+   default void set(double m00,
+                    double m01,
+                    double m02,
+                    double m03,
+                    double m10,
+                    double m11,
+                    double m12,
+                    double m13,
+                    double m20,
+                    double m21,
+                    double m22,
                     double m23)
    {
       getLinearTransform().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);

@@ -127,7 +127,8 @@ public class EuclidGeometryFactoriesTest
             accessTraceMap.put(bound, new boolean[] {false, false});
          }
          BoundingBox2DBasics source = new BoundingBox2D();
-         BoundingBox2DBasics observable = EuclidGeometryFactories.newObservableBoundingBox2DBasics((axis, bound,
+         BoundingBox2DBasics observable = EuclidGeometryFactories.newObservableBoundingBox2DBasics((axis,
+                                                                                                    bound,
                                                                                                     newValue) -> changeTraceMap.get(bound)[axis.ordinal()] = true,
                                                                                                    (axis,
                                                                                                     bound) -> accessTraceMap.get(bound)[axis.ordinal()] = true,
@@ -195,7 +196,8 @@ public class EuclidGeometryFactoriesTest
             accessTraceMap.put(bound, new boolean[] {false, false, false});
          }
          BoundingBox3DBasics source = new BoundingBox3D();
-         BoundingBox3DBasics observable = EuclidGeometryFactories.newObservableBoundingBox3DBasics((axis, bound,
+         BoundingBox3DBasics observable = EuclidGeometryFactories.newObservableBoundingBox3DBasics((axis,
+                                                                                                    bound,
                                                                                                     newValue) -> changeTraceMap.get(bound)[axis.ordinal()] = true,
                                                                                                    (axis,
                                                                                                     bound) -> accessTraceMap.get(bound)[axis.ordinal()] = true,

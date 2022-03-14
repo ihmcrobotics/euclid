@@ -283,7 +283,9 @@ public class FrameGilbertJohnsonKeerthiCollisionDetectorTest
       }
    }
 
-   private static void computeResults(FrameShape3DBasics shapeA, FrameShape3DBasics shapeB, EuclidShape3DCollisionResult framelessResultToPack,
+   private static void computeResults(FrameShape3DBasics shapeA,
+                                      FrameShape3DBasics shapeB,
+                                      EuclidShape3DCollisionResult framelessResultToPack,
                                       EuclidFrameShape3DCollisionResult frameResultToPack)
    {
       ReferenceFrame frameA = shapeA.getReferenceFrame();

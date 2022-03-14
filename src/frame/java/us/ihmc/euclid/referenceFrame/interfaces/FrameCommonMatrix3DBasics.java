@@ -208,7 +208,15 @@ public interface FrameCommonMatrix3DBasics extends FixedFrameCommonMatrix3DBasic
     * @param m21            the new 3rd row 2nd column coefficient for this matrix.
     * @param m22            the new 3rd row 3rd column coefficient for this matrix.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21,
+   default void setIncludingFrame(ReferenceFrame referenceFrame,
+                                  double m00,
+                                  double m01,
+                                  double m02,
+                                  double m10,
+                                  double m11,
+                                  double m12,
+                                  double m20,
+                                  double m21,
                                   double m22)
    {
       setReferenceFrame(referenceFrame);

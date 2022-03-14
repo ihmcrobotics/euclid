@@ -150,7 +150,11 @@ public class EuclidFrameShapeRandomTools
     * @return the random capsule 3D.
     * @throws RuntimeException if {@code minLength > maxLength} or {@code minRadius > maxRadius}.
     */
-   public static FrameCapsule3D nextFrameCapsule3D(Random random, ReferenceFrame referenceFrame, double minLength, double maxLength, double minRadius,
+   public static FrameCapsule3D nextFrameCapsule3D(Random random,
+                                                   ReferenceFrame referenceFrame,
+                                                   double minLength,
+                                                   double maxLength,
+                                                   double minRadius,
                                                    double maxRadius)
    {
       return new FrameCapsule3D(referenceFrame, EuclidShapeRandomTools.nextCapsule3D(random, minLength, maxLength, minRadius, maxRadius));
@@ -194,7 +198,11 @@ public class EuclidFrameShapeRandomTools
     * @return the random cylinder 3D.
     * @throws RuntimeException if {@code minLength > maxLength} or {@code minRadius > maxRadius}.
     */
-   public static FrameCylinder3D nextFrameCylinder3D(Random random, ReferenceFrame referenceFrame, double minLength, double maxLength, double minRadius,
+   public static FrameCylinder3D nextFrameCylinder3D(Random random,
+                                                     ReferenceFrame referenceFrame,
+                                                     double minLength,
+                                                     double maxLength,
+                                                     double minRadius,
                                                      double maxRadius)
    {
       return new FrameCylinder3D(referenceFrame, EuclidShapeRandomTools.nextCylinder3D(random, minLength, maxLength, minRadius, maxRadius));
@@ -382,7 +390,10 @@ public class EuclidFrameShapeRandomTools
     * @param numberOfVertices the size of the convex polygon.
     * @return the random face.
     */
-   public static FrameFace3D nextCircleBasedFrameFace3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double maxEdgeLength,
+   public static FrameFace3D nextCircleBasedFrameFace3D(Random random,
+                                                        ReferenceFrame referenceFrame,
+                                                        double centerMinMax,
+                                                        double maxEdgeLength,
                                                         int numberOfVertices)
    {
       return nextCircleBasedFrameFace3D(random,
@@ -407,8 +418,12 @@ public class EuclidFrameShapeRandomTools
     *                         modified.
     * @return the random face.
     */
-   public static FrameFace3D nextCircleBasedFrameFace3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double maxEdgeLength,
-                                                        int numberOfVertices, Vector3DReadOnly faceNormal)
+   public static FrameFace3D nextCircleBasedFrameFace3D(Random random,
+                                                        ReferenceFrame referenceFrame,
+                                                        double centerMinMax,
+                                                        double maxEdgeLength,
+                                                        int numberOfVertices,
+                                                        Vector3DReadOnly faceNormal)
    {
       List<Point3D> vertices = EuclidShapeRandomTools.nextCircleBasedConvexPolygon3D(random, centerMinMax, maxEdgeLength, numberOfVertices, faceNormal);
       FrameFace3D face3D = new FrameFace3D(() -> referenceFrame, faceNormal);
@@ -499,8 +514,15 @@ public class EuclidFrameShapeRandomTools
     * @param divisionsMax   the maximum number of divisions for discretizing the cone.
     * @return the random convex polytope 3D.
     */
-   public static FrameConvexPolytope3D nextConeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double heightMin,
-                                                                     double heightMax, double radiusMin, double radiusMax, int divisionsMin, int divisionsMax)
+   public static FrameConvexPolytope3D nextConeFrameConvexPolytope3D(Random random,
+                                                                     ReferenceFrame referenceFrame,
+                                                                     double centerMinMax,
+                                                                     double heightMin,
+                                                                     double heightMax,
+                                                                     double radiusMin,
+                                                                     double radiusMax,
+                                                                     int divisionsMin,
+                                                                     int divisionsMax)
    {
       return new FrameConvexPolytope3D(referenceFrame,
                                        EuclidShapeRandomTools.nextConeConvexPolytope3D(random,
@@ -550,7 +572,10 @@ public class EuclidFrameShapeRandomTools
     * @param edgeLengthMax  the maximum value for the cube's edge length.
     * @return the random convex polytope 3D.
     */
-   public static FrameConvexPolytope3D nextCubeFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double edgeLengthMin,
+   public static FrameConvexPolytope3D nextCubeFrameConvexPolytope3D(Random random,
+                                                                     ReferenceFrame referenceFrame,
+                                                                     double centerMinMax,
+                                                                     double edgeLengthMin,
                                                                      double edgeLengthMax)
    {
       return new FrameConvexPolytope3D(referenceFrame, EuclidShapeRandomTools.nextCubeConvexPolytope3D(random, centerMinMax, edgeLengthMin, edgeLengthMax));
@@ -597,8 +622,14 @@ public class EuclidFrameShapeRandomTools
     * @param divisionsMax   the maximum number of divisions for discretizing the cylinder.
     * @return the random convex polytope 3D.
     */
-   public static FrameConvexPolytope3D nextCylinderFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double lengthMin,
-                                                                         double lengthMax, double radiusMin, double radiusMax, int divisionsMin,
+   public static FrameConvexPolytope3D nextCylinderFrameConvexPolytope3D(Random random,
+                                                                         ReferenceFrame referenceFrame,
+                                                                         double centerMinMax,
+                                                                         double lengthMin,
+                                                                         double lengthMax,
+                                                                         double radiusMin,
+                                                                         double radiusMax,
+                                                                         int divisionsMin,
                                                                          int divisionsMax)
    {
       return new FrameConvexPolytope3D(referenceFrame,
@@ -651,8 +682,11 @@ public class EuclidFrameShapeRandomTools
     *                       icosahedron.
     * @return the random convex polytope 3D.
     */
-   public static FrameConvexPolytope3D nextIcosahedronBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax,
-                                                                                 double radiusMin, double radiusMax)
+   public static FrameConvexPolytope3D nextIcosahedronBasedFrameConvexPolytope3D(Random random,
+                                                                                 ReferenceFrame referenceFrame,
+                                                                                 double centerMinMax,
+                                                                                 double radiusMin,
+                                                                                 double radiusMax)
    {
       return new FrameConvexPolytope3D(referenceFrame, EuclidShapeRandomTools.nextIcosahedronBasedConvexPolytope3D(random, centerMinMax, radiusMin, radiusMax));
    }
@@ -697,8 +731,11 @@ public class EuclidFrameShapeRandomTools
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
-   public static FrameConvexPolytope3D nextIcoSphereBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax,
-                                                                               double radiusMin, double radiusMax)
+   public static FrameConvexPolytope3D nextIcoSphereBasedFrameConvexPolytope3D(Random random,
+                                                                               ReferenceFrame referenceFrame,
+                                                                               double centerMinMax,
+                                                                               double radiusMin,
+                                                                               double radiusMax)
    {
       return new FrameConvexPolytope3D(referenceFrame, EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random, centerMinMax, radiusMin, radiusMax));
    }
@@ -716,8 +753,12 @@ public class EuclidFrameShapeRandomTools
     * @return the random convex polytope 3D.
     * @see IcoSphereFactory
     */
-   public static FrameConvexPolytope3D nextIcoSphereBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax,
-                                                                               int recursionLevel, double radiusMin, double radiusMax)
+   public static FrameConvexPolytope3D nextIcoSphereBasedFrameConvexPolytope3D(Random random,
+                                                                               ReferenceFrame referenceFrame,
+                                                                               double centerMinMax,
+                                                                               int recursionLevel,
+                                                                               double radiusMin,
+                                                                               double radiusMax)
    {
       return new FrameConvexPolytope3D(referenceFrame,
                                        EuclidShapeRandomTools.nextIcoSphereBasedConvexPolytope3D(random, centerMinMax, recursionLevel, radiusMin, radiusMax));
@@ -759,7 +800,9 @@ public class EuclidFrameShapeRandomTools
     * @param minMax         the range of the point cloud in the three directions.
     * @return the random convex polytope 3D.
     */
-   public static FrameConvexPolytope3D nextPointCloudBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax,
+   public static FrameConvexPolytope3D nextPointCloudBasedFrameConvexPolytope3D(Random random,
+                                                                                ReferenceFrame referenceFrame,
+                                                                                double centerMinMax,
                                                                                 double minMax)
    {
       return new FrameConvexPolytope3D(referenceFrame, EuclidShapeRandomTools.nextPointCloudBasedConvexPolytope3D(random, centerMinMax, minMax));
@@ -778,8 +821,11 @@ public class EuclidFrameShapeRandomTools
     *                               polytope will be less than {@code numberOfPossiblePoints}.
     * @return the random convex polytope 3D.
     */
-   public static FrameConvexPolytope3D nextPointCloudBasedFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax,
-                                                                                double minMax, int numberOfPossiblePoints)
+   public static FrameConvexPolytope3D nextPointCloudBasedFrameConvexPolytope3D(Random random,
+                                                                                ReferenceFrame referenceFrame,
+                                                                                double centerMinMax,
+                                                                                double minMax,
+                                                                                int numberOfPossiblePoints)
    {
       return new FrameConvexPolytope3D(referenceFrame,
                                        EuclidShapeRandomTools.nextPointCloudBasedConvexPolytope3D(random, centerMinMax, minMax, numberOfPossiblePoints));
@@ -826,8 +872,14 @@ public class EuclidFrameShapeRandomTools
     * @param baseWidthMax   the maximum value for the width of the pyramid's base.
     * @return the random convex polytope 3D.
     */
-   public static FrameConvexPolytope3D nextPyramidFrameConvexPolytope3D(Random random, ReferenceFrame referenceFrame, double centerMinMax, double heightMin,
-                                                                        double heightMax, double baseLengthMin, double baseLengthMax, double baseWidthMin,
+   public static FrameConvexPolytope3D nextPyramidFrameConvexPolytope3D(Random random,
+                                                                        ReferenceFrame referenceFrame,
+                                                                        double centerMinMax,
+                                                                        double heightMin,
+                                                                        double heightMax,
+                                                                        double baseLengthMin,
+                                                                        double baseLengthMax,
+                                                                        double baseWidthMin,
                                                                         double baseWidthMax)
    {
       return new FrameConvexPolytope3D(referenceFrame,

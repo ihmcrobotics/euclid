@@ -54,7 +54,8 @@ public class EuclidFrameShapeCollisionToolsTest
                                                                                                                         Shape3DCollisionEvaluator<A, B> referenceForTesting,
                                                                                                                         BiFunction<Random, ReferenceFrame, A> shapeARandomGenerator,
                                                                                                                         BiFunction<Random, ReferenceFrame, B> shapeBRandomGenerator,
-                                                                                                                        boolean testNormal, double epsilon)
+                                                                                                                        boolean testNormal,
+                                                                                                                        double epsilon)
    {
       for (int i = 0; i < ITERATIONS; i++)
       { // Test in world frame
@@ -106,7 +107,9 @@ public class EuclidFrameShapeCollisionToolsTest
       }
    }
 
-   private static void assertCollisionResultsEqual(EuclidShape3DCollisionResult expected, EuclidFrameShape3DCollisionResult actual, boolean testNormal,
+   private static void assertCollisionResultsEqual(EuclidShape3DCollisionResult expected,
+                                                   EuclidFrameShape3DCollisionResult actual,
+                                                   boolean testNormal,
                                                    double epsilon)
    {
       if (!testNormal)

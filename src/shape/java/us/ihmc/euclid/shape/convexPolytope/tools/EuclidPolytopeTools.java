@@ -57,7 +57,9 @@ public class EuclidPolytopeTools
     * @param lineSegmentEnd2   the end position of the second line segment. Not modified.
     * @return the result of the cross product.
     */
-   public static Vector3D crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
+   public static Vector3D crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1,
+                                                       Point3DReadOnly lineSegmentEnd1,
+                                                       Point3DReadOnly lineSegmentStart2,
                                                        Point3DReadOnly lineSegmentEnd2)
    {
       Vector3D crossProduct = new Vector3D();
@@ -78,8 +80,11 @@ public class EuclidPolytopeTools
     * @param lineSegmentEnd2    the end position of the second line segment. Not modified.
     * @param crossProductToPack the vector used to store the result of the cross product. Modified.
     */
-   public static void crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1, Point3DReadOnly lineSegmentEnd1, Point3DReadOnly lineSegmentStart2,
-                                                   Point3DReadOnly lineSegmentEnd2, Vector3DBasics crossProductToPack)
+   public static void crossProductOfLineSegment3Ds(Point3DReadOnly lineSegmentStart1,
+                                                   Point3DReadOnly lineSegmentEnd1,
+                                                   Point3DReadOnly lineSegmentStart2,
+                                                   Point3DReadOnly lineSegmentEnd2,
+                                                   Vector3DBasics crossProductToPack)
    {
       double direction1X = lineSegmentEnd1.getX() - lineSegmentStart1.getX();
       double direction1Y = lineSegmentEnd1.getY() - lineSegmentStart1.getY();
@@ -110,7 +115,9 @@ public class EuclidPolytopeTools
     * @param planeNormal       the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the left side of the line.
     */
-   public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
+   public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point,
+                                                     Point3DReadOnly firstPointOnLine,
+                                                     Point3DReadOnly secondPointOnLine,
                                                      Vector3DReadOnly planeNormal)
    {
       return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, true);
@@ -131,7 +138,9 @@ public class EuclidPolytopeTools
     * @param planeNormal   the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the left side of the line.
     */
-   public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
+   public static boolean isPoint3DOnLeftSideOfLine3D(Point3DReadOnly point,
+                                                     Point3DReadOnly pointOnLine,
+                                                     Vector3DReadOnly lineDirection,
                                                      Vector3DReadOnly planeNormal)
    {
       return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, true);
@@ -152,7 +161,9 @@ public class EuclidPolytopeTools
     * @param planeNormal       the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the right side of the line.
     */
-   public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
+   public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point,
+                                                      Point3DReadOnly firstPointOnLine,
+                                                      Point3DReadOnly secondPointOnLine,
                                                       Vector3DReadOnly planeNormal)
    {
       return isPoint3DOnSideOfLine3D(point, firstPointOnLine, secondPointOnLine, planeNormal, false);
@@ -173,7 +184,9 @@ public class EuclidPolytopeTools
     * @param planeNormal   the normal of the plane the line is lying onto. Not modified.
     * @return {@code true} if the query is located on the right side of the line.
     */
-   public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
+   public static boolean isPoint3DOnRightSideOfLine3D(Point3DReadOnly point,
+                                                      Point3DReadOnly pointOnLine,
+                                                      Vector3DReadOnly lineDirection,
                                                       Vector3DReadOnly planeNormal)
    {
       return isPoint3DOnSideOfLine3D(point, pointOnLine, lineDirection, planeNormal, false);
@@ -205,9 +218,19 @@ public class EuclidPolytopeTools
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
     */
-   public static boolean isPoint3DOnSideOfLine3D(double pointX, double pointY, double pointZ, double pointOnLineX, double pointOnLineY, double pointOnLineZ,
-                                                 double lineDirectionX, double lineDirectionY, double lineDirectionZ, double planeNormalX, double planeNormalY,
-                                                 double planeNormalZ, boolean testLeftSide)
+   public static boolean isPoint3DOnSideOfLine3D(double pointX,
+                                                 double pointY,
+                                                 double pointZ,
+                                                 double pointOnLineX,
+                                                 double pointOnLineY,
+                                                 double pointOnLineZ,
+                                                 double lineDirectionX,
+                                                 double lineDirectionY,
+                                                 double lineDirectionZ,
+                                                 double planeNormalX,
+                                                 double planeNormalY,
+                                                 double planeNormalZ,
+                                                 boolean testLeftSide)
    {
       double dx = pointX - pointOnLineX;
       double dy = pointY - pointOnLineY;
@@ -243,8 +266,11 @@ public class EuclidPolytopeTools
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
     */
-   public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly firstPointOnLine, Point3DReadOnly secondPointOnLine,
-                                                 Vector3DReadOnly planeNormal, boolean testLeftSide)
+   public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point,
+                                                 Point3DReadOnly firstPointOnLine,
+                                                 Point3DReadOnly secondPointOnLine,
+                                                 Vector3DReadOnly planeNormal,
+                                                 boolean testLeftSide)
    {
       double pointOnLineX = firstPointOnLine.getX();
       double pointOnLineY = firstPointOnLine.getY();
@@ -285,8 +311,11 @@ public class EuclidPolytopeTools
     * @return {@code true} if the point is on the query side of the line, {@code false} if the point is
     *         on the opposite side or exactly on the line.
     */
-   public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point, Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection,
-                                                 Vector3DReadOnly planeNormal, boolean testLeftSide)
+   public static boolean isPoint3DOnSideOfLine3D(Point3DReadOnly point,
+                                                 Point3DReadOnly pointOnLine,
+                                                 Vector3DReadOnly lineDirection,
+                                                 Vector3DReadOnly planeNormal,
+                                                 boolean testLeftSide)
    {
       return isPoint3DOnSideOfLine3D(point.getX(),
                                      point.getY(),
@@ -382,7 +411,9 @@ public class EuclidPolytopeTools
     *         any face or if the observer is inside one of the faces.
     */
    @SuppressWarnings("unchecked")
-   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<E> computeSilhouette(List<F> faces, Point3DReadOnly observer, double epsilon,
+   public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<E> computeSilhouette(List<F> faces,
+                                                                                                    Point3DReadOnly observer,
+                                                                                                    double epsilon,
                                                                                                     Collection<F> visibleFacesToPack)
    {
       if (faces.isEmpty())
@@ -499,9 +530,8 @@ public class EuclidPolytopeTools
     * WARNING: This method generates garbage.
     * </p>
     *
-    *
-    * @param <F> the type of face. 
-    * @param <E> the type half-edge.
+    * @param <F>        the type of face.
+    * @param <E>        the type half-edge.
     * @param query      the coordinates of the query. Not modified.
     * @param silhouette the list of the half-edges to navigate. Not modified.
     * @param epsilon    the tolerance used for determining whether the query is close to a face support
@@ -510,7 +540,8 @@ public class EuclidPolytopeTools
     */
    @SuppressWarnings("unchecked")
    public static <F extends Face3DReadOnly, E extends HalfEdge3DReadOnly> List<F> computeInPlaneFacesAroundSilhouette(Point3DReadOnly query,
-                                                                                                                      Collection<E> silhouette, double epsilon)
+                                                                                                                      Collection<E> silhouette,
+                                                                                                                      double epsilon)
    {
       List<F> inPlaneFacesToPack = new ArrayList<>();
 

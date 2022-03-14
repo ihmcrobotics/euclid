@@ -995,15 +995,24 @@ public class EuclidCoreTestToolsTest
       }
    }
 
-   private static void assertAssertionMethodsBehaveProperly(boolean failExpected, String methodName, Class<?> argumentsClass, Object expected, Object actual,
+   private static void assertAssertionMethodsBehaveProperly(boolean failExpected,
+                                                            String methodName,
+                                                            Class<?> argumentsClass,
+                                                            Object expected,
+                                                            Object actual,
                                                             double epsilon)
          throws Throwable
    {
       assertAssertionMethodsBehaveProperly(EuclidCoreTestTools.class, failExpected, methodName, argumentsClass, expected, actual, epsilon);
    }
 
-   public static void assertAssertionMethodsBehaveProperly(Class<?> assertionClassHolder, boolean failExpected, String methodName, Class<?> argumentsClass,
-                                                           Object expected, Object actual, double epsilon)
+   public static void assertAssertionMethodsBehaveProperly(Class<?> assertionClassHolder,
+                                                           boolean failExpected,
+                                                           String methodName,
+                                                           Class<?> argumentsClass,
+                                                           Object expected,
+                                                           Object actual,
+                                                           double epsilon)
          throws Throwable
    {
       Method assertionMethod1 = assertionClassHolder.getMethod(methodName, argumentsClass, argumentsClass, Double.TYPE);

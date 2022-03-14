@@ -91,7 +91,8 @@ public class EuclidShapeCollisionTools
     * @param shapeB       the capsule. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DCapsule3DCollision(PointShape3DReadOnly shapeA, Capsule3DReadOnly shapeB,
+   public static void evaluatePointShape3DCapsule3DCollision(PointShape3DReadOnly shapeA,
+                                                             Capsule3DReadOnly shapeB,
                                                              EuclidShape3DCollisionResultBasics resultToPack)
    {
       evaluatePoint3DCapsule3DCollision(shapeA, shapeB, resultToPack);
@@ -179,7 +180,8 @@ public class EuclidShapeCollisionTools
     * @param shapeB       the cylinder. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DCylinder3DCollision(PointShape3DReadOnly shapeA, Cylinder3DReadOnly shapeB,
+   public static void evaluatePointShape3DCylinder3DCollision(PointShape3DReadOnly shapeA,
+                                                              Cylinder3DReadOnly shapeB,
                                                               EuclidShape3DCollisionResultBasics resultToPack)
    {
       evaluatePoint3DCylinder3DCollision(shapeA, shapeB, resultToPack);
@@ -207,7 +209,8 @@ public class EuclidShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
-   private static void evaluatePoint3DCylinder3DCollision(Point3DReadOnly point3D, Cylinder3DReadOnly cylinder3D,
+   private static void evaluatePoint3DCylinder3DCollision(Point3DReadOnly point3D,
+                                                          Cylinder3DReadOnly cylinder3D,
                                                           EuclidShape3DCollisionResultBasics resultToPack)
    {
       resultToPack.setToNaN();
@@ -233,7 +236,8 @@ public class EuclidShapeCollisionTools
     * @param shapeB       the ellipsoid. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DEllipsoid3DCollision(PointShape3DReadOnly shapeA, Ellipsoid3DReadOnly shapeB,
+   public static void evaluatePointShape3DEllipsoid3DCollision(PointShape3DReadOnly shapeA,
+                                                               Ellipsoid3DReadOnly shapeB,
                                                                EuclidShape3DCollisionResultBasics resultToPack)
    {
       evaluatePoint3DEllipsoid3DCollision(shapeA, shapeB, resultToPack);
@@ -261,7 +265,8 @@ public class EuclidShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
-   private static void evaluatePoint3DEllipsoid3DCollision(Point3DReadOnly point3D, Ellipsoid3DReadOnly ellipsoid3D,
+   private static void evaluatePoint3DEllipsoid3DCollision(Point3DReadOnly point3D,
+                                                           Ellipsoid3DReadOnly ellipsoid3D,
                                                            EuclidShape3DCollisionResultBasics resultToPack)
    {
       resultToPack.setToNaN();
@@ -290,7 +295,8 @@ public class EuclidShapeCollisionTools
     * @param shapeB       the second point shape. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DPointShape3DCollision(PointShape3DReadOnly shapeA, PointShape3DReadOnly shapeB,
+   public static void evaluatePointShape3DPointShape3DCollision(PointShape3DReadOnly shapeA,
+                                                                PointShape3DReadOnly shapeB,
                                                                 EuclidShape3DCollisionResultBasics resultToPack)
    {
       Point3DBasics pointOnA = resultToPack.getPointOnA();
@@ -369,7 +375,8 @@ public class EuclidShapeCollisionTools
     * @param shapeB       the sphere. Not modified.
     * @param resultToPack the object in which the collision result is stored. Modified.
     */
-   public static void evaluatePointShape3DSphere3DCollision(PointShape3DReadOnly shapeA, Sphere3DReadOnly shapeB,
+   public static void evaluatePointShape3DSphere3DCollision(PointShape3DReadOnly shapeA,
+                                                            Sphere3DReadOnly shapeB,
                                                             EuclidShape3DCollisionResultBasics resultToPack)
    {
       evaluatePoint3DSphere3DCollision(shapeA, shapeB.getPosition(), shapeB.getRadius(), resultToPack);
@@ -398,7 +405,9 @@ public class EuclidShapeCollisionTools
       resultToPack.setSignedDistance(distance);
    }
 
-   private static void evaluatePoint3DSphere3DCollision(Point3DReadOnly point3D, Point3DReadOnly sphere3DPosition, double sphere3DRadius,
+   private static void evaluatePoint3DSphere3DCollision(Point3DReadOnly point3D,
+                                                        Point3DReadOnly sphere3DPosition,
+                                                        double sphere3DRadius,
                                                         EuclidShape3DCollisionResultBasics resultToPack)
    {
       resultToPack.setToNaN();

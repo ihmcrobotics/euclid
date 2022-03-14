@@ -449,7 +449,10 @@ public class EuclidShapeRandomTools
     * @param planeNormal      defines the normal of the plane onto which the vertices are positioned.
     * @return the random convex polygon 3D.
     */
-   public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random, double centerMinMax, double maxEdgeLength, int numberOfVertices,
+   public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random,
+                                                              double centerMinMax,
+                                                              double maxEdgeLength,
+                                                              int numberOfVertices,
                                                               Vector3DReadOnly planeNormal)
    {
       return nextCircleBasedConvexPolygon3D(random, EuclidCoreRandomTools.nextPoint3D(random, centerMinMax), maxEdgeLength, numberOfVertices, planeNormal);
@@ -467,7 +470,10 @@ public class EuclidShapeRandomTools
     * @param planeNormal      defines the normal of the plane onto which the vertices are positioned.
     * @return the random convex polygon 3D.
     */
-   public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random, Point3DReadOnly center, double maxEdgeLength, int numberOfVertices,
+   public static List<Point3D> nextCircleBasedConvexPolygon3D(Random random,
+                                                              Point3DReadOnly center,
+                                                              double maxEdgeLength,
+                                                              int numberOfVertices,
                                                               Vector3DReadOnly planeNormal)
    {
       List<Point2D> circleBasedConvexPolygon2D = EuclidGeometryRandomTools.nextCircleBasedConvexPolygon2D(random,
@@ -617,8 +623,14 @@ public class EuclidShapeRandomTools
     * @param divisionsMax the maximum number of divisions for discretizing the cone.
     * @return the random convex polytope 3D.
     */
-   public static ConvexPolytope3D nextConeConvexPolytope3D(Random random, double centerMinMax, double heightMin, double heightMax, double radiusMin,
-                                                           double radiusMax, int divisionsMin, int divisionsMax)
+   public static ConvexPolytope3D nextConeConvexPolytope3D(Random random,
+                                                           double centerMinMax,
+                                                           double heightMin,
+                                                           double heightMax,
+                                                           double radiusMin,
+                                                           double radiusMax,
+                                                           int divisionsMin,
+                                                           int divisionsMax)
    {
       List<Point3D> coneVertices = EuclidPolytopeFactories.newConeVertices(EuclidCoreRandomTools.nextDouble(random, heightMin, heightMax),
                                                                            EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
@@ -710,8 +722,14 @@ public class EuclidShapeRandomTools
     * @param divisionsMax the maximum number of divisions for discretizing the cylinder.
     * @return the random convex polytope 3D.
     */
-   public static ConvexPolytope3D nextCylinderConvexPolytope3D(Random random, double centerMinMax, double lengthMin, double lengthMax, double radiusMin,
-                                                               double radiusMax, int divisionsMin, int divisionsMax)
+   public static ConvexPolytope3D nextCylinderConvexPolytope3D(Random random,
+                                                               double centerMinMax,
+                                                               double lengthMin,
+                                                               double lengthMax,
+                                                               double radiusMin,
+                                                               double radiusMax,
+                                                               int divisionsMin,
+                                                               int divisionsMax)
    {
       List<Point3D> cylinderVertices = EuclidPolytopeFactories.newCylinderVertices(EuclidCoreRandomTools.nextDouble(random, lengthMin, lengthMax),
                                                                                    EuclidCoreRandomTools.nextDouble(random, radiusMin, radiusMax),
@@ -922,8 +940,14 @@ public class EuclidShapeRandomTools
     * @param baseWidthMax  the maximum value for the width of the pyramid's base.
     * @return the random convex polytope 3D.
     */
-   public static ConvexPolytope3D nextPyramidConvexPolytope3D(Random random, double centerMinMax, double heightMin, double heightMax, double baseLengthMin,
-                                                              double baseLengthMax, double baseWidthMin, double baseWidthMax)
+   public static ConvexPolytope3D nextPyramidConvexPolytope3D(Random random,
+                                                              double centerMinMax,
+                                                              double heightMin,
+                                                              double heightMax,
+                                                              double baseLengthMin,
+                                                              double baseLengthMax,
+                                                              double baseWidthMin,
+                                                              double baseWidthMax)
    {
       List<Point3D> pyramidVertices = EuclidPolytopeFactories.newPyramidVertices(EuclidCoreRandomTools.nextDouble(random, heightMin, heightMax),
                                                                                  EuclidCoreRandomTools.nextDouble(random, baseLengthMin, baseLengthMax),

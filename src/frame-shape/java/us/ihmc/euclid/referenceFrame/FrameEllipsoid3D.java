@@ -104,7 +104,11 @@ public class FrameEllipsoid3D implements FrameEllipsoid3DBasics, GeometryObject<
     * @param radiusZ        the size of the ellipsoid along the z-axis.
     * @throws IllegalArgumentException if any of the three radii is negative.
     */
-   public FrameEllipsoid3D(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double radiusX, double radiusY,
+   public FrameEllipsoid3D(ReferenceFrame referenceFrame,
+                           Point3DReadOnly position,
+                           Orientation3DReadOnly orientation,
+                           double radiusX,
+                           double radiusY,
                            double radiusZ)
    {
       setIncludingFrame(referenceFrame, position, orientation, radiusX, radiusY, radiusZ);

@@ -374,7 +374,15 @@ public class Matrix3DFeatures
     * @param epsilon the tolerance as shown above.
     * @return {@code true} if the given matrix is a rotation matrix, {@code false} otherwise.
     */
-   public static boolean isRotationMatrix(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+   public static boolean isRotationMatrix(double m00,
+                                          double m01,
+                                          double m02,
+                                          double m10,
+                                          double m11,
+                                          double m12,
+                                          double m20,
+                                          double m21,
+                                          double m22,
                                           double epsilon)
    {
       double xyDot = m00 * m10 + m01 * m11 + m02 * m12;
@@ -505,7 +513,15 @@ public class Matrix3DFeatures
     * @param epsilon the tolerance used as shown above.
     * @return {@code true} if the matrix is skew symmetric, {@code false} otherwise.
     */
-   public static boolean isMatrixSkewSymmetric(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+   public static boolean isMatrixSkewSymmetric(double m00,
+                                               double m01,
+                                               double m02,
+                                               double m10,
+                                               double m11,
+                                               double m12,
+                                               double m20,
+                                               double m21,
+                                               double m22,
                                                double epsilon)
    {
       if (Math.abs(m00) <= epsilon && Math.abs(m11) <= epsilon && Math.abs(m22) <= epsilon)
@@ -577,7 +593,15 @@ public class Matrix3DFeatures
     * @param epsilon the tolerance used as shown above.
     * @return {@code true} if the matrix is skew symmetric, {@code false} otherwise.
     */
-   public static boolean isMatrixSymmetric(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+   public static boolean isMatrixSymmetric(double m00,
+                                           double m01,
+                                           double m02,
+                                           double m10,
+                                           double m11,
+                                           double m12,
+                                           double m20,
+                                           double m21,
+                                           double m22,
                                            double epsilon)
    {
       return Math.abs(m01 - m10) <= epsilon && Math.abs(m02 - m20) <= epsilon && Math.abs(m12 - m21) <= epsilon;

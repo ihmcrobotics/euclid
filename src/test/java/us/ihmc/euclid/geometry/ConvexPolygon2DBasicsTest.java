@@ -591,7 +591,7 @@ public abstract class ConvexPolygon2DBasicsTest<T extends ConvexPolygon2DBasics>
       for (int i = 0; i < ITERATIONS; i++)
       { // Testing that querying for one of the vertices it returns true
          ConvexPolygon2D convexPolygon2D = EuclidGeometryRandomTools.nextConvexPolygon2D(random);
-         
+
          for (Point2DReadOnly vertex : convexPolygon2D.getPolygonVerticesView())
          {
             assertTrue(convexPolygon2D.isPointInside(vertex));

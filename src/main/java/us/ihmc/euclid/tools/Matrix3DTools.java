@@ -246,7 +246,12 @@ public class Matrix3DTools
     * @param invert2      whether to invert {@code m2} before performing the multiplication.
     * @param matrixToPack the matrix in which the result is stored. Modified.
     */
-   public static void multiply(Matrix3DReadOnly m1, boolean transpose1, boolean invert1, Matrix3DReadOnly m2, boolean transpose2, boolean invert2,
+   public static void multiply(Matrix3DReadOnly m1,
+                               boolean transpose1,
+                               boolean invert1,
+                               Matrix3DReadOnly m2,
+                               boolean transpose2,
+                               boolean invert2,
                                CommonMatrix3DBasics matrixToPack)
    {
       if (m1.isIdentity())
@@ -463,8 +468,12 @@ public class Matrix3DTools
     * @param invertOrientation whether to invert the orientation before performing the operation.
     * @param matrixToPack      the matrix in which the result is stored. Modified.
     */
-   public static void multiply(Matrix3DReadOnly matrix, boolean transposeMatrix, boolean invertMatrix, Orientation3DReadOnly orientation,
-                               boolean invertOrientation, CommonMatrix3DBasics matrixToPack)
+   public static void multiply(Matrix3DReadOnly matrix,
+                               boolean transposeMatrix,
+                               boolean invertMatrix,
+                               Orientation3DReadOnly orientation,
+                               boolean invertOrientation,
+                               CommonMatrix3DBasics matrixToPack)
    {
       if (orientation instanceof RotationMatrixReadOnly)
       {
@@ -602,8 +611,12 @@ public class Matrix3DTools
     * @param invertMatrix      whether to invert the matrix before performing the operation.
     * @param matrixToPack      the matrix in which the result is stored. Modified.
     */
-   public static void multiply(Orientation3DReadOnly orientation, boolean invertOrientation, Matrix3DReadOnly matrix, boolean transposeMatrix,
-                               boolean invertMatrix, CommonMatrix3DBasics matrixToPack)
+   public static void multiply(Orientation3DReadOnly orientation,
+                               boolean invertOrientation,
+                               Matrix3DReadOnly matrix,
+                               boolean transposeMatrix,
+                               boolean invertMatrix,
+                               CommonMatrix3DBasics matrixToPack)
    {
       if (orientation instanceof RotationMatrixReadOnly)
       {
@@ -996,7 +1009,9 @@ public class Matrix3DTools
     *                                 {@code checkIfTransformInXYPlane} is {@code true}.
     * @throws SingularMatrixException if {@code matrix} is not invertible.
     */
-   public static void inverseTransform(Matrix3DReadOnly matrix, Tuple2DReadOnly tupleOriginal, Tuple2DBasics tupleTransformed,
+   public static void inverseTransform(Matrix3DReadOnly matrix,
+                                       Tuple2DReadOnly tupleOriginal,
+                                       Tuple2DBasics tupleTransformed,
                                        boolean checkIfTransformInXYPlane)
    {
       boolean isMatrix2D = matrix.isMatrix2D();

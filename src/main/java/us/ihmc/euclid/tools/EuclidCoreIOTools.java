@@ -498,7 +498,15 @@ public class EuclidCoreIOTools
     * @param m22    the 3rd row 3rd column coefficient of the matrix.
     * @return the representative {@code String}.
     */
-   public static String getMatrix3DString(String format, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21,
+   public static String getMatrix3DString(String format,
+                                          double m00,
+                                          double m01,
+                                          double m02,
+                                          double m10,
+                                          double m11,
+                                          double m12,
+                                          double m20,
+                                          double m21,
                                           double m22)
    {
       String ret = getStringOf("/", " \\\n", ", ", format, m00, m01, m02);
@@ -795,7 +803,10 @@ public class EuclidCoreIOTools
     *                                {@code String} for each element.
     * @return the representative {@code String}.
     */
-   public static <T> String getCollectionString(String prefix, String suffix, String separator, Collection<? extends T> collection,
+   public static <T> String getCollectionString(String prefix,
+                                                String suffix,
+                                                String separator,
+                                                Collection<? extends T> collection,
                                                 Function<T, String> elementToStringFunction)
    {
       if (collection == null)

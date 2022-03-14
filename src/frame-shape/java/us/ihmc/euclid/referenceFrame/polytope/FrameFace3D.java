@@ -82,7 +82,9 @@ public class FrameFace3D extends AbstractFace3D<FrameVertex3D, FrameHalfEdge3D, 
     * @param constructionEpsilon  tolerance used when adding vertices to a face to trigger a series of
     *                             edge-cases.
     */
-   public FrameFace3D(ReferenceFrameHolder referenceFrameHolder, Collection<FrameHalfEdge3D> faceEdges, FrameVector3DReadOnly normal,
+   public FrameFace3D(ReferenceFrameHolder referenceFrameHolder,
+                      Collection<FrameHalfEdge3D> faceEdges,
+                      FrameVector3DReadOnly normal,
                       double constructionEpsilon)
    {
       super(edgeFactory(referenceFrameHolder), constructionEpsilon);

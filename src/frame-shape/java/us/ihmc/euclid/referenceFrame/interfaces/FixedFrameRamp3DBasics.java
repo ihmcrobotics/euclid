@@ -408,7 +408,11 @@ public interface FixedFrameRamp3DBasics extends Ramp3DBasics, FrameRamp3DReadOnl
     * @param sizeZ          the size along the z-axis.
     * @throws IllegalArgumentException if any of the three size arguments is negative.
     */
-   default void setMatchingFrame(ReferenceFrame referenceFrame, Point3DReadOnly position, Orientation3DReadOnly orientation, double sizeX, double sizeY,
+   default void setMatchingFrame(ReferenceFrame referenceFrame,
+                                 Point3DReadOnly position,
+                                 Orientation3DReadOnly orientation,
+                                 double sizeX,
+                                 double sizeY,
                                  double sizeZ)
    {
       set(position, orientation, sizeX, sizeY, sizeZ);

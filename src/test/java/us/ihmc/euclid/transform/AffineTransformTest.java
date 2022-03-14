@@ -1794,8 +1794,18 @@ public class AffineTransformTest extends TransformTest<AffineTransform>
       assertFalse(t.epsilonEquals(createTransform(m00, m01, m02, m10, m11, m12, m20, m21, m22, tx, ty, tz - big), EPS));
    }
 
-   private static AffineTransform createTransform(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
-                                                  double tx, double ty, double tz)
+   private static AffineTransform createTransform(double m00,
+                                                  double m01,
+                                                  double m02,
+                                                  double m10,
+                                                  double m11,
+                                                  double m12,
+                                                  double m20,
+                                                  double m21,
+                                                  double m22,
+                                                  double tx,
+                                                  double ty,
+                                                  double tz)
    {
       return new AffineTransform(new Matrix3D(m00, m01, m02, m10, m11, m12, m20, m21, m22), new Vector3D(tx, ty, tz));
    }

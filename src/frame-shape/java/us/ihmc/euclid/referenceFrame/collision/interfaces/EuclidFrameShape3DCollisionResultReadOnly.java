@@ -89,7 +89,9 @@ public interface EuclidFrameShape3DCollisionResultReadOnly extends EuclidShape3D
     * @return {@code true} if the two collision results are considered geometrically similar,
     *         {@code false} otherwise.
     */
-   default boolean geometricallyEquals(EuclidFrameShape3DCollisionResultReadOnly other, double distanceEpsilon, double pointTangentialEpsilon,
+   default boolean geometricallyEquals(EuclidFrameShape3DCollisionResultReadOnly other,
+                                       double distanceEpsilon,
+                                       double pointTangentialEpsilon,
                                        double normalEpsilon)
    {
       boolean swap;

@@ -39,7 +39,8 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
     * @throws ReferenceFrameMismatchException if any of the frame arguments is not expressed in the
     *                                         same reference frame as {@code this}.
     */
-   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, FixedFramePoint3DBasics closestPointOnSurfaceToPack,
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck,
+                                            FixedFramePoint3DBasics closestPointOnSurfaceToPack,
                                             FixedFrameVector3DBasics normalAtClosestPointToPack)
    {
       checkReferenceFrameMatch(closestPointOnSurfaceToPack);
@@ -58,7 +59,8 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
     * @return {@code true} if the query is inside this shape or exactly on its surface, {@code false}
     *         otherwise.
     */
-   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck, FramePoint3DBasics closestPointOnSurfaceToPack,
+   default boolean evaluatePoint3DCollision(Point3DReadOnly pointToCheck,
+                                            FramePoint3DBasics closestPointOnSurfaceToPack,
                                             FrameVector3DBasics normalAtClosestPointToPack)
    {
       closestPointOnSurfaceToPack.setReferenceFrame(getReferenceFrame());
@@ -79,7 +81,8 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
     * @throws ReferenceFrameMismatchException if the frame argument is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default boolean evaluatePoint3DCollision(FramePoint3DReadOnly pointToCheck, Point3DBasics closestPointOnSurfaceToPack,
+   default boolean evaluatePoint3DCollision(FramePoint3DReadOnly pointToCheck,
+                                            Point3DBasics closestPointOnSurfaceToPack,
                                             Vector3DBasics normalAtClosestPointToPack)
    {
       checkReferenceFrameMatch(pointToCheck);
@@ -99,7 +102,8 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
     * @throws ReferenceFrameMismatchException if any of the arguments is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default boolean evaluatePoint3DCollision(FramePoint3DReadOnly pointToCheck, FixedFramePoint3DBasics closestPointOnSurfaceToPack,
+   default boolean evaluatePoint3DCollision(FramePoint3DReadOnly pointToCheck,
+                                            FixedFramePoint3DBasics closestPointOnSurfaceToPack,
                                             FixedFrameVector3DBasics normalAtClosestPointToPack)
    {
       checkReferenceFrameMatch(pointToCheck);
@@ -119,7 +123,8 @@ public interface FrameShape3DReadOnly extends Shape3DReadOnly, SupportingFrameVe
     * @throws ReferenceFrameMismatchException if {@code pointToCheck} is not expressed in the same
     *                                         reference frame as {@code this}.
     */
-   default boolean evaluatePoint3DCollision(FramePoint3DReadOnly pointToCheck, FramePoint3DBasics closestPointOnSurfaceToPack,
+   default boolean evaluatePoint3DCollision(FramePoint3DReadOnly pointToCheck,
+                                            FramePoint3DBasics closestPointOnSurfaceToPack,
                                             FrameVector3DBasics normalAtClosestPointToPack)
    {
       checkReferenceFrameMatch(pointToCheck);

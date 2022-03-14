@@ -99,7 +99,11 @@ public class BoundingBoxException extends RuntimeException
     * @param boundingBoxMaxZ the maximum z-coordinate of the bounding box to be displayed in the detail
     *                        message.
     */
-   public BoundingBoxException(double boundingBoxMinX, double boundingBoxMinY, double boundingBoxMinZ, double boundingBoxMaxX, double boundingBoxMaxY,
+   public BoundingBoxException(double boundingBoxMinX,
+                               double boundingBoxMinY,
+                               double boundingBoxMinZ,
+                               double boundingBoxMaxX,
+                               double boundingBoxMaxY,
                                double boundingBoxMaxZ)
    {
       super("Improper bounding box 3D: min = " + EuclidCoreIOTools.getStringOf("(", " )", ", ", boundingBoxMinX, boundingBoxMinY, boundingBoxMinZ) + ", max = "

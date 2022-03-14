@@ -110,8 +110,13 @@ public class SymmetricEigenDecomposition3DTest
       performAssertions(0, A, Qeuclid, lambdaeuclid, Qejml, lambdaejml, EPSILON);
    }
 
-   private void performAssertions(int i, Matrix3DReadOnly A, Matrix3DBasics Qeuclid, Vector3DBasics lambdaeuclid, Matrix3DBasics Qejml,
-                                  Vector3DBasics lambdaejml, double epsilon)
+   private void performAssertions(int i,
+                                  Matrix3DReadOnly A,
+                                  Matrix3DBasics Qeuclid,
+                                  Vector3DBasics lambdaeuclid,
+                                  Matrix3DBasics Qejml,
+                                  Vector3DBasics lambdaejml,
+                                  double epsilon)
    {
       for (int col = 0; col < 3; col++)
       {

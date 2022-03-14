@@ -237,7 +237,9 @@ public interface Ellipsoid3DReadOnly extends Shape3DReadOnly
     * @return the number of intersections between the line and this ellipsoid. It is either equal to 0,
     *         1, or 2.
     */
-   default int intersectionWith(Point3DReadOnly pointOnLine, Vector3DReadOnly lineDirection, Point3DBasics firstIntersectionToPack,
+   default int intersectionWith(Point3DReadOnly pointOnLine,
+                                Vector3DReadOnly lineDirection,
+                                Point3DBasics firstIntersectionToPack,
                                 Point3DBasics secondIntersectionToPack)
    {
       Point3DBasics pointOnLineInLocal = getIntermediateVariableSupplier().requestPoint3D();

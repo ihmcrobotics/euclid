@@ -269,7 +269,15 @@ public class YawPitchRollConversion
     * @param m22                the 3rd row 3rd column coefficient of the rotation matrix.
     * @param yawPitchRollToPack the yaw-pitch-roll used to store the orientation. Modified.
     */
-   public static void convertMatrixToYawPitchRoll(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+   public static void convertMatrixToYawPitchRoll(double m00,
+                                                  double m01,
+                                                  double m02,
+                                                  double m10,
+                                                  double m11,
+                                                  double m12,
+                                                  double m20,
+                                                  double m21,
+                                                  double m22,
                                                   YawPitchRollBasics yawPitchRollToPack)
    {
       double yaw = computeYawImpl(m00, m10);

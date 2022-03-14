@@ -470,7 +470,9 @@ public interface BoundingBox2DReadOnly
     *         0 or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
-   default int intersectionWithLine2D(Point2DReadOnly pointOnLine, Vector2DReadOnly lineDirection, Point2DBasics firstIntersectionToPack,
+   default int intersectionWithLine2D(Point2DReadOnly pointOnLine,
+                                      Vector2DReadOnly lineDirection,
+                                      Point2DBasics firstIntersectionToPack,
                                       Point2DBasics secondIntersectionToPack)
    {
       checkBounds();
@@ -543,7 +545,9 @@ public interface BoundingBox2DReadOnly
     *         equal to 0, 1, or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
-   default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart, Point2DReadOnly lineSegmentEnd, Point2DBasics firstIntersectionToPack,
+   default int intersectionWithLineSegment2D(Point2DReadOnly lineSegmentStart,
+                                             Point2DReadOnly lineSegmentEnd,
+                                             Point2DBasics firstIntersectionToPack,
                                              Point2DBasics secondIntersectionToPack)
    {
       checkBounds();
@@ -581,7 +585,9 @@ public interface BoundingBox2DReadOnly
     *         0, 1, or 2.
     * @throws RuntimeException if this bounding box is improper according to {@link #checkBounds()}.
     */
-   default int intersectionWithRay2D(Point2DReadOnly rayOrigin, Vector2DReadOnly rayDirection, Point2DBasics firstIntersectionToPack,
+   default int intersectionWithRay2D(Point2DReadOnly rayOrigin,
+                                     Vector2DReadOnly rayDirection,
+                                     Point2DBasics firstIntersectionToPack,
                                      Point2DBasics secondIntersectionToPack)
    {
       checkBounds();

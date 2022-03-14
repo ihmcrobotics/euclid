@@ -287,8 +287,10 @@ public class EuclidPolytopeConstructionTools
       return newFaces;
    }
 
-   private static boolean filterInPlaneFaces(Vertex3DReadOnly vertex, List<? extends HalfEdge3DReadOnly> silhouetteEdges,
-                                             Collection<? extends Face3DReadOnly> inPlaneFaces, double epsilon)
+   private static boolean filterInPlaneFaces(Vertex3DReadOnly vertex,
+                                             List<? extends HalfEdge3DReadOnly> silhouetteEdges,
+                                             Collection<? extends Face3DReadOnly> inPlaneFaces,
+                                             double epsilon)
    {
       if (inPlaneFaces.isEmpty())
          return true;
@@ -630,8 +632,11 @@ public class EuclidPolytopeConstructionTools
     *                         Can be {@code null}.
     * @return the area of the polygon.
     */
-   public static double computeConvexPolygon3DArea(List<? extends Point3DReadOnly> convexPolygon3D, Vector3DReadOnly normal, int numberOfVertices,
-                                                   boolean clockwiseOrdered, Point3DBasics centroidToPack)
+   public static double computeConvexPolygon3DArea(List<? extends Point3DReadOnly> convexPolygon3D,
+                                                   Vector3DReadOnly normal,
+                                                   int numberOfVertices,
+                                                   boolean clockwiseOrdered,
+                                                   Point3DBasics centroidToPack)
    {
       checkNumberOfVertices(convexPolygon3D, numberOfVertices);
 

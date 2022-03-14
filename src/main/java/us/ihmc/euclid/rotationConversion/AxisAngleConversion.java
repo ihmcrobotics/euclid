@@ -92,7 +92,15 @@ public class AxisAngleConversion
     * @param m22             the 3rd row 3rd column coefficient of the rotation matrix.
     * @param axisAngleToPack the axis-angle in which the result is stored. Modified.
     */
-   public static void convertMatrixToAxisAngle(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22,
+   public static void convertMatrixToAxisAngle(double m00,
+                                               double m01,
+                                               double m02,
+                                               double m10,
+                                               double m11,
+                                               double m12,
+                                               double m20,
+                                               double m21,
+                                               double m22,
                                                AxisAngleBasics axisAngleToPack)
    {
       if (EuclidCoreTools.containsNaN(m00, m01, m02, m10, m11, m12, m20, m21, m22))

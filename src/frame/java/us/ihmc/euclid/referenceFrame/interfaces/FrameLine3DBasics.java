@@ -77,8 +77,13 @@ public interface FrameLine3DBasics extends FixedFrameLine3DBasics, FrameChangeab
     * @param lineDirectionY the new y-component of the direction of this line.
     * @param lineDirectionZ the new z-component of the direction of this line.
     */
-   default void setIncludingFrame(ReferenceFrame referenceFrame, double pointOnLineX, double pointOnLineY, double pointOnLineZ, double lineDirectionX,
-                                  double lineDirectionY, double lineDirectionZ)
+   default void setIncludingFrame(ReferenceFrame referenceFrame,
+                                  double pointOnLineX,
+                                  double pointOnLineY,
+                                  double pointOnLineZ,
+                                  double lineDirectionX,
+                                  double lineDirectionY,
+                                  double lineDirectionZ)
    {
       setReferenceFrame(referenceFrame);
       set(pointOnLineX, pointOnLineY, pointOnLineZ, lineDirectionX, lineDirectionY, lineDirectionZ);

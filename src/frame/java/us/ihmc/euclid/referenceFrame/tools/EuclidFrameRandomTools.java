@@ -222,7 +222,10 @@ public class EuclidFrameRandomTools
     * @return the array containing the random reference frames and {@code rootFrame} at the first
     *         index.
     */
-   public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix, Random random, ReferenceFrame rootFrame, int numberOfReferenceFrames,
+   public static ReferenceFrame[] nextReferenceFrameTree(String frameNamePrefix,
+                                                         Random random,
+                                                         ReferenceFrame rootFrame,
+                                                         int numberOfReferenceFrames,
                                                          boolean use2DTransforms)
    {
       ReferenceFrame[] referenceFrames = new ReferenceFrame[numberOfReferenceFrames + 1];
@@ -333,7 +336,13 @@ public class EuclidFrameRandomTools
     * @return the random frame point.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
-   public static FramePoint3D nextFramePoint3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
+   public static FramePoint3D nextFramePoint3D(Random random,
+                                               ReferenceFrame referenceFrame,
+                                               double minX,
+                                               double maxX,
+                                               double minY,
+                                               double maxY,
+                                               double minZ,
                                                double maxZ)
    {
       return new FramePoint3D(referenceFrame, EuclidCoreRandomTools.nextPoint3D(random, minX, maxX, minY, maxY, minZ, maxZ));
@@ -444,7 +453,13 @@ public class EuclidFrameRandomTools
     * @return the random vector.
     * @throws RuntimeException if {@code maxX < minX}, {@code maxY < minY}, {@code maxZ < minZ}.
     */
-   public static FrameVector3D nextFrameVector3D(Random random, ReferenceFrame referenceFrame, double minX, double maxX, double minY, double maxY, double minZ,
+   public static FrameVector3D nextFrameVector3D(Random random,
+                                                 ReferenceFrame referenceFrame,
+                                                 double minX,
+                                                 double maxX,
+                                                 double minY,
+                                                 double maxY,
+                                                 double minZ,
                                                  double maxZ)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextVector3D(random, minX, maxX, minY, maxY, minZ, maxZ));
@@ -485,7 +500,9 @@ public class EuclidFrameRandomTools
     * @param normalize              whether to normalize the generated frame vector or not.
     * @return the random frame vector.
     */
-   public static FrameVector3D nextOrthogonalFrameVector3D(Random random, ReferenceFrame referenceFrame, Vector3DReadOnly vectorToBeOrthogonalTo,
+   public static FrameVector3D nextOrthogonalFrameVector3D(Random random,
+                                                           ReferenceFrame referenceFrame,
+                                                           Vector3DReadOnly vectorToBeOrthogonalTo,
                                                            boolean normalize)
    {
       return new FrameVector3D(referenceFrame, EuclidCoreRandomTools.nextOrthogonalVector3D(random, vectorToBeOrthogonalTo, normalize));

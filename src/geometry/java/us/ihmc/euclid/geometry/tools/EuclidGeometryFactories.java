@@ -247,7 +247,8 @@ public class EuclidGeometryFactories
     * @return the observable bounding box.
     */
    public static BoundingBox2DBasics newObservableBoundingBox2DBasics(BoundingBoxChangedListener<Axis2D> valueChangedListener,
-                                                                      BiConsumer<Axis2D, Bound> valueAccessedListener, BoundingBox2DBasics source)
+                                                                      BiConsumer<Axis2D, Bound> valueAccessedListener,
+                                                                      BoundingBox2DBasics source)
    {
       return new BoundingBox2DBasics()
       {
@@ -365,7 +366,8 @@ public class EuclidGeometryFactories
     * @return the observable bounding box.
     */
    public static BoundingBox3DBasics newObservableBoundingBox3DBasics(BoundingBoxChangedListener<Axis3D> valueChangedListener,
-                                                                      BiConsumer<Axis3D, Bound> valueAccessedListener, BoundingBox3DBasics source)
+                                                                      BiConsumer<Axis3D, Bound> valueAccessedListener,
+                                                                      BoundingBox3DBasics source)
    {
       return new BoundingBox3DBasics()
       {

@@ -75,7 +75,10 @@ public class EuclidEllipsoid3DTools
     *                           stored. Modified.
     * @return the smallest distance between the point and the ellipsoid's surface.
     */
-   public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii, Point3DReadOnly query, int maxIterations, double epsilon,
+   public static double distancePoint3DEllipsoid3D(Vector3DReadOnly radii,
+                                                   Point3DReadOnly query,
+                                                   int maxIterations,
+                                                   double epsilon,
                                                    Point3DBasics closestPointToPack)
    {
       // Enforcing: e0 > e1 > e2
@@ -213,7 +216,12 @@ public class EuclidEllipsoid3DTools
       return distance;
    }
 
-   private static double distancePoint2DEllipse2D(double e0, double e1, double y0, double y1, int maxIterations, double epsilon,
+   private static double distancePoint2DEllipse2D(double e0,
+                                                  double e1,
+                                                  double y0,
+                                                  double y1,
+                                                  int maxIterations,
+                                                  double epsilon,
                                                   Point3DBasics closestPointToPack)
    {
       double distance;
@@ -342,7 +350,9 @@ public class EuclidEllipsoid3DTools
       private final CoordinateReader coordinateReader1;
       private final CoordinateReader coordinateReader2;
 
-      private CoordinateOrder(Tuple3DUpdater tuple3DUpdater, CoordinateReader coordinateReader0, CoordinateReader coordinateReader1,
+      private CoordinateOrder(Tuple3DUpdater tuple3DUpdater,
+                              CoordinateReader coordinateReader0,
+                              CoordinateReader coordinateReader1,
                               CoordinateReader coordinateReader2)
       {
          this.tuple3DUpdater = tuple3DUpdater;

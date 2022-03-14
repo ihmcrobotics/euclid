@@ -67,7 +67,9 @@ public class EuclidFrameTestTools
     *                        expressed in the same reference frame. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertRotationFrameVectorGeometricallyEquals(String messagePrefix, FrameVector3DReadOnly expected, FrameVector3DReadOnly actual,
+   public static void assertRotationFrameVectorGeometricallyEquals(String messagePrefix,
+                                                                   FrameVector3DReadOnly expected,
+                                                                   FrameVector3DReadOnly actual,
                                                                    double epsilon)
    {
       assertRotationFrameVectorGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -90,8 +92,11 @@ public class EuclidFrameTestTools
     *                        expressed in the same reference frame. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertRotationFrameVectorGeometricallyEquals(String messagePrefix, FrameVector3DReadOnly expected, FrameVector3DReadOnly actual,
-                                                                   double epsilon, String format)
+   public static void assertRotationFrameVectorGeometricallyEquals(String messagePrefix,
+                                                                   FrameVector3DReadOnly expected,
+                                                                   FrameVector3DReadOnly actual,
+                                                                   double epsilon,
+                                                                   String format)
    {
       if (expected == null && actual == null)
          return;
@@ -171,7 +176,10 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two yaw-pitch-rolls are not equal or not expressed in the same
     *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameYawPitchRollEquals(String messagePrefix, FrameYawPitchRollReadOnly expected, FrameYawPitchRollReadOnly actual, double epsilon,
+   public static void assertFrameYawPitchRollEquals(String messagePrefix,
+                                                    FrameYawPitchRollReadOnly expected,
+                                                    FrameYawPitchRollReadOnly actual,
+                                                    double epsilon,
                                                     String format)
    {
       if (expected == null && actual == null)
@@ -219,7 +227,9 @@ public class EuclidFrameTestTools
     *                        expressed in the same reference frame. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertFrameYawPitchRollGeometricallyEquals(String messagePrefix, FrameYawPitchRollReadOnly expected, FrameYawPitchRollReadOnly actual,
+   public static void assertFrameYawPitchRollGeometricallyEquals(String messagePrefix,
+                                                                 FrameYawPitchRollReadOnly expected,
+                                                                 FrameYawPitchRollReadOnly actual,
                                                                  double epsilon)
    {
       assertFrameYawPitchRollGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -241,8 +251,11 @@ public class EuclidFrameTestTools
     *                        expressed in the same reference frame. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertFrameYawPitchRollGeometricallyEquals(String messagePrefix, FrameYawPitchRollReadOnly expected, FrameYawPitchRollReadOnly actual,
-                                                                 double epsilon, String format)
+   public static void assertFrameYawPitchRollGeometricallyEquals(String messagePrefix,
+                                                                 FrameYawPitchRollReadOnly expected,
+                                                                 FrameYawPitchRollReadOnly actual,
+                                                                 double epsilon,
+                                                                 String format)
    {
       if (expected == null && actual == null)
          return;
@@ -378,7 +391,10 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFramePoint2DGeometricallyEquals(String messagePrefix, FramePoint2DReadOnly expected, FramePoint2DReadOnly actual, double epsilon,
+   public static void assertFramePoint2DGeometricallyEquals(String messagePrefix,
+                                                            FramePoint2DReadOnly expected,
+                                                            FramePoint2DReadOnly actual,
+                                                            double epsilon,
                                                             String format)
    {
       if (expected == null && actual == null)
@@ -450,7 +466,10 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameVector2DGeometricallyEquals(String messagePrefix, FrameVector2DReadOnly expected, FrameVector2DReadOnly actual, double epsilon,
+   public static void assertFrameVector2DGeometricallyEquals(String messagePrefix,
+                                                             FrameVector2DReadOnly expected,
+                                                             FrameVector2DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -587,7 +606,10 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFramePoint3DGeometricallyEquals(String messagePrefix, FramePoint3DReadOnly expected, FramePoint3DReadOnly actual, double epsilon,
+   public static void assertFramePoint3DGeometricallyEquals(String messagePrefix,
+                                                            FramePoint3DReadOnly expected,
+                                                            FramePoint3DReadOnly actual,
+                                                            double epsilon,
                                                             String format)
    {
       if (expected == null && actual == null)
@@ -659,7 +681,10 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameVector3DGeometricallyEquals(String messagePrefix, FrameVector3DReadOnly expected, FrameVector3DReadOnly actual, double epsilon,
+   public static void assertFrameVector3DGeometricallyEquals(String messagePrefix,
+                                                             FrameVector3DReadOnly expected,
+                                                             FrameVector3DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -796,7 +821,10 @@ public class EuclidFrameTestTools
     *                        the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameVector4DGeometricallyEquals(String messagePrefix, FrameVector4DReadOnly expected, FrameVector4DReadOnly actual, double epsilon,
+   public static void assertFrameVector4DGeometricallyEquals(String messagePrefix,
+                                                             FrameVector4DReadOnly expected,
+                                                             FrameVector4DReadOnly actual,
+                                                             double epsilon,
                                                              String format)
    {
       if (expected == null && actual == null)
@@ -846,7 +874,9 @@ public class EuclidFrameTestTools
     *                        in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameQuaternionGeometricallyEquals(String messagePrefix, FrameQuaternionReadOnly expected, FrameQuaternionReadOnly actual,
+   public static void assertFrameQuaternionGeometricallyEquals(String messagePrefix,
+                                                               FrameQuaternionReadOnly expected,
+                                                               FrameQuaternionReadOnly actual,
                                                                double epsilon)
    {
       assertFrameQuaternionGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -869,8 +899,11 @@ public class EuclidFrameTestTools
     *                        in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameQuaternionGeometricallyEquals(String messagePrefix, FrameQuaternionReadOnly expected, FrameQuaternionReadOnly actual,
-                                                               double epsilon, String format)
+   public static void assertFrameQuaternionGeometricallyEquals(String messagePrefix,
+                                                               FrameQuaternionReadOnly expected,
+                                                               FrameQuaternionReadOnly actual,
+                                                               double epsilon,
+                                                               String format)
    {
       if (expected == null && actual == null)
          return;
@@ -917,7 +950,9 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two orientation 2Ds are not equal or not expressed in the reference
     *                        frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameOrientation2DEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
+   public static void assertFrameOrientation2DEquals(String messagePrefix,
+                                                     FrameOrientation2DReadOnly expected,
+                                                     FrameOrientation2DReadOnly actual,
                                                      double epsilon)
    {
       assertFrameOrientation2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -939,8 +974,11 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two orientation 2Ds are not equal or not expressed in the reference
     *                        frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameOrientation2DEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
-                                                     double epsilon, String format)
+   public static void assertFrameOrientation2DEquals(String messagePrefix,
+                                                     FrameOrientation2DReadOnly expected,
+                                                     FrameOrientation2DReadOnly actual,
+                                                     double epsilon,
+                                                     String format)
    {
       if (expected == null && actual == null)
          return;
@@ -987,7 +1025,9 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameOrientation2DGeometricallyEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
+   public static void assertFrameOrientation2DGeometricallyEquals(String messagePrefix,
+                                                                  FrameOrientation2DReadOnly expected,
+                                                                  FrameOrientation2DReadOnly actual,
                                                                   double epsilon)
    {
       assertFrameOrientation2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1009,8 +1049,11 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameOrientation2DGeometricallyEquals(String messagePrefix, FrameOrientation2DReadOnly expected, FrameOrientation2DReadOnly actual,
-                                                                  double epsilon, String format)
+   public static void assertFrameOrientation2DGeometricallyEquals(String messagePrefix,
+                                                                  FrameOrientation2DReadOnly expected,
+                                                                  FrameOrientation2DReadOnly actual,
+                                                                  double epsilon,
+                                                                  String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1075,7 +1118,10 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two matrices are not equal or not expressed in the reference frame.
     *                        If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameMatrix3DEquals(String messagePrefix, FrameMatrix3DReadOnly expected, FrameMatrix3DReadOnly actual, double epsilon,
+   public static void assertFrameMatrix3DEquals(String messagePrefix,
+                                                FrameMatrix3DReadOnly expected,
+                                                FrameMatrix3DReadOnly actual,
+                                                double epsilon,
                                                 String format)
    {
       if (expected == null && actual == null)
@@ -1123,8 +1169,10 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameRotationMatrixGeometricallyEquals(String messagePrefix, FrameRotationMatrixReadOnly expected,
-                                                                   FrameRotationMatrixReadOnly actual, double epsilon)
+   public static void assertFrameRotationMatrixGeometricallyEquals(String messagePrefix,
+                                                                   FrameRotationMatrixReadOnly expected,
+                                                                   FrameRotationMatrixReadOnly actual,
+                                                                   double epsilon)
    {
       assertFrameRotationMatrixGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -1145,8 +1193,11 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameRotationMatrixGeometricallyEquals(String messagePrefix, FrameRotationMatrixReadOnly expected,
-                                                                   FrameRotationMatrixReadOnly actual, double epsilon, String format)
+   public static void assertFrameRotationMatrixGeometricallyEquals(String messagePrefix,
+                                                                   FrameRotationMatrixReadOnly expected,
+                                                                   FrameRotationMatrixReadOnly actual,
+                                                                   double epsilon,
+                                                                   String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1193,7 +1244,9 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two bounding box 2Ds are not equal or not expressed in the
     *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameBoundingBox2DEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
+   public static void assertFrameBoundingBox2DEquals(String messagePrefix,
+                                                     FrameBoundingBox2DReadOnly expected,
+                                                     FrameBoundingBox2DReadOnly actual,
                                                      double epsilon)
    {
       assertFrameBoundingBox2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1215,8 +1268,11 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two bounding box 2Ds are not equal or not expressed in the
     *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameBoundingBox2DEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
-                                                     double epsilon, String format)
+   public static void assertFrameBoundingBox2DEquals(String messagePrefix,
+                                                     FrameBoundingBox2DReadOnly expected,
+                                                     FrameBoundingBox2DReadOnly actual,
+                                                     double epsilon,
+                                                     String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1265,7 +1321,9 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameBoundingBox2DGeometricallyEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
+   public static void assertFrameBoundingBox2DGeometricallyEquals(String messagePrefix,
+                                                                  FrameBoundingBox2DReadOnly expected,
+                                                                  FrameBoundingBox2DReadOnly actual,
                                                                   double epsilon)
    {
       assertFrameBoundingBox2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1288,8 +1346,11 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameBoundingBox2DGeometricallyEquals(String messagePrefix, FrameBoundingBox2DReadOnly expected, FrameBoundingBox2DReadOnly actual,
-                                                                  double epsilon, String format)
+   public static void assertFrameBoundingBox2DGeometricallyEquals(String messagePrefix,
+                                                                  FrameBoundingBox2DReadOnly expected,
+                                                                  FrameBoundingBox2DReadOnly actual,
+                                                                  double epsilon,
+                                                                  String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1336,7 +1397,9 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two bounding box 3Ds are not equal or not expressed in the
     *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameBoundingBox3DEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
+   public static void assertFrameBoundingBox3DEquals(String messagePrefix,
+                                                     FrameBoundingBox3DReadOnly expected,
+                                                     FrameBoundingBox3DReadOnly actual,
                                                      double epsilon)
    {
       assertFrameBoundingBox3DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1358,8 +1421,11 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two bounding box 3Ds are not equal or not expressed in the
     *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameBoundingBox3DEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
-                                                     double epsilon, String format)
+   public static void assertFrameBoundingBox3DEquals(String messagePrefix,
+                                                     FrameBoundingBox3DReadOnly expected,
+                                                     FrameBoundingBox3DReadOnly actual,
+                                                     double epsilon,
+                                                     String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1408,7 +1474,9 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameBoundingBox3DGeometricallyEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
+   public static void assertFrameBoundingBox3DGeometricallyEquals(String messagePrefix,
+                                                                  FrameBoundingBox3DReadOnly expected,
+                                                                  FrameBoundingBox3DReadOnly actual,
                                                                   double epsilon)
    {
       assertFrameBoundingBox3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1431,8 +1499,11 @@ public class EuclidFrameTestTools
     *                        expressed in the reference frame. If only one of the arguments is equal to
     *                        {@code null}.
     */
-   public static void assertFrameBoundingBox3DGeometricallyEquals(String messagePrefix, FrameBoundingBox3DReadOnly expected, FrameBoundingBox3DReadOnly actual,
-                                                                  double epsilon, String format)
+   public static void assertFrameBoundingBox3DGeometricallyEquals(String messagePrefix,
+                                                                  FrameBoundingBox3DReadOnly expected,
+                                                                  FrameBoundingBox3DReadOnly actual,
+                                                                  double epsilon,
+                                                                  String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1479,7 +1550,9 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two frame convex polygon 2D are not equal or not expressed in the
     *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameConvexPolygon2DEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual,
+   public static void assertFrameConvexPolygon2DEquals(String messagePrefix,
+                                                       FrameConvexPolygon2DReadOnly expected,
+                                                       FrameConvexPolygon2DReadOnly actual,
                                                        double epsilon)
    {
       assertFrameConvexPolygon2DEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
@@ -1500,8 +1573,11 @@ public class EuclidFrameTestTools
     * @throws AssertionError if the two frame convex polygon 2D are not equal or not expressed in the
     *                        reference frame. If only one of the arguments is equal to {@code null}.
     */
-   public static void assertFrameConvexPolygon2DEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual,
-                                                       double epsilon, String format)
+   public static void assertFrameConvexPolygon2DEquals(String messagePrefix,
+                                                       FrameConvexPolygon2DReadOnly expected,
+                                                       FrameConvexPolygon2DReadOnly actual,
+                                                       double epsilon,
+                                                       String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1548,8 +1624,10 @@ public class EuclidFrameTestTools
     *                        not expressed in the reference frame. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertFrameConvexPolygon2DGeometricallyEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected,
-                                                                    FrameConvexPolygon2DReadOnly actual, double epsilon)
+   public static void assertFrameConvexPolygon2DGeometricallyEquals(String messagePrefix,
+                                                                    FrameConvexPolygon2DReadOnly expected,
+                                                                    FrameConvexPolygon2DReadOnly actual,
+                                                                    double epsilon)
    {
       assertFrameConvexPolygon2DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -1570,8 +1648,11 @@ public class EuclidFrameTestTools
     *                        not expressed in the reference frame. If only one of the arguments is
     *                        equal to {@code null}.
     */
-   public static void assertFrameConvexPolygon2DGeometricallyEquals(String messagePrefix, FrameConvexPolygon2DReadOnly expected,
-                                                                    FrameConvexPolygon2DReadOnly actual, double epsilon, String format)
+   public static void assertFrameConvexPolygon2DGeometricallyEquals(String messagePrefix,
+                                                                    FrameConvexPolygon2DReadOnly expected,
+                                                                    FrameConvexPolygon2DReadOnly actual,
+                                                                    double epsilon,
+                                                                    String format)
    {
       if (expected == null && actual == null)
          return;
@@ -1642,7 +1723,9 @@ public class EuclidFrameTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, FrameConvexPolygon2DReadOnly expected, FrameConvexPolygon2DReadOnly actual,
+   private static void throwNotEqualAssertionError(String messagePrefix,
+                                                   FrameConvexPolygon2DReadOnly expected,
+                                                   FrameConvexPolygon2DReadOnly actual,
                                                    String format)
    {
       String expectedAsString = EuclidFrameIOTools.getFrameConvexPolygon2DString(format, expected);

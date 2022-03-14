@@ -438,8 +438,11 @@ public class LineSegment2DTest
       }
    }
 
-   private void assertOnlyExistenceOfIntersectionAllCombinations(boolean intersectionExist, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
-                                                                 Point2D lineSegmentStart2, Point2D lineSegmentEnd2)
+   private void assertOnlyExistenceOfIntersectionAllCombinations(boolean intersectionExist,
+                                                                 Point2D lineSegmentStart1,
+                                                                 Point2D lineSegmentEnd1,
+                                                                 Point2D lineSegmentStart2,
+                                                                 Point2D lineSegmentEnd2)
    {
       LineSegment2D lineSegment1 = new LineSegment2D(lineSegmentStart1, lineSegmentEnd1);
       LineSegment2D reverseLineSegment1 = new LineSegment2D(lineSegmentEnd1, lineSegmentStart1);
@@ -472,8 +475,11 @@ public class LineSegment2DTest
       }
    }
 
-   private void assertAllCombinationsOfIntersectionWith(Point2D expectedIntersection, Point2D lineSegmentStart1, Point2D lineSegmentEnd1,
-                                                        Point2D lineSegmentStart2, Point2D lineSegmentEnd2)
+   private void assertAllCombinationsOfIntersectionWith(Point2D expectedIntersection,
+                                                        Point2D lineSegmentStart1,
+                                                        Point2D lineSegmentEnd1,
+                                                        Point2D lineSegmentStart2,
+                                                        Point2D lineSegmentEnd2)
    {
 
       LineSegment2D lineSegment1 = new LineSegment2D(lineSegmentStart1, lineSegmentEnd1);
