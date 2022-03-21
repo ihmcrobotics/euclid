@@ -1,6 +1,7 @@
 package us.ihmc.euclid.tuple2D.interfaces;
 
 import us.ihmc.euclid.tools.EuclidCoreTools;
+import us.ihmc.euclid.tools.TupleTools;
 
 /**
  * Read-only interface for a 2 dimensional vector.
@@ -87,17 +88,7 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     */
    default double angle(Vector2DReadOnly other)
    {
-      double firstVectorX = getX();
-      double firstVectorY = getY();
-      double secondVectorX = other.getX();
-      double secondVectorY = other.getY();
-
-      // The sign of the angle comes from the cross product
-      double crossProduct = firstVectorX * secondVectorY - firstVectorY * secondVectorX;
-      // the magnitude of the angle comes from the dot product
-      double dotProduct = firstVectorX * secondVectorX + firstVectorY * secondVectorY;
-
-      return EuclidCoreTools.atan2(crossProduct, dotProduct);
+      return TupleTools.angle(this, other);
    }
 
    /**

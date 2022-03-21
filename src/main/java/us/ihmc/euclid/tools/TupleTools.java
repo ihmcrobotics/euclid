@@ -83,6 +83,80 @@ public class TupleTools
    }
 
    /**
+    * Convenience method to calculate the angle in radians between two vectors given as tuples.
+    *
+    * @param tuple1 the first tuple. Not modified.
+    * @param tuple2 the second tuple. Not modified.
+    * @return the value of the angle from {@code tuple1} to {@code tuple2} in the range [0; <i>pi</i>].
+    */
+   public static double angle(Tuple2DReadOnly tuple1, Tuple2DReadOnly tuple2)
+   {
+      double x1 = tuple1.getX();
+      double y1 = tuple1.getY();
+      double x2 = tuple2.getX();
+      double y2 = tuple2.getY();
+      return angle(x1, y1, x2, y2);
+   }
+
+   /**
+    * Convenience method to calculate the angle in radians between to vectors.
+    *
+    * @param x1 the x-component of first the vector.
+    * @param y1 the y-component of first the vector.
+    * @param x2 the x-component of second the vector.
+    * @param y2 the y-component of second the vector.
+    * @return the value of the angle from the first vector to the second vector in the range
+    *         [-<i>pi</i>; <i>pi</i>].
+    */
+   public static double angle(double x1, double y1, double x2, double y2)
+   {
+      double cosTheta = x1 * x2 + y1 * y2;
+      double sinTheta = x1 * y2 - y1 * x2;
+      return EuclidCoreTools.atan2(sinTheta, cosTheta);
+   }
+
+   /**
+    * Convenience method to calculate the angle in radians between two vectors given as tuples.
+    *
+    * @param tuple1 the first tuple. Not modified.
+    * @param tuple2 the second tuple. Not modified.
+    * @return the value of the angle from {@code tuple1} to {@code tuple2} in the range [0; <i>pi</i>].
+    */
+   public static double angle(Tuple3DReadOnly tuple1, Tuple3DReadOnly tuple2)
+   {
+      double x1 = tuple1.getX();
+      double y1 = tuple1.getY();
+      double z1 = tuple1.getZ();
+      double x2 = tuple2.getX();
+      double y2 = tuple2.getY();
+      double z2 = tuple2.getZ();
+      return angle(x1, y1, z1, x2, y2, z2);
+   }
+
+   /**
+    * Convenience method to calculate the angle in radians between to vectors.
+    *
+    * @param x1 the x-component of first the vector.
+    * @param y1 the y-component of first the vector.
+    * @param z1 the z-component of first the vector.
+    * @param x2 the x-component of second the vector.
+    * @param y2 the y-component of second the vector.
+    * @param z2 the z-component of second the vector.
+    * @return the value of the angle from the first vector to the second vector in the range [0;
+    *         <i>pi</i>].
+    */
+   public static double angle(double x1, double y1, double z1, double x2, double y2, double z2)
+   {
+      double crossX = y1 * z2 - z1 * y2;
+      double crossY = z1 * x2 - x1 * z2;
+      double crossZ = x1 * y2 - y1 * x2;
+
+      double cosTheta = x1 * x2 + y1 * y2 + z1 * z2;
+      double sinTheta = EuclidCoreTools.norm(crossX, crossY, crossZ);
+      return EuclidCoreTools.atan2(sinTheta, cosTheta);
+   }
+
+   /**
     * Tests on a per component basis if the two given tuples are equal to an {@code epsilon}.
     *
     * @param tuple1  the first tuple. Not modified.

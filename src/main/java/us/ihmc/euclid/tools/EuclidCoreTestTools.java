@@ -341,7 +341,7 @@ public class EuclidCoreTestTools
       }
       catch (AssertionError e)
       {
-         double difference = expectedQuaternion.distancePrecise(actualQuaternion);
+         double difference = expectedQuaternion.distance(actualQuaternion);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }
@@ -1378,7 +1378,7 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         double difference = expected.distancePrecise(actual);
+         double difference = expected.distance(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
       }

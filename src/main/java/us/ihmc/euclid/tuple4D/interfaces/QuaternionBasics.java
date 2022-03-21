@@ -641,30 +641,6 @@ public interface QuaternionBasics extends QuaternionReadOnly, Orientation3DBasic
     */
    default void interpolate(QuaternionReadOnly q0, QuaternionReadOnly qf, double alpha)
    {
-      double cosHalfTheta = q0.dot(qf);
-      double sign = 1.0;
-
-      if (cosHalfTheta < 0.0)
-      {
-         sign = -1.0;
-         cosHalfTheta = -cosHalfTheta;
-      }
-
-      double alpha0 = 1.0 - alpha;
-      double alphaf = alpha;
-
-      if (1.0 - cosHalfTheta > 1.0e-12)
-      {
-         double halfTheta = EuclidCoreTools.acos(cosHalfTheta);
-         double sinHalfTheta = EuclidCoreTools.sin(halfTheta);
-         alpha0 = EuclidCoreTools.sin(alpha0 * halfTheta) / sinHalfTheta;
-         alphaf = EuclidCoreTools.sin(alphaf * halfTheta) / sinHalfTheta;
-      }
-
-      double qx = alpha0 * q0.getX() + sign * alphaf * qf.getX();
-      double qy = alpha0 * q0.getY() + sign * alphaf * qf.getY();
-      double qz = alpha0 * q0.getZ() + sign * alphaf * qf.getZ();
-      double qs = alpha0 * q0.getS() + sign * alphaf * qf.getS();
-      set(qx, qy, qz, qs);
+      QuaternionTools.interpolate(q0, qf, alpha, this);
    }
 }

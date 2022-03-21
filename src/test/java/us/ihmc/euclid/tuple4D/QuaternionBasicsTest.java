@@ -187,15 +187,11 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
             QuaternionReadOnly q2 = createRandomTuple(random);
             qDiff.difference(q1, q2);
 
-            while (qDiff.getAngle() < 0.01)
-            {
-               q2 = createRandomTuple(random);
-               qDiff.difference(q1, q2);
-            }
             double expectedAngle = qDiff.getAngle();
             double actualAngle = q1.distance(q2);
-            assertEquals(expectedAngle, actualAngle, 75.0 * getEpsilon());
-            assertEquals(0.0, q1.distance(q1), 1.0e-3);
+            assertEquals(expectedAngle, actualAngle, getEpsilon());
+            assertEquals(0.0, q1.distance(q1));
+            assertEquals(0.0, q1.distance(new Quaternion(q1)), getEpsilon());
          }
       }
 
@@ -205,36 +201,13 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
 
          for (int j = 0; j < ITERATIONS; j++)
          {
-            double expectedAngle = EuclidCoreRandomTools.nextDouble(random, 1.0e-3, 1.0);
+            double expectedAngle = EuclidCoreRandomTools.nextDouble(random, 0.0, 2.0 * Math.PI);
             AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), expectedAngle);
             T q2 = createEmptyTuple();
             q2.set(aa);
             q2.preMultiply(q1);
             double actualAngle = q1.distance(q2);
-            assertEquals(expectedAngle, actualAngle, 10000 * getEpsilon());
-         }
-      }
-   }
-
-   @Test
-   public void testDistancePrecise() throws Exception
-   {
-      Random random = new Random(1651L);
-
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         QuaternionReadOnly q1 = createRandomTuple(random);
-
-         for (int j = 0; j < ITERATIONS; j++)
-         {
-            double expectedAngle = random.nextDouble();
-            AxisAngle aa = new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), expectedAngle);
-            T q2 = createEmptyTuple();
-            q2.set(aa);
-            q2.preMultiply(q1);
-            double actualAngle = q1.distancePrecise(q2);
             assertEquals(expectedAngle, actualAngle, getEpsilon());
-            assertEquals(0.0, q1.distance(q1), 1.0e-3);
          }
       }
    }
