@@ -16,21 +16,51 @@ import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple4D.Vector4D;
 
 public class EuclidCoreToolsTest
 {
    @Test
    public void testConstants()
    {
-      assertEquals(new Point2D(), EuclidCoreTools.origin2D);
-      assertEquals(new Point3D(), EuclidCoreTools.origin3D);
-      assertEquals(new Vector2D(), EuclidCoreTools.zeroVector2D);
-      assertEquals(new Vector3D(), EuclidCoreTools.zeroVector3D);
-      Matrix3D expected = new Matrix3D();
-      expected.setToZero();
-      assertEquals(expected, EuclidCoreTools.zeroMatrix3D);
-      expected.setIdentity();
-      assertEquals(expected, EuclidCoreTools.identityMatrix3D);
+	   
+	   Point2D pt2d = new Point2D();
+	   assertEquals(pt2d, EuclidCoreTools.origin2D);
+	   assertEquals(1,EuclidCoreTools.origin2D.hashCode());
+	   assertEquals(pt2d.toString(),EuclidCoreTools.origin2D.toString());
+	   
+	   Point3D pt3d = new Point3D();
+	   assertEquals(new Point3D(), EuclidCoreTools.origin3D);
+	   assertEquals(pt3d.hashCode(), EuclidCoreTools.origin3D.hashCode());
+	   assertEquals(pt3d.toString(),EuclidCoreTools.origin3D.toString());
+	   
+	   Vector2D vec2d = new Vector2D();
+	   assertEquals(vec2d, EuclidCoreTools.zeroVector2D);
+	   assertEquals(vec2d.hashCode(), EuclidCoreTools.zeroVector2D.hashCode());
+	   assertEquals(vec2d.toString(),EuclidCoreTools.zeroVector2D.toString());
+	   
+	   Vector3D vec3d = new Vector3D();
+	   assertEquals(vec3d, EuclidCoreTools.zeroVector3D);
+	   assertEquals(vec3d.hashCode(), EuclidCoreTools.zeroVector3D.hashCode());
+	   assertEquals(vec3d.toString(),EuclidCoreTools.zeroVector3D.toString());
+	   
+	   Vector4D expectedQuaternion = new Vector4D();
+	   expectedQuaternion.setElement(3, 1);
+	   assertEquals(expectedQuaternion, EuclidCoreTools.neutralQuaternion);
+	   assertEquals(expectedQuaternion.hashCode(),EuclidCoreTools.neutralQuaternion.hashCode());
+	   assertEquals(expectedQuaternion.toString(),EuclidCoreTools.neutralQuaternion.toString());
+	   
+	   Matrix3D expected = new Matrix3D();
+	   expected.setToZero();
+	   assertEquals(expected, EuclidCoreTools.zeroMatrix3D);
+	   assertEquals(expected.toString(), EuclidCoreTools.zeroMatrix3D.toString());
+	   assertEquals(expected.hashCode(), EuclidCoreTools.zeroMatrix3D.hashCode());
+	   
+	   expected.setIdentity();
+	   assertEquals(expected, EuclidCoreTools.identityMatrix3D);
+	   assertEquals(expected.toString(),EuclidCoreTools.identityMatrix3D.toString());
+	   assertEquals(expected.hashCode(), EuclidCoreTools.identityMatrix3D.hashCode());
+	   
    }
 
    @Test
