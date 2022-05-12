@@ -88,7 +88,7 @@ public class QuaternionTools
          z = 0.25 * S;
       }
  
-      // convert rotationMatrix to quaternion.
+      // convert quaternion to rotationMatrix
       // . . .
 
       // now compute distance
