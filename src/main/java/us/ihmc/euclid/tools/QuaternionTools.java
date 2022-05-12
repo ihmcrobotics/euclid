@@ -38,7 +38,7 @@ public class QuaternionTools
    public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
    {
       double distance = 0;
-      double trace = rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22();
+
       //      double w = Math.sqrt(1 + rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22()) / 2;
 
       double m00 = rotationMatrix.getM00();
@@ -50,6 +50,9 @@ public class QuaternionTools
       double m20 = rotationMatrix.getM20();
       double m21 = rotationMatrix.getM21();
       double m22 = rotationMatrix.getM22();
+      
+      double trace = m00 + m11 + m22;
+      
       double x, y, z, w;
 
       if (trace > 0)
@@ -84,13 +87,13 @@ public class QuaternionTools
          y = (m12 + m21) / S;
          z = 0.25 * S;
       }
+ 
       // convert rotationMatrix to quaternion.
       // . . .
 
       // now compute distance
       // . . .
 
-      //
 
       return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), x, y, z, w);
    }
