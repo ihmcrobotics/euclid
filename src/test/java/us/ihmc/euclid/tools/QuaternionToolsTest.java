@@ -24,10 +24,34 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class QuaternionToolsTest
 {
    private static final double EPSILON = 1.0e-12;
+   
+   @Test
+   public void testDistance() throws Exception
+   {
+      Random random = new Random(3212423);
+      
+      for(int i = 0; i < ITERATIONS; ++i)
+      {
+         RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
+      
+         YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random); 
+         Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
+         
+         Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         
+         double expectedDistance = QuaternionTools.distance(randomQuaternion, randomMatrixConverted);
+         double actualDistance = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
+         System.out.println("expectedDistance = "+ expectedDistance);
+         System.out.println("actualDistance = "+ actualDistance);
+         assertEquals(expectedDistance,actualDistance,EPSILON);
+      }      
+   }
 
    @Test
    public void testMultiply() throws Exception
