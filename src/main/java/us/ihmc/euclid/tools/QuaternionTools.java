@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tools;
 
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAMatrix2DException;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -16,6 +17,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * This gathers common mathematical operations involving quaternions.
@@ -30,6 +32,107 @@ public class QuaternionTools
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
+
+   // Angular distance (quaternion & rotationMatrix)- - - - - Jae O. >>>
+
+   public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
+   {
+      double distance = 0;
+      double trace = rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22();
+//      double w = Math.sqrt(1 + rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22()) / 2;
+      
+      double m00 = rotationMatrix.getM21();
+      double m01 = rotationMatrix.getM21();
+      double m02 = rotationMatrix.getM21();
+      double m10 = rotationMatrix.getM21();
+      double m11 = rotationMatrix.getM21();
+      double m12 = rotationMatrix.getM21();
+      double m20 = rotationMatrix.getM21();
+      double m21 = rotationMatrix.getM21();
+      double m22 = rotationMatrix.getM21();
+      double x,y,z,w;
+
+      if (trace > 0)
+      {
+         double S = Math.sqrt(trace + 1.0) * 2; // S=4*w
+         w = 0.25 * S;
+         x = (m21 - m12) / S;
+         y = (m02 - m20) / S;
+         z = (m10 - m01) / S;
+      }
+      else if ((m00 > m11) & (m00 > m22))
+      {
+         double S = Math.sqrt(1.0 + m00 - m11 - m22) * 2; // S=4*x
+         w = (m21 - m12) / S;
+         x = 0.25 * S;
+         y = (m01 + m10) / S;
+         z = (m02 + m20) / S;
+      }
+      else if (m11 > m22)
+      {
+         double S = Math.sqrt(1.0 + m11 - m00 - m22) * 2; // S=4*y
+         w = (m02 - m20) / S;
+         x = (m01 + m10) / S;
+         y = 0.25 * S;
+         z = (m12 + m21) / S;
+      }
+      else
+      {
+         double S = Math.sqrt(1.0 + m22 - m00 - m11) * 2; // S=4*z
+         w = (m10 - m01) / S;
+         x = (m02 + m20) / S;
+         y = (m12 + m21) / S;
+         z = 0.25 * S;
+      }
+      // convert rotationMatrix to quaternion.
+      // . . .
+        
+      // now compute distance
+      // . . .
+
+      //
+      
+      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), x, y, z, w);
+   }
+
+   // <<< Angular distance(quaternion & rotationMatrix) - - - - - Jae O.
+   
+   public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll)
+   {
+      double halfYaw = 0.5 * yawPitchRoll.getYaw();
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
+
+      double halfPitch = 0.5 * yawPitchRoll.getPitch();
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
+
+      double halfRoll = 0.5 * yawPitchRoll.getRoll();
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
+
+      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+      
+      return distance(quaternion.getX(),quaternion.getY(),quaternion.getZ(),quaternion.getS(),qx,qy,qz,qs);
+   }
+   // Angular distance (quaternion & rollpitchyaw)- - - - - Jae O. >>>
+   
+   public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
+   {
+      double s = Math.sin(axisAngle.getAngle());
+      double qx = axisAngle.getX() * s;
+      double qy = axisAngle.getY() * s;
+      double qz = axisAngle.getZ() * s;
+      double qs = Math.cos(axisAngle.getAngle()/2);
+      return distance(quaternion.getX(),quaternion.getY(),quaternion.getZ(),quaternion.getS(),qx,qy,qz,qs);
+
+   }
+   
+   
+   // <<< Angular distance (quaternion & rollpitchyaw)- - - - - Jae O.
 
    /**
     * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
@@ -166,7 +269,8 @@ public class QuaternionTools
 
       double q2s, q2x, q2y, q2z;
       if (orientation2 instanceof QuaternionReadOnly)
-      { // In this case orientation2 might be the same object as quaternionToPack, so let's save its components first.
+      { // In this case orientation2 might be the same object as
+         // quaternionToPack, so let's save its components first.
          QuaternionReadOnly q2 = (QuaternionReadOnly) orientation2;
          q2x = q2.getX();
          q2y = q2.getY();
@@ -182,7 +286,8 @@ public class QuaternionTools
          q2s = quaternionToPack.getS();
       }
 
-      // Now we can safely use the quaternionToPack argument to convert the orientation1.
+      // Now we can safely use the quaternionToPack argument to convert the
+      // orientation1.
       quaternionToPack.set(orientation1);
       double q1x = quaternionToPack.getX();
       double q1y = quaternionToPack.getY();
@@ -220,12 +325,14 @@ public class QuaternionTools
          return;
       }
 
-      // In this case orientation2 might be the same object as quaternionToPack, so let's save its components first.
+      // In this case orientation2 might be the same object as quaternionToPack, so
+      // let's save its components first.
       double q2x = orientation2.getX();
       double q2y = orientation2.getY();
       double q2z = orientation2.getZ();
       double q2s = orientation2.getS();
-      // Now we can safely use the quaternionToPack argument to convert the orientation1.
+      // Now we can safely use the quaternionToPack argument to convert the
+      // orientation1.
       quaternionToPack.set(orientation1);
       double q1x = quaternionToPack.getX();
       double q1y = quaternionToPack.getY();
@@ -263,12 +370,14 @@ public class QuaternionTools
          return;
       }
 
-      // In this case orientation1 might be the same object as quaternionToPack, so let's save its components first.
+      // In this case orientation1 might be the same object as quaternionToPack, so
+      // let's save its components first.
       double q1x = orientation1.getX();
       double q1y = orientation1.getY();
       double q1z = orientation1.getZ();
       double q1s = orientation1.getS();
-      // Now we can safely use the quaternionToPack argument to convert the orientation2.
+      // Now we can safely use the quaternionToPack argument to convert the
+      // orientation2.
       quaternionToPack.set(orientation2);
       double q2x = quaternionToPack.getX();
       double q2y = quaternionToPack.getY();
@@ -989,7 +1098,8 @@ public class QuaternionTools
          qz = -qz;
       }
 
-      // It's the same as transforming a vector 3D. The scalar of the transformed vector 4D is the same as the original.
+      // It's the same as transforming a vector 3D. The scalar of the transformed
+      // vector 4D is the same as the original.
       norm = 1.0 / norm;
       qx *= norm;
       qy *= norm;
