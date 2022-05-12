@@ -39,18 +39,18 @@ public class QuaternionTools
    {
       double distance = 0;
       double trace = rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22();
-//      double w = Math.sqrt(1 + rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22()) / 2;
-      
-      double m00 = rotationMatrix.getM21();
-      double m01 = rotationMatrix.getM21();
-      double m02 = rotationMatrix.getM21();
-      double m10 = rotationMatrix.getM21();
-      double m11 = rotationMatrix.getM21();
-      double m12 = rotationMatrix.getM21();
-      double m20 = rotationMatrix.getM21();
+      //      double w = Math.sqrt(1 + rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22()) / 2;
+
+      double m00 = rotationMatrix.getM00();
+      double m01 = rotationMatrix.getM01();
+      double m02 = rotationMatrix.getM02();
+      double m10 = rotationMatrix.getM10();
+      double m11 = rotationMatrix.getM11();
+      double m12 = rotationMatrix.getM12();
+      double m20 = rotationMatrix.getM20();
       double m21 = rotationMatrix.getM21();
-      double m22 = rotationMatrix.getM21();
-      double x,y,z,w;
+      double m22 = rotationMatrix.getM22();
+      double x, y, z, w;
 
       if (trace > 0)
       {
@@ -86,17 +86,19 @@ public class QuaternionTools
       }
       // convert rotationMatrix to quaternion.
       // . . .
-        
+
       // now compute distance
       // . . .
 
       //
-      
+
       return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), x, y, z, w);
    }
 
    // <<< Angular distance(quaternion & rotationMatrix) - - - - - Jae O.
+
    
+// Angular distance (quaternion & rollpitchyaw)- - - - - Jae O. >>>
    public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll)
    {
       double halfYaw = 0.5 * yawPitchRoll.getYaw();
@@ -115,24 +117,23 @@ public class QuaternionTools
       double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
-      
-      return distance(quaternion.getX(),quaternion.getY(),quaternion.getZ(),quaternion.getS(),qx,qy,qz,qs);
+
+      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs);
    }
-   // Angular distance (quaternion & rollpitchyaw)- - - - - Jae O. >>>
    
+   // <<< Angular distance (quaternion & rollpitchyaw)- - - - - Jae O.
+   
+   // Angular distance (quaternion & axisangle)- - - - - Jae O. >>>
    public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
    {
       double s = Math.sin(axisAngle.getAngle());
       double qx = axisAngle.getX() * s;
       double qy = axisAngle.getY() * s;
       double qz = axisAngle.getZ() * s;
-      double qs = Math.cos(axisAngle.getAngle()/2);
-      return distance(quaternion.getX(),quaternion.getY(),quaternion.getZ(),quaternion.getS(),qx,qy,qz,qs);
-
+      double qs = Math.cos(axisAngle.getAngle() / 2);
+      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs);
    }
-   
-   
-   // <<< Angular distance (quaternion & rollpitchyaw)- - - - - Jae O.
+   // <<< Angular distance (quaternion & axisangle)- - - - - Jae O.
 
    /**
     * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
@@ -270,7 +271,7 @@ public class QuaternionTools
       double q2s, q2x, q2y, q2z;
       if (orientation2 instanceof QuaternionReadOnly)
       { // In this case orientation2 might be the same object as
-         // quaternionToPack, so let's save its components first.
+        // quaternionToPack, so let's save its components first.
          QuaternionReadOnly q2 = (QuaternionReadOnly) orientation2;
          q2x = q2.getX();
          q2y = q2.getY();
