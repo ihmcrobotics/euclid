@@ -34,7 +34,7 @@ public class QuaternionToolsTest
    public void testDistance() throws Exception
    {
       Random random = new Random(3212423);
-      
+      int cnt = 0;
       for(int i = 0; i < ITERATIONS; ++i)
       {
          RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
@@ -49,8 +49,12 @@ public class QuaternionToolsTest
          double actualDistance = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
          System.out.println("expectedDistance = "+ expectedDistance);
          System.out.println("actualDistance = "+ actualDistance);
+         cnt++;
+         System.out.println("iter = " + cnt);
          assertEquals(expectedDistance,actualDistance,EPSILON);
+         
       }      
+      
    }
 
    @Test
