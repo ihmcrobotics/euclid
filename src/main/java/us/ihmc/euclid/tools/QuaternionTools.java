@@ -102,7 +102,7 @@ public class QuaternionTools
          fromQuaternionM20 = 0;
          fromQuaternionM21 = 0;
          fromQuaternionM22 = 1;
-         //         matrixToPack.setIdentity();
+         //    ..     matrixToPack.setIdentity();
 
       }
       else
