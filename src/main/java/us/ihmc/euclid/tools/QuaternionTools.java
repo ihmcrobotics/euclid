@@ -36,6 +36,10 @@ public class QuaternionTools
 
    // Angular distance (quaternion & rotationMatrix)- - - - - Jae O. >>>
 
+   
+   // COMMENT ONE: Here, I'm using the same conversion method as in quaternionconverstion.java 
+   //   but I'm getting different result.
+    
    public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
    {
       //      double w = Math.sqrt(1 + rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22()) / 2;
