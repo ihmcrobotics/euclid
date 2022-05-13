@@ -8,6 +8,7 @@ import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -37,71 +38,139 @@ public class QuaternionTools
 
    public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
    {
-      double distance = 0;
-
       //      double w = Math.sqrt(1 + rotationMatrix.getM00() + rotationMatrix.getM11() + rotationMatrix.getM22()) / 2;
 
-      double m00 = rotationMatrix.getM00();
-      double m01 = rotationMatrix.getM01();
-      double m02 = rotationMatrix.getM02();
-      double m10 = rotationMatrix.getM10();
-      double m11 = rotationMatrix.getM11();
-      double m12 = rotationMatrix.getM12();
-      double m20 = rotationMatrix.getM20();
-      double m21 = rotationMatrix.getM21();
-      double m22 = rotationMatrix.getM22();
-      
-      double trace = m00 + m11 + m22;
-      
-      double x, y, z, w;
+      double rotationM00 = rotationMatrix.getM00();
+      double rotationM01 = rotationMatrix.getM01();
+      double rotationM02 = rotationMatrix.getM02();
+      double rotationM10 = rotationMatrix.getM10();
+      double rotationM11 = rotationMatrix.getM11();
+      double rotationM12 = rotationMatrix.getM12();
+      double rotationM20 = rotationMatrix.getM20();
+      double rotationM21 = rotationMatrix.getM21();
+      double rotationM22 = rotationMatrix.getM22();
+      double fromQuaternionM00, fromQuaternionM01, fromQuaternionM02, fromQuaternionM10, fromQuaternionM11, fromQuaternionM12, fromQuaternionM20,
+            fromQuaternionM21, fromQuaternionM22;
 
-      if (trace > 0)
-      {
-         double S = Math.sqrt(trace + 1.0) * 2; // S=4*w
-         w = 0.25 * S;
-         x = (m21 - m12) / S;
-         y = (m02 - m20) / S;
-         z = (m10 - m01) / S;
-      }
-      else if ((m00 > m11) & (m00 > m22))
-      {
-         double S = Math.sqrt(1.0 + m00 - m11 - m22) * 2; // S=4*x
-         w = (m21 - m12) / S;
-         x = 0.25 * S;
-         y = (m01 + m10) / S;
-         z = (m02 + m20) / S;
-      }
-      else if (m11 > m22)
-      {
-         double S = Math.sqrt(1.0 + m11 - m00 - m22) * 2; // S=4*y
-         w = (m02 - m20) / S;
-         x = (m01 + m10) / S;
-         y = 0.25 * S;
-         z = (m12 + m21) / S;
-      }
-      else
-      {
-         double S = Math.sqrt(1.0 + m22 - m00 - m11) * 2; // S=4*z
-         w = (m10 - m01) / S;
-         x = (m02 + m20) / S;
-         y = (m12 + m21) / S;
-         z = 0.25 * S;
-      }
- 
+      double qs = quaternion.getS();
+      double qx = quaternion.getX();
+      double qy = quaternion.getY();
+      double qz = quaternion.getZ();
+
       // convert quaternion to rotationMatrix
       // . . .
 
       // now compute distance
       // . . .
 
+      if (EuclidCoreTools.containsNaN(qx, qy, qz, qs))
+      {
+         //         matrixToPack.setToNaN();
+         System.out.println("Original quaternion contains NaN");
+         return 0;
+      }
 
-      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), x, y, z, w);
+      if (QuaternionTools.isNeutralQuaternion(qx, qy, qz, qs, EPS))
+      {
+         //         matrixToPack.setIdentity();
+         fromQuaternionM00 = 1;
+         fromQuaternionM01 = 0;
+         fromQuaternionM02 = 0;
+         fromQuaternionM10 = 0;
+         fromQuaternionM11 = 1;
+         fromQuaternionM12 = 0;
+         fromQuaternionM20 = 0;
+         fromQuaternionM21 = 0;
+         fromQuaternionM22 = 1;
+
+      }
+
+      double norm = EuclidCoreTools.fastNorm(qx, qy, qz, qs);
+
+      if (norm < EPS)
+      {
+         fromQuaternionM00 = 1;
+         fromQuaternionM01 = 0;
+         fromQuaternionM02 = 0;
+         fromQuaternionM10 = 0;
+         fromQuaternionM11 = 1;
+         fromQuaternionM12 = 0;
+         fromQuaternionM20 = 0;
+         fromQuaternionM21 = 0;
+         fromQuaternionM22 = 1;
+         //         matrixToPack.setIdentity();
+
+      }
+      else
+      {
+         norm = 1.0 / norm;
+         qx *= norm;
+         qy *= norm;
+         qz *= norm;
+         qs *= norm;
+
+         double yy2 = 2.0 * qy * qy;
+         double zz2 = 2.0 * qz * qz;
+         double xx2 = 2.0 * qx * qx;
+         double xy2 = 2.0 * qx * qy;
+         double sz2 = 2.0 * qs * qz;
+         double xz2 = 2.0 * qx * qz;
+         double sy2 = 2.0 * qs * qy;
+         double yz2 = 2.0 * qy * qz;
+         double sx2 = 2.0 * qs * qx;
+
+         fromQuaternionM00 = 1.0 - yy2 - zz2;
+         fromQuaternionM01 = xy2 - sz2;
+         fromQuaternionM02 = xz2 + sy2;
+         fromQuaternionM10 = xy2 + sz2;
+         fromQuaternionM11 = 1.0 - xx2 - zz2;
+         fromQuaternionM12 = yz2 - sx2;
+         fromQuaternionM20 = xz2 - sy2;
+         fromQuaternionM21 = yz2 + sx2;
+         fromQuaternionM22 = 1.0 - xx2 - yy2;
+      }
+
+      double m00 = fromQuaternionM00 * rotationM00 + fromQuaternionM01 * rotationM01 + fromQuaternionM02 * rotationM02;
+      double m01 = fromQuaternionM00 * rotationM10 + fromQuaternionM01 * rotationM11 + fromQuaternionM02 * rotationM12;
+      double m02 = fromQuaternionM00 * rotationM20 + fromQuaternionM01 * rotationM21 + fromQuaternionM02 * rotationM22;
+      double m10 = fromQuaternionM10 * rotationM00 + fromQuaternionM11 * rotationM01 + fromQuaternionM12 * rotationM02;
+      double m11 = fromQuaternionM10 * rotationM10 + fromQuaternionM11 * rotationM11 + fromQuaternionM12 * rotationM12;
+      double m12 = fromQuaternionM10 * rotationM20 + fromQuaternionM11 * rotationM21 + fromQuaternionM12 * rotationM22;
+      double m20 = fromQuaternionM20 * rotationM00 + fromQuaternionM21 * rotationM01 + fromQuaternionM22 * rotationM02;
+      double m21 = fromQuaternionM20 * rotationM10 + fromQuaternionM21 * rotationM11 + fromQuaternionM22 * rotationM12;
+      double m22 = fromQuaternionM20 * rotationM20 + fromQuaternionM21 * rotationM21 + fromQuaternionM22 * rotationM22;
+
+      double angle, x, y, z; // variables for result
+
+      x = m21 - m12;
+      y = m02 - m20;
+      z = m10 - m01;
+
+      double s = EuclidCoreTools.fastNorm(x, y, z);
+
+      if (s > AxisAngleConversion.EPS)
+      {
+         double sin = 0.5 * s;
+         double cos = 0.5 * (m00 + m11 + m22 - 1.0);
+         angle = EuclidCoreTools.atan2(sin, cos);
+      }
+      else if (m00 + m11 + m22 > 3.0 - 1.0e-7)
+      { // At this point, the matrix has to be identity.
+         return 0.0;
+      }
+      else
+      {
+         // otherwise this singularity is angle = 180
+         angle = Math.PI;
+      }
+
+      return angle;
+
    }
 
    // <<< Angular distance(quaternion & rotationMatrix) - - - - - Jae O.
 
-   
-// Angular distance (quaternion & rollpitchyaw)- - - - - Jae O. >>>
+   // Angular distance (quaternion & rollpitchyaw)- - - - - Jae O. >>>
    public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll)
    {
       double halfYaw = 0.5 * yawPitchRoll.getYaw();
@@ -123,18 +192,51 @@ public class QuaternionTools
 
       return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs);
    }
-   
+
    // <<< Angular distance (quaternion & rollpitchyaw)- - - - - Jae O.
-   
+
    // Angular distance (quaternion & axisangle)- - - - - Jae O. >>>
    public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
    {
-      double s = Math.sin(axisAngle.getAngle());
-      double qx = axisAngle.getX() * s;
-      double qy = axisAngle.getY() * s;
-      double qz = axisAngle.getZ() * s;
-      double qs = Math.cos(axisAngle.getAngle() / 2);
-      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs);
+      
+//      double s = Math.sin(axisAngle.getAngle());
+//      double qx = axisAngle.getX() * s;
+//      double qy = axisAngle.getY() * s;
+//      double qz = axisAngle.getZ() * s;
+//      double qs = Math.cos(axisAngle.getAngle() / 2);
+//      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs);
+      
+      double ux = axisAngle.getX();
+      double uy = axisAngle.getY();
+      double uz = axisAngle.getZ();
+      double convertedX, convertedY, convertedZ,convertedS;
+      if (EuclidCoreTools.containsNaN(ux, uy, uz, axisAngle.getAngle()))
+      {
+//         quaternionToPack.setToNaN();
+         System.out.println("contains nan");
+         return 0;
+      }
+
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
+      if (uNorm < EPS)
+      {
+         convertedX = 0;
+         convertedY = 0;
+         convertedZ = 0;
+         convertedS = 0;
+      }
+      else
+      {
+         double halfTheta = 0.5 * axisAngle.getAngle();
+         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
+         convertedX = ux * sinHalfTheta;
+         convertedY = uy * sinHalfTheta;
+         convertedZ = uz * sinHalfTheta;
+         convertedS = cosHalfTheta;
+//         quaternionToPack.setUnsafe(ux * sinHalfTheta, uy * sinHalfTheta, uz * sinHalfTheta, cosHalfTheta);
+      }
+      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), convertedX, convertedY, convertedZ, convertedS);
    }
    // <<< Angular distance (quaternion & axisangle)- - - - - Jae O.
 
