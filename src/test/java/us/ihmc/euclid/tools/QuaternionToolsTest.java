@@ -33,6 +33,8 @@ public class QuaternionToolsTest
    @Test
    public void testDistance() throws Exception
    {
+	   // COMMENT ONE: distance method with roll pitch yaw and axis angle input methods
+	   // pass the tests
       Random random = new Random(3212423);
       int cnt = 0;
       for(int i = 0; i < ITERATIONS; ++i)
@@ -42,9 +44,11 @@ public class QuaternionToolsTest
          // 1
          RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
+         RotationMatrix randomQuaternionConvertedToMatrix = new RotationMatrix(randomQuaternion);
          
          double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted);
          double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
+         double additionalDistance_1 = RotationMatrixTools.distance(randomQuaternionConvertedToMatrix, randomRotationMatrix);
       
          // 2
          YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random); 
@@ -62,6 +66,8 @@ public class QuaternionToolsTest
                   
          System.out.println("expectedDistance (rot) = "+ expectedDistance_1);
          System.out.println("actualDistance (rot) = "+ actualDistance_1);
+         System.out.println("additional distance(rot and rot) = "+ additionalDistance_1);
+         
          
          System.out.println("expectedDistance (ypr) = "+ expectedDistance_2);
          System.out.println("actualDistance (ypr) = "+ actualDistance_2);
