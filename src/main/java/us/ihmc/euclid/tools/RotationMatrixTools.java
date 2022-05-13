@@ -993,23 +993,66 @@ public class RotationMatrixTools
    /**
     * Computes and returns the distance from the rotation matrix {@code m1} to {@code m2}.
     *
-    * @param m1 the first rotation matrix. Not modified.
-    * @param m2 the second rotation matrix. Not modified.
+    * @param a the first rotation matrix. Not modified.
+    * @param b the second rotation matrix. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
-   public static double distance(RotationMatrixReadOnly m1, RotationMatrixReadOnly m2)
+   public static double distance(RotationMatrixReadOnly a, RotationMatrixReadOnly b)
    {
-      double m00 = m1.getM00() * m2.getM00() + m1.getM01() * m2.getM01() + m1.getM02() * m2.getM02();
-      double m01 = m1.getM00() * m2.getM10() + m1.getM01() * m2.getM11() + m1.getM02() * m2.getM12();
-      double m02 = m1.getM00() * m2.getM20() + m1.getM01() * m2.getM21() + m1.getM02() * m2.getM22();
-      double m10 = m1.getM10() * m2.getM00() + m1.getM11() * m2.getM01() + m1.getM12() * m2.getM02();
-      double m11 = m1.getM10() * m2.getM10() + m1.getM11() * m2.getM11() + m1.getM12() * m2.getM12();
-      double m12 = m1.getM10() * m2.getM20() + m1.getM11() * m2.getM21() + m1.getM12() * m2.getM22();
-      double m20 = m1.getM20() * m2.getM00() + m1.getM21() * m2.getM01() + m1.getM22() * m2.getM02();
-      double m21 = m1.getM20() * m2.getM10() + m1.getM21() * m2.getM11() + m1.getM22() * m2.getM12();
-      double m22 = m1.getM20() * m2.getM20() + m1.getM21() * m2.getM21() + m1.getM22() * m2.getM22();
+      double b00 = b.getM00();
+      double b01 = b.getM01();
+      double b02 = b.getM02();
+      double b10 = b.getM10();
+      double b11 = b.getM11();
+      double b12 = b.getM12();
+      double b20 = b.getM20();
+      double b21 = b.getM21();
+      double b22 = b.getM22();
+      return distance(a, b00, b01, b02, b10, b11, b12, b20, b21, b22);
+   }
 
+   public static double distance(RotationMatrixReadOnly a,
+                                 double b00,
+                                 double b01,
+                                 double b02,
+                                 double b10,
+                                 double b11,
+                                 double b12,
+                                 double b20,
+                                 double b21,
+                                 double b22)
+   {
+      double m00 = a.getM00() * b00 + a.getM01() * b01 + a.getM02() * b02;
+      double m01 = a.getM00() * b10 + a.getM01() * b11 + a.getM02() * b12;
+      double m02 = a.getM00() * b20 + a.getM01() * b21 + a.getM02() * b22;
+      double m10 = a.getM10() * b00 + a.getM11() * b01 + a.getM12() * b02;
+      double m11 = a.getM10() * b10 + a.getM11() * b11 + a.getM12() * b12;
+      double m12 = a.getM10() * b20 + a.getM11() * b21 + a.getM12() * b22;
+      double m20 = a.getM20() * b00 + a.getM21() * b01 + a.getM22() * b02;
+      double m21 = a.getM20() * b10 + a.getM21() * b11 + a.getM22() * b12;
+      double m22 = a.getM20() * b20 + a.getM21() * b21 + a.getM22() * b22;
+
+      return angle(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   // TODO Test me against Quaternion.angle or AxisAngle.angle
+   public static double angle(RotationMatrixReadOnly m)
+   {
+      double m00 = m.getM00();
+      double m01 = m.getM01();
+      double m02 = m.getM02();
+      double m10 = m.getM10();
+      double m11 = m.getM11();
+      double m12 = m.getM12();
+      double m20 = m.getM20();
+      double m21 = m.getM21();
+      double m22 = m.getM22();
+      return angle(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   public static double angle(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+   {
       double angle, x, y, z; // variables for result
 
       x = m21 - m12;

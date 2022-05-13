@@ -45,8 +45,8 @@ public class QuaternionToolsTest
          RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
          RotationMatrix randomQuaternionConvertedToMatrix = new RotationMatrix(randomQuaternion);
-         
-         double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted);
+
+         double expectedDistance_1 = QuaternionTools.distanceLimitedToPi(randomQuaternion, randomMatrixConverted);
          double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
          double additionalDistance_1 = RotationMatrixTools.distance(randomQuaternionConvertedToMatrix, randomRotationMatrix);
       
