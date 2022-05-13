@@ -33,7 +33,7 @@ public class QuaternionToolsTest
    @Test
    public void testDistance() throws Exception
    {
-	   // COMMENT ONE: distance method with roll pitch yaw and axis angle input methods
+	   // COMMENT ONE: distance method with roll pitch yaw and axis angle input methods..
 	   // pass the tests
       Random random = new Random(3212423);
       int cnt = 0;
