@@ -37,21 +37,43 @@ public class QuaternionToolsTest
       int cnt = 0;
       for(int i = 0; i < ITERATIONS; ++i)
       {
+         Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         
+         // 1
          RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
+         
+         double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted);
+         double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
       
+         // 2
          YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random); 
          Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
          
-         Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted);
+         double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll);
          
-         double expectedDistance = QuaternionTools.distance(randomQuaternion, randomMatrixConverted);
-         double actualDistance = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
-         System.out.println("expectedDistance = "+ expectedDistance);
-         System.out.println("actualDistance = "+ actualDistance);
+         // 3
+         AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         Quaternion randomAxisAngleConverted = new Quaternion(randomAxisAngle);
+         
+         double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted);
+         double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle);
+                  
+         System.out.println("expectedDistance (rot) = "+ expectedDistance_1);
+         System.out.println("actualDistance (rot) = "+ actualDistance_1);
+         
+         System.out.println("expectedDistance (ypr) = "+ expectedDistance_2);
+         System.out.println("actualDistance (ypr) = "+ actualDistance_2);
+         
+         System.out.println("expectedDistance (axis) = "+ expectedDistance_3);
+         System.out.println("actualDistance (axis) = "+ actualDistance_3);
+
          cnt++;
          System.out.println("iter = " + cnt);
-         assertEquals(expectedDistance,actualDistance,EPSILON);
+         assertEquals(expectedDistance_1,actualDistance_1,EPSILON);
+         assertEquals(expectedDistance_2,actualDistance_2,EPSILON);
+         assertEquals(expectedDistance_3,actualDistance_3,EPSILON);
          
       }      
       
