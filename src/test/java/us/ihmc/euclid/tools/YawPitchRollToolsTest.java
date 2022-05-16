@@ -17,6 +17,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -156,6 +157,50 @@ public class YawPitchRollToolsTest
                                                  secondYPR.getRoll()),
                       EPSILON);
       }
+      
+      // distance test between self(yawPitchRoll) and other(quaternion)
+      for(int i = 0; i < ITERATIONS; ++i)
+      {
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         YawPitchRoll converted = new YawPitchRoll(quaternion);
+         
+         Quaternion selfConverted = new Quaternion(yawPitchRoll);
+         
+         double actualDistance = YawPitchRollTools.distance(yawPitchRoll, quaternion);
+         double expectedDistance = QuaternionTools.distance(selfConverted, quaternion);
+         
+         assertEquals(expectedDistance, actualDistance, EPSILON);
+      }
+      
+      // distance test between self(yawPitchRoll) and other(rotation matrix)
+      for(int i = 0; i < ITERATIONS; ++i)
+      {
+//         System.out.println("iter = " + i);
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         RotationMatrix converted = new RotationMatrix(yawPitchRoll);
+         
+         double actualDistance = YawPitchRollTools.distance(yawPitchRoll, rotationMatrix);
+         double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
+         
+         assertEquals(actualDistance,expectedDistance,EPSILON);
+      }
+      
+   // distance test between self(yawPitchRoll) and other(axis angle)
+      for(int i = 0; i < ITERATIONS; ++i)
+      {
+         System.out.println("iter = " + i);
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         AxisAngle converted = new AxisAngle(yawPitchRoll);
+         
+         double actualDistance = YawPitchRollTools.distance(yawPitchRoll, axisAngle);
+         double expectedDistance = AxisAngleTools.distance(axisAngle, converted);
+         
+         assertEquals(actualDistance,expectedDistance,EPSILON);
+      }
+
    }
 
    @Test

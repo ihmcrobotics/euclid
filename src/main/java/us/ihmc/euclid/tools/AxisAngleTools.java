@@ -17,6 +17,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * This class provides a collection of static tools to perform operations on axis-angles.
@@ -1108,6 +1109,153 @@ public class AxisAngleTools
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
+   
+   public static double angle(AxisAngleReadOnly aa1)
+   {
+      return aa1.getAngle();
+   }
+
+   public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion)
+   {
+      // Converting self to quaternion.
+      double ux = axisAngle.getX();
+      double uy = axisAngle.getY();
+      double uz = axisAngle.getZ();
+      double angle = axisAngle.getAngle();
+      double qs, qx, qy, qz;
+      if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
+      {
+         return Double.NaN;
+      }
+
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
+      if (uNorm < EPS)
+      {
+         qx = 0;
+         qy = 0;
+         qz = 0;
+         qs = 0;
+      }
+      else
+      {
+         double halfTheta = 0.5 * angle;
+         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
+         qx = ux * sinHalfTheta;
+         qy = uy * sinHalfTheta;
+         qz = uz * sinHalfTheta;
+         qs = cosHalfTheta;
+      }
+
+      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getAngle(), qz, qy, qz, qs, false);
+   }
+
+   public static double distance(AxisAngleReadOnly aa1, RotationMatrixReadOnly M2)
+   {
+      // Converting self to rotation matrix . . .
+      double ux = aa1.getX();
+      double uy = aa1.getY();
+      double uz = aa1.getZ();
+      double angle = aa1.getAngle();
+      double m00 = 0, m01 = 0, m02 = 0, m10 = 0, m11 = 0, m12 = 0, m20 = 0, m21 = 0, m22 = 0;
+      if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
+      {
+         return Double.NaN;
+      }
+
+      if (EuclidCoreTools.isAngleZero(angle, EPS))
+      {
+         m00 = 1;
+         m11 = 1;
+         m22 = 1;
+         return RotationMatrixTools.distance(M2, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      }
+
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
+
+      if (uNorm < EPS)
+      {
+         m00 = 1;
+         m11 = 1;
+         m22 = 1;
+      }
+      else
+      {
+         uNorm = 1.0 / uNorm;
+         double ax = ux * uNorm;
+         double ay = uy * uNorm;
+         double az = uz * uNorm;
+
+         double sinTheta = EuclidCoreTools.sin(angle);
+         double cosTheta = EuclidCoreTools.cos(angle);
+         double t = 1.0 - cosTheta;
+
+         double xz = ax * az;
+         double xy = ax * ay;
+         double yz = ay * az;
+
+         m00 = t * ax * ax + cosTheta;
+         m01 = t * xy - sinTheta * az;
+         m02 = t * xz + sinTheta * ay;
+         m10 = t * xy + sinTheta * az;
+         m11 = t * ay * ay + cosTheta;
+         m12 = t * yz - sinTheta * ax;
+         m20 = t * xz - sinTheta * ay;
+         m21 = t * yz + sinTheta * ax;
+         m22 = t * az * az + cosTheta;
+      }
+      return RotationMatrixTools.distance(M2, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   public static double distance(AxisAngleReadOnly aa1, YawPitchRollReadOnly ypr2)
+   {
+      // converting ypr2 to axis angle
+      double yaw = ypr2.getYaw();
+      double pitch = ypr2.getPitch();
+      double roll = ypr2.getRoll();
+      double angle, ax, ay, az;
+
+      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      {
+         return Double.NaN;
+      }
+
+      double halfYaw = yaw / 2.0;
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
+
+      double halfPitch = pitch / 2.0;
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
+
+      double halfRoll = roll / 2.0;
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
+
+      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
+
+      if (uNorm > EPS)
+      {
+         angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs);
+         uNorm = 1.0 / uNorm;
+         ax = qx * uNorm;
+         ay = qy * uNorm;
+         az = qz * uNorm;
+      }
+      else
+      {
+         angle = 0;
+         ax = 0;
+         ay = 0;
+         az = 0;
+      }
+      return distance(aa1, ax, ay, az, angle);
+   }
 
    /**
     * Computes and returns the distance between the two axis-angles {@code aa1} and {@code aa2}.
@@ -1119,15 +1267,17 @@ public class AxisAngleTools
     */
    public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2)
    {
+      return distance(aa1, aa2.getX(), aa2.getY(), aa2.getZ(), aa2.getAngle());
+   }
+
+   public static double distance(AxisAngleReadOnly aa1, double u2x, double u2y, double u2z, double u2a)
+   {
       double alpha = aa1.getAngle();
       double u1x = aa1.getX();
       double u1y = aa1.getY();
       double u1z = aa1.getZ();
 
-      double beta = -aa2.getAngle();
-      double u2x = aa2.getX();
-      double u2y = aa2.getY();
-      double u2z = aa2.getZ();
+      double beta = -u2a;
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
@@ -1154,5 +1304,6 @@ public class AxisAngleTools
 
       double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       return Math.abs(gamma);
+
    }
 }

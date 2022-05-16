@@ -69,6 +69,169 @@ public class YawPitchRollTools
    {
       return Math.abs(pitch) <= epsilon && Math.abs(roll) <= epsilon;
    }
+   
+   // TODO: Needs testing with other type's angle methods
+   public static double angle(YawPitchRollReadOnly ypr)
+   {
+      double yaw = ypr.getYaw();
+      double pitch = ypr.getYaw();
+      double roll = ypr.getRoll();
+      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      {
+         return Double.NaN;
+      }
+
+      double halfYaw = yaw / 2.0;
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
+
+      double halfPitch = pitch / 2.0;
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
+
+      double halfRoll = roll / 2.0;
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
+
+      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
+
+      if (uNorm > ZERO_EPS)
+      {
+         return 2.0 * EuclidCoreTools.atan2(uNorm, qs);
+      }
+      else
+      {
+         return 0;
+      }
+   }
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, QuaternionReadOnly quaternion)
+   {
+      // converting . . .
+      double halfYaw = 0.5 * yawPitchRoll.getYaw();
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
+
+      double halfPitch = 0.5 * yawPitchRoll.getPitch();
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
+
+      double halfRoll = 0.5 * yawPitchRoll.getRoll();
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
+
+      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+      
+      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, false);
+
+   }
+   
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrix)
+   {
+      double yaw = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getPitch();
+      double roll = yawPitchRoll.getRoll();
+      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
+      double angle = 0;
+      // Convert self . . .
+      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      {
+         return Double.NaN;
+      }
+
+      if (YawPitchRollTools.isZero(yaw, pitch, roll, ZERO_EPS))
+      {
+         m00 = 1;
+         m01 = 0;
+         m02 = 0;
+         m10 = 0;
+         m11 = 1;
+         m12 = 0;
+         m20 = 0;
+         m21 = 0;
+         m22 = 1;
+         return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      }
+
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
+
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
+
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
+
+      // Introduction to Robotics, 2.64
+      m00 = cosc * cosb;
+      m01 = cosc * sinb * sina - sinc * cosa;
+      m02 = cosc * sinb * cosa + sinc * sina;
+      m10 = sinc * cosb;
+      m11 = sinc * sinb * sina + cosc * cosa;
+      m12 = sinc * sinb * cosa - cosc * sina;
+      m20 = -sinb;
+      m21 = cosb * sina;
+      m22 = cosb * cosa;
+      return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+   
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle)
+   {
+      // converting self to axis angle
+      double yaw = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getPitch();
+      double roll = yawPitchRoll.getRoll();
+      double ax,ay,az,aa;
+      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      {
+         return Double.NaN;
+      }
+
+      double halfYaw = yaw / 2.0;
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
+
+      double halfPitch = pitch / 2.0;
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
+
+      double halfRoll = roll / 2.0;
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
+
+      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
+
+      if (uNorm > ZERO_EPS)
+      {
+         aa = 2.0 * EuclidCoreTools.atan2(uNorm, qs);
+         uNorm = 1.0 / uNorm;
+         ax = qx * uNorm;
+         ay = qy * uNorm;
+         az = qz * uNorm;
+      }
+      else
+      {
+         aa = 0;
+         ax = 0;
+         ay = 0;
+         az = 0;
+      }
+      
+      return AxisAngleTools.distance(axisAngle, ax,ay,az,aa);
+   }
+
 
    /**
     * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and

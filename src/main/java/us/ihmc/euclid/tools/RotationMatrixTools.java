@@ -1,5 +1,6 @@
 package us.ihmc.euclid.tools;
 
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
@@ -13,6 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * Tools for performing operations on rotation matrices.
@@ -21,6 +23,9 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public class RotationMatrixTools
 {
+   
+   static final double EPS = 1.0e-12;
+
    private RotationMatrixTools()
    {
       // Suppresses default constructor, ensuring non-instantiability.
@@ -988,6 +993,164 @@ public class RotationMatrixTools
       double r22 = r0.getM20() * m02 + r0.getM21() * m12 + r0.getM22() * m22;
 
       matrixToPack.set(r00, r01, r02, r10, r11, r12, r20, r21, r22);
+   }
+   
+   public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
+   {
+      if (quaternion.containsNaN())
+      {
+         System.out.println("Original quaternion contains NaN");
+         return Double.NaN;
+      }
+
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return RotationMatrixTools.angle(rotationMatrix);
+      }
+
+      double qs = quaternion.getS();
+      double qx = quaternion.getX();
+      double qy = quaternion.getY();
+      double qz = quaternion.getZ();
+
+      double yy2 = 2.0 * qy * qy;
+      double zz2 = 2.0 * qz * qz;
+      double xx2 = 2.0 * qx * qx;
+      double xy2 = 2.0 * qx * qy;
+      double sz2 = 2.0 * qs * qz;
+      double xz2 = 2.0 * qx * qz;
+      double sy2 = 2.0 * qs * qy;
+      double yz2 = 2.0 * qy * qz;
+      double sx2 = 2.0 * qs * qx;
+
+      double q00 = 1.0 - yy2 - zz2;
+      double q01 = xy2 - sz2;
+      double q02 = xz2 + sy2;
+      double q10 = xy2 + sz2;
+      double q11 = 1.0 - xx2 - zz2;
+      double q12 = yz2 - sx2;
+      double q20 = xz2 - sy2;
+      double q21 = yz2 + sx2;
+      double q22 = 1.0 - xx2 - yy2;
+      
+      return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
+   }
+   public static double distance(RotationMatrixReadOnly rotationMatrix, AxisAngleReadOnly aa)
+   {
+      double ux = aa.getX();
+      double uy = aa.getY();
+      double uz = aa.getZ();
+      double angle = aa.getAngle();
+      
+      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
+      // converting axis angle to matrix > > >
+      if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
+      {
+         return Double.NaN;
+      }
+
+      if (EuclidCoreTools.isAngleZero(angle, EPS))
+      {
+         m00 = 1;
+         m01 = 0;
+         m02 = 0;
+         m10 = 0;
+         m11 = 1;
+         m12 = 0;
+         m20 = 0;
+         m21 = 0;
+         m22 = 1;
+         return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      }
+
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
+
+      if (uNorm < EPS)
+      {
+         m00 = 1;
+         m01 = 0;
+         m02 = 0;
+         m10 = 0;
+         m11 = 1;
+         m12 = 0;
+         m20 = 0;
+         m21 = 0;
+         m22 = 1;
+      }
+      else
+      {
+         uNorm = 1.0 / uNorm;
+         double ax = ux * uNorm;
+         double ay = uy * uNorm;
+         double az = uz * uNorm;
+
+         double sinTheta = EuclidCoreTools.sin(angle);
+         double cosTheta = EuclidCoreTools.cos(angle);
+         double t = 1.0 - cosTheta;
+
+         double xz = ax * az;
+         double xy = ax * ay;
+         double yz = ay * az;
+
+         m00 = t * ax * ax + cosTheta;
+         m01 = t * xy - sinTheta * az;
+         m02 = t * xz + sinTheta * ay;
+         m10 = t * xy + sinTheta * az;
+         m11 = t * ay * ay + cosTheta;
+         m12 = t * yz - sinTheta * ax;
+         m20 = t * xz - sinTheta * ay;
+         m21 = t * yz + sinTheta * ax;
+         m22 = t * az * az + cosTheta;
+      }
+      return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+   
+   public static double distance(RotationMatrixReadOnly rotationMatrix, YawPitchRollReadOnly ypr)
+   {
+      // converting . . .
+      double yaw = ypr.getYaw();
+      double pitch = ypr.getPitch();
+      double roll = ypr.getRoll();
+      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
+      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      {
+         return Double.NaN;
+      }
+
+      if (YawPitchRollTools.isZero(yaw, pitch, roll, EPS))
+      {
+         m00 = 1;
+         m01 = 0;
+         m02 = 0;
+         m10 = 0;
+         m11 = 1;
+         m12 = 0;
+         m20 = 0;
+         m21 = 0;
+         m22 = 1;
+         return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      }
+
+      double cosc = EuclidCoreTools.cos(yaw);
+      double sinc = EuclidCoreTools.sin(yaw);
+
+      double cosb = EuclidCoreTools.cos(pitch);
+      double sinb = EuclidCoreTools.sin(pitch);
+
+      double cosa = EuclidCoreTools.cos(roll);
+      double sina = EuclidCoreTools.sin(roll);
+
+      // Introduction to Robotics, 2.64
+      m00 = cosc * cosb;
+      m01 = cosc * sinb * sina - sinc * cosa;
+      m02 = cosc * sinb * cosa + sinc * sina;
+      m10 = sinc * cosb;
+      m11 = sinc * sinb * sina + cosc * cosa;
+      m12 = sinc * sinb * cosa - cosc * sina;
+      m20 = -sinb;
+      m21 = cosb * sina;
+      m22 = cosb * cosa;
+      return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    /**

@@ -153,7 +153,6 @@ public class QuaternionTools
          convertedY = uy * sinHalfTheta;
          convertedZ = uz * sinHalfTheta;
          convertedS = cosHalfTheta;
-         //         quaternionToPack.setUnsafe(ux * sinHalfTheta, uy * sinHalfTheta, uz * sinHalfTheta, cosHalfTheta);
       }
       return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), convertedX, convertedY, convertedZ, convertedS, false);
    }
@@ -1617,7 +1616,7 @@ public class QuaternionTools
          return distance(q1.getX(), q1.getY(), q1.getZ(), q1.getS(), q2.getX(), q2.getY(), q2.getZ(), q2.getS(), true);
    }
 
-   private static double distance(double q1x, double q1y, double q1z, double q1s, double q2x, double q2y, double q2z, double q2s, boolean limitToPi)
+   static double distance(double q1x, double q1y, double q1z, double q1s, double q2x, double q2y, double q2z, double q2s, boolean limitToPi)
    {
       double x = q1s * q2x - q1x * q2s - q1y * q2z + q1z * q2y;
       double y = q1s * q2y + q1x * q2z - q1y * q2s - q1z * q2x;

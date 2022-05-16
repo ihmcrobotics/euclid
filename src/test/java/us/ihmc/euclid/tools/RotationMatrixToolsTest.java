@@ -20,6 +20,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class RotationMatrixToolsTest
 {
@@ -255,6 +256,41 @@ public class RotationMatrixToolsTest
          EuclidCoreTestTools.assertAngleEquals(expectedDistance, actualDistance, EPS);
          assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
       }
+ 
+      // cross platform distance test > > > > > 
+      // rotationMatrix & quaterion
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         RotationMatrix converted = new RotationMatrix(quaternion);
+         double actualDistance = RotationMatrixTools.distance(rotationMatrix, quaternion);
+         double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
+         assertEquals(actualDistance, expectedDistance, EPS);
+      }
+      
+      // rotationMatrix & axisAngle
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         RotationMatrix converted = new RotationMatrix(axisAngle);
+         double actualDistance = RotationMatrixTools.distance(rotationMatrix, axisAngle);
+         double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
+         assertEquals(actualDistance, expectedDistance, EPS);
+      }
+      
+      // rotationMatrix & yawpitchroll
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         RotationMatrix converted = new RotationMatrix(yawPitchRoll);
+         double actualDistance = RotationMatrixTools.distance(rotationMatrix, yawPitchRoll);
+         double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
+         assertEquals(actualDistance, expectedDistance, EPS);
+      }      
+      
    }
 
    @Test
