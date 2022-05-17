@@ -37,26 +37,45 @@ public class QuaternionTools
 
    // COMMENT ONE: Here, I'm using the same conversion method as in quaternionconverstion.java 
    //   but I'm getting different result.
+   
+   public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D)
+   {
+      if (orientation3D instanceof QuaternionReadOnly)
+      {
+         return distance(quaternion, (QuaternionReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(quaternion, (YawPitchRollReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(quaternion, (AxisAngleReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(quaternion, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
+         return Double.NaN;
+      }
+   }
 
    public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
    {
 
-      // convert quaternion to rotationMatrix
-      // . . .
-
-      // now compute distance
-      // . . .
-
-      if (quaternion.containsNaN())
+      if (quaternion.containsNaN() || rotationMatrix.containsNaN())
       {
-         //         matrixToPack.setToNaN();
-         System.out.println("Original quaternion contains NaN");
          return Double.NaN;
       }
-
       if (quaternion.isZeroOrientation(EPS))
       {
          return RotationMatrixTools.angle(rotationMatrix);
+      }
+      if (rotationMatrix.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
       }
 
       double qs = quaternion.getS();
@@ -86,12 +105,24 @@ public class QuaternionTools
 
       return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
    }
-
    // <<< Angular distance(quaternion & rotationMatrix) - - - - - Jae O.
 
    // Angular distance (quaternion & rollpitchyaw)- - - - - Jae O. >>>
    public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll)
    {
+      if (quaternion.containsNaN() || yawPitchRoll.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      if (yawPitchRoll.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+      
       double halfYaw = 0.5 * yawPitchRoll.getYaw();
       double cYaw = EuclidCoreTools.cos(halfYaw);
       double sYaw = EuclidCoreTools.sin(halfYaw);
@@ -118,23 +149,24 @@ public class QuaternionTools
    public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
    {
 
-      //      double s = Math.sin(axisAngle.getAngle());
-      //      double qx = axisAngle.getX() * s;
-      //      double qy = axisAngle.getY() * s;
-      //      double qz = axisAngle.getZ() * s;
-      //      double qs = Math.cos(axisAngle.getAngle() / 2);
-      //      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs);
-
+      if (quaternion.containsNaN() || axisAngle.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+      
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double convertedX, convertedY, convertedZ, convertedS;
-      if (EuclidCoreTools.containsNaN(ux, uy, uz, axisAngle.getAngle()))
-      {
-         //         quaternionToPack.setToNaN();
-         System.out.println("contains nan");
-         return 0;
-      }
+
 
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)

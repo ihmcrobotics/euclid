@@ -1110,24 +1110,57 @@ public class AxisAngleTools
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
    
-   public static double angle(AxisAngleReadOnly aa1)
+//   public static double angle(AxisAngleReadOnly aa1)
+//   {
+//      return aa1.getAngle();
+//   }
+   
+   public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D)
    {
-      return aa1.getAngle();
+      if (orientation3D instanceof QuaternionReadOnly)
+      {
+         return distance(axisAngle, (QuaternionReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(axisAngle, (YawPitchRollReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(axisAngle, (AxisAngleReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(axisAngle, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
+         return Double.NaN;
+      }
    }
 
    public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion)
    {
+
+      if (axisAngle.containsNaN() || quaternion.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      
       // Converting self to quaternion.
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double angle = axisAngle.getAngle();
       double qs, qx, qy, qz;
-      if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
-      {
-         return Double.NaN;
-      }
-
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)
       {
@@ -1147,29 +1180,36 @@ public class AxisAngleTools
          qs = cosHalfTheta;
       }
 
-      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getAngle(), qz, qy, qz, qs, false);
+      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, false);
    }
 
-   public static double distance(AxisAngleReadOnly aa1, RotationMatrixReadOnly M2)
+   public static double distance(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrix)
    {
-      // Converting self to rotation matrix . . .
-      double ux = aa1.getX();
-      double uy = aa1.getY();
-      double uz = aa1.getZ();
-      double angle = aa1.getAngle();
-      double m00 = 0, m01 = 0, m02 = 0, m10 = 0, m11 = 0, m12 = 0, m20 = 0, m21 = 0, m22 = 0;
-      if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
+      // case: NaN
+      if (axisAngle.containsNaN() || rotationMatrix.containsNaN())
       {
          return Double.NaN;
       }
-
-      if (EuclidCoreTools.isAngleZero(angle, EPS))
+      // case: one is zero orientation
+      if (axisAngle.isZeroOrientation(EPS))
       {
-         m00 = 1;
-         m11 = 1;
-         m22 = 1;
-         return RotationMatrixTools.distance(M2, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         return RotationMatrixTools.angle(rotationMatrix);
       }
+      // case: one is zero orientation
+      if (rotationMatrix.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      
+      
+      // Converting self to rotation matrix . . .
+      double ux = axisAngle.getX();
+      double uy = axisAngle.getY();
+      double uz = axisAngle.getZ();
+      double angle = axisAngle.getAngle();
+      double m00 = 0, m01 = 0, m02 = 0, m10 = 0, m11 = 0, m12 = 0, m20 = 0, m21 = 0, m22 = 0;
+      
+
 
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
@@ -1204,21 +1244,32 @@ public class AxisAngleTools
          m21 = t * yz + sinTheta * ax;
          m22 = t * az * az + cosTheta;
       }
-      return RotationMatrixTools.distance(M2, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
-   public static double distance(AxisAngleReadOnly aa1, YawPitchRollReadOnly ypr2)
+   public static double distance(AxisAngleReadOnly axisAngle, YawPitchRollReadOnly yawPitchRoll)
    {
-      // converting ypr2 to axis angle
-      double yaw = ypr2.getYaw();
-      double pitch = ypr2.getPitch();
-      double roll = ypr2.getRoll();
-      double angle, ax, ay, az;
-
-      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      if (axisAngle.containsNaN() || axisAngle.containsNaN())
       {
          return Double.NaN;
       }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      
+      if (yawPitchRoll.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      
+      // converting yawPitchRoll to axis angle
+      double yaw = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getPitch();
+      double roll = yawPitchRoll.getRoll();
+      double angle, ax, ay, az;
+
+
 
       double halfYaw = yaw / 2.0;
       double cYaw = EuclidCoreTools.cos(halfYaw);
@@ -1254,7 +1305,7 @@ public class AxisAngleTools
          ay = 0;
          az = 0;
       }
-      return distance(aa1, ax, ay, az, angle);
+      return distance(axisAngle, ax, ay, az, angle);
    }
 
    /**
@@ -1270,7 +1321,7 @@ public class AxisAngleTools
       return distance(aa1, aa2.getX(), aa2.getY(), aa2.getZ(), aa2.getAngle());
    }
 
-   public static double distance(AxisAngleReadOnly aa1, double u2x, double u2y, double u2z, double u2a)
+   static double distance(AxisAngleReadOnly aa1, double u2x, double u2y, double u2z, double u2a)
    {
       double alpha = aa1.getAngle();
       double u1x = aa1.getX();

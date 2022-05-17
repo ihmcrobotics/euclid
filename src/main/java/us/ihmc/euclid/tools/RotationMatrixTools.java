@@ -995,14 +995,40 @@ public class RotationMatrixTools
       matrixToPack.set(r00, r01, r02, r10, r11, r12, r20, r21, r22);
    }
    
-   public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
+   public static double distance(RotationMatrixReadOnly rotationMatrix, Orientation3DReadOnly orientation3D)
    {
-      if (quaternion.containsNaN())
+      if (orientation3D instanceof QuaternionReadOnly)
       {
-         System.out.println("Original quaternion contains NaN");
+         return distance(rotationMatrix, (QuaternionReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(rotationMatrix, (YawPitchRollReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(rotationMatrix, (AxisAngleReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(rotationMatrix, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
          return Double.NaN;
       }
-
+   }
+   
+   public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
+   {
+      if (rotationMatrix.containsNaN() || quaternion.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (rotationMatrix.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
       if (quaternion.isZeroOrientation(EPS))
       {
          return RotationMatrixTools.angle(rotationMatrix);
@@ -1035,33 +1061,30 @@ public class RotationMatrixTools
       
       return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
    }
-   public static double distance(RotationMatrixReadOnly rotationMatrix, AxisAngleReadOnly aa)
+   public static double distance(RotationMatrixReadOnly rotationMatrix, AxisAngleReadOnly axisAngle)
    {
-      double ux = aa.getX();
-      double uy = aa.getY();
-      double uz = aa.getZ();
-      double angle = aa.getAngle();
-      
-      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
-      // converting axis angle to matrix > > >
-      if (EuclidCoreTools.containsNaN(ux, uy, uz, angle))
+      if (rotationMatrix.containsNaN() || axisAngle.containsNaN())
       {
          return Double.NaN;
       }
-
-      if (EuclidCoreTools.isAngleZero(angle, EPS))
+      if (rotationMatrix.isZeroOrientation(EPS))
       {
-         m00 = 1;
-         m01 = 0;
-         m02 = 0;
-         m10 = 0;
-         m11 = 1;
-         m12 = 0;
-         m20 = 0;
-         m21 = 0;
-         m22 = 1;
-         return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+         return axisAngle.getAngle();
       }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return RotationMatrixTools.angle(rotationMatrix);
+      }
+      
+      // converting axis angle to matrix > > >
+      double ux = axisAngle.getX();
+      double uy = axisAngle.getY();
+      double uz = axisAngle.getZ();
+      double angle = axisAngle.getAngle();
+      
+      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
+      
+
 
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
@@ -1105,17 +1128,27 @@ public class RotationMatrixTools
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
    
-   public static double distance(RotationMatrixReadOnly rotationMatrix, YawPitchRollReadOnly ypr)
+   public static double distance(RotationMatrixReadOnly rotationMatrix, YawPitchRollReadOnly yawPitchRoll)
    {
-      // converting . . .
-      double yaw = ypr.getYaw();
-      double pitch = ypr.getPitch();
-      double roll = ypr.getRoll();
-      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
-      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
+      if (rotationMatrix.containsNaN() || yawPitchRoll.containsNaN())
       {
          return Double.NaN;
       }
+      if (rotationMatrix.isZeroOrientation(EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      if (yawPitchRoll.isZeroOrientation(EPS))
+      {
+         return RotationMatrixTools.angle(rotationMatrix);
+      }
+      
+      // converting . . .
+      double yaw = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getPitch();
+      double roll = yawPitchRoll.getRoll();
+      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
+
 
       if (YawPitchRollTools.isZero(yaw, pitch, roll, EPS))
       {

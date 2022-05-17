@@ -71,11 +71,11 @@ public class YawPitchRollTools
    }
    
    // TODO: Needs testing with other type's angle methods
-   public static double angle(YawPitchRollReadOnly ypr)
+   public static double angle(YawPitchRollReadOnly yawPitchRoll)
    {
-      double yaw = ypr.getYaw();
-      double pitch = ypr.getYaw();
-      double roll = ypr.getRoll();
+      double yaw = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getYaw();
+      double roll = yawPitchRoll.getRoll();
       if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
       {
          return Double.NaN;
@@ -109,9 +109,47 @@ public class YawPitchRollTools
          return 0;
       }
    }
+   
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, Orientation3DReadOnly orientation3D)
+   {
+      if (orientation3D instanceof QuaternionReadOnly)
+      {
+         return distance(yawPitchRoll, (QuaternionReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(yawPitchRoll, (YawPitchRollReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(yawPitchRoll, (AxisAngleReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(yawPitchRoll, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
+         return Double.NaN;
+      }
+   }
+   
    public static double distance(YawPitchRollReadOnly yawPitchRoll, QuaternionReadOnly quaternion)
    {
-      // converting . . .
+      if (yawPitchRoll.containsNaN() || quaternion.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (yawPitchRoll.isZeroOrientation(ZERO_EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+      if (quaternion.isZeroOrientation(ZERO_EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      
+      // converting . . . 
       double halfYaw = 0.5 * yawPitchRoll.getYaw();
       double cYaw = EuclidCoreTools.cos(halfYaw);
       double sYaw = EuclidCoreTools.sin(halfYaw);
@@ -135,30 +173,24 @@ public class YawPitchRollTools
    
    public static double distance(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrix)
    {
+      if (yawPitchRoll.containsNaN() || rotationMatrix.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (yawPitchRoll.isZeroOrientation(ZERO_EPS))
+      {
+         return RotationMatrixTools.angle(rotationMatrix);               
+      }
+      if (rotationMatrix.isZeroOrientation(ZERO_EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      
+      // Convert self . . .
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
       double m00,m01,m02,m10,m11,m12,m20,m21,m22;
-      double angle = 0;
-      // Convert self . . .
-      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
-      {
-         return Double.NaN;
-      }
-
-      if (YawPitchRollTools.isZero(yaw, pitch, roll, ZERO_EPS))
-      {
-         m00 = 1;
-         m01 = 0;
-         m02 = 0;
-         m10 = 0;
-         m11 = 1;
-         m12 = 0;
-         m20 = 0;
-         m21 = 0;
-         m22 = 1;
-         return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
-      }
 
       double cosc = EuclidCoreTools.cos(yaw);
       double sinc = EuclidCoreTools.sin(yaw);
@@ -184,15 +216,24 @@ public class YawPitchRollTools
    
    public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle)
    {
+      if (yawPitchRoll.containsNaN() || axisAngle.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (yawPitchRoll.isZeroOrientation(ZERO_EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      if (axisAngle.isZeroOrientation(ZERO_EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      
       // converting self to axis angle
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
       double ax,ay,az,aa;
-      if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
-      {
-         return Double.NaN;
-      }
 
       double halfYaw = yaw / 2.0;
       double cYaw = EuclidCoreTools.cos(halfYaw);
