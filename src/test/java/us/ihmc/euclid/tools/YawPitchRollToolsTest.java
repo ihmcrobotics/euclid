@@ -168,7 +168,7 @@ public class YawPitchRollToolsTest
          Quaternion selfConverted = new Quaternion(yawPitchRoll);
          
          double actualDistance = YawPitchRollTools.distance(yawPitchRoll, quaternion);
-         double expectedDistance = QuaternionTools.distance(selfConverted, quaternion);
+         double expectedDistance = QuaternionTools.distance(selfConverted, quaternion, false);
          
          assertEquals(expectedDistance, actualDistance, EPSILON);
       }

@@ -66,7 +66,7 @@ public class AxisAngleToolsTest
          Quaternion converted = new Quaternion(axisAngle);
 
          double actualDistance = AxisAngleTools.distance(axisAngle, quaternion);
-         double expectedDistance = QuaternionTools.distance(converted, quaternion);
+         double expectedDistance = QuaternionTools.distance(converted, quaternion, false);
          System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
          assertEquals(actualDistance, expectedDistance, EPSILON);
          

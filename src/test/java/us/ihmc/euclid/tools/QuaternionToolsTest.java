@@ -46,7 +46,7 @@ public class QuaternionToolsTest
          Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
          RotationMatrix randomQuaternionConvertedToMatrix = new RotationMatrix(randomQuaternion);
 
-         double expectedDistance_1 = QuaternionTools.distanceLimitedToPi(randomQuaternion, randomMatrixConverted);
+         double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted, true);
          double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
          double additionalDistance_1 = RotationMatrixTools.distance(randomQuaternionConvertedToMatrix, randomRotationMatrix);
       
@@ -54,14 +54,14 @@ public class QuaternionToolsTest
          YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random); 
          Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
          
-         double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted);
+         double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted, false);
          double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll);
          
          // 3
          AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          Quaternion randomAxisAngleConverted = new Quaternion(randomAxisAngle);
          
-         double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted);
+         double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted, false);
          double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle);
                   
          System.out.println("expectedDistance (rot) = "+ expectedDistance_1);

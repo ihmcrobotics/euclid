@@ -130,7 +130,7 @@ public class YawPitchRollTools
       }
       else
       {
-         return Double.NaN;
+         throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
    }
    

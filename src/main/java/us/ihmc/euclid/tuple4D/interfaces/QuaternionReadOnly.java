@@ -131,7 +131,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
     */
    default double distance(QuaternionReadOnly other)
    {
-      return QuaternionTools.distance(this, other);
+      return QuaternionTools.distance(this, other, false);
    }
 
    /**

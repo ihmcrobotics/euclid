@@ -32,162 +32,8 @@ public class QuaternionTools
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
-
-   // Angular distance (quaternion & rotationMatrix)- - - - - Jae O. >>>
-
-   // COMMENT ONE: Here, I'm using the same conversion method as in quaternionconverstion.java 
-   //   but I'm getting different result.
    
-   public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D)
-   {
-      if (orientation3D instanceof QuaternionReadOnly)
-      {
-         return distance(quaternion, (QuaternionReadOnly) orientation3D);
-      }
-      if (orientation3D instanceof YawPitchRollReadOnly)
-      {
-         return distance(quaternion, (YawPitchRollReadOnly) orientation3D);
-      }
-      if (orientation3D instanceof AxisAngleReadOnly)
-      {
-         return distance(quaternion, (AxisAngleReadOnly) orientation3D);
-      }
-      if (orientation3D instanceof RotationMatrixReadOnly)
-      {
-         return distance(quaternion, (RotationMatrixReadOnly) orientation3D);
-      }
-      else
-      {
-         return Double.NaN;
-      }
-   }
-
-   public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
-   {
-
-      if (quaternion.containsNaN() || rotationMatrix.containsNaN())
-      {
-         return Double.NaN;
-      }
-      if (quaternion.isZeroOrientation(EPS))
-      {
-         return RotationMatrixTools.angle(rotationMatrix);
-      }
-      if (rotationMatrix.isZeroOrientation(EPS))
-      {
-         return QuaternionTools.angle(quaternion);
-      }
-
-      double qs = quaternion.getS();
-      double qx = quaternion.getX();
-      double qy = quaternion.getY();
-      double qz = quaternion.getZ();
-
-      double yy2 = 2.0 * qy * qy;
-      double zz2 = 2.0 * qz * qz;
-      double xx2 = 2.0 * qx * qx;
-      double xy2 = 2.0 * qx * qy;
-      double sz2 = 2.0 * qs * qz;
-      double xz2 = 2.0 * qx * qz;
-      double sy2 = 2.0 * qs * qy;
-      double yz2 = 2.0 * qy * qz;
-      double sx2 = 2.0 * qs * qx;
-
-      double q00 = 1.0 - yy2 - zz2;
-      double q01 = xy2 - sz2;
-      double q02 = xz2 + sy2;
-      double q10 = xy2 + sz2;
-      double q11 = 1.0 - xx2 - zz2;
-      double q12 = yz2 - sx2;
-      double q20 = xz2 - sy2;
-      double q21 = yz2 + sx2;
-      double q22 = 1.0 - xx2 - yy2;
-
-      return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
-   }
-   // <<< Angular distance(quaternion & rotationMatrix) - - - - - Jae O.
-
-   // Angular distance (quaternion & rollpitchyaw)- - - - - Jae O. >>>
-   public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll)
-   {
-      if (quaternion.containsNaN() || yawPitchRoll.containsNaN())
-      {
-         return Double.NaN;
-      }
-      if (quaternion.isZeroOrientation(EPS))
-      {
-         return YawPitchRollTools.angle(yawPitchRoll);
-      }
-      if (yawPitchRoll.isZeroOrientation(EPS))
-      {
-         return QuaternionTools.angle(quaternion);
-      }
-      
-      double halfYaw = 0.5 * yawPitchRoll.getYaw();
-      double cYaw = EuclidCoreTools.cos(halfYaw);
-      double sYaw = EuclidCoreTools.sin(halfYaw);
-
-      double halfPitch = 0.5 * yawPitchRoll.getPitch();
-      double cPitch = EuclidCoreTools.cos(halfPitch);
-      double sPitch = EuclidCoreTools.sin(halfPitch);
-
-      double halfRoll = 0.5 * yawPitchRoll.getRoll();
-      double cRoll = EuclidCoreTools.cos(halfRoll);
-      double sRoll = EuclidCoreTools.sin(halfRoll);
-
-      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
-      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
-      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
-      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
-
-      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, false);
-   }
-
-   // <<< Angular distance (quaternion & rollpitchyaw)- - - - - Jae O.
-
-   // Angular distance (quaternion & axisangle)- - - - - Jae O. >>>
-   public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
-   {
-
-      if (quaternion.containsNaN() || axisAngle.containsNaN())
-      {
-         return Double.NaN;
-      }
-      if (quaternion.isZeroOrientation(EPS))
-      {
-         return axisAngle.getAngle();
-      }
-      if (axisAngle.isZeroOrientation(EPS))
-      {
-         return QuaternionTools.angle(quaternion);
-      }
-      
-      double ux = axisAngle.getX();
-      double uy = axisAngle.getY();
-      double uz = axisAngle.getZ();
-      double convertedX, convertedY, convertedZ, convertedS;
-
-
-      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
-      if (uNorm < EPS)
-      {
-         convertedX = 0;
-         convertedY = 0;
-         convertedZ = 0;
-         convertedS = 0;
-      }
-      else
-      {
-         double halfTheta = 0.5 * axisAngle.getAngle();
-         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
-         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
-         convertedX = ux * sinHalfTheta;
-         convertedY = uy * sinHalfTheta;
-         convertedZ = uz * sinHalfTheta;
-         convertedS = cosHalfTheta;
-      }
-      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), convertedX, convertedY, convertedZ, convertedS, false);
-   }
+   
    // <<< Angular distance (quaternion & axisangle)- - - - - Jae O.
 
    /**
@@ -1624,6 +1470,7 @@ public class QuaternionTools
       quaternionToPack.setUnsafe(x, y, z, s);
    }
 
+
    /**
     * Computes the distance between the two given quaternions.
     *
@@ -1632,20 +1479,14 @@ public class QuaternionTools
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     */
-   public static double distance(QuaternionReadOnly q1, QuaternionReadOnly q2)
+   public static double distance(QuaternionReadOnly q1, QuaternionReadOnly q2, boolean limitToPi)
    {
-      if (q1 == q2)
+      if (q1==q2)
+      {
          return 0.0;
-      else
-         return distance(q1.getX(), q1.getY(), q1.getZ(), q1.getS(), q2.getX(), q2.getY(), q2.getZ(), q2.getS(), false);
-   }
+      }
+      return distance(q1.getX(), q1.getY(), q1.getZ(), q1.getS(), q2.getX(), q2.getY(), q2.getZ(), q2.getS(), limitToPi);
 
-   public static double distanceLimitedToPi(QuaternionReadOnly q1, QuaternionReadOnly q2)
-   {
-      if (q1 == q2)
-         return 0.0;
-      else
-         return distance(q1.getX(), q1.getY(), q1.getZ(), q1.getS(), q2.getX(), q2.getY(), q2.getZ(), q2.getS(), true);
    }
 
    static double distance(double q1x, double q1y, double q1z, double q1s, double q2x, double q2y, double q2z, double q2s, boolean limitToPi)
@@ -1655,6 +1496,151 @@ public class QuaternionTools
       double z = q1s * q2z - q1x * q2y + q1y * q2x - q1z * q2s;
       double s = q1s * q2s + q1x * q2x + q1y * q2y + q1z * q2z;
       return angle(x, y, z, s, limitToPi);
+   }
+   public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D, boolean limitToPi)
+   {
+      if (orientation3D instanceof QuaternionReadOnly)
+      {
+         return distance(quaternion, (QuaternionReadOnly) orientation3D, limitToPi);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(quaternion, (YawPitchRollReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(quaternion, (AxisAngleReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(quaternion, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
+      }
+   }
+
+   public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
+   {
+
+      if (quaternion.containsNaN() || rotationMatrix.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return RotationMatrixTools.angle(rotationMatrix);
+      }
+      if (rotationMatrix.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+
+      double qs = quaternion.getS();
+      double qx = quaternion.getX();
+      double qy = quaternion.getY();
+      double qz = quaternion.getZ();
+
+      double yy2 = 2.0 * qy * qy;
+      double zz2 = 2.0 * qz * qz;
+      double xx2 = 2.0 * qx * qx;
+      double xy2 = 2.0 * qx * qy;
+      double sz2 = 2.0 * qs * qz;
+      double xz2 = 2.0 * qx * qz;
+      double sy2 = 2.0 * qs * qy;
+      double yz2 = 2.0 * qy * qz;
+      double sx2 = 2.0 * qs * qx;
+
+      double q00 = 1.0 - yy2 - zz2;
+      double q01 = xy2 - sz2;
+      double q02 = xz2 + sy2;
+      double q10 = xy2 + sz2;
+      double q11 = 1.0 - xx2 - zz2;
+      double q12 = yz2 - sx2;
+      double q20 = xz2 - sy2;
+      double q21 = yz2 + sx2;
+      double q22 = 1.0 - xx2 - yy2;
+
+      return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
+   }
+
+   public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll)
+   {
+      if (quaternion.containsNaN() || yawPitchRoll.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+      if (yawPitchRoll.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+      
+      double halfYaw = 0.5 * yawPitchRoll.getYaw();
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
+
+      double halfPitch = 0.5 * yawPitchRoll.getPitch();
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
+
+      double halfRoll = 0.5 * yawPitchRoll.getRoll();
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
+
+      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+
+      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, false);
+   }
+
+   public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
+   {
+
+      if (quaternion.containsNaN() || axisAngle.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+      
+      double ux = axisAngle.getX();
+      double uy = axisAngle.getY();
+      double uz = axisAngle.getZ();
+      double convertedX, convertedY, convertedZ, convertedS;
+
+
+      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
+      if (uNorm < EPS)
+      {
+         convertedX = 0;
+         convertedY = 0;
+         convertedZ = 0;
+         convertedS = 0;
+      }
+      else
+      {
+         double halfTheta = 0.5 * axisAngle.getAngle();
+         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
+         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
+         convertedX = ux * sinHalfTheta;
+         convertedY = uy * sinHalfTheta;
+         convertedZ = uz * sinHalfTheta;
+         convertedS = cosHalfTheta;
+      }
+      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), convertedX, convertedY, convertedZ, convertedS, false);
    }
 
    public static double angle(QuaternionReadOnly q)
