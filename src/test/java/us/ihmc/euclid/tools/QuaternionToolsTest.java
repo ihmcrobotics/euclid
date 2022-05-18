@@ -53,7 +53,7 @@ public class QuaternionToolsTest
          Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
          
          double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted, false);
-         double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll);
+         double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll, false);
          
          // 3 (axis angle)
          AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);

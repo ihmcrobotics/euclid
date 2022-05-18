@@ -1508,7 +1508,7 @@ public class QuaternionTools
       }
       if (orientation3D instanceof YawPitchRollReadOnly)
       {
-         return distance(quaternion, (YawPitchRollReadOnly) orientation3D);
+         return distance(quaternion, (YawPitchRollReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof AxisAngleReadOnly)
       {
@@ -1568,7 +1568,7 @@ public class QuaternionTools
       return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
    }
 
-   public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll)
+   public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
    {
       if (quaternion.containsNaN() || yawPitchRoll.containsNaN())
       {
@@ -1600,7 +1600,7 @@ public class QuaternionTools
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
 
-      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, false);
+      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
    }
 
    public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
