@@ -33,6 +33,7 @@ public class QuaternionTools
       // Suppresses default constructor, ensuring non-instantiability.
    }
    
+   // change from mac . . .
    
    // <<< Angular distance (quaternion & axisangle)- - - - - Jae O.
 
