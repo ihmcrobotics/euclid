@@ -35,6 +35,8 @@ public class QuaternionTools
    
    // change from mac . . .
    
+   // change from lab . . .
+   
    // <<< Angular distance (quaternion & axisangle)- - - - - Jae O.
 
    /**

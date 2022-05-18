@@ -290,7 +290,6 @@ public class RotationMatrixToolsTest
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
       }      
-      
    }
 
    @Test
