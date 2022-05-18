@@ -1115,19 +1115,20 @@ public class AxisAngleTools
 //      return aa1.getAngle();
 //   }
    
-   public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D)
+   // CROSS PLATFORM DISTANCE METHOD >>
+   public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
       if (orientation3D instanceof QuaternionReadOnly)
       {
-         return distance(axisAngle, (QuaternionReadOnly) orientation3D);
+         return distance(axisAngle, (QuaternionReadOnly) orientation3D , limitToPi);
       }
       if (orientation3D instanceof YawPitchRollReadOnly)
       {
-         return distance(axisAngle, (YawPitchRollReadOnly) orientation3D);
+         return distance(axisAngle, (YawPitchRollReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof AxisAngleReadOnly)
       {
-         return distance(axisAngle, (AxisAngleReadOnly) orientation3D);
+         return distance(axisAngle, (AxisAngleReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof RotationMatrixReadOnly)
       {
@@ -1139,7 +1140,7 @@ public class AxisAngleTools
       }
    }
 
-   public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion)
+   public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion, boolean limitToPi)
    {
 
       if (axisAngle.containsNaN() || quaternion.containsNaN())
@@ -1180,7 +1181,7 @@ public class AxisAngleTools
          qs = cosHalfTheta;
       }
 
-      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, false);
+      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
    }
 
    public static double distance(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrix)
@@ -1247,7 +1248,7 @@ public class AxisAngleTools
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
-   public static double distance(AxisAngleReadOnly axisAngle, YawPitchRollReadOnly yawPitchRoll)
+   public static double distance(AxisAngleReadOnly axisAngle, YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
    {
       if (axisAngle.containsNaN() || axisAngle.containsNaN())
       {
@@ -1305,7 +1306,7 @@ public class AxisAngleTools
          ay = 0;
          az = 0;
       }
-      return distance(axisAngle, ax, ay, az, angle);
+      return distance(axisAngle, ax, ay, az, angle, limitToPi);
    }
 
    /**
@@ -1316,12 +1317,12 @@ public class AxisAngleTools
     * @return the angle representing the distance between the two axis-angles. It is contained in [0,
     *         2<i>pi</i>]
     */
-   public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2)
+   public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2, boolean limitToPi)
    {
-      return distance(aa1, aa2.getX(), aa2.getY(), aa2.getZ(), aa2.getAngle());
+      return distance(aa1, aa2.getX(), aa2.getY(), aa2.getZ(), aa2.getAngle(), limitToPi);
    }
 
-   static double distance(AxisAngleReadOnly aa1, double u2x, double u2y, double u2z, double u2a)
+   static double distance(AxisAngleReadOnly aa1, double u2x, double u2y, double u2z, double u2a, boolean limitToPi)
    {
       double alpha = aa1.getAngle();
       double u1x = aa1.getX();
@@ -1354,6 +1355,13 @@ public class AxisAngleTools
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
       double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
+      
+      if(limitToPi)
+      {
+         int num = (int) (gamma / Math.PI);
+         gamma-=num*Math.PI;
+      }
+
       return Math.abs(gamma);
 
    }

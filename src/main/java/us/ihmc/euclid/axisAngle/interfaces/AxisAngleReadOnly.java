@@ -191,7 +191,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     */
    default double distance(AxisAngleReadOnly other)
    {
-      return AxisAngleTools.distance(this, other);
+      return AxisAngleTools.distance(this, other, false);
    }
 
    /** {@inheritDoc} */

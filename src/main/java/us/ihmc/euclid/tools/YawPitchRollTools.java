@@ -134,7 +134,7 @@ public class YawPitchRollTools
       }
    }
    
-   public static double distance(YawPitchRollReadOnly yawPitchRoll, QuaternionReadOnly quaternion)
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, QuaternionReadOnly quaternion, boolean limitToPi)
    {
       if (yawPitchRoll.containsNaN() || quaternion.containsNaN())
       {
@@ -167,7 +167,7 @@ public class YawPitchRollTools
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
       
-      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, false);
+      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
 
    }
    
@@ -214,7 +214,7 @@ public class YawPitchRollTools
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
    
-   public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle)
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle, boolean limitToPi)
    {
       if (yawPitchRoll.containsNaN() || axisAngle.containsNaN())
       {
@@ -270,7 +270,7 @@ public class YawPitchRollTools
          az = 0;
       }
       
-      return AxisAngleTools.distance(axisAngle, ax,ay,az,aa);
+      return AxisAngleTools.distance(axisAngle, ax,ay,az,aa,limitToPi);
    }
 
 

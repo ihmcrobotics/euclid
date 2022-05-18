@@ -35,54 +35,44 @@ public class QuaternionToolsTest
    {
 	   // COMMENT ONE: distance method with roll pitch yaw and axis angle input methods..
 	   // pass the tests
+      double rotMax = 0, yprMax = 0, aaMax = 0;
       Random random = new Random(3212423);
-      int cnt = 0;
       for(int i = 0; i < ITERATIONS; ++i)
       {
          Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
          
-         // 1
+         // 1 (rotation Matrix)
          RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
-         RotationMatrix randomQuaternionConvertedToMatrix = new RotationMatrix(randomQuaternion);
-
-         double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted, true);
-         double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
-         double additionalDistance_1 = RotationMatrixTools.distance(randomQuaternionConvertedToMatrix, randomRotationMatrix);
+         
+         double expectedDistance_1= QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
+         double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted, true);
       
-         // 2
+         // 2 (yaw pitch roll)
          YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random); 
          Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
          
          double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted, false);
          double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll);
          
-         // 3
+         // 3 (axis angle)
          AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          Quaternion randomAxisAngleConverted = new Quaternion(randomAxisAngle);
          
          double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted, false);
          double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle);
-                  
-         System.out.println("expectedDistance (rot) = "+ expectedDistance_1);
-         System.out.println("actualDistance (rot) = "+ actualDistance_1);
-         System.out.println("additional distance(rot and rot) = "+ additionalDistance_1);
-         
-         
-         System.out.println("expectedDistance (ypr) = "+ expectedDistance_2);
-         System.out.println("actualDistance (ypr) = "+ actualDistance_2);
-         
-         System.out.println("expectedDistance (axis) = "+ expectedDistance_3);
-         System.out.println("actualDistance (axis) = "+ actualDistance_3);
 
-         cnt++;
-         System.out.println("iter = " + cnt);
+         rotMax = Math.max(rotMax, actualDistance_1);
+         yprMax = Math.max(yprMax, actualDistance_2);
+         aaMax = Math.max(rotMax, actualDistance_3);
+
          assertEquals(expectedDistance_1,actualDistance_1,EPSILON);
          assertEquals(expectedDistance_2,actualDistance_2,EPSILON);
          assertEquals(expectedDistance_3,actualDistance_3,EPSILON);
-         
       }      
-      
+      System.out.println("distance max (Quat , Rot) : " + rotMax * 180/Math.PI);
+      System.out.println("distance max (Quat , ypr) : " + yprMax * 180/Math.PI);
+      System.out.println("distance max (Quat , aa) : " + aaMax * 180/Math.PI);
    }
 
    @Test
@@ -1288,4 +1278,16 @@ public class QuaternionToolsTest
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(quaternionExpected, quaternionActual, EPSILON);
       }
    }
+   
+//   @Test
+//   public void rangeTest() throws Exception
+//   {
+//      // personal testing . . .
+//      Random random = new Random(21352345);
+//      for (int i = 0; i < ITERATIONS; ++i)
+//      {
+//         Quaternion q = EuclidCoreRandomTools.nextQuaternion(random);
+//         System.out.println("quat angle = " + QuaternionTools.angle(q) * 180 / Math.PI);
+//      }
+//   }
 }

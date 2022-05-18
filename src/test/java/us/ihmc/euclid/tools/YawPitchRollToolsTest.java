@@ -159,6 +159,9 @@ public class YawPitchRollToolsTest
       }
       
       // distance test between self(yawPitchRoll) and other(quaternion)
+      double quatMax = 0, aaMax = 0, rotMax = 0;
+      
+      
       for(int i = 0; i < ITERATIONS; ++i)
       {
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
@@ -167,16 +170,16 @@ public class YawPitchRollToolsTest
          
          Quaternion selfConverted = new Quaternion(yawPitchRoll);
          
-         double actualDistance = YawPitchRollTools.distance(yawPitchRoll, quaternion);
+         double actualDistance = YawPitchRollTools.distance(yawPitchRoll, quaternion, false);
          double expectedDistance = QuaternionTools.distance(selfConverted, quaternion, false);
          
          assertEquals(expectedDistance, actualDistance, EPSILON);
+         quatMax = Math.max(quatMax, actualDistance);
       }
       
       // distance test between self(yawPitchRoll) and other(rotation matrix)
       for(int i = 0; i < ITERATIONS; ++i)
       {
-//         System.out.println("iter = " + i);
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix converted = new RotationMatrix(yawPitchRoll);
@@ -185,9 +188,10 @@ public class YawPitchRollToolsTest
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          
          assertEquals(actualDistance,expectedDistance,EPSILON);
+         rotMax = Math.max(rotMax, actualDistance);
       }
       
-   // distance test between self(yawPitchRoll) and other(axis angle)
+      // distance test between self(yawPitchRoll) and other(axis angle)
       for(int i = 0; i < ITERATIONS; ++i)
       {
          System.out.println("iter = " + i);
@@ -195,11 +199,17 @@ public class YawPitchRollToolsTest
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          AxisAngle converted = new AxisAngle(yawPitchRoll);
          
-         double actualDistance = YawPitchRollTools.distance(yawPitchRoll, axisAngle);
-         double expectedDistance = AxisAngleTools.distance(axisAngle, converted);
+         double actualDistance = YawPitchRollTools.distance(yawPitchRoll, axisAngle, false);
+         double expectedDistance = AxisAngleTools.distance(axisAngle, converted, false);
          
          assertEquals(actualDistance,expectedDistance,EPSILON);
+         
+         aaMax = Math.max(aaMax, actualDistance);
       }
+      
+      System.out.println("distance max (ypr , Quat) : " + quatMax * 180/Math.PI);
+      System.out.println("distance max (ypr , Rot) : " + rotMax * 180/Math.PI);
+      System.out.println("distance max (ypr , aa) : " + aaMax * 180/Math.PI);
 
    }
 
@@ -721,4 +731,16 @@ public class YawPitchRollToolsTest
          EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
       }
    }
+   
+//   @Test
+//   public void rangeTest() throws Exception
+//   {
+//      // personal testing . . .
+//      Random random = new Random(21352345);
+//      for (int i = 0; i < ITERATIONS; ++i)
+//      {
+//         YawPitchRoll ypr = EuclidCoreRandomTools.nextYawPitchRoll(random);
+//         System.out.println("ypr angle = " + YawPitchRollTools.angle(ypr) * 180 / Math.PI);
+//      }
+//   }
 }

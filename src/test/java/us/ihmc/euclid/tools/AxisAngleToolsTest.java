@@ -34,7 +34,7 @@ public class AxisAngleToolsTest
          Quaternion q1 = new Quaternion(aa1);
          Quaternion q2 = new Quaternion(aa2);
 
-         double actualDistance = AxisAngleTools.distance(aa1, aa2);
+         double actualDistance = AxisAngleTools.distance(aa1, aa2, false);
          double expectedDistance = q1.distance(q2);
          assertEquals(expectedDistance, actualDistance, EPSILON);
          assertEquals(0.0, aa1.distance(aa1), EPSILON);
@@ -50,14 +50,15 @@ public class AxisAngleToolsTest
          Quaternion q1 = new Quaternion(aa1);
          Quaternion q2 = new Quaternion(aa2);
 
-         double actualDistance = AxisAngleTools.distance(aa1, aa2);
+         double actualDistance = AxisAngleTools.distance(aa1, aa2, false);
          double expectedDistance = q1.distance(q2);
          assertEquals(expectedDistance, actualDistance, EPSILON);
          assertEquals(0.0, aa1.distance(aa1), EPSILON);
       }
 
       // test distance from self(axis angle) to other(quaternion)
-
+      double quatMax = 0, yprMax = 0, rotMax = 0;
+       
       for (int i = 0; i < ITERATIONS; ++i)
       {
          System.out.println("iter = " + i);
@@ -65,13 +66,11 @@ public class AxisAngleToolsTest
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion converted = new Quaternion(axisAngle);
 
-         double actualDistance = AxisAngleTools.distance(axisAngle, quaternion);
+         double actualDistance = AxisAngleTools.distance(axisAngle, quaternion, false);
          double expectedDistance = QuaternionTools.distance(converted, quaternion, false);
          System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
          assertEquals(actualDistance, expectedDistance, EPSILON);
-         
-//         actual = 1.0740802829893035
-//         expected = 1.212024412428833
+         quatMax = Math.max(quatMax, actualDistance);
       }
 
       // test distance from self(axis angle) to other (rotation matrix)
@@ -85,7 +84,7 @@ public class AxisAngleToolsTest
          double expectedDistance = RotationMatrixTools.distance(converted, rotationMatrix);
 
          assertEquals(actualDistance, expectedDistance, EPSILON);
-
+         rotMax = Math.max(rotMax, actualDistance);
       }
 
       // test distance from self(axis angle) to other (yaw pitch roll)
@@ -95,11 +94,28 @@ public class AxisAngleToolsTest
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          AxisAngle converted = new AxisAngle(yawPitchRoll);
 
-         double actualDistance = AxisAngleTools.distance(axisAngle, yawPitchRoll);
-         double expectedDistance = AxisAngleTools.distance(converted, axisAngle);
+         double actualDistance = AxisAngleTools.distance(axisAngle, yawPitchRoll, false);
+         double expectedDistance = AxisAngleTools.distance(converted, axisAngle, false);
          System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
          assertEquals(actualDistance, expectedDistance, EPSILON);
+         
+         yprMax = Math.max(yprMax, actualDistance);
       }
-
+      
+      System.out.println("distance max (aa , Quat) : " + quatMax * 180/Math.PI);
+      System.out.println("distance max (aa , ypr) : " + yprMax * 180/Math.PI);
+      System.out.println("distance max (aa , Rot) : " + rotMax * 180/Math.PI);
    }
+   
+//   @Test
+//   public void rangeTest() throws Exception
+//   {
+//      // personal testing . . .
+//      Random random = new Random(21352345);
+//      for (int i = 0; i < ITERATIONS; ++i)
+//      {
+//         AxisAngle aa = EuclidCoreRandomTools.nextAxisAngle(random);
+//         System.out.println("axis angle (angle) = " + aa.getAngle() * 180 / Math.PI);
+//      }
+//   }
 }

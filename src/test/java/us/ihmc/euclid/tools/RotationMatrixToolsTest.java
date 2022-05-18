@@ -257,7 +257,9 @@ public class RotationMatrixToolsTest
          assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
       }
  
-      // cross platform distance test > > > > > 
+      // cross platform distance test > > > > >
+      double quatMax = 0, yprMax = 0, aaMax = 0;
+
       // rotationMatrix & quaterion
       for (int i = 0; i < ITERATIONS; ++i)
       {
@@ -267,6 +269,8 @@ public class RotationMatrixToolsTest
          double actualDistance = RotationMatrixTools.distance(rotationMatrix, quaternion);
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
+         
+         quatMax = Math.max(quatMax, actualDistance);
       }
       
       // rotationMatrix & axisAngle
@@ -278,6 +282,8 @@ public class RotationMatrixToolsTest
          double actualDistance = RotationMatrixTools.distance(rotationMatrix, axisAngle);
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
+         
+         aaMax = Math.max(aaMax, actualDistance);
       }
       
       // rotationMatrix & yawpitchroll
@@ -289,7 +295,12 @@ public class RotationMatrixToolsTest
          double actualDistance = RotationMatrixTools.distance(rotationMatrix, yawPitchRoll);
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
+         
+         yprMax = Math.max(yprMax, actualDistance);
       }      
+      System.out.println("distance max (Rot , Quat) : " + quatMax * 180/Math.PI);
+      System.out.println("distance max (Rot , ypr) : " + yprMax * 180/Math.PI);
+      System.out.println("distance max (Rot , aa) : " + aaMax * 180/Math.PI);
    }
 
    @Test
@@ -579,4 +590,16 @@ public class RotationMatrixToolsTest
          EuclidCoreTestTools.assertMatrix3DEquals(yawMatrix, actual, EPS);
       }
    }
+   
+//   @Test
+//   public void rangeTest() throws Exception
+//   {
+//      // personal testing . . .
+//      Random random = new Random(21352345);
+//      for (int i = 0; i < ITERATIONS; ++i)
+//      {
+//         RotationMatrix rm = EuclidCoreRandomTools.nextRotationMatrix(random);
+//         System.out.println("matrix angle = " + RotationMatrixTools.angle(rm) * 180 / Math.PI);
+//      }
+//   }
 }
