@@ -1616,7 +1616,7 @@ public class QuaternionTools
       }
       if (axisAngle.isZeroOrientation(EPS))
       {
-         return QuaternionTools.angle(quaternion);
+         return angle(quaternion);
       }
       
       double ux = axisAngle.getX();
@@ -1628,10 +1628,7 @@ public class QuaternionTools
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)
       {
-         convertedX = 0;
-         convertedY = 0;
-         convertedZ = 0;
-         convertedS = 0;
+         return angle(quaternion);
       }
       else
       {

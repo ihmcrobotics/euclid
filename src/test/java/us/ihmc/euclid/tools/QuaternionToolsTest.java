@@ -1278,6 +1278,22 @@ public class QuaternionToolsTest
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(quaternionExpected, quaternionActual, EPSILON);
       }
    }
+
+   // TODO: test limit to pi distance method in quaternion first. If good, use this to verify other types - Jae.
+   @Test
+   public void limitToPiTest() throws Exception
+   {
+      Random random = new Random(52341);
+      Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
+      Quaternion distance = EuclidCoreRandomTools.nextQuaternion(random);
+//      distance.set
+      
+      
+   }
+   
+   
+   
+   
    
 //   @Test
 //   public void rangeTest() throws Exception

@@ -1165,10 +1165,7 @@ public class AxisAngleTools
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)
       {
-         qx = 0;
-         qy = 0;
-         qz = 0;
-         qs = 0;
+         return QuaternionTools.angle(quaternion);
       }
       else
       {
@@ -1216,9 +1213,7 @@ public class AxisAngleTools
 
       if (uNorm < EPS)
       {
-         m00 = 1;
-         m11 = 1;
-         m22 = 1;
+         return RotationMatrixTools.angle(rotationMatrix);
       }
       else
       {
@@ -1301,10 +1296,7 @@ public class AxisAngleTools
       }
       else
       {
-         angle = 0;
-         ax = 0;
-         ay = 0;
-         az = 0;
+         return axisAngle.getAngle();
       }
       return distance(axisAngle, ax, ay, az, angle, limitToPi);
    }
