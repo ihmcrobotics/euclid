@@ -22,6 +22,7 @@ import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -158,14 +159,10 @@ public class YawPitchRollToolsTest
                       EPSILON);
       }
 
-      // distance test between self(yawPitchRoll) and other(quaternion)
-      double quatMax = 0, aaMax = 0, rotMax = 0;
-
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      {// Cross Platform distance method testing: (YawPitchRoll , Quaternion) 
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
-         YawPitchRoll converted = new YawPitchRoll(quaternion);
 
          Quaternion selfConverted = new Quaternion(yawPitchRoll);
 
@@ -173,12 +170,10 @@ public class YawPitchRollToolsTest
          double expectedDistance = QuaternionTools.distance(selfConverted, quaternion, false);
 
          assertEquals(expectedDistance, actualDistance, EPSILON);
-         quatMax = Math.max(quatMax, actualDistance);
       }
-
-      // distance test between self(yawPitchRoll) and other(rotation matrix)
+      
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      {// Cross Platform distance method testing: (YawPitchRoll , Quaternion) 
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix converted = new RotationMatrix(yawPitchRoll);
@@ -187,12 +182,10 @@ public class YawPitchRollToolsTest
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
 
          assertEquals(actualDistance, expectedDistance, EPSILON);
-         rotMax = Math.max(rotMax, actualDistance);
       }
-
-      // distance test between self(yawPitchRoll) and other(axis angle)
+      
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      {// Cross Platform distance method testing: (YawPitchRoll , Axis Angle) 
          System.out.println("iter = " + i);
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
@@ -202,14 +195,34 @@ public class YawPitchRollToolsTest
          double expectedDistance = AxisAngleTools.distance(axisAngle, converted, false);
 
          assertEquals(actualDistance, expectedDistance, EPSILON);
-
-         aaMax = Math.max(aaMax, actualDistance);
       }
+   }
 
-      System.out.println("distance max (ypr , Quat) : " + quatMax * 180 / Math.PI);
-      System.out.println("distance max (ypr , Rot) : " + rotMax * 180 / Math.PI);
-      System.out.println("distance max (ypr , aa) : " + aaMax * 180 / Math.PI);
+   @Test
+   public void testDistanceWithLimitToPi() throws Exception
+   {// Test distance method with limit to Pi. 
+      double min = Math.PI;
+      double max = 2 * min;
+      Random random = new Random(23523L);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
+         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+         distance.setAngle(randomAngle);
+         AxisAngle aa2 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa2);
+         Quaternion q1 = new Quaternion(aa1);
+         Quaternion q2 = new Quaternion(aa2);
+         YawPitchRoll ypr1 = new YawPitchRoll(q1);
 
+         double expected = QuaternionTools.distance(q1, q2, true);
+         double actual1 = YawPitchRollTools.distance(ypr1, q2, true);
+         double actual2 = YawPitchRollTools.distance(ypr1, aa2, true);
+
+         assertEquals(expected, actual1, EPSILON);
+         assertEquals(expected, actual2, EPSILON);
+      }
    }
 
    @Test
@@ -728,34 +741,6 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.appendRollRotation(original, roll, actual);
          EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
-      }
-   }
-
-   @Test
-   public void testDistanceWithLimitToPi() throws Exception
-   {
-      double min = Math.PI;
-      double max = 2 * min;
-      Random random = new Random(23523L);
-      for (int i = 0; i < ITERATIONS; ++i)
-      {
-         double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
-         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
-         distance.setAngle(randomAngle);
-         AxisAngle aa2 = new AxisAngle();
-         AxisAngleTools.multiply(aa1, distance, aa2);
-         Quaternion q1 = new Quaternion(aa1);
-         Quaternion q2 = new Quaternion(aa2);
-         YawPitchRoll ypr1 = new YawPitchRoll(q1);
-         YawPitchRoll ypr2 = new YawPitchRoll(q2);
-
-         double expected = QuaternionTools.distance(q1, q2, true);
-         double actual1 = YawPitchRollTools.distance(ypr1, q2, true);
-         double actual2 = YawPitchRollTools.distance(ypr1, aa2, true);
-
-         assertEquals(expected, actual1, EPSILON);
-         assertEquals(expected, actual2, EPSILON);
       }
    }
 }

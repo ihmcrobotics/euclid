@@ -34,42 +34,71 @@ public class QuaternionToolsTest
    @Test
    public void testDistance() throws Exception
    {
-      // COMMENT ONE: distance method with roll pitch yaw and axis angle input methods..
-      // pass the tests
-      double rotMax = 0, yprMax = 0, aaMax = 0;
       Random random = new Random(3212423);
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      {// Cross Platform distance method testing:
          Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
 
-         // 1 (rotation Matrix)
+         // (Quaternion & rotation Matrix)
          RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
 
          double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
          double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted, true);
 
-         // 2 (yaw pitch roll)
+         // (Quaternion & yaw pitch roll)
          YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
 
          double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted, false);
          double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll, false);
 
-         // 3 (axis angle)
+         // (Quaternion & axis angle)
          AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          Quaternion randomAxisAngleConverted = new Quaternion(randomAxisAngle);
 
          double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted, false);
          double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle);
 
-         rotMax = Math.max(rotMax, actualDistance_1);
-         yprMax = Math.max(yprMax, actualDistance_2);
-         aaMax = Math.max(rotMax, actualDistance_3);
+         assertEquals(actualDistance_1, expectedDistance_1);
+         assertEquals(actualDistance_2, expectedDistance_2);
+         assertEquals(actualDistance_3, expectedDistance_3);
+      }
+   }
 
-         assertEquals(expectedDistance_1, actualDistance_1, EPSILON);
-         assertEquals(expectedDistance_2, actualDistance_2, EPSILON);
-         assertEquals(expectedDistance_3, actualDistance_3, EPSILON);
+   @Test
+   public void testDistanceWithLimitToPi() throws Exception
+   {// Test distance method with limit to Pi. 
+    // This is used for verifying other type's distance method with limit to pi.
+      Random random = new Random(532341);
+      double min = Math.PI;
+      double max = 2 * Math.PI;
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
+         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+         distance.setAngle(randomAngle);
+         AxisAngle aa2 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa2);
+         
+         Quaternion q1 = new Quaternion(aa1);
+         Quaternion q2 = new Quaternion(aa2);
+         double actual = QuaternionTools.distance(q1, q2, true);
+         
+         distance.setAngle(actual);
+         AxisAngle aa3 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa3);
+         Quaternion q3 = new Quaternion(aa3);
+         
+         distance.setAngle(-actual);
+         AxisAngle aa4 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa4);
+         Quaternion q4 = new Quaternion(aa4);
+         
+         assertFalse(q2.geometricallyEquals(q3, EPSILON));
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q2, q4, EPSILON);
+         
       }
    }
 
@@ -1274,37 +1303,6 @@ public class QuaternionToolsTest
          QuaternionTools.multiply(new Quaternion(transposed), conjugate, quaternionExpected);
          QuaternionTools.multiply(matrix, true, quaternion, true, quaternionActual);
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(quaternionExpected, quaternionActual, EPSILON);
-      }
-   }
-
-   // TODO: test limit to pi distance method in quaternion first. If good, use this to verify other types - Jae.
-   @Test
-   public void testDistanceWithLimitToPi() throws Exception
-   {
-      Random random = new Random(532341);
-      double min = Math.PI;
-      double max = 2 * Math.PI;
-      for (int i = 0; i < ITERATIONS; ++i)
-      {
-         double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
-         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
-         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
-         distance.setAngle(randomAngle);
-         AxisAngle aa2 = new AxisAngle();
-         AxisAngleTools.multiply(aa1, distance, aa2);
-         Quaternion q1 = new Quaternion(aa1);
-         Quaternion q2 = new Quaternion(aa2);
-         double actual = QuaternionTools.distance(q1, q2, true);
-         distance.setAngle(actual);
-         AxisAngle aa3 = new AxisAngle();
-         AxisAngleTools.multiply(aa1, distance, aa3);
-         Quaternion q3 = new Quaternion(aa3);
-         distance.setAngle(-actual);
-         AxisAngle aa4 = new AxisAngle();
-         AxisAngleTools.multiply(aa1, distance, aa4);
-         Quaternion q4 = new Quaternion(aa4);
-         assertFalse(q2.geometricallyEquals(q3, EPSILON));
-         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q2, q4, EPSILON);
       }
    }
 

@@ -109,12 +109,17 @@ public class YawPitchRollTools
          return 0;
       }
    }
-   
-   public static double distance(YawPitchRollReadOnly yawPitchRoll, Orientation3DReadOnly orientation3D)
+   /**
+    * Performs a Cross platform Angular Distance Calculation between YawPitchRoll and any other 3D orientation systems. 
+    * @param yawPitchRoll
+    * @param orientation3D
+    * @param limitToPi    converts the resulting angular distance to within [0 , <i>pi</i>] if set true.
+    */
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
       if (orientation3D instanceof QuaternionReadOnly)
       {
-         return distance(yawPitchRoll, (QuaternionReadOnly) orientation3D);
+         return distance(yawPitchRoll, (QuaternionReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof YawPitchRollReadOnly)
       {
@@ -122,7 +127,7 @@ public class YawPitchRollTools
       }
       if (orientation3D instanceof AxisAngleReadOnly)
       {
-         return distance(yawPitchRoll, (AxisAngleReadOnly) orientation3D);
+         return distance(yawPitchRoll, (AxisAngleReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof RotationMatrixReadOnly)
       {
@@ -132,6 +137,7 @@ public class YawPitchRollTools
       {
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
+      // TODO: Interface instead of checking instance?
    }
    
    public static double distance(YawPitchRollReadOnly yawPitchRoll, QuaternionReadOnly quaternion, boolean limitToPi)
@@ -149,7 +155,7 @@ public class YawPitchRollTools
          return YawPitchRollTools.angle(yawPitchRoll);
       }
       
-      // converting . . . 
+      // converting yawPitchRoll -> Quaternion
       double halfYaw = 0.5 * yawPitchRoll.getYaw();
       double cYaw = EuclidCoreTools.cos(halfYaw);
       double sYaw = EuclidCoreTools.sin(halfYaw);
@@ -186,7 +192,7 @@ public class YawPitchRollTools
          return YawPitchRollTools.angle(yawPitchRoll);
       }
       
-      // Convert self . . .
+      // Convert self(YawPitchRoll) -> Rotation Matrix
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
@@ -229,7 +235,7 @@ public class YawPitchRollTools
          return YawPitchRollTools.angle(yawPitchRoll);
       }
       
-      // converting self to axis angle
+      // converting self(YawPitchRoll) to Axis Angle
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();

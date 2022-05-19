@@ -208,7 +208,7 @@ public class RotationMatrixToolsTest
       Random random = new Random(45345L);
 
       for (int i = 0; i < ITERATIONS; i++)
-      { // Testing against quaternion distance
+      { 
          RotationMatrix m1 = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix m2 = EuclidCoreRandomTools.nextRotationMatrix(random);
 
@@ -257,50 +257,35 @@ public class RotationMatrixToolsTest
          assertEquals(0.0, RotationMatrixTools.distance(m1, m1), EPS);
       }
 
-      // cross platform distance test > > > > >
-      double quatMax = 0, yprMax = 0, aaMax = 0;
-
-      // rotationMatrix & quaterion
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      {// Cross Platform distance method testing: (RotationMatrix, Quaternion)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          RotationMatrix converted = new RotationMatrix(quaternion);
          double actualDistance = RotationMatrixTools.distance(rotationMatrix, quaternion);
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
-
-         quatMax = Math.max(quatMax, actualDistance);
       }
 
-      // rotationMatrix & axisAngle
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      {// Cross Platform distance method testing: (RotationMatrix , Axis Angle)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          RotationMatrix converted = new RotationMatrix(axisAngle);
          double actualDistance = RotationMatrixTools.distance(rotationMatrix, axisAngle);
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
-
-         aaMax = Math.max(aaMax, actualDistance);
       }
 
-      // rotationMatrix & yawpitchroll
       for (int i = 0; i < ITERATIONS; ++i)
-      {
+      {// Cross Platform Distance Method Testing: (RotationMatrix , Yaw Pitch Roll)
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          RotationMatrix converted = new RotationMatrix(yawPitchRoll);
          double actualDistance = RotationMatrixTools.distance(rotationMatrix, yawPitchRoll);
          double expectedDistance = RotationMatrixTools.distance(rotationMatrix, converted);
          assertEquals(actualDistance, expectedDistance, EPS);
-
-         yprMax = Math.max(yprMax, actualDistance);
       }
-      System.out.println("distance max (Rot , Quat) : " + quatMax * 180 / Math.PI);
-      System.out.println("distance max (Rot , ypr) : " + yprMax * 180 / Math.PI);
-      System.out.println("distance max (Rot , aa) : " + aaMax * 180 / Math.PI);
    }
 
    @Test

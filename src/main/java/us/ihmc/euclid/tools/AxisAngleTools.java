@@ -1110,12 +1110,12 @@ public class AxisAngleTools
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
    
-//   public static double angle(AxisAngleReadOnly aa1)
-//   {
-//      return aa1.getAngle();
-//   }
-   
-   // CROSS PLATFORM DISTANCE METHOD >>
+   /**
+    * Performs a Cross platform Angular Distance Calculation between Axis Angle and any other 3D orientation systems. 
+    * @param axisAngle
+    * @param orientation3D
+    * @param limitToPi    converts the resulting angular distance to within [0 , <i>pi</i>] if set true.
+    */
    public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
       if (orientation3D instanceof QuaternionReadOnly)
@@ -1156,7 +1156,7 @@ public class AxisAngleTools
          return axisAngle.getAngle();
       }
       
-      // Converting self to quaternion.
+      // Converting self(AxisAngle) to quaternion.
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();

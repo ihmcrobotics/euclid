@@ -32,13 +32,6 @@ public class QuaternionTools
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
-   
-   // change from mac . . .
-   
-   // change from lab . . .
-   
-   // <<< Angular distance (quaternion & axisangle)- - - - - Jae O.
-
    /**
     * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
     * basis.
@@ -1472,7 +1465,36 @@ public class QuaternionTools
       double s = qs * cRoll - qx * sRoll;
       quaternionToPack.setUnsafe(x, y, z, s);
    }
-
+   
+   /**
+    * Performs a Cross platform Angular Distance Calculation between Quaternion and any other 3D orientation systems. 
+    * @param quaternion 
+    * @param orientation3D
+    * @param limitToPi    converts the resulting angular distance to within [0 , <i>pi</i>] if set true.
+    */
+   public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D, boolean limitToPi)
+   {
+      if (orientation3D instanceof QuaternionReadOnly)
+      {
+         return distance(quaternion, (QuaternionReadOnly) orientation3D, limitToPi);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(quaternion, (YawPitchRollReadOnly) orientation3D, limitToPi);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(quaternion, (AxisAngleReadOnly) orientation3D);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(quaternion, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
+      }
+   }
 
    /**
     * Computes the distance between the two given quaternions.
@@ -1500,29 +1522,7 @@ public class QuaternionTools
       double s = q1s * q2s + q1x * q2x + q1y * q2y + q1z * q2z;
       return angle(x, y, z, s, limitToPi);
    }
-   public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D, boolean limitToPi)
-   {
-      if (orientation3D instanceof QuaternionReadOnly)
-      {
-         return distance(quaternion, (QuaternionReadOnly) orientation3D, limitToPi);
-      }
-      if (orientation3D instanceof YawPitchRollReadOnly)
-      {
-         return distance(quaternion, (YawPitchRollReadOnly) orientation3D, limitToPi);
-      }
-      if (orientation3D instanceof AxisAngleReadOnly)
-      {
-         return distance(quaternion, (AxisAngleReadOnly) orientation3D);
-      }
-      if (orientation3D instanceof RotationMatrixReadOnly)
-      {
-         return distance(quaternion, (RotationMatrixReadOnly) orientation3D);
-      }
-      else
-      {
-         throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
-      }
-   }
+
 
    public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
    {

@@ -995,6 +995,11 @@ public class RotationMatrixTools
       matrixToPack.set(r00, r01, r02, r10, r11, r12, r20, r21, r22);
    }
    
+   /**
+    * Performs a Cross platform Angular Distance Calculation between Rotation Matrix and any other 3D orientation systems. 
+    * @param rotationMatrix 
+    * @param orientation3D
+    */
    public static double distance(RotationMatrixReadOnly rotationMatrix, Orientation3DReadOnly orientation3D)
    {
       if (orientation3D instanceof QuaternionReadOnly)

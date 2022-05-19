@@ -1,23 +1,30 @@
 package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.tools.AxisAngleTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.tools.YawPitchRollTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * Base interface to easily identify implementations that represent a physical orientation in 3
@@ -757,4 +764,13 @@ public interface Orientation3DReadOnly
    {
       return EuclidCoreIOTools.getStringAsYawPitchRoll(this);
    }
+   
+//   default double distance()
+//   {
+//      
+//   }
+   
+   double distance(Orientation3DReadOnly other, boolean limitToPi);
+
+   double angle(boolean limitToPi);
 }
