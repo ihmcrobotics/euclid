@@ -732,7 +732,7 @@ public class YawPitchRollToolsTest
    }
 
    @Test
-   public void limitToPiTest() throws Exception
+   public void testDistanceWithLimitToPi() throws Exception
    {
       double min = Math.PI;
       double max = 2 * min;

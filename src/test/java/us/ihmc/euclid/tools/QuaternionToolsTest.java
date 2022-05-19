@@ -1279,7 +1279,7 @@ public class QuaternionToolsTest
 
    // TODO: test limit to pi distance method in quaternion first. If good, use this to verify other types - Jae.
    @Test
-   public void limitToPiTest() throws Exception
+   public void testDistanceWithLimitToPi() throws Exception
    {
       Random random = new Random(532341);
       double min = Math.PI;
@@ -1303,10 +1303,8 @@ public class QuaternionToolsTest
          AxisAngle aa4 = new AxisAngle();
          AxisAngleTools.multiply(aa1, distance, aa4);
          Quaternion q4 = new Quaternion(aa4);
-         q3.negate();
-         q2.geometricallyEquals(q3, EPSILON);
+         assertFalse(q2.geometricallyEquals(q3, EPSILON));
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q2, q4, EPSILON);
-
       }
    }
 
