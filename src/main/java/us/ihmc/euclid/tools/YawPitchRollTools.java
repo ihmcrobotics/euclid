@@ -264,10 +264,7 @@ public class YawPitchRollTools
       }
       else
       {
-         aa = 0;
-         ax = 0;
-         ay = 0;
-         az = 0;
+         return YawPitchRollTools.angle(yawPitchRoll);
       }
       
       return AxisAngleTools.distance(axisAngle, ax,ay,az,aa,limitToPi);

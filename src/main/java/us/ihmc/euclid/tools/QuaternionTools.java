@@ -1657,7 +1657,7 @@ public class QuaternionTools
          qz = -qz;
          qs = -qs;
       }
-
+      
       double sinHalfTheta = EuclidCoreTools.norm(qx, qy, qz);
 
       if (EuclidCoreTools.epsilonEquals(1.0, qs, EPS))

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -1283,12 +1284,32 @@ public class QuaternionToolsTest
    @Test
    public void limitToPiTest() throws Exception
    {
-      Random random = new Random(52341);
-      Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
-      Quaternion distance = EuclidCoreRandomTools.nextQuaternion(random);
-//      distance.set
-      
-      
+      Random random = new Random(532341);
+      double min = Math.PI;
+      double max = 2*Math.PI;
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
+         AxisAngle aa = EuclidCoreRandomTools.nextAxisAngle(random);
+         double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
+         aa.setAngle(randomAngle);
+         Quaternion q2 = new Quaternion(aa);
+
+         System.out.println("q1 angle = " + QuaternionTools.angle(q1)*180/Math.PI);
+         System.out.println("q2 = " + q2.toString());
+         System.out.println("q2 angle = " + QuaternionTools.angle(q2)*180/Math.PI);
+         
+         double actual = QuaternionTools.distance(q1,q2,true);
+         q2.negate();
+         System.out.println("q2 negated = " + q2.toString());
+         double expected = QuaternionTools.distance(q1,q2,false);
+         
+         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
+         System.out.println("diff = " + Math.abs(actual - expected)*180/Math.PI);
+         assertEquals(actual,expected,EPSILON);
+         System.out.println("distance over pi limited result: " + actual);
+         System.out.println("iter: " + i + " out of " + ITERATIONS);
+      }
    }
    
    
