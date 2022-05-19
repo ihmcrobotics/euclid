@@ -59,7 +59,7 @@ public class AxisAngleToolsTest
 
       // test distance from self(axis angle) to other(quaternion)
       double quatMax = 0, yprMax = 0, rotMax = 0;
-       
+
       for (int i = 0; i < ITERATIONS; ++i)
       {
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
@@ -68,7 +68,7 @@ public class AxisAngleToolsTest
 
          double actualDistance = AxisAngleTools.distance(axisAngle, quaternion, false);
          double expectedDistance = QuaternionTools.distance(converted, quaternion, false);
-//         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
+         //         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
          assertEquals(actualDistance, expectedDistance, EPSILON);
          quatMax = Math.max(quatMax, actualDistance);
       }
@@ -96,26 +96,26 @@ public class AxisAngleToolsTest
 
          double actualDistance = AxisAngleTools.distance(axisAngle, yawPitchRoll, false);
          double expectedDistance = AxisAngleTools.distance(converted, axisAngle, false);
-//         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
+         //         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
          assertEquals(actualDistance, expectedDistance, EPSILON);
-         
+
          yprMax = Math.max(yprMax, actualDistance);
       }
-      
-//      System.out.println("distance max (aa , Quat) : " + quatMax * 180/Math.PI);
-//      System.out.println("distance max (aa , ypr) : " + yprMax * 180/Math.PI);
-//      System.out.println("distance max (aa , Rot) : " + rotMax * 180/Math.PI);
+
+      //      System.out.println("distance max (aa , Quat) : " + quatMax * 180/Math.PI);
+      //      System.out.println("distance max (aa , ypr) : " + yprMax * 180/Math.PI);
+      //      System.out.println("distance max (aa , Rot) : " + rotMax * 180/Math.PI);
    }
-   
+
    @Test
    public void limitToPiTest() throws Exception
    {
       double min = Math.PI;
-      double max = 2*min;
+      double max = 2 * min;
       Random random = new Random(23523L);
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         double randomAngle = ThreadLocalRandom.current().nextDouble(min,max);
+         double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
          AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
          AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
          distance.setAngle(randomAngle);
@@ -123,27 +123,12 @@ public class AxisAngleToolsTest
          AxisAngleTools.multiply(aa1, distance, aa2);
          Quaternion q1 = new Quaternion(aa1);
          Quaternion q2 = new Quaternion(aa2);
-         
-         double expected = QuaternionTools.distance(q1,q2,true);
-         double actual = AxisAngleTools.distance(aa1, aa2,true);
-//         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
-         assertEquals(expected,actual,EPSILON);
-         
-//         System.out.println("Iter = " + i);
-         
+
+         double expected = QuaternionTools.distance(q1, q2, true);
+         double actual = AxisAngleTools.distance(aa1, aa2, true);
+         assertEquals(expected, actual, EPSILON);
       }
 
    }
-   
-//   @Test
-//   public void rangeTest() throws Exception
-//   {
-//      // personal testing . . .
-//      Random random = new Random(21352345);
-//      for (int i = 0; i < ITERATIONS; ++i)
-//      {
-//         AxisAngle aa = EuclidCoreRandomTools.nextAxisAngle(random);
-//         System.out.println("axis angle (angle) = " + aa.getAngle() * 180 / Math.PI);
-//      }
-//   }
+
 }

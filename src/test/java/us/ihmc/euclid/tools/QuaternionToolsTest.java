@@ -30,36 +30,36 @@ import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 public class QuaternionToolsTest
 {
    private static final double EPSILON = 1.0e-12;
-   
+
    @Test
    public void testDistance() throws Exception
    {
-	   // COMMENT ONE: distance method with roll pitch yaw and axis angle input methods..
-	   // pass the tests
+      // COMMENT ONE: distance method with roll pitch yaw and axis angle input methods..
+      // pass the tests
       double rotMax = 0, yprMax = 0, aaMax = 0;
       Random random = new Random(3212423);
-      for(int i = 0; i < ITERATIONS; ++i)
+      for (int i = 0; i < ITERATIONS; ++i)
       {
          Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
-         
+
          // 1 (rotation Matrix)
          RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
-         
-         double expectedDistance_1= QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
+
+         double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
          double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted, true);
-      
+
          // 2 (yaw pitch roll)
-         YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random); 
+         YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
-         
+
          double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted, false);
          double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll, false);
-         
+
          // 3 (axis angle)
          AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          Quaternion randomAxisAngleConverted = new Quaternion(randomAxisAngle);
-         
+
          double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted, false);
          double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle);
 
@@ -67,10 +67,10 @@ public class QuaternionToolsTest
          yprMax = Math.max(yprMax, actualDistance_2);
          aaMax = Math.max(rotMax, actualDistance_3);
 
-         assertEquals(expectedDistance_1,actualDistance_1,EPSILON);
-         assertEquals(expectedDistance_2,actualDistance_2,EPSILON);
-         assertEquals(expectedDistance_3,actualDistance_3,EPSILON);
-      }      
+         assertEquals(expectedDistance_1, actualDistance_1, EPSILON);
+         assertEquals(expectedDistance_2, actualDistance_2, EPSILON);
+         assertEquals(expectedDistance_3, actualDistance_3, EPSILON);
+      }
    }
 
    @Test
@@ -1283,46 +1283,10 @@ public class QuaternionToolsTest
    {
       Random random = new Random(532341);
       double min = Math.PI;
-      double max = 2*Math.PI;
+      double max = 2 * Math.PI;
       for (int i = 0; i < ITERATIONS; ++i)
       {
-//         Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
-//         AxisAngle aa = EuclidCoreRandomTools.nextAxisAngle(random);
          double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
-//         aa.setAngle(randomAngle);
-//         Quaternion q2 = new Quaternion(aa);
-//
-//         System.out.println("q1 angle = " + QuaternionTools.angle(q1)*180/Math.PI);
-//         System.out.println("q2 angle = " + QuaternionTools.angle(q2)*180/Math.PI);
-//         
-//         double actual = QuaternionTools.distance(q1,q2,true);
-//         q2.negate();
-//         System.out.println("q2 angle (negated) = " + QuaternionTools.angle(q2)*180/Math.PI);
-//         double expected = QuaternionTools.distance(q1,q2,false);
-//         
-//         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
-//         System.out.println("diff = " + Math.abs(actual - expected)*180/Math.PI);
-//         assertEquals(actual,expected,EPSILON);
-//         System.out.println("iter: " + i + " out of " + ITERATIONS);
-         
-//         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
-//         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
-//         
-//         distance.setAngle(randomAngle);
-//         AxisAngle aa2 = new AxisAngle(aa1);
-//         aa2.append(distance);
-//         
-//         Quaternion q1 = new Quaternion(aa1);
-//         Quaternion q2 = new Quaternion(aa2);
-//         
-//         double expected = distance.getAngle();
-//         double actual = QuaternionTools.distance(q1, q2,true);
-//         
-//         q1.geometricallyEquals(q2, i)
-//         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q1, q2, i);
-//         
-//         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
-         
          AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
          AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
          distance.setAngle(randomAngle);
@@ -1330,7 +1294,7 @@ public class QuaternionToolsTest
          AxisAngleTools.multiply(aa1, distance, aa2);
          Quaternion q1 = new Quaternion(aa1);
          Quaternion q2 = new Quaternion(aa2);
-         double actual = QuaternionTools.distance(q1,q2,true);
+         double actual = QuaternionTools.distance(q1, q2, true);
          distance.setAngle(actual);
          AxisAngle aa3 = new AxisAngle();
          AxisAngleTools.multiply(aa1, distance, aa3);
@@ -1339,27 +1303,11 @@ public class QuaternionToolsTest
          AxisAngle aa4 = new AxisAngle();
          AxisAngleTools.multiply(aa1, distance, aa4);
          Quaternion q4 = new Quaternion(aa4);
-         
          q3.negate();
          q2.geometricallyEquals(q3, EPSILON);
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q2, q4, EPSILON);
 
       }
    }
-   
-   
-   
-   
-   
-//   @Test
-//   public void rangeTest() throws Exception
-//   {
-//      // personal testing . . .
-//      Random random = new Random(21352345);
-//      for (int i = 0; i < ITERATIONS; ++i)
-//      {
-//         Quaternion q = EuclidCoreRandomTools.nextQuaternion(random);
-//         System.out.println("quat angle = " + QuaternionTools.angle(q) * 180 / Math.PI);
-//      }
-//   }
+
 }
