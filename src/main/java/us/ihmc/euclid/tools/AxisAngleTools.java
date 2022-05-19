@@ -1348,10 +1348,10 @@ public class AxisAngleTools
 
       double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
       
-      if(limitToPi)
+      if(limitToPi && gamma > Math.PI)
       {
-         int num = (int) (gamma / Math.PI);
-         gamma-=num*Math.PI;
+         gamma = 2*Math.PI - gamma;
+//         gamma = 2.0 * EuclidCoreTools.atan2(Math.abs(sinHalfGamma), cosHalfGamma);
       }
 
       return Math.abs(gamma);

@@ -7,6 +7,7 @@ import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextDouble;
 import static us.ihmc.euclid.tools.EuclidCoreRandomTools.nextVector3DWithFixedLength;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -61,14 +62,13 @@ public class AxisAngleToolsTest
        
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         System.out.println("iter = " + i);
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          Quaternion converted = new Quaternion(axisAngle);
 
          double actualDistance = AxisAngleTools.distance(axisAngle, quaternion, false);
          double expectedDistance = QuaternionTools.distance(converted, quaternion, false);
-         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
+//         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
          assertEquals(actualDistance, expectedDistance, EPSILON);
          quatMax = Math.max(quatMax, actualDistance);
       }
@@ -96,15 +96,43 @@ public class AxisAngleToolsTest
 
          double actualDistance = AxisAngleTools.distance(axisAngle, yawPitchRoll, false);
          double expectedDistance = AxisAngleTools.distance(converted, axisAngle, false);
-         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
+//         System.out.println("actual = " + actualDistance + "\nexpected = " + expectedDistance);
          assertEquals(actualDistance, expectedDistance, EPSILON);
          
          yprMax = Math.max(yprMax, actualDistance);
       }
       
-      System.out.println("distance max (aa , Quat) : " + quatMax * 180/Math.PI);
-      System.out.println("distance max (aa , ypr) : " + yprMax * 180/Math.PI);
-      System.out.println("distance max (aa , Rot) : " + rotMax * 180/Math.PI);
+//      System.out.println("distance max (aa , Quat) : " + quatMax * 180/Math.PI);
+//      System.out.println("distance max (aa , ypr) : " + yprMax * 180/Math.PI);
+//      System.out.println("distance max (aa , Rot) : " + rotMax * 180/Math.PI);
+   }
+   
+   @Test
+   public void limitToPiTest() throws Exception
+   {
+      double min = Math.PI;
+      double max = 2*min;
+      Random random = new Random(23523L);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         double randomAngle = ThreadLocalRandom.current().nextDouble(min,max);
+         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+         distance.setAngle(randomAngle);
+         AxisAngle aa2 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa2);
+         Quaternion q1 = new Quaternion(aa1);
+         Quaternion q2 = new Quaternion(aa2);
+         
+         double expected = QuaternionTools.distance(q1,q2,true);
+         double actual = AxisAngleTools.distance(aa1, aa2,true);
+//         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
+         assertEquals(expected,actual,EPSILON);
+         
+//         System.out.println("Iter = " + i);
+         
+      }
+
    }
    
 //   @Test

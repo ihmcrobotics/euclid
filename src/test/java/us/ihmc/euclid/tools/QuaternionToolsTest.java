@@ -1286,24 +1286,64 @@ public class QuaternionToolsTest
       double max = 2*Math.PI;
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
-         AxisAngle aa = EuclidCoreRandomTools.nextAxisAngle(random);
+//         Quaternion q1 = EuclidCoreRandomTools.nextQuaternion(random);
+//         AxisAngle aa = EuclidCoreRandomTools.nextAxisAngle(random);
          double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
-         aa.setAngle(randomAngle);
-         Quaternion q2 = new Quaternion(aa);
-
-         System.out.println("q1 angle = " + QuaternionTools.angle(q1)*180/Math.PI);
-         System.out.println("q2 angle = " + QuaternionTools.angle(q2)*180/Math.PI);
+//         aa.setAngle(randomAngle);
+//         Quaternion q2 = new Quaternion(aa);
+//
+//         System.out.println("q1 angle = " + QuaternionTools.angle(q1)*180/Math.PI);
+//         System.out.println("q2 angle = " + QuaternionTools.angle(q2)*180/Math.PI);
+//         
+//         double actual = QuaternionTools.distance(q1,q2,true);
+//         q2.negate();
+//         System.out.println("q2 angle (negated) = " + QuaternionTools.angle(q2)*180/Math.PI);
+//         double expected = QuaternionTools.distance(q1,q2,false);
+//         
+//         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
+//         System.out.println("diff = " + Math.abs(actual - expected)*180/Math.PI);
+//         assertEquals(actual,expected,EPSILON);
+//         System.out.println("iter: " + i + " out of " + ITERATIONS);
          
+//         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+//         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+//         
+//         distance.setAngle(randomAngle);
+//         AxisAngle aa2 = new AxisAngle(aa1);
+//         aa2.append(distance);
+//         
+//         Quaternion q1 = new Quaternion(aa1);
+//         Quaternion q2 = new Quaternion(aa2);
+//         
+//         double expected = distance.getAngle();
+//         double actual = QuaternionTools.distance(q1, q2,true);
+//         
+//         q1.geometricallyEquals(q2, i)
+//         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q1, q2, i);
+//         
+//         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
+         
+         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+         distance.setAngle(randomAngle);
+         AxisAngle aa2 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa2);
+         Quaternion q1 = new Quaternion(aa1);
+         Quaternion q2 = new Quaternion(aa2);
          double actual = QuaternionTools.distance(q1,q2,true);
-         q2.negate();
-         System.out.println("q2 angle (negated) = " + QuaternionTools.angle(q2)*180/Math.PI);
-         double expected = QuaternionTools.distance(q1,q2,false);
+         distance.setAngle(actual);
+         AxisAngle aa3 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa3);
+         Quaternion q3 = new Quaternion(aa3);
+         distance.setAngle(-actual);
+         AxisAngle aa4 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa4);
+         Quaternion q4 = new Quaternion(aa4);
          
-         System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
-         System.out.println("diff = " + Math.abs(actual - expected)*180/Math.PI);
-         assertEquals(actual,expected,EPSILON);
-         System.out.println("iter: " + i + " out of " + ITERATIONS);
+         q3.negate();
+         q2.geometricallyEquals(q3, EPSILON);
+         EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q2, q4, EPSILON);
+
       }
    }
    

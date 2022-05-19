@@ -7,6 +7,7 @@ import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 import static us.ihmc.euclid.tools.EuclidCoreTestTools.assertExceptionIsThrown;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,6 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -729,6 +729,34 @@ public class YawPitchRollToolsTest
 
          YawPitchRollTools.appendRollRotation(original, roll, actual);
          EuclidCoreTestTools.assertYawPitchRollEquals(expected, actual, EPSILON);
+      }
+   }
+   
+   @Test
+   public void limitToPiTest() throws Exception
+   {
+      double min = Math.PI;
+      double max = 2*min;
+      Random random = new Random(23523L);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         double randomAngle = ThreadLocalRandom.current().nextDouble(min,max);
+         AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+         AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+         distance.setAngle(randomAngle);
+         AxisAngle aa2 = new AxisAngle();
+         AxisAngleTools.multiply(aa1, distance, aa2);
+         Quaternion q1 = new Quaternion(aa1);
+         Quaternion q2 = new Quaternion(aa2);
+         YawPitchRoll ypr1 = new YawPitchRoll(q1);
+         YawPitchRoll ypr2 = new YawPitchRoll(q2);
+         
+         double expected = QuaternionTools.distance(q1,q2,true);
+         double actual1 = YawPitchRollTools.distance(ypr1, q2, true);
+         double actual2 = YawPitchRollTools.distance(ypr1, aa2, true);
+         
+         assertEquals(expected, actual1 , EPSILON);
+         assertEquals(expected, actual2 , EPSILON);
       }
    }
    
