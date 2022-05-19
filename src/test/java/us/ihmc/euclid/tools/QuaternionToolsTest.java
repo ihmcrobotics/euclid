@@ -71,9 +71,6 @@ public class QuaternionToolsTest
          assertEquals(expectedDistance_2,actualDistance_2,EPSILON);
          assertEquals(expectedDistance_3,actualDistance_3,EPSILON);
       }      
-      System.out.println("distance max (Quat , Rot) : " + rotMax * 180/Math.PI);
-      System.out.println("distance max (Quat , ypr) : " + yprMax * 180/Math.PI);
-      System.out.println("distance max (Quat , aa) : " + aaMax * 180/Math.PI);
    }
 
    @Test
@@ -1296,18 +1293,16 @@ public class QuaternionToolsTest
          Quaternion q2 = new Quaternion(aa);
 
          System.out.println("q1 angle = " + QuaternionTools.angle(q1)*180/Math.PI);
-         System.out.println("q2 = " + q2.toString());
          System.out.println("q2 angle = " + QuaternionTools.angle(q2)*180/Math.PI);
          
          double actual = QuaternionTools.distance(q1,q2,true);
          q2.negate();
-         System.out.println("q2 negated = " + q2.toString());
+         System.out.println("q2 angle (negated) = " + QuaternionTools.angle(q2)*180/Math.PI);
          double expected = QuaternionTools.distance(q1,q2,false);
          
          System.out.println("actual = " + actual*180/Math.PI + "\nexpected = " + expected*180/Math.PI);
          System.out.println("diff = " + Math.abs(actual - expected)*180/Math.PI);
          assertEquals(actual,expected,EPSILON);
-         System.out.println("distance over pi limited result: " + actual);
          System.out.println("iter: " + i + " out of " + ITERATIONS);
       }
    }
