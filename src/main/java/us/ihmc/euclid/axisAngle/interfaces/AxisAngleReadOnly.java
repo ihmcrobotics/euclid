@@ -197,7 +197,11 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    {
       return AxisAngleTools.distance(this, other, limitToPi);
    }
-
+   /**
+    * Computes and returns the angular distance from origin.
+    * @return the the angular distance from origin. It is contained in
+    *         [0, 2<i>pi</i>].
+    */
    default double angle()
    {
       return this.getAngle();
@@ -491,7 +495,6 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     */
    default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
    {
-//      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
       return distance(other,true) <= epsilon;
    }
 }

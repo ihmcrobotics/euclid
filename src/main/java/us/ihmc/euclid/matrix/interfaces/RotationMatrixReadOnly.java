@@ -105,6 +105,12 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    {
       return RotationMatrixTools.distance(this, other);
    }
+ 
+   /**
+    * Computes and returns the angular distance from origin.
+    * @return the angular distance from origin. It is contained in
+    *         [0, <i>pi</i>].
+    */
    default double angle()
    {
       return RotationMatrixTools.angle(this);

@@ -139,11 +139,21 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
       return QuaternionTools.distance(this, other, limitToPi);
    }
    
+   /**
+    * Computes and returns the angular distance from origin.
+    * @return the angular distance from origin. It is contained in
+    *         [0, 2<i>pi</i>].
+    */
    default double angle()
    {
       return QuaternionTools.angle(this);
    }
-   
+   /**
+    * Computes and returns the angular distance from origin.
+    * @param limitToPi limits the result to [0, <i>pi</i>] if set True. 
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, 2<i>pi</i>] unless limitToPi is set true.
+    */
    default double angle(boolean limitToPi)
    {
       return QuaternionTools.angle(this,limitToPi);
@@ -309,8 +319,6 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    {
       if (epsilon >= Math.PI)
          return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
-
-//      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
       return distance(other, true) <= epsilon;
    }
 }

@@ -166,15 +166,21 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
    {
       return YawPitchRollTools.distance(this, other, limitToPi);
    }
-   
-   default double angle()
-   {
-      return angle(false);
-   }
+   /**
+    * Computes and returns the angular distance from origin.
+    * @param limitToPi limits the result to [0, <i>pi</i>]. 
+    * @return the angular distance from origin. It is contained in
+    *         [0, 2<i>pi</i>] unless limitToPi is true.
+    */
    default double angle(boolean limitToPi)
    {
       return YawPitchRollTools.angle(this);
    }
+   default double angle()
+   {
+      return angle(false);
+   }
+
 
    /** {@inheritDoc} */
    @Override
@@ -437,6 +443,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     */
    default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
    {
+      // TODO: FAILS
 //      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
       return distance(other,true) <= epsilon;
    }

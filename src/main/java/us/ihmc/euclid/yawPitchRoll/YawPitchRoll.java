@@ -239,14 +239,12 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
    @Override
    public double distance(Orientation3DReadOnly other)
    {
-      // TODO Auto-generated method stub
       return distance(other, false);
    }
 
    @Override
    public double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
-      // TODO Auto-generated method stub
       return YawPitchRollTools.distance(this, other, limitToPi);
    }
 }
