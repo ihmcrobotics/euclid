@@ -1498,26 +1498,7 @@ public class QuaternionTools
    }
    public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D)
    {
-      if (orientation3D instanceof QuaternionReadOnly)
-      {
-         return distance(quaternion, (QuaternionReadOnly) orientation3D, false);
-      }
-      if (orientation3D instanceof YawPitchRollReadOnly)
-      {
-         return distance(quaternion, (YawPitchRollReadOnly) orientation3D, false);
-      }
-      if (orientation3D instanceof AxisAngleReadOnly)
-      {
-         return distance(quaternion, (AxisAngleReadOnly) orientation3D);
-      }
-      if (orientation3D instanceof RotationMatrixReadOnly)
-      {
-         return distance(quaternion, (RotationMatrixReadOnly) orientation3D);
-      }
-      else
-      {
-         throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
-      }
+      return distance(quaternion, orientation3D, false);
    }
 
    /**

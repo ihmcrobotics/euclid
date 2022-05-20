@@ -1358,8 +1358,6 @@ public class AxisAngleTools
       {
          gamma = 2*Math.PI - gamma;
       }
-
       return Math.abs(gamma);
-
    }
 }
