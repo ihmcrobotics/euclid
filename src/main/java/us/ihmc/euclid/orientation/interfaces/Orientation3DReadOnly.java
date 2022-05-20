@@ -769,8 +769,9 @@ public interface Orientation3DReadOnly
 //   {
 //      
 //   }
-   
+   double distance(Orientation3DReadOnly other);
    double distance(Orientation3DReadOnly other, boolean limitToPi);
 
+   double angle();
    double angle(boolean limitToPi);
 }

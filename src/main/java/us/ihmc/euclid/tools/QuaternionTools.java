@@ -1645,7 +1645,11 @@ public class QuaternionTools
 
    public static double angle(QuaternionReadOnly q)
    {
-      return angle(q.getX(), q.getY(), q.getZ(), q.getS(), false);
+      return angle(q, false);
+   }
+   public static double angle(QuaternionReadOnly q, boolean limitToPi)
+   {
+      return angle(q.getX(), q.getY(), q.getZ(), q.getS(), limitToPi);
    }
 
    static double angle(double qx, double qy, double qz, double qs, boolean limitToPi)

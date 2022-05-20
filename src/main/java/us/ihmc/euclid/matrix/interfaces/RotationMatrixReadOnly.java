@@ -105,6 +105,10 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    {
       return RotationMatrixTools.distance(this, other);
    }
+   default double angle()
+   {
+      return RotationMatrixTools.angle(this);
+   }
 
    /** {@inheritDoc} */
    @Override

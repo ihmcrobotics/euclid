@@ -138,6 +138,16 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    {
       return QuaternionTools.distance(this, other, limitToPi);
    }
+   
+   default double angle()
+   {
+      return QuaternionTools.angle(this);
+   }
+   
+   default double angle(boolean limitToPi)
+   {
+      return QuaternionTools.angle(this,limitToPi);
+   }
 
    /**
     * Calculates and returns the angle of the rotation this quaternion represents.
