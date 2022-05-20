@@ -1023,6 +1023,7 @@ public class RotationMatrixTools
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
    }
+
    
    public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
    {

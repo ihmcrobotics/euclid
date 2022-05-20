@@ -12,9 +12,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.rotationConversion.QuaternionConversion;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -25,7 +27,9 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public class QuaternionToolsTest
 {
@@ -60,11 +64,44 @@ public class QuaternionToolsTest
          double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted, false);
          double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle);
 
-         assertEquals(actualDistance_1, expectedDistance_1);
-         assertEquals(actualDistance_2, expectedDistance_2);
-         assertEquals(actualDistance_3, expectedDistance_3);
+         System.out.println("expected 1: " + expectedDistance_1*180/Math.PI + "\nactual 1: "+ actualDistance_1*180/Math.PI);
+         System.out.println("expected 2: " + expectedDistance_2*180/Math.PI + "\nactual 2: "+ actualDistance_2*180/Math.PI);
+         System.out.println("expected 3: " + expectedDistance_3*180/Math.PI + "\nactual 3: "+ actualDistance_3*180/Math.PI);
+         
+         assertEquals(actualDistance_1, expectedDistance_1,EPSILON);
+         assertEquals(actualDistance_2, expectedDistance_2,EPSILON);
+         assertEquals(actualDistance_3, expectedDistance_3,EPSILON);
+         System.out.println("iter = " + i);
+      }
+      
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Type check test in distance method
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         
+         double notCastedResult = QuaternionTools.distance(quaternion, orientation,false);
+         if(orientation instanceof QuaternionReadOnly)
+         {
+            orientation = (Quaternion) orientation;
+         }
+         else if(orientation instanceof YawPitchRollReadOnly)
+         {
+            orientation = (YawPitchRoll) orientation;
+         }
+         else if(orientation instanceof AxisAngleReadOnly)
+         {
+            orientation = (AxisAngle) orientation;
+         }
+         else
+         {
+            orientation = (RotationMatrix) orientation;
+         }
+         double castedResult = QuaternionTools.distance(quaternion, orientation, false);
+         
+         assertEquals(notCastedResult, castedResult);
       }
    }
+
 
    @Test
    public void testDistanceWithLimitToPi() throws Exception

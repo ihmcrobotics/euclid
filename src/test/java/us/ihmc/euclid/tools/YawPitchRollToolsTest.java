@@ -12,12 +12,14 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
+import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -27,9 +29,11 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public class YawPitchRollToolsTest
 {
@@ -186,7 +190,6 @@ public class YawPitchRollToolsTest
       
       for (int i = 0; i < ITERATIONS; ++i)
       {// Cross Platform distance method testing: (YawPitchRoll , Axis Angle) 
-         System.out.println("iter = " + i);
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          AxisAngle converted = new AxisAngle(yawPitchRoll);
@@ -195,6 +198,34 @@ public class YawPitchRollToolsTest
          double expectedDistance = AxisAngleTools.distance(axisAngle, converted, false);
 
          assertEquals(actualDistance, expectedDistance, EPSILON);
+      }
+      
+      
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Type check test in distance method
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         
+         double notCastedResult = YawPitchRollTools.distance(yawPitchRoll, orientation,false);
+         if(orientation instanceof QuaternionReadOnly)
+         {
+            orientation = (Quaternion) orientation;
+         }
+         else if(orientation instanceof YawPitchRollReadOnly)
+         {
+            orientation = (YawPitchRoll) orientation;
+         }
+         else if(orientation instanceof AxisAngleReadOnly)
+         {
+            orientation = (AxisAngle) orientation;
+         }
+         else
+         {
+            orientation = (RotationMatrix) orientation;
+         }
+         double castedResult = YawPitchRollTools.distance(yawPitchRoll, orientation,false);
+         
+         assertEquals(notCastedResult, castedResult);
       }
    }
 

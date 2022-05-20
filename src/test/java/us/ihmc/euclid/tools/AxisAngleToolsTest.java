@@ -14,10 +14,13 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.referenceFrame.FrameQuaternion;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
+import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public class AxisAngleToolsTest
 {
@@ -93,6 +96,33 @@ public class AxisAngleToolsTest
          double expectedDistance = AxisAngleTools.distance(converted, axisAngle, false);
 
          assertEquals(actualDistance, expectedDistance, EPSILON);
+      }
+      
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Type check test in distance method
+         AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         
+         double notCastedResult = AxisAngleTools.distance(axisAngle, orientation,false);
+         if(orientation instanceof QuaternionReadOnly)
+         {
+            orientation = (Quaternion) orientation;
+         }
+         else if(orientation instanceof YawPitchRollReadOnly)
+         {
+            orientation = (YawPitchRoll) orientation;
+         }
+         else if(orientation instanceof AxisAngleReadOnly)
+         {
+            orientation = (AxisAngle) orientation;
+         }
+         else
+         {
+            orientation = (RotationMatrix) orientation;
+         }
+         double castedResult = AxisAngleTools.distance(axisAngle, orientation,false);
+         
+         assertEquals(notCastedResult, castedResult);
       }
    }
 
