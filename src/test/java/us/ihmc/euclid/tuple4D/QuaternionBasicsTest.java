@@ -47,6 +47,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
 
 public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends Tuple4DBasicsTest<T>
 {
+   public static final double EPS = 1e-14;
    // Read-only part
    @Test
    public void testIsUnitary()
@@ -211,6 +212,22 @@ public abstract class QuaternionBasicsTest<T extends QuaternionBasics> extends T
          }
       }
    }
+   
+   @Test
+   public void testAngle() throws Exception
+   {
+      Random random = new Random(1223L);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         double angle = EuclidCoreRandomTools.nextDouble(random, 2*Math.PI);
+         AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         axisAngle.setAngle(angle);
+         Quaternion quaternion = new Quaternion(axisAngle);
+         System.out.println("expected: " + angle * 180/Math.PI + "\nmine: " + quaternion.angle() * 180/Math.PI);
+         assertEquals(quaternion.angle(),Math.abs(angle),EPS);
+      }
+   }
+   
 
    @Test
    public void testGetAngle()

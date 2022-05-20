@@ -1139,7 +1139,13 @@ public class AxisAngleTools
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
    }
-
+   /**
+    * Computes and returns Angular Distance between Axis Angle and Quaternion. 
+    * @param axisAngle the axisAngle to be used for comparison. Not modified
+    * @param quaternion the quaternion to be used for comparison. Not modified
+    * @param limitToPi limits the result to [0 , <i>pi</i>] if set true.
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>]
+    */
    public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion, boolean limitToPi)
    {
 
@@ -1181,36 +1187,33 @@ public class AxisAngleTools
       return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
    }
 
+   /**
+    * Computes and returns Angular Distance between Axis Angle and Rotation Matrix. 
+    * @param axisAngle the axisAngle to be used for comparison. Not modified
+    * @param rotationMatrix the rotationMatrix to be used for comparison. Not modified
+    * @return angular distance between the two orientations in range: [0, <i>pi</i>]
+    */
    public static double distance(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrix)
    {
-      // case: NaN
       if (axisAngle.containsNaN() || rotationMatrix.containsNaN())
       {
          return Double.NaN;
       }
-      // case: one is zero orientation
       if (axisAngle.isZeroOrientation(EPS))
       {
          return RotationMatrixTools.angle(rotationMatrix);
       }
-      // case: one is zero orientation
       if (rotationMatrix.isZeroOrientation(EPS))
       {
          return axisAngle.getAngle();
       }
-      
-      
-      // Converting self to rotation matrix . . .
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double angle = axisAngle.getAngle();
       double m00 = 0, m01 = 0, m02 = 0, m10 = 0, m11 = 0, m12 = 0, m20 = 0, m21 = 0, m22 = 0;
-      
-
 
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
-
       if (uNorm < EPS)
       {
          return RotationMatrixTools.angle(rotationMatrix);
@@ -1242,7 +1245,12 @@ public class AxisAngleTools
       }
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
-
+   /**
+    * Computes and returns Angular Distance between Axis Angle and yawPitchRoll. 
+    * @param axisAngle the axisAngle to be used for comparison. Not modified
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>]
+    */
    public static double distance(AxisAngleReadOnly axisAngle, YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
    {
       if (axisAngle.containsNaN() || axisAngle.containsNaN())
@@ -1258,8 +1266,6 @@ public class AxisAngleTools
       {
          return axisAngle.getAngle();
       }
-      
-      // converting yawPitchRoll to axis angle
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
@@ -1351,7 +1357,6 @@ public class AxisAngleTools
       if(limitToPi && gamma > Math.PI)
       {
          gamma = 2*Math.PI - gamma;
-//         gamma = 2.0 * EuclidCoreTools.atan2(Math.abs(sinHalfGamma), cosHalfGamma);
       }
 
       return Math.abs(gamma);

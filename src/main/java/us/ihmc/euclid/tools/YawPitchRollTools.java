@@ -71,25 +71,31 @@ public class YawPitchRollTools
    }
    
    // TODO: Needs testing with other type's angle methods
+   /**
+    * Computes and returns the angular distance of given yaw pitch roll from origin.
+    *
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @return angular distance from origin in [0, <i>pi</i>].
+    */
    public static double angle(YawPitchRollReadOnly yawPitchRoll)
    {
       double yaw = yawPitchRoll.getYaw();
-      double pitch = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
       if (EuclidCoreTools.containsNaN(yaw, pitch, roll))
       {
          return Double.NaN;
       }
 
-      double halfYaw = yaw / 2.0;
+      double halfYaw = 0.5 * yaw;
       double cYaw = EuclidCoreTools.cos(halfYaw);
       double sYaw = EuclidCoreTools.sin(halfYaw);
 
-      double halfPitch = pitch / 2.0;
+      double halfPitch = 0.5 * pitch;
       double cPitch = EuclidCoreTools.cos(halfPitch);
       double sPitch = EuclidCoreTools.sin(halfPitch);
 
-      double halfRoll = roll / 2.0;
+      double halfRoll = 0.5 * roll;
       double cRoll = EuclidCoreTools.cos(halfRoll);
       double sRoll = EuclidCoreTools.sin(halfRoll);
 
@@ -97,17 +103,9 @@ public class YawPitchRollTools
       double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
-
-      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
-
-      if (uNorm > ZERO_EPS)
-      {
-         return 2.0 * EuclidCoreTools.atan2(uNorm, qs);
-      }
-      else
-      {
-         return 0;
-      }
+      
+      double distance =QuaternionTools.angle(qx, qy, qz, qs, false); 
+      return  distance > Math.PI ? 2*Math.PI - distance : distance;
    }
    /**
     * Performs a Cross platform Angular Distance Calculation between YawPitchRoll and any other 3D orientation systems. 
@@ -137,9 +135,16 @@ public class YawPitchRollTools
       {
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
-      // TODO: Interface instead of checking instance?
    }
-   
+   /**
+    * Computes and returns the distance between yawPitchRoll and Quaterion.
+    *
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @param quaternion the quaternion to be used for comparison. Not modified.
+    * @param limitToPi limits the result to [0,<i>pi</i>] if set True. 
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, 2<i>pi</i>].
+    */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, QuaternionReadOnly quaternion, boolean limitToPi)
    {
       if (yawPitchRoll.containsNaN() || quaternion.containsNaN())
@@ -154,8 +159,6 @@ public class YawPitchRollTools
       {
          return YawPitchRollTools.angle(yawPitchRoll);
       }
-      
-      // converting yawPitchRoll -> Quaternion
       double halfYaw = 0.5 * yawPitchRoll.getYaw();
       double cYaw = EuclidCoreTools.cos(halfYaw);
       double sYaw = EuclidCoreTools.sin(halfYaw);
@@ -174,9 +177,15 @@ public class YawPitchRollTools
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
       
       return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
-
    }
-   
+   /**
+    * Computes and returns the distance between yawPitchRoll and rotationMatrix.
+    *
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @param rotationMatrix the rotationMatrix to be used for comparison. Not modified.
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, RotationMatrixReadOnly rotationMatrix)
    {
       if (yawPitchRoll.containsNaN() || rotationMatrix.containsNaN())
@@ -191,8 +200,6 @@ public class YawPitchRollTools
       {
          return YawPitchRollTools.angle(yawPitchRoll);
       }
-      
-      // Convert self(YawPitchRoll) -> Rotation Matrix
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
@@ -220,6 +227,15 @@ public class YawPitchRollTools
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
    
+   /**
+    * Computes and returns the distance between yawPitchRoll and axis angle.
+    *
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @param axisAngle the axisAngleto be used for comparison. Not modified.
+    * @param limits the result to [0,<i>pi</i>] if set True. 
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, 2<i>pi</i>].
+    */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle, boolean limitToPi)
    {
       if (yawPitchRoll.containsNaN() || axisAngle.containsNaN())
@@ -275,8 +291,6 @@ public class YawPitchRollTools
       
       return AxisAngleTools.distance(axisAngle, ax,ay,az,aa,limitToPi);
    }
-
-
    /**
     * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and
     * {@code yawPitchRoll2}.
@@ -364,8 +378,9 @@ public class YawPitchRollTools
       double z = q1s * q2z - q1x * q2y + q1y * q2x - q1z * q2s;
       double s = q1s * q2s + q1x * q2x + q1y * q2y + q1z * q2z;
 
-      double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
-      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
+      return QuaternionTools.angle(x,y,z,s,false);
+//      double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
+//      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
    }
 
    /**

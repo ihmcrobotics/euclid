@@ -1024,7 +1024,14 @@ public class RotationMatrixTools
       }
    }
 
-   
+   /**
+    * Computes and returns the distance between rotation matrix and Quaterion.
+    *
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param quaternion the quaternion to be used for comparison. Not modified.
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
    public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
    {
       if (rotationMatrix.containsNaN() || quaternion.containsNaN())
@@ -1067,6 +1074,14 @@ public class RotationMatrixTools
       
       return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
    }
+   /**
+    * Computes and returns the distance between rotation matrix and axis angle.
+    *
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param axisAngle the axisAngle to be used for comparison. Not modified.
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
    public static double distance(RotationMatrixReadOnly rotationMatrix, AxisAngleReadOnly axisAngle)
    {
       if (rotationMatrix.containsNaN() || axisAngle.containsNaN())
@@ -1082,16 +1097,12 @@ public class RotationMatrixTools
          return RotationMatrixTools.angle(rotationMatrix);
       }
       
-      // converting axis angle to matrix > > >
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double angle = axisAngle.getAngle();
       
       double m00,m01,m02,m10,m11,m12,m20,m21,m22;
-      
-
-
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
       if (uNorm < EPS)
@@ -1126,6 +1137,14 @@ public class RotationMatrixTools
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
    
+   /**
+    * Computes and returns the distance between rotation matrix and yaw pitch roll.
+    *
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
    public static double distance(RotationMatrixReadOnly rotationMatrix, YawPitchRollReadOnly yawPitchRoll)
    {
       if (rotationMatrix.containsNaN() || yawPitchRoll.containsNaN())
@@ -1140,8 +1159,6 @@ public class RotationMatrixTools
       {
          return RotationMatrixTools.angle(rotationMatrix);
       }
-      
-      // converting . . .
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
@@ -1216,6 +1233,15 @@ public class RotationMatrixTools
    }
 
    // TODO Test me against Quaternion.angle or AxisAngle.angle
+   
+   
+   /**
+    * Computes and returns the angular distance of given rotation matrix from origin.
+    *
+    * @param m the rotation matrix to be used for comparison. Not modified
+    * @return the angle representing the distance from origin (zero orientation). It is contained in
+    *         [0, <i>pi</i>].
+    */
    public static double angle(RotationMatrixReadOnly m)
    {
       double m00 = m.getM00();

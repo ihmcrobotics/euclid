@@ -1467,10 +1467,11 @@ public class QuaternionTools
    }
    
    /**
-    * Performs a Cross platform Angular Distance Calculation between Quaternion and any other 3D orientation systems. 
-    * @param quaternion 
-    * @param orientation3D
-    * @param limitToPi    converts the resulting angular distance to within [0 , <i>pi</i>] if set true.
+    * Performs a Cross platform Angular Distance Calculation between Quaternion and other 3D orientation representations. 
+    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @param orientation3D the orientation3D to be used in the comparison. Not modified.
+    * @param limitToPi converts the resulting angular distance to within [0 , <i>pi</i>] if set true.    
+    * @return angular distance between the two orientations within [0 , 2<i>pi</i>]
     */
    public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
@@ -1495,7 +1496,6 @@ public class QuaternionTools
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
    }
-   
    public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D)
    {
       if (orientation3D instanceof QuaternionReadOnly)
@@ -1535,7 +1535,6 @@ public class QuaternionTools
          return 0.0;
       }
       return distance(q1.getX(), q1.getY(), q1.getZ(), q1.getS(), q2.getX(), q2.getY(), q2.getZ(), q2.getS(), limitToPi);
-
    }
 
    static double distance(double q1x, double q1y, double q1z, double q1s, double q2x, double q2y, double q2z, double q2s, boolean limitToPi)
@@ -1547,7 +1546,14 @@ public class QuaternionTools
       return angle(x, y, z, s, limitToPi);
    }
 
-
+   /**
+    * Computes the distance between the Quaternion and RotationMatrix.
+    *
+    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @param rotationMatrix the rotationMatrix to be used in the comparison. Not modified.
+    * @return the angle representing the distance between the two quaternions. It is contained in [0,
+    *         <i>pi</i>]
+    */
    public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
    {
 
@@ -1592,6 +1598,14 @@ public class QuaternionTools
       return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
    }
 
+   /**
+    * Computes the distance between the Quaternion and YawPitchRoll.
+    *
+    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @param yawPitchRoll the yawPitchRollto be used in the comparison. Not modified.
+    * @return the angle representing the distance between the two quaternions. It is contained in [0,
+    *         2<i>pi</i>]
+    */
    public static double distance(QuaternionReadOnly quaternion, YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
    {
       if (quaternion.containsNaN() || yawPitchRoll.containsNaN())
@@ -1627,6 +1641,14 @@ public class QuaternionTools
       return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
    }
 
+   /**
+    * Computes the distance between the Quaternion and AxisAngle.
+    *
+    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @param axisAngle the axisAngle to be used in the comparison. Not modified.
+    * @return the angle representing the distance between the two quaternions. It is contained in [0,
+    *         <i>pi</i>]
+    */
    public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
    {
 
@@ -1666,16 +1688,24 @@ public class QuaternionTools
       }
       return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), convertedX, convertedY, convertedZ, convertedS, false);
    }
+   
 
-   public static double angle(QuaternionReadOnly q)
-   {
-      return angle(q, false);
-   }
+   /**
+    * Computes the angular distance from origin of the given Quaternion.
+    *
+    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @param limitToPi limits the resulting distance to [0,<i>pi</i>]
+    * @return the angle representing the distance between the two quaternions. It is contained in [0,
+    *         <i>pi</i>] unless limitToPi is set to True.
+    */
    public static double angle(QuaternionReadOnly q, boolean limitToPi)
    {
       return angle(q.getX(), q.getY(), q.getZ(), q.getS(), limitToPi);
    }
-
+   public static double angle(QuaternionReadOnly q)
+   {
+      return angle(q, false);
+   }
    static double angle(double qx, double qy, double qz, double qs, boolean limitToPi)
    {
       if (limitToPi && qs < 0.0)

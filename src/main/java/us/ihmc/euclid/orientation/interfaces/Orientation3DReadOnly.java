@@ -60,7 +60,7 @@ public interface Orientation3DReadOnly
     * Test if this orientation 3D represents a zero orientation.
     * <p>
     * A zero orientation when used as a transform, leaves a the transformed geometry unchanged.
-    * </p>
+    * </p> 
     * <p>
     * Equivalent to calling {@link #isZeroOrientation(double)} with {@link #ZERO_EPSILON}.
     * </p>
@@ -770,9 +770,6 @@ public interface Orientation3DReadOnly
 //      
 //   }
    
-//   double distance(Orientation3DReadOnly other);
-//   double distance(Orientation3DReadOnly other, boolean limitToPi);
-//
-//   double angle();
-//   double angle(boolean limitToPi);
+   double distance(Orientation3DReadOnly other);
+   double angle();
 }

@@ -129,12 +129,12 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     */
-   default double distance(QuaternionReadOnly other)
+   default double distance(Orientation3DReadOnly other)
    {
       return distance(other, false);
    }
    
-   default double distance(QuaternionReadOnly other, boolean limitToPi)
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return QuaternionTools.distance(this, other, limitToPi);
    }
@@ -305,11 +305,12 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
     *                be considered equal.
     * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(QuaternionReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
    {
       if (epsilon >= Math.PI)
          return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
 
-      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+//      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+      return distance(other, true) <= epsilon;
    }
 }

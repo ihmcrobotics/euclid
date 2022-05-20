@@ -101,7 +101,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
-   default double distance(RotationMatrixReadOnly other)
+   default double distance(Orientation3DReadOnly other)
    {
       return RotationMatrixTools.distance(this, other);
    }
@@ -436,7 +436,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(RotationMatrixReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
    {
       return distance(other) <= epsilon;
    }

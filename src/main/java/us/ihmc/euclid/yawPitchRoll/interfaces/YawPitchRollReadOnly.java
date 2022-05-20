@@ -158,11 +158,11 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * @return the angle representing the distance between the two orientations. It is contained in [0,
     *         2<i>pi</i>]
     */
-   default double distance(YawPitchRollReadOnly other)
+   default double distance(Orientation3DReadOnly other)
    {
       return distance(other, false);
    }
-   default double distance(YawPitchRollReadOnly other, boolean limitToPi)
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return YawPitchRollTools.distance(this, other, limitToPi);
    }
@@ -435,8 +435,9 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * @return {@code true} if the two yaw-pitch-roll represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(YawPitchRollReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
    {
-      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+//      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+      return distance(other,true) <= epsilon;
    }
 }

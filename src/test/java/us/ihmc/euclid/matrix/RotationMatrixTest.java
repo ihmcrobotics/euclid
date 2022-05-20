@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
@@ -751,6 +752,22 @@ public class RotationMatrixTest extends CommonMatrix3DBasicsTest<RotationMatrix>
          double expectedDistance = RotationMatrixTools.distance(m1, m2);
          assertEquals(expectedDistance, actualDistance, EPS);
       }
+   }
+   
+   @Test
+   public void testAngle() throws Exception
+   {
+      Random random = new Random(2443L);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
+         randomAxisAngle.setAngle(angle);
+         RotationMatrix randomRotationMatrix = new RotationMatrix(randomAxisAngle);
+         assertEquals(randomRotationMatrix.angle(), Math.abs(angle), EPS);
+      }
+      
+      
    }
 
    @Test

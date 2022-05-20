@@ -189,23 +189,19 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * @return the angle representing the distance between the two axis-angles. It is contained in [0,
     *         2<i>pi</i>]
     */
-   default double distance(AxisAngleReadOnly other)
+   default double distance(Orientation3DReadOnly other)
    {
       return distance(other, false);
    }
-   default double distance(AxisAngleReadOnly other, boolean limitToPi)
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return AxisAngleTools.distance(this, other, limitToPi);
    }
-   
-//   default double angle()
-//   {
-//      return angle(false);
-//   }
-//   default double angle(boolean limitToPi)
-//   {
-//      return this.getAngle();
-//   }
+
+   default double angle()
+   {
+      return this.getAngle();
+   }
 
    /** {@inheritDoc} */
    @Override
@@ -493,8 +489,9 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * @param epsilon the maximum angle for the two quaternions to be considered equal.
     * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(AxisAngleReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
    {
-      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+//      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
+      return distance(other,true) <= epsilon;
    }
 }
