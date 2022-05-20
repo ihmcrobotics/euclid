@@ -1109,18 +1109,21 @@ public class AxisAngleTools
       double sinHalfGammaInv = 1.0 / sinHalfGamma;
       axisAngleToPack.set(sinHalfGammaUx * sinHalfGammaInv, sinHalfGammaUy * sinHalfGammaInv, sinHalfGammaUz * sinHalfGammaInv, gamma);
    }
-   
+
    /**
-    * Performs a Cross platform Angular Distance Calculation between Axis Angle and any other 3D orientation systems. 
+    * Performs a Cross platform Angular Distance Calculation between Axis Angle and any other 3D
+    * orientation systems.
+    * 
     * @param axisAngle
     * @param orientation3D
-    * @param limitToPi    converts the resulting angular distance to within [0 , <i>pi</i>] if set true.
+    * @param limitToPi     converts the resulting angular distance to within [0 , <i>pi</i>] if set
+    *                      true.
     */
    public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
       if (orientation3D instanceof QuaternionReadOnly)
       {
-         return distance(axisAngle, (QuaternionReadOnly) orientation3D , limitToPi);
+         return distance(axisAngle, (QuaternionReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof YawPitchRollReadOnly)
       {
@@ -1139,11 +1142,13 @@ public class AxisAngleTools
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
    }
+
    /**
-    * Computes and returns Angular Distance between Axis Angle and Quaternion. 
-    * @param axisAngle the axisAngle to be used for comparison. Not modified
+    * Computes and returns Angular Distance between Axis Angle and Quaternion.
+    * 
+    * @param axisAngle  the axisAngle to be used for comparison. Not modified
     * @param quaternion the quaternion to be used for comparison. Not modified
-    * @param limitToPi limits the result to [0 , <i>pi</i>] if set true.
+    * @param limitToPi  limits the result to [0 , <i>pi</i>] if set true.
     * @return angular distance between the two orientations in range: [0, 2<i>pi</i>]
     */
    public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion, boolean limitToPi)
@@ -1161,7 +1166,7 @@ public class AxisAngleTools
       {
          return axisAngle.getAngle();
       }
-      
+
       // Converting self(AxisAngle) to quaternion.
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
@@ -1188,8 +1193,9 @@ public class AxisAngleTools
    }
 
    /**
-    * Computes and returns Angular Distance between Axis Angle and Rotation Matrix. 
-    * @param axisAngle the axisAngle to be used for comparison. Not modified
+    * Computes and returns Angular Distance between Axis Angle and Rotation Matrix.
+    * 
+    * @param axisAngle      the axisAngle to be used for comparison. Not modified
     * @param rotationMatrix the rotationMatrix to be used for comparison. Not modified
     * @return angular distance between the two orientations in range: [0, <i>pi</i>]
     */
@@ -1245,9 +1251,11 @@ public class AxisAngleTools
       }
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
+
    /**
-    * Computes and returns Angular Distance between Axis Angle and yawPitchRoll. 
-    * @param axisAngle the axisAngle to be used for comparison. Not modified
+    * Computes and returns Angular Distance between Axis Angle and yawPitchRoll.
+    * 
+    * @param axisAngle    the axisAngle to be used for comparison. Not modified
     * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified
     * @return angular distance between the two orientations in range: [0, 2<i>pi</i>]
     */
@@ -1261,7 +1269,7 @@ public class AxisAngleTools
       {
          return YawPitchRollTools.angle(yawPitchRoll);
       }
-      
+
       if (yawPitchRoll.isZeroOrientation(EPS))
       {
          return axisAngle.getAngle();
@@ -1270,8 +1278,6 @@ public class AxisAngleTools
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
       double angle, ax, ay, az;
-
-
 
       double halfYaw = yaw / 2.0;
       double cYaw = EuclidCoreTools.cos(halfYaw);
@@ -1353,10 +1359,10 @@ public class AxisAngleTools
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
       double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
-      
-      if(limitToPi && gamma > Math.PI)
+
+      if (limitToPi && gamma > Math.PI)
       {
-         gamma = 2*Math.PI - gamma;
+         gamma = 2 * Math.PI - gamma;
       }
       return Math.abs(gamma);
    }

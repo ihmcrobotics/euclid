@@ -32,6 +32,7 @@ public class QuaternionTools
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
+
    /**
     * Tests that the given {@code quaternion} is equal to the neutral quaternion on a per-component
     * basis.
@@ -1465,12 +1466,15 @@ public class QuaternionTools
       double s = qs * cRoll - qx * sRoll;
       quaternionToPack.setUnsafe(x, y, z, s);
    }
-   
+
    /**
-    * Performs a Cross platform Angular Distance Calculation between Quaternion and other 3D orientation representations. 
-    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * Performs a Cross platform Angular Distance Calculation between Quaternion and other 3D
+    * orientation representations.
+    * 
+    * @param quaternion    the quaternion to be used in the comparison. Not modified.
     * @param orientation3D the orientation3D to be used in the comparison. Not modified.
-    * @param limitToPi converts the resulting angular distance to within [0 , <i>pi</i>] if set true.    
+    * @param limitToPi     converts the resulting angular distance to within [0 , <i>pi</i>] if set
+    *                      true.
     * @return angular distance between the two orientations within [0 , 2<i>pi</i>]
     */
    public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D, boolean limitToPi)
@@ -1496,6 +1500,7 @@ public class QuaternionTools
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
    }
+
    public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D)
    {
       return distance(quaternion, orientation3D, false);
@@ -1511,7 +1516,7 @@ public class QuaternionTools
     */
    public static double distance(QuaternionReadOnly q1, QuaternionReadOnly q2, boolean limitToPi)
    {
-      if (q1==q2)
+      if (q1 == q2)
       {
          return 0.0;
       }
@@ -1530,7 +1535,7 @@ public class QuaternionTools
    /**
     * Computes the distance between the Quaternion and RotationMatrix.
     *
-    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @param quaternion     the quaternion to be used in the comparison. Not modified.
     * @param rotationMatrix the rotationMatrix to be used in the comparison. Not modified.
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         <i>pi</i>]
@@ -1582,7 +1587,7 @@ public class QuaternionTools
    /**
     * Computes the distance between the Quaternion and YawPitchRoll.
     *
-    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @param quaternion   the quaternion to be used in the comparison. Not modified.
     * @param yawPitchRoll the yawPitchRollto be used in the comparison. Not modified.
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
@@ -1601,7 +1606,7 @@ public class QuaternionTools
       {
          return QuaternionTools.angle(quaternion);
       }
-      
+
       double halfYaw = 0.5 * yawPitchRoll.getYaw();
       double cYaw = EuclidCoreTools.cos(halfYaw);
       double sYaw = EuclidCoreTools.sin(halfYaw);
@@ -1626,7 +1631,7 @@ public class QuaternionTools
     * Computes the distance between the Quaternion and AxisAngle.
     *
     * @param quaternion the quaternion to be used in the comparison. Not modified.
-    * @param axisAngle the axisAngle to be used in the comparison. Not modified.
+    * @param axisAngle  the axisAngle to be used in the comparison. Not modified.
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         <i>pi</i>]
     */
@@ -1645,12 +1650,11 @@ public class QuaternionTools
       {
          return angle(quaternion);
       }
-      
+
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double convertedX, convertedY, convertedZ, convertedS;
-
 
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
       if (uNorm < EPS)
@@ -1669,13 +1673,12 @@ public class QuaternionTools
       }
       return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), convertedX, convertedY, convertedZ, convertedS, false);
    }
-   
 
    /**
     * Computes the angular distance from origin of the given Quaternion.
     *
     * @param quaternion the quaternion to be used in the comparison. Not modified.
-    * @param limitToPi limits the resulting distance to [0,<i>pi</i>]
+    * @param limitToPi  limits the resulting distance to [0,<i>pi</i>]
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         <i>pi</i>] unless limitToPi is set to True.
     */
@@ -1683,10 +1686,12 @@ public class QuaternionTools
    {
       return angle(q.getX(), q.getY(), q.getZ(), q.getS(), limitToPi);
    }
+
    public static double angle(QuaternionReadOnly q)
    {
       return angle(q, false);
    }
+
    static double angle(double qx, double qy, double qz, double qs, boolean limitToPi)
    {
       if (limitToPi && qs < 0.0)
@@ -1696,7 +1701,7 @@ public class QuaternionTools
          qz = -qz;
          qs = -qs;
       }
-      
+
       double sinHalfTheta = EuclidCoreTools.norm(qx, qy, qz);
 
       if (EuclidCoreTools.epsilonEquals(1.0, qs, EPS))

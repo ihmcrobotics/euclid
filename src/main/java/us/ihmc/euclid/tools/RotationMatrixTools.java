@@ -23,7 +23,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  */
 public class RotationMatrixTools
 {
-   
+
    static final double EPS = 1.0e-12;
 
    private RotationMatrixTools()
@@ -994,10 +994,12 @@ public class RotationMatrixTools
 
       matrixToPack.set(r00, r01, r02, r10, r11, r12, r20, r21, r22);
    }
-   
+
    /**
-    * Performs a Cross platform Angular Distance Calculation between Rotation Matrix and any other 3D orientation systems. 
-    * @param rotationMatrix 
+    * Performs a Cross platform Angular Distance Calculation between Rotation Matrix and any other 3D
+    * orientation systems.
+    * 
+    * @param rotationMatrix
     * @param orientation3D
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, Orientation3DReadOnly orientation3D)
@@ -1028,7 +1030,7 @@ public class RotationMatrixTools
     * Computes and returns the distance between rotation matrix and Quaterion.
     *
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
-    * @param quaternion the quaternion to be used for comparison. Not modified.
+    * @param quaternion     the quaternion to be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
@@ -1071,14 +1073,15 @@ public class RotationMatrixTools
       double q20 = xz2 - sy2;
       double q21 = yz2 + sx2;
       double q22 = 1.0 - xx2 - yy2;
-      
+
       return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
    }
+
    /**
     * Computes and returns the distance between rotation matrix and axis angle.
     *
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
-    * @param axisAngle the axisAngle to be used for comparison. Not modified.
+    * @param axisAngle      the axisAngle to be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
@@ -1096,13 +1099,13 @@ public class RotationMatrixTools
       {
          return RotationMatrixTools.angle(rotationMatrix);
       }
-      
+
       double ux = axisAngle.getX();
       double uy = axisAngle.getY();
       double uz = axisAngle.getZ();
       double angle = axisAngle.getAngle();
-      
-      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
+
+      double m00, m01, m02, m10, m11, m12, m20, m21, m22;
       double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
 
       if (uNorm < EPS)
@@ -1136,12 +1139,12 @@ public class RotationMatrixTools
       }
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
-   
+
    /**
     * Computes and returns the distance between rotation matrix and yaw pitch roll.
     *
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
-    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @param yawPitchRoll   the yawPitchRoll to be used for comparison. Not modified.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
@@ -1162,7 +1165,7 @@ public class RotationMatrixTools
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
       double roll = yawPitchRoll.getRoll();
-      double m00,m01,m02,m10,m11,m12,m20,m21,m22;
+      double m00, m01, m02, m10, m11, m12, m20, m21, m22;
 
       double cosc = EuclidCoreTools.cos(yaw);
       double sinc = EuclidCoreTools.sin(yaw);
@@ -1233,8 +1236,7 @@ public class RotationMatrixTools
    }
 
    // TODO Test me against Quaternion.angle or AxisAngle.angle
-   
-   
+
    /**
     * Computes and returns the angular distance of given rotation matrix from origin.
     *
