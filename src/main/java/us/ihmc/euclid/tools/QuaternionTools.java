@@ -1511,6 +1511,7 @@ public class QuaternionTools
     *
     * @param q1 the quaternion to be used in the comparison. Not modified.
     * @param q2 the quaternion to be used in the comparison. Not modified.
+    * @param limitToPi Limits the result to [0,<i>pi</i>]. 
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     */
@@ -1589,6 +1590,7 @@ public class QuaternionTools
     *
     * @param quaternion   the quaternion to be used in the comparison. Not modified.
     * @param yawPitchRoll the yawPitchRollto be used in the comparison. Not modified.
+    * @param limitToPi    Limits the result to [0,<i>pi</i>].
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     */

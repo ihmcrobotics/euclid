@@ -1111,13 +1111,14 @@ public class AxisAngleTools
    }
 
    /**
-    * Performs a Cross platform Angular Distance Calculation between Axis Angle and any other 3D
+    * Performs a cross platform angular distance calculation between axis angle and any other 3D
     * orientation systems.
     * 
-    * @param axisAngle
-    * @param orientation3D
-    * @param limitToPi     converts the resulting angular distance to within [0 , <i>pi</i>] if set
-    *                      true.
+    * @param axisAngle     the axisAngle to be used for comparison. Not modified
+    * @param orientation3D the orientation3D to be used for comparison. Not modified
+    * @param limitToPi     limits the result to [0 , <i>pi</i>].
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
+    *         false.
     */
    public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
@@ -1149,7 +1150,8 @@ public class AxisAngleTools
     * @param axisAngle  the axisAngle to be used for comparison. Not modified
     * @param quaternion the quaternion to be used for comparison. Not modified
     * @param limitToPi  limits the result to [0 , <i>pi</i>] if set true.
-    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>]
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
+    *         false.
     */
    public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion, boolean limitToPi)
    {
@@ -1257,7 +1259,9 @@ public class AxisAngleTools
     * 
     * @param axisAngle    the axisAngle to be used for comparison. Not modified
     * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified
-    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>]
+    * @param limitToPi    Limits the result to [0, <i>pi</i>].
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
+    *         false.
     */
    public static double distance(AxisAngleReadOnly axisAngle, YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
    {
@@ -1316,10 +1320,11 @@ public class AxisAngleTools
    /**
     * Computes and returns the distance between the two axis-angles {@code aa1} and {@code aa2}.
     *
-    * @param aa1 the first axis-angle to measure the distance. Not modified.
-    * @param aa2 the second axis-angle to measure the distance. Not modified.
+    * @param aa1       the first axis-angle to measure the distance. Not modified.
+    * @param aa2       the second axis-angle to measure the distance. Not modified.
+    * @param limitToPi Limits the result to [0, <i>pi</i>].
     * @return the angle representing the distance between the two axis-angles. It is contained in [0,
-    *         2<i>pi</i>]
+    *         2<i>pi</i>] when limitToPi = false.
     */
    public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2, boolean limitToPi)
    {

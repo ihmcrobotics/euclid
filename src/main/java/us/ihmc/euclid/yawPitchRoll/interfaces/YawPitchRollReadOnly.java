@@ -174,7 +174,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     */
    default double angle(boolean limitToPi)
    {
-      return YawPitchRollTools.angle(this);
+      return YawPitchRollTools.angle(this, limitToPi);
    }
    default double angle()
    {

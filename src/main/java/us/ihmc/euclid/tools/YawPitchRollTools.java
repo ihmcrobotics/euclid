@@ -70,14 +70,15 @@ public class YawPitchRollTools
       return Math.abs(pitch) <= epsilon && Math.abs(roll) <= epsilon;
    }
 
-   // TODO: Needs testing with other type's angle methods
+   // TODO: Needs testing with other type's angle methods - - - - D O N E
    /**
     * Computes and returns the angular distance of given yaw pitch roll from origin.
     *
     * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
-    * @return angular distance from origin in [0, <i>pi</i>].
+    * @param limitToPi    Limits the result to [0, <i>pi</i>].
+    * @return angular distance from origin in [0, 2<i>pi</i>].
     */
-   public static double angle(YawPitchRollReadOnly yawPitchRoll)
+   public static double angle(YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
    {
       double yaw = yawPitchRoll.getYaw();
       double pitch = yawPitchRoll.getPitch();
@@ -104,18 +105,26 @@ public class YawPitchRollTools
       double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
       double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
 
-      double distance = QuaternionTools.angle(qx, qy, qz, qs, false);
-      return distance > Math.PI ? 2 * Math.PI - distance : distance;
+      //      double distance = QuaternionTools.angle(qx, qy, qz, qs, false);
+      //      return distance > Math.PI ? 2 * Math.PI - distance : distance;
+      return QuaternionTools.angle(qx, qy, qz, qs, limitToPi);
+   }
+
+   public static double angle(YawPitchRollReadOnly yawPitchRoll)
+   {
+      return angle(yawPitchRoll, false);
    }
 
    /**
     * Performs a Cross platform Angular Distance Calculation between YawPitchRoll and any other 3D
     * orientation systems.
     * 
-    * @param yawPitchRoll
-    * @param orientation3D
+    * @param yawPitchRoll  the yawPitchRoll to be used for comparison. Not modified.
+    * @param orientation3D the orientation3D to be used for comparison. Not modified.
     * @param limitToPi     converts the resulting angular distance to within [0 , <i>pi</i>] if set
     *                      true.
+    * @return The angle representing the distance between the yawPitchRoll and the other orientation,
+    *         contained in [0, 2<i>pi</i>].
     */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, Orientation3DReadOnly orientation3D, boolean limitToPi)
    {
@@ -298,45 +307,67 @@ public class YawPitchRollTools
       return AxisAngleTools.distance(axisAngle, ax, ay, az, aa, limitToPi);
    }
 
-   /**
-    * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and
-    * {@code yawPitchRoll2}.
-    *
-    * @param yawPitchRoll1 the first yaw-pitch-roll to measure the distance. Not modified.
-    * @param yawPitchRoll2 the second yaw-pitch-roll to measure the distance. Not modified.
-    * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
-    *         [0, 2<i>pi</i>]
-    */
-   public static double distance(YawPitchRollReadOnly yawPitchRoll1, YawPitchRollReadOnly yawPitchRoll2)
+   public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle)
    {
-      return distance(yawPitchRoll1.getYaw(),
-                      yawPitchRoll1.getPitch(),
-                      yawPitchRoll1.getRoll(),
-                      yawPitchRoll2.getYaw(),
-                      yawPitchRoll2.getPitch(),
-                      yawPitchRoll2.getRoll());
+      return distance(yawPitchRoll, axisAngle, false);
    }
 
    /**
     * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and
     * {@code yawPitchRoll2}.
     *
-    * @param yaw1   the first angle of the first orientation representing the rotation around the
-    *               z-axis.
-    * @param pitch1 the second angle of the first orientation representing the rotation around the
-    *               y-axis.
-    * @param roll1  the third angle of the first orientation representing the rotation around the
-    *               x-axis.
-    * @param yaw2   the first angle of the second orientation representing the rotation around the
-    *               z-axis.
-    * @param pitch2 the second angle of the second orientation representing the rotation around the
-    *               y-axis.
-    * @param roll2  the third angle of the second orientation representing the rotation around the
-    *               x-axis.
+    * @param yawPitchRoll1 the first yaw-pitch-roll to measure the distance. Not modified.
+    * @param yawPitchRoll2 the second yaw-pitch-roll to measure the distance. Not modified
+    * @param limitToPi     limits the result to [0,<i>pi</i>]
     * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
     *         [0, 2<i>pi</i>]
     */
-   public static double distance(double yaw1, double pitch1, double roll1, double yaw2, double pitch2, double roll2)
+   public static double distance(YawPitchRollReadOnly yawPitchRoll1, YawPitchRollReadOnly yawPitchRoll2, boolean limitToPi)
+   {
+      return distance(yawPitchRoll1.getYaw(),
+                      yawPitchRoll1.getPitch(),
+                      yawPitchRoll1.getRoll(),
+                      yawPitchRoll2.getYaw(),
+                      yawPitchRoll2.getPitch(),
+                      yawPitchRoll2.getRoll(),
+                      limitToPi);
+   }
+
+   /**
+    * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and
+    * {@code yawPitchRoll2}.
+    *
+    * @param yawPitchRoll1 the first yaw-pitch-roll to measure the distance. Not modified.
+    * @param yawPitchRoll2 the second yaw-pitch-roll to measure the distance. Not modified
+    * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
+    *         [0, 2<i>pi</i>]
+    */
+   public static double distance(YawPitchRollReadOnly yawPitchRoll1, YawPitchRollReadOnly yawPitchRoll2)
+   {
+      return distance(yawPitchRoll1, yawPitchRoll2, false);
+   }
+
+   /**
+    * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and
+    * {@code yawPitchRoll2}.
+    *
+    * @param yaw1      the first angle of the first orientation representing the rotation around the
+    *                  z-axis.
+    * @param pitch1    the second angle of the first orientation representing the rotation around the
+    *                  y-axis.
+    * @param roll1     the third angle of the first orientation representing the rotation around the
+    *                  x-axis.
+    * @param yaw2      the first angle of the second orientation representing the rotation around the
+    *                  z-axis.
+    * @param pitch2    the second angle of the second orientation representing the rotation around the
+    *                  y-axis.
+    * @param roll2     the third angle of the second orientation representing the rotation around the
+    *                  x-axis.
+    * @param limitToPi Limits the result to [0, <i>pi</i>].
+    * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
+    *         [0, 2<i>pi</i>]
+    */
+   public static double distance(double yaw1, double pitch1, double roll1, double yaw2, double pitch2, double roll2, boolean limitToPi)
    {
       double q1s, q1x, q1y, q1z;
 
@@ -385,9 +416,31 @@ public class YawPitchRollTools
       double z = q1s * q2z - q1x * q2y + q1y * q2x - q1z * q2s;
       double s = q1s * q2s + q1x * q2x + q1y * q2y + q1z * q2z;
 
-      return QuaternionTools.angle(x, y, z, s, false);
-      //      double sinHalfTheta = EuclidCoreTools.norm(x, y, z);
-      //      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, s);
+      return QuaternionTools.angle(x, y, z, s, limitToPi);
+   }
+
+   /**
+    * Computes and returns the distance between the two yaw-pitch-rolls {@code yawPitchRoll1} and
+    * {@code yawPitchRoll2}.
+    *
+    * @param yaw1   the first angle of the first orientation representing the rotation around the
+    *               z-axis.
+    * @param pitch1 the second angle of the first orientation representing the rotation around the
+    *               y-axis.
+    * @param roll1  the third angle of the first orientation representing the rotation around the
+    *               x-axis.
+    * @param yaw2   the first angle of the second orientation representing the rotation around the
+    *               z-axis.
+    * @param pitch2 the second angle of the second orientation representing the rotation around the
+    *               y-axis.
+    * @param roll2  the third angle of the second orientation representing the rotation around the
+    *               x-axis.
+    * @return the angle representing the distance between the two yaw-pitch-roll. It is contained in
+    *         [0, 2<i>pi</i>]
+    */
+   public static double distance(double yaw1, double pitch1, double roll1, double yaw2, double pitch2, double roll2)
+   {
+      return distance(yaw1, pitch1, roll1, yaw2, pitch2, roll2, false);
    }
 
    /**

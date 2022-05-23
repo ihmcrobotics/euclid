@@ -255,6 +255,22 @@ public class YawPitchRollToolsTest
          assertEquals(expected, actual2, EPSILON);
       }
    }
+   
+   @Test
+   public void testAngle() throws Exception
+   {
+      Random random = new Random(152345);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         YawPitchRoll yawPitchRoll = new YawPitchRoll(quaternion);
+         
+         double expected = quaternion.angle();
+         double actual = yawPitchRoll.angle(true);
+         System.out.println("expected: " + expected * 180 / Math.PI + "\nactual: " + actual * 180/ Math.PI);
+         assertEquals(expected, actual, EPSILON);
+      }
+   }
 
    @Test
    public void testTransform() throws Exception

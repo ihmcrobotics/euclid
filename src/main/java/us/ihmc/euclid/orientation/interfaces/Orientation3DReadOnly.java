@@ -60,7 +60,7 @@ public interface Orientation3DReadOnly
     * Test if this orientation 3D represents a zero orientation.
     * <p>
     * A zero orientation when used as a transform, leaves a the transformed geometry unchanged.
-    * </p> 
+    * </p>
     * <p>
     * Equivalent to calling {@link #isZeroOrientation(double)} with {@link #ZERO_EPSILON}.
     * </p>
@@ -764,12 +764,42 @@ public interface Orientation3DReadOnly
    {
       return EuclidCoreIOTools.getStringAsYawPitchRoll(this);
    }
-   
-//   default double distance()
-//   {
-//      
-//   }
-   
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    * </p>
+    *
+    * @param other the other orientation to be compared to. Not modified.
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>pi].
+    */
    double distance(Orientation3DReadOnly other);
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    * <p>
+    * 
+    * @param other     the other orientation to be compared to. Not modified.
+    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>pi].
+    */
+   double distance(Orientation3DReadOnly other, boolean limitToPi);
+
+   /**
+    * Calculates and returns the angular distance from origin.
+    * <p>
+    * 
+    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
+    */
    double angle();
+
+   /**
+    * Calculates and returns the angular distance from origin.
+    * <p>
+    * 
+    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
+    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
+    */
+   double angle(boolean limitToPi);
 }

@@ -497,4 +497,5 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    {
       return distance(other,true) <= epsilon;
    }
+   
 }

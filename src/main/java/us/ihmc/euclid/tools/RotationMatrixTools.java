@@ -999,8 +999,9 @@ public class RotationMatrixTools
     * Performs a Cross platform Angular Distance Calculation between Rotation Matrix and any other 3D
     * orientation systems.
     * 
-    * @param rotationMatrix
-    * @param orientation3D
+    * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
+    * @param orientation3D  the orientation3D to be used for comparison. Not modified.
+    * @return The angle between roationMatrix and orientation3D, contained in [0, <i>pi</i>].
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, Orientation3DReadOnly orientation3D)
    {
@@ -1031,8 +1032,8 @@ public class RotationMatrixTools
     *
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
     * @param quaternion     the quaternion to be used for comparison. Not modified.
-    * @return the angle representing the distance between the two rotation matrices. It is contained in
-    *         [0, <i>pi</i>].
+    * @return the angle representing the distance between the two orientations. It is contained in [0,
+    *         <i>pi</i>].
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
    {
@@ -1211,16 +1212,7 @@ public class RotationMatrixTools
       return distance(a, b00, b01, b02, b10, b11, b12, b20, b21, b22);
    }
 
-   public static double distance(RotationMatrixReadOnly a,
-                                 double b00,
-                                 double b01,
-                                 double b02,
-                                 double b10,
-                                 double b11,
-                                 double b12,
-                                 double b20,
-                                 double b21,
-                                 double b22)
+   static double distance(RotationMatrixReadOnly a, double b00, double b01, double b02, double b10, double b11, double b12, double b20, double b21, double b22)
    {
       double m00 = a.getM00() * b00 + a.getM01() * b01 + a.getM02() * b02;
       double m01 = a.getM00() * b10 + a.getM01() * b11 + a.getM02() * b12;
@@ -1235,7 +1227,7 @@ public class RotationMatrixTools
       return angle(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
-   // TODO Test me against Quaternion.angle or AxisAngle.angle
+   // TODO Test me against Quaternion.angle or AxisAngle.angle - - - - - D O N E
 
    /**
     * Computes and returns the angular distance of given rotation matrix from origin.
@@ -1258,6 +1250,21 @@ public class RotationMatrixTools
       return angle(m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
+   /**
+    * Computes and returns the angular distance of given rotation matrix from origin.
+    * 
+    * @param m00 element at (0,0)
+    * @param m01 element at (0,1)
+    * @param m02 element at (0,2)
+    * @param m10 element at (1,0)
+    * @param m11 element at (1,1)
+    * @param m12 element at (1,2)
+    * @param m20 element at (2,0)
+    * @param m21 element at (2,1)
+    * @param m22 element at (2,2)
+    * @return the angle representing the distance from origin (zero orientation). It is contained in
+    *         [0, <i>pi</i>].
+    */
    public static double angle(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
    {
       double angle, x, y, z; // variables for result

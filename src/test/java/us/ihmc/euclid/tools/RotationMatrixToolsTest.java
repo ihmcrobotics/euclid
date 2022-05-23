@@ -317,6 +317,22 @@ public class RotationMatrixToolsTest
          assertEquals(notCastedResult, castedResult);
       }
    }
+   
+   @Test
+   public void testAngle() throws Exception
+   {
+      Random random = new Random(242334);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
+         
+         double expected = quaternion.angle();
+         double actual = rotationMatrix.angle();
+         
+         assertEquals(expected, actual, EPS);
+      }
+   }
 
    @Test
    public void testMultiply() throws Exception
