@@ -8,7 +8,6 @@ import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
-import us.ihmc.euclid.tools.AxisAngleTools;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.UnitVector3D32;
@@ -266,19 +265,5 @@ public class AxisAngle32 implements AxisAngleBasics, Settable<AxisAngle32>, Epsi
       long bits = EuclidHashCodeTools.addToHashCode(1L, axis);
       bits = EuclidHashCodeTools.addToHashCode(bits, angle);
       return EuclidHashCodeTools.toIntHashCode(bits);
-   }
-
-   @Override
-   public double distance(Orientation3DReadOnly other)
-   {
-      // TODO Auto-generated method stub
-      return distance(other, false);
-   }
-
-   @Override
-   public double distance(Orientation3DReadOnly other, boolean limitToPi)
-   {
-      // TODO Auto-generated method stub
-      return AxisAngleTools.distance(this, other, limitToPi);
    }
 }
