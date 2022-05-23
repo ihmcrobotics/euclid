@@ -62,7 +62,7 @@ public class QuaternionToolsTest
          Quaternion randomAxisAngleConverted = new Quaternion(randomAxisAngle);
 
          double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted, false);
-         double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle);
+         double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle, false);
 
          System.out.println("expected 1: " + expectedDistance_1*180/Math.PI + "\nactual 1: "+ actualDistance_1*180/Math.PI);
          System.out.println("expected 2: " + expectedDistance_2*180/Math.PI + "\nactual 2: "+ actualDistance_2*180/Math.PI);

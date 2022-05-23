@@ -1113,7 +1113,7 @@ public class AxisAngleTools
    /**
     * Performs a cross platform angular distance calculation between axis angle and any other 3D
     * orientation systems.
-    * 
+    *
     * @param axisAngle     the axisAngle to be used for comparison. Not modified
     * @param orientation3D the orientation3D to be used for comparison. Not modified
     * @param limitToPi     limits the result to [0 , <i>pi</i>].
@@ -1146,7 +1146,7 @@ public class AxisAngleTools
 
    /**
     * Computes and returns Angular Distance between Axis Angle and Quaternion.
-    * 
+    *
     * @param axisAngle  the axisAngle to be used for comparison. Not modified
     * @param quaternion the quaternion to be used for comparison. Not modified
     * @param limitToPi  limits the result to [0 , <i>pi</i>] if set true.
@@ -1175,28 +1175,21 @@ public class AxisAngleTools
       double uz = axisAngle.getZ();
       double angle = axisAngle.getAngle();
       double qs, qx, qy, qz;
-      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
-      if (uNorm < EPS)
-      {
-         return QuaternionTools.angle(quaternion);
-      }
-      else
-      {
-         double halfTheta = 0.5 * angle;
-         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
-         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
-         qx = ux * sinHalfTheta;
-         qy = uy * sinHalfTheta;
-         qz = uz * sinHalfTheta;
-         qs = cosHalfTheta;
-      }
+
+      double halfTheta = 0.5 * angle;
+      double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
+      double sinHalfTheta = EuclidCoreTools.sin(halfTheta);
+      qx = ux * sinHalfTheta;
+      qy = uy * sinHalfTheta;
+      qz = uz * sinHalfTheta;
+      qs = cosHalfTheta;
 
       return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
    }
 
    /**
     * Computes and returns Angular Distance between Axis Angle and Rotation Matrix.
-    * 
+    *
     * @param axisAngle      the axisAngle to be used for comparison. Not modified
     * @param rotationMatrix the rotationMatrix to be used for comparison. Not modified
     * @return angular distance between the two orientations in range: [0, <i>pi</i>]
@@ -1221,42 +1214,30 @@ public class AxisAngleTools
       double angle = axisAngle.getAngle();
       double m00 = 0, m01 = 0, m02 = 0, m10 = 0, m11 = 0, m12 = 0, m20 = 0, m21 = 0, m22 = 0;
 
-      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
-      if (uNorm < EPS)
-      {
-         return RotationMatrixTools.angle(rotationMatrix);
-      }
-      else
-      {
-         uNorm = 1.0 / uNorm;
-         double ax = ux * uNorm;
-         double ay = uy * uNorm;
-         double az = uz * uNorm;
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
+      double t = 1.0 - cosTheta;
 
-         double sinTheta = EuclidCoreTools.sin(angle);
-         double cosTheta = EuclidCoreTools.cos(angle);
-         double t = 1.0 - cosTheta;
+      double xz = ux * uz;
+      double xy = ux * uy;
+      double yz = uy * uz;
 
-         double xz = ax * az;
-         double xy = ax * ay;
-         double yz = ay * az;
+      m00 = t * ux * ux + cosTheta;
+      m01 = t * xy - sinTheta * uz;
+      m02 = t * xz + sinTheta * uy;
+      m10 = t * xy + sinTheta * uz;
+      m11 = t * uy * uy + cosTheta;
+      m12 = t * yz - sinTheta * ux;
+      m20 = t * xz - sinTheta * uy;
+      m21 = t * yz + sinTheta * ux;
+      m22 = t * uz * uz + cosTheta;
 
-         m00 = t * ax * ax + cosTheta;
-         m01 = t * xy - sinTheta * az;
-         m02 = t * xz + sinTheta * ay;
-         m10 = t * xy + sinTheta * az;
-         m11 = t * ay * ay + cosTheta;
-         m12 = t * yz - sinTheta * ax;
-         m20 = t * xz - sinTheta * ay;
-         m21 = t * yz + sinTheta * ax;
-         m22 = t * az * az + cosTheta;
-      }
       return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
    }
 
    /**
     * Computes and returns Angular Distance between Axis Angle and yawPitchRoll.
-    * 
+    *
     * @param axisAngle    the axisAngle to be used for comparison. Not modified
     * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified
     * @param limitToPi    Limits the result to [0, <i>pi</i>].

@@ -168,8 +168,7 @@ public class QuaternionTools
 
       double q2s, q2x, q2y, q2z;
       if (orientation2 instanceof QuaternionReadOnly)
-      { // In this case orientation2 might be the same object as
-        // quaternionToPack, so let's save its components first.
+      { // In this case orientation2 might be the same object as quaternionToPack, so let's save its components first.
          QuaternionReadOnly q2 = (QuaternionReadOnly) orientation2;
          q2x = q2.getX();
          q2y = q2.getY();
@@ -185,8 +184,7 @@ public class QuaternionTools
          q2s = quaternionToPack.getS();
       }
 
-      // Now we can safely use the quaternionToPack argument to convert the
-      // orientation1.
+      // Now we can safely use the quaternionToPack argument to convert the orientation1.
       quaternionToPack.set(orientation1);
       double q1x = quaternionToPack.getX();
       double q1y = quaternionToPack.getY();
@@ -224,14 +222,12 @@ public class QuaternionTools
          return;
       }
 
-      // In this case orientation2 might be the same object as quaternionToPack, so
-      // let's save its components first.
+      // In this case orientation2 might be the same object as quaternionToPack, so let's save its components first.
       double q2x = orientation2.getX();
       double q2y = orientation2.getY();
       double q2z = orientation2.getZ();
       double q2s = orientation2.getS();
-      // Now we can safely use the quaternionToPack argument to convert the
-      // orientation1.
+      // Now we can safely use the quaternionToPack argument to convert the orientation1.
       quaternionToPack.set(orientation1);
       double q1x = quaternionToPack.getX();
       double q1y = quaternionToPack.getY();
@@ -269,14 +265,12 @@ public class QuaternionTools
          return;
       }
 
-      // In this case orientation1 might be the same object as quaternionToPack, so
-      // let's save its components first.
+      // In this case orientation1 might be the same object as quaternionToPack, so let's save its components first.
       double q1x = orientation1.getX();
       double q1y = orientation1.getY();
       double q1z = orientation1.getZ();
       double q1s = orientation1.getS();
-      // Now we can safely use the quaternionToPack argument to convert the
-      // orientation2.
+      // Now we can safely use the quaternionToPack argument to convert the orientation2.
       quaternionToPack.set(orientation2);
       double q2x = quaternionToPack.getX();
       double q2y = quaternionToPack.getY();
@@ -997,8 +991,7 @@ public class QuaternionTools
          qz = -qz;
       }
 
-      // It's the same as transforming a vector 3D. The scalar of the transformed
-      // vector 4D is the same as the original.
+      // It's the same as transforming a vector 3D. The scalar of the transformed vector 4D is the same as the original.
       norm = 1.0 / norm;
       qx *= norm;
       qy *= norm;
@@ -1470,7 +1463,7 @@ public class QuaternionTools
    /**
     * Performs a Cross platform Angular Distance Calculation between Quaternion and other 3D
     * orientation representations.
-    * 
+    *
     * @param quaternion    the quaternion to be used in the comparison. Not modified.
     * @param orientation3D the orientation3D to be used in the comparison. Not modified.
     * @param limitToPi     converts the resulting angular distance to within [0 , <i>pi</i>] if set
@@ -1489,7 +1482,7 @@ public class QuaternionTools
       }
       if (orientation3D instanceof AxisAngleReadOnly)
       {
-         return distance(quaternion, (AxisAngleReadOnly) orientation3D);
+         return distance(quaternion, (AxisAngleReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof RotationMatrixReadOnly)
       {
@@ -1499,11 +1492,6 @@ public class QuaternionTools
       {
          throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
       }
-   }
-
-   public static double distance(QuaternionReadOnly quaternion, Orientation3DReadOnly orientation3D)
-   {
-      return distance(quaternion, orientation3D, false);
    }
 
    /**
@@ -1543,7 +1531,6 @@ public class QuaternionTools
     */
    public static double distance(QuaternionReadOnly quaternion, RotationMatrixReadOnly rotationMatrix)
    {
-
       if (quaternion.containsNaN() || rotationMatrix.containsNaN())
       {
          return Double.NaN;
@@ -1634,46 +1621,13 @@ public class QuaternionTools
     *
     * @param quaternion the quaternion to be used in the comparison. Not modified.
     * @param axisAngle  the axisAngle to be used in the comparison. Not modified.
+    * @param limitToPi  Limits the result to [0,<i>pi</i>].
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         <i>pi</i>]
     */
-   public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle)
+   public static double distance(QuaternionReadOnly quaternion, AxisAngleReadOnly axisAngle, boolean limitToPi)
    {
-
-      if (quaternion.containsNaN() || axisAngle.containsNaN())
-      {
-         return Double.NaN;
-      }
-      if (quaternion.isZeroOrientation(EPS))
-      {
-         return axisAngle.getAngle();
-      }
-      if (axisAngle.isZeroOrientation(EPS))
-      {
-         return angle(quaternion);
-      }
-
-      double ux = axisAngle.getX();
-      double uy = axisAngle.getY();
-      double uz = axisAngle.getZ();
-      double convertedX, convertedY, convertedZ, convertedS;
-
-      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
-      if (uNorm < EPS)
-      {
-         return angle(quaternion);
-      }
-      else
-      {
-         double halfTheta = 0.5 * axisAngle.getAngle();
-         double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
-         double sinHalfTheta = EuclidCoreTools.sin(halfTheta) / uNorm;
-         convertedX = ux * sinHalfTheta;
-         convertedY = uy * sinHalfTheta;
-         convertedZ = uz * sinHalfTheta;
-         convertedS = cosHalfTheta;
-      }
-      return distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), convertedX, convertedY, convertedZ, convertedS, false);
+      return AxisAngleTools.distance(axisAngle, quaternion, limitToPi);
    }
 
    /**
@@ -1740,7 +1694,7 @@ public class QuaternionTools
     * The interpolation method used here is often called a <i>Spherical Linear Interpolation</i> or
     * SLERP.
     * </p>
-    * 
+    *
     * @param q0                  the first quaternion used in the interpolation. Not modified.
     * @param qf                  the second quaternion used in the interpolation. Not modified.
     * @param alpha               the percentage to use for the interpolation. A value of 0 will result

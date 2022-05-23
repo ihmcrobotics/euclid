@@ -998,7 +998,7 @@ public class RotationMatrixTools
    /**
     * Performs a Cross platform Angular Distance Calculation between Rotation Matrix and any other 3D
     * orientation systems.
-    * 
+    *
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
     * @param orientation3D  the orientation3D to be used for comparison. Not modified.
     * @return The angle between roationMatrix and orientation3D, contained in [0, <i>pi</i>].
@@ -1028,7 +1028,7 @@ public class RotationMatrixTools
    }
 
    /**
-    * Computes and returns the distance between rotation matrix and Quaterion.
+    * Computes and returns the distance between rotation matrix and Quaternion.
     *
     * @param rotationMatrix the rotation matrix to be used for comparison. Not modified.
     * @param quaternion     the quaternion to be used for comparison. Not modified.
@@ -1037,45 +1037,7 @@ public class RotationMatrixTools
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, QuaternionReadOnly quaternion)
    {
-      if (rotationMatrix.containsNaN() || quaternion.containsNaN())
-      {
-         return Double.NaN;
-      }
-      if (rotationMatrix.isZeroOrientation(EPS))
-      {
-         return QuaternionTools.angle(quaternion);
-      }
-      if (quaternion.isZeroOrientation(EPS))
-      {
-         return RotationMatrixTools.angle(rotationMatrix);
-      }
-
-      double qs = quaternion.getS();
-      double qx = quaternion.getX();
-      double qy = quaternion.getY();
-      double qz = quaternion.getZ();
-
-      double yy2 = 2.0 * qy * qy;
-      double zz2 = 2.0 * qz * qz;
-      double xx2 = 2.0 * qx * qx;
-      double xy2 = 2.0 * qx * qy;
-      double sz2 = 2.0 * qs * qz;
-      double xz2 = 2.0 * qx * qz;
-      double sy2 = 2.0 * qs * qy;
-      double yz2 = 2.0 * qy * qz;
-      double sx2 = 2.0 * qs * qx;
-
-      double q00 = 1.0 - yy2 - zz2;
-      double q01 = xy2 - sz2;
-      double q02 = xz2 + sy2;
-      double q10 = xy2 + sz2;
-      double q11 = 1.0 - xx2 - zz2;
-      double q12 = yz2 - sx2;
-      double q20 = xz2 - sy2;
-      double q21 = yz2 + sx2;
-      double q22 = 1.0 - xx2 - yy2;
-
-      return RotationMatrixTools.distance(rotationMatrix, q00, q01, q02, q10, q11, q12, q20, q21, q22);
+      return QuaternionTools.distance(quaternion, rotationMatrix);
    }
 
    /**
@@ -1088,57 +1050,7 @@ public class RotationMatrixTools
     */
    public static double distance(RotationMatrixReadOnly rotationMatrix, AxisAngleReadOnly axisAngle)
    {
-      if (rotationMatrix.containsNaN() || axisAngle.containsNaN())
-      {
-         return Double.NaN;
-      }
-      if (rotationMatrix.isZeroOrientation(EPS))
-      {
-         return axisAngle.getAngle();
-      }
-      if (axisAngle.isZeroOrientation(EPS))
-      {
-         return RotationMatrixTools.angle(rotationMatrix);
-      }
-
-      double ux = axisAngle.getX();
-      double uy = axisAngle.getY();
-      double uz = axisAngle.getZ();
-      double angle = axisAngle.getAngle();
-
-      double m00, m01, m02, m10, m11, m12, m20, m21, m22;
-      double uNorm = EuclidCoreTools.fastNorm(ux, uy, uz);
-
-      if (uNorm < EPS)
-      {
-         return RotationMatrixTools.angle(rotationMatrix);
-      }
-      else
-      {
-         uNorm = 1.0 / uNorm;
-         double ax = ux * uNorm;
-         double ay = uy * uNorm;
-         double az = uz * uNorm;
-
-         double sinTheta = EuclidCoreTools.sin(angle);
-         double cosTheta = EuclidCoreTools.cos(angle);
-         double t = 1.0 - cosTheta;
-
-         double xz = ax * az;
-         double xy = ax * ay;
-         double yz = ay * az;
-
-         m00 = t * ax * ax + cosTheta;
-         m01 = t * xy - sinTheta * az;
-         m02 = t * xz + sinTheta * ay;
-         m10 = t * xy + sinTheta * az;
-         m11 = t * ay * ay + cosTheta;
-         m12 = t * yz - sinTheta * ax;
-         m20 = t * xz - sinTheta * ay;
-         m21 = t * yz + sinTheta * ax;
-         m22 = t * az * az + cosTheta;
-      }
-      return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+      return AxisAngleTools.distance(axisAngle, rotationMatrix);
    }
 
    /**
@@ -1252,7 +1164,7 @@ public class RotationMatrixTools
 
    /**
     * Computes and returns the angular distance of given rotation matrix from origin.
-    * 
+    *
     * @param m00 element at (0,0)
     * @param m01 element at (0,1)
     * @param m02 element at (0,2)
