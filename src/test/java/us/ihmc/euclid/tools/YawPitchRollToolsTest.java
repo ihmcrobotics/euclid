@@ -267,7 +267,6 @@ public class YawPitchRollToolsTest
          
          double expected = quaternion.angle();
          double actual = yawPitchRoll.angle(true);
-         System.out.println("expected: " + expected * 180 / Math.PI + "\nactual: " + actual * 180/ Math.PI);
          assertEquals(expected, actual, EPSILON);
       }
    }

@@ -129,31 +129,35 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     */
+   @Override
    default double distance(Orientation3DReadOnly other)
    {
       return distance(other, false);
    }
-   
+
+   @Override
    default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return QuaternionTools.distance(this, other, limitToPi);
    }
-   
+
    /**
     * Computes and returns the angular distance from origin.
     * @return the angular distance from origin. It is contained in
     *         [0, 2<i>pi</i>].
     */
+   @Override
    default double angle()
    {
       return QuaternionTools.angle(this);
    }
    /**
     * Computes and returns the angular distance from origin.
-    * @param limitToPi limits the result to [0, <i>pi</i>] if set True. 
+    * @param limitToPi limits the result to [0, <i>pi</i>] if set True.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, 2<i>pi</i>] unless limitToPi is set true.
     */
+   @Override
    default double angle(boolean limitToPi)
    {
       return QuaternionTools.angle(this,limitToPi);

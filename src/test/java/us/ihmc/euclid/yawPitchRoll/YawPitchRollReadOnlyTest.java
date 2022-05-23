@@ -208,7 +208,7 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          double expected = YawPitchRollTools.distance(ypr1, ypr2);
          assertEquals(expected, actual, getEpsilon());
       }
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       {
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
@@ -219,18 +219,16 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          assertEquals(actual, expected, getEpsilon());
       }
    }
-   
+
    @Test
    public void testAngle() throws Exception
    {
       Random random = new Random(32423);
       for (int i = 0; i < ITERATIONS; ++i)
       {
-         AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
-         double angle = EuclidCoreRandomTools.nextDouble(random, Math.PI);
-         axisAngle.setAngle(angle);
-         YawPitchRoll yawPitchRoll = new YawPitchRoll(axisAngle);
-         assertEquals(Math.abs(angle), yawPitchRoll.angle(),getEpsilon());
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         Quaternion quaternion = new Quaternion(yawPitchRoll);
+         assertEquals(quaternion.angle(), yawPitchRoll.angle(), getEpsilon());
       }
    }
 
@@ -645,7 +643,7 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
 
       T yprbA;
       YawPitchRoll yprbB;
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
@@ -655,18 +653,15 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
 
          yprbB = new YawPitchRoll(ypr);
          yprbB.prepend(yprbA);
-         
-         System.out.println(yprbA.angle() * 180 / Math.PI);
-         System.out.println(yprbB.angle() * 180 / Math.PI);
 
          assertFalse(yprbA.geometricallyEquals(yprbB, epsilon));
       }
-      
-      System.out.println("---------------------------------------------------");
-      System.out.println("---------------------------------------------------");
-      System.out.println("---------------------------------------------------");
 
-      
+//      System.out.println("---------------------------------------------------");
+//      System.out.println("---------------------------------------------------");
+//      System.out.println("---------------------------------------------------");
+
+
       // Fail -->
       for (int i = 0; i < ITERATIONS; ++i)
       {
@@ -677,10 +672,10 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
 
          yprbB = new YawPitchRoll(ypr);
          yprbB.prepend(yprbA);
-         
-         System.out.println(yprbA.angle() * 180 / Math.PI);
-         System.out.println(yprbB.angle() * 180 / Math.PI);
-         
+
+//         System.out.println(yprbA.angle() * 180 / Math.PI);
+//         System.out.println(yprbB.angle() * 180 / Math.PI);
+
          assertTrue(yprbA.geometricallyEquals(yprbB, epsilon));
       }
    }

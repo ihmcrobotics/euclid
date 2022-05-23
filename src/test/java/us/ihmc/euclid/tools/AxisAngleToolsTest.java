@@ -149,13 +149,4 @@ public class AxisAngleToolsTest
       }
 
    }
-   
-   @Test
-   public void myTest() throws Exception
-   {
-      AxisAngle aa = new AxisAngle();
-      FrameQuaternion f = new FrameQuaternion();
-      double d = AxisAngleTools.distance(aa, f, true);
-   }
-
 }

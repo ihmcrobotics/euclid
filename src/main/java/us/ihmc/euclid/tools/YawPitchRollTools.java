@@ -140,7 +140,7 @@ public class YawPitchRollTools
       }
       if (orientation3D instanceof YawPitchRollReadOnly)
       {
-         return distance(yawPitchRoll, (YawPitchRollReadOnly) orientation3D);
+         return distance(yawPitchRoll, (YawPitchRollReadOnly) orientation3D, limitToPi);
       }
       if (orientation3D instanceof AxisAngleReadOnly)
       {

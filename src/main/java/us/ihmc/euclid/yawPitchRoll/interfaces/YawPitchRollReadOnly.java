@@ -158,11 +158,13 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * @return the angle representing the distance between the two orientations. It is contained in [0,
     *         2<i>pi</i>]
     */
+   @Override
    default double distance(Orientation3DReadOnly other)
    {
       return distance(other, false);
    }
 
+   @Override
    default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return YawPitchRollTools.distance(this, other, limitToPi);
@@ -170,16 +172,18 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
 
    /**
     * Computes and returns the angular distance from origin.
-    * 
+    *
     * @param limitToPi limits the result to [0, <i>pi</i>].
     * @return the angular distance from origin. It is contained in [0, 2<i>pi</i>] unless limitToPi is
     *         true.
     */
+   @Override
    default double angle(boolean limitToPi)
    {
       return YawPitchRollTools.angle(this, limitToPi);
    }
 
+   @Override
    default double angle()
    {
       return angle(false);
@@ -416,13 +420,7 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     */
    default boolean epsilonEquals(YawPitchRollReadOnly other, double epsilon)
    {
-      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon))
-         return false;
-
-      if (!EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon))
-         return false;
-
-      if (!EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon) || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
          return false;
 
       return true;

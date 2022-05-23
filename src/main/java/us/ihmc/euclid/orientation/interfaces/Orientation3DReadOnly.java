@@ -771,7 +771,7 @@ public interface Orientation3DReadOnly
    /**
     * Calculates and returns the angular distance between this(self) and other orientation.
     * <p>
-    * 
+    *
     * @param other     the other orientation to be compared to. Not modified.
     * @param limitToPi Limits the result to [0, <i>pi</i>pi].
     * @return the angle between the two orientations. The result is not guaranteed to be in [0,
@@ -782,7 +782,7 @@ public interface Orientation3DReadOnly
    /**
     * Calculates and returns the angular distance from origin.
     * <p>
-    * 
+    *
     * @return the angle from origin in range: [0, 2<i>pi</i>pi].
     */
    double angle();
@@ -790,7 +790,7 @@ public interface Orientation3DReadOnly
    /**
     * Calculates and returns the angular distance from origin.
     * <p>
-    * 
+    *
     * @param limitToPi Limits the result to [0, <i>pi</i>pi].
     * @return the angle from origin in range: [0, 2<i>pi</i>pi].
     */
