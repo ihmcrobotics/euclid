@@ -683,7 +683,5 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          
          assertTrue(yprbA.geometricallyEquals(yprbB, epsilon));
       }
-
-
    }
 }
