@@ -189,6 +189,17 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
       return AxisAngleTools.distance(this, other, limitToPi);
    }
 
+   /**
+    * Computes and returns the angular distance from origin.
+    * 
+    * @return the the angular distance from origin.
+    */
+   @Override
+   default double angle()
+   {
+      return getAngle();
+   }
+
    /** {@inheritDoc} */
    @Override
    default double angle(boolean limitToPi)
