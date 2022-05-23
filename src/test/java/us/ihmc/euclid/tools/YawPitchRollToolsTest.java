@@ -24,7 +24,6 @@ import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -164,7 +163,7 @@ public class YawPitchRollToolsTest
       }
 
       for (int i = 0; i < ITERATIONS; ++i)
-      {// Cross Platform distance method testing: (YawPitchRoll , Quaternion) 
+      {// Cross Platform distance method testing: (YawPitchRoll , Quaternion)
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
 
@@ -175,9 +174,9 @@ public class YawPitchRollToolsTest
 
          assertEquals(expectedDistance, actualDistance, EPSILON);
       }
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
-      {// Cross Platform distance method testing: (YawPitchRoll , Quaternion) 
+      {// Cross Platform distance method testing: (YawPitchRoll , Quaternion)
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          RotationMatrix converted = new RotationMatrix(yawPitchRoll);
@@ -187,9 +186,9 @@ public class YawPitchRollToolsTest
 
          assertEquals(actualDistance, expectedDistance, EPSILON);
       }
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
-      {// Cross Platform distance method testing: (YawPitchRoll , Axis Angle) 
+      {// Cross Platform distance method testing: (YawPitchRoll , Axis Angle)
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
          AxisAngle converted = new AxisAngle(yawPitchRoll);
@@ -199,39 +198,38 @@ public class YawPitchRollToolsTest
 
          assertEquals(actualDistance, expectedDistance, EPSILON);
       }
-      
-      
+
       for (int i = 0; i < ITERATIONS; ++i)
       {// Type check test in distance method
          YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
-         
-         double notCastedResult = YawPitchRollTools.distance(yawPitchRoll, orientation,false);
-         if(orientation instanceof QuaternionReadOnly)
+
+         double notCastedResult = YawPitchRollTools.distance(yawPitchRoll, orientation, false);
+         if (orientation instanceof QuaternionReadOnly)
          {
-            orientation = (Quaternion) orientation;
+            orientation = orientation;
          }
-         else if(orientation instanceof YawPitchRollReadOnly)
+         else if (orientation instanceof YawPitchRollReadOnly)
          {
-            orientation = (YawPitchRoll) orientation;
+            orientation = orientation;
          }
-         else if(orientation instanceof AxisAngleReadOnly)
+         else if (orientation instanceof AxisAngleReadOnly)
          {
-            orientation = (AxisAngle) orientation;
+            orientation = orientation;
          }
          else
          {
-            orientation = (RotationMatrix) orientation;
+            orientation = orientation;
          }
-         double castedResult = YawPitchRollTools.distance(yawPitchRoll, orientation,false);
-         
+         double castedResult = YawPitchRollTools.distance(yawPitchRoll, orientation, false);
+
          assertEquals(notCastedResult, castedResult);
       }
    }
 
    @Test
    public void testDistanceWithLimitToPi() throws Exception
-   {// Test distance method with limit to Pi. 
+   {// Test distance method with limit to Pi.
       double min = Math.PI;
       double max = 2 * min;
       Random random = new Random(23523L);
@@ -255,7 +253,7 @@ public class YawPitchRollToolsTest
          assertEquals(expected, actual2, EPSILON);
       }
    }
-   
+
    @Test
    public void testAngle() throws Exception
    {
@@ -264,7 +262,7 @@ public class YawPitchRollToolsTest
       {
          Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
          YawPitchRoll yawPitchRoll = new YawPitchRoll(quaternion);
-         
+
          double expected = quaternion.angle();
          double actual = yawPitchRoll.angle(true);
          assertEquals(expected, actual, EPSILON);

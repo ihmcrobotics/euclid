@@ -1348,7 +1348,7 @@ public class AxisAngleTools
 
       if (limitToPi && gamma > Math.PI)
       {
-         gamma = 2 * Math.PI - gamma;
+         gamma = EuclidCoreTools.trimAngleMinusPiToPi(gamma);
       }
       return Math.abs(gamma);
    }
