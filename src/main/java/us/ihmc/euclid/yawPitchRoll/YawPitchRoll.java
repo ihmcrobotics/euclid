@@ -4,7 +4,6 @@ import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
-import us.ihmc.euclid.tools.YawPitchRollTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
@@ -216,7 +215,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
    /**
     * Calculates and returns a hash code value from the value of each component of this yaw-pitch-roll.
     *
-    * @return the hash code value for this yaww-pitch-roll.
+    * @return the hash code value for this yaw-pitch-roll.
     */
    @Override
    public int hashCode()
@@ -234,17 +233,5 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
    public String toString()
    {
       return EuclidCoreIOTools.getYawPitchRollString(this);
-   }
-
-   @Override
-   public double distance(Orientation3DReadOnly other)
-   {
-      return distance(other, false);
-   }
-
-   @Override
-   public double distance(Orientation3DReadOnly other, boolean limitToPi)
-   {
-      return YawPitchRollTools.distance(this, other, limitToPi);
    }
 }
