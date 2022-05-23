@@ -182,36 +182,14 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
       return Math.abs(getAngle()) < epsilon || Math.abs(getX()) < epsilon && Math.abs(getY()) < epsilon;
    }
 
-   /**
-    * Computes and returns the distance from this axis-angle to {@code other}.
-    *
-    * @param other the other axis-angle to measure the distance. Not modified.
-    * @return the angle representing the distance between the two axis-angles. It is contained in [0,
-    *         2<i>pi</i>]
-    */
-   @Override
-   default double distance(Orientation3DReadOnly other)
-   {
-      return distance(other, false);
-   }
-
+   /** {@inheritDoc} */
    @Override
    default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return AxisAngleTools.distance(this, other, limitToPi);
    }
 
-   /**
-    * Computes and returns the angular distance from origin.
-    *
-    * @return the the angular distance from origin.
-    */
-   @Override
-   default double angle()
-   {
-      return getAngle();
-   }
-
+   /** {@inheritDoc} */
    @Override
    default double angle(boolean limitToPi)
    {

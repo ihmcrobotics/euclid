@@ -229,39 +229,41 @@ public interface Orientation3DReadOnly
 
    /**
     * Calculates and returns the angular distance from origin.
-    * <p>
     *
-    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
+    * @return the angle from origin in range: [0, 2<i>pi</i>].
     */
-   double angle();
+   default double angle()
+   {
+      return angle(false);
+   }
 
    /**
     * Calculates and returns the angular distance from origin.
-    * <p>
     *
-    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
-    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
+    * @param limitToPi Limits the result to [0, <i>pi</i>].
+    * @return the angle from origin in range: [0, 2<i>pi</i>].
     */
    double angle(boolean limitToPi);
 
    /**
     * Calculates and returns the angular distance between this(self) and other orientation.
-    * </p>
     *
     * @param other the other orientation to be compared to. Not modified.
     * @return the angle between the two orientations. The result is not guaranteed to be in [0,
-    *         <i>pi</i>pi].
+    *         <i>pi</i>].
     */
-   double distance(Orientation3DReadOnly other);
+   default double distance(Orientation3DReadOnly other)
+   {
+      return distance(other, false);
+   }
 
    /**
     * Calculates and returns the angular distance between this(self) and other orientation.
-    * <p>
     *
     * @param other     the other orientation to be compared to. Not modified.
     * @param limitToPi Limits the result to [0, <i>pi</i>pi].
     * @return the angle between the two orientations. The result is not guaranteed to be in [0,
-    *         <i>pi</i>pi].
+    *         <i>pi</i>].
     */
    double distance(Orientation3DReadOnly other, boolean limitToPi);
 

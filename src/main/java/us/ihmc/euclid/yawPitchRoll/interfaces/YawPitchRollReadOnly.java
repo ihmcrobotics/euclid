@@ -151,42 +151,18 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
       return YawPitchRollTools.isOrientation2D(getYaw(), getPitch(), getRoll(), epsilon);
    }
 
-   /**
-    * Computes and returns the distance from this yaw-pitch-roll to {@code other}.
-    *
-    * @param other the other yaw-pitch-roll to measure the distance. Not modified.
-    * @return the angle representing the distance between the two orientations. It is contained in [0,
-    *         2<i>pi</i>]
-    */
-   @Override
-   default double distance(Orientation3DReadOnly other)
-   {
-      return distance(other, false);
-   }
-
+   /** {@inheritDoc} */
    @Override
    default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return YawPitchRollTools.distance(this, other, limitToPi);
    }
 
-   /**
-    * Computes and returns the angular distance from origin.
-    *
-    * @param limitToPi limits the result to [0, <i>pi</i>].
-    * @return the angular distance from origin. It is contained in [0, 2<i>pi</i>] unless limitToPi is
-    *         true.
-    */
+   /** {@inheritDoc} */
    @Override
    default double angle(boolean limitToPi)
    {
       return YawPitchRollTools.angle(this, limitToPi);
-   }
-
-   @Override
-   default double angle()
-   {
-      return angle(false);
    }
 
    /** {@inheritDoc} */
