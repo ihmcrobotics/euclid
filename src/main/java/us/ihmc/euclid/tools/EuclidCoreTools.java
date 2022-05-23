@@ -70,10 +70,8 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
+         
       }
 
       @Override
@@ -118,11 +116,7 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
       }
 
       @Override
@@ -161,10 +155,7 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
       }
 
       @Override
@@ -209,11 +200,7 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         long hashCode = 1L;
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         hashCode = EuclidHashCodeTools.addToHashCode(hashCode, 0.0);
-         return EuclidHashCodeTools.toIntHashCode(hashCode);
+         return 1;
       }
 
       @Override
@@ -255,7 +242,7 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         return EuclidHashCodeTools.toIntHashCode(0.0, 0.0, 0.0, 1.0);
+         return -1106247679;
       }
 
       @Override
@@ -349,7 +336,7 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+         return 1;
       }
    };
 
@@ -431,7 +418,7 @@ public class EuclidCoreTools
       @Override
       public int hashCode()
       {
-         return EuclidHashCodeTools.toIntHashCode(getM00(), getM01(), getM02(), getM10(), getM11(), getM12(), getM20(), getM21(), getM22());
+         return 976224257;
       }
    };
 
