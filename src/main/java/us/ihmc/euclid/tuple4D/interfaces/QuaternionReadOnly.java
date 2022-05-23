@@ -143,16 +143,18 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
 
    /**
     * Computes and returns the angular distance from origin.
-    * @return the angular distance from origin. It is contained in
-    *         [0, 2<i>pi</i>].
+    *
+    * @return the angular distance from origin. It is contained in [0, 2<i>pi</i>].
     */
    @Override
    default double angle()
    {
       return QuaternionTools.angle(this);
    }
+
    /**
     * Computes and returns the angular distance from origin.
+    *
     * @param limitToPi limits the result to [0, <i>pi</i>] if set True.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, 2<i>pi</i>] unless limitToPi is set true.
@@ -160,7 +162,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    @Override
    default double angle(boolean limitToPi)
    {
-      return QuaternionTools.angle(this,limitToPi);
+      return QuaternionTools.angle(this, limitToPi);
    }
 
    /**
@@ -297,32 +299,5 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
       QuaternionTools.inverseTransform(this, matrixOriginal, matrixTransformed);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two quaternions are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that two quaternions of opposite sign are considered equal, such that the two quaternions
-    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically equal.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
-    *                be considered equal.
-    * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
-   {
-      if (epsilon >= Math.PI)
-         return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
-      return distance(other, true) <= epsilon;
    }
 }

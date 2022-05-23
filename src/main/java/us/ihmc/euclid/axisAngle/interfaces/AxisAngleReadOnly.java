@@ -189,23 +189,30 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * @return the angle representing the distance between the two axis-angles. It is contained in [0,
     *         2<i>pi</i>]
     */
+   @Override
    default double distance(Orientation3DReadOnly other)
    {
       return distance(other, false);
    }
+
+   @Override
    default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return AxisAngleTools.distance(this, other, limitToPi);
    }
+
    /**
     * Computes and returns the angular distance from origin.
+    *
     * @return the the angular distance from origin.
     */
+   @Override
    default double angle()
    {
-      return this.getAngle();
+      return getAngle();
    }
-   
+
+   @Override
    default double angle(boolean limitToPi)
    {
       return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(angle()));
@@ -481,25 +488,4 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
       return true;
    }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two axis-angle are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other axis-angle to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
-   {
-      return distance(other,true) <= epsilon;
-   }
-   
 }

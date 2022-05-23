@@ -228,6 +228,44 @@ public interface Orientation3DReadOnly
    double getRoll();
 
    /**
+    * Calculates and returns the angular distance from origin.
+    * <p>
+    *
+    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
+    */
+   double angle();
+
+   /**
+    * Calculates and returns the angular distance from origin.
+    * <p>
+    *
+    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
+    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
+    */
+   double angle(boolean limitToPi);
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    * </p>
+    *
+    * @param other the other orientation to be compared to. Not modified.
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>pi].
+    */
+   double distance(Orientation3DReadOnly other);
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    * <p>
+    *
+    * @param other     the other orientation to be compared to. Not modified.
+    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>pi].
+    */
+   double distance(Orientation3DReadOnly other, boolean limitToPi);
+
+   /**
     * Transforms the given tuple by this orientation.
     * <p>
     * If the given tuple is expressed in the local frame described by this orientation, then the tuple
@@ -748,6 +786,25 @@ public interface Orientation3DReadOnly
    }
 
    /**
+    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
+    * <p>
+    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
+    * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
+    * </p>
+    *
+    * @param other   the other orientation to compare against this. Not modified.
+    * @param epsilon the maximum angle for the two orientations to be considered equal.
+    * @return {@code true} if the two orientations represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
+   {
+      if (epsilon >= Math.PI)
+         return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
+      return distance(other, true) <= epsilon;
+   }
+
+   /**
     * Provides a {@code String} representation of this orientation converted to yaw-pitch-roll angles
     * as follows: yaw-pitch-roll: (yaw, pitch, roll).
     *
@@ -757,42 +814,4 @@ public interface Orientation3DReadOnly
    {
       return EuclidCoreIOTools.getStringAsYawPitchRoll(this);
    }
-
-   /**
-    * Calculates and returns the angular distance between this(self) and other orientation.
-    * </p>
-    *
-    * @param other the other orientation to be compared to. Not modified.
-    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
-    *         <i>pi</i>pi].
-    */
-   double distance(Orientation3DReadOnly other);
-
-   /**
-    * Calculates and returns the angular distance between this(self) and other orientation.
-    * <p>
-    *
-    * @param other     the other orientation to be compared to. Not modified.
-    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
-    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
-    *         <i>pi</i>pi].
-    */
-   double distance(Orientation3DReadOnly other, boolean limitToPi);
-
-   /**
-    * Calculates and returns the angular distance from origin.
-    * <p>
-    *
-    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
-    */
-   double angle();
-
-   /**
-    * Calculates and returns the angular distance from origin.
-    * <p>
-    *
-    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
-    * @return the angle from origin in range: [0, 2<i>pi</i>pi].
-    */
-   double angle(boolean limitToPi);
 }

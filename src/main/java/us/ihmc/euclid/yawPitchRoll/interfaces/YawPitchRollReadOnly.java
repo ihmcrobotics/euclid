@@ -420,30 +420,10 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     */
    default boolean epsilonEquals(YawPitchRollReadOnly other, double epsilon)
    {
-      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon) || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon)
+            || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
          return false;
 
       return true;
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two yaw-pitch-roll are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two yaw-pitch-roll represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
-   {
-      return distance(other, true) <= epsilon;
    }
 }

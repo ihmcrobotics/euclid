@@ -101,6 +101,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
+   @Override
    default double distance(Orientation3DReadOnly other)
    {
       return RotationMatrixTools.distance(this, other);
@@ -114,6 +115,7 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, <i>pi</i>].
     */
+   @Override
    default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
       return distance(other);
@@ -121,9 +123,10 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
 
    /**
     * Computes and returns the angular distance from origin.
-    * 
+    *
     * @return the angular distance from origin. It is contained in [0, <i>pi</i>].
     */
+   @Override
    default double angle()
    {
       return RotationMatrixTools.angle(this);
@@ -131,10 +134,11 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
 
    /**
     * Computes and returns the angular distance from origin.
-    * 
+    *
     * @param limitToPi Does nothing here. Result is always capped to [0,<i>pi</i>].
     * @return the angular distance from origin. It is contained in [0, <i>pi</i>].
     */
+   @Override
    default double angle(boolean limitToPi)
    {
       return angle();
@@ -448,26 +452,5 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
          Matrix3DTools.multiplyTransposeLeft(this, matrixOriginal, matrixTransformed);
          Matrix3DTools.multiply(matrixTransformed, this, matrixTransformed);
       }
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two rotation matrices are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other rotation matrix to compare against this. Not modified.
-    * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
-    * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
-    *         otherwise.
-    */
-   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
-   {
-      return distance(other) <= epsilon;
    }
 }
