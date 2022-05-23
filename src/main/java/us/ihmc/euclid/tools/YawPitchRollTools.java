@@ -110,6 +110,12 @@ public class YawPitchRollTools
       return QuaternionTools.angle(qx, qy, qz, qs, limitToPi);
    }
 
+   /**
+    * Computes and returns the angular distance of given yaw pitch roll from origin.
+    *
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @return angular distance from origin in [0, 2<i>pi</i>].
+    */
    public static double angle(YawPitchRollReadOnly yawPitchRoll)
    {
       return angle(yawPitchRoll, false);
@@ -247,7 +253,7 @@ public class YawPitchRollTools
     *
     * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
     * @param axisAngle    the axisAngleto be used for comparison. Not modified.
-    * @param limits       the result to [0,<i>pi</i>] if set True.
+    * @param limitToPi    Limits the result to [0,<i>pi</i>] if set True.
     * @return the angle representing the distance between the two rotation matrices. It is contained in
     *         [0, 2<i>pi</i>].
     */
@@ -307,6 +313,14 @@ public class YawPitchRollTools
       return AxisAngleTools.distance(axisAngle, ax, ay, az, aa, limitToPi);
    }
 
+   /**
+    * Computes and returns the distance between yawPitchRoll and axis angle.
+    *
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified.
+    * @param axisAngle    the axisAngleto be used for comparison. Not modified.
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, 2<i>pi</i>].
+    */
    public static double distance(YawPitchRollReadOnly yawPitchRoll, AxisAngleReadOnly axisAngle)
    {
       return distance(yawPitchRoll, axisAngle, false);

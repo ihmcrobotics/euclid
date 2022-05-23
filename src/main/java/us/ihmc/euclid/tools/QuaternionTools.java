@@ -1509,9 +1509,9 @@ public class QuaternionTools
    /**
     * Computes the distance between the two given quaternions.
     *
-    * @param q1 the quaternion to be used in the comparison. Not modified.
-    * @param q2 the quaternion to be used in the comparison. Not modified.
-    * @param limitToPi Limits the result to [0,<i>pi</i>]. 
+    * @param q1        the quaternion to be used in the comparison. Not modified.
+    * @param q2        the quaternion to be used in the comparison. Not modified.
+    * @param limitToPi Limits the result to [0,<i>pi</i>].
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
     *         2<i>pi</i>]
     */
@@ -1682,13 +1682,20 @@ public class QuaternionTools
     * @param quaternion the quaternion to be used in the comparison. Not modified.
     * @param limitToPi  limits the resulting distance to [0,<i>pi</i>]
     * @return the angle representing the distance between the two quaternions. It is contained in [0,
-    *         <i>pi</i>] unless limitToPi is set to True.
+    *         2<i>pi</i>] unless limitToPi is set to True.
     */
    public static double angle(QuaternionReadOnly q, boolean limitToPi)
    {
       return angle(q.getX(), q.getY(), q.getZ(), q.getS(), limitToPi);
    }
 
+   /**
+    * Computes the angular distance from origin of the given Quaternion.
+    *
+    * @param quaternion the quaternion to be used in the comparison. Not modified.
+    * @return the angle representing the distance between the two quaternions. It is contained in [0,
+    *         2<i>pi</i>].
+    */
    public static double angle(QuaternionReadOnly q)
    {
       return angle(q, false);

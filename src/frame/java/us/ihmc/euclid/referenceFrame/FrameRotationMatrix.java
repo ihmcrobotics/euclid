@@ -485,4 +485,5 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
    {
       return EuclidHashCodeTools.toIntHashCode(rotationMatrix, referenceFrame);
    }
+
 }

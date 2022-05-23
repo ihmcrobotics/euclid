@@ -105,15 +105,39 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    {
       return RotationMatrixTools.distance(this, other);
    }
- 
+
+   /**
+    * Computes and returns the distance between this rotation matrix and the {@code other}.
+    *
+    * @param other     the other rotation matrix to compute the distance. Not modified.
+    * @param limitToPi Does nothing here. Result is always capped to [0,<i>pi</i>].
+    * @return the angle representing the distance between the two rotation matrices. It is contained in
+    *         [0, <i>pi</i>].
+    */
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
+   {
+      return distance(other);
+   }
+
    /**
     * Computes and returns the angular distance from origin.
-    * @return the angular distance from origin. It is contained in
-    *         [0, <i>pi</i>].
+    * 
+    * @return the angular distance from origin. It is contained in [0, <i>pi</i>].
     */
    default double angle()
    {
       return RotationMatrixTools.angle(this);
+   }
+
+   /**
+    * Computes and returns the angular distance from origin.
+    * 
+    * @param limitToPi Does nothing here. Result is always capped to [0,<i>pi</i>].
+    * @return the angular distance from origin. It is contained in [0, <i>pi</i>].
+    */
+   default double angle(boolean limitToPi)
+   {
+      return angle();
    }
 
    /** {@inheritDoc} */

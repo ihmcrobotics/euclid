@@ -230,11 +230,4 @@ public class AxisAngle implements AxisAngleBasics, EpsilonComparable<AxisAngle>,
       bits = EuclidHashCodeTools.addToHashCode(bits, angle);
       return EuclidHashCodeTools.toIntHashCode(bits);
    }
-
-   @Override
-   public double angle(boolean limitToPi)
-   {
-      // TODO Auto-generated method stub
-      return 0;
-   }
 }
