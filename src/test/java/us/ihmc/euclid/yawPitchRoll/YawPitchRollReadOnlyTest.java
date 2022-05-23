@@ -657,12 +657,6 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          assertFalse(yprbA.geometricallyEquals(yprbB, epsilon));
       }
 
-//      System.out.println("---------------------------------------------------");
-//      System.out.println("---------------------------------------------------");
-//      System.out.println("---------------------------------------------------");
-
-
-      // Fail -->
       for (int i = 0; i < ITERATIONS; ++i)
       {
          double epsilon = random.nextDouble();
@@ -672,10 +666,6 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
 
          yprbB = new YawPitchRoll(ypr);
          yprbB.prepend(yprbA);
-
-//         System.out.println(yprbA.angle() * 180 / Math.PI);
-//         System.out.println(yprbB.angle() * 180 / Math.PI);
-
          assertTrue(yprbA.geometricallyEquals(yprbB, epsilon));
       }
    }

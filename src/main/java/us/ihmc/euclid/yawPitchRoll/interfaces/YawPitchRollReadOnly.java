@@ -444,10 +444,6 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     */
    default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
    {
-      // TODO: FAILS
-      System.out.println("original : " + Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))));
-      System.out.println("new      : " + distance(other, true));
-//      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
       return distance(other, true) <= epsilon;
    }
 }

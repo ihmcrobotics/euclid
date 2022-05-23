@@ -71,7 +71,7 @@ public class EuclidCoreTools
       public int hashCode()
       {
          return 1;
-         
+
       }
 
       @Override
@@ -535,9 +535,9 @@ public class EuclidCoreTools
     */
    public static boolean containsNaN(double[] array)
    {
-      for (int i = 0; i < array.length; i++)
+      for (double element : array)
       {
-         if (Double.isNaN(array[i]))
+         if (Double.isNaN(element))
             return true;
       }
       return false;

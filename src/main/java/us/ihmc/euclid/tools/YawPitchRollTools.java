@@ -124,7 +124,7 @@ public class YawPitchRollTools
    /**
     * Performs a Cross platform Angular Distance Calculation between YawPitchRoll and any other 3D
     * orientation systems.
-    * 
+    *
     * @param yawPitchRoll  the yawPitchRoll to be used for comparison. Not modified.
     * @param orientation3D the orientation3D to be used for comparison. Not modified.
     * @param limitToPi     converts the resulting angular distance to within [0 , <i>pi</i>] if set
