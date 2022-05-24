@@ -251,7 +251,7 @@ public class YawPitchRollToolsTest
          double distanceLimit = YawPitchRollTools.distance(ypr1, orientation3D, true);
          double distanceLimitFromQuaternion = QuaternionTools.distance(q1, orientation3D, true);
          double distanceNoLimit = YawPitchRollTools.distance(ypr1, orientation3D, false);
-         double distanceNoLimitFromQuaternion = QuaternionTools.distance(q1, orientation3D, false);
+         double distanceNoLimitFromQuaternion = QuaternionTools.distance(new Quaternion(ypr1), orientation3D, false);
          
          assertEquals(distanceLimit, distanceLimitFromQuaternion, EPSILON);
          assertEquals(distanceNoLimit, distanceNoLimitFromQuaternion, EPSILON);
