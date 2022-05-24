@@ -122,27 +122,30 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
       return EuclidCoreTools.fastSquareRoot(normSquared());
    }
 
-   /**
-    * Computes and returns the distance from this quaternion to {@code other}.
-    *
-    * @param other the other quaternion to measure the distance. Not modified.
-    * @return the angle representing the distance between the two quaternions. It is contained in [0,
-    *         2<i>pi</i>]
-    */
-   default double distance(QuaternionReadOnly other)
+   /** {@inheritDoc} */
+   @Override
+   default double distance(Orientation3DReadOnly other, boolean limitToPi)
    {
-      return QuaternionTools.distance(this, other);
+      return QuaternionTools.distance(this, other, limitToPi);
+   }
+
+   /** {@inheritDoc} */
+   @Override
+   default double angle(boolean limitToPi)
+   {
+      return QuaternionTools.angle(this, limitToPi);
    }
 
    /**
     * Calculates and returns the angle of the rotation this quaternion represents.
-    *
+    * 
+    * @deprecated Use {@link #angle()} instead.
     * @return the angle &in; [-2<i>pi</i>;2<i>pi</i>].
     */
+   @Deprecated
    default double getAngle()
    {
-      double sinHalfTheta = EuclidCoreTools.norm(getX(), getY(), getZ());
-      return 2.0 * EuclidCoreTools.atan2(sinHalfTheta, getS());
+      return QuaternionTools.angle(this);
    }
 
    /** {@inheritDoc} */
@@ -269,33 +272,5 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    default void inverseTransform(Matrix3DReadOnly matrixOriginal, Matrix3DBasics matrixTransformed)
    {
       QuaternionTools.inverseTransform(this, matrixOriginal, matrixTransformed);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two quaternions are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that two quaternions of opposite sign are considered equal, such that the two quaternions
-    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically equal.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
-    *                be considered equal.
-    * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(QuaternionReadOnly other, double epsilon)
-   {
-      if (epsilon >= Math.PI)
-         return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
-
-      return Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distance(other))) <= epsilon;
    }
 }

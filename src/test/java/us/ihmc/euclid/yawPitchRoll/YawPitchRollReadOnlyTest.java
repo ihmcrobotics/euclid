@@ -18,6 +18,7 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.rotationConversion.QuaternionConversion;
@@ -206,6 +207,28 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          double actual = ypr1.distance(ypr2);
          double expected = YawPitchRollTools.distance(ypr1, ypr2);
          assertEquals(expected, actual, getEpsilon());
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         Quaternion quaternion = new Quaternion(yawPitchRoll);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         double actual = yawPitchRoll.distance(orientation);
+         double expected = quaternion.distance(orientation);
+         assertEquals(actual, expected, getEpsilon());
+      }
+   }
+
+   @Test
+   public void testAngle() throws Exception
+   {
+      Random random = new Random(32423);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         Quaternion quaternion = new Quaternion(yawPitchRoll);
+         assertEquals(quaternion.angle(), yawPitchRoll.angle(), getEpsilon());
       }
    }
 
@@ -625,19 +648,6 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
       {
          double epsilon = random.nextDouble();
          yprbA = createRandomYawPitchRoll(random);
-         double angleEps = epsilon * 0.99;
-         T ypr = createYawPitchRoll(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), angleEps));
-
-         yprbB = new YawPitchRoll(ypr);
-         yprbB.prepend(yprbA);
-
-         assertTrue(yprbA.geometricallyEquals(yprbB, epsilon));
-      }
-
-      for (int i = 0; i < ITERATIONS; ++i)
-      {
-         double epsilon = random.nextDouble();
-         yprbA = createRandomYawPitchRoll(random);
          double angleEps = epsilon * 1.01;
          T ypr = createYawPitchRoll(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), angleEps));
 
@@ -645,6 +655,18 @@ public abstract class YawPitchRollReadOnlyTest<T extends YawPitchRollReadOnly>
          yprbB.prepend(yprbA);
 
          assertFalse(yprbA.geometricallyEquals(yprbB, epsilon));
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {
+         double epsilon = random.nextDouble();
+         yprbA = createRandomYawPitchRoll(random);
+         double angleEps = epsilon * 0.99;
+         T ypr = createYawPitchRoll(new AxisAngle(EuclidCoreRandomTools.nextVector3DWithFixedLength(random, 1.0), angleEps));
+
+         yprbB = new YawPitchRoll(ypr);
+         yprbB.prepend(yprbA);
+         assertTrue(yprbA.geometricallyEquals(yprbB, epsilon));
       }
    }
 }

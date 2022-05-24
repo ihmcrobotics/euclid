@@ -17,6 +17,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
  * This class provides a collection of static tools to perform operations on axis-angles.
@@ -1110,24 +1111,215 @@ public class AxisAngleTools
    }
 
    /**
+    * Performs a cross platform angular distance calculation between axis angle and any other 3D
+    * orientation systems.
+    *
+    * @param axisAngle     the axisAngle to be used for comparison. Not modified
+    * @param orientation3D the orientation3D to be used for comparison. Not modified
+    * @param limitToPi     limits the result to [0 , <i>pi</i>].
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
+    *         false.
+    */
+   public static double distance(AxisAngleReadOnly axisAngle, Orientation3DReadOnly orientation3D, boolean limitToPi)
+   {
+      if (orientation3D instanceof QuaternionReadOnly)
+      {
+         return distance(axisAngle, (QuaternionReadOnly) orientation3D, limitToPi);
+      }
+      if (orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return distance(axisAngle, (YawPitchRollReadOnly) orientation3D, limitToPi);
+      }
+      if (orientation3D instanceof AxisAngleReadOnly)
+      {
+         return distance(axisAngle, (AxisAngleReadOnly) orientation3D, limitToPi);
+      }
+      if (orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return distance(axisAngle, (RotationMatrixReadOnly) orientation3D);
+      }
+      else
+      {
+         throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
+      }
+   }
+
+   /**
+    * Computes and returns Angular Distance between Axis Angle and Quaternion.
+    *
+    * @param axisAngle  the axisAngle to be used for comparison. Not modified
+    * @param quaternion the quaternion to be used for comparison. Not modified
+    * @param limitToPi  limits the result to [0 , <i>pi</i>] if set true.
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
+    *         false.
+    */
+   public static double distance(AxisAngleReadOnly axisAngle, QuaternionReadOnly quaternion, boolean limitToPi)
+   {
+
+      if (axisAngle.containsNaN() || quaternion.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return QuaternionTools.angle(quaternion);
+      }
+      if (quaternion.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+
+      // Converting self(AxisAngle) to quaternion.
+      double ux = axisAngle.getX();
+      double uy = axisAngle.getY();
+      double uz = axisAngle.getZ();
+      double angle = axisAngle.getAngle();
+      double qs, qx, qy, qz;
+
+      double halfTheta = 0.5 * angle;
+      double cosHalfTheta = EuclidCoreTools.cos(halfTheta);
+      double sinHalfTheta = EuclidCoreTools.sin(halfTheta);
+      qx = ux * sinHalfTheta;
+      qy = uy * sinHalfTheta;
+      qz = uz * sinHalfTheta;
+      qs = cosHalfTheta;
+
+      return QuaternionTools.distance(quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getS(), qx, qy, qz, qs, limitToPi);
+   }
+
+   /**
+    * Computes and returns Angular Distance between Axis Angle and Rotation Matrix.
+    *
+    * @param axisAngle      the axisAngle to be used for comparison. Not modified
+    * @param rotationMatrix the rotationMatrix to be used for comparison. Not modified
+    * @return angular distance between the two orientations in range: [0, <i>pi</i>]
+    */
+   public static double distance(AxisAngleReadOnly axisAngle, RotationMatrixReadOnly rotationMatrix)
+   {
+      if (axisAngle.containsNaN() || rotationMatrix.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return RotationMatrixTools.angle(rotationMatrix);
+      }
+      if (rotationMatrix.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      double ux = axisAngle.getX();
+      double uy = axisAngle.getY();
+      double uz = axisAngle.getZ();
+      double angle = axisAngle.getAngle();
+      double m00 = 0, m01 = 0, m02 = 0, m10 = 0, m11 = 0, m12 = 0, m20 = 0, m21 = 0, m22 = 0;
+
+      double sinTheta = EuclidCoreTools.sin(angle);
+      double cosTheta = EuclidCoreTools.cos(angle);
+      double t = 1.0 - cosTheta;
+
+      double xz = ux * uz;
+      double xy = ux * uy;
+      double yz = uy * uz;
+
+      m00 = t * ux * ux + cosTheta;
+      m01 = t * xy - sinTheta * uz;
+      m02 = t * xz + sinTheta * uy;
+      m10 = t * xy + sinTheta * uz;
+      m11 = t * uy * uy + cosTheta;
+      m12 = t * yz - sinTheta * ux;
+      m20 = t * xz - sinTheta * uy;
+      m21 = t * yz + sinTheta * ux;
+      m22 = t * uz * uz + cosTheta;
+
+      return RotationMatrixTools.distance(rotationMatrix, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+   }
+
+   /**
+    * Computes and returns Angular Distance between Axis Angle and yawPitchRoll.
+    *
+    * @param axisAngle    the axisAngle to be used for comparison. Not modified
+    * @param yawPitchRoll the yawPitchRoll to be used for comparison. Not modified
+    * @param limitToPi    Limits the result to [0, <i>pi</i>].
+    * @return angular distance between the two orientations in range: [0, 2<i>pi</i>] when limitToPi =
+    *         false.
+    */
+   public static double distance(AxisAngleReadOnly axisAngle, YawPitchRollReadOnly yawPitchRoll, boolean limitToPi)
+   {
+      if (axisAngle.containsNaN() || axisAngle.containsNaN())
+      {
+         return Double.NaN;
+      }
+      if (axisAngle.isZeroOrientation(EPS))
+      {
+         return YawPitchRollTools.angle(yawPitchRoll);
+      }
+
+      if (yawPitchRoll.isZeroOrientation(EPS))
+      {
+         return axisAngle.getAngle();
+      }
+      double yaw = yawPitchRoll.getYaw();
+      double pitch = yawPitchRoll.getPitch();
+      double roll = yawPitchRoll.getRoll();
+      double angle, ax, ay, az;
+
+      double halfYaw = yaw / 2.0;
+      double cYaw = EuclidCoreTools.cos(halfYaw);
+      double sYaw = EuclidCoreTools.sin(halfYaw);
+
+      double halfPitch = pitch / 2.0;
+      double cPitch = EuclidCoreTools.cos(halfPitch);
+      double sPitch = EuclidCoreTools.sin(halfPitch);
+
+      double halfRoll = roll / 2.0;
+      double cRoll = EuclidCoreTools.cos(halfRoll);
+      double sRoll = EuclidCoreTools.sin(halfRoll);
+
+      double qs = cYaw * cPitch * cRoll + sYaw * sPitch * sRoll;
+      double qx = cYaw * cPitch * sRoll - sYaw * sPitch * cRoll;
+      double qy = sYaw * cPitch * sRoll + cYaw * sPitch * cRoll;
+      double qz = sYaw * cPitch * cRoll - cYaw * sPitch * sRoll;
+
+      double uNorm = EuclidCoreTools.norm(qx, qy, qz);
+
+      if (uNorm > EPS)
+      {
+         angle = 2.0 * EuclidCoreTools.atan2(uNorm, qs);
+         uNorm = 1.0 / uNorm;
+         ax = qx * uNorm;
+         ay = qy * uNorm;
+         az = qz * uNorm;
+      }
+      else
+      {
+         return axisAngle.getAngle();
+      }
+      return distance(axisAngle, ax, ay, az, angle, limitToPi);
+   }
+
+   /**
     * Computes and returns the distance between the two axis-angles {@code aa1} and {@code aa2}.
     *
-    * @param aa1 the first axis-angle to measure the distance. Not modified.
-    * @param aa2 the second axis-angle to measure the distance. Not modified.
+    * @param aa1       the first axis-angle to measure the distance. Not modified.
+    * @param aa2       the second axis-angle to measure the distance. Not modified.
+    * @param limitToPi Limits the result to [0, <i>pi</i>].
     * @return the angle representing the distance between the two axis-angles. It is contained in [0,
-    *         2<i>pi</i>]
+    *         2<i>pi</i>] when limitToPi = false.
     */
-   public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2)
+   public static double distance(AxisAngleReadOnly aa1, AxisAngleReadOnly aa2, boolean limitToPi)
+   {
+      return distance(aa1, aa2.getX(), aa2.getY(), aa2.getZ(), aa2.getAngle(), limitToPi);
+   }
+
+   static double distance(AxisAngleReadOnly aa1, double u2x, double u2y, double u2z, double u2a, boolean limitToPi)
    {
       double alpha = aa1.getAngle();
       double u1x = aa1.getX();
       double u1y = aa1.getY();
       double u1z = aa1.getZ();
 
-      double beta = -aa2.getAngle();
-      double u2x = aa2.getX();
-      double u2y = aa2.getY();
-      double u2z = aa2.getZ();
+      double beta = -u2a;
 
       double cosHalfAlpha = EuclidCoreTools.cos(0.5 * alpha);
       double sinHalfAlpha = EuclidCoreTools.sin(0.5 * alpha);
@@ -1153,6 +1345,11 @@ public class AxisAngleTools
       double sinHalfGamma = EuclidCoreTools.norm(sinHalfGammaUx, sinHalfGammaUy, sinHalfGammaUz);
 
       double gamma = 2.0 * EuclidCoreTools.atan2(sinHalfGamma, cosHalfGamma);
+
+      if (limitToPi && gamma > Math.PI)
+      {
+         gamma = EuclidCoreTools.trimAngleMinusPiToPi(gamma);
+      }
       return Math.abs(gamma);
    }
 }

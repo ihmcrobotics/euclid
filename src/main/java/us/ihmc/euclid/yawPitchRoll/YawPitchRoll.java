@@ -215,7 +215,7 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
    /**
     * Calculates and returns a hash code value from the value of each component of this yaw-pitch-roll.
     *
-    * @return the hash code value for this yaww-pitch-roll.
+    * @return the hash code value for this yaw-pitch-roll.
     */
    @Override
    public int hashCode()

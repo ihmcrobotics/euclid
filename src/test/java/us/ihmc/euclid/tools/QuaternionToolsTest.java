@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,7 @@ import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.rotationConversion.QuaternionConversion;
 import us.ihmc.euclid.tuple2D.Vector2D;
@@ -24,10 +26,99 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public class QuaternionToolsTest
 {
    private static final double EPSILON = 1.0e-12;
+
+   @Test
+   public void testDistance() throws Exception
+   {
+      Random random = new Random(3212423);
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Cross Platform distance method testing:
+         Quaternion randomQuaternion = EuclidCoreRandomTools.nextQuaternion(random);
+
+         // (Quaternion & rotation Matrix)
+         RotationMatrix randomRotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         Quaternion randomMatrixConverted = new Quaternion(randomRotationMatrix);
+
+         double expectedDistance_1 = QuaternionTools.distance(randomQuaternion, randomRotationMatrix);
+         double actualDistance_1 = QuaternionTools.distance(randomQuaternion, randomMatrixConverted, true);
+
+         // (Quaternion & yaw pitch roll)
+         YawPitchRoll randomYawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         Quaternion randomYawPitchRollConverted = new Quaternion(randomYawPitchRoll);
+
+         double expectedDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRollConverted, false);
+         double actualDistance_2 = QuaternionTools.distance(randomQuaternion, randomYawPitchRoll, false);
+
+         // (Quaternion & axis angle)
+         AxisAngle randomAxisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+         Quaternion randomAxisAngleConverted = new Quaternion(randomAxisAngle);
+
+         double expectedDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngleConverted, false);
+         double actualDistance_3 = QuaternionTools.distance(randomQuaternion, randomAxisAngle, false);
+
+         assertEquals(actualDistance_1, expectedDistance_1, EPSILON);
+         assertEquals(actualDistance_2, expectedDistance_2, EPSILON);
+         assertEquals(actualDistance_3, expectedDistance_3, EPSILON);
+      }
+
+      for (int i = 0; i < ITERATIONS; ++i)
+      {// Type check test in distance method
+         Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+         Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
+         double withQuaternionResult = QuaternionTools.distance(quaternion, new Quaternion(orientation), false);
+         double withRotationMatrixResult = QuaternionTools.distance(quaternion, new RotationMatrix(orientation), false);
+
+         double notCastedResult = QuaternionTools.distance(quaternion, orientation, false);
+
+         if (Math.abs(notCastedResult) <= Math.PI)
+            assertEquals(notCastedResult, withRotationMatrixResult, EPSILON);
+         else
+            assertEquals(notCastedResult, withQuaternionResult, EPSILON);
+      }
+     // Test distance method with limit to Pi.
+     // This is used for verifying other type's distance method with limit to pi.
+     double min = Math.PI;
+     double max = 2 * Math.PI;
+     for (int i = 0; i < ITERATIONS; ++i)
+     {
+        double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
+        AxisAngle aa1 = EuclidCoreRandomTools.nextAxisAngle(random);
+        AxisAngle distance = EuclidCoreRandomTools.nextAxisAngle(random);
+        distance.setAngle(randomAngle);
+        AxisAngle aa2 = new AxisAngle();
+        AxisAngleTools.multiply(aa1, distance, aa2);
+
+        Quaternion q1 = new Quaternion(aa1);
+        Quaternion q2 = new Quaternion(aa2);
+        double actual = QuaternionTools.distance(q1, q2, true);
+
+        distance.setAngle(actual);
+        AxisAngle aa3 = new AxisAngle();
+        AxisAngleTools.multiply(aa1, distance, aa3);
+        Quaternion q3 = new Quaternion(aa3);
+
+        distance.setAngle(-actual);
+        AxisAngle aa4 = new AxisAngle();
+        AxisAngleTools.multiply(aa1, distance, aa4);
+        Quaternion q4 = new Quaternion(aa4);
+
+        assertFalse(q2.geometricallyEquals(q3, EPSILON));
+        EuclidCoreTestTools.assertQuaternionGeometricallyEquals(q2, q4, EPSILON);
+
+        Orientation3DBasics orientation3D = EuclidCoreRandomTools.nextOrientation3D(random);
+
+        double distanceLimit = QuaternionTools.distance(q1, orientation3D, true);
+        double distanceNoLimit = QuaternionTools.distance(q1, orientation3D, false);
+
+        assertTrue(distanceLimit <= Math.PI);
+        assertEquals(Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(distanceNoLimit)), distanceLimit, EPSILON);
+     }
+   }
 
    @Test
    public void testMultiply() throws Exception
@@ -1232,4 +1323,5 @@ public class QuaternionToolsTest
          EuclidCoreTestTools.assertQuaternionGeometricallyEquals(quaternionExpected, quaternionActual, EPSILON);
       }
    }
+
 }

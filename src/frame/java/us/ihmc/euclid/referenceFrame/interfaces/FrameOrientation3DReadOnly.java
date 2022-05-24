@@ -39,6 +39,37 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, ReferenceFrameHolder
 {
    /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    *
+    * @param other the other orientation to be compared to. Not modified.
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>].
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
+    *                                         not match.
+    */
+   default double distance(FrameOrientation3DReadOnly other)
+   {
+      checkReferenceFrameMatch(other);
+      return Orientation3DReadOnly.super.distance(other);
+   }
+
+   /**
+    * Calculates and returns the angular distance between this(self) and other orientation.
+    *
+    * @param other     the other orientation to be compared to. Not modified.
+    * @param limitToPi Limits the result to [0, <i>pi</i>pi].
+    * @return the angle between the two orientations. The result is not guaranteed to be in [0,
+    *         <i>pi</i>].
+    * @throws ReferenceFrameMismatchException if reference frame of {@code this} and {@code other} do
+    *                                         not match.
+    */
+   default double distance(FrameOrientation3DReadOnly other, boolean limitToPi)
+   {
+      checkReferenceFrameMatch(other);
+      return distance((Orientation3DReadOnly) other, limitToPi);
+   }
+
+   /**
     * Converts, if necessary, and packs this orientation in a quaternion.
     *
     * @param quaternionToPack the quaternion into which this orientation is to be stored. Modified.
@@ -2182,5 +2213,23 @@ public interface FrameOrientation3DReadOnly extends Orientation3DReadOnly, Refer
       checkReferenceFrameMatch(matrixOriginal);
       matrixTransformed.setReferenceFrame(getReferenceFrame());
       inverseTransform((RotationMatrixReadOnly) matrixOriginal, (RotationMatrixBasics) matrixTransformed);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two frame orientations are
+    * geometrically similar, i.e. the magnitude of their difference is less than or equal to
+    * {@code epsilon}.
+    *
+    * @param other   the frame orientation to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two frame orientations represent the same geometry, {@code false}
+    *         otherwise.
+    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
+    *                                         frame as {@code this}.
+    */
+   default boolean geometricallyEquals(FrameOrientation3DReadOnly other, double epsilon)
+   {
+      checkReferenceFrameMatch(other);
+      return geometricallyEquals((Orientation3DReadOnly) other, epsilon);
    }
 }
