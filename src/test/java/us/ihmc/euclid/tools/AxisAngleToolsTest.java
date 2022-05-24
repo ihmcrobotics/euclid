@@ -108,7 +108,7 @@ public class AxisAngleToolsTest
          else
             assertEquals(notCastedResult, withQuaternionResult, EPSILON);
       }
-      
+
       // Test distance method with limit to PI.
       double min = Math.PI;
       double max = 2 * min;
@@ -126,10 +126,16 @@ public class AxisAngleToolsTest
          double expected = QuaternionTools.distance(q1, q2, true);
          double actual = AxisAngleTools.distance(aa1, aa2, true);
          assertEquals(expected, actual, EPSILON);
-         
-         
-         
-         
+
+         Orientation3DBasics orientation3D = EuclidCoreRandomTools.nextOrientation3D(random);
+
+         double distanceLimit = AxisAngleTools.distance(aa1, orientation3D, true);
+         double distanceLimitFromQuaternion = QuaternionTools.distance(q1, orientation3D, true);
+         double distanceNoLimit = AxisAngleTools.distance(aa1, orientation3D, false);
+         double distanceNoLimitFromQuaternion = QuaternionTools.distance(q1, orientation3D, false);
+
+         assertEquals(distanceLimit, distanceLimitFromQuaternion, EPSILON);
+         assertEquals(distanceNoLimit, distanceNoLimitFromQuaternion, EPSILON);
       }
    }
 }

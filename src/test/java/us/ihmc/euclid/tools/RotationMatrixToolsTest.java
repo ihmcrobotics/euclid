@@ -313,7 +313,7 @@ public class RotationMatrixToolsTest
          RotationMatrix rotationMatrix = new RotationMatrix(quaternion);
          
          double expected = quaternion.angle();
-         double actual = rotationMatrix.angle();
+         double actual = RotationMatrixTools.angle(rotationMatrix);
          
          assertEquals(expected, actual, EPS);
       }
