@@ -108,14 +108,10 @@ public class AxisAngleToolsTest
          else
             assertEquals(notCastedResult, withQuaternionResult, EPSILON);
       }
-   }
-
-   @Test
-   public void testDistanceWithLimitToPi() throws Exception
-   {// Test distance method with limit to PI.
+      
+      // Test distance method with limit to PI.
       double min = Math.PI;
       double max = 2 * min;
-      Random random = new Random(23523L);
       for (int i = 0; i < ITERATIONS; ++i)
       {
          double randomAngle = ThreadLocalRandom.current().nextDouble(min, max);
@@ -130,7 +126,10 @@ public class AxisAngleToolsTest
          double expected = QuaternionTools.distance(q1, q2, true);
          double actual = AxisAngleTools.distance(aa1, aa2, true);
          assertEquals(expected, actual, EPSILON);
+         
+         
+         
+         
       }
-
    }
 }

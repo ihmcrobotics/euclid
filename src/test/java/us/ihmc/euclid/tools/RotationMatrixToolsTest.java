@@ -9,7 +9,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
@@ -21,9 +20,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
-import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
-import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 public class RotationMatrixToolsTest
 {
@@ -292,29 +289,17 @@ public class RotationMatrixToolsTest
       
       for (int i = 0; i < ITERATIONS; ++i)
       {// Type check test in distance method
-         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+         YawPitchRoll rotationMatrix = EuclidCoreRandomTools.nextYawPitchRoll(random);
          Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
-         
-         double notCastedResult = RotationMatrixTools.distance(rotationMatrix, orientation);
-         if(orientation instanceof QuaternionReadOnly)
-         {
-            orientation = (Quaternion) orientation;
-         }
-         else if(orientation instanceof YawPitchRollReadOnly)
-         {
-            orientation = (YawPitchRoll) orientation;
-         }
-         else if(orientation instanceof AxisAngleReadOnly)
-         {
-            orientation = (AxisAngle) orientation;
-         }
+         double withQuaternionResult = YawPitchRollTools.distance(rotationMatrix, new Quaternion(orientation), false);
+         double withRotationMatrixResult = YawPitchRollTools.distance(rotationMatrix, new RotationMatrix(orientation), false);
+
+         double notCastedResult = YawPitchRollTools.distance(rotationMatrix, orientation, false);
+
+         if (Math.abs(notCastedResult) <= Math.PI)
+            assertEquals(notCastedResult, withRotationMatrixResult, EPS);
          else
-         {
-            orientation = (RotationMatrix) orientation;
-         }
-         double castedResult = RotationMatrixTools.distance(rotationMatrix, orientation);
-         
-         assertEquals(notCastedResult, castedResult);
+            assertEquals(notCastedResult, withQuaternionResult, EPS);
       }
    }
    
