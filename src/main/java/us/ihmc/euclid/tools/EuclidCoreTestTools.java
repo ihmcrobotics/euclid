@@ -22,6 +22,7 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
@@ -1651,6 +1652,19 @@ public class EuclidCoreTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
    }
+   
+   public static void assertOrientation3DGeometricallyEquals(String messagePrefix,
+                                                             Orientation3DReadOnly expected,
+                                                             Orientation3DReadOnly actual,
+                                                             double epsilon,
+                                                             String format)
+   {
+      if (!expected.geometricallyEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+      
+   }
 
    /**
     * Asserts that the given axis-angle contains only {@link Double#NaN}.
@@ -2168,6 +2182,7 @@ public class EuclidCoreTestTools
    {
       assertRigidBodyTransformGeometricallyEquals(null, expected, actual, epsilon);
    }
+   // TODO:RigidBodyTransform ->RigidBodyTransformReadOnly  <--
 
    /**
     * Asserts that the two given rigid-body transform represent the same geometry to an
@@ -2734,6 +2749,12 @@ public class EuclidCoreTestTools
       String expectedAsString = getQuaternionBasedTransformString(format, expected);
       String actualAsString = getQuaternionBasedTransformString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+   
+   private static void throwNotEqualAssertionError(String messagePrefix, Orientation3DReadOnly expected, Orientation3DReadOnly actual, String format)
+   {
+      String expectedAsString = EuclidCoreIOTools.getOrientation3DString(format, expected);
+      String actualAsString = EuclidCoreIOTools.getOrientation3DString(format, actual);
    }
 
    /**

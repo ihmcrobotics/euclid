@@ -397,6 +397,7 @@ public class EuclidCoreIOTools
    {
       return getStringOf("(", " )", ", ", format, orientation2DAngle);
    }
+   
 
    /**
     * Gets a representative {@code String} of {@code matrix} as follows:
