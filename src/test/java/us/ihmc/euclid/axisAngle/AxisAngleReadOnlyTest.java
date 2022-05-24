@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static us.ihmc.euclid.EuclidTestConstants.ITERATIONS;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +16,6 @@ import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
@@ -38,7 +36,6 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DBasics;
 import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
-import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
 public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
 {
@@ -289,7 +286,7 @@ public abstract class AxisAngleReadOnlyTest<T extends AxisAngleReadOnly>
          double angle = EuclidCoreRandomTools.nextDouble(random, 10.0);
          UnitVector3D axis = EuclidCoreRandomTools.nextUnitVector3D(random);
          axisAngle = createAxisAngle(axis, angle);
-         assertEquals(angle, axisAngle.angle());
+         assertEquals(angle, axisAngle.angle(), getEpsilon());
       }
    }
 
