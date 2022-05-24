@@ -289,12 +289,12 @@ public class RotationMatrixToolsTest
       
       for (int i = 0; i < ITERATIONS; ++i)
       {// Type check test in distance method
-         YawPitchRoll rotationMatrix = EuclidCoreRandomTools.nextYawPitchRoll(random);
+         RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
          Orientation3DBasics orientation = EuclidCoreRandomTools.nextOrientation3D(random);
-         double withQuaternionResult = YawPitchRollTools.distance(rotationMatrix, new Quaternion(orientation), false);
-         double withRotationMatrixResult = YawPitchRollTools.distance(rotationMatrix, new RotationMatrix(orientation), false);
+         double withQuaternionResult = RotationMatrixTools.distance(rotationMatrix, new Quaternion(orientation));
+         double withRotationMatrixResult = RotationMatrixTools.distance(rotationMatrix, new RotationMatrix(orientation));
 
-         double notCastedResult = YawPitchRollTools.distance(rotationMatrix, orientation, false);
+         double notCastedResult = RotationMatrixTools.distance(rotationMatrix, orientation);
 
          if (Math.abs(notCastedResult) <= Math.PI)
             assertEquals(notCastedResult, withRotationMatrixResult, EPS);
