@@ -11,12 +11,14 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple3D.Point3D;
+import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
@@ -202,6 +204,69 @@ public class EuclidCoreIOToolsTest
       expected = "(0.5150467291512681 )";
       assertEquals(expected, EuclidCoreIOTools.getOrientation2DString(null, t));
    }
+   
+   @Test
+   public void testGetOrientation3DStringRegression()
+   {  
+      String expected;
+      String randomFormat = EuclidCoreIOTools.getStringFormat(8, 7);
+      
+      Random random = new Random(345345);
+      RotationMatrix rotationMatrix = EuclidCoreRandomTools.nextRotationMatrix(random);
+      random = new Random(345345);
+      Quaternion quaternion = EuclidCoreRandomTools.nextQuaternion(random);
+      random = new Random(345345);
+      AxisAngle axisAngle = EuclidCoreRandomTools.nextAxisAngle(random);
+      random = new Random(345345);
+      YawPitchRoll yawPitchRoll = EuclidCoreRandomTools.nextYawPitchRoll(random);
+      
+      // rotation matrix
+      expected = "/-0.146,  0.372,  0.917 \\\n"//
+                  + "| 0.050,  0.928, -0.369 |\n"//
+                  + "\\-0.988, -0.008, -0.154 /";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(rotationMatrix));
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(EuclidCoreIOTools.DEFAULT_FORMAT, rotationMatrix));
+      assertEquals("null", EuclidCoreIOTools.getOrientation3DString(null));
+      expected = "/-0.1460544, 0.3719639, 0.9166848 \\\n"//
+            +"|0.0497947, 0.9282109, -0.3687071 |\n"//
+            +"\\-0.9880226, -0.0082053, -0.1540911 /";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(randomFormat, rotationMatrix));
+      expected = "/-0.14605438133050594, 0.3719638705161967, 0.916684785913224 \\\n"
+            + "|0.04979465293823307, 0.9282109416799752, -0.36870711992628336 |\n"
+            + "\\-0.9880225757708799, -0.008205289524678472, -0.154091086669191 /";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(null, rotationMatrix));
+      
+      // yaw pitch roll
+      expected = "yaw-pitch-roll: ( 0.515, -0.861,  3.044)";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(yawPitchRoll));
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(EuclidCoreIOTools.DEFAULT_FORMAT, yawPitchRoll));
+      assertEquals("null", EuclidCoreIOTools.getOrientation3DString(null));
+      expected = "yaw-pitch-roll: (0.5150467, -0.8611524, 3.0443941)";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(randomFormat, yawPitchRoll));
+      expected = "yaw-pitch-roll: (0.5150467291512681, -0.8611524243712763, 3.0443941351920367)";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(null, yawPitchRoll));
+      
+      // quaternion
+      expected = "( 0.141,  0.746, -0.126,  0.638 )";  
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(quaternion));
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(EuclidCoreIOTools.DEFAULT_FORMAT, quaternion));
+      assertEquals("null", EuclidCoreIOTools.getOrientation3DString(null));
+      expected = "(0.1412673, 0.7463840, -0.1262461, 0.6379783 )";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(randomFormat, quaternion));
+      expected = "(0.14126726766904454, 0.7463840180630331, -0.12624614150672073, 0.6379783447892801 )";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(null, quaternion));
+      
+      // axis angle
+      expected = "(-0.183, -0.969,  0.164, -1.758 )";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(axisAngle));
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(EuclidCoreIOTools.DEFAULT_FORMAT, axisAngle));
+      assertEquals("null", EuclidCoreIOTools.getOrientation3DString(null));
+      expected = "(-0.1834510, -0.9692615, 0.1639445, -1.7578525 )";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(randomFormat, axisAngle));
+      expected = "(-0.18345104608744625, -0.9692615363482303, 0.16394446573547383, -1.7578525333049415 )";
+      assertEquals(expected, EuclidCoreIOTools.getOrientation3DString(null, axisAngle));      
+   }
+   
 
    @Test
    public void testGetMatrix3DStringRegression()

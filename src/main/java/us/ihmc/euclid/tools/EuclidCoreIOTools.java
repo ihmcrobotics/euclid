@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Function;
 
+import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
@@ -14,8 +17,10 @@ import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
+import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
 
 /**
@@ -191,6 +196,7 @@ public class EuclidCoreIOTools
       ret += getStringOf("Translation: (", " )", ", ", format, translation.getX(), translation.getY(), translation.getZ());
       return ret;
    }
+   
 
    /**
     * Gets a representative {@code String} of {@code tuple} as follows:
@@ -397,7 +403,6 @@ public class EuclidCoreIOTools
    {
       return getStringOf("(", " )", ", ", format, orientation2DAngle);
    }
-   
 
    /**
     * Gets a representative {@code String} of {@code matrix} as follows:
@@ -1268,5 +1273,34 @@ public class EuclidCoreIOTools
    public static String getStringFormat(int numberOfChar, int precision)
    {
       return "%" + numberOfChar + "." + precision + "f";
+   }
+
+   public static String getOrientation3DString(Orientation3DReadOnly orientation3D)
+   {     
+      if (orientation3D == null)
+         return "null";
+      return getOrientation3DString(DEFAULT_FORMAT, orientation3D);
+   }
+
+   public static String getOrientation3DString(String format, Orientation3DReadOnly orientation3D)
+   {
+      // TODO Needs testing
+      if(orientation3D instanceof QuaternionReadOnly)
+      {
+         return getTuple4DString(format,(Quaternion) orientation3D);
+      }
+      if(orientation3D instanceof RotationMatrixReadOnly)
+      {
+         return getMatrix3DString(format,(RotationMatrix) orientation3D);
+      }
+      if(orientation3D instanceof AxisAngleReadOnly)
+      {
+         return getAxisAngleString(format,(AxisAngle) orientation3D);
+      }
+      if(orientation3D instanceof YawPitchRollReadOnly)
+      {
+         return getYawPitchRollString(format,(YawPitchRoll) orientation3D);
+      }
+      throw new UnsupportedOperationException("Unsupported type: " + orientation3D.getClass().getSimpleName());
    }
 }

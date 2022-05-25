@@ -17,6 +17,8 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.Orientation2D;
 import us.ihmc.euclid.orientation.interfaces.Orientation2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
@@ -764,6 +766,50 @@ public class EuclidCoreTestToolsTest
          Orientation2D expected = EuclidCoreRandomTools.nextOrientation2D(random);
          Orientation2D actual = new Orientation2D(expected);
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+   }
+
+   @Test
+   public void testAssertOrientation3DGeoMetricallyEquals() throws Throwable
+   {
+      Random random = new Random(345234);
+      String methodName = "assertOrientation3DGeometricallyEquals";
+      Class<Orientation3DReadOnly> argumentsClass = Orientation3DReadOnly.class;
+      {
+         Orientation3DBasics expected = null;
+         Orientation3DBasics actual = null;
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation3DBasics expected = EuclidCoreRandomTools.nextOrientation3D(random);
+         Orientation3DBasics actual = null;
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation3DBasics expected = null;
+         Orientation3DBasics actual = EuclidCoreRandomTools.nextOrientation3D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation3DBasics expected = EuclidCoreRandomTools.nextOrientation3D(random);
+         Orientation3DBasics actual = EuclidCoreRandomTools.nextOrientation3D(random);
+         assertAssertionMethodsBehaveProperly(true, methodName, argumentsClass, expected, actual, EPSILON);
+      }
+
+      {
+         Orientation3DBasics expected = EuclidCoreRandomTools.nextOrientation3D(random);
+//         Orientation3DBasics actual = new Orientation3DReadOnly(expected);
+         AxisAngle actualAxisAngle = new AxisAngle(expected);
+         RotationMatrix actualRotationMatrix = new RotationMatrix(expected);
+         Quaternion actualQuaternion= new Quaternion(expected);
+         YawPitchRoll actualYawPitchRoll= new YawPitchRoll(expected);
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualAxisAngle, EPSILON);
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualRotationMatrix, EPSILON);
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualQuaternion, EPSILON);
+         assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actualYawPitchRoll, EPSILON);
       }
    }
 

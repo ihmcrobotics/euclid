@@ -1001,11 +1001,11 @@ public class EuclidCoreTestTools
          return;
 
       if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly) expected, actual, format);
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
+         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly)expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
    }
 
@@ -1375,13 +1375,13 @@ public class EuclidCoreTestTools
          return;
 
       if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         throwNotEqualAssertionError(messagePrefix,(Orientation3DReadOnly) expected, actual, format);
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
          double difference = expected.distance(actual);
          difference = Math.abs(EuclidCoreTools.trimAngleMinusPiToPi(difference));
-         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(difference), format);
+         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly) expected, actual, "Difference of: " + Double.toString(difference), format);
       }
    }
 
@@ -1653,17 +1653,45 @@ public class EuclidCoreTestTools
       }
    }
    
+   
+   
+   public static void assertOrientation3DGeometricallyEquals(Orientation3DReadOnly expected, Orientation3DReadOnly actual, double epsilon)
+   {
+      assertOrientation3DGeometricallyEquals(null, expected, actual, epsilon);
+   }
+   
+   public static void assertOrientation3DGeometricallyEquals(String messagePrefix, Orientation3DReadOnly expected, Orientation3DReadOnly actual, double epsilon)
+   {
+      assertOrientation3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
+   }
+   
    public static void assertOrientation3DGeometricallyEquals(String messagePrefix,
                                                              Orientation3DReadOnly expected,
                                                              Orientation3DReadOnly actual,
                                                              double epsilon,
                                                              String format)
    {
+      if (expected == null && actual == null)
+         return;
+      if (!(expected != null && actual != null))
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+         throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
       
+   }
+
+   private static void throwNotEqualAssertionError(String messagePrefix,
+                                                   Orientation3DReadOnly expected,
+                                                   Orientation3DReadOnly actual,
+                                                   String difference,
+                                                   String format)
+   {
+      // TODO NEEDS TESTING 
+      String expectedAsString = EuclidCoreIOTools.getOrientation3DString(expected);
+      String actualAsString = EuclidCoreIOTools.getOrientation3DString(actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    /**
@@ -2715,6 +2743,14 @@ public class EuclidCoreTestTools
       String actualAsString = EuclidCoreIOTools.getOrientation2DString(format, actual);
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
+   
+   private static void throwNotEqualAssertionError(String messagePrefix, Orientation3DReadOnly expected, Orientation3DReadOnly actual, String format)
+   {
+      String expectedAsString = EuclidCoreIOTools.getOrientation3DString(format, expected);
+      String actualAsString = EuclidCoreIOTools.getOrientation3DString(format, actual);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+
 
    private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String format)
    {
@@ -2751,11 +2787,7 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
    
-   private static void throwNotEqualAssertionError(String messagePrefix, Orientation3DReadOnly expected, Orientation3DReadOnly actual, String format)
-   {
-      String expectedAsString = EuclidCoreIOTools.getOrientation3DString(format, expected);
-      String actualAsString = EuclidCoreIOTools.getOrientation3DString(format, actual);
-   }
+
 
    /**
     * Throws a new {@code AssertionError} as follows:
