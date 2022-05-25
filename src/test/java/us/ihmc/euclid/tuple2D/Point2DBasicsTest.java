@@ -135,8 +135,8 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T expected = createEmptyTuple();
 
          RigidBodyTransform rigidBodyTransform = new RigidBodyTransform();
-         rigidBodyTransform.setRotationYaw(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         rigidBodyTransform.setTranslation(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         rigidBodyTransform.getRotation().setToYawOrientation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
+         rigidBodyTransform.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          rigidBodyTransform.transform(expected);
@@ -197,8 +197,8 @@ public abstract class Point2DBasicsTest<T extends Point2DBasics> extends Tuple2D
          T expected = createEmptyTuple();
 
          RigidBodyTransform rigidBodyTransform = new RigidBodyTransform();
-         rigidBodyTransform.setRotationYaw(EuclidCoreRandomTools.nextDouble(random, Math.PI));
-         rigidBodyTransform.setTranslation(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
+         rigidBodyTransform.getRotation().setToYawOrientation(EuclidCoreRandomTools.nextDouble(random, Math.PI));
+         rigidBodyTransform.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random, 0.0, 10.0));
 
          expected.set(original);
          actual.set(original);

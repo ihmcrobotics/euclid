@@ -229,7 +229,7 @@ public class LineSegment2DTest
 
          LineSegment2D expectedLineSegment = new LineSegment2D(originalLineSegment);
          RigidBodyTransform transform = new RigidBodyTransform();
-         transform.setTranslation(x, y, 0.0);
+         transform.getTranslation().set(x, y, 0.0);
          expectedLineSegment.applyTransform(transform);
          EuclidGeometryTestTools.assertLineSegment2DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
       }
@@ -246,7 +246,7 @@ public class LineSegment2DTest
 
          LineSegment2D expectedLineSegment = new LineSegment2D(originalLineSegment);
          RigidBodyTransform transform = new RigidBodyTransform();
-         transform.setTranslation(translation.getX(), translation.getY(), 0.0);
+         transform.getTranslation().set(translation.getX(), translation.getY(), 0.0);
          expectedLineSegment.applyTransform(transform);
          EuclidGeometryTestTools.assertLineSegment2DEquals(expectedLineSegment, translatedLineSegment, EPSILON);
       }

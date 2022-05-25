@@ -1172,7 +1172,7 @@ public class Line2DTest
       Vector3D eulerAngles = new Vector3D(0.0, 0.0, 0.0);
 
       transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+      transform.getTranslation().set(translation);
 
       Point2D firstPointOnLine = randomPoint(random);
       Point2D secondPointOnLine = randomPoint(random);
@@ -1202,7 +1202,7 @@ public class Line2DTest
       Vector3D eulerAngles = new Vector3D(0.0, 0.0, randomDouble(random, 2.0 * Math.PI));
 
       transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+      transform.getTranslation().set(translation);
 
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
       Point2D point = new Point2D(line.getPoint());
@@ -1235,7 +1235,7 @@ public class Line2DTest
          Vector3D eulerAngles = new Vector3D(randomDouble(random, 2.0 * Math.PI), 0.0, 0.0);
 
          transform.setRotationEulerAndZeroTranslation(eulerAngles);
-         transform.setTranslation(translation);
+         transform.getTranslation().set(translation);
 
          Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
@@ -1258,7 +1258,7 @@ public class Line2DTest
          Vector3D eulerAngles = new Vector3D(0.0, randomDouble(random, 2.0 * Math.PI), 0.0);
 
          transform.setRotationEulerAndZeroTranslation(eulerAngles);
-         transform.setTranslation(translation);
+         transform.getTranslation().set(translation);
 
          Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
 
@@ -1281,7 +1281,7 @@ public class Line2DTest
       Vector3D eulerAngles = new Vector3D(0.0, 0.0, randomDouble(random, 2.0 * Math.PI));
 
       transform.setRotationEulerAndZeroTranslation(eulerAngles);
-      transform.setTranslation(translation);
+      transform.getTranslation().set(translation);
 
       Line2D line = new Line2D(firstPointOnLine, secondPointOnLine);
       Point2D point = new Point2D(line.getPoint());

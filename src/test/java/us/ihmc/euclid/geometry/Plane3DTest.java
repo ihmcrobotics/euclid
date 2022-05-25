@@ -123,7 +123,7 @@ public class Plane3DTest
       EuclidCoreTestTools.assertTuple3DEquals(plane.getPointCopy(), new Point3D(0.0, 0.0, 0.0), 1e-14);
 
       RigidBodyTransform transformation2 = new RigidBodyTransform();
-      transformation2.setTranslation(new Vector3D(1.0, 2.0, 3.0));
+      transformation2.getTranslation().set(new Vector3D(1.0, 2.0, 3.0));
       Plane3D plane2 = new Plane3D(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
       plane2.applyTransform(transformation2);
       EuclidCoreTestTools.assertTuple3DEquals(plane2.getNormalCopy(), new Vector3D(0.0, 0.0, 1.0), 1e-14);
@@ -131,7 +131,7 @@ public class Plane3DTest
 
       RigidBodyTransform transformation3 = new RigidBodyTransform();
       transformation3.setRotationPitchAndZeroTranslation(Math.PI / 2);
-      transformation3.setTranslation(new Vector3D(1.0, 2.0, 3.0));
+      transformation3.getTranslation().set(new Vector3D(1.0, 2.0, 3.0));
       Plane3D plane3 = new Plane3D(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
       plane3.applyTransform(transformation3);
       EuclidCoreTestTools.assertTuple3DEquals(plane3.getNormalCopy(), new Vector3D(1.0, 0.0, 0.0), 1e-14);
@@ -139,7 +139,7 @@ public class Plane3DTest
 
       RigidBodyTransform transformation4 = new RigidBodyTransform();
       transformation4.setRotationPitchAndZeroTranslation(Math.PI / 2);
-      transformation4.setTranslation(new Vector3D(1.0, 2.0, 3.0));
+      transformation4.getTranslation().set(new Vector3D(1.0, 2.0, 3.0));
    }
 
    @Test

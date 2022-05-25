@@ -198,18 +198,6 @@ public class RigidBodyTransform
    }
 
    /**
-    * Computes the determinant of the rotation part of this transform.
-    *
-    * @return the determinant's value.
-    * @deprecated Use {@code this.getRotation().determinant()} instead.
-    */
-   @Deprecated
-   public double determinantRotationPart()
-   {
-      return getRotation().determinant();
-   }
-
-   /**
     * Sets this rigid-body transform from the given 12 coefficients.
     *
     * @param m00 the 1st row 1st column component of the rotation part of this transform.
@@ -545,86 +533,6 @@ public class RigidBodyTransform
    }
 
    /**
-    * Sets the rotation part of this transform from the given 9 coefficients.
-    *
-    * @param m00 the 1st row 1st column component of the rotation part of this transform.
-    * @param m01 the 1st row 2nd column component of the rotation part of this transform.
-    * @param m02 the 1st row 3rd column component of the rotation part of this transform.
-    * @param m10 the 2nd row 1st column component of the rotation part of this transform.
-    * @param m11 the 2nd row 2nd column component of the rotation part of this transform.
-    * @param m12 the 2nd row 3rd column component of the rotation part of this transform.
-    * @param m20 the 3rd row 1st column component of the rotation part of this transform.
-    * @param m21 the 3rd row 2nd column component of the rotation part of this transform.
-    * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
-    * @throws NotARotationMatrixException if the resulting matrix does not represent a rotation matrix.
-    * @deprecated Use {@code this.getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22)}
-    *             instead.
-    */
-   @Deprecated
-   public void setRotation(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      getRotation().set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-   }
-
-   /**
-    * Sets the rotation part of this transform from the given 9 coefficients.
-    * <p>
-    * Prefer using the method
-    * {@link #setRotation(double, double, double, double, double, double, double, double, double)} as
-    * it asserts that the coefficients 0represent a rotation matrix.
-    * </p>
-    *
-    * @param m00 the 1st row 1st column component of the rotation part of this transform.
-    * @param m01 the 1st row 2nd column component of the rotation part of this transform.
-    * @param m02 the 1st row 3rd column component of the rotation part of this transform.
-    * @param m10 the 2nd row 1st column component of the rotation part of this transform.
-    * @param m11 the 2nd row 2nd column component of the rotation part of this transform.
-    * @param m12 the 2nd row 3rd column component of the rotation part of this transform.
-    * @param m20 the 3rd row 1st column component of the rotation part of this transform.
-    * @param m21 the 3rd row 2nd column component of the rotation part of this transform.
-    * @param m22 the 3rd row 3rd column component of the rotation part of this transform.
-    * @deprecated Use {@code this.getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22)}
-    *             instead.
-    */
-   @Deprecated
-   public void setRotationUnsafe(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
-   {
-      getRotation().setUnsafe(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given matrix.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
-    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
-    */
-   @Deprecated
-   public void setRotation(DMatrix rotationMatrix)
-   {
-      getRotation().set(rotationMatrix);
-   }
-
-   /**
-    * Sets the rotation part of this transform to the given matrix.
-    * <p>
-    * This method does not affect the translation part of this transform.
-    * </p>
-    *
-    * @param rotationMatrix the matrix used to set the rotation part of this transform. Not modified.
-    * @throws NotARotationMatrixException if the given {@code rotationMatrix} is not a rotation matrix.
-    * @deprecated Use {@code this.getRotation().set(rotationMatrix)} instead.
-    */
-   @Deprecated
-   public void setRotation(Matrix3DReadOnly rotationMatrix)
-   {
-      getRotation().set(rotationMatrix);
-   }
-
-   /**
     * Sets the rotation part of this transform to the given matrix and sets the translation part to
     * zero.
     *
@@ -829,45 +737,6 @@ public class RigidBodyTransform
    public RotationMatrixBasics getRotation()
    {
       return rotationMatrix;
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *                             Modified.
-    * @deprecated Use {@code rotationMatrixToPack.set(this.getRotation())} instead.
-    */
-   @Deprecated
-   public void getRotation(CommonMatrix3DBasics rotationMatrixToPack)
-   {
-      rotationMatrixToPack.set(getRotation());
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform.
-    *
-    * @param rotationMatrixToPack the matrix in which the rotation part of this transform is stored.
-    *                             Modified.
-    * @deprecated Use {@code this.getRotation().get(rotationMatrixToPack)} instead.
-    */
-   @Deprecated
-   public void getRotation(DMatrix rotationMatrixToPack)
-   {
-      getRotation().get(rotationMatrixToPack);
-   }
-
-   /**
-    * Packs the rotation part of this rigid-body transform in 1D row-major array.
-    *
-    * @param rotationMatrixArrayToPack the array in which the rotation part of this transform is
-    *                                  stored. Modified.
-    * @deprecated Use {@code this.getRotation().get(rotationMatrixToPack)} instead.
-    */
-   @Deprecated
-   public void getRotation(double[] rotationMatrixArrayToPack)
-   {
-      getRotation().get(rotationMatrixArrayToPack);
    }
 
    @Override
