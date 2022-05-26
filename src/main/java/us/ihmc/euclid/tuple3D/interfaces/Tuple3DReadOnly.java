@@ -274,4 +274,12 @@ public interface Tuple3DReadOnly
       else
          return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
    }
+
+   default boolean geometricallyEquals(Tuple3DReadOnly other, double epsilon)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      double dz = getZ() - other.getZ();
+      return EuclidCoreTools.norm(dx, dy, dz) <= epsilon;
+   }
 }

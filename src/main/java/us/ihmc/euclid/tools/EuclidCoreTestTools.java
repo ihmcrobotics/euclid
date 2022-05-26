@@ -26,6 +26,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -2206,7 +2207,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rigid-body transforms do not represent the same geometry. If
     *                        only one of the arguments is equal to {@code null}.
     */
-   public static void assertRigidBodyTransformGeometricallyEquals(RigidBodyTransform expected, RigidBodyTransform actual, double epsilon)
+   public static void assertRigidBodyTransformGeometricallyEquals(RigidBodyTransformReadOnly expected, RigidBodyTransformReadOnly actual, double epsilon)
    {
       assertRigidBodyTransformGeometricallyEquals(null, expected, actual, epsilon);
    }
@@ -2226,7 +2227,7 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rigid-body transforms do not represent the same geometry. If
     *                        only one of the arguments is equal to {@code null}.
     */
-   public static void assertRigidBodyTransformGeometricallyEquals(String messagePrefix, RigidBodyTransform expected, RigidBodyTransform actual, double epsilon)
+   public static void assertRigidBodyTransformGeometricallyEquals(String messagePrefix, RigidBodyTransformReadOnly expected, RigidBodyTransformReadOnly actual, double epsilon)
    {
       assertRigidBodyTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -2248,8 +2249,8 @@ public class EuclidCoreTestTools
     *                        only one of the arguments is equal to {@code null}.
     */
    public static void assertRigidBodyTransformGeometricallyEquals(String messagePrefix,
-                                                                  RigidBodyTransform expected,
-                                                                  RigidBodyTransform actual,
+                                                                  RigidBodyTransformReadOnly expected,
+                                                                  RigidBodyTransformReadOnly actual,
                                                                   double epsilon,
                                                                   String format)
    {
@@ -2773,7 +2774,7 @@ public class EuclidCoreTestTools
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, RigidBodyTransform expected, RigidBodyTransform actual, String format)
+   private static void throwNotEqualAssertionError(String messagePrefix, RigidBodyTransformReadOnly expected, RigidBodyTransformReadOnly actual, String format)
    {
       String expectedAsString = getRigidBodyTransformString(format, expected);
       String actualAsString = getRigidBodyTransformString(format, actual);

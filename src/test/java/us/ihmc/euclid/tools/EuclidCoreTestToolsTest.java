@@ -23,6 +23,7 @@ import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
@@ -856,7 +857,7 @@ public class EuclidCoreTestToolsTest
    {
       Random random = new Random(453453);
       String methodName = "assertRigidBodyTransformGeometricallyEquals";
-      Class<RigidBodyTransform> argumentsClass = RigidBodyTransform.class;
+      Class<RigidBodyTransformReadOnly> argumentsClass = RigidBodyTransformReadOnly.class;
 
       {
          RigidBodyTransform expected = null;
@@ -888,6 +889,7 @@ public class EuclidCoreTestToolsTest
          assertAssertionMethodsBehaveProperly(false, methodName, argumentsClass, expected, actual, EPSILON);
       }
    }
+
 
    @Test
    public void testAssertQuaternionBasedTransformEquals() throws Throwable

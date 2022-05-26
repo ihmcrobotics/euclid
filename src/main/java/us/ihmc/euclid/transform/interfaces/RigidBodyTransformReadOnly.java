@@ -379,4 +379,11 @@ public interface RigidBodyTransformReadOnly extends Transform
       rotationMatrixToPack.set(getRotation());
       translationToPack.set(getTranslation());
    }
+
+   default boolean geometricallyEquals(RigidBodyTransformReadOnly actual, double epsilon)
+   {
+      if (epsilon >= Math.PI)
+         return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
+      return actual.getRotation().geometricallyEquals(getRotation(), epsilon) && actual.getTranslation().geometricallyEquals(getTranslation(), epsilon);
+   }
 }

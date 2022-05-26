@@ -15,6 +15,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.QuaternionBasedTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
 import us.ihmc.euclid.transform.interfaces.AffineTransformReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -42,7 +43,15 @@ public class EuclidCoreIOTools
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
-
+   
+   public static String getRigidBodyTransformString(RigidBodyTransformReadOnly rigidBodyTransformReadOnly)
+   {
+      return getRigidBodyTransformString((RigidBodyTransform) rigidBodyTransformReadOnly);
+   }
+   public static String getRigidBodyTransformString(String format, RigidBodyTransformReadOnly rigidBodyTransformReadOnly)
+   {
+      return getRigidBodyTransformString(format, (RigidBodyTransform) rigidBodyTransformReadOnly);
+   }
    /**
     * Gets a representative {@code String} of {@code rigidBodyTransform} as follows:
     *
