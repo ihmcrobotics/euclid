@@ -248,9 +248,9 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    }
 
    /**
-    * Gets the read-only reference to the rotation part of this transform.
+    * Gets frame quaternion reference of the rotation part of this FramePose3D.
     *
-    * @return the rotation part of this transform.
+    * @return the rotation part of this FramePose3D.
     */
    @Override
    public FixedFrameQuaternionBasics getRotation()
@@ -260,9 +260,9 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    }
 
    /**
-    * Gets the read-only reference of the translation part of this rigid-body transform.
+    * Gets the frame point reference to the translation part of this FramePose3D.
     *
-    * @return the translation part of this transform.
+    * @return the translation part of this FramePose3D.
     */
    @Override
    public FixedFramePoint3DBasics getTranslation()
