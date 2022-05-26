@@ -34,7 +34,7 @@ import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.tuple4D.Vector4D;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
-public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
+public class RigidBodyTransformTest extends RigidBodyTransformBasicsTest<RigidBodyTransform>
 {
    private static final double EPS = 1.0e-14;
 
@@ -2236,144 +2236,6 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
-   public void testMultiply() throws Exception
-   {
-      Random random = new Random(465416L);
-
-      // Test against invert
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform transform = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform inverse = new RigidBodyTransform(transform);
-         inverse.invert();
-
-         assertTrue(transform.hasRotation());
-         assertTrue(transform.hasTranslation());
-         transform.multiply(inverse);
-         assertFalse(transform.hasRotation());
-         assertFalse(transform.hasTranslation());
-
-         for (int row = 0; row < 4; row++)
-         {
-            for (int column = 0; column < 4; column++)
-            {
-               if (row == column)
-                  assertEquals(transform.getElement(row, column), 1.0, EPS);
-               else
-                  assertEquals(transform.getElement(row, column), 0.0, EPS);
-            }
-         }
-      }
-
-      // Test against EJML
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform t1 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         RigidBodyTransform t2 = EuclidCoreRandomTools.nextRigidBodyTransform(random);
-         checkMultiplyAgainstEJML(t1, t2);
-      }
-
-      // Try different combinations with/without translation/rotation
-      for (int i = 0; i < ITERATIONS; i++)
-      {
-         RigidBodyTransform t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         RigidBodyTransform t2 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(new Quaternion(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(new RotationMatrix(), EuclidCoreRandomTools.nextVector3D(random));
-         checkMultiplyAgainstEJML(t1, t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), new Vector3D());
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2.getRotation().set(t1.getRotation());
-         t2.invertRotation();
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertFalse(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-
-         t1 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         t2 = new RigidBodyTransform(EuclidCoreRandomTools.nextQuaternion(random), EuclidCoreRandomTools.nextVector3D(random));
-         Vector3D negateTranslation = new Vector3D(t1.getTranslation());
-         negateTranslation.negate();
-         t1.inverseTransform(negateTranslation);
-         t2.getTranslation().set(negateTranslation);
-         checkMultiplyAgainstEJML(t1, t2);
-         assertTrue(t1.hasRotation());
-         assertTrue(t1.hasTranslation());
-         t1.multiply(t2);
-         assertTrue(t1.hasRotation());
-         assertFalse(t1.hasTranslation());
-      }
-   }
-
-   private static void checkMultiplyAgainstEJML(RigidBodyTransform t1, RigidBodyTransform t2)
-   {
-      RigidBodyTransform t3 = new RigidBodyTransform(t1);
-      t3.multiply(t2);
-
-      DMatrixRMaj m1 = new DMatrixRMaj(4, 4);
-      DMatrixRMaj m2 = new DMatrixRMaj(4, 4);
-      DMatrixRMaj m3 = new DMatrixRMaj(4, 4);
-      t1.get(m1);
-      t2.get(m2);
-      CommonOps_DDRM.mult(m1, m2, m3);
-
-      for (int row = 0; row < 4; row++)
-         for (int column = 0; column < 4; column++)
-            assertEquals(m3.get(row, column), t3.getElement(row, column), EPS);
-   }
-
-   @Test
    public void testMultiplyWithQuaternionBasedTransform() throws Exception
    {
       Random random = new Random(465416L);
@@ -4258,5 +4120,19 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
       transfom2D.getRotation().setToYawOrientation(2.0 * Math.PI * random.nextDouble() - Math.PI);
       transfom2D.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random));
       return transfom2D;
+   }
+
+   @Override
+   public RigidBodyTransform copy(RigidBodyTransform original)
+   {
+      return new RigidBodyTransform(original);
+   }
+
+   @Override
+   public RigidBodyTransform identity()
+   {
+      RigidBodyTransform identity = new RigidBodyTransform();
+      identity.setIdentity();
+      return identity;
    }
 }
