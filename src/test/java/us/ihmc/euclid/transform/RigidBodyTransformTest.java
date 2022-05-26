@@ -1019,6 +1019,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testSetRotation() throws Exception
    {
       Random random = new Random(2342L);
@@ -1161,6 +1165,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testAppendTranslation() throws Exception
    {
       Random random = new Random(35454L);
@@ -1397,6 +1405,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testPrependTranslation() throws Exception
    {
       Random random = new Random(35454L);
@@ -1634,6 +1646,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testSetRotationYawPitchRoll() throws Exception
    {
       Random random = new Random(234L);
@@ -1841,6 +1857,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testRotationEuler() throws Exception
    {
       Random random = new Random(42353L);
@@ -1887,6 +1907,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testSetTranslation() throws Exception
    {
       Random random = new Random(243L);
@@ -2172,6 +2196,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testInvert() throws Exception
    {
       Random random = new Random(3453L);
@@ -3641,6 +3669,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Test
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public void testTransformWithTuple2D() throws Exception
    {
       Random random = new Random(4353L);
@@ -4216,6 +4248,10 @@ public class RigidBodyTransformTest extends TransformTest<RigidBodyTransform>
    }
 
    @Override
+   @Deprecated // The test no longer tests RigidBodyTransform but tests the RotationMatrix,
+   // which is already tested in RotationMatrixTest, after inlining the deprecated method in RigidBodyTransform.
+   // (setRotation() -> getRotation().set~)
+   // (setTranslation() -> getTranslation().set~)
    public RigidBodyTransform createRandomTransform2D(Random random)
    {
       RigidBodyTransform transfom2D = new RigidBodyTransform();

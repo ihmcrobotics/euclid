@@ -188,4 +188,18 @@ public class Pose3D implements Pose3DBasics, GeometryObject<Pose3D>
    {
       return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
+
+   @Override
+   public Quaternion getRotation()
+   {
+      // TODO Check with Sylvain
+      return orientation;
+   }
+
+   @Override
+   public Point3D getTranslation()
+   {
+      // TODO Check 
+      return position;
+   }
 }

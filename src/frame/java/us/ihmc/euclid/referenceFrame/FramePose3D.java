@@ -246,4 +246,28 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    {
       return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
+
+   /**
+    * Gets the read-only reference to the rotation part of this transform.
+    *
+    * @return the rotation part of this transform.
+    */
+   @Override
+   public FixedFrameQuaternionBasics getRotation()
+   {
+      // TODO Check with Sylvain
+      return orientation;
+   }
+
+   /**
+    * Gets the read-only reference of the translation part of this rigid-body transform.
+    *
+    * @return the translation part of this transform.
+    */
+   @Override
+   public FixedFramePoint3DBasics getTranslation()
+   {
+      // TODO Check with Sylvain
+      return position;
+   }
 }

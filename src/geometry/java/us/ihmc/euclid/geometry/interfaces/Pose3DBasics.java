@@ -7,6 +7,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -20,7 +21,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  * A pose 3D represents a position and orientation in 3 dimensions.
  * </p>
  */
-public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable
+public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, RigidBodyTransformBasics
 {
    /**
     * Sets the x-coordinate of the position.
