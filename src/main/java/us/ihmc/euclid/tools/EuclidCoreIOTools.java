@@ -43,15 +43,7 @@ public class EuclidCoreIOTools
    {
       // Suppresses default constructor, ensuring non-instantiability.
    }
-   
-   public static String getRigidBodyTransformString(RigidBodyTransformReadOnly rigidBodyTransformReadOnly)
-   {
-      return getRigidBodyTransformString((RigidBodyTransform) rigidBodyTransformReadOnly);
-   }
-   public static String getRigidBodyTransformString(String format, RigidBodyTransformReadOnly rigidBodyTransformReadOnly)
-   {
-      return getRigidBodyTransformString(format, (RigidBodyTransform) rigidBodyTransformReadOnly);
-   }
+
    /**
     * Gets a representative {@code String} of {@code rigidBodyTransform} as follows:
     *
@@ -65,7 +57,7 @@ public class EuclidCoreIOTools
     * @param rigidBodyTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getRigidBodyTransformString(RigidBodyTransform rigidBodyTransform)
+   public static String getRigidBodyTransformString(RigidBodyTransformReadOnly rigidBodyTransform)
    {
       return getRigidBodyTransformString(DEFAULT_FORMAT, rigidBodyTransform);
    }
@@ -88,12 +80,12 @@ public class EuclidCoreIOTools
     * @param rigidBodyTransform the object to get the {@code String} of. Not modified.
     * @return the representative {@code String}.
     */
-   public static String getRigidBodyTransformString(String format, RigidBodyTransform rigidBodyTransform)
+   public static String getRigidBodyTransformString(String format, RigidBodyTransformReadOnly rigidBodyTransform)
    {
       if (rigidBodyTransform == null)
          return "null";
       else
-         return getHomogeneousTransformString(format, rigidBodyTransform.getRotation(), rigidBodyTransform.getTranslation());
+         return getHomogeneousTransformString(format, (Matrix3DReadOnly) rigidBodyTransform.getRotation(), rigidBodyTransform.getTranslation());
    }
 
    /**

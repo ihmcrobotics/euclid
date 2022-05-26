@@ -1006,7 +1006,11 @@ public class EuclidCoreTestTools
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
-         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly)expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
+         throwNotEqualAssertionError(messagePrefix,
+                                     (Orientation3DReadOnly) expected,
+                                     actual,
+                                     "Difference of: " + Double.toString(expected.distance(actual)),
+                                     format);
       }
    }
 
@@ -1376,7 +1380,7 @@ public class EuclidCoreTestTools
          return;
 
       if (!(expected != null && actual != null))
-         throwNotEqualAssertionError(messagePrefix,(Orientation3DReadOnly) expected, actual, format);
+         throwNotEqualAssertionError(messagePrefix, (Orientation3DReadOnly) expected, actual, format);
 
       if (!expected.geometricallyEquals(actual, epsilon))
       {
@@ -1653,19 +1657,47 @@ public class EuclidCoreTestTools
          throwNotEqualAssertionError(messagePrefix, expected, actual, format);
       }
    }
-   
-   
-   
+
+   /**
+    * Check if the two Orientation3D's are geometrically equal. Does NOT indicate that the two are
+    * 'equal'.
+    * 
+    * @param expected the orientation3D to be used for comparison. Not modified.
+    * @param actual   the orientation3D to be used for comparison. Not modified.
+    * @param epsilon  the tolerance to be used in comparison.
+    */
    public static void assertOrientation3DGeometricallyEquals(Orientation3DReadOnly expected, Orientation3DReadOnly actual, double epsilon)
    {
       assertOrientation3DGeometricallyEquals(null, expected, actual, epsilon);
    }
-   
+
+   /**
+    * Check if the two Orientation3D's are geometrically equal. Does NOT indicate that the two are
+    * 'equal'.
+    * 
+    * @param messagePrefix Prefix prefix to add to the error message.
+    * @param expected      the orientation3D to be used for comparison. Not modified.
+    * @param actual        the orientation3D to be used for comparison. Not modified.
+    * @param epsilon       the tolerance to be used in comparison.
+    */
    public static void assertOrientation3DGeometricallyEquals(String messagePrefix, Orientation3DReadOnly expected, Orientation3DReadOnly actual, double epsilon)
    {
       assertOrientation3DGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
-   
+
+   /**
+    * Check if the two Orientation3D's are geometrically equal. Does NOT indicate that the two are
+    * 'equal'.
+    * 
+    * @param messagePrefix Prefix prefix to add to the error message.
+    * @param expected      the orientation3D to be used for comparison. Not modified.
+    * @param actual        the orientation3D to be used for comparison. Not modified.
+    * @param epsilon       the tolerance to be used in comparison.
+    * @param format        the format to use for printing each component when an {@code AssertionError}
+    *                      is thrown.
+    * @throws AssertionError if the two orientation 3Ds do not represent the same geometry. If only one
+    *                        of the arguments is equal to {@code null}.
+    */
    public static void assertOrientation3DGeometricallyEquals(String messagePrefix,
                                                              Orientation3DReadOnly expected,
                                                              Orientation3DReadOnly actual,
@@ -1680,7 +1712,7 @@ public class EuclidCoreTestTools
       {
          throwNotEqualAssertionError(messagePrefix, expected, actual, "Difference of: " + Double.toString(expected.distance(actual)), format);
       }
-      
+
    }
 
    private static void throwNotEqualAssertionError(String messagePrefix,
@@ -2227,7 +2259,10 @@ public class EuclidCoreTestTools
     * @throws AssertionError if the two rigid-body transforms do not represent the same geometry. If
     *                        only one of the arguments is equal to {@code null}.
     */
-   public static void assertRigidBodyTransformGeometricallyEquals(String messagePrefix, RigidBodyTransformReadOnly expected, RigidBodyTransformReadOnly actual, double epsilon)
+   public static void assertRigidBodyTransformGeometricallyEquals(String messagePrefix,
+                                                                  RigidBodyTransformReadOnly expected,
+                                                                  RigidBodyTransformReadOnly actual,
+                                                                  double epsilon)
    {
       assertRigidBodyTransformGeometricallyEquals(messagePrefix, expected, actual, epsilon, DEFAULT_FORMAT);
    }
@@ -2744,14 +2779,13 @@ public class EuclidCoreTestTools
       String actualAsString = EuclidCoreIOTools.getOrientation2DString(format, actual);
       EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
-   
+
    private static void throwNotEqualAssertionError(String messagePrefix, Orientation3DReadOnly expected, Orientation3DReadOnly actual, String format)
    {
       String expectedAsString = EuclidCoreIOTools.getOrientation3DString(format, expected);
       String actualAsString = EuclidCoreIOTools.getOrientation3DString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
-
 
    private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String format)
    {
@@ -2787,8 +2821,6 @@ public class EuclidCoreTestTools
       String actualAsString = getQuaternionBasedTransformString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
-   
-
 
    /**
     * Throws a new {@code AssertionError} as follows:
