@@ -1,7 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
