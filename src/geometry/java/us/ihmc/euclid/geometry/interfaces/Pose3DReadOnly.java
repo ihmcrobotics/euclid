@@ -239,7 +239,7 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
    }
 
    /**
-    * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
+    * Testsdddd on a per component basis, if this pose 3D is exactly equal to {@code other}.
     *
     * @param other the other pose 3D to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
