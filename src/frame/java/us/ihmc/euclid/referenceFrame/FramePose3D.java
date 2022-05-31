@@ -255,8 +255,7 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    @Override
    public FixedFrameQuaternionBasics getRotation()
    {
-      // TODO Check with Sylvain
-      return orientation;
+      return getOrientation();
    }
 
    /**
@@ -267,7 +266,6 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    @Override
    public FixedFramePoint3DBasics getTranslation()
    {
-      // TODO Check with Sylvain
-      return position;
+      return getTranslation();
    }
 }

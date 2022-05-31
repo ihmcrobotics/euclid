@@ -12,6 +12,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
 import us.ihmc.euclid.transform.interfaces.Transform;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
 
@@ -586,4 +587,18 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, 
       transform.inverseTransform(getPosition());
       transform.inverseTransform(getOrientation());
    }
+   
+   @Override
+   default Tuple3DBasics getTranslation()
+   {
+      return getPosition();
+   }
+   
+   @Override
+   default Orientation3DBasics getRotation()
+   {
+      return getOrientation();
+   }
+   
+   
 }

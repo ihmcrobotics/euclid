@@ -382,8 +382,6 @@ public interface RigidBodyTransformReadOnly extends Transform
 
    default boolean geometricallyEquals(RigidBodyTransformReadOnly actual, double epsilon)
    {
-      if (epsilon >= Math.PI)
-         return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
       return actual.getRotation().geometricallyEquals(getRotation(), epsilon) && actual.getTranslation().geometricallyEquals(getTranslation(), epsilon);
    }
 }

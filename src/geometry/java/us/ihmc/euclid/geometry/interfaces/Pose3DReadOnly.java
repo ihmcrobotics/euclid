@@ -254,17 +254,21 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
          return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
    
-////   @Override
+   
+   Tuple3DBasics getTranslation();
+   
+   Orientation3DBasics getRotation();
+   
 //   default Point3DReadOnly getTranslation()
 //   {
 //      return getPosition();
 //   }
 //   
-////   @Override
+//   
 //   default QuaternionReadOnly getRotation()
 //   {
 //      return getOrientation();
 //   }
-//   
+   
    
 }
