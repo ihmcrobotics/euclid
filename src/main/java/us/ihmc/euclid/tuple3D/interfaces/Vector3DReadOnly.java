@@ -60,6 +60,19 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
    {
       return EuclidCoreTools.normSquared(getX(), getY(), getZ());
    }
+   
+   default double distanceSquared(Vector3DReadOnly other)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      double dz = getZ() - other.getZ();
+      return EuclidCoreTools.normSquared(dx, dy, dz);
+   }
+   
+   default double distance(Vector3DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(distanceSquared(other));
+   }
 
    /**
     * Calculates and returns the value of the dot product of this vector with {@code other}.
@@ -106,11 +119,12 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
     *                considered equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Vector3DReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Object other, double epsilon)
    {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      return EuclidCoreTools.norm(dx, dy, dz) <= epsilon;
+      if( !(other instanceof Vector3DReadOnly))
+      {
+         return false;
+      }
+      return distance((Vector3DReadOnly) other) <= epsilon;
    }
 }

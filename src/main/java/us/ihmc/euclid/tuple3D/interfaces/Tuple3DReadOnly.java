@@ -3,6 +3,8 @@ package us.ihmc.euclid.tuple3D.interfaces;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.Axis3D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -31,7 +33,7 @@ import us.ihmc.euclid.tools.TupleTools;
  *
  * @author Sylvain Bertrand
  */
-public interface Tuple3DReadOnly
+public interface Tuple3DReadOnly extends EuclidGeometry
 {
    /**
     * Returns the x-component of this tuple.
@@ -254,9 +256,14 @@ public interface Tuple3DReadOnly
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Tuple3DReadOnly other, double epsilon)
+   default boolean epsilonEquals(Object other, double epsilon)
    {
-      return TupleTools.epsilonEquals(this, other, epsilon);
+      if (other instanceof Tuple3DReadOnly)
+      {
+         return TupleTools.epsilonEquals(this, (Tuple3DReadOnly)other, epsilon);
+      }
+      else
+         return false;
    }
 
    /**
@@ -275,11 +282,12 @@ public interface Tuple3DReadOnly
          return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
    }
 
-   default boolean geometricallyEquals(Tuple3DReadOnly other, double epsilon)
-   {
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      return EuclidCoreTools.norm(dx, dy, dz) <= epsilon;
-   }
+   // TODO: this should be in point3DRO, Vector3DRO
+//   default boolean geometricallyEquals(Tuple3DReadOnly other, double epsilon)
+//   {
+//      double dx = getX() - other.getX();
+//      double dy = getY() - other.getY();
+//      double dz = getZ() - other.getZ();
+//      return EuclidCoreTools.norm(dx, dy, dz) <= epsilon;
+//   }
 }
