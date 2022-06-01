@@ -255,20 +255,19 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
    }
    
    
-   Tuple3DBasics getTranslation();
-   
-   Orientation3DBasics getRotation();
-   
-//   default Point3DReadOnly getTranslation()
-//   {
-//      return getPosition();
-//   }
+//   Tuple3DBasics getTranslation();
 //   
-//   
-//   default QuaternionReadOnly getRotation()
-//   {
-//      return getOrientation();
-//   }
+//   Orientation3DBasics getRotation();
+   
+   default Point3DReadOnly getTranslation()
+   {
+      return getPosition();
+   }
    
    
+   default QuaternionReadOnly getRotation()
+   {
+      return getOrientation();
+   }
+  
 }

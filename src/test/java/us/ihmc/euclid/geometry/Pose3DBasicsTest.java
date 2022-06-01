@@ -13,15 +13,17 @@ import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
+import us.ihmc.euclid.interfaces.EpsilonComparable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreRandomTools;
 import us.ihmc.euclid.transform.RigidBodyTransform;
+import us.ihmc.euclid.transform.RigidBodyTransformBasicsTest;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.yawPitchRoll.YawPitchRoll;
 
-public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
+public abstract class Pose3DBasicsTest<T extends Pose3DBasics & EpsilonComparable<T>> extends RigidBodyTransformBasicsTest<T>
 {
    private static final double EPSILON = 1e-7;
 
@@ -36,6 +38,7 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
       return copy;
    }
 
+   @Override
    @Test
    public void testSetToNaN()
    {
@@ -56,6 +59,7 @@ public abstract class Pose3DBasicsTest<T extends Pose3DBasics>
       }
    }
 
+   @Override
    @Test
    public void testSetToZero()
    {

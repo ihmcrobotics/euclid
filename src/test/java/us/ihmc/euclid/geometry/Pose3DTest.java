@@ -15,6 +15,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple4D.Quaternion;
 
 public class Pose3DTest extends Pose3DBasicsTest<Pose3D>
+//public class Pose3DTest extends RigidBodyTransformBasicsTest<Pose3D>
 {
    private static final double EPSILON = 1e-7;
 
@@ -81,5 +82,39 @@ public class Pose3DTest extends Pose3DBasicsTest<Pose3D>
          assertEquals(quaternion.getPitch(), fromRBT.getPitch(), EPSILON);
          assertEquals(quaternion.getRoll(), fromRBT.getRoll(), EPSILON);
       }
+   }
+
+   @Override
+   public Pose3D createRandomTransform(Random random)
+   {
+      // TODO Auto-generated method stub
+      return createRandomPose3D(random);
+   }
+
+   @Override
+   public Pose3D createRandomTransform2D(Random random)
+   {
+      // TODO Auto-generated method stub
+      Pose3D pose2D = new Pose3D();
+      pose2D.getRotation().setToYawOrientation(2.0 * Math.PI * random.nextDouble() - Math.PI);
+      pose2D.getTranslation().set(EuclidCoreRandomTools.nextVector3D(random));
+      return pose2D;
+   }
+
+   @Override
+   public Pose3D copy(Pose3D original)
+   {
+      // TODO Auto-generated method stub
+      return new Pose3D(original);
+      
+   }
+
+   @Override
+   public Pose3D identity()
+   {
+      // TODO Auto-generated method stub
+      Pose3D identity = new Pose3D();
+      identity.setToZero();
+      return identity;
    }
 }
