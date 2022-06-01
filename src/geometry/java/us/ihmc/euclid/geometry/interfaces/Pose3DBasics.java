@@ -587,12 +587,22 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, 
       transform.inverseTransform(getOrientation());
    }
    
+   /**
+    * Gets the write and read reference of the translation part of this pose 3D.
+    *
+    * @return the translation part of this pose 3D.
+    */
    @Override
    default Point3DBasics getTranslation()
    {
       return getPosition();
    }
    
+   /**
+    * Gets the write and read reference of the rotation part of this pose 3D.
+    *
+    * @return the translation part of this pose 3D.
+    */
    @Override
    default QuaternionBasics getRotation()
    {

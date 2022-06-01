@@ -239,7 +239,7 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
    }
 
    /**
-    * Testsdddd on a per component basis, if this pose 3D is exactly equal to {@code other}.
+    * Tests on a per component basis, if this pose 3D is exactly equal to {@code other}.
     *
     * @param other the other pose 3D to compare against this. Not modified.
     * @return {@code true} if the two poses are exactly equal component-wise, {@code false} otherwise.
@@ -254,17 +254,21 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
          return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
    
-   
-//   Tuple3DBasics getTranslation();
-//   
-//   Orientation3DBasics getRotation();
-   
+   /**
+    * Gets the write and read reference of the translation part of this pose 3D. Not Modified.
+    *
+    * @return the translation part of this pose 3D.
+    */
    default Point3DReadOnly getTranslation()
    {
       return getPosition();
    }
    
-   
+   /**
+    * Gets the write and read reference of the translation part of this pose 3D. Not Modified.
+    *
+    * @return the translation part of this pose 3D.
+    */
    default QuaternionReadOnly getRotation()
    {
       return getOrientation();
