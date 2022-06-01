@@ -1605,7 +1605,6 @@ public abstract class RigidBodyTransformBasicsTest<T extends RigidBodyTransformB
          actual.preMultiply(multipliedWith);
          assertTrue(actual.hasRotation());
          assertTrue(actual.hasTranslation());
-         System.out.println("actual = " + actual.toString() + "\nexpected = " + expected.toString());
          assertTrue(actual.epsilonEquals(expected, EPS));
 
          multipliedWithRigidBody.set(actual);
