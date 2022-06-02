@@ -4,7 +4,6 @@ import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
-import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
@@ -283,21 +282,8 @@ public interface Tuple3DReadOnly extends EuclidGeometry
          return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
    }
    
-//   default String makeString()
-//   {
-//      return EuclidCoreIOTools.getTuple3DString(this);
-//   }
-//   default String makeString(String format)
-//   {
-//      return EuclidCoreIOTools.getTuple3DString(format, this);
-//   }
-
-   // TODO: this should be in point3DRO, Vector3DRO
-//   default boolean geometricallyEquals(Tuple3DReadOnly other, double epsilon)
-//   {
-//      double dx = getX() - other.getX();
-//      double dy = getY() - other.getY();
-//      double dz = getZ() - other.getZ();
-//      return EuclidCoreTools.norm(dx, dy, dz) <= epsilon;
-//   }
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getTuple3DString(format, this);
+   }
 }

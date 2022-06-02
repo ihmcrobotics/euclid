@@ -8,6 +8,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -15,6 +16,7 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
+import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
 /**
@@ -273,4 +275,22 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    {
       QuaternionTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
+   
+   
+   default boolean epsilonEquals(Object other, double epsilon)
+   {
+      if( !(other instanceof QuaternionReadOnly))
+      {
+         return false;
+      }
+      
+      return QuaternionBasics.super.epsilonEquals((QuaternionReadOnly) other, epsilon);
+   }
+   
+   
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getTuple4DString(format, this);
+   }
+   
 }

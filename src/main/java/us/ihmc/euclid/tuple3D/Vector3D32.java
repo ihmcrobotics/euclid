@@ -1,6 +1,5 @@
 package us.ihmc.euclid.tuple3D;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
@@ -17,7 +16,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
  *
  * @author Sylvain Bertrand
  */
-public class Vector3D32 implements Vector3DBasics, GeometryObject<Vector3D32>
+public class Vector3D32 implements Vector3DBasics
 {
    /** The x-component. */
    private float x;
@@ -72,7 +71,6 @@ public class Vector3D32 implements Vector3DBasics, GeometryObject<Vector3D32>
     *
     * @param other the other vector to copy the values from. Not modified.
     */
-   @Override
    public void set(Vector3D32 other)
    {
       Vector3DBasics.super.set(other);
@@ -224,42 +222,6 @@ public class Vector3D32 implements Vector3DBasics, GeometryObject<Vector3D32>
    }
 
    /**
-    * Tests on a per component basis if this vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Vector3D32 other, double epsilon)
-   {
-      return Vector3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 3D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 3D to compare against this. Not modified.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Vector3D32 other, double epsilon)
-   {
-      return Vector3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this vector 3D as follows: (x, y, z).
     *
     * @return the {@code String} representing this vector 3D.
@@ -267,7 +229,7 @@ public class Vector3D32 implements Vector3DBasics, GeometryObject<Vector3D32>
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getTuple3DString(this);
+      return Vector3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

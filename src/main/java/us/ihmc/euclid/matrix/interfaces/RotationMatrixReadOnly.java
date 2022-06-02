@@ -4,6 +4,7 @@ import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -441,5 +442,25 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
          Matrix3DTools.multiplyTransposeLeft(this, matrixOriginal, matrixTransformed);
          Matrix3DTools.multiply(matrixTransformed, this, matrixTransformed);
       }
+   }
+   
+   
+   
+   /**
+    * Provides a {@code String} representation of this matrix as follows:
+    *
+    * <pre>
+    * /-0.576, -0.784,  0.949 \
+    * | 0.649, -0.542, -0.941 |
+    * \-0.486, -0.502, -0.619 /
+    * </pre>
+    *
+    * @param format the format to be used.
+    * @return the {@code String} representing this matrix.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getMatrix3DString(format,this);
    }
 }

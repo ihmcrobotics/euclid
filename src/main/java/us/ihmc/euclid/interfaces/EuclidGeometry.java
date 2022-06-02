@@ -6,8 +6,5 @@ public interface EuclidGeometry
    
    boolean geometricallyEquals(Object obj, double epsilon);
    
-   // rename.
-   String makeString();
-   
-   String makeString(String format);
+   String toString(String format);
 }

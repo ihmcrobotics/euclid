@@ -2,6 +2,7 @@ package us.ihmc.euclid.orientation.interfaces;
 
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.exceptions.NotAnOrientation2DException;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -30,7 +31,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
  *
  * @author Sylvain Bertrand
  */
-public interface Orientation3DReadOnly
+public interface Orientation3DReadOnly extends EuclidGeometry
 {
    /**
     * Default tolerance to use when testing if this orientation represents an orientation in the
@@ -799,11 +800,15 @@ public interface Orientation3DReadOnly
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(Orientation3DReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Object other, double epsilon)
    {
+      if ( !(other instanceof Orientation3DReadOnly))
+      {
+         return false;
+      }
       if (epsilon >= Math.PI)
          return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
-      return distance(other, true) <= epsilon;
+      return distance((Orientation3DReadOnly) other, true) <= epsilon;
    }
 
    /**
