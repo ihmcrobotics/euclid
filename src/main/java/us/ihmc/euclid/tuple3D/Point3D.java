@@ -1,5 +1,7 @@
 package us.ihmc.euclid.tuple3D;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;

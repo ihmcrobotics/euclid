@@ -1,7 +1,10 @@
 package us.ihmc.euclid.tuple3D.interfaces;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
+import us.ihmc.euclid.tuple3D.Point3D;
 
 /**
  * Read-only interface for a 3 dimensional point.
@@ -186,4 +189,11 @@ public interface Point3DReadOnly extends Tuple3DReadOnly
       }   
       return distance((Point3DReadOnly) other) <= epsilon;
    }
+   
+   default boolean geometricallyEquals(Point3D other, double epsilon)
+   {
+      return distance(other) <= epsilon;
+   }
+   
+
 }
