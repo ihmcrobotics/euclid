@@ -5,6 +5,7 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
+import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.tools.RotationMatrixTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -443,9 +444,44 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
          Matrix3DTools.multiply(matrixTransformed, this, matrixTransformed);
       }
    }
-   
-   
-   
+
+   /**
+    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
+    * {@code epsilon}.
+    *
+    * @param other   the other matrix to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean epsilonEquals(Object other, double epsilon)
+   {
+      if (!(other instanceof RotationMatrixReadOnly))
+      {
+         return false;
+      }
+      if (!EuclidCoreTools.epsilonEquals(getM00(), ((RotationMatrixReadOnly) other).getM00(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM01(), ((RotationMatrixReadOnly) other).getM01(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM02(), ((RotationMatrixReadOnly) other).getM02(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM10(), ((RotationMatrixReadOnly) other).getM10(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM11(), ((RotationMatrixReadOnly) other).getM11(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM12(), ((RotationMatrixReadOnly) other).getM12(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM20(), ((RotationMatrixReadOnly) other).getM20(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM21(), ((RotationMatrixReadOnly) other).getM21(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getM22(), ((RotationMatrixReadOnly) other).getM22(), epsilon))
+         return false;
+
+      return true;
+   }
+
    /**
     * Provides a {@code String} representation of this matrix as follows:
     *
@@ -461,6 +497,6 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
    @Override
    default String toString(String format)
    {
-      return EuclidCoreIOTools.getMatrix3DString(format,this);
+      return EuclidCoreIOTools.getMatrix3DString(format, this);
    }
 }

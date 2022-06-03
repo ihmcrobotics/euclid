@@ -1,6 +1,5 @@
 package us.ihmc.euclid.yawPitchRoll;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -34,7 +33,7 @@ import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitchRoll>
+public class YawPitchRoll implements YawPitchRollBasics
 {
    /** The yaw angle representing the first rotation around the z-axis. */
    private double yaw;
@@ -104,17 +103,6 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
       set(yawPitchRollArray);
    }
 
-   /**
-    * Sets this yaw-pitch-roll to the same value as the given {@code other}.
-    *
-    * @param other the other yaw-pitch-roll. Not modified.
-    */
-   @Override
-   public void set(YawPitchRoll other)
-   {
-      YawPitchRollBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public void setYaw(double yaw)
@@ -173,43 +161,6 @@ public class YawPitchRoll implements YawPitchRollBasics, GeometryObject<YawPitch
          return YawPitchRollBasics.super.equals((YawPitchRollReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Tests on a per component basis, if this yaw-pitch-roll is equal to {@code other} to an
-    * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
-    * two different orientations.
-    *
-    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(YawPitchRoll other, double epsilon)
-   {
-      return YawPitchRollBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two axis-angle are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other axis-angle to compare against this. Not modified.
-    * @param epsilon the maximum angle for the two quaternions to be considered equal.
-    * @return {@code true} if the two axis-angle represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(YawPitchRoll other, double epsilon)
-   {
-      return YawPitchRollBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

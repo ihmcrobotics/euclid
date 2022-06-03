@@ -1,6 +1,5 @@
 package us.ihmc.euclid.axisAngle.interfaces;
 
-import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -484,9 +483,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
       return true;
    }
-   
-   
-   
+
    /**
     * Provides a {@code String} representation of this axis-angle as follows: (x, y, z, angle).
     *

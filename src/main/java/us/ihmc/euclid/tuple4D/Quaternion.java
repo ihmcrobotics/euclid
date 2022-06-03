@@ -2,7 +2,6 @@ package us.ihmc.euclid.tuple4D;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
@@ -20,7 +19,7 @@ import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
+public class Quaternion implements QuaternionBasics
 {
    /** The x-component. */
    private double x;
@@ -144,17 +143,6 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
       setYawPitchRoll(yaw, pitch, roll);
    }
 
-   /**
-    * Sets this quaternion to {@code other}.
-    *
-    * @param other the other quaternion to copy the values from. Not modified.
-    */
-   @Override
-   public void set(Quaternion other)
-   {
-      QuaternionBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public void setUnsafe(double qx, double qy, double qz, double qs)
@@ -207,46 +195,6 @@ public class Quaternion implements QuaternionBasics, GeometryObject<Quaternion>
          return equals((Tuple4DReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Tests on a per component basis if this quaternion is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Quaternion other, double epsilon)
-   {
-      return QuaternionBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two quaternions are considered geometrically equal if the magnitude of their difference is less
-    * than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that two quaternions of opposite sign are considered equal, such that the two quaternions
-    * {@code q1 = (x, y, z, s)} and {@code q2 = (-x, -y, -z, -s)} are considered geometrically equal.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the maximum angle of the difference quaternion can be for the two quaternions to
-    *                be considered equal.
-    * @return {@code true} if the two quaternions represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Quaternion other, double epsilon)
-   {
-      return QuaternionBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

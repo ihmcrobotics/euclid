@@ -1,7 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -28,7 +26,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * requiring {@code FramePoint3D}.
  * </p>
  */
-public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoint3D>
+public class FramePoint3D implements FramePoint3DBasics
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -127,18 +125,6 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
       setIncludingFrame(other);
    }
 
-   /**
-    * Sets this frame point to {@code other}.
-    *
-    * @param other the other frame point to set this to. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   @Override
-   public void set(FramePoint3D other)
-   {
-      FramePoint3DBasics.super.set(other);
-   }
 
    /**
     * Sets the reference frame of this point without updating or modifying its x, y, and z components.
@@ -246,46 +232,6 @@ public class FramePoint3D implements FramePoint3DBasics, GeometryObject<FramePoi
          return false;
    }
 
-   /**
-    * Tests on a per component basis if this point is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two points have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other point to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two points are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FramePoint3D other, double epsilon)
-   {
-      return FramePoint3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same point 3D to an {@code epsilon}.
-    * <p>
-    * Two points are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other point 3D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
-    * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FramePoint3D other, double epsilon)
-   {
-      return FramePoint3DBasics.super.geometricallyEquals(other, epsilon);
-   }
 
    /**
     * Provides a {@code String} representation of this frame point 3D as follows: (x, y, z)-worldFrame.

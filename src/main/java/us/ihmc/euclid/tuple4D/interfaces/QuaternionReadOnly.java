@@ -11,12 +11,12 @@ import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
+import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
-import us.ihmc.euclid.tuple4D.Quaternion;
 import us.ihmc.euclid.yawPitchRoll.interfaces.YawPitchRollBasics;
 
 /**
@@ -276,7 +276,14 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
       QuaternionTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
    
-   
+   /**
+    * Tests on a per component basis if this quaternion is equal to the given {@code other} to an
+    * {@code epsilon}.
+    *
+    * @param other   the other quaternion to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
+    */
    default boolean epsilonEquals(Object other, double epsilon)
    {
       if( !(other instanceof QuaternionReadOnly))
@@ -284,10 +291,15 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
          return false;
       }
       
-      return QuaternionBasics.super.epsilonEquals((QuaternionReadOnly) other, epsilon);
+      return TupleTools.epsilonEquals(this,(QuaternionReadOnly) other, epsilon);
    }
    
-   
+   /**
+    * Provides a {@code String} representation of this quaternion as follows: (x, y, z, s).
+    *
+    * @param format the format to use for each number.
+    * @return the {@code String} representing this quaternion.
+    */
    default String toString(String format)
    {
       return EuclidCoreIOTools.getTuple4DString(format, this);

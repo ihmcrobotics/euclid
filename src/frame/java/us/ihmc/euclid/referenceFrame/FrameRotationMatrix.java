@@ -39,7 +39,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryObject<FrameRotationMatrix>
+public class FrameRotationMatrix implements FrameRotationMatrixBasics
 {
    /** The reference frame is which this rotation matrix is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -243,12 +243,7 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
       setRotationVectorIncludingFrame(rotationVector);
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public void set(FrameRotationMatrix other)
-   {
-      FrameRotationMatrixBasics.super.set(other);
-   }
+
 
    /** {@inheritDoc} */
    @Override
@@ -415,47 +410,6 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics, GeometryO
          return false;
    }
 
-   /**
-    * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two matrices have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other matrix to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two matrices are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameRotationMatrix other, double epsilon)
-   {
-      return FrameRotationMatrixBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
-    * <p>
-    * Two rotation matrices are considered geometrically equal if the magnitude of their difference is
-    * less than or equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other rotation matrix to compare against this. Not modified.
-    * @param epsilon the maximum angle between the two rotation matrices to be considered equal.
-    * @return {@code true} if the two rotation matrices represent the same geometry, {@code false}
-    *         otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameRotationMatrix other, double epsilon)
-   {
-      return FrameRotationMatrixBasics.super.geometricallyEquals(other, epsilon);
-   }
 
    /**
     * Provides a {@code String} representation of this matrix as follows:

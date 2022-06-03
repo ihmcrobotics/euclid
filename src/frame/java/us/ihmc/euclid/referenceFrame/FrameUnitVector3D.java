@@ -27,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.UnitVector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObject<FrameUnitVector3D>
+public class FrameUnitVector3D implements FrameUnitVector3DBasics
 {
    /** The reference frame is which this vector is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -161,12 +161,7 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObjec
       return vector.isDirty();
    }
 
-   /** {@inheritDoc} */
-   @Override
-   public void set(FrameUnitVector3D other)
-   {
-      FrameUnitVector3DBasics.super.set(other);
-   }
+
 
    /** {@inheritDoc} */
    @Override
@@ -249,48 +244,6 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics, GeometryObjec
          return equals((FrameTuple3DReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Tests on a per component basis if this vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two vectors have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two vectors are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FrameUnitVector3D other, double epsilon)
-   {
-      return FrameUnitVector3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 3D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 3D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two vectors can be spaced and still considered
-    *                equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FrameUnitVector3D other, double epsilon)
-   {
-      return FrameUnitVector3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

@@ -1,6 +1,5 @@
 package us.ihmc.euclid.shape.primitives;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
@@ -15,7 +14,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class PointShape3D implements PointShape3DBasics, GeometryObject<PointShape3D>
+public class PointShape3D implements PointShape3DBasics
 {
    private double x, y, z;
 
@@ -47,13 +46,6 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    public PointShape3D(Tuple3DReadOnly tuple3DReadOnly)
    {
       set(tuple3DReadOnly);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void set(PointShape3D other)
-   {
-      PointShape3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -102,33 +94,6 @@ public class PointShape3D implements PointShape3DBasics, GeometryObject<PointSha
    public PointShape3D copy()
    {
       return new PointShape3D(this);
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other point shape to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two point shapes are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(PointShape3D other, double epsilon)
-   {
-      return PointShape3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} and {@code other} to determine if the two point shapes are geometrically
-    * similar.
-    *
-    * @param other   the point shape to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the point shapes represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(PointShape3D other, double epsilon)
-   {
-      return PointShape3DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

@@ -7,6 +7,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.YawPitchRollTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -394,12 +395,29 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean epsilonEquals(YawPitchRollReadOnly other, double epsilon)
+   default boolean epsilonEquals(Object other, double epsilon)
    {
-      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon)
-            || !EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
+      if(!(other instanceof YawPitchRollReadOnly))
+      {
+         return false;
+      }
+      if (!EuclidCoreTools.epsilonEquals(getYaw(), ((YawPitchRollReadOnly) other).getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), ((YawPitchRollReadOnly) other).getPitch(), epsilon)
+            || !EuclidCoreTools.epsilonEquals(getRoll(), ((YawPitchRollReadOnly) other).getRoll(), epsilon))
          return false;
 
       return true;
+   }
+   
+   /**
+   * Provides a {@code String} representation of this yaw-pitch-roll as follows: yaw-pitch-roll: (yaw,
+   * pitch, roll).
+   * 
+   * @param  format the format to be used
+   * @return the {@code String} representing this yaw-pitch-roll.
+   */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getYawPitchRollString(format, this);
    }
 }
