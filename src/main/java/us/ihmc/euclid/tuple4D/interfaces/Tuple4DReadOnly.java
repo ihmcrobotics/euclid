@@ -2,6 +2,7 @@ package us.ihmc.euclid.tuple4D.interfaces;
 
 import org.ejml.data.DMatrix;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 
@@ -33,7 +34,7 @@ import us.ihmc.euclid.tools.TupleTools;
  *
  * @author Sylvain Bertrand
  */
-public interface Tuple4DReadOnly
+public interface Tuple4DReadOnly extends EuclidGeometry
 {
    /**
     * Returns the x-component of this tuple.
@@ -307,19 +308,6 @@ public interface Tuple4DReadOnly
    }
 
    /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other tuple to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Tuple4DReadOnly other, double epsilon)
-   {
-      return TupleTools.epsilonEquals(this, other, epsilon);
-   }
-
-   /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
     * @param other the other tuple to compare against this. Not modified.
@@ -333,5 +321,28 @@ public interface Tuple4DReadOnly
          return false;
       else
          return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ() && getS() == other.getS();
+   }
+
+   /**
+    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
+    * {@code epsilon}.
+    * <p>
+    * If the two tuples have different frames, this method returns {@code false}.
+    * </p>
+    *
+    * @param object  the other tuple to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two tuples are equal and are expressed in the same reference frame,
+    *         {@code false} otherwise.
+    */
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
+   {
+      if (!(object instanceof Tuple4DReadOnly))
+      {
+         return false;
+      }
+      Tuple4DReadOnly other = (Tuple4DReadOnly) object;
+      return TupleTools.epsilonEquals(this, other, epsilon);
    }
 }

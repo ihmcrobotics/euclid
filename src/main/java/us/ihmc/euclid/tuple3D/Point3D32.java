@@ -66,16 +66,6 @@ public class Point3D32 implements Point3DBasics
    }
 
    /**
-    * Sets this point to {@code other}.
-    *
-    * @param other the other point to copy the values from. Not modified.
-    */
-   public void set(Point3D32 other)
-   {
-      Point3DBasics.super.set(other);
-   }
-
-   /**
     * Sets the x-coordinate of this point.
     *
     * @param x the x-coordinate.
@@ -219,9 +209,7 @@ public class Point3D32 implements Point3DBasics
       else
          return false;
    }
-
-
-
+   
    /**
     * Provides a {@code String} representation of this point 3D as follows: (x, y, z).
     *

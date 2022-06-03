@@ -1,8 +1,6 @@
 package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.Axis3D;
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameUnitVector3DBasics;
@@ -160,8 +158,6 @@ public class FrameUnitVector3D implements FrameUnitVector3DBasics
    {
       return vector.isDirty();
    }
-
-
 
    /** {@inheritDoc} */
    @Override

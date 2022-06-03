@@ -192,7 +192,7 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
 
    /**
     * Computes and returns the angular distance from origin.
-    * 
+    *
     * @return the the angular distance from origin.
     */
    @Override
@@ -465,20 +465,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
    @Override
    default boolean epsilonEquals(Object other, double epsilon)
    {
-      if( !(other instanceof AxisAngleReadOnly))
-      {
-         return false;
-      }      
-      if (!EuclidCoreTools.epsilonEquals(getX(), ((AxisAngleReadOnly)other).getX(), epsilon))
+      if (!(other instanceof AxisAngleReadOnly) || !EuclidCoreTools.epsilonEquals(getX(), ((AxisAngleReadOnly) other).getX(), epsilon) || !EuclidCoreTools.epsilonEquals(getY(), ((AxisAngleReadOnly) other).getY(), epsilon) || !EuclidCoreTools.epsilonEquals(getZ(), ((AxisAngleReadOnly) other).getZ(), epsilon))
          return false;
 
-      if (!EuclidCoreTools.epsilonEquals(getY(), ((AxisAngleReadOnly)other).getY(), epsilon))
-         return false;
-
-      if (!EuclidCoreTools.epsilonEquals(getZ(), ((AxisAngleReadOnly)other).getZ(), epsilon))
-         return false;
-
-      if (!EuclidCoreTools.epsilonEquals(getAngle(), ((AxisAngleReadOnly)other).getAngle(), epsilon))
+      if (!EuclidCoreTools.epsilonEquals(getAngle(), ((AxisAngleReadOnly) other).getAngle(), epsilon))
          return false;
 
       return true;
@@ -490,10 +480,10 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * @param format the format to use for each number.
     * @return the {@code String} representing this axis-angle.
     */
+   @Override
    default String toString(String format)
    {
       return EuclidCoreIOTools.getAxisAngleString(format, this);
    }
-   
 
 }

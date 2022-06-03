@@ -11,7 +11,6 @@ import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
-import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -140,7 +139,7 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
 
    /**
     * Calculates and returns the angle of the rotation this quaternion represents.
-    * 
+    *
     * @deprecated Use {@link #angle()} instead.
     * @return the angle &in; [-2<i>pi</i>;2<i>pi</i>].
     */
@@ -275,34 +274,17 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    {
       QuaternionTools.inverseTransform(this, matrixOriginal, matrixTransformed);
    }
-   
-   /**
-    * Tests on a per component basis if this quaternion is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other quaternion to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   default boolean epsilonEquals(Object other, double epsilon)
-   {
-      if( !(other instanceof QuaternionReadOnly))
-      {
-         return false;
-      }
-      
-      return TupleTools.epsilonEquals(this,(QuaternionReadOnly) other, epsilon);
-   }
-   
+
    /**
     * Provides a {@code String} representation of this quaternion as follows: (x, y, z, s).
     *
     * @param format the format to use for each number.
     * @return the {@code String} representing this quaternion.
     */
+   @Override
    default String toString(String format)
    {
       return EuclidCoreIOTools.getTuple4DString(format, this);
    }
-   
+
 }

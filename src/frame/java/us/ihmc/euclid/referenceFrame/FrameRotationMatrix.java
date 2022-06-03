@@ -3,12 +3,10 @@ package us.ihmc.euclid.referenceFrame;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameMatrix3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameRotationMatrixBasics;
@@ -243,8 +241,6 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics
       setRotationVectorIncludingFrame(rotationVector);
    }
 
-
-
    /** {@inheritDoc} */
    @Override
    public void set(RotationMatrixReadOnly other)
@@ -409,7 +405,6 @@ public class FrameRotationMatrix implements FrameRotationMatrixBasics
       else
          return false;
    }
-
 
    /**
     * Provides a {@code String} representation of this matrix as follows:
