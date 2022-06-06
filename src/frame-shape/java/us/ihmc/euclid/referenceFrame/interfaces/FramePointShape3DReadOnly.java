@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.geometry.interfaces.BoundingBox3DBasics;
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.primitives.interfaces.PointShape3DReadOnly;
 
 /**
@@ -61,4 +62,19 @@ public interface FramePointShape3DReadOnly extends PointShape3DReadOnly, FrameSh
    /** {@inheritDoc} */
    @Override
    FixedFramePointShape3DBasics copy();
+
+   /**
+    * Provides a {@code String} representation of this point shape 3D as follows:
+    *
+    * <pre>
+    * Point shape 3D: (-0.362, -0.617,  0.066 ) - worldFrame
+    * </pre>
+    *
+    * @return the {@code String} representing this point shape 3D.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameShapeIOTools.getFramePointShape3DString(this);
+   }
 }

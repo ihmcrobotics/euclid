@@ -35,9 +35,9 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    FixedFrameQuaternionBasics getOrientation();
 
    /**
-    * Gets the frame point reference to the translation part of this FramePose3D.
+    * Gets the read-only reference of the position part of this pose 3D.
     *
-    * @return the translation part of this FramePose3D.
+    * @return the position part of this FramePose3D.
     */
    @Override
    default FixedFramePoint3DBasics getTranslation()
@@ -46,9 +46,9 @@ public interface FixedFramePose3DBasics extends FramePose3DReadOnly, Pose3DBasic
    }
 
    /**
-    * Gets frame quaternion reference of the rotation part of this FramePose3D.
+    * Gets the read-only reference to the orientation part of this pose 3D.
     *
-    * @return the rotation part of this FramePose3D.
+    * @return the orientation part of this FramePose3D.
     */
    @Override
    default FixedFrameQuaternionBasics getRotation()

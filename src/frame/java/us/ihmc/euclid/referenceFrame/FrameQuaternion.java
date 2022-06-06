@@ -305,7 +305,8 @@ public class FrameQuaternion implements FrameQuaternionBasics
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameTuple4DString(this);
+      return FrameQuaternionBasics.super.toString(null);
+            
    }
 
    /**

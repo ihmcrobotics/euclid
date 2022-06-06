@@ -4,10 +4,9 @@ import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.Axis2D;
 import us.ihmc.euclid.interfaces.EuclidGeometry;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
-import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
  * Read-only interface for a 2 dimensional tuple.
@@ -234,7 +233,7 @@ public interface Tuple2DReadOnly extends EuclidGeometry
       Tuple2DReadOnly other = (Tuple2DReadOnly) object;
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
-   
+
    /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
@@ -250,5 +249,26 @@ public interface Tuple2DReadOnly extends EuclidGeometry
       else
          return getX() == other.getX() && getY() == other.getY();
    }
+
+   /**
+    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
+    * {@code epsilon}. It does not make sense to have geometric comparison of two 2D points, but it is
+    * defined to comply with EuclidGeometry
+    *
+    * @param object  the object to compare against this.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      return epsilonEquals(object, epsilon);
+   }
    
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getTuple2DString(format, this);
+   }
+
 }

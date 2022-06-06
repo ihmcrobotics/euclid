@@ -1,5 +1,6 @@
 package us.ihmc.euclid.geometry.interfaces;
 
+import us.ihmc.euclid.geometry.tools.EuclidGeometryIOTools;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformBasics;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
@@ -321,6 +322,15 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
          return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
 
-
-
+   /**
+    * Provides a {@code String} representation of this pose 3D as follows:<br>
+    * Pose 3D: position = (x, y, z), orientation = (qx, qy, qz, qs)
+    *
+    * @return the {@code String} representing this pose 3D.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidGeometryIOTools.getPose3DString(format, this);
+   }
 }

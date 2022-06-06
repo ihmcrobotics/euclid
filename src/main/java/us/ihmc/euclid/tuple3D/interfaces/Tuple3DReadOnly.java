@@ -256,6 +256,7 @@ public interface Tuple3DReadOnly extends EuclidGeometry
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
+   @Override
    default boolean epsilonEquals(Object other, double epsilon)
    {
       if (other instanceof Tuple3DReadOnly)
@@ -281,7 +282,8 @@ public interface Tuple3DReadOnly extends EuclidGeometry
       else
          return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
    }
-   
+
+   @Override
    default String toString(String format)
    {
       return EuclidCoreIOTools.getTuple3DString(format, this);

@@ -3,6 +3,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
@@ -409,5 +410,11 @@ public interface FrameRotationMatrixReadOnly extends RotationMatrixReadOnly, Fra
    {
       checkReferenceFrameMatch(tupleOriginal);
       RotationMatrixReadOnly.super.inverseTransform(tupleOriginal, tupleTransformed);
+   }
+   
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameMatrix3DString(format, this);
    }
 }

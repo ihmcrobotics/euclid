@@ -3,7 +3,6 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameVector3DBasics;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -125,8 +124,6 @@ public class FrameVector3D implements FrameVector3DBasics
       setIncludingFrame(other);
    }
 
-
-
    /**
     * Sets the reference frame of this vector without updating or modifying its x, y, and z components.
     *
@@ -242,7 +239,7 @@ public class FrameVector3D implements FrameVector3DBasics
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameTuple3DString(this);
+      return FrameVector3DBasics.super.toString(null);
    }
 
    /**

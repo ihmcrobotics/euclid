@@ -1,6 +1,7 @@
 package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
 
 /**
@@ -57,5 +58,11 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
          return false;
 
       return Tuple2DReadOnly.super.equals(other);
+   }
+   
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameTuple2DString(format, this);
    }
 }

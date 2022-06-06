@@ -2,6 +2,7 @@ package us.ihmc.euclid.referenceFrame.interfaces;
 
 import us.ihmc.euclid.referenceFrame.ReferenceFrame;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 
 /**
@@ -156,4 +157,16 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
       checkReferenceFrameMatch(other);
       return Point3DReadOnly.super.geometricallyEquals(other, epsilon);
    }
+   
+   /**
+    * Provides a {@code String} representation of this frame point 3D as follows: (x, y, z)-worldFrame.
+    *
+    * @return the {@code String} representing this frame point 3D.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidFrameIOTools.getFrameTuple3DString(format, this);
+   }
+  
 }

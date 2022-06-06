@@ -2,7 +2,6 @@ package us.ihmc.euclid.referenceFrame;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DBasics;
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
@@ -126,19 +125,6 @@ public class FramePose3D implements FramePose3DBasics
    public FramePose3D(FramePose3DReadOnly other)
    {
       setIncludingFrame(other);
-   }
-
-   /**
-    * Sets this frame pose 3D to the {@code other} frame pose 3D.
-    *
-    * @param other the other frame pose 3D. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public void set(FramePose3D other)
-   {
-      FramePose3DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */

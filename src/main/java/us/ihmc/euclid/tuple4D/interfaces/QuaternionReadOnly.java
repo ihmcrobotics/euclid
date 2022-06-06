@@ -286,5 +286,34 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    {
       return EuclidCoreIOTools.getTuple4DString(format, this);
    }
+   
+   
+   
+   /**
+    * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
+    * <p>
+    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
+    * that the 2 orientations are of the same type nor that they are equal on a per-component bases.
+    * </p>
+    *
+    * @param other   the other orientation to compare against this. Not modified.
+    * @param epsilon the maximum angle for the two orientations to be considered equal.
+    * @return {@code true} if the two orientations represent the same geometry, {@code false}
+    *         otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(Object other, double epsilon)
+   {
+      if ( !(other instanceof Orientation3DReadOnly))
+      {
+         return false;
+      }
+      if (epsilon >= Math.PI)
+         return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
+      return distance((Orientation3DReadOnly) other, true) <= epsilon;
+   }
+   
+   
+   
 
 }

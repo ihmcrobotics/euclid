@@ -3,7 +3,7 @@ package us.ihmc.euclid.referenceFrame;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePointShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 
@@ -184,6 +184,6 @@ public class FramePointShape3D implements FramePointShape3DBasics
    @Override
    public String toString()
    {
-      return EuclidFrameShapeIOTools.getFramePointShape3DString(this);
+      return FramePointShape3DBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 }

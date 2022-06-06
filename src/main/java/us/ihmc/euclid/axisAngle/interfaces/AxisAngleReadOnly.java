@@ -463,12 +463,19 @@ public interface AxisAngleReadOnly extends Orientation3DReadOnly
     * @return {@code true} if the two axis-angle are equal component-wise, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (!(other instanceof AxisAngleReadOnly) || !EuclidCoreTools.epsilonEquals(getX(), ((AxisAngleReadOnly) other).getX(), epsilon) || !EuclidCoreTools.epsilonEquals(getY(), ((AxisAngleReadOnly) other).getY(), epsilon) || !EuclidCoreTools.epsilonEquals(getZ(), ((AxisAngleReadOnly) other).getZ(), epsilon))
+      if (!(object instanceof AxisAngleReadOnly))
          return false;
-
-      if (!EuclidCoreTools.epsilonEquals(getAngle(), ((AxisAngleReadOnly) other).getAngle(), epsilon))
+      
+      AxisAngleReadOnly other = (AxisAngleReadOnly) object;
+      if ( !EuclidCoreTools.epsilonEquals(getX(), other.getX(), epsilon)) 
+         return false;
+      if ( !EuclidCoreTools.epsilonEquals(getY(), other.getY(), epsilon))
+         return false;
+      if ( !EuclidCoreTools.epsilonEquals(getZ(), other.getZ(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getAngle(), other.getAngle(), epsilon))
          return false;
 
       return true;
