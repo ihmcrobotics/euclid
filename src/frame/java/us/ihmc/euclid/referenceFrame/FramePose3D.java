@@ -32,7 +32,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * requiring {@code FramePose3D}.
  * </p>
  */
-public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3D>
+public class FramePose3D implements FramePose3DBasics
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -189,42 +189,6 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
    }
 
    /**
-    * Tests on a per component basis if this pose is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other pose to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two poses are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FramePose3D other, double epsilon)
-   {
-      return FramePose3DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FramePose3D other, double epsilon)
-   {
-      return FramePose3DBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this pose 3D as follows:<br>
     * Pose 3D: position = (x, y, z), orientation = (x, y, z, s)-worldFrame
     *
@@ -247,25 +211,5 @@ public class FramePose3D implements FramePose3DBasics, GeometryObject<FramePose3
       return EuclidHashCodeTools.toIntHashCode(position, orientation);
    }
 
-   /**
-    * Gets frame quaternion reference of the rotation part of this FramePose3D.
-    *
-    * @return the rotation part of this FramePose3D.
-    */
-   @Override
-   public FixedFrameQuaternionBasics getRotation()
-   {
-      return getOrientation();
-   }
 
-   /**
-    * Gets the frame point reference to the translation part of this FramePose3D.
-    *
-    * @return the translation part of this FramePose3D.
-    */
-   @Override
-   public FixedFramePoint3DBasics getTranslation()
-   {
-      return getTranslation();
-   }
 }

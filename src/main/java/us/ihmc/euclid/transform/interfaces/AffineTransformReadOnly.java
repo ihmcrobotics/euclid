@@ -8,6 +8,7 @@ import us.ihmc.euclid.matrix.interfaces.Matrix3DBasics;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DBasics;
@@ -28,14 +29,14 @@ import us.ihmc.euclid.tuple4D.interfaces.Vector4DReadOnly;
  * An affine transform represents a transform that can rotate, scale, shear, and/or translate
  * geometries.
  * </p>
- * 
+ *
  * @author Sylvain Bertrand
  */
 public interface AffineTransformReadOnly extends Transform
 {
    /**
     * Gets the read-only reference of the linear part of this transform, such as rotation and scaling.
-    * 
+    *
     * @return the read-only reference of the linear part of this transform.
     */
    LinearTransform3DReadOnly getLinearTransform();
@@ -370,6 +371,26 @@ public interface AffineTransformReadOnly extends Transform
 
    /**
     * Two affine transforms are considered geometrically equal if both the linear transform and
+    * translation vector are geometrically equal. Returns false by default if incoming object is not a
+    * type of AffineTransform.
+    *
+    * @param other   the other object to compare against this.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two transforms are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      if (!(object instanceof AffineTransformReadOnly))
+      {
+         return false;
+      }
+      AffineTransformReadOnly other = (AffineTransformReadOnly) object;
+      return geometricallyEquals(other, epsilon);
+   }
+
+   /**
+    * Two affine transforms are considered geometrically equal if both the linear transform and
     * translation vector are geometrically equal.
     *
     * @param other   the other affine transform to compare against this. Not modified.
@@ -379,6 +400,27 @@ public interface AffineTransformReadOnly extends Transform
    default boolean geometricallyEquals(AffineTransformReadOnly other, double epsilon)
    {
       return other.getLinearTransform().epsilonEquals(getLinearTransform(), epsilon) && other.getTranslation().geometricallyEquals(getTranslation(), epsilon);
+   }
+
+
+   /**
+    * Tests on a per component basis if this transform and {@code other} are equal to an
+    * {@code epsilon}.
+    * Returns false by default if incoming object is not a type of affineTransform.
+    *
+    * @param object  the object to compare against this.
+    * @param epsilon tolerance to use when comparing each component.
+    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
+    */
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
+   {
+      if ( !(object instanceof AffineTransformReadOnly))
+      {
+         return false;
+      }
+      AffineTransformReadOnly other = (AffineTransformReadOnly) object;
+      return epsilonEquals(other, epsilon);
    }
 
    /**
@@ -412,5 +454,12 @@ public interface AffineTransformReadOnly extends Transform
          return false;
       else
          return getLinearTransform().equals(other.getLinearTransform()) && getTranslation().equals(other.getTranslation());
+   }
+
+
+   @Override
+   default String toString(String format)
+   {
+      return EuclidCoreIOTools.getAffineTransformString(format, this);
    }
 }

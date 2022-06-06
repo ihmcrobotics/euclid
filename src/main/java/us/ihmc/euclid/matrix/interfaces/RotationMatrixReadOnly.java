@@ -445,6 +445,8 @@ public interface RotationMatrixReadOnly extends Matrix3DReadOnly, Orientation3DR
       }
    }
 
+   
+   // TODO: This should be removed once Matrix3DReadOnly extends EuclidGeometry.
    /**
     * Tests on a per coefficient basis if this matrix is equal to the given {@code other} to an
     * {@code epsilon}.

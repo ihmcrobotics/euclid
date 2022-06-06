@@ -218,7 +218,8 @@ public class FrameYawPitchRoll implements FrameYawPitchRollBasics
    @Override
    public String toString()
    {
-      return EuclidFrameIOTools.getFrameYawPitchRollString(this);
+      // TODO: ask SUPER
+      return FrameYawPitchRollBasics.super.toString(null);
    }
 
    /**

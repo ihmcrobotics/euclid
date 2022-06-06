@@ -2,15 +2,12 @@ package us.ihmc.euclid.transform;
 
 import org.ejml.data.DMatrix;
 
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.LinearTransform3D;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DBasics;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tools.Matrix3DTools;
 import us.ihmc.euclid.transform.interfaces.AffineTransformBasics;
@@ -47,7 +44,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  * @author Sylvain Bertrand
  */
 public class AffineTransform
-      implements AffineTransformBasics, EpsilonComparable<AffineTransform>, GeometricallyComparable<AffineTransform>, Settable<AffineTransform>
+      implements AffineTransformBasics, Settable<AffineTransform>
 {
    /** The rotation plus scaling part of this transform. */
    private final LinearTransform3D linearTransform = new LinearTransform3D();
@@ -405,34 +402,6 @@ public class AffineTransform
    }
 
    /**
-    * Two affine transforms are considered geometrically equal if both the linear transform and
-    * translation vector are geometrically equal.
-    *
-    * @param other   the other affine transform to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(AffineTransform other, double epsilon)
-   {
-      return AffineTransformBasics.super.geometricallyEquals(other, epsilon);
-   }
-
-   /**
-    * Tests on a per component basis if this transform and {@code other} are equal to an
-    * {@code epsilon}.
-    *
-    * @param epsilon tolerance to use when comparing each component.
-    * @param other   the other affine transform to compare against this. Not modified.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(AffineTransform other, double epsilon)
-   {
-      return AffineTransformBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(AffineTransformReadOnly)}, it returns {@code false} otherwise or if the
     * {@code object} is {@code null}.
@@ -464,7 +433,7 @@ public class AffineTransform
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getAffineTransformString(this);
+      return AffineTransformBasics.super.toString(null);
    }
 
    @Override

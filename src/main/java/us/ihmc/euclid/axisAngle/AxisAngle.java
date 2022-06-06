@@ -3,7 +3,6 @@ package us.ihmc.euclid.axisAngle;
 import us.ihmc.euclid.Axis3D;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
-import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.AxisAngleConversion;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
@@ -22,8 +21,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-//public class AxisAngle implements AxisAngleBasics, EpsilonComparable<AxisAngle>, Settable<AxisAngle>
-public class AxisAngle implements AxisAngleBasics, Settable<AxisAngle>
+public class AxisAngle implements AxisAngleBasics
 {
    /** The axis part of this axis-angle. */
    private final UnitVector3D axis = new UnitVector3D(Axis3D.X);
@@ -61,16 +59,6 @@ public class AxisAngle implements AxisAngleBasics, Settable<AxisAngle>
    public AxisAngle(double x, double y, double z, double angle)
    {
       set(x, y, z, angle);
-   }
-   
-   /**
-    * Provides a {@code String} representation of this axis-angle as follows: (x, y, z, angle).
-    *
-    * @return the {@code String} representing this axis-angle.
-    */
-   public String toString()
-   {
-      return EuclidCoreIOTools.getAxisAngleString(this);
    }
 
    /**
@@ -136,7 +124,6 @@ public class AxisAngle implements AxisAngleBasics, Settable<AxisAngle>
     *
     * @param other the other axis-angle. Not modified.
     */
-   @Override
    public void set(AxisAngle other)
    {
       AxisAngleBasics.super.set(other);
@@ -177,6 +164,17 @@ public class AxisAngle implements AxisAngleBasics, Settable<AxisAngle>
          return equals((AxisAngleReadOnly) object);
       else
          return false;
+   }
+   
+   
+   /**
+    * Provides a {@code String} representation of this axis-angle as follows: (x, y, z, angle).
+    *
+    * @return the {@code String} representing this axis-angle.
+    */
+   public String toString()
+   {
+      return EuclidCoreIOTools.getAxisAngleString(this);
    }
 
    /**

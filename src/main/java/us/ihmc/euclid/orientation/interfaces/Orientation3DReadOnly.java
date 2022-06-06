@@ -807,7 +807,7 @@ public interface Orientation3DReadOnly extends EuclidGeometry
          return false;
       }
       if (epsilon >= Math.PI)
-         return true; // Trivial case. If epsilon is greater than pi, then any pair of quaternions are equal.
+         return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
       return distance((Orientation3DReadOnly) other, true) <= epsilon;
    }
 

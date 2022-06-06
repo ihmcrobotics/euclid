@@ -68,6 +68,30 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, 
     */
    @Override
    QuaternionBasics getOrientation();
+   
+   /**
+    * Gets the reference of the position part of this pose 3D.
+    * Same as getPosition but it is defined again to comply to RigidBodyTransformBasics
+    *
+    * @return the position part of this pose 3D.
+    */
+   @Override
+   default Point3DBasics getTranslation()
+   {
+      return getPosition();
+   }
+   
+   /**
+    * Gets the reference to the orientation part of this pose 3D.
+    * Same as getOrientation but it is defined again to comply to RigidBodyTransformBasics
+    *
+    * @return the orientation part of this pose 3D.
+    */
+   @Override
+   default QuaternionBasics getRotation()
+   {
+      return getOrientation();
+   }
 
    /**
     * Sets the position coordinates.
@@ -587,27 +611,7 @@ public interface Pose3DBasics extends Pose3DReadOnly, Transformable, Clearable, 
       transform.inverseTransform(getOrientation());
    }
    
-   /**
-    * Gets the write and read reference of the translation part of this pose 3D.
-    *
-    * @return the translation part of this pose 3D.
-    */
-   @Override
-   default Point3DBasics getTranslation()
-   {
-      return getPosition();
-   }
-   
-   /**
-    * Gets the write and read reference of the rotation part of this pose 3D.
-    *
-    * @return the translation part of this pose 3D.
-    */
-   @Override
-   default QuaternionBasics getRotation()
-   {
-      return getOrientation();
-   }
+
    
    
 }

@@ -3,8 +3,11 @@ package us.ihmc.euclid.tuple2D.interfaces;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.Axis2D;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
+import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.TupleTools;
+import us.ihmc.euclid.tuple4D.interfaces.Tuple4DReadOnly;
 
 /**
  * Read-only interface for a 2 dimensional tuple.
@@ -31,7 +34,7 @@ import us.ihmc.euclid.tools.TupleTools;
  *
  * @author Sylvain Bertrand
  */
-public interface Tuple2DReadOnly
+public interface Tuple2DReadOnly extends EuclidGeometry
 {
    /**
     * Returns the x-component of this tuple.
@@ -218,15 +221,20 @@ public interface Tuple2DReadOnly
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other   the other tuple to compare against this. Not modified.
+    * @param object  the object to compare against this.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
-   default boolean epsilonEquals(Tuple2DReadOnly other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Tuple2DReadOnly))
+      {
+         return false;
+      }
+      Tuple2DReadOnly other = (Tuple2DReadOnly) object;
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
-
+   
    /**
     * Tests on a per component basis, if this tuple is exactly equal to {@code other}.
     *
@@ -242,4 +250,5 @@ public interface Tuple2DReadOnly
       else
          return getX() == other.getX() && getY() == other.getY();
    }
+   
 }

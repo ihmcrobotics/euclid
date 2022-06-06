@@ -31,6 +31,30 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
    QuaternionReadOnly getOrientation();
 
    /**
+    * Gets the read-only reference of the position part of this pose 3D.
+    * Same as getPosition but it is defined again to comply to RigidBodyTransformReadOnly.
+    *
+    * @return the read-only position part of this pose 3D.
+    */
+   @Override
+   default Point3DReadOnly getTranslation()
+   {
+      return getPosition();
+   }
+
+   /**
+    * Gets the read-only reference to the orientation part of this pose 3D.
+    * Same as getOrientation but it is defined again to comply to RigidBodyTransformReadOnly.
+    *
+    * @return the read-only orientation part of this pose 3D.
+    */
+   @Override
+   default QuaternionReadOnly getRotation()
+   {
+      return getOrientation();
+   }
+
+   /**
     * Gets the x-coordinate of the position part of this pose 3D.
     *
     * @return the x-coordinate of this pose 3D.
@@ -110,6 +134,7 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
     *
     * @return {@code true} if this pose contains a {@link Double#NaN}, {@code false} otherwise.
     */
+   @Override
    default boolean containsNaN()
    {
       return getOrientation().containsNaN() || getPosition().containsNaN();
@@ -213,6 +238,26 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
    /**
     * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
     * {@code epsilon}.
+    * Returns false by default if incoming object is not a type of pose3D.
+    *
+    * @param object  the query.
+    * @param epsilon the tolerance to use.
+    * @return {@code true} if the two poses are equal, {@code false} otherwise.
+    */
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
+   {
+      if ( !(object instanceof Pose3DReadOnly))
+      {
+         return false;
+      }
+      Pose3DReadOnly other = (Pose3DReadOnly) object;
+      return epsilonEquals(other, epsilon);
+   }
+
+   /**
+    * Tests on a per-component basis if this pose is equal to {@code other} with the tolerance
+    * {@code epsilon}.
     *
     * @param other   the query. Not modified.
     * @param epsilon the tolerance to use.
@@ -221,6 +266,28 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
    default boolean epsilonEquals(Pose3DReadOnly other, double epsilon)
    {
       return getPosition().epsilonEquals(other.getPosition(), epsilon) && getOrientation().epsilonEquals(other.getOrientation(), epsilon);
+   }
+
+   /**
+    * Compares {@code this} to {@code other} to determine if the two poses are geometrically similar.
+    * <p>
+    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
+    * Returns false by default if incoming object is not a type of Pose3D.
+    * </p>
+    *
+    * @param object  the object to compare to. Not modified.
+    * @param epsilon the tolerance of the comparison.
+    * @return {@code true} if the two poses represent the same geometry, {@code false} otherwise.
+    */
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      if ( !(object instanceof Pose3DReadOnly))
+      {
+         return false;
+      }
+      Pose3DReadOnly other = (Pose3DReadOnly) object;
+      return geometricallyEquals(other, epsilon);
    }
 
    /**
@@ -253,25 +320,7 @@ public interface Pose3DReadOnly extends RigidBodyTransformReadOnly
       else
          return getPosition().equals(other.getPosition()) && getOrientation().equals(other.getOrientation());
    }
-   
-   /**
-    * Gets the write and read reference of the translation part of this pose 3D. Not Modified.
-    *
-    * @return the translation part of this pose 3D.
-    */
-   default Point3DReadOnly getTranslation()
-   {
-      return getPosition();
-   }
-   
-   /**
-    * Gets the write and read reference of the translation part of this pose 3D. Not Modified.
-    *
-    * @return the translation part of this pose 3D.
-    */
-   default QuaternionReadOnly getRotation()
-   {
-      return getOrientation();
-   }
-  
+
+
+
 }
