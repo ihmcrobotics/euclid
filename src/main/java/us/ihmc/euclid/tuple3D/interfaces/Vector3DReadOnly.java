@@ -61,7 +61,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
       return EuclidCoreTools.normSquared(getX(), getY(), getZ());
    }
    
-   default double differenceSquared(Vector3DReadOnly other)
+   default double differenceLengthSquared(Vector3DReadOnly other)
    {
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
@@ -71,7 +71,7 @@ public interface Vector3DReadOnly extends Tuple3DReadOnly
    
    default double differenceLength(Vector3DReadOnly other)
    {
-      return EuclidCoreTools.squareRoot(differenceSquared(other));
+      return EuclidCoreTools.squareRoot(differenceLengthSquared(other));
    }
 
    /**

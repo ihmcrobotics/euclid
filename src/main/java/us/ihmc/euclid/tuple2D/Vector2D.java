@@ -1,6 +1,5 @@
 package us.ihmc.euclid.tuple2D;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DReadOnly;
@@ -18,7 +17,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Vector2D implements Vector2DBasics, GeometryObject<Vector2D>
+public class Vector2D implements Vector2DBasics
 {
    /** The x-component. */
    private double x;
@@ -73,17 +72,6 @@ public class Vector2D implements Vector2DBasics, GeometryObject<Vector2D>
    public Vector2D(Tuple3DReadOnly tuple3DReadOnly)
    {
       set(tuple3DReadOnly);
-   }
-
-   /**
-    * Sets this vector to {@code other}.
-    *
-    * @param other the other vector to copy the values from. Not modified.
-    */
-   @Override
-   public void set(Vector2D other)
-   {
-      Vector2DBasics.super.set(other);
    }
 
    /**
@@ -144,42 +132,6 @@ public class Vector2D implements Vector2DBasics, GeometryObject<Vector2D>
          return equals((Tuple2DReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Tests on a per component basis if this vector is equal to the given {@code other} to an
-    * {@code epsilon}.
-    *
-    * @param other   the other vector to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Vector2D other, double epsilon)
-   {
-      return Vector2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 2D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other vector 2D to compare against this. Not modified.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Vector2D other, double epsilon)
-   {
-      return Vector2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

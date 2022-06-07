@@ -389,19 +389,6 @@ public interface AffineTransformReadOnly extends Transform
       return geometricallyEquals(other, epsilon);
    }
 
-   /**
-    * Two affine transforms are considered geometrically equal if both the linear transform and
-    * translation vector are geometrically equal.
-    *
-    * @param other   the other affine transform to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two transforms are equal, {@code false} otherwise.
-    */
-   default boolean geometricallyEquals(AffineTransformReadOnly other, double epsilon)
-   {
-      return other.getLinearTransform().epsilonEquals(getLinearTransform(), epsilon) && other.getTranslation().geometricallyEquals(getTranslation(), epsilon);
-   }
-
 
    /**
     * Tests on a per component basis if this transform and {@code other} are equal to an

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DChangeListener;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DPoseBasics;
@@ -23,7 +22,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPose>
+public class Shape3DPose implements Shape3DPoseBasics
 {
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
@@ -66,14 +65,7 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
    {
       set(pose);
    }
-
-   /** {@inheritDoc} */
-   @Override
-   public void set(Shape3DPose other)
-   {
-      Shape3DPoseBasics.super.set(other);
-   }
-
+   
    /** {@inheritDoc} */
    @Override
    public RotationMatrixBasics getShapeOrientation()
@@ -156,36 +148,6 @@ public class Shape3DPose implements Shape3DPoseBasics, GeometryObject<Shape3DPos
       return changeListeners.remove(listener);
    }
 
-   /**
-    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two shape poses are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(Shape3DPose other, double epsilon)
-   {
-      return Shape3DPoseBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
-    * similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the shape pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(Shape3DPose other, double epsilon)
-   {
-      return Shape3DPoseBasics.super.geometricallyEquals(other, epsilon);
-   }
 
    /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns

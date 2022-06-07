@@ -390,21 +390,24 @@ public interface YawPitchRollReadOnly extends Orientation3DReadOnly
     * {@code epsilon}. A failing test does not necessarily mean that the two yaw-pitch-rolls represent
     * two different orientations.
     *
-    * @param other   the other yaw-pitch-roll to compare against this. Not modified.
+    * @param object  the object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two yaw-pitch-rolls are equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean epsilonEquals(Object other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if(!(other instanceof YawPitchRollReadOnly))
-      {
+      if(!(object instanceof YawPitchRollReadOnly))
          return false;
-      }
-      if (!EuclidCoreTools.epsilonEquals(getYaw(), ((YawPitchRollReadOnly) other).getYaw(), epsilon) || !EuclidCoreTools.epsilonEquals(getPitch(), ((YawPitchRollReadOnly) other).getPitch(), epsilon)
-            || !EuclidCoreTools.epsilonEquals(getRoll(), ((YawPitchRollReadOnly) other).getRoll(), epsilon))
+      
+      YawPitchRollReadOnly other = (YawPitchRollReadOnly) object;      
+      if (!EuclidCoreTools.epsilonEquals(getYaw(), other.getYaw(), epsilon))
          return false;
-
+      if (!EuclidCoreTools.epsilonEquals(getPitch(), other.getPitch(), epsilon))
+         return false;
+      if (!EuclidCoreTools.epsilonEquals(getRoll(), other.getRoll(), epsilon))
+         return false;
+         
       return true;
    }
    

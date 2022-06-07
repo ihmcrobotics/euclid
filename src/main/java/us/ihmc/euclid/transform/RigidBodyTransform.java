@@ -3,8 +3,6 @@ package us.ihmc.euclid.transform;
 import org.ejml.data.DMatrix;
 
 import us.ihmc.euclid.exceptions.NotARotationMatrixException;
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.matrix.interfaces.CommonMatrix3DBasics;
@@ -53,8 +51,7 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionBasics;
  *
  * @author Sylvain Bertrand
  */
-public class RigidBodyTransform
-      implements RigidBodyTransformBasics, EpsilonComparable<RigidBodyTransform>, GeometricallyComparable<RigidBodyTransform>, Settable<RigidBodyTransform>
+public class RigidBodyTransform implements RigidBodyTransformBasics, Settable<RigidBodyTransform>
 {
    /** The rotation part of this transform. */
    private final RotationMatrix rotationMatrix = new RotationMatrix();
@@ -965,20 +962,6 @@ public class RigidBodyTransform
    }
 
    /**
-    * Tests separately and on a per component basis if the rotation part and the translation part of
-    * this transform and {@code other} are equal to an {@code epsilon}.
-    *
-    * @param epsilon tolerance to use when comparing each component.
-    * @param other   the other rigid-body transform to compare against this. Not modified.
-    * @return {@code true} if the two objects are equal component-wise, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(RigidBodyTransform other, double epsilon)
-   {
-      return getRotation().epsilonEquals(other.getRotation(), epsilon) && getTranslation().epsilonEquals(other.getTranslation(), epsilon);
-   }
-
-   /**
     * Tests if the given {@code object}'s class is the same as this, in which case the method returns
     * {@link #equals(RigidBodyTransform)}, it returns {@code false} otherwise or if the {@code object}
     * is {@code null}.
@@ -1016,20 +999,6 @@ public class RigidBodyTransform
    }
 
    /**
-    * Two rigid body transforms are considered geometrically equal if both the rotation matrices and
-    * translation vectors are equal.
-    *
-    * @param other   the other rigid body transform to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two rigid body transforms are equal, {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(RigidBodyTransform other, double epsilon)
-   {
-      return other.getRotation().geometricallyEquals(getRotation(), epsilon) && other.getTranslation().geometricallyEquals(getTranslation(), epsilon);
-   }
-
-   /**
     * Provides a {@code String} representation of this transform as follows:
     * 
     * <pre>
@@ -1044,7 +1013,13 @@ public class RigidBodyTransform
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getRigidBodyTransformString(this);
+      return toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+   
+   @Override
+   public String toString(String format)
+   {
+      return EuclidCoreIOTools.getRigidBodyTransformString(format, this);
    }
 
    @Override

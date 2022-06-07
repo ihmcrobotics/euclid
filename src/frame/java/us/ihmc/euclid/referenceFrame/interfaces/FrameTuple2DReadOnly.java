@@ -65,4 +65,16 @@ public interface FrameTuple2DReadOnly extends Tuple2DReadOnly, ReferenceFrameHol
    {
       return EuclidFrameIOTools.getFrameTuple2DString(format, this);
    }
+   
+   @Override   
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      // TODO Auto-generated method stub
+      if( !(object instanceof FrameTuple2DReadOnly))
+         return false;
+      FrameTuple2DReadOnly other = (FrameTuple2DReadOnly) object;      
+      if (getReferenceFrame() != other.getReferenceFrame())
+         return false;
+      return distance(other) <= epsilon;
+   }
 }

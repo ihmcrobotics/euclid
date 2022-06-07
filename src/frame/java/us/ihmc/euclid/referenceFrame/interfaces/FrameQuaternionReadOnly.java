@@ -21,4 +21,10 @@ import us.ihmc.euclid.tuple4D.interfaces.QuaternionReadOnly;
  */
 public interface FrameQuaternionReadOnly extends FrameTuple4DReadOnly, FrameOrientation3DReadOnly, QuaternionReadOnly
 {
+   /** {@inheritDoc} */
+   @Override
+   default String toString(String format)
+   {
+      return FrameTuple4DReadOnly.super.toString(format);
+   }
 }

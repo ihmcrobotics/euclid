@@ -347,40 +347,16 @@ public interface Tuple4DReadOnly extends EuclidGeometry
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
 
+   /**
+    * Provides a {@code String} representation of this tuple4D as follows: (x, y, z, s).
+    *
+    * @param format the format to use for each number.
+    * @return the {@code String} representing this tuple4D.
+    */
    @Override
    default String toString(String format)
    {
       return EuclidCoreIOTools.getTuple4DString(format, this);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same vector 4D to an {@code epsilon}.
-    * <p>
-    * Two vectors are considered geometrically equal if the length of their difference is less than or
-    * equal to {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param object  the object to compare against this.
-    * @param epsilon the maximum length of the difference vector can be for the two vectors to be
-    *                considered equal.
-    * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      if (!(object instanceof Tuple4DReadOnly))
-         return false;
-      
-      Tuple4DReadOnly other = (Tuple4DReadOnly) object;
-      double dx = getX() - other.getX();
-      double dy = getY() - other.getY();
-      double dz = getZ() - other.getZ();
-      double ds = getS() - other.getS();
-      return EuclidCoreTools.norm(dx, dy, dz, ds) <= epsilon;
    }
 
 }

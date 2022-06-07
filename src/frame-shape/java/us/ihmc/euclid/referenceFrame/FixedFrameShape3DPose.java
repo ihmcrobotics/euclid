@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.ihmc.euclid.geometry.interfaces.Pose3DReadOnly;
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFramePoint3DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameRotationMatrixBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FixedFrameShape3DPoseBasics;
@@ -26,7 +24,7 @@ import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, GeometryObject<FixedFrameShape3DPose>
+public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics
 {
    /** The listeners to be notified when this pose changes. */
    private final List<Shape3DChangeListener> changeListeners = new ArrayList<>();
@@ -90,13 +88,6 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
    {
       this(referenceFrameHolder);
       set(pose);
-   }
-
-   /** {@inheritDoc} */
-   @Override
-   public void set(FixedFrameShape3DPose other)
-   {
-      FixedFrameShape3DPoseBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -186,43 +177,6 @@ public class FixedFrameShape3DPose implements FixedFrameShape3DPoseBasics, Geome
    public boolean removeChangeListener(Shape3DChangeListener listener)
    {
       return changeListeners.remove(listener);
-   }
-
-   /**
-    * Tests on a per-component basis if this shape pose is equal to {@code other} with the tolerance
-    * {@code epsilon}.
-    * <p>
-    * If the two poses have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the query. Not modified.
-    * @param epsilon the tolerance to use.
-    * @return {@code true} if the two shape poses are equal and are expressed in the same reference
-    *         frame, {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FixedFrameShape3DPose other, double epsilon)
-   {
-      return FixedFrameShape3DPoseBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Compares {@code this} to {@code other} to determine if the two shape poses are geometrically
-    * similar.
-    * <p>
-    * Two poses are geometrically equal if both their position and orientation are geometrically equal.
-    * </p>
-    *
-    * @param other   the shape pose to compare to. Not modified.
-    * @param epsilon the tolerance of the comparison.
-    * @return {@code true} if the two shape poses represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
-    *                                         the same reference frame.
-    */
-   @Override
-   public boolean geometricallyEquals(FixedFrameShape3DPose other, double epsilon)
-   {
-      return FixedFrameShape3DPoseBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

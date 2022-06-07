@@ -119,16 +119,6 @@ public class AxisAngle implements AxisAngleBasics
       setYawPitchRoll(yaw, pitch, roll);
    }
 
-   /**
-    * Sets this axis-angle to the same value as the given axis-angle {@code other}.
-    *
-    * @param other the other axis-angle. Not modified.
-    */
-   public void set(AxisAngle other)
-   {
-      AxisAngleBasics.super.set(other);
-   }
-
    /** {@inheritDoc} */
    @Override
    public UnitVector3DBasics getAxis()

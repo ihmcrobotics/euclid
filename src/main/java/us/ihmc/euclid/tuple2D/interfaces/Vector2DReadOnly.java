@@ -125,13 +125,16 @@ public interface Vector2DReadOnly extends Tuple2DReadOnly
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other   the other vector 2D to compare against this. Not modified.
+    * @param object  the object to compare against this.
     * @param epsilon the maximum length of the difference vector can be for the two vectors to be
     *                considered equal.
     * @return {@code true} if the two vectors represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Vector2DReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof Vector2DReadOnly))
+         return false;
+      Vector2DReadOnly other = (Vector2DReadOnly) object;
       double dx = getX() - other.getX();
       double dy = getY() - other.getY();
       return EuclidCoreTools.norm(dx, dy) <= epsilon;

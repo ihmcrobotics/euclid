@@ -33,4 +33,10 @@ public interface FixedFrameUnitVector2DBasics extends FixedFrameVector2DBasics, 
       checkReferenceFrameMatch(other);
       set((UnitVector2DReadOnly) other);
    }
+   
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      return FixedFrameVector2DBasics.super.geometricallyEquals(object, epsilon);
+   }
 }

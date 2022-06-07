@@ -33,4 +33,10 @@ public interface FixedFrameVector2DBasics extends FrameVector2DReadOnly, FixedFr
       checkReferenceFrameMatch(other);
       Vector2DBasics.super.setAndNormalize(other);
    }
+   
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
+   {
+      return FrameVector2DReadOnly.super.geometricallyEquals(object, epsilon);
+   }
 }

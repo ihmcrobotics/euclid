@@ -215,7 +215,37 @@ public interface Tuple2DReadOnly extends EuclidGeometry
       tupleMatrixToPack.unsafe_set(startRow++, column, getX());
       tupleMatrixToPack.unsafe_set(startRow, column, getY());
    }
+   
+   
+   /**
+    * Calculates and returns the distance between this point and {@code other}.
+    *
+    * @param other the other point used to measure the distance. Not modified.
+    * @return the distance between the two points.
+    */
+   default double distance(Tuple2DReadOnly other)
+   {
+      return EuclidCoreTools.squareRoot(distanceSquared(other));
+   }
 
+   /**
+    * Calculates and returns the square of the distance between this point and {@code other}.
+    * <p>
+    * This method is usually preferred over {@link #distance(Point2DReadOnly)} when calculation speed
+    * matters and knowledge of the actual distance does not, i.e. when comparing distances between
+    * several pairs of points.
+    * </p>
+    *
+    * @param other the other point used to measure the square of the distance. Not modified.
+    * @return the square of the distance between the two points.
+    */
+   default double distanceSquared(Tuple2DReadOnly other)
+   {
+      double dx = getX() - other.getX();
+      double dy = getY() - other.getY();
+      return dx * dx + dy * dy;
+   }
+   
    /**
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
@@ -227,9 +257,8 @@ public interface Tuple2DReadOnly extends EuclidGeometry
    default boolean epsilonEquals(Object object, double epsilon)
    {
       if (!(object instanceof Tuple2DReadOnly))
-      {
          return false;
-      }
+      
       Tuple2DReadOnly other = (Tuple2DReadOnly) object;
       return TupleTools.epsilonEquals(this, other, epsilon);
    }
@@ -248,21 +277,6 @@ public interface Tuple2DReadOnly extends EuclidGeometry
          return false;
       else
          return getX() == other.getX() && getY() == other.getY();
-   }
-
-   /**
-    * Tests on a per component basis if this tuple is equal to the given {@code other} to an
-    * {@code epsilon}. It does not make sense to have geometric comparison of two 2D points, but it is
-    * defined to comply with EuclidGeometry
-    *
-    * @param object  the object to compare against this.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two tuples are equal, {@code false} otherwise.
-    */
-   @Override
-   default boolean geometricallyEquals(Object object, double epsilon)
-   {
-      return epsilonEquals(object, epsilon);
    }
    
    @Override

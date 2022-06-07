@@ -7,7 +7,7 @@ import us.ihmc.euclid.referenceFrame.interfaces.FrameOrientation3DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameQuaternionReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple4DReadOnly;
-import us.ihmc.euclid.referenceFrame.tools.EuclidFrameIOTools;
+import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidHashCodeTools;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.euclid.tuple4D.Quaternion;
@@ -199,8 +199,6 @@ public class FrameQuaternion implements FrameQuaternionBasics
       setIncludingFrame(orientation);
    }
 
-
-
    /**
     * Sets the reference frame of this quaternion without updating or modifying its x, y, z, and s
     *
@@ -292,10 +290,6 @@ public class FrameQuaternion implements FrameQuaternionBasics
          return false;
    }
 
-
-
-
-
    /**
     * Provides a {@code String} representation of this frame quaternion as follows: (x, y, z,
     * s)-worldFrame.
@@ -305,8 +299,20 @@ public class FrameQuaternion implements FrameQuaternionBasics
    @Override
    public String toString()
    {
-      return FrameQuaternionBasics.super.toString(null);
-            
+      return FrameQuaternionBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
+   }
+
+   /**
+    * Provides a {@code String} representation of this frame quaternion as follows: (x, y, z,
+    * s)-worldFrame.
+    * 
+    * @param format the format to be used.
+    * @return the {@code String} representing this frame quaternion.
+    */
+   @Override
+   public String toString(String format)
+   {
+      return FrameQuaternionBasics.super.toString(format);
    }
 
    /**

@@ -109,8 +109,12 @@ public interface FramePoint2DReadOnly extends Point2DReadOnly, FrameTuple2DReadO
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
     */
-   default boolean geometricallyEquals(FramePoint2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if ( !(object instanceof FramePoint2DReadOnly))
+         return false;
+      FramePoint2DReadOnly other= (FramePoint2DReadOnly) object;
       checkReferenceFrameMatch(other);
       return Point2DReadOnly.super.geometricallyEquals(other, epsilon);
    }

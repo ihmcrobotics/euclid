@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleBasics;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
@@ -2821,6 +2822,13 @@ public class EuclidCoreTestTools
       String actualAsString = getQuaternionBasedTransformString(format, actual);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
    }
+   
+   private static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String format)
+   {
+      String expectedAsString = expected.toString(format);
+      String actualAsString = expected.toString(format);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
 
    /**
     * Throws a new {@code AssertionError} as follows:
@@ -2899,5 +2907,21 @@ public class EuclidCoreTestTools
          return prefix + " " + message;
       else
          return message;
+   }
+   
+   public static void assertEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
+   {
+      if (true!=expected.epsilonEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
+   }
+   
+   public static void assertGeometricallyEquals(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, double epsilon, String format)
+   {
+      if (true!=expected.geometricallyEquals(actual, epsilon))
+      {
+         throwNotEqualAssertionError(messagePrefix, expected, actual, format);
+      }
    }
 }

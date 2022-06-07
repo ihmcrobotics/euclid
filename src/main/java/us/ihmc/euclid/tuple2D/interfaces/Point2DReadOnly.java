@@ -135,12 +135,16 @@ public interface Point2DReadOnly extends Tuple2DReadOnly
     * {@code this.epsilonEquals(other, epsilon)} and vice versa.
     * </p>
     *
-    * @param other   the other point 2D to compare against this. Not modified.
+    * @param object  the object to compare against this.
     * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
     * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
     */
-   default boolean geometricallyEquals(Point2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if ( !(object instanceof Point2DReadOnly))
+         return false;
+      Point2DReadOnly other = (Point2DReadOnly) object;
       return distance(other) <= epsilon;
    }
 }

@@ -252,19 +252,18 @@ public interface Tuple3DReadOnly extends EuclidGeometry
     * Tests on a per component basis if this tuple is equal to the given {@code other} to an
     * {@code epsilon}.
     *
-    * @param other   the other tuple to compare against this. Not modified.
+    * @param object  the object to compare against this.
     * @param epsilon the tolerance to use when comparing each component.
     * @return {@code true} if the two tuples are equal, {@code false} otherwise.
     */
    @Override
-   default boolean epsilonEquals(Object other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (other instanceof Tuple3DReadOnly)
-      {
-         return TupleTools.epsilonEquals(this, (Tuple3DReadOnly)other, epsilon);
-      }
-      else
+      if ( !(object instanceof Tuple3DReadOnly))
          return false;
+      
+      Tuple3DReadOnly other = (Tuple3DReadOnly) object;
+      return TupleTools.epsilonEquals(this, (Tuple3DReadOnly)other, epsilon);
    }
 
    /**

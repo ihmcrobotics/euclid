@@ -1,7 +1,5 @@
 package us.ihmc.euclid.referenceFrame;
 
-import us.ihmc.euclid.interfaces.GeometryObject;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FramePoint2DBasics;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple2DReadOnly;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameTuple3DReadOnly;
@@ -29,7 +27,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
  * requiring {@code FramePoint2D}.
  * </p>
  */
-public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoint2D>
+public class FramePoint2D implements FramePoint2DBasics
 {
    /** The reference frame is which this point is currently expressed. */
    private ReferenceFrame referenceFrame;
@@ -127,19 +125,6 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
    public FramePoint2D(FrameTuple3DReadOnly frameTuple3DReadOnly)
    {
       setIncludingFrame(frameTuple3DReadOnly);
-   }
-
-   /**
-    * Sets this frame point to {@code other}.
-    *
-    * @param other the other frame point to set this to. Not modified.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same frame as
-    *                                         {@code this}.
-    */
-   @Override
-   public void set(FramePoint2D other)
-   {
-      FramePoint2DBasics.super.set(other);
    }
 
    /** {@inheritDoc} */
@@ -250,47 +235,6 @@ public class FramePoint2D implements FramePoint2DBasics, GeometryObject<FramePoi
          return equals((FrameTuple2DReadOnly) object);
       else
          return false;
-   }
-
-   /**
-    * Tests on a per component basis if this point is equal to the given {@code other} to an
-    * {@code epsilon}.
-    * <p>
-    * If the two points have different frames, this method returns {@code false}.
-    * </p>
-    *
-    * @param other   the other point to compare against this. Not modified.
-    * @param epsilon the tolerance to use when comparing each component.
-    * @return {@code true} if the two points are equal and are expressed in the same reference frame,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(FramePoint2D other, double epsilon)
-   {
-      return FramePoint2DBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests if {@code this} and {@code other} represent the same point 2D to an {@code epsilon}.
-    * <p>
-    * Two points are considered geometrically equal if they are at a distance of less than or equal to
-    * {@code epsilon}.
-    * </p>
-    * <p>
-    * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
-    * {@code this.epsilonEquals(other, epsilon)} and vice versa.
-    * </p>
-    *
-    * @param other   the other point 2D to compare against this. Not modified.
-    * @param epsilon the maximum distance that the two points can be spaced and still considered equal.
-    * @return {@code true} if the two points represent the same geometry, {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
-    *                                         frame as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(FramePoint2D other, double epsilon)
-   {
-      return FramePoint2DBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

@@ -8,7 +8,6 @@ import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.rotationConversion.RotationMatrixConversion;
 import us.ihmc.euclid.rotationConversion.RotationVectorConversion;
 import us.ihmc.euclid.rotationConversion.YawPitchRollConversion;
-import us.ihmc.euclid.tools.EuclidCoreIOTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tools.QuaternionTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
@@ -276,20 +275,6 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
    }
 
    /**
-    * Provides a {@code String} representation of this quaternion as follows: (x, y, z, s).
-    *
-    * @param format the format to use for each number.
-    * @return the {@code String} representing this quaternion.
-    */
-   @Override
-   default String toString(String format)
-   {
-      return EuclidCoreIOTools.getTuple4DString(format, this);
-   }
-   
-   
-   
-   /**
     * Tests if {@code this} and {@code other} represent the same orientation to an {@code epsilon}.
     * <p>
     * Note that {@code this.geometricallyEquals(other, epsilon) == true} does not necessarily imply
@@ -312,8 +297,4 @@ public interface QuaternionReadOnly extends Tuple4DReadOnly, Orientation3DReadOn
          return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
       return distance((Orientation3DReadOnly) other, true) <= epsilon;
    }
-   
-   
-   
-
 }
