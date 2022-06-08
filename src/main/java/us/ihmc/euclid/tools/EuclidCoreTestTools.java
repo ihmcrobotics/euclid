@@ -1,15 +1,11 @@
 package us.ihmc.euclid.tools;
 
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAffineTransformString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getAxisAngleString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getMatrix3DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getQuaternionBasedTransformString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getRigidBodyTransformString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getStringFormat;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple2DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple3DString;
 import static us.ihmc.euclid.tools.EuclidCoreIOTools.getTuple4DString;
-import static us.ihmc.euclid.tools.EuclidCoreIOTools.getYawPitchRollString;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -2628,134 +2624,18 @@ public class EuclidCoreTestTools
       }
    }
 
-   private static void throwNotEqualAssertionError(String messagePrefix, YawPitchRollReadOnly expected, YawPitchRollReadOnly actual, String format)
-   {
-      String expectedAsString = getYawPitchRollString(format, expected);
-      String actualAsString = getYawPitchRollString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix,
-                                                   YawPitchRollReadOnly expected,
-                                                   YawPitchRollReadOnly actual,
-                                                   String difference,
-                                                   String format)
-   {
-      String expectedAsString = getYawPitchRollString(format, expected);
-      String actualAsString = getYawPitchRollString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, String format)
-   {
-      String expectedAsString = getTuple2DString(format, expected);
-      String actualAsString = getTuple2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple2DReadOnly expected, Tuple2DReadOnly actual, String difference, String format)
-   {
-      String expectedAsString = getTuple2DString(format, expected);
-      String actualAsString = getTuple2DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, String format)
-   {
-      String expectedAsString = getTuple3DString(format, expected);
-      String actualAsString = getTuple3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple3DReadOnly expected, Tuple3DReadOnly actual, String difference, String format)
-   {
-      String expectedAsString = getTuple3DString(format, expected);
-      String actualAsString = getTuple3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, String format)
-   {
-      String expectedAsString = getTuple4DString(format, expected);
-      String actualAsString = getTuple4DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Tuple4DReadOnly expected, Tuple4DReadOnly actual, String difference, String format)
-   {
-      String expectedAsString = getTuple4DString(format, expected);
-      String actualAsString = getTuple4DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, String format)
-   {
-      String expectedAsString = getAxisAngleString(format, expected);
-      String actualAsString = getAxisAngleString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, AxisAngleReadOnly expected, AxisAngleReadOnly actual, String difference, String format)
-   {
-      String expectedAsString = getAxisAngleString(format, expected);
-      String actualAsString = getAxisAngleString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Orientation2DReadOnly expected, Orientation2DReadOnly actual, String format)
-   {
-      String expectedAsString = EuclidCoreIOTools.getOrientation2DString(format, expected);
-      String actualAsString = EuclidCoreIOTools.getOrientation2DString(format, actual);
-      EuclidCoreTestTools.throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Orientation3DReadOnly expected, Orientation3DReadOnly actual, String format)
-   {
-      String expectedAsString = EuclidCoreIOTools.getOrientation3DString(format, expected);
-      String actualAsString = EuclidCoreIOTools.getOrientation3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String format)
-   {
-      String expectedAsString = getMatrix3DString(format, expected);
-      String actualAsString = getMatrix3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, Matrix3DReadOnly expected, Matrix3DReadOnly actual, String difference, String format)
-   {
-      String expectedAsString = getMatrix3DString(format, expected);
-      String actualAsString = getMatrix3DString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, AffineTransformReadOnly expected, AffineTransformReadOnly actual, String format)
-   {
-      String expectedAsString = getAffineTransformString(format, expected);
-      String actualAsString = getAffineTransformString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, RigidBodyTransformReadOnly expected, RigidBodyTransformReadOnly actual, String format)
-   {
-      String expectedAsString = getRigidBodyTransformString(format, expected);
-      String actualAsString = getRigidBodyTransformString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
-   private static void throwNotEqualAssertionError(String messagePrefix, QuaternionBasedTransform expected, QuaternionBasedTransform actual, String format)
-   {
-      String expectedAsString = getQuaternionBasedTransformString(format, expected);
-      String actualAsString = getQuaternionBasedTransformString(format, actual);
-      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
-   }
-
    private static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String format)
    {
       String expectedAsString = expected.toString(format);
-      String actualAsString = expected.toString(format);
+      String actualAsString = actual.toString(format);
       throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString);
+   }
+   
+   private static void throwNotEqualAssertionError(String messagePrefix, EuclidGeometry expected, EuclidGeometry actual, String difference, String format)
+   {
+      String expectedAsString = expected.toString(format);
+      String actualAsString = actual.toString(format);
+      throwNotEqualAssertionError(messagePrefix, expectedAsString, actualAsString, difference);
    }
 
    /**

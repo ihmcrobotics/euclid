@@ -800,15 +800,14 @@ public interface Orientation3DReadOnly extends EuclidGeometry
     * @return {@code true} if the two orientations represent the same geometry, {@code false}
     *         otherwise.
     */
-   default boolean geometricallyEquals(Object other, double epsilon)
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
-      if ( !(other instanceof Orientation3DReadOnly))
-      {
+      if (!(object instanceof Orientation3DReadOnly))
          return false;
-      }
       if (epsilon >= Math.PI)
          return true; // Trivial case. If epsilon is greater than pi, then any pair of orientations are equal.
-      return distance((Orientation3DReadOnly) other, true) <= epsilon;
+      Orientation3DReadOnly other = (Orientation3DReadOnly) object;
+      return distance(other, true) <= epsilon;
    }
 
    /**

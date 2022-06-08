@@ -1118,12 +1118,21 @@ public interface Matrix3DReadOnly extends EuclidGeometry
 
       return true;
    }
-   
+
+   /**
+    * Two 3D matrices are considered geometrically equal if they are epsilon equal.
+    * <p>
+    * This method is equivalent to {@link #epsilonEquals(Matrix3DReadOnly, double)}.
+    * </p>
+    *
+    * @param object  the object to compare against this. Not modified.
+    * @param epsilon the tolerance to use when comparing each component.
+    * @return {@code true} if the two matrices are equal, {@code false} otherwise.
+    */
    @Override
    default boolean geometricallyEquals(Object object, double epsilon)
    {
-      // TODO Auto-generated method stub
-      return false;
+      return epsilonEquals(object, epsilon);
    }
 
    /**

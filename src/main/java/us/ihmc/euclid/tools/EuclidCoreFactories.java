@@ -665,6 +665,7 @@ public class EuclidCoreFactories
          {
             return EuclidCoreIOTools.getMatrix3DString(this);
          }
+
       };
    }
 

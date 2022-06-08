@@ -155,8 +155,7 @@ public class AxisAngle implements AxisAngleBasics
       else
          return false;
    }
-   
-   
+
    /**
     * Provides a {@code String} representation of this axis-angle as follows: (x, y, z, angle).
     *
@@ -164,7 +163,7 @@ public class AxisAngle implements AxisAngleBasics
     */
    public String toString()
    {
-      return EuclidCoreIOTools.getAxisAngleString(this);
+      return AxisAngleBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**

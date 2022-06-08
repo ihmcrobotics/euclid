@@ -424,7 +424,7 @@ public class RotationMatrix implements RotationMatrixBasics
    @Override
    public String toString()
    {
-      return EuclidCoreIOTools.getMatrix3DString(this);
+      return RotationMatrixBasics.super.toString(EuclidCoreIOTools.DEFAULT_FORMAT);
    }
 
    /**
