@@ -1232,15 +1232,19 @@ public interface FrameBoundingBox2DReadOnly extends BoundingBox2DReadOnly, Refer
     * similar, i.e. the distance between their min and max points is less than or equal to
     * {@code epsilon}.
     *
-    * @param other   the bounding box to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two bounding boxes represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code this} and {@code other} are not expressed in
     *                                         the same reference frame.
     */
-   default boolean geometricallyEquals(FrameBoundingBox2DReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameBoundingBox2DReadOnly))
+         return false;
+      FrameBoundingBox2DReadOnly other = (FrameBoundingBox2DReadOnly) object;
       checkReferenceFrameMatch(other);
       return BoundingBox2DReadOnly.super.geometricallyEquals(other, epsilon);
    }

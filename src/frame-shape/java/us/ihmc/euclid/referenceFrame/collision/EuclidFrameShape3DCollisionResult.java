@@ -1,12 +1,9 @@
 package us.ihmc.euclid.referenceFrame.collision;
 
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.referenceFrame.FramePoint3D;
 import us.ihmc.euclid.referenceFrame.FrameVector3D;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultBasics;
 import us.ihmc.euclid.referenceFrame.collision.interfaces.EuclidFrameShape3DCollisionResultReadOnly;
-import us.ihmc.euclid.referenceFrame.exceptions.ReferenceFrameMismatchException;
 import us.ihmc.euclid.referenceFrame.interfaces.FrameShape3DReadOnly;
 import us.ihmc.euclid.referenceFrame.tools.EuclidFrameShapeIOTools;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
@@ -17,8 +14,8 @@ import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultRea
  *
  * @author Sylvain Bertrand
  */
-public class EuclidFrameShape3DCollisionResult implements EuclidFrameShape3DCollisionResultBasics, EpsilonComparable<EuclidFrameShape3DCollisionResult>,
-      GeometricallyComparable<EuclidFrameShape3DCollisionResult>
+public class EuclidFrameShape3DCollisionResult implements EuclidFrameShape3DCollisionResultBasics
+
 {
    /** Whether the shapes are colliding. */
    private boolean shapesAreColliding;
@@ -129,40 +126,6 @@ public class EuclidFrameShape3DCollisionResult implements EuclidFrameShape3DColl
    public FrameVector3D getNormalOnB()
    {
       return normalOnB;
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    * <p>
-    * Two instances of collision frame results are not considered equal when their respective frames
-    * are different.
-    * </p>
-    *
-    * @param other   the other collision result to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two collision results are equal component-wise, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(EuclidFrameShape3DCollisionResult other, double epsilon)
-   {
-      return EuclidFrameShape3DCollisionResultBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests each feature of {@code this} against {@code other} for geometric similarity.
-    *
-    * @param other   the other collision result to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each feature.
-    * @return {@code true} if the two collision results are considered geometrically similar,
-    *         {@code false} otherwise.
-    * @throws ReferenceFrameMismatchException if {@code other} does not hold the same reference frames
-    *                                         as {@code this}.
-    */
-   @Override
-   public boolean geometricallyEquals(EuclidFrameShape3DCollisionResult other, double epsilon)
-   {
-      return EuclidFrameShape3DCollisionResultBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

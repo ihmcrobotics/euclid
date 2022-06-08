@@ -145,15 +145,18 @@ public interface FramePoint3DReadOnly extends Point3DReadOnly, FrameTuple3DReadO
     * Compares {@code this} to {@code other} to determine if the two frame points are geometrically
     * similar, i.e. the distance between them is less than or equal to {@code epsilon}.
     *
-    * @param other   the frame point to compare to. Not modified.
+    * @param object  the object to compare to. Not modified.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the two frame points represent the same geometry, {@code false}
     *         otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} is not expressed in the same reference
     *                                         frame as {@code this}.
     */
-   default boolean geometricallyEquals(FramePoint3DReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FramePoint3DReadOnly))
+         return false;
+      FramePoint3DReadOnly other = (FramePoint3DReadOnly) object;
       checkReferenceFrameMatch(other);
       return Point3DReadOnly.super.geometricallyEquals(other, epsilon);
    }

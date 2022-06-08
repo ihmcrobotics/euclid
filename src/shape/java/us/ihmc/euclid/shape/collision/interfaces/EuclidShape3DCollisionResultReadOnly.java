@@ -1,6 +1,8 @@
 package us.ihmc.euclid.shape.collision.interfaces;
 
+import us.ihmc.euclid.interfaces.EuclidGeometry;
 import us.ihmc.euclid.shape.primitives.interfaces.Shape3DReadOnly;
+import us.ihmc.euclid.shape.tools.EuclidShapeIOTools;
 import us.ihmc.euclid.shape.tools.EuclidShapeTools;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
@@ -11,7 +13,7 @@ import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
  *
  * @author Sylvain Bertrand
  */
-public interface EuclidShape3DCollisionResultReadOnly
+public interface EuclidShape3DCollisionResultReadOnly extends EuclidGeometry
 {
    /**
     * Gets whether the shapes are colliding.
@@ -111,9 +113,7 @@ public interface EuclidShape3DCollisionResultReadOnly
     */
    default boolean containsNaN()
    {
-      if (Double.isNaN(getSignedDistance()))
-         return true;
-      if (getPointOnA().containsNaN() || getNormalOnA().containsNaN())
+      if (Double.isNaN(getSignedDistance()) || getPointOnA().containsNaN() || getNormalOnA().containsNaN())
          return true;
       if (getPointOnB().containsNaN() || getNormalOnB().containsNaN())
          return true;
@@ -123,20 +123,19 @@ public interface EuclidShape3DCollisionResultReadOnly
    /**
     * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
     *
-    * @param other   the other collision result to compare against this. Not modified.
+    * @param object  the other object to compare against this. Not modified.
     * @param epsilon tolerance to use when comparing each component.
     * @return {@code true} if the two collision results are equal component-wise, {@code false}
     *         otherwise.
     */
-   default boolean epsilonEquals(EuclidShape3DCollisionResultReadOnly other, double epsilon)
+   @Override
+   default boolean epsilonEquals(Object object, double epsilon)
    {
-      if (getShapeA() != other.getShapeA())
+      if (!(object instanceof EuclidShape3DCollisionResultReadOnly))
          return false;
-      if (getShapeB() != other.getShapeB())
-         return false;
-      if (areShapesColliding() != other.areShapesColliding())
-         return false;
-      if (!EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
+      EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) object;
+      if ((getShapeA() != other.getShapeA()) || (getShapeB() != other.getShapeB()) || (areShapesColliding() != other.areShapesColliding())
+            || !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), epsilon))
          return false;
 
       if (getPointOnA().containsNaN() ? !other.getPointOnA().containsNaN() : !getPointOnA().epsilonEquals(other.getPointOnA(), epsilon))
@@ -161,15 +160,19 @@ public interface EuclidShape3DCollisionResultReadOnly
     * @return {@code true} if the two collision results are considered geometrically similar,
     *         {@code false} otherwise.
     */
-   default boolean geometricallyEquals(EuclidShape3DCollisionResultReadOnly other, double epsilon)
+   @Override
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof EuclidShape3DCollisionResultReadOnly))
+         return false;
+      EuclidShape3DCollisionResultReadOnly other = (EuclidShape3DCollisionResultReadOnly) object;
       return geometricallyEquals(other, epsilon, epsilon, epsilon);
    }
 
    /**
     * Tests each feature of {@code this} against {@code other} for geometric similarity.
     *
-    * @param other                  the other collision result to compare against this. Not modified.
+    * @param object                 the other object to compare against this. Not modified.
     * @param distanceEpsilon        tolerance to use when comparing the distance feature.
     * @param pointTangentialEpsilon tolerance to use when comparing {@code pointOnA} and
     *                               {@code pointOnB} in the plane perpendicular to the collision
@@ -183,11 +186,8 @@ public interface EuclidShape3DCollisionResultReadOnly
     */
    default boolean geometricallyEquals(EuclidShape3DCollisionResultReadOnly other, double distanceEpsilon, double pointTangentialEpsilon, double normalEpsilon)
    {
-      if (areShapesColliding() != other.areShapesColliding())
-         return false;
-
-      if (Double.isNaN(getSignedDistance()) ? !Double.isNaN(other.getSignedDistance())
-            : !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), distanceEpsilon))
+      if ((areShapesColliding() != other.areShapesColliding()) || (Double.isNaN(getSignedDistance()) ? !Double.isNaN(other.getSignedDistance())
+            : !EuclidCoreTools.epsilonEquals(getSignedDistance(), other.getSignedDistance(), distanceEpsilon)))
          return false;
 
       boolean swap;
@@ -269,13 +269,8 @@ public interface EuclidShape3DCollisionResultReadOnly
       }
       else
       {
-         if (areShapesColliding() != other.areShapesColliding())
-            return false;
-         if (Double.compare(getSignedDistance(), other.getSignedDistance()) != 0)
-            return false;
-         if (getShapeA() != other.getShapeA())
-            return false;
-         if (getShapeB() != other.getShapeB())
+         if ((areShapesColliding() != other.areShapesColliding()) || (Double.compare(getSignedDistance(), other.getSignedDistance()) != 0)
+               || (getShapeA() != other.getShapeA()) || (getShapeB() != other.getShapeB()))
             return false;
          if (!getPointOnA().equals(other.getPointOnA()))
             return false;
@@ -287,5 +282,36 @@ public interface EuclidShape3DCollisionResultReadOnly
             return false;
          return true;
       }
+   }
+
+   /**
+    * Gets the representative {@code String} of {@code euclidShape3DCollisionResult} given a specific
+    * format to use.
+    * <p>
+    * Using the default format {@link #DEFAULT_FORMAT}, this provides a {@code String} as follows:<br>
+    * When shapes are colliding:
+    *
+    * <pre>
+    * Collision test result: colliding, depth: 0.539
+    * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * </pre>
+    *
+    * When shapes are not colliding:
+    *
+    * <pre>
+    * Collision test result: non-colliding, separating distance: 0.539
+    * Shape A: Box3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * Shape B: Capsule3D, location: ( 0.540,  0.110,  0.319 ), normal: ( 0.540,  0.110,  0.319 )
+    * </pre>
+    * </p>
+    *
+    * @param format the format to use for each number.
+    * @return the representative {@code String}.
+    */
+   @Override
+   default String toString(String format)
+   {
+      return EuclidShapeIOTools.getEuclidShape3DCollisionResultString(format, this);
    }
 }

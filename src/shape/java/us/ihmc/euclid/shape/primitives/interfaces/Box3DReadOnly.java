@@ -410,7 +410,7 @@ public interface Box3DReadOnly extends Shape3DReadOnly
     * @param vertexIndex  the index in [0, 7] of the vertex to pack.
     * @param vertexToPack point in which the coordinates of the vertex are stored. Modified.
     * @throws IndexOutOfBoundsException if {@code vertexIndex} is not in [0, 7].
-    */
+    */tetrm
    default void getVertex(int vertexIndex, Point3DBasics vertexToPack)
    {
       if (vertexIndex < 0 || vertexIndex >= 8)

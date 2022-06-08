@@ -1,7 +1,5 @@
 package us.ihmc.euclid.shape.collision;
 
-import us.ihmc.euclid.interfaces.EpsilonComparable;
-import us.ihmc.euclid.interfaces.GeometricallyComparable;
 import us.ihmc.euclid.interfaces.Settable;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultBasics;
 import us.ihmc.euclid.shape.collision.interfaces.EuclidShape3DCollisionResultReadOnly;
@@ -15,8 +13,7 @@ import us.ihmc.euclid.tuple3D.Vector3D;
  *
  * @author Sylvain Bertrand
  */
-public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResultBasics, EpsilonComparable<EuclidShape3DCollisionResult>,
-      GeometricallyComparable<EuclidShape3DCollisionResult>, Settable<EuclidShape3DCollisionResult>
+public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResultBasics, Settable<EuclidShape3DCollisionResult>
 {
    /** Whether the shapes are colliding. */
    private boolean shapesAreColliding;
@@ -144,34 +141,6 @@ public class EuclidShape3DCollisionResult implements EuclidShape3DCollisionResul
    public Vector3D getNormalOnB()
    {
       return normalOnB;
-   }
-
-   /**
-    * Tests on a per component basis if {@code other} and {@code this} are equal to an {@code epsilon}.
-    *
-    * @param other   the other collision result to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each component.
-    * @return {@code true} if the two collision results are equal component-wise, {@code false}
-    *         otherwise.
-    */
-   @Override
-   public boolean epsilonEquals(EuclidShape3DCollisionResult other, double epsilon)
-   {
-      return EuclidShape3DCollisionResultBasics.super.epsilonEquals(other, epsilon);
-   }
-
-   /**
-    * Tests each feature of {@code this} against {@code other} for geometric similarity.
-    *
-    * @param other   the other collision result to compare against this. Not modified.
-    * @param epsilon tolerance to use when comparing each feature.
-    * @return {@code true} if the two collision results are considered geometrically similar,
-    *         {@code false} otherwise.
-    */
-   @Override
-   public boolean geometricallyEquals(EuclidShape3DCollisionResult other, double epsilon)
-   {
-      return EuclidShape3DCollisionResultBasics.super.geometricallyEquals(other, epsilon);
    }
 
    /**

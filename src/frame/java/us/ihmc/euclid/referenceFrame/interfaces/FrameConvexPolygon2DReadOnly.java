@@ -1916,13 +1916,16 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * The method returns {@code false} if the two polygons are expressed in different frames.
     * </p>
     *
-    * @param other   the query. Not modified.
+    * @param object  the query. Not modified.
     * @param epsilon the tolerance to use.
     * @return {@code true} if the two line segments are equal, {@code false} otherwise.
     * @see #epsilonEquals(ConvexPolygon2DReadOnly, double)
     */
-   default boolean epsilonEquals(FrameConvexPolygon2DReadOnly other, double epsilon)
+   default boolean epsilonEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameConvexPolygon2DReadOnly))
+         return false;
+      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) object;
       if (getReferenceFrame() != other.getReferenceFrame())
          return false;
       else
@@ -1939,15 +1942,18 @@ public interface FrameConvexPolygon2DReadOnly extends ConvexPolygon2DReadOnly, R
     * same vertex.
     * </p>
     *
-    * @param other   the convex polygon to compare to.
+    * @param object  the convex polygon to compare to.
     * @param epsilon the tolerance of the comparison.
     * @return {@code true} if the convex polygons represent the same geometry, {@code false} otherwise.
     * @throws ReferenceFrameMismatchException if {@code other} and {@code this} are not expressed in
     *                                         the same reference frame.
     * @see #geometricallyEquals(ConvexPolygon2DReadOnly, double)
     */
-   default boolean geometricallyEquals(FrameConvexPolygon2DReadOnly other, double epsilon)
+   default boolean geometricallyEquals(Object object, double epsilon)
    {
+      if (!(object instanceof FrameConvexPolygon2DReadOnly))
+         return false;
+      FrameConvexPolygon2DReadOnly other = (FrameConvexPolygon2DReadOnly) object;
       checkReferenceFrameMatch(other);
       return ConvexPolygon2DReadOnly.super.geometricallyEquals(other, epsilon);
    }
